@@ -1,17 +1,10 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-import sys
-sys.path.append('/usr/local/lib/python2.7/dist-packages')
 
 import os
 import nest
-# import json
-# import anyjson
 import lib.helpers as hh
 
 from flask import Flask, jsonify, render_template, request
-from pprint import pprint
 
 app = Flask(__name__)
 
@@ -69,6 +62,7 @@ def simulate():
     return jsonify(data=dict([(x, hh.prep_multi([events['times'], events[x]])) for x in nodes['neuron']['recordables']]), nodes=nodes)
 
 if __name__ == '__main__':
+    import sys
     if len(sys.argv) > 1:
         app.run(sys.argv[1])
     else:

@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-import sys
-sys.path.append('/usr/local/lib/python2.7/dist-packages')
 
 from flask import Flask, jsonify, render_template, request, abort
 import nest

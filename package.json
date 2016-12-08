@@ -18,8 +18,10 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "bootstrap-slider": "^9.5.3",
     "d3-array": "^1.0.2",
     "d3-axis": "^1.0.4",
+    "d3-dsv": "^1.0.3",
     "d3-request": "^1.0.3",
     "d3-scale": "^1.0.4",
     "d3-selection": "^1.0.3",

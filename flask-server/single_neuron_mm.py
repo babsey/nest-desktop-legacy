@@ -1,12 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-import sys
-sys.path.append('/usr/local/lib/python2.7/dist-packages')
-
-import nest
 
 from flask import Flask, jsonify, request
+import nest
 
 app = Flask(__name__)
 
@@ -35,6 +30,7 @@ def simulate():
     return jsonify(data=data, time=time)
 
 if __name__ == '__main__':
+    import sys
     if len(sys.argv) > 1:
         app.run(sys.argv[1])
     else:
