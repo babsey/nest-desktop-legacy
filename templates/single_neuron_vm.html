@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css" />
+
+    <title>NEST desktop: single neuron</title>
+    <style>
+        body {
+            font: 10px sans-serif;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .line {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .vth {
+            stroke: red;
+            stroke-width: 1;
+            stroke-dasharray: 3, 3;
+        }
+
+        .vreset {
+            stroke: green;
+            stroke-width: 1;
+            stroke-dasharray: 3, 3;
+        }
+
+        dt {
+            margin-top: 10px;
+        }
+
+        #controller {
+            z-index: 1000;
+            width: 315px
+        }
+
+        #controller-body {
+            width: 285px;
+        }
+
+        #chart {
+            position: absolute;
+            top: 0px;
+            z-index: -1000
+        }
+    </style>
+</head>
+
+<body>
+    <div id="controller" class="container pull-right">
+        <div class="pull-right">
+            <button type="button" class="btn btn-default navbar-btn" onclick="$('#controller-body').toggle()">
+                <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </button>
+        </div>
+        <h3 div="page-header">NEST desktop</h3>
+
+        <div id="controller-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <div id="level"></div>
+
+                    <div id="input" class="model">
+                        <div class="form-group">
+                            <label for="id_input">Input</label>
+                            <select id="id_input" class="form-control model_select">
+                                <option value="" disabled selected hidden>select an input device</option>
+                            </select>
+                        </div>
+                        <dl class="params"></dl>
+                    </div>
+
+                    <div id="neuron" class="model">
+                        <div class="form-group">
+                            <label for="id_neuron">Neuron</label>
+                            <select id="id_neuron" class="form-control model_select">
+                                <option value="" disabled selected hidden>select a neuron model</option>
+                            </select>
+                        </div>
+                        <dl class="params"></dl>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chart"></div>
+    <script>
+        $ = require("jquery");
+        var nodes;
+        require("../src/single_neuron_vm.js");
+    </script>
+</body>
+
+</html>

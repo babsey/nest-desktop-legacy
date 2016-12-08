@@ -1,0 +1,5 @@
+id,level,value,min,max,step,label
+mean,1,0.0,0.0,1000.0,1.0,Mean value of the noise current (pA)
+std,1,0.0,0.0,100.0,1.0,Standard deviation of noise current (pA)
+phase,2,0.0,0.0,360.0,1.0,Phase of sine modulation (0-360 deg)
+frequency,2,0.0,0.0,1000.0,1.0,Frequency of sine modulation (Hz)

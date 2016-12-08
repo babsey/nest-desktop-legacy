@@ -1,0 +1,79 @@
+[
+    {
+        "label": "RS",
+        "params": {
+            "E_L":      -70.0,
+            "alpha_1":   37.0,
+            "alpha_2":    2.0,
+            "omega":     19.0,
+            "t_ref":      2.0,
+            "tau_m":      5.0,
+            "tau_syn_ex": 1.0,
+            "tau_syn_in": 3.0
+        }
+    },
+    {
+        "label": "IB",
+        "params": {
+            "alpha_1":    1.7,
+            "alpha_2":    2.0,
+            "omega":     26.0
+        }
+    },
+    {
+        "label": "FS",
+        "params": {
+            "alpha_1":   10.0,
+            "alpha_2":    0.002,
+            "omega":     11.0
+        }
+    },
+    {
+        "label": "CH",
+        "params": {
+            "alpha_1":   -0.5,
+            "alpha_2":    0.4,
+            "omega":     26.0
+        }
+    },
+    {
+        "label": "FSI",
+        "params": {
+            "C_m":      500.0,
+            "E_L":      -68.0,
+            "alpha_1":   10.0,
+            "alpha_2":    0.2,
+            "omega":     10.0,
+            "t_ref":      2.0,
+            "tau_syn_ex": 0.3,
+            "tau_syn_in": 2.0
+        }
+    },
+    {
+        "label": "MSN",
+        "params": {
+            "C_m":      200.0,
+            "E_L":      -58.0,
+            "alpha_1":    7.5,
+            "alpha_2":    1.5,
+            "omega":     19.0,
+            "t_ref":      1.0,
+            "tau_syn_ex": 0.2,
+            "tau_syn_in": 2.0
+        }
+    },
+    {
+        "label": "MSN_Carlos",
+        "params": {
+            "C_m":      200.0,
+            "E_L":      -80.0,
+            "alpha_1":    7.5,
+            "alpha_2":    1.5,
+            "omega":     19.0,
+            "t_ref":      1.0,
+            "tau_m":     20.0,
+            "tau_syn_ex": 0.2,
+            "tau_syn_in": 2.0
+        }
+    }
+]

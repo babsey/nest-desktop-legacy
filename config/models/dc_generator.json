@@ -1,0 +1,9 @@
+[
+    {
+        "label": "izhikevich",
+        "params": {
+            "amplitude": 10.0,
+            "start":    300.0
+        }
+    }
+]

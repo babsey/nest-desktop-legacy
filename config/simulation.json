@@ -1,0 +1,12 @@
+{
+    "izhikevich": {
+        "input": {
+            "model": "dc_generator",
+            "params": "izhikevich"
+        },
+        "neuron": {
+            "model": "izhikevich",
+            "params": "default"
+        }
+    }
+}

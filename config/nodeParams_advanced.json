@@ -1,0 +1,6 @@
+{
+    "aeif_cond_alpha":          ["C_m", "t_ref", "V_reset", "E_L", "g_L", "I_e", "a", "b", "Delta_T", "tau_w", "V_th", "V_peak", "E_ex", "tau_syn_ex", "E_in", "tau_syn_in"],
+    "hh_psc_alpha":             ["C_m", "E_K", "E_L", "E_Na", "I_e", "g_K", "g_L", "g_Na", "tau_syn_ex", "tau_syn_in"],
+    "izhikevich":               ["I_e", "V_th", "a", "b", "c", "d"],
+    "mat2_psc_exp":             ["E_L", "I_e", "alpha_1", "alpha_2", "omega", "t_ref", "tau_m", "tau_syn_ex", "tau_syn_in"],
+}

@@ -1,0 +1,11 @@
+id,type,label,recordables
+ac_generator,input,AC generator
+dc_generator,input,DC generator
+iaf_cond_alpha,neuron,IAF cond alpha,V_m;g_ex;g_in
+iaf_cond_exp,neuron,IAF cond exp,V_m;g_ex;g_in
+iaf_neuron,neuron,IAF neuron,V_m
+iaf_psc_alpha,neuron,IAF PSC alpha,V_m;input_currents_ex;input_currents_in;weighted_spikes_ex;weighted_spikes_in
+iaf_psc_delta,neuron,IAF PSC delta,V_m
+iaf_psc_exp,neuron,IAF PSC exp,V_m;input_currents_ex;input_currents_in;weighted_spikes_ex;weighted_spikes_in
+noise_generator,input,Noise generator
+poisson_generator,input,Poisson generator

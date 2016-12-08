@@ -1,0 +1,33 @@
+[
+    {
+        "label" : "MSN",
+        "params": {
+            "E_L":          -80.0,
+            "C_m":          200.0,
+            "t_ref":          2.0,
+            "V_th":         -45.0,
+            "V_reset":      -80.0,
+            "E_ex":           0.0,
+            "E_in":         -64.0,
+            "g_L":           12.5,
+            "tau_syn_ex":     5.0,
+            "tau_syn_in":    10.0,
+            "tau_minus":     20.0
+        }
+    },
+    {
+        "label": "FSI",
+        "params": {
+            "C_m":          200.0,
+            "E_L":          -80.0,
+            "E_ex":           0.0,
+            "E_in":         -64.0,
+            "V_reset":      -80.0,
+            "V_th":         -54.0,
+            "g_L":           25.0,
+            "t_ref":          2.0,
+            "tau_syn_ex":     0.2,
+            "tau_syn_in":     2.0
+        }
+    }
+]

@@ -1,0 +1,12 @@
+{
+    "iaf_cond_alpha":           ["C_m", "E_L", "E_ex", "E_in", "I_e", "V_reset", "V_th", "g_L", "t_ref", "tau_syn_ex", "tau_syn_in"],
+    "iaf_cond_exp":             ["C_m", "E_L", "E_ex", "E_in", "I_e", "V_reset", "V_th", "g_L", "t_ref", "tau_syn_ex", "tau_syn_in"],
+    "iaf_neuron":               ["C_m", "E_L", "I_e", "V_reset", "V_th", "t_ref", "tau_m", "tau_syn"],
+    "iaf_psc_alpha":            ["C_m", "E_L", "I_e", "V_reset", "V_th", "t_ref", "tau_syn_ex", "tau_syn_in"],
+    "iaf_psc_delta":            ["C_m", "E_L", "I_e", "V_reset", "V_th", "t_ref"],
+    "iaf_psc_exp":              ["C_m", "E_L", "I_e", "V_reset", "V_th", "t_ref", "tau_syn_ex", "tau_syn_in"],
+    "ac_generator":             ["amplitude", "offset", "phase", "frequency"],
+    "dc_generator":             ["amplitude", "start"],
+    "noise_generator":          ["mean", "std"],
+    "poisson_generator":        ["origin", "rate"]
+}

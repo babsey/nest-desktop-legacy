@@ -1,0 +1,14 @@
+[
+    {
+        "label": "test",
+        "params": {
+            "C_m": 100.0
+        }
+    },
+    {
+        "label": "low-threshold neuron",
+        "params": {
+            "V_th":-65.0
+        }
+    }
+]
