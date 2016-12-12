@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css" />
 
-    <title>NEST desktop: single neuron</title>
+    <title>NEST desktop: spike activity</title>
     <style>
         body {
             font: 10px sans-serif;
@@ -92,13 +92,6 @@
                         <dl class="params"></dl>
                     </div>
 
-                    <div id="record" class="model" style="display:none">
-                        <div class="form-group">
-                            <label for="id_record">Record from</label>
-                            <select id="id_record" class="form-control"></select>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -108,7 +101,7 @@
     <script>
         $ = require("jquery");
         var nodes,data;
-        require("../src/single_neuron_mm.js");
+        require("../src/spike_activity.js");
     </script>
 </body>
 

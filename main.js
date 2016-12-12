@@ -33,6 +33,8 @@ app.on('ready', function() {
     // mainWindow.loadURL('file://' + __dirname + '/templates/iaf_neuron.html');
     // mainWindow.loadURL('file://' + __dirname + '/templates/single_neuron_vm.html');
     mainWindow.loadURL('file://' + __dirname + '/templates/single_neuron_mm.html');
+    // mainWindow.loadURL('file://' + __dirname + '/templates/spike_activity.html');
+    // mainWindow.loadURL('file://' + __dirname + '/templates/basal_ganglia.html');
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools();

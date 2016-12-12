@@ -9,7 +9,8 @@ app = Flask(__name__)
 def simulate():
     nest.ResetKernel()
 
-    nodes = request.get_json()
+    data = request.get_json()
+    nodes = data['nodes']
     nodes['neuron']['params'] = dict(zip(nodes['neuron']['params'].keys(), map(float, nodes['neuron']['params'].values())))
     nodes['input']['params'] = dict(zip(nodes['input']['params'].keys(), map(float, nodes['input']['params'].values())))
 
@@ -20,14 +21,14 @@ def simulate():
     nest.Connect(input,neuron)
     nest.Connect(vm,neuron)
 
-    nest.Simulate(1000.)
+    nest.Simulate(data['simtime'])
     time = nest.GetKernelStatus('time')
 
     events = nest.GetStatus(vm,'events')[0]
-    data = dict(map(lambda (x,y): (x,y.tolist()), events.items()))
     nest.SetStatus(vm, {'n_events': 0})
 
-    return jsonify(data=data, time=time)
+    events = dict(map(lambda (x,y): (x,y.tolist()), events.items()))
+    return jsonify(events=events, time=time)
 
 if __name__ == '__main__':
     import sys
