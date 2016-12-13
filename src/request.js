@@ -8,7 +8,7 @@ $(document)
         $("select").attr("disabled", false);
     })
 
-function simulate(simtime, nodes) {
+function simulate(url, simtime, nodes) {
 
     var sendData = {
         'simtime': simtime,
@@ -17,7 +17,7 @@ function simulate(simtime, nodes) {
 
     return $.ajax({
         method: "POST",
-        url: "http://localhost:5000/simulate/",
+        url: "http://localhost:5000/"+ url +"/",
         data: JSON.stringify(sendData),
         contentType: 'application/json;charset=UTF-8'
     })

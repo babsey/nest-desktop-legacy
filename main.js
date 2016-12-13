@@ -26,15 +26,11 @@ app.on('ready', function() {
     mainWindow = new BrowserWindow({
         width: 1280,        // 1024
         height: 768,
-        // "node-integration": false
+        // "node-integration":: false
     });
 
     // and load the index.html of the app.
-    // mainWindow.loadURL('file://' + __dirname + '/templates/iaf_neuron.html');
-    // mainWindow.loadURL('file://' + __dirname + '/templates/single_neuron_vm.html');
-    mainWindow.loadURL('file://' + __dirname + '/templates/single_neuron_mm.html');
-    // mainWindow.loadURL('file://' + __dirname + '/templates/spike_activity.html');
-    // mainWindow.loadURL('file://' + __dirname + '/templates/basal_ganglia.html');
+    mainWindow.loadURL('file://' + __dirname + '/index.html');
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools();

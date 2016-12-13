@@ -3,7 +3,7 @@
 var $ = require("jquery");
 var Slider = require("bootstrap-slider");
 
-function slider(name, options) {
+function slider0(name, options) {
 
     var options_default = {
         min: 0,
@@ -48,9 +48,7 @@ function iaf_slider(nodes, param, options) {
     });
 }
 
-function paramSlider(nodes, node, param, options) {
-    nodes[node]['params'][param] = options.value;
-
+function slider(param, options) {
     var options_default = {
         min: 0,
         max: 10,
@@ -60,28 +58,40 @@ function paramSlider(nodes, node, param, options) {
     };
     var options = $.extend(options_default, options);
     $('#id_' + param).after(
-        '<dd id=' + param + ' class="' + param + '"><input id="' + param + 'Input" class="slider paramSlider"> <span id="' + param + 'Val" style="margin-left:10px">' + options.value + '</span></dd>'
+        '<dd id=' + param + ' class="' + param + '"><input id="' + param + 'Input" class="slider"> <span id="' + param + 'Val" style="margin-left:10px">' + options.value + '</span></dd>'
     );
 
     var slider = $("#" + param + 'Input').slider(options);
     slider.on("change", function() {
         options.value = $("#" + param + 'Input').val();
         $("#" + param + "Val").text(options.value);
-        nodes[node]['params'][param] = options.value;
     });
     return slider
 }
 
+function row(p) {
+    return {
+        id: p.id,
+        label: p.label,
+        level: p.level,
+        options: {
+            value: +p.value,
+            min: +p.min,
+            max: +p.max,
+            step: +p.step
+        }
+    }
+}
+
 $(document)
     .bind("ajaxSend", function() {
-        $("input.paramSlider").slider("disable");
+        $("input.slider").slider("disable");
     })
     .bind("ajaxComplete", function() {
-        $("input.paramSlider").slider("enable");
+        $("input.slider").slider("enable");
     })
 
 module.exports = {
-    iaf_slider: iaf_slider,
-    paramSlider: paramSlider,
-    slider: slider
+    slider: slider,
+    row: row
 };

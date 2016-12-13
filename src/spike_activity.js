@@ -17,20 +17,12 @@ d3Request.csv('file://' + curpath + '/settings/models.csv', function(models) {
 })
 
 
-function row(p) {
-    return {
-        id: p.id,
-        label: p.label,
-        level: p.level,
-        slider: {
-            value: +p.value,
-            min: +p.min,
-            max: +p.max,
-            step: +p.step
-        }
-    }
+function slider(ref, id, label, options) {
+    $('#' + ref).find('.params').append('<dt id="id_' + id + '" class="' + id + '">' + label + '</dt>')
+    return s.slider(id, options);
 }
-s.slider('level', {
+
+slider('level', 'level', 'Level of configuration', {
     value: 1,
     min: 1,
     max: 4,
@@ -39,7 +31,7 @@ s.slider('level', {
 
 function simulate(simtime) {
     if (('neuron' in nodes) && ('input' in nodes)) {
-        req.simulate(simtime, nodes)
+        req.simulate('spike_activity', simtime, nodes)
             .done(function(res) {
                 data = res
                 rp.update(data.events['times'], data.events['senders'], data.time, data.pop);
@@ -49,13 +41,14 @@ function simulate(simtime) {
 
 var update_params = function(node, model) {
     var url = 'file://' + curpath + '/settings/sliderDefaults/' + model + '.csv';
-    d3Request.csv(url, row, function(params) {
+    d3Request.csv(url, s.row, function(params) {
         params.forEach(function(p) {
-            $('#' + node).find('.params').append('<dt id="id_' + p.id + '" class="' + p.id + '">' + p.label + '</dt>')
-            var param_slider = s.paramSlider(nodes, node, p.id, p.slider);
-            param_slider.on("slideStop", function() {
+            var pslider = slider(node, p.id, p.label, p.options);
+            pslider.on("slideStop", function(d) {
+                nodes[node]['params'][p.id] = d.value;
                 simulate(1000.)
             })
+            nodes[node]['params'][p.id] = pslider.slider('getValue');
             if (p.level > $('#levelInput').attr('value')) {
                 $('.' + p.id).addClass('hidden')
             }

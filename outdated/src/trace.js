@@ -36,7 +36,7 @@ var line = d3Shape.line()
 
 var svg;
 
-function voltage_trace(reference) {
+function trace(reference) {
 
     $(reference).empty()
 
@@ -83,15 +83,18 @@ function voltage_trace(reference) {
 }
 
 var t = d3Transition.transition()
-    .duration(750)
+    .duration(250)
     .ease(d3Ease.easeLinear);
 
-function update(x, y, curtime) {
+function update(x, y, curtime, ylabel) {
 
     xScale.domain([curtime - 1000., curtime]);
     yScale.domain(d3Array.extent(x, function(d, i) {
         return y[i]
     })).nice(10);
+
+    d3Selection.select('#ylabel')
+        .text(ylabel);
 
     d3Selection.select('#xaxis')
         .transition(t)
@@ -114,6 +117,6 @@ function update(x, y, curtime) {
 
 
 module.exports = {
-    voltage_trace: voltage_trace,
+    trace: trace,
     update: update
 }

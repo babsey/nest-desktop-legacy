@@ -4,57 +4,8 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css" />
-
+    <link rel="stylesheet" href='../dist/css/raster_plot.css'></link>
     <title>NEST desktop: spike activity</title>
-    <style>
-        body {
-            font: 10px sans-serif;
-        }
-
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }
-
-        .line {
-            fill: none;
-            stroke: steelblue;
-            stroke-width: 1.5px;
-        }
-
-        .vth {
-            stroke: red;
-            stroke-width: 1;
-            stroke-dasharray: 3, 3;
-        }
-
-        .vreset {
-            stroke: green;
-            stroke-width: 1;
-            stroke-dasharray: 3, 3;
-        }
-
-        dt {
-            margin-top: 10px;
-        }
-
-        #controller {
-            z-index: 1000;
-            width: 315px
-        }
-
-        #controller-body {
-            width: 285px;
-        }
-
-        #chart {
-            position: absolute;
-            top: 0px;
-            z-index: -1000
-        }
-    </style>
 </head>
 
 <body>
@@ -64,13 +15,15 @@
                 <span class="glyphicon glyphicon-menu-hamburger"></span>
             </button>
         </div>
-        <h3 div="page-header">NEST desktop</h3>
+        <h3 div="page-header"><a href="../index.html">NEST desktop</a></h3>
 
         <div id="controller-body">
             <div class="panel panel-default">
                 <div class="panel-body">
 
-                    <div id="level"></div>
+                    <div id="level">
+                        <dl class="params"></dl>
+                    </div>
 
                     <div id="input" class="model">
                         <div class="form-group">
@@ -100,7 +53,7 @@
     <div id="chart"></div>
     <script>
         $ = require("jquery");
-        var nodes,data;
+        var nodes, data;
         require("../src/spike_activity.js");
     </script>
 </body>

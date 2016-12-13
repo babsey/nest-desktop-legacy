@@ -1,66 +1,36 @@
 <!DOCTYPE html>
+
 <head>
-<meta charset="utf-8">
-<link rel="stylesheet" href="static/css/bootstrap.min.css" />
-<link rel="stylesheet" href="static/css/d3.slider.css" />
-<title>NEST web interface: iaf neuron</title>
-<style>
-
-body {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
-
-.vth {
-    fill: none;
-    stroke: red;
-    stroke-width: 1;
-    stroke-dasharray: 3, 3;
-}
-
-dt {
-    margin-top: 20px;
-}
-</style>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
 </head>
+
 <body>
-<div class="container">
-    <div class="col-sm-8">
-    <div id="chart"></div>
-</div>
-<div class="col-sm-4">
-    <div class="container-fluid">
-        <h2 div="page-header">Nest web interface</h2>
-
-        <dl>
-            <dt>Input mean</dt><dd id="mean"></dd>
-            <dt>Input standard deviation</dt><dd id="std"></dd>
-            <dt>Membrane capacitance</dt><dd id="C_m"></dd>
-            <dt>Membrane time constant</dt><dd id="tau_m"></dd>
-        </dl>
-
-        <p style="margin-top:50px">
-        <button id="simulate" class="btn btn-default">Simulate</button>
-        <p>
+    <div class="jumbotron">
+        <div class="container">
+            <h1>NEST desktop application</h1>
+            <p>
+                It is a desktop application for the NEural Simulation Tool. (http://www.nest-initiative.org/)
+            </p>
+            <p>
+                <a class="btn btn-primary btn-lg" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
+            </p>
+        </div>
     </div>
-</div>
-</div>
-    <!-- // <script type="text/javascript" src="iaf_neuron.js"></script> -->
 
-    <script>
-    require('iaf_neuron');
-    </script>
+    <div class="container">
+        <div class="col-md-4">
+            <div class="list-group">
+                <a class="btn btn-default list-group-item" href="./templates/neuronal_activity.html" role="button">
+                    <span class="glyphicon glyphicon glyphicon-tree-deciduous" aria-hidden="true"></span> Neuronal activity
+                </a>
+
+                <a class="btn btn-default list-group-item" href="./templates/spike_activity.html" role="button">
+                    <span class="glyphicon glyphicon glyphicon glyphicon-tree-conifer" aria-hidden="true"></span> Spike activity
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
