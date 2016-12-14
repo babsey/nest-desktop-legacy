@@ -5,7 +5,7 @@ var d3Request = require('d3-request');
 
 var s = require("./slider");
 var req = require('./request');
-var ts = require('./traces');
+var lineChart = require('./line-chart');
 
 
 var paths = window.location.pathname.split('/')
@@ -36,19 +36,24 @@ d3Request.csv('file://' + curpath + '/settings/models.csv', function(models) {
     })
 })
 
-function slider(ref, id, label, options) {
-    $('#' + ref).find('.params').append('<dt id="id_' + id + '" class="' + id + '">' + label + '</dt>')
+function slider(ref, id, level, label, options) {
+    $('#' + ref).find('.params').append('<span class="paramSlider level_' + level + '"><dt id="id_' + id + '">' + label + '</dt></div>')
     return s.slider(id, options);
 }
 
-slider('level', 'level', 'Level of configuration', {
+slider('level', 'level', 0, 'Level of configuration', {
     value: 1,
     min: 1,
     max: 4,
     step: 1
+}).on('slideStop', function(d) {
+    $('.paramSlider').hide()
+    for (var i = 0; i <= d.value; i++) {
+        $('.level_' + i).show()
+    }
 })
 
-slider('npop', 'npop', 'Population size', {
+slider('npop', 'npop', 0, 'Population size', {
     value: 10,
     min: 1,
     max: 100,
@@ -58,22 +63,38 @@ slider('npop', 'npop', 'Population size', {
     simulate(1000.)
 })
 
-slider('outdegree', 'outdegree', 'Outdegree', {
+slider('outdegree', 'outdegree', 0, 'Outdegree', {
     value: 10,
     min: 1,
     max: 100,
     step: 1
 }).on('slideStop', function(d) {
     nodes['neuron'].outdegree = d.value;
-    simulate(1000.)
+    simulate(1500.)
 })
+
+// var times,values;
 
 function simulate(simtime) {
     if (('neuron' in nodes) && ('input' in nodes)) {
         req.simulate('neuronal_activity', simtime, nodes)
             .done(function(res) {
                 data = res
-                ts.update(data.events.times, data.events[record_from], data.time, data.pop, recordLabels[record_from]);
+                var pop = data.pop;
+                var npop = pop.length;
+                times = data.events.times.filter(function(d, i) {
+                    return i % npop == 0
+                });
+                values = pop.map(function() {
+                    return []
+                });
+                data.events[record_from].map(function(d, i) {
+                    values[i % npop].push(d)
+                });
+
+                chart.update(times, values)
+                    .xlim([data.time - 1000, data.time])
+                    .ylabel(recordLabels[record_from]);
             })
     }
 }
@@ -82,14 +103,14 @@ var update_params = function(node, model) {
     var url = 'file://' + curpath + '/settings/sliderDefaults/' + model + '.csv';
     d3Request.csv(url, s.row, function(params) {
         params.forEach(function(p) {
-            var pslider = slider(node, p.id, p.label, p.options);
+            var pslider = slider(node, p.id, p.level, p.label, p.options);
             pslider.on("slideStop", function(d) {
                 nodes[node]['params'][p.id] = d.value;
-                simulate(1000.)
+                simulate(1500.)
             })
             nodes[node]['params'][p.id] = pslider.slider('getValue');
             if (p.level > $('#levelInput').attr('value')) {
-                $('.' + p.id).addClass('hidden')
+                $('#' + p.id).parent().attr('style', 'display: none')
             }
         })
     })
@@ -116,12 +137,25 @@ $('.model .model_select').on('change', function() {
         $('#record').show();
     }
     update_params(node, model)
-    simulate(1000.)
+    simulate(1500.)
 })
 
 $('#id_record').on('change', function() {
     record_from = this.value;
-    ts.update(data.events.times, data.events[record_from], data.time, data.pop, recordLabels[record_from]);
+    var pop = data.pop;
+    var npop = pop.length;
+
+    values = pop.map(function() {
+        return []
+    });
+    data.events[record_from].map(function(d, i) {
+        values[i % npop].push(d)
+    });
+
+    chart.update(times, values)
+        .xlim([data.time - 1000, data.time])
+        .ylabel(recordLabels[record_from]);
 })
 
-ts.traces('#chart', 10)
+chart = lineChart('#chart')
+    .xlabel('Time (ms)');

@@ -48,7 +48,7 @@ function iaf_slider(nodes, param, options) {
     });
 }
 
-function slider(param, options) {
+function slider(id, options) {
     var options_default = {
         min: 0,
         max: 10,
@@ -57,14 +57,14 @@ function slider(param, options) {
         tooltip: 'hide',
     };
     var options = $.extend(options_default, options);
-    $('#id_' + param).after(
-        '<dd id=' + param + ' class="' + param + '"><input id="' + param + 'Input" class="slider"> <span id="' + param + 'Val" style="margin-left:10px">' + options.value + '</span></dd>'
+    $('#id_' + id).after(
+        '<dd id=' + id + '><input id="' + id + 'Input" class="sliderInput"> <span id="' + id + 'Val" style="margin-left:10px">' + options.value + '</span></dd>'
     );
 
-    var slider = $("#" + param + 'Input').slider(options);
+    var slider = $("#" + id + 'Input').slider(options);
     slider.on("change", function() {
-        options.value = $("#" + param + 'Input').val();
-        $("#" + param + "Val").text(options.value);
+        options.value = $("#" + id + 'Input').val();
+        $("#" + id + "Val").text(options.value);
     });
     return slider
 }

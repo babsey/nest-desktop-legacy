@@ -20,6 +20,8 @@ function simulate(url, simtime, nodes) {
         url: "http://localhost:5000/"+ url +"/",
         data: JSON.stringify(sendData),
         contentType: 'application/json;charset=UTF-8'
+    }).fail(function (d) {
+        alert(d.statusText)
     })
 }
 

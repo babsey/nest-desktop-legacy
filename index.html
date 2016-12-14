@@ -6,27 +6,38 @@
 </head>
 
 <body>
-    <div class="jumbotron">
+    <div class="jumbotron" style="background-color:transparent; overflow:hidden">
         <div class="container">
             <h1>NEST desktop application</h1>
             <p>
-                It is a desktop application for the NEural Simulation Tool. (http://www.nest-initiative.org/)
+                It is a desktop application for the NEural Simulation Tool.
+                (<a href="http://www.nest-initiative.org/">http://www.nest-initiative.org/</a>)
             </p>
             <p>
                 <a class="btn btn-primary btn-lg" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
             </p>
         </div>
     </div>
+    <div style="background-image:url(./dist/img/neuron-network_invert0.jpg);
+        background-repeat:no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        width: 1280px; height:295px; opacity:0.2; top:0px;
+        position:absolute; z-index:-1">
+    </div>
 
     <div class="container">
-        <div class="col-md-4">
-            <div class="list-group">
-                <a class="btn btn-default list-group-item" href="./templates/neuronal_activity.html" role="button">
-                    <span class="glyphicon glyphicon glyphicon-tree-deciduous" aria-hidden="true"></span> Neuronal activity
-                </a>
 
-                <a class="btn btn-default list-group-item" href="./templates/spike_activity.html" role="button">
-                    <span class="glyphicon glyphicon glyphicon glyphicon-tree-conifer" aria-hidden="true"></span> Spike activity
+        <div class="row">
+            <div class="col-sm-6 col-md-3">
+                <a href="./templates/neuronal_activity.html" class="thumbnail">
+                    <img src="./dist/img/neuronal-activity.png" alt="neuronal activity">
+                </a>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <a href="./templates/spike_activity.html" class="thumbnail">
+                    <img src="./dist/img/spike-activity.png" alt="spike activity">
                 </a>
             </div>
         </div>

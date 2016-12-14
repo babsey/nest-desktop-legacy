@@ -16,15 +16,17 @@ if [ ${NEST} -eq 0 ] && [ ${FLASK} -eq 0 ]
     # Run local server for nest
     # netstat -na | grep 5000
     # lsof -t -i:5000
-    python ./flask-server/nest_server.py &
     mkdir ./log
-    echo $! > ./log/nest_server.pid
+
+    python ./flask_server.py &
+    echo $! > ./log/flask_server.pid
 
     # start nest-desktop
     npm start
 
     # Kill local server
-    kill -9 `cat ./log/nest_server.pid`
+    kill -9 `cat ./log/flask_server.pid`
+    rm ./log/flask_server.pid
 else
     echo '-------------------------------------------------------------------'
     echo 'Required packages have to be installed before running nest-desktop:'
