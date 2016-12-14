@@ -60,10 +60,10 @@ slider('npop', 'npop', 0, 'Population size', {
     step: 1
 }).on('slideStop', function(d) {
     nodes['neuron'].npop = d.value;
-    simulate(1000.)
+    simulate(1500.)
 })
 
-slider('outdegree', 'outdegree', 0, 'Outdegree', {
+slider('outdegree', 'outdegree', 0, 'Outdegree (%)', {
     value: 10,
     min: 1,
     max: 100,
@@ -92,9 +92,10 @@ function simulate(simtime) {
                     values[i % npop].push(d)
                 });
 
-                chart.update(times, values)
-                    .xlim([data.time - 1000, data.time])
-                    .ylabel(recordLabels[record_from]);
+                chart.data({x:times,y:values})
+                    .xlim([data.time - 1000., data.time])
+                    .ylabel(recordLabels[record_from])
+                    .update();
             })
     }
 }
@@ -152,9 +153,10 @@ $('#id_record').on('change', function() {
         values[i % npop].push(d)
     });
 
-    chart.update(times, values)
+    chart.data({x:times,y:values})
         .xlim([data.time - 1000, data.time])
-        .ylabel(recordLabels[record_from]);
+        .ylabel(recordLabels[record_from])
+        .update();
 })
 
 chart = lineChart('#chart')

@@ -33,12 +33,10 @@ var t = d3Transition.transition()
 var aline = d3Shape.line();
 var bline = d3Shape.line();
 
-var data;
-
 function _update(line, classname) {
 
     line.x(function(d, i) {
-        return xScale(data.x[i]);
+        return xScale(_data.x[i]);
     }).y(function(d) {
         return yScale(d);
     });
@@ -46,7 +44,7 @@ function _update(line, classname) {
     var lines = d3Selection
         .select('#line')
         .selectAll("."+ classname)
-        .data(data.y);
+        .data(_data.y);
 
     lines
         .transition(t)
@@ -76,32 +74,22 @@ function _update(line, classname) {
 
 }
 
-function update(x, y) {
-    data = {
-        x: x,
-        y: y
-    };
-
-    xlim(d3Array.extent(x));
-    ylim(d3Array.extent([].concat.apply([], y)));
-    _update(bline,'bline')
-    _update(aline,'aline')
-    return chart
+var _data = {x:[],y:[]};
+function data(d) {
+    if (!arguments.length) return _data;
+    _data = d;
+    xlim(d3Array.extent(_data.x));
+    ylim(d3Array.extent([].concat.apply([],_data.y)));
+    return chart;
 }
 
 function xlim(xlim) {
     xScale.domain(xlim);
-    d3Selection.select('#xaxis')
-        .transition(t)
-        .call(xAxis);
     return chart
 }
 
 function ylim(ylim) {
     yScale.domain(ylim);
-    d3Selection.select('#yaxis')
-        .transition(t)
-        .call(yAxis);
     return chart
 }
 
@@ -114,6 +102,18 @@ function ylabel(label) {
 function xlabel(label) {
     d3Selection.select('#xlabel')
         .text(label);
+    return chart
+}
+
+function update() {
+    d3Selection.select('#xaxis')
+        .transition(t)
+        .call(xAxis);
+    d3Selection.select('#yaxis')
+        .transition(t)
+        .call(yAxis);
+    _update(bline,'bline')
+    _update(aline,'aline')
     return chart
 }
 
@@ -161,11 +161,12 @@ function lineChart(reference) {
 }
 
 var chart = {
-    update: update,
+    data: data,
     xlim: xlim,
     ylim: ylim,
     xlabel: xlabel,
     ylabel: ylabel,
+    update: update,
 }
 
 module.exports = lineChart

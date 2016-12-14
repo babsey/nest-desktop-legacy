@@ -26,6 +26,7 @@ app.on('ready', function() {
     mainWindow = new BrowserWindow({
         width: 1280,        // 1024
         height: 768,
+        frame: false,
         // "node-integration":: false
     });
 
