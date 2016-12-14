@@ -7,7 +7,10 @@
     "start": "electron ."
   },
   "keywords": [
-    "NEST"
+    "NEST",
+    "neuronal",
+    "spike",
+    "activity"
   ],
   "author": {
     "name": "Sebastian Spreizer"
