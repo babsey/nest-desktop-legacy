@@ -60,7 +60,7 @@ function _update(line, classname) {
         .on('mouseover', function(d, i) {
             d3Selection.selectAll('#line')
                 .classed('active', true);
-            d3Selection.selectAll('.aline_' + i)
+            d3Selection.selectAll('.aline.line_' + i)
                 .classed('active', true);
         })
         .on('mouseout', function(d, i) {

@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A NEST desktop application",
   "main": "main.js",
   "scripts": {
@@ -22,10 +22,13 @@
     "d3-array": "^1.0.2",
     "d3-axis": "^1.0.4",
     "d3-dsv": "^1.0.3",
+    "d3-ease": "^1.0.2",
+    "d3-interpolate": "^1.1.2",
     "d3-request": "^1.0.3",
     "d3-scale": "^1.0.4",
     "d3-selection": "^1.0.3",
     "d3-shape": "^1.0.4",
+    "d3-transition": "^1.0.3",
     "electron-plugins": "0.0.4",
     "electron-updater": "^0.2.2",
     "jquery": "^3.1.1"
