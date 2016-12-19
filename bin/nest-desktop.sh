@@ -1,45 +1,67 @@
 #!/usr/bin/env bash
+NESTAPP="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 
-python -c 'import flask'
-FLASK=$?
+function nest-desktop_testpath  {
+    echo $NESTAPP
+}
 
-python -c 'import nest'
-NEST=$?
+function nest-desktop_testmodule {
+    echo 'Testing required packages'
 
-CURPATH=`dirname $(readlink -f $0)`
-cd ${CURPATH}/..
+    python -c 'import flask'
+    FLASK=$?
+    if [ ${FLASK} -eq 1 ]
+        then
+        echo ' - Flask not found. ( http://flask.pocoo.org/ )'
+    else
+        echo ' - Flask found.'
+    fi
 
+    python -c 'import nest'
+    NEST=$?
+    if [ ${NEST} -eq 1 ]
+        then
+        echo ' - NEST not found. ( http://www.nest-simulator.org/ )'
+    else
+        nest --version
+    fi
+}
 
-if [ ${NEST} -eq 0 ] && [ ${FLASK} -eq 0 ]
-    then
+function nest-desktop_db-create  {
+    cd ${NESTAPP}/flask
+    python ./app/db_create.py
+}
 
-    # Run flask server
-    python ./flask/views.py &
-    echo $! > ./flask/server.pid
+function nest-desktop_start  {
+    cd ${NESTAPP}
 
-    # Start nest-desktop
-    npm start
+    python -c 'import flask'
+    FLASK=$?
 
-    # Kill flask server
-    kill -9 `cat ./flask/server.pid`
-    rm ./flask/server.pid
+    python -c 'import nest'
+    NEST=$?
 
-    # Check if port 5000 is running
-    # netstat -na | grep 5000
+    if [ ${NEST} -eq 0 ] && [ ${FLASK} -eq 0 ]
+        then
 
-    # Get PID of the port 5000
-    lsof -t -i:5000
-else
-    echo '-------------------------------------------------------------------'
-    echo 'Required packages have to be installed before running nest-desktop:'
-fi
+        # Run flask server
+        python ./flask/views.py &
+        echo $! > ./flask/server.pid
 
-if [ ${FLASK} -eq 1 ]
-    then
-    echo ' - Flask not found. ( http://flask.pocoo.org/ )'
-fi
+        # Start nest-desktop
+        npm start
 
-if [ ${NEST} -eq 1 ]
-    then
-    echo ' - NEST not found. ( http://www.nest-simulator.org/ )'
-fi
+        # Kill flask server
+        kill -9 `cat ./flask/server.pid`
+        rm ./flask/server.pid
+
+        # Check if port 5000 is running
+        # netstat -na | grep 5000
+
+        # Get PID of the port 5000
+        lsof -t -i:5000
+    else
+        echo '-------------------------------------------------------------------'
+        echo 'Required packages have to be installed before running nest-desktop:'
+    fi
+}

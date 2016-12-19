@@ -33,6 +33,11 @@ sudo apt-get install nodejs
 # Install nest-desktop and its dependencies
 npm install nest-desktop -g
 
+# load commands for nest-desktop
+source ./node_modules/nest-desktop/bin/nest-desktop.sh
+
+# Create a sqlite database
+
 # Run the app (with starting flask server)
 cd node_modules/nest-desktop
 bash ./bin/nest-desktop.sh
