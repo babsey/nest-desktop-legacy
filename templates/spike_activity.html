@@ -10,22 +10,59 @@
 </head>
 
 <body>
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form id="network-add-form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="network-name" class="control-label">Network:</label>
+                            <input type="text" class="form-control" id="network-name" placeholder="name">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="network-add-submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
     <div id="controller" class="container pull-right">
         <div class="pull-right">
+            <a type="button" class="btn btn-default navbar-btn" href="../index.html">
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
+            </a>
+            <button type="button" class="btn btn-default navbar-btn" id="network-add" data-toggle="modal" data-target="#myModal" disabled>
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span>
+            </button>
+            <button type="button" class="btn btn-default navbar-btn" id="get-network-list">
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
+            </button>
             <button type="button" class="btn btn-default navbar-btn" onclick="$('#controller-body').toggle()">
                 <span class="glyphicon glyphicon-menu-hamburger"></span>
             </button>
         </div>
-        <h3 div="page-header"><a href="../index.html">NEST desktop</a></h3>
+        <!-- <h3 div="page-header"><a href="../index.html">NEST desktop</a></h3> -->
 
-        <div id="controller-body">
-            <div class="panel panel-default">
+        <div id="controller-body" class="pull-right">
+            <div id="network-list" style="display:none" class="panel"></div>
+
+            <div id="controller-panel" class="panel panel-default">
                 <div class="panel-body">
-
-                    <div id="level">
+                    <div id="simtime">
                         <dl class="params"></dl>
                     </div>
-                    
+
+                    <!-- <div id="level">
+                        <dl class="params"></dl>
+                    </div> -->
+
                     <hr>
                     <div id="input" class="model">
                         <select id="id_input" class="form-control model_select">
@@ -42,6 +79,15 @@
                         <dl class="params"></dl>
                     </div>
 
+                    <hr>
+                    <div id="npop">
+                        <dl class="params"></dl>
+                    </div>
+                    
+                    <div id="outdegree">
+                        <dl class="params"></dl>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -49,7 +95,8 @@
 
     <div id="chart"></div>
     <script>
-        $ = require("jquery");
+        window.$ = window.jQuery = require('jquery');
+
         var nodes, data, chart;
         require("../src/spike-activity.js");
     </script>

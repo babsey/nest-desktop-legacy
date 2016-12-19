@@ -29,6 +29,8 @@ app.on('ready', function() {
         frame: false,
         // "node-integration":: false
     });
+    mainWindow.$ = mainWindow.jQuery = require('jquery');
+
 
     // and load the index.html of the app.
     mainWindow.loadURL('file://' + __dirname + '/index.html');

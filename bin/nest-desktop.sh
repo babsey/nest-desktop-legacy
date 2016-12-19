@@ -13,20 +13,22 @@ cd ${CURPATH}/..
 if [ ${NEST} -eq 0 ] && [ ${FLASK} -eq 0 ]
     then
 
-    # Run local server for nest
-    # netstat -na | grep 5000
-    # lsof -t -i:5000
-    mkdir ./log
+    # Run flask server
+    python ./flask/views.py &
+    echo $! > ./flask/server.pid
 
-    python ./flask_server.py &
-    echo $! > ./log/flask_server.pid
-
-    # start nest-desktop
+    # Start nest-desktop
     npm start
 
-    # Kill local server
-    kill -9 `cat ./log/flask_server.pid`
-    rm ./log/flask_server.pid
+    # Kill flask server
+    kill -9 `cat ./flask/server.pid`
+    rm ./flask/server.pid
+
+    # Check if port 5000 is running
+    # netstat -na | grep 5000
+
+    # Get PID of the port 5000
+    lsof -t -i:5000
 else
     echo '-------------------------------------------------------------------'
     echo 'Required packages have to be installed before running nest-desktop:'

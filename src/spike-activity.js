@@ -1,79 +1,73 @@
 "use strict"
 
-var $ = require("jquery");
+require('bootstrap');
 var d3Request = require('d3-request');
 
-var s = require("./slider");
-var req = require('./request')
-var scatterChart = require('./scatter-chart')
+var models = require("../dist/js/models");
+var slider = require("../dist/js/slider");
+var req = require('../dist/js/request');
+var nav = require('../dist/js/navigation');
+var scatterChart = require('../dist/js/scatter-chart');
 
-var paths = window.location.pathname.split('/')
-var curpath = paths.slice(0, paths.length - 2).join('/')
-
-d3Request.csv('file://' + curpath + '/settings/models.csv', function(models) {
-    models.forEach(function(model) {
-        $("<option class='model_select' value=" + model.id + ">" + model.label + "</option>").appendTo("#id_" + model.type)
-    })
-})
-
-
-function paramSlider(ref, id, level, label, options) {
-    $('#' + ref).find('.params').append('<span class="paramSlider level_' + level + '"><dt id="id_' + id + '">' + label + '</dt></div>')
-    return s.slider(id, options);
+data = {
+    simtime: 1000.,
+    level: 1,
+    nodes: {
+        neuron: {
+            npop: 10,
+            outdegree: 10,
+            model: undefined,
+            params: {},
+        },
+        input: {
+            model: undefined,
+            params: {},
+        }
+    }
 }
 
-paramSlider('level', 'level', 0, 'Level of configuration', {
-    value: 1,
-    min: 1,
-    max: 4,
-    step: 1
-}).on('slideStop', function(d) {
-    $('.paramSlider').hide()
-    for (var i = 0; i <= d.value; i++) {
-        $('.level_' + i).show()
-    }
-})
-
-function simulate(simtime) {
-    if (('neuron' in nodes) && ('input' in nodes)) {
-        req.simulate('spike_activity', simtime, nodes)
+function simulate() {
+    setTimeout(function() {
+        if ((data.nodes.neuron.model == undefined) || (data.nodes.input.model == undefined)) return
+        var sendData = {
+            simtime: data.simtime,
+            nodes: data.nodes,
+        }
+        req.simulate('spike_activity', sendData)
             .done(function(res) {
-                data = res
+                data.events = res.events;
+                data.curtime = res.curtime;
+                data.nodes.neuron.pop = res.nodes.neuron.pop;
                 chart.update(data.events['times'], data.events['senders'])
-                    .xlim([data.time-1000,data.time])
-                    .ylim([0, data.pop.length]);
+                    // .xlim([data.time - 1000, data.time])
+                    .ylim([0, data.nodes.neuron.pop.length]);
             })
-    }
+    }, 100)
 }
 
-var update_params = function(node, model) {
-    var url = 'file://' + curpath + '/settings/sliderDefaults/' + model + '.csv';
-    d3Request.csv(url, s.row, function(params) {
-        params.forEach(function(p) {
-            var pslider = paramSlider(node, p.id, p.level, p.label, p.options);
-            pslider.on("slideStop", function(d) {
-                nodes[node]['params'][p.id] = d.value;
-                simulate(1500.)
-            })
-            nodes[node]['params'][p.id] = pslider.slider('getValue');
-            if (p.level > $('#levelInput').attr('value')) {
-                $('#' + p.id).parent().attr('style', 'display: none')
-            }
-        })
+slider.create_paramslider(data)
+models.load_model_list(data.nodes)
+models.model_select_onChange(data.nodes, data.level)
+nav.init_button(data, 'spike_activity')
+
+setTimeout(function() {
+    $('.sliderInput').on('slideStop', simulate)
+    $('.model_select').on('change', function() {
+        var node = $(this).parents('.model').attr('id');
+        var model = this.value;
+        slider.update_modelslider(data.nodes, node, model, data.level)
+        simulate()
     })
-}
+    $('.network').on('click', simulate)
+}, 100)
 
-nodes = {};
-$('.model .model_select').on('change', function() {
-    var node = $(this).parents('.model').attr('id');
-    $('#' + node).find('.params').empty();
-    var model = this.value;
-    nodes[node] = {
-        'model': model,
-        'params': {}
-    }
-    update_params(node, model);
-    simulate(1500.)
+$('#network-add-submit').on('click', function() {
+    setTimeout(function() {
+        nav.get_network_list(data, 'spike_activity')
+        setTimeout(function() {
+            $('.network').on('click', simulate)
+        }, 100)
+    }, 100)
 })
 
 chart = scatterChart('#chart')
