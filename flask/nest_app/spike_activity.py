@@ -22,7 +22,7 @@ def spike_activity(data):
     input = nest.Create(nodes['input']['model'], params=inputParams)
     sd = nest.Create('spike_detector')
 
-    nest.Connect(input,popE)
+    nest.Connect(input,pop)
     nest.Connect(pop,sd)
 
     nest.SetStatus(noise, {'std':1000.})
@@ -36,7 +36,7 @@ def spike_activity(data):
         syn_spec={'weight':1.})
     nest.Connect(popI,pop,
         conn_spec={'rule': 'fixed_outdegree', 'outdegree': int(p*npop)},
-        syn_spec={'weight':-4.})
+        syn_spec={'weight':-8.})
 
     nest.Simulate(data['simtime'])
     curtime = nest.GetKernelStatus('time')

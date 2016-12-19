@@ -2,7 +2,7 @@
 
 **A NEST desktop application**
 
-This is a desktop application for the NEural Simulation Tool.(http://www.nest-initiative.org/)
+An interactive desktop application for the NEural Simulation Tool (http://www.nest-initiative.org/).
 
 ## To Use
 
@@ -10,8 +10,7 @@ To install and to run this application you'll need [NEST](http://www.nest-simula
 
 ```bash (Ubuntu)
 
-# Install NEST
-cd Downloads
+# Install NEST with PyNEST in your home folder (for Python 2.7)
 wget https://github.com/nest/nest-simulator/releases/download/v2.10.0/nest-2.10.0.tar.gz
 tar -zxf nest-2.10.0.tar.gz
 cd nest-2.10.0
@@ -19,21 +18,26 @@ cd nest-2.10.0
 make
 make install
 
-# Install Flask
+# Make sure that NEST is in PYTHONPATH (add this in .bashrc)
+export PYTHONPATH=$HOME/opt/nest/lib/pyton2.7/sist-packages:$PYTHONPATH
+
+# Install for Flask server (with root right)
 sudo pip install Flask
 
-# Install nodejs
+# Install database access in sqlite for Flask (version ^0.3.0) (with root right)
+sudo pip install anyjson tempita sqlparse migrate sqlalchemy flask_sqlalchemy
+
+# Install nodejs (with root right)
 sudo apt-get install nodejs
 
-# Install nest-desktop
-npm install nest-desktop
-
-# Install dependencies for nest-desktop
-cd nest-desktop
-npm install
+# Install nest-desktop and its dependencies
+npm install nest-desktop -g
 
 # Run the app (with starting flask server)
+cd node_modules/nest-desktop
 bash ./bin/nest-desktop.sh
+
+# Close the app with CTRL + W or Esc
 ```
 
 #### License [MIT](LICENSE)

@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A NEST desktop application",
   "main": "main.js",
   "scripts": {
@@ -16,9 +16,6 @@
     "name": "Sebastian Spreizer"
   },
   "license": "MIT",
-  "devDependencies": {
-    "electron-prebuilt": "^0.35.0"
-  },
   "dependencies": {
     "bootstrap": "^3.3.7",
     "bootstrap-slider": "^9.5.3",
@@ -32,8 +29,7 @@
     "d3-selection": "^1.0.3",
     "d3-shape": "^1.0.4",
     "d3-transition": "^1.0.3",
-    "electron-plugins": "0.0.4",
-    "electron-updater": "^0.2.2",
+    "electron": "1.4.1",
     "jquery": "^3.1.1"
   }
 }
