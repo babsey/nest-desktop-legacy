@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import nest
 
-def neuronal_activity(data):
+def neuronal_state_activity(data):
     nest.ResetKernel()
 
     nodes = data['nodes']
@@ -26,6 +26,8 @@ def neuronal_activity(data):
     nest.Connect(mm,pop)
 
     nest.Simulate(data['simtime'])
+    print 'Simulation finished'
+
     curtime = nest.GetKernelStatus('time')
     data['curtime'] = curtime
 

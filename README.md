@@ -48,18 +48,15 @@ Make sure that NEST is in PYTHONPATH (add this in .bashrc)
 export PYTHONPATH=$HOME/opt/nest/lib/pyton2.7/sist-packages:$PYTHONPATH
 ```
 
-Install for Flask server (with root right)
+Install Flask (with root right)
 ```bash (Ubuntu)
-sudo pip install Flask
+sudo apt-get install python-flask
 ```
 
-Install database access in sqlite for Flask (version ^0.3.0) (with root right)
+Install database access for Flask (version ^0.3.0)
+via pip (I encourage you to use virtualenv)
 ```bash (Ubuntu)
-sudo pip install anyjson tempita sqlparse migrate sqlalchemy flask_sqlalchemy
-```
-or install from file requirements.txt
-```bash (Ubuntu)
-sudo pip install -r requirements.txt
+pip install anyjson migrate flask-sqlalchemy
 ```
 
 Install nodejs (with root right)

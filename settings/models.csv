@@ -4,9 +4,10 @@ dc_generator,input,DC generator
 iaf_cond_alpha,neuron,IAF cond alpha,V_m;g_ex;g_in
 iaf_cond_exp,neuron,IAF cond exp,V_m;g_ex;g_in
 iaf_neuron,neuron,IAF neuron,V_m
-iaf_psc_alpha,neuron,IAF PSC alpha,V_m;input_currents_ex;input_currents_in;weighted_spikes_ex;weighted_spikes_in
-iaf_psc_delta,neuron,IAF PSC delta,V_m
-iaf_psc_exp,neuron,IAF PSC exp,V_m;input_currents_ex;input_currents_in;weighted_spikes_ex;weighted_spikes_in
+iaf_psc_alpha,neuron,IAF psc alpha,V_m;input_currents_ex;input_currents_in;weighted_spikes_ex;weighted_spikes_in
+iaf_psc_delta,neuron,IAF psc delta,V_m
+iaf_psc_exp,neuron,IAF psc exp,V_m;input_currents_ex;input_currents_in;weighted_spikes_ex;weighted_spikes_in
+mat2_psc_exp,neuron,MAT2 psc exp,V_m;V_th
 mip_generator,input,MIP generator
 noise_generator,input,Noise generator
 parrot_neuron,neuron, Parrot neuron

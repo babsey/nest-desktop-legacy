@@ -7,12 +7,18 @@
 </head>
 
 <body>
+    <div class="pull-right" style="margin-right:10px">
+        <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+    </div>
+
     <div class="jumbotron" style="background-color:transparent; overflow:hidden">
         <div class="container">
             <h1>NEST desktop</h1>
             <p>
-                A desktop application for the NEural Simulation Tool.
-                (<a href="http://www.nest-initiative.org/">http://www.nest-initiative.org/</a>)
+                A desktop application for the NEural Simulation Tool. (
+                <a href="http://www.nest-initiative.org/">http://www.nest-initiative.org/</a>)
             </p>
             <p>
                 <a class="btn btn-primary btn-lg" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
@@ -25,18 +31,40 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-4 col-md-3">
-                <a href="./templates/neuronal_activity.html" class="thumbnail">
-                    <img src="./dist/img/neuronal-activity.png" alt="neuronal activity">
+                <a href="./templates/neuronal_state_activity.html" class="thumbnail network" id="neuronal_state_activity">
+                    <div style="position:absolute">
+                        <button class="btn btn-default" type="button">
+                            Neuronal state activity <span class="badge"></span>
+                        </button>
+                    </div>
+                    <img src="./dist/img/neuronal-state-activity.png" alt="neuronal state activity">
                 </a>
             </div>
 
             <div class="col-xs-12 col-sm-4 col-md-3">
-                <a href="./templates/spike_activity.html" class="thumbnail">
+                <a href="./templates/spike_activity.html" class="thumbnail network" id="spike_activity">
+                    <div style="position:absolute">
+                        <button class="btn btn-default" type="button">
+                            Spike activity <span class="badge"></span>
+                        </button>
+                    </div>
                     <img src="./dist/img/spike-activity.png" alt="spike activity">
                 </a>
             </div>
         </div>
     </div>
 </body>
+
+<script>
+    var $ = require('jquery');
+    var req = require('./dist/js/request');
+
+    $('.network').each(function() {
+        var n = $(this)
+        req.network_list(this.id).done(function(d) {
+            n.find('.badge').html(d.length)
+        })
+    })
+</script>
 
 </html>

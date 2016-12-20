@@ -48,6 +48,9 @@
             <button type="button" class="btn btn-default navbar-btn" onclick="$('#controller-body').toggle()">
                 <span class="glyphicon glyphicon-menu-hamburger"></span>
             </button>
+            <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
         </div>
         <!-- <h3 div="page-header">NEST desktop</h3> -->
 
@@ -106,7 +109,7 @@
         window.$ = window.jQuery = require('jquery');
 
         var nodes, data, chart, times, values,simulate;
-        require("../src/neuronal-activity.js");
+        require("../src/neuronal-state-activity.js");
     </script>
 </body>
 

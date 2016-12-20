@@ -34,7 +34,7 @@ simulate = function() {
             simtime: data.simtime,
             nodes: data.nodes,
         }
-        req.simulate('neuronal_activity', sendData)
+        req.simulate('neuronal_state_activity', sendData)
             .done(function(res) {
                 data.events = res.events;
                 data.curtime = res.curtime;
@@ -84,10 +84,10 @@ $('#id_record').on('change', function() {
 })
 
 
-slider.create_paramslider(data)
+slider.create_paramslider(data, {'npop': {max: 10, min: 1}})
 models.load_model_list(data.nodes)
 models.model_select_onChange(data.nodes, data.level)
-nav.init_button(data, 'neuronal_activity')
+nav.init_button(data, 'neuronal_state_activity')
 
 setTimeout(function() {
     $('.sliderInput').on('slideStop', simulate)
@@ -102,7 +102,7 @@ setTimeout(function() {
 
 $('#network-add-submit').on('click', function() {
     setTimeout(function() {
-        nav.get_network_list(data, 'neuronal_activity')
+        nav.get_network_list(data, 'neuronal_state_activity')
         setTimeout(function() {
             $('.network').on('click', simulate)
         }, 100)
