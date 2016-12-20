@@ -1,13 +1,15 @@
 "use strict"
 
+window.$ = window.jQuery = require('jquery');
 require('bootstrap');
 var d3Request = require('d3-request');
 
-var models = require("../dist/js/models");
-var slider = require("../dist/js/slider");
-var req = require('../dist/js/request');
-var nav = require('../dist/js/navigation');
-var lineChart = require('../dist/js/line-chart');
+// var data, chart, times, values, simulate;
+var models = require("./models");
+var slider = require("./slider");
+var req = require('./request');
+var nav = require('./navigation');
+var lineChart = require('./line-chart');
 
 data = {
     simtime: 1000.,

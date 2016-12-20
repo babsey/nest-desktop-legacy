@@ -3,7 +3,7 @@
 function nest-desktop {
     echo 'A NEST desktop application'
     OLDPATH=`pwd`
-    NESTAPP="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
+    CURPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 
     START=true
     while [[ $# -gt 0 ]]
@@ -17,7 +17,7 @@ function nest-desktop {
         ;;
         -i|--init)
             START=false
-            cd ${NESTAPP}/flask
+            cd ${CURPATH}/flask
             python ./app/db_create.py
         ;;
         -kp|--kill-port)
@@ -26,17 +26,17 @@ function nest-desktop {
         ;;
         -s|--server-only)
             START=false
-            cd ${NESTAPP}
+            cd ${CURPATH}
             # Run flask server
             python ./flask/views.py
         ;;
         -tm|--test-module)
             START=false
-            ${NESTAPP}/bin/nest-desktop-test.sh
+            ${CURPATH}/bin/nest-desktop-test.sh
         ;;
         -tp|--test-path)
             START=false
-            echo $NESTAPP
+            echo ${CURPATH}
         ;;
         -v|--version)
             START=false
@@ -52,7 +52,7 @@ function nest-desktop {
 
     if [ $START = true ]
         then
-        cd ${NESTAPP}
+        cd ${CURPATH}
         python -c 'import flask'
         FLASK=$?
         python -c 'import nest'

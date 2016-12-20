@@ -32,11 +32,6 @@ For Python 2.7
 ./configure --prefix=$HOME/opt/nest
 ```
 
-For Python 3.4
-```bash (Ubuntu)
-cmake -Dwith-python=3 $HOME/opt/nest
-```
-
 Start making and installing NEST
 ```bash (Ubuntu)
 make
@@ -48,13 +43,13 @@ Make sure that NEST is in PYTHONPATH (add this in .bashrc)
 export PYTHONPATH=$HOME/opt/nest/lib/pyton2.7/sist-packages:$PYTHONPATH
 ```
 
-Install Flask (with root right)
+Install Flask
+via pip (I encourage you to use virtualenv)
 ```bash (Ubuntu)
-sudo apt-get install python-flask
+pip install flask
 ```
 
 Install database access for Flask (version ^0.3.0)
-via pip (I encourage you to use virtualenv)
 ```bash (Ubuntu)
 pip install anyjson migrate flask-sqlalchemy
 ```

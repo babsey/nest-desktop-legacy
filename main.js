@@ -26,7 +26,6 @@ function createWindow() {
         icon: './dist/img/icon.png',
         "node-integration": true,
     });
-    mainWindow.$ = mainWindow.jQuery = require('jquery');
 
     // and load the index.html of the app.
     mainWindow.loadURL('file://' + __dirname + '/index.html');
