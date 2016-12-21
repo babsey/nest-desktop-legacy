@@ -4,7 +4,7 @@
 
 An interactive desktop application for the NEural Simulation Tool (http://www.nest-initiative.org/).
 
-## To install
+## To install (Ubuntu)
 
 To install this application you'll need [NEST](http://www.nest-simulator.org/), [Flask](http://flask.pocoo.org) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
@@ -38,9 +38,9 @@ make
 make install
 ```
 
-Make sure that NEST is in PYTHONPATH (add this in .bashrc)
+Make sure that NEST is in the PYTHONPATH (or add this line in .bashrc)
 ```bash (Ubuntu)
-export PYTHONPATH=$HOME/opt/nest/lib/pyton2.7/sist-packages:$PYTHONPATH
+export PYTHONPATH=$HOME/opt/nest/lib/pyton2.7/site-packages:$PYTHONPATH
 ```
 
 Install Flask
@@ -59,9 +59,14 @@ Install nodejs (with root right)
 sudo apt-get install nodejs
 ```
 
+Install electron  with root right, latest tested version: 1.4.13)
+```bash (Ubuntu)
+sudo npm install electron -g
+```
+
 Install nest-desktop and its dependencies
 ```bash (Ubuntu)
-npm install nest-desktop -g
+npm install nest-desktop
 ```
 
 ## To start
