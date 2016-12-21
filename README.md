@@ -2,20 +2,13 @@
 
 **A NEST desktop application**
 
-An interactive desktop application for the NEural Simulation Tool (http://www.nest-initiative.org/).
+![nest-logo](http://www.nest-simulator.org/wp-content/uploads/2015/03/nest_logo.png)
+
+An interactive desktop application for the [NEural Simulation Tool](http://www.nest-initiative.org/).
 
 ## To install (Ubuntu)
 
-To install this application you'll need [NEST](http://www.nest-simulator.org/), [Flask](http://flask.pocoo.org) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
-
-
-Install NEST with PyNEST in your home folder
-Read the installation instructions: http://www.nest-simulator.org/installation/
-```bash (Ubuntu)
-wget https://github.com/nest/nest-simulator/releases/download/v2.10.0/nest-2.10.0.tar.gz
-tar -zxf nest-2.10.0.tar.gz
-cd nest-2.10.0
-```
+To install this application you'll need [NEST](http://www.nest-simulator.org/), [Flask](http://flask.pocoo.org), [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Electron](http://electron.atom.io/) installed on your computer. From your command line:
 
 Install standard configuration before installing NEST
 ```bash (Ubuntu)
@@ -25,6 +18,14 @@ sudo apt-get install build-essential autoconf automake libtool libltdl7-dev libr
 Optional packages for python:
 ```bash (Ubuntu)
 sudo apt-get install python-numpy python-scipy python-matplotlib ipython
+```
+
+Install NEST with PyNEST in your home folder.
+Read the [installation instructions](http://www.nest-simulator.org/installation/)
+```bash (Ubuntu)
+wget https://github.com/nest/nest-simulator/releases/download/v2.10.0/nest-2.10.0.tar.gz
+tar -zxf nest-2.10.0.tar.gz
+cd nest-2.10.0
 ```
 
 For Python 2.7
@@ -38,7 +39,7 @@ make
 make install
 ```
 
-Make sure that NEST is in the PYTHONPATH (or add this line in .bashrc)
+Make sure that NEST is in the PYTHONPATH (or add this line in .bashrc file)
 ```bash (Ubuntu)
 export PYTHONPATH=$HOME/opt/nest/lib/pyton2.7/site-packages:$PYTHONPATH
 ```
@@ -54,12 +55,12 @@ Install database access for Flask (version ^0.3.0)
 pip install anyjson migrate flask-sqlalchemy
 ```
 
-Install nodejs (with root right)
+Install nodejs with root rights
 ```bash (Ubuntu)
 sudo apt-get install nodejs
 ```
 
-Install electron  with root right, latest tested version: 1.4.13)
+Install [Electron](https://github.com/electron/electron) with root rights (latest tested version: 1.4.13)
 ```bash (Ubuntu)
 sudo npm install electron -g
 ```

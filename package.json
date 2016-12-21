@@ -1,11 +1,16 @@
 {
   "name": "nest-desktop",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "A NEST desktop application",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/babsey/nest-webapp.git"
+  },
+
   "keywords": [
     "NEST",
     "neuronal",
