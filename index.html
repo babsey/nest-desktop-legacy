@@ -7,14 +7,13 @@
 </head>
 
 <body>
-    <div class="pull-right" style="margin-right:10px">
-        <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
-            <span class="glyphicon glyphicon-remove"></span>
-        </button>
-    </div>
-
-    <div class="jumbotron" style="background-color:transparent; overflow:hidden">
-        <div class="container">
+    <div class="container">
+        <div class="pull-right" style="position: relative; right: -60px;">
+            <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </div>
+        <div class="jumbotron" style="background-color:transparent">
             <h1>NEST desktop</h1>
             <p>
                 A desktop application for the NEural Simulation Tool. (
@@ -56,15 +55,21 @@
 </body>
 
 <script>
-    var $ = require('jquery');
-    var req = require('./src/request');
+    const $ = require('jquery');
+    const req = require('./src/request');
+    const shell = require("electron").shell;
 
     $('.network').each(function() {
-        var n = $(this)
+        const n = $(this)
         req.network_list(this.id).done(function(d) {
             n.find('.badge').html(d.length)
         })
     })
+
+    $(document).on('click', 'a[href^="http"]', function(event) {
+        event.preventDefault();
+        shell.openExternal(this.href);
+    });
 </script>
 
 </html>

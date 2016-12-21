@@ -64,18 +64,13 @@ Install nest-desktop and its dependencies
 npm install nest-desktop -g
 ```
 
-## To use
+## To start
 Load nest-desktop command
 ```bash (Ubuntu)
 source ./node_modules/nest-desktop/bin/nest-desktop.sh
 ```
 
-Test required modules for nest-desktop
-```bash (Ubuntu)
-nest-desktop testmodule
-```
-
-Create a sqlite database
+First create a sqlite database
 ```bash (Ubuntu)
 nest-desktop init
 ```
@@ -84,7 +79,14 @@ Run the app (with starting flask server)
 ```bash (Ubuntu)
 nest-desktop start
 ```
-Close the app with CTRL + W or Esc
+Keybindings to close it are 'CTRL + W' or 'Esc'
+
+## For further usage
+
+Test required modules for nest-desktop
+```bash (Ubuntu)
+nest-desktop test
+```
 
 Check if port 5000 is running
 ```bash (Ubuntu)
@@ -94,6 +96,11 @@ nest-desktop checkport
 Kill the port 5000
 ```bash (Ubuntu)
 nest-desktop killport
+```
+
+Show all available commands
+```bash (Ubuntu)
+nest-desktop help
 ```
 
 #### License [MIT](LICENSE)
