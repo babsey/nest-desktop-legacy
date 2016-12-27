@@ -27,64 +27,31 @@ var xAxis = d3Axis.axisBottom(xScale);
 var yAxis = d3Axis.axisLeft(yScale);
 
 var t = d3Transition.transition()
-    .duration(750)
+    .duration(250)
     .ease(d3Ease.easeLinear);
 
-var data;
+var _data = {
+    x: [],
+    y: [],
+};
 
-function _update() {
-    var dots = d3Selection.select('#chart-area')
-        .selectAll(".dot")
-        .data(data.x);
-
-    dots.attr("cx", function(d) {
-            return xScale(d);
-        })
-        .attr("cy", function(d, i) {
-            return yScale(data.y[i]);
-        })
-
-    dots.enter().append("circle")
-        .attr("class", "dot")
-        .attr("r", 1.)
-        .attr("cx", function(d) {
-            return xScale(d);
-        })
-        .attr("cy", function(d, i) {
-            return yScale(data.y[i]);
-        });
-
-    dots.exit()
-        .remove();
+function data(d) {
+    if (!arguments.length) return _data;
+    _data = d;
+    xlim(d3Array.extent(_data.x));
+    ylim(d3Array.extent([].concat.apply([], _data.y)));
+    return chart;
 }
 
-function update(x, y) {
-    data = {
-        x: x,
-        y: y
-    }
-
-    xlim(d3Array.extent(x));
-    ylim(d3Array.extent(y));
-    _update()
+function xlim(x) {
+    if (!arguments.length) return d3Array.extent(_data.x);
+    xScale.domain(x);
     return chart
 }
 
-function xlim(xlim) {
-    xScale.domain(xlim);
-    d3Selection.select('#xaxis')
-        .transition(t)
-        .call(xAxis);
-    _update()
-    return chart
-}
-
-function ylim(ylim) {
-    yScale.domain(ylim);
-    d3Selection.select('#yaxis')
-        .transition(t)
-        .call(yAxis);
-    _update()
+function ylim(y) {
+    if (!arguments.length) return d3Array.extent([].concat.apply([], _data.y));
+    yScale.domain(y);
     return chart
 }
 
@@ -100,6 +67,44 @@ function xlabel(label) {
     return chart
 }
 
+function update() {
+
+    d3Selection.select('#xaxis')
+        .transition(t)
+        .call(xAxis);
+
+    d3Selection.select('#yaxis')
+        .transition(t)
+        .call(yAxis);
+
+    var dots = d3Selection
+        .select('#scatter')
+        .selectAll(".dot")
+        .data(_data.x);
+
+    dots.attr("cx", function(d) {
+            return xScale(d);
+        })
+        .attr("cy", function(d, i) {
+            return yScale(_data.y[i]);
+        })
+
+    dots.enter().append("circle")
+        .attr("class", "dot")
+        .attr("r", 3)
+        .attr("cx", function(d) {
+            return xScale(d);
+        })
+        .attr("cy", function(d, i) {
+            return yScale(_data.y[i]);
+        });
+
+    dots.exit()
+        .remove();
+
+    return chart;
+}
+
 function scatterChart(reference) {
     d3Selection.select(reference).html("");
 
@@ -107,8 +112,7 @@ function scatterChart(reference) {
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .attr('id', "chart-area");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     svg.append("g")
         .attr("id", "xaxis")
@@ -136,15 +140,20 @@ function scatterChart(reference) {
         .attr("dy", ".71em")
         .attr("text-anchor", "end");
 
+    svg.append("g")
+        .attr("clip-path", "url(#clip)")
+        .attr('id', 'scatter');
+
     return chart
 }
 
 var chart = {
-    update: update,
+    data: data,
     xlim: xlim,
     ylim: ylim,
     xlabel: xlabel,
-    ylabel: ylabel
+    ylabel: ylabel,
+    update: update,
 }
 
 module.exports = scatterChart

@@ -58,7 +58,7 @@ function create_paramslider(data, options) {
             value: data.nodes.neuron.outdegree,
             min: 0,
             max: 100,
-            step: 1
+            step: 2
         }
     }
     var options = $.extend(options_default, options)

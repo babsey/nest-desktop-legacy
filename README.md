@@ -51,7 +51,7 @@ via pip (I encourage you to use virtualenv)
 pip install flask
 ```
 
-Install database access for Flask (version ^0.3.0)
+Install database access for Flask (for nest-desktop version ^0.3.0)
 ```
 pip install anyjson migrate flask-sqlalchemy
 ```

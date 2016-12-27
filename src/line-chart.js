@@ -27,19 +27,12 @@ var xAxis = d3Axis.axisBottom(xScale);
 var yAxis = d3Axis.axisLeft(yScale);
 
 var t = d3Transition.transition()
-    .duration(500)
+    .duration(250)
     .ease(d3Ease.easeLinear);
 
-var aline = d3Shape.line();
-var bline = d3Shape.line();
+var line = d3Shape.line();
 
-function _update(line, classname) {
-
-    line.x(function(d, i) {
-        return xScale(_data.x[i]);
-    }).y(function(d) {
-        return yScale(d);
-    });
+function _draw_line(classname) {
 
     var lines = d3Selection
         .select('#line')
@@ -53,7 +46,7 @@ function _update(line, classname) {
     lines.enter()
         .append("path")
         .attr("class", function(d, i) {
-            return classname + ' line_' + i
+            return classname +' line_' + i
         })
         .on('mouseover', function(d, i) {
             d3Selection.selectAll('#line')
@@ -64,14 +57,14 @@ function _update(line, classname) {
         .on('mouseout', function(d, i) {
             d3Selection.selectAll('#line')
                 .classed('active', false)
-            d3Selection.selectAll('.aline')
+            d3Selection.selectAll('#line path')
                 .classed('active', false);
         })
         .transition(t)
+        .attr("style", function () {return 'zscore:'+ (classname == 'aline' ? 1 : -1000)})
         .attr("d", line);
 
     lines.exit().remove()
-
 }
 
 var _data = {
@@ -88,11 +81,13 @@ function data(d) {
 }
 
 function xlim(xlim) {
+    if (!arguments.length) return d3Array.extent(_data.x);
     xScale.domain(xlim);
     return chart
 }
 
 function ylim(ylim) {
+    if (!arguments.length) return d3Array.extent([].concat.apply([], _data.y));
     yScale.domain(ylim);
     return chart
 }
@@ -110,15 +105,24 @@ function xlabel(label) {
 }
 
 function update() {
+
     d3Selection.select('#xaxis')
         .transition(t)
         .call(xAxis);
     d3Selection.select('#yaxis')
         .transition(t)
         .call(yAxis);
-    _update(bline, 'bline')
-    _update(aline, 'aline')
-    return chart
+
+    line.x(function(d, i) {
+        return xScale(_data.x[i]);
+    }).y(function(d) {
+        return yScale(d);
+    });
+
+    _draw_line('aline')
+    _draw_line('bline')
+
+    return chart;
 }
 
 function lineChart(reference) {

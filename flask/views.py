@@ -44,9 +44,10 @@ def network_add():
 
 from nest_app.neuronal_state_activity import neuronal_state_activity
 from nest_app.spike_activity import spike_activity
+from nest_app.bump_activity import bump_activity
 
 @app.route('/neuronal_state_activity/', methods=['POST'])
-def app_neural_activity():
+def app_neuronal_state_activity():
     data = request.get_json()
     return jsonify(neuronal_state_activity(data))
 
@@ -54,6 +55,11 @@ def app_neural_activity():
 def app_spike_activity():
     data = request.get_json()
     return jsonify(spike_activity(data))
+
+@app.route('/bump_activity/', methods=['POST'])
+def app_bump_activity():
+    data = request.get_json()
+    return jsonify(bump_activity(data))
 
 
 if __name__ == '__main__':

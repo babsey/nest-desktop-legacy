@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Scatter chart</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href='../dist/css/scatter-chart.css'></link>
+    <link rel="stylesheet" href='../dist/css/main.css'></link>
+</head>
+
+<body>
+    <a href="index.html">back</a>
+    <div id="chart"></div>
+    <script>
+        var scatterChart = require("../src/scatter-chart");
+        var math = require('mathjs');
+
+        var chart = scatterChart('#chart');
+
+        var n = 1000;
+        chart.data({
+                x: math.random([n]),
+                y: math.random([n]),
+            })
+            .update()
+    </script>
+</body>
+
+</html>
