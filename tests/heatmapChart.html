@@ -9,7 +9,17 @@
 </head>
 
 <body>
-    <a href="index.html">back</a>
+    <div id="controller" class="container pull-right">
+        <div class="pull-right">
+            <a type="button" class="btn btn-default navbar-btn" href="../index.html">
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
+            </a>
+            <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </div>
+    </div>
+
     <div id="chart"></div>
     <script>
         var math = require('mathjs');
@@ -24,21 +34,18 @@
         }
 
         var chart = heatmapChart('#chart');
-
-        var n = 40;
-
-        var c = math.random([n,n])
-        c[0] = d3Array.range(0,1.,1./n);
+        var n = 10;
+        var c = math.random([n * n])
         chart.data({
-                x: d3Array.range(0,n),
-                y: d3Array.range(0,n),
+                x: d3Array.range(0, n),
+                y: d3Array.range(0, n),
                 c: c,
             })
-            .xlim([0,n])
-            .ylim([0,n])
-            .cmap(['#fff','#000'])
-            .clim([0,1])
-            // .legend()
+            .xlim([0, n])
+            .ylim([0, n])
+            // .cmap(['#fff','#000'])
+            .clim([0, 1])
+            .legend()
             .update();
     </script>
 </body>

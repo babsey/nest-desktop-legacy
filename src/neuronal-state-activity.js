@@ -3,6 +3,7 @@
 window.$ = window.jQuery = require('jquery');
 require('bootstrap');
 var d3Request = require('d3-request');
+var d3Array = require('d3-array')
 
 // var data, chart, times, values, simulate;
 var models = require("./models");
@@ -57,7 +58,8 @@ simulate = function() {
                         x: times,
                         y: values
                     })
-                    // .xlim([data.time - 1000., data.time])
+                    .xlim(d3Array.extent(times))
+                    .ylim(d3Array.extent([].concat.apply([], values)))
                     .ylabel(models.record_labels[data.nodes.neuron.record_from])
                     .update();
             })
@@ -80,7 +82,6 @@ $('#id_record').on('change', function() {
             x: times,
             y: values
         })
-        // .xlim([data.time - 1000, data.time])
         .ylabel(models.record_labels[data.nodes.neuron.record_from])
         .update();
 })

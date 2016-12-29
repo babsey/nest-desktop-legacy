@@ -17,7 +17,9 @@ data = {
     level: 1,
     nodes: {
         neuron: {
-            npop: 900,
+            npop: 400,
+            nrow: 20,
+            ncol: 20,
             outdegree: 50,
             model: 'iaf_cond_alpha',
             params: {
@@ -100,6 +102,8 @@ $('#network-add-submit').on('click', function() {
     }, 100)
 })
 
+
 chart = heatmapChart('#chart')
     .xlabel('Neuron Col ID')
     .ylabel('Neuron Row ID');
+//

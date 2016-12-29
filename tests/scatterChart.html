@@ -9,7 +9,17 @@
 </head>
 
 <body>
-    <a href="index.html">back</a>
+    <div id="controller" class="container pull-right">
+        <div class="pull-right">
+            <a type="button" class="btn btn-default navbar-btn" href="../index.html">
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
+            </a>
+            <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </div>
+    </div>
+
     <div id="chart"></div>
     <script>
         var scatterChart = require("../src/scatter-chart");

@@ -4,14 +4,25 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href='./dist/css/main.css'></link>
+    <title>Nest desktop application</title>
 </head>
 
 <body>
     <div class="container">
         <div class="pull-right" style="position: relative; right: -60px;">
-            <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
-                <span class="glyphicon glyphicon-remove"></span>
-            </button>
+            <div class="dropdown">
+                <button class="btn btn-default navbar-bin dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-wrench"></span><span class="caret"></span></button>
+
+                    <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="./tests/lineChart.html">Line chart</a></li>
+                    <li><a href="./tests/scatterChart.html">Scatter chart</a></li>
+                    <li><a href="./tests/heatmapChart.html">Heatmap chart</a></li>
+                </ul>
+            </div>
         </div>
         <div class="jumbotron" style="background-color:transparent">
             <h1>NEST desktop</h1>
@@ -67,7 +78,9 @@
 </body>
 
 <script>
-    const $ = require('jquery');
+    window.jQuery = window.$ = require('jquery');
+
+    require('bootstrap');
     const req = require('./src/request');
     const shell = require("electron").shell;
 

@@ -44,8 +44,8 @@ function simulate() {
                         x: data.events['times'],
                         y: data.events['senders']
                     })
-                    // .xlim([data.time - 1000, data.time])
-                    // .ylim([0, data.nodes.neuron.pop.length])
+                    .xlim([0,data.simtime])
+                    .ylim([0, data.nodes.neuron.pop.length])
                     .update();
             })
     }, 100)

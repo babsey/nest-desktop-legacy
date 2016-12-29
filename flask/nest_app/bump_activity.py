@@ -14,13 +14,13 @@ def bump_activity(data):
     nodes['neuron']['params'] = dict(zip(nodes['neuron']['params'].keys(), map(float, nodes['neuron']['params'].values())))
     nodes['input']['params'] = dict(zip(nodes['input']['params'].keys(), map(float, nodes['input']['params'].values())))
 
-    nrow = ncol = 30
-    nMSN = nrow*ncol
-    pop = nest.Create(nodes['neuron']['model'], nMSN, params=nodes['neuron']['params'])
+    nrow = nodes['neuron']['nrow']
+    ncol = nodes['neuron']['ncol']
+    npop = nrow*ncol
+    pop = nest.Create(nodes['neuron']['model'], npop, params=nodes['neuron']['params'])
     data['nodes']['neuron']['pop'] = pop
     data['nodes']['neuron']['ncol'] = ncol
     data['nodes']['neuron']['nrow'] = nrow
-    npop = len(pop)
 
     input = nest.Create(nodes['input']['model'], params=nodes['input']['params'])
     sd = nest.Create('spike_detector', params={
@@ -36,7 +36,7 @@ def bump_activity(data):
     nest.Connect(input,pop)
     nest.Connect(pop,sd)
 
-    nest.Simulate(1100.)
+    nest.Simulate(data['simtime'])
     curtime = nest.GetKernelStatus('time')
     data['curtime'] = curtime
 
