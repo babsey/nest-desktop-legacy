@@ -34,14 +34,14 @@
     </div>
 
     <div id="controller" class="container pull-right">
-        <div class="pull-right">
+        <div class="pull-right dropdown">
             <a type="button" class="btn btn-default navbar-btn" href="../index.html">
                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
             </a>
             <button type="button" class="btn btn-default navbar-btn" id="network-add" data-toggle="modal" data-target="#myModal" disabled>
                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span>
             </button>
-            <button type="button" class="btn btn-default navbar-btn" id="get-network-list">
+            <button type="button" class="btn btn-default dropdown-toggle" id="get-network-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
             </button>
             <button type="button" class="btn btn-default navbar-btn" onclick="$('#controller-body').toggle()">
@@ -50,45 +50,43 @@
             <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
+            <ul id="network-list" class="dropdown-menu dropdown-menu-right" aria-labelledby="get-network-list"></ul>
         </div>
-        <!-- <h3 div="page-header"><a href="../index.html">NEST desktop</a></h3> -->
 
         <div id="controller-body" class="pull-right">
-            <div id="network-list" style="display:none" class="panel"></div>
-
             <div id="controller-panel" class="panel panel-default">
                 <div class="panel-body">
                     <div id="simtime">
                         <dl class="params"></dl>
                     </div>
 
-                    <!-- <div id="level">
+                    <div id="grng_seed">
                         <dl class="params"></dl>
-                    </div> -->
+                    </div>
 
-                    <!-- <hr> -->
-                    <div id="input" class="model">
-                        <select id="id_input" class="form-control model_select">
+                    <hr>
+                    <div id="input" class="model" nidx="1">
+                        <select id="id_input" class="form-control modelSelect">
                             <option value="" disabled selected hidden>Select an input device</option>
                         </select>
                         <dl class="params"></dl>
                     </div>
 
                     <!-- <hr> -->
-                    <div id="neuron" class="model hide">
-                        <select id="id_neuron" class="form-control model_select">
+                    <div id="neuron" class="model" nidx="0">
+                        <select id="id_neuron" class="form-control modelSelect hide">
                             <option value="" disabled selected hidden>Select a neuron model</option>
                         </select>
-                        <dl class="params"></dl>
-                    </div>
+                        <dl class="params" class="hide"></dl>
 
-                    <hr>
-                    <div id="npop" class="hide">
-                        <dl class="params"></dl>
-                    </div>
+                        <hr>
+                        <div id="npop" class="hide">
+                            <dl class="params"></dl>
+                        </div>
 
-                    <div id="outdegree">
-                        <dl class="params"></dl>
+                        <div id="outdegree">
+                            <dl class="params"></dl>
+                        </div>
                     </div>
 
                 </div>
@@ -100,6 +98,7 @@
     <script>
         var $ = require('jquery');
         var nodes, data, chart;
+        var selected_node, selected_link;
         require("../src/bump-activity-heatmap.js");
     </script>
 </body>

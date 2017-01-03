@@ -16,15 +16,13 @@ class Network(db.Model):
     timestamp = db.Column(db.DateTime)
     nest_app = db.Column(db.String(32))
     name = db.Column(db.String(32))
-    nodes = db.Column(db.String(1000))
-    # links = db.Column(db.String(1000))
+    network = db.Column(db.String(5000))
 
-    def __init__(self, nest_app, name='', nodes='[]'):
+    def __init__(self, nest_app, name='', network='{}'):
         self.timestamp = datetime.utcnow()
         self.nest_app = nest_app
         self.name = name
-        self.nodes = nodes
-        # self.links = links
+        self.network = network
 
     def __repr__(self):
         return '<Network %r>' % (self.id)

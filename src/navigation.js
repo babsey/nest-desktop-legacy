@@ -9,29 +9,30 @@ function get_network_list(data, name) {
         for (var i = 0; i < network_list.length; i++) {
             var network = network_list[i];
             $('#network-list').append(
-                '<a href="#" id="network_' + network.id +
-                '" class="list-group-item network" title="' + network.timestamp + '">' +
-                (i + 1) + ' - ' + (network.name ? network.name : network.timestamp) + '</a>')
+                '<li><a href="#" id="network_' + network.id +
+                '" class="network" title="' + network.timestamp + '">' +
+                (i + 1) + ' - ' + (network.name ? network.name : network.timestamp) + '</a></li>')
         }
 
         $('.network').on('click', function(d) {
             req.network(this.id.split('_')[1]).done(function(r) {
-                for (var nid in r.nodes) {
-                    var node = r.nodes[nid];
-                    data.nodes[nid].model = node.model;
-                    data.nodes[nid].params = node.params
-                    if (nid == 'neuron') {
-                        data.nodes[nid].npop = node.npop;
-                        data.nodes[nid].outdegree = node.outdegree;
+                data.simtime = r.data.simtime || 1000.;
+                data.kernel = r.data.kernel || {
+                    grng_seed: 0
+                };
+                for (var nid in r.data.nodes) {
+                    var node = r.data.nodes[nid];
+                    selected_node = data.nodes[nid];
+                    selected_node.model = node.model;
+                    selected_node.params = node.params
+                    if (selected_node.type == 'neuron') {
+                        selected_node.npop = node.npop;
+                        selected_node.outdegree = node.outdegree;
                     }
-                    $('#' + nid + ' select').val(node.model);
                     slider.update_paramslider(data)
-                    slider.update_modelslider(data.nodes, nid, node.model, data.level, node.params)
+                    slider.update_modelslider(selected_node, data.level, node.params)
 
                 }
-                $('#network-list').hide();
-                $('#controller-panel').show();
-                $('#get-network-list').removeClass('active');
                 $('#network-add').attr('disabled', 'disabled');
             })
         })
@@ -46,31 +47,19 @@ function init_button(data, name) {
         req.network_add({
             name: network_name,
             nest_app: name,
-            nodes: data.nodes
+            data: data
         })
     })
 
-    $('#get-network-list').on('click', function() {
-        if ($('#get-network-list').hasClass('active')) {
-            $('#network-list').hide()
-            $('#controller-panel').show()
-            $(this).removeClass('active')
-        } else {
-            $('#network-list').show()
-            $('#controller-panel').hide()
-            $(this).addClass('active')
-        }
-    })
-
-    $('.model_select').on('change', function() {
-        if ((data.nodes.neuron.model != undefined) && (data.nodes.input.model != undefined)) {
-            $('#network-add').attr('disabled', false)
-        }
-    })
-
     setTimeout(function() {
+        $('.modelSelect').on('click', function() {
+            if ((data.nodes[0].model != undefined) && (data.nodes[1].model != undefined)) {
+                $('#network-add').attr('disabled', false)
+            }
+        })
+
         $('.sliderInput').on('slideStop', function() {
-            if ((data.nodes.neuron.model != undefined) && (data.nodes.input.model != undefined)) {
+            if ((data.nodes[0].model != undefined) && (data.nodes[1].model != undefined)) {
                 $('#network-add').attr('disabled', false)
             }
         })

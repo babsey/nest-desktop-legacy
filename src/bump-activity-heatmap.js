@@ -12,98 +12,108 @@ var req = require('./request');
 var nav = require('./navigation');
 var heatmapChart = require('./heatmap-chart');
 
+selected_node = null;
+selected_link = null;
+
 data = {
+    kernel: {
+        grng_seed: 0,
+    },
     simtime: 1000.,
     level: 1,
-    nodes: {
-        neuron: {
-            npop: 400,
-            nrow: 20,
-            ncol: 20,
-            outdegree: 50,
-            model: 'iaf_cond_alpha',
-            params: {
-                'C_m':        200.0,
-                'E_L':        -80.0,
-                'E_ex':         0.0,
-                'E_in':       -64.0,
-                'V_reset':    -80.0,
-                'V_th':       -45.0,
-                'g_L':         12.5,
-                't_ref':        2.0,
-                'tau_minus':   20.0,
-                'tau_syn_ex':   5.0,
-                'tau_syn_in':  10.0,
-            },
+    nodes: [{
+        type: 'neuron',
+        model: 'iaf_cond_alpha',
+        params: {
+            'C_m': 200.0,
+            'E_L': -80.0,
+            'E_ex': 0.0,
+            'E_in': -64.0,
+            'V_reset': -80.0,
+            'V_th': -45.0,
+            'g_L': 12.5,
+            't_ref': 2.0,
+            'tau_minus': 20.0,
+            'tau_syn_ex': 5.0,
+            'tau_syn_in': 10.0,
         },
-        input: {
-            model: undefined,
-            params: {},
-        }
-    }
+        npop: 400,
+        nrow: 20,
+        ncol: 20,
+        outdegree: 50,
+    }, {
+        type: 'input',
+        model: undefined,
+        params: {},
+    }]
 }
 
 function simulate() {
-    setTimeout(function() {
-        if ((data.nodes.neuron.model == undefined) || (data.nodes.input.model == undefined)) return
-        var sendData = {
-            simtime: data.simtime,
-            nodes: data.nodes,
-        }
-        req.simulate('bump_activity', sendData)
-            .done(function(res) {
-                data.events = res.events;
-                data.curtime = res.curtime;
-                data.nodes.neuron.pop = res.nodes.neuron.pop;
-                data.nodes.neuron.nrow = res.nodes.neuron.nrow;
-                data.nodes.neuron.ncol = res.nodes.neuron.ncol;
+    if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+    var sendData = {
+        kernel: data.kernel,
+        simtime: data.simtime,
+        nodes: data.nodes,
+    }
+    req.simulate('bump_activity', sendData)
+        .done(function(res) {
+            data.events = res.events;
+            data.curtime = res.curtime;
+            data.nodes[0].pop = res.nodes[0].pop;
+            data.nodes[0].nrow = res.nodes[0].nrow;
+            data.nodes[0].ncol = res.nodes[0].ncol;
 
-                var h = d3Array.histogram()
-                    .domain([1,data.nodes.neuron.pop.length+1])
-                    .thresholds(data.nodes.neuron.pop)(data.events['senders']);
-                var hh = h.map(function (d) {return d.length*1})
+            var h1 = d3Array.histogram()
+                .domain([1,data.nodes[0].pop.length+1])
+                .thresholds(data.nodes[0].pop)(data.events['senders']);
+            var h1 = h1.map(function (d) {return d.length*1})
 
-                chart.data({
-                        y: d3Array.range(0,data.nodes.neuron.nrow),
-                        x: d3Array.range(0,data.nodes.neuron.ncol),
-                        c: hh,
-                    })
-                    .xlim([0, data.nodes.neuron.nrow])
-                    .ylim([0, data.nodes.neuron.ncol])
-                    .clim([0, 50])
-                    .legend()
-                    .update();
-            })
-    }, 100)
+            chart.data({
+                    y: d3Array.range(0, data.nodes[0].nrow),
+                    x: d3Array.range(0, data.nodes[0].ncol),
+                    c: h1,
+                })
+                .xlim([0, data.nodes[0].nrow])
+                .ylim([0, data.nodes[0].ncol])
+                .clim([0, 50])
+                .update();
+        })
 }
 
 slider.create_paramslider(data)
 models.load_model_list(data.nodes)
-models.model_select_onChange(data.nodes, data.level)
 nav.init_button(data, 'bump_activity')
 
 setTimeout(function() {
-    $('.sliderInput').on('slideStop', simulate)
-    $('.model_select').on('change', function() {
-        var node = $(this).parents('.model').attr('id');
-        var model = this.value;
-        slider.update_modelslider(data.nodes, node, model, data.level)
-        simulate()
+    $('.modelSlider .sliderInput').on('slideStop', function() {
+        selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
+        selected_node.params[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
     })
-    $('.network').on('click', simulate)
-}, 100)
+    $('.sliderInput').on('slideStop', function() {
+        setTimeout(simulate, 100)
+    })
+    $('.modelSelect').on('change', function() {
+        var model = this.value;
+        selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
+        selected_node.model = model;
+        models.selected_model(selected_node)
+        slider.update_modelslider(selected_node, data.level)
+        setTimeout(simulate, 100)
+    })
+    $('.network').on('click', function() {
+        setTimeout(simulate, 100)
+    })
+}, 200)
 
 $('#network-add-submit').on('click', function() {
     setTimeout(function() {
         nav.get_network_list(data, 'bump_activity')
-        setTimeout(function() {
-            $('.network').on('click', simulate)
-        }, 100)
+        $('.network').on('click', function() {
+            setTimeout(simulate, 100)
+        })
     }, 100)
 })
 
-
 chart = heatmapChart('#chart')
-    .xlabel('Neuron Col ID')
-    .ylabel('Neuron Row ID');
-//
+    .xlabel('Neuron Row ID')
+    .ylabel('Neuron Col ID');

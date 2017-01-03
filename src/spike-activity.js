@@ -11,61 +11,74 @@ var req = require('./request');
 var nav = require('./navigation');
 var scatterChart = require('./scatter-chart');
 
+selected_node = null;
+selected_link = null;
+
 data = {
+    kernel: {
+        grng_seed: 0,
+    },
     simtime: 1000.,
     level: 1,
-    nodes: {
-        neuron: {
-            npop: 10,
-            outdegree: 10,
-            model: undefined,
-            params: {},
-        },
-        input: {
-            model: undefined,
-            params: {},
-        }
-    }
+    nodes: [{
+        type: 'neuron',
+        model: undefined,
+        params: {},
+        npop: 10,
+        outdegree: 10,
+    }, {
+        type: 'input',
+        model: undefined,
+        params: {},
+    }]
 }
 
 function simulate() {
-    setTimeout(function() {
-        if ((data.nodes.neuron.model == undefined) || (data.nodes.input.model == undefined)) return
-        var sendData = {
-            simtime: data.simtime,
-            nodes: data.nodes,
-        }
-        req.simulate('spike_activity', sendData)
-            .done(function(res) {
-                data.events = res.events;
-                data.curtime = res.curtime;
-                data.nodes.neuron.pop = res.nodes.neuron.pop;
-                chart.data({
-                        x: data.events['times'],
-                        y: data.events['senders']
-                    })
-                    .xlim([0,data.simtime])
-                    .ylim([0, data.nodes.neuron.pop.length])
-                    .update();
-            })
-    }, 100)
+    if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+    var sendData = {
+        kernel: data.kernel,
+        simtime: data.simtime,
+        nodes: data.nodes,
+    }
+    req.simulate('spike_activity', sendData)
+        .done(function(res) {
+            data.events = res.events;
+            data.curtime = res.curtime;
+            data.nodes[0].pop = res.nodes[0].pop;
+            chart.data({
+                    x: data.events['times'],
+                    y: data.events['senders']
+                })
+                .xlim([0, data.simtime])
+                .ylim([0, data.nodes[0].pop.length])
+                .update();
+        })
 }
 
 slider.create_paramslider(data)
 models.load_model_list(data.nodes)
-models.model_select_onChange(data.nodes, data.level)
 nav.init_button(data, 'spike_activity')
 
 setTimeout(function() {
-    $('.sliderInput').on('slideStop', simulate)
-    $('.model_select').on('change', function() {
-        var node = $(this).parents('.model').attr('id');
-        var model = this.value;
-        slider.update_modelslider(data.nodes, node, model, data.level)
-        simulate()
+    $('.modelSlider .sliderInput').on('slideStop', function() {
+        selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
+        selected_node.params[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
     })
-    $('.network').on('click', simulate)
-}, 100)
+    $('.sliderInput').on('slideStop', function() {
+        setTimeout(simulate, 100)
+    })
+    $('.modelSelect').on('change', function() {
+        selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
+        var model = this.value;
+        selected_node.model = model;
+        models.selected_model(selected_node)
+        slider.update_modelslider(selected_node, data.level)
+        setTimeout(simulate, 100)
+    })
+    $('.network').on('click', function() {
+        setTimeout(simulate, 100)
+    })
+}, 200)
 
 $('#network-add-submit').on('click', function() {
     setTimeout(function() {

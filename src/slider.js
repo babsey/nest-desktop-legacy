@@ -7,6 +7,9 @@ var Slider = require("bootstrap-slider");
 var paths = window.location.pathname.split('/')
 var curpath = paths.slice(0, paths.length - 2).join('/')
 
+var selected_node = null,
+    selected_link = null;
+
 function slider(ref, id, options) {
     var options_default = {
         min: 0,
@@ -48,14 +51,20 @@ function create_paramslider(data, options) {
             max: 2000,
             step: 100,
         },
+        grng_seed: {
+            value: data.kernel.grng_seed,
+            min: 0,
+            max: 1000,
+            step: 1
+        },
         npop: {
-            value: data.nodes.neuron.npop,
+            value: data.nodes[0].npop,
             min: 1,
             max: 500,
             step: 1,
         },
         outdegree: {
-            value: data.nodes.neuron.outdegree,
+            value: data.nodes[0].outdegree,
             min: 0,
             max: 100,
             step: 2
@@ -68,24 +77,31 @@ function create_paramslider(data, options) {
             data.simtime = d.value;
         })
 
+    paramSlider('#grng_seed', 'grng_seed', 0, 'Random number generated seed', options.grng_seed)
+        .on('slideStop', function(d) {
+            data.kernel.grng_seed = d.value;
+        })
+
     paramSlider('#npop', 'npop', 0, 'Population size', options.npop)
         .on('slideStop', function(d) {
-            data.nodes.neuron.npop = d.value;
+            data.nodes[0].npop = d.value;
         })
 
     paramSlider('#outdegree', 'outdegree', 0, 'Outdegree (%)', options.outdegree)
         .on('slideStop', function(d) {
-            data.nodes.neuron.outdegree = d.value;
+            data.nodes[0].outdegree = d.value;
         })
 }
 
 function update_paramslider(data) {
     $('#simtimeInput').slider('setValue', data.simtime)
     $('#simtimeVal').html(data.simtime)
-    $('#npopInput').slider('setValue', data.nodes.neuron.npop)
-    $('#npopVal').html(data.nodes.neuron.npop)
-    $('#outdegreeInput').slider('setValue', data.nodes.neuron.outdegree)
-    $('#outdegreeVal').html(data.nodes.neuron.outdegree)
+    $('#grng_seedInput').slider('setValue', data.kernel.grng_seed)
+    $('#grng_seedVal').html(data.kernel.grng_seed)
+    $('#npopInput').slider('setValue', data.nodes[0].npop)
+    $('#npopVal').html(data.nodes[0].npop)
+    $('#outdegreeInput').slider('setValue', data.nodes[0].outdegree)
+    $('#outdegreeVal').html(data.nodes[0].outdegree)
 }
 
 function row(p) {
@@ -102,38 +118,36 @@ function row(p) {
     }
 }
 
-function create_modelslider(nodes, node, model) {
+function create_modelslider(type, model) {
     var url = 'file://' + curpath + '/settings/sliderDefaults/' + model + '.csv';
     d3Request.csv(url, row, function(ps) {
-        $('#' + node).find('.params').append('<span id="' + model + '" class="modelSlider">')
+        $('#' + type).find('.params').append('<span id="' + model + '" class="modelSlider">')
         ps.forEach(function(p) {
-            var pslider = modelSlider('#' + model, p.id, p.level, p.label, p.options);
-            pslider.on("slideStop", function(d) {
-                nodes[node].params[p.id] = d.value;
-            })
+            var pslider = modelSlider('span#' + model, p.id, p.level, p.label, p.options);
         })
     })
 }
 
-function update_modelslider(nodes, node, model, level, params) {
-    $('#' + node).find('.modelSlider').hide();
+function update_modelslider(node, level, params) {
+    var model = node.model;
+    $('option#'+model).prop('selected', true);
+    $('#' + node.type).find('.modelSlider').hide();
     if (params == undefined) {
-        var ps = $('#' + model).find('.paramSlider');
+        var ps = $('span#' + model).find('.paramSlider');
         ps.each(function() {
             var pid = this.id;
-            nodes[node].params[pid] = $('#' + model).find('#' + pid + 'Input').slider('getValue');
-            // $('#' + model).find('#' + pid).attr('style', 'display: ' + ($('#' + pid).attr('level') > level ? 'none' : 'visible'))
-            $('#' + model).find('#' + pid).attr('level') > level ? $('#' + model).find('#' + pid).hide() : $('#' + model).find('#' + pid).show()
+            node.params[pid] = $('span#' + model).find('#' + pid + 'Input').slider('getValue');
+            $('span#' + model).find('#' + pid).attr('level') > level ? $('span#' + model).find('#' + pid).hide() : $('span#' + model).find('#' + pid).show()
         })
     } else {
-        for (var pid in nodes[node].params) {
-            var val = nodes[node].params[pid];
-            $('#' + model).find('#' + pid + 'Input').slider('setValue', val);
-            $('#' + model).find('#' + pid + 'Val').html(val);
-            $('#' + model).find('#' + pid).attr('level') > level ? $('#' + model).find('#' + pid).hide() : $('#' + model).find('#' + pid).show()
+        for (var pid in params) {
+            var val = params[pid];
+            $('span#' + model).find('#' + pid + 'Input').slider('setValue', val);
+            $('span#' + model).find('#' + pid + 'Val').html(val);
+            $('span#' + model).find('#' + pid).attr('level') > level ? $('span#' + model).find('#' + pid).hide() : $('span#' + model).find('#' + pid).show()
         }
     }
-    $('#' + node).find('#' + model).show();
+    $('span#' + model).show();
 }
 
 

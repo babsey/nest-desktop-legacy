@@ -1,0 +1,64 @@
+CHANGELOG
+---------
+
+0.3.7:
+    Chart lib
+    Heatmap chart lib
+    Bump activity
+
+0.3.6:
+    README
+
+0.3.5:
+    README
+
+0.3.4:
+    README
+    Fixed bash command with help text
+
+0.3.3:
+    Fixed bash command
+    Fixed layout
+    Module tests
+    Navigation lib
+
+0.3.2:
+    Pip requirements
+    Fixed bash command
+
+0.3.1:
+    Fixed bash command
+
+0.3.0:
+    Fixed bash command
+    Database implementation (sqlite3)
+    Database commands
+    README
+    Fixed electron scripts
+    Fixed spike activity
+
+0.2.1:
+    Fixed line chart
+
+0.2.0:
+    Neuronal state activity
+    Spike activity
+    Raster plot
+    Scatter chart lib
+    Request lib
+    Fixed bash command
+    Fixed line chart
+    Fixed scatter chart
+
+0.1.0:
+    Initial version
+    Bash command
+    Electron interface
+    Slider lib with bootstrap-slider
+    Flask server
+    Nest simulation
+    One neuron simulation
+    Voltage trace
+    Line chart lib
+    README
+    LICENSE

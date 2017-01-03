@@ -11,8 +11,8 @@ import anyjson as json
 
 @app.route('/network/<int:network_id>', methods=['GET'])
 def network(network_id):
-    network = Network.query.filter(Network.id==network_id).first()
-    return jsonify(id=network.id, nodes=json.loads(network.nodes))
+    network_obj = Network.query.filter(Network.id==network_id).first()
+    return jsonify(id=network_obj.id, data=json.loads(network_obj.network))
 
 @app.route('/network/list/<nest_app>', methods=['GET'])
 def network_list(nest_app):
@@ -21,18 +21,20 @@ def network_list(nest_app):
         'id': network.id,
         'name': network.name,
         'timestamp': network.timestamp,
-        'nodes': json.loads(network.nodes)} for network in network_obj]
+        'network': json.loads(network.network)} for network in network_obj]
     return jsonify(network_list)
 
 @app.route('/network/add/', methods=['POST'])
 def network_add():
     data = request.get_json()
-    network = Network(
+    network = data['data']
+    if network.has_key('events'): del network['events']
+    network_obj = Network(
         name = data['name'],
         nest_app = data['nest_app'],
-        nodes = json.dumps(data['nodes'])
+        network = json.dumps(network)
     )
-    db.session.add(network)
+    db.session.add(network_obj)
     db.session.commit()
     return 'Done'
 

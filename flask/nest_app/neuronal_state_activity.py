@@ -1,27 +1,30 @@
 #!/usr/bin/env python
+import numpy as np
 import nest
 
 def neuronal_state_activity(data):
+    np.random.seed(int(data['kernel'].get('grng_seed', 0)))
+
     nest.ResetKernel()
+    nest.SetKernelStatus({
+        # 'local_num_threads': 4,
+        'grng_seed': np.random.randint(0,1000),
+        'rng_seeds': np.random.randint(0,1000,1).tolist(),
+    })
 
     nodes = data['nodes']
-    neuronParams = nodes['neuron']['params']
-    inputParams = nodes['input']['params']
+    neuronParams = nodes[0]['params']
+    inputParams = nodes[1]['params']
 
     neuronParams = dict(zip(neuronParams.keys(), map(float, neuronParams.values())))
     inputParams = dict(zip(inputParams.keys(), map(float, inputParams.values())))
 
-    npop = int(nodes['neuron']['npop'])
-    pop = nest.Create(nodes['neuron']['model'], int(npop), params=neuronParams)
-    data['nodes']['neuron']['pop'] = pop
+    pop = nest.Create(nodes[0]['model'], int(nodes[0]['npop']), params=neuronParams)
+    data['nodes'][0]['pop'] = pop
 
-    input = nest.Create(nodes['input']['model'], params=inputParams)
+    input = nest.Create(nodes[1]['model'], params=inputParams)
     mm = nest.Create('multimeter', params={'record_from': nest.GetStatus(pop,'recordables')[0]})
 
-    p = int(nodes['neuron']['outdegree'])/100.
-    nest.Connect(pop,pop,
-        conn_spec = {'rule':'fixed_outdegree', 'outdegree': int(p*npop)},
-        syn_spec = {'weight':-1.})
     nest.Connect(input,pop)
     nest.Connect(mm,pop)
 

@@ -4,30 +4,33 @@ import nest
 import lib.lcrn_network as lcrn
 
 def bump_activity(data):
+    np.random.seed(int(data['kernel'].get('grng_seed', 0)))
+
     nest.ResetKernel()
     nest.SetKernelStatus({
-        # 'grng_seed': int(np.random.random() * 1000),
         'local_num_threads': 4,
+        'grng_seed': int(data['kernel'].get('grng_seed', 0)),
+        'rng_seeds': np.random.randint(0,1000,4).tolist(),
     })
 
     nodes = data['nodes']
-    nodes['neuron']['params'] = dict(zip(nodes['neuron']['params'].keys(), map(float, nodes['neuron']['params'].values())))
-    nodes['input']['params'] = dict(zip(nodes['input']['params'].keys(), map(float, nodes['input']['params'].values())))
+    nodes[0]['params'] = dict(zip(nodes[0]['params'].keys(), map(float, nodes[0]['params'].values())))
+    nodes[1]['params'] = dict(zip(nodes[1]['params'].keys(), map(float, nodes[1]['params'].values())))
 
-    nrow = nodes['neuron']['nrow']
-    ncol = nodes['neuron']['ncol']
+    nrow = nodes[0]['nrow']
+    ncol = nodes[0]['ncol']
     npop = nrow*ncol
-    pop = nest.Create(nodes['neuron']['model'], npop, params=nodes['neuron']['params'])
-    data['nodes']['neuron']['pop'] = pop
-    data['nodes']['neuron']['ncol'] = ncol
-    data['nodes']['neuron']['nrow'] = nrow
+    pop = nest.Create(nodes[0]['model'], npop, params=nodes[0]['params'])
+    data['nodes'][0]['pop'] = pop
+    data['nodes'][0]['ncol'] = ncol
+    data['nodes'][0]['nrow'] = nrow
 
-    input = nest.Create(nodes['input']['model'], params=nodes['input']['params'])
+    input = nest.Create(nodes[1]['model'], params=nodes[1]['params'])
     sd = nest.Create('spike_detector', params={
         'start': 100.,
     })
 
-    p = data['nodes']['neuron']['outdegree']/100.
+    p = data['nodes'][0]['outdegree']/100.
     offset = pop[0]
     for ii in range(npop):
         targets, delay = lcrn.lcrn_gamma_targets(ii, nrow, ncol, nrow, ncol, int(p*npop) , 4, 3)

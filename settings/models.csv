@@ -1,4 +1,4 @@
-id,type,label,recordables
+name,type,label,recordables
 ac_generator,input,AC generator
 dc_generator,input,DC generator
 iaf_cond_alpha,neuron,IAF cond alpha,V_m;g_ex;g_in

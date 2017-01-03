@@ -23,38 +23,32 @@ function load_model_list(nodes) {
     d3Request.csv('file://' + curpath + '/settings/models.csv', function(models) {
         models.forEach(function(model) {
             if (model.recordables) {
-                recordables[model.id] = model.recordables.split(';');
+                recordables[model.name] = model.recordables.split(';');
             }
-            $("<option class='model_select' value=" + model.id + ">" + model.label + "</option>").appendTo("#id_" + model.type)
-            slider.create_modelslider(nodes, model.type, model.id)
+            $("<option class='modelSelect' id='" + model.name +"' value=" + model.name + ">" + model.label + "</option>").appendTo("#id_" + model.type)
+            slider.create_modelslider(model.type, model.name)
         })
         setTimeout(function () {$('.modelSlider').hide()},100)
     })
 }
 
-function model_select_onChange(nodes, level) {
-    $('.model_select').on('change', function() {
-        var node = $(this).parents('.model').attr('id');
-        var model = this.value;
+function selected_model(node) {
+    var model = node.model;
+    node.params = {};
+    if (node.type == 'neuron') {
+        $('#id_record').empty()
+        for (var recId in recordables[model]) {
+            var rec = recordables[model][recId];
+            $('<option val="' + rec + '">' + rec + '</option>').appendTo('#id_record')
 
-        nodes[node].model = model;
-        nodes[node].params = {};
-        if (node == 'neuron') {
-            var neuron = nodes.neuron;
-            $('#id_record').empty()
-            for (var recId in recordables[model]) {
-                var rec = recordables[model][recId];
-                $('<option val="' + rec + '">' + rec + '</option>').appendTo('#id_record')
-
-            }
-            neuron.record_from = $('#id_record option:selected').val();
-            $('#record').show();
         }
-    })
+        node.record_from = $('#id_record option:selected').val();
+        $('#record').show();
+    }
 }
 
 module.exports = {
     record_labels: record_labels,
     load_model_list: load_model_list,
-    model_select_onChange: model_select_onChange,
+    selected_model: selected_model,
 }
