@@ -1,6 +1,11 @@
 CHANGELOG
 ---------
 
+0.3.8:
+    nodes dict -> nodes list
+    Seed implementation
+    SQLITE: column nodes to network
+
 0.3.7:
     Chart lib
     Heatmap chart lib
