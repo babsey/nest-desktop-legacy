@@ -1,8 +1,15 @@
 CHANGELOG
 ---------
 
+0.3.9:
+    Links list
+    Parameter level settings
+    Events lib
+    Better nest app code
+    Network dropdown
+
 0.3.8:
-    nodes dict -> nodes list
+    Nodes dict -> nodes list
     Seed implementation
     SQLITE: column nodes to network
 

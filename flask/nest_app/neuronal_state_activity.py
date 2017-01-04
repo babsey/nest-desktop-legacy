@@ -3,7 +3,6 @@ import numpy as np
 import nest
 
 def neuronal_state_activity(data):
-    print data
     np.random.seed(int(data['kernel'].get('grng_seed', 0)))
 
     nest.ResetKernel()
