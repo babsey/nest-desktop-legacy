@@ -26,13 +26,13 @@ function load_model_list(nodes) {
                 recordables[model.name] = model.recordables.split(';');
             }
             $("<option class='modelSelect' id='" + model.name +"' value=" + model.name + ">" + model.label + "</option>").appendTo("#id_" + model.type)
-            slider.create_modelslider(model.type, model.name)
+            slider.init_paramSlider(model.type, model.name)
         })
-        setTimeout(function () {$('.modelSlider').hide()},100)
+        setTimeout(function () {$('.paramSlider').hide()},100)
     })
 }
 
-function selected_model(node) {
+function model_selected(node) {
     var model = node.model;
     node.params = {};
     if (node.type == 'neuron') {
@@ -50,5 +50,5 @@ function selected_model(node) {
 module.exports = {
     record_labels: record_labels,
     load_model_list: load_model_list,
-    selected_model: selected_model,
+    model_selected: model_selected,
 }

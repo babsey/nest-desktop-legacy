@@ -35,36 +35,63 @@
     </div>
 
     <div id="controller" class="container pull-right">
-        <div class="pull-right dropdown">
+        <div class="pull-right">
             <a type="button" class="btn btn-default navbar-btn" href="../index.html">
                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
             </a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" id="get-network-config" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-wrench"></span>
+                </button>
+                <ul id="network-config" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="get-network-config">
+                    <li id="level_1" class="level" level="1">
+                        <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span>
+                            Rookie
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
+                            </a>
+                    </li>
+                    <li id="level_2" class="level" level="2">
+                        <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span>
+                            Beginner
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
+                            </a>
+                    </li>
+                    <li id="level_3" class="level" level="3">
+                        <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span>
+                            Advanced
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
+                            </a>
+                    </li>
+                    <li id="level_4" class="level" level="4">
+                        <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span>
+                            Expert
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
+                            </a>
+                    </li>
+                </ul>
+            </div>
             <button type="button" class="btn btn-default navbar-btn" id="network-add" data-toggle="modal" data-target="#myModal" disabled>
                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span>
             </button>
-            <button type="button" class="btn btn-default dropdown-toggle" id="get-network-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
-            </button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" id="get-network-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
+                </button>
+                <ul id="network-list" class="dropdown-menu dropdown-menu-right" aria-labelledby="get-network-list"></ul>
+            </div>
             <button type="button" class="btn btn-default navbar-btn" onclick="$('#controller-body').toggle()">
                 <span class="glyphicon glyphicon-menu-hamburger"></span>
             </button>
             <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
-            <ul id="network-list" class="dropdown-menu dropdown-menu-right" aria-labelledby="get-network-list"></ul>
         </div>
 
         <div id="controller-body" class="pull-right">
             <div id="controller-panel" class="panel panel-default">
                 <div class="panel-body">
-                    <div id="simtime">
-                        <dl class="params"></dl>
-                    </div>
-
-                    <div id="grng_seed">
-                        <dl class="params"></dl>
-                    </div>
-
+                    <dl id="simtime"></dl>
+                    <dl id="grng_seed"></dl>
                     <hr>
                     <div id="input" class="model" nidx="1">
                         <select id="id_input" class="form-control modelSelect">
@@ -78,25 +105,17 @@
                         <select id="id_neuron" class="form-control modelSelect">
                             <option value="" disabled selected hidden>Select a neuron model</option>
                         </select>
-                        <dl class="params">
-                        </dl>
+                        <dl class="params"></dl>
 
                         <hr>
-                        <div id="npop">
-                            <dl class="params"></dl>
-                        </div>
-
-                        <div id="outdegree" class="hide">
-                            <dl class="params"></dl>
-                        </div>
-
+                        <dl id="n"></dl>
+                        <dl id="outdegree"></dl>
                         <div id="record" class="model" style="display:none">
                             <div class="form-group">
                                 <label for="id_record">Record from</label>
                                 <select id="id_record" class="form-control"></select>
                             </div>
                         </div>
-
                     </div>
 
                 </div>

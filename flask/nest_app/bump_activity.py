@@ -19,25 +19,26 @@ def bump_activity(data):
 
     nrow = nodes[0]['nrow']
     ncol = nodes[0]['ncol']
-    npop = nrow*ncol
-    pop = nest.Create(nodes[0]['model'], npop, params=nodes[0]['params'])
-    data['nodes'][0]['pop'] = pop
+    n = nrow*ncol
+    neuron = nest.Create(nodes[0]['model'], n, params=nodes[0]['params'])
+    data['nodes'][0]['ids'] = neuron
     data['nodes'][0]['ncol'] = ncol
     data['nodes'][0]['nrow'] = nrow
 
     input = nest.Create(nodes[1]['model'], params=nodes[1]['params'])
+    data['nodes'][1]['ids'] = input
     sd = nest.Create('spike_detector', params={
         'start': 100.,
     })
 
-    p = data['nodes'][0]['outdegree']/100.
-    offset = pop[0]
-    for ii in range(npop):
-        targets, delay = lcrn.lcrn_gamma_targets(ii, nrow, ncol, nrow, ncol, int(p*npop) , 4, 3)
-        nest.Connect([pop[ii]], (targets+offset).tolist(), 'all_to_all', {'weight': -1.})
+    outdegree = data['links'][1]['conn_spec']['outdegree']
+    offset = neuron[0]
+    for ii in range(n):
+        targets, delay = lcrn.lcrn_gamma_targets(ii, nrow, ncol, nrow, ncol, outdegree , 4, 3)
+        nest.Connect([neuron[ii]], (targets+offset).tolist(), 'all_to_all', {'weight': -1.})
 
-    nest.Connect(input,pop)
-    nest.Connect(pop,sd)
+    nest.Connect(input,neuron)
+    nest.Connect(neuron,sd)
 
     nest.Simulate(data['simtime'])
     curtime = nest.GetKernelStatus('time')

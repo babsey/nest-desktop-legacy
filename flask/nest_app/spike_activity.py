@@ -13,24 +13,19 @@ def spike_activity(data):
     })
 
     nodes = data['nodes']
-    neuronParams = nodes[0]['params']
-    inputParams = nodes[1]['params']
+    for nidx, node in enumerate(nodes):
+        params = node['params']
+        params = dict(zip(params.keys(), map(float, params.values())))
+        data['nodes'][nidx]['ids'] = nest.Create(node['model'], int(node.get('n',1)), params=params)
 
-    neuronParams = dict(zip(neuronParams.keys(), map(float, neuronParams.values())))
-    inputParams = dict(zip(inputParams.keys(), map(float, inputParams.values())))
+    for link in data['links']:
+        syn_spec = link['syn_spec']
+        syn_spec = dict(zip(syn_spec.keys(), map(float, syn_spec.values())))
+        nest.Connect(data['nodes'][link['source']]['ids'],data['nodes'][link['target']]['ids'],
+                conn_spec=link['conn_spec'], syn_spec=syn_spec)
 
-    pop = nest.Create(nodes[0]['model'], int(nodes[0]['npop']), params=neuronParams)
-    data['nodes'][0]['pop'] = pop
-
-    noise = nest.Create('noise_generator')
-    input = nest.Create(nodes[1]['model'], params=inputParams)
     sd = nest.Create('spike_detector')
-
-    nest.Connect(input,pop)
-    nest.Connect(pop,sd)
-
-    nest.SetStatus(noise, {'std':0.})
-    events = nest.GetStatus(sd,'events')[0]
+    nest.Connect(data['nodes'][0]['ids'], sd)
 
     nest.Simulate(data['simtime'])
     curtime = nest.GetKernelStatus('time')

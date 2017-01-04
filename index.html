@@ -10,27 +10,27 @@
 <body>
     <div class="container">
         <div class="pull-right" style="position: relative; right: -60px;">
-            <div class="dropdown">
+            <div class="btn-group hide">
                 <button class="btn btn-default navbar-bin dropdown-toggle" type="button" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-wrench"></span><span class="caret"></span></button>
-
-                    <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="./tests/lineChart.html">Line chart</a></li>
                     <li><a href="./tests/scatterChart.html">Scatter chart</a></li>
                     <li><a href="./tests/heatmapChart.html">Heatmap chart</a></li>
                 </ul>
             </div>
+            <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
         </div>
-        <div class="jumbotron" style="background-color:transparent">
+        <div class="jumbotron">
             <h1>NEST desktop</h1>
             <p>
-                A desktop application for the NEural Simulation Tool. (
-                <a href="http://www.nest-initiative.org/">http://www.nest-initiative.org/</a>)
+                A desktop application for the NEural Simulation Tool.
+                (<a href="http://www.nest-initiative.org/">http://www.nest-initiative.org/</a>)
             </p>
-            <p>
+            <p class="hide">
                 <a class="btn btn-primary btn-lg" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
             </p>
         </div>

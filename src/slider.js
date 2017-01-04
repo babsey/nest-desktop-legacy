@@ -7,8 +7,20 @@ var Slider = require("bootstrap-slider");
 var paths = window.location.pathname.split('/')
 var curpath = paths.slice(0, paths.length - 2).join('/')
 
-var selected_node = null,
-    selected_link = null;
+
+function row(p) {
+    return {
+        id: p.id,
+        label: p.label,
+        level: p.level,
+        options: {
+            value: +p.value,
+            min: +p.min,
+            max: +p.max,
+            step: +p.step
+        }
+    }
+}
 
 function slider(ref, id, options) {
     var options_default = {
@@ -31,107 +43,46 @@ function slider(ref, id, options) {
     return slider
 }
 
-function paramSlider(ref, id, level, label, options) {
-    $(ref).find('.params').append('<span id="' + id + '" class="paramSlider" level="' + level + '"></span>')
-    $(ref).find('.params').find('#' + id).append('<dt>' + label + '</dt>')
-    return slider('.params', id, options);
+//
+// slider for data values
+//
+
+function create_dataSlider(ref, id, level, label, options) {
+    $(ref).append('<span id="' + id + '" class="dataSlider" level="' + level + '"></span>')
+    $(ref).find('#' + id).append('<dt>' + label + '</dt>')
+    return slider(ref, id, options);
 }
 
-function modelSlider(ref, id, level, label, options) {
+function update_dataSlider(id, value) {
+    $('#'+ id +'Input').slider('setValue', value)
+    $('#'+ id +'Val').html(value)
+}
+
+//
+// slider for parameter values of a model
+//
+
+
+function create_paramSlider(ref, id, level, label, options) {
     $(ref).append('<span id="' + id + '" class="paramSlider" level="' + level + '"></span>')
     $(ref).find('#' + id).append('<dt>' + label + '</dt>')
     return slider(ref, id, options);
 }
 
-function create_paramslider(data, options) {
-    var options_default = {
-        simtime: {
-            value: data.simtime,
-            min: 100,
-            max: 2000,
-            step: 100,
-        },
-        grng_seed: {
-            value: data.kernel.grng_seed,
-            min: 0,
-            max: 1000,
-            step: 1
-        },
-        npop: {
-            value: data.nodes[0].npop,
-            min: 1,
-            max: 500,
-            step: 1,
-        },
-        outdegree: {
-            value: data.nodes[0].outdegree,
-            min: 0,
-            max: 100,
-            step: 2
-        }
-    }
-    var options = $.extend(options_default, options)
-
-    paramSlider('#simtime', 'simtime', 0, 'Simulation time (ms)', options.simtime)
-        .on('slideStop', function(d) {
-            data.simtime = d.value;
-        })
-
-    paramSlider('#grng_seed', 'grng_seed', 0, 'Random number generated seed', options.grng_seed)
-        .on('slideStop', function(d) {
-            data.kernel.grng_seed = d.value;
-        })
-
-    paramSlider('#npop', 'npop', 0, 'Population size', options.npop)
-        .on('slideStop', function(d) {
-            data.nodes[0].npop = d.value;
-        })
-
-    paramSlider('#outdegree', 'outdegree', 0, 'Outdegree (%)', options.outdegree)
-        .on('slideStop', function(d) {
-            data.nodes[0].outdegree = d.value;
-        })
-}
-
-function update_paramslider(data) {
-    $('#simtimeInput').slider('setValue', data.simtime)
-    $('#simtimeVal').html(data.simtime)
-    $('#grng_seedInput').slider('setValue', data.kernel.grng_seed)
-    $('#grng_seedVal').html(data.kernel.grng_seed)
-    $('#npopInput').slider('setValue', data.nodes[0].npop)
-    $('#npopVal').html(data.nodes[0].npop)
-    $('#outdegreeInput').slider('setValue', data.nodes[0].outdegree)
-    $('#outdegreeVal').html(data.nodes[0].outdegree)
-}
-
-function row(p) {
-    return {
-        id: p.id,
-        label: p.label,
-        level: p.level,
-        options: {
-            value: +p.value,
-            min: +p.min,
-            max: +p.max,
-            step: +p.step
-        }
-    }
-}
-
-function create_modelslider(type, model) {
+function init_paramSlider(type, model) {
     var url = 'file://' + curpath + '/settings/sliderDefaults/' + model + '.csv';
     d3Request.csv(url, row, function(ps) {
         $('#' + type).find('.params').append('<span id="' + model + '" class="modelSlider">')
         ps.forEach(function(p) {
-            var pslider = modelSlider('span#' + model, p.id, p.level, p.label, p.options);
+            var pslider = create_paramSlider('span#' + model, p.id, p.level, p.label, p.options);
         })
     })
 }
 
-function update_modelslider(node, level, params) {
+function update_paramSlider(node, level, params) {
     var model = node.model;
     $('option#'+model).prop('selected', true);
-    $('#' + node.type).find('.modelSlider').hide();
+    $('#' + node.type).find('.paramSlider').hide();
     if (params == undefined) {
         var ps = $('span#' + model).find('.paramSlider');
         ps.each(function() {
@@ -152,10 +103,8 @@ function update_modelslider(node, level, params) {
 
 
 module.exports = {
-    slider: slider,
-    paramSlider: paramSlider,
-    create_paramslider: create_paramslider,
-    update_paramslider: update_paramslider,
-    create_modelslider: create_modelslider,
-    update_modelslider: update_modelslider,
+    create_dataSlider: create_dataSlider,
+    update_dataSlider: update_dataSlider,
+    init_paramSlider: init_paramSlider,
+    update_paramSlider: update_paramSlider,
 };

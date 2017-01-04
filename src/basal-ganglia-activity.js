@@ -41,7 +41,7 @@ var update_params = function(node, model) {
     d3Request.csv(url, row, function(params) {
         params.forEach(function(p) {
             $('#' + node).find('.params').append('<dt id="id_' + p.id + '" class="'+ p.id +'">' + p.label + '</dt>')
-            var param_slider = s.nodeSlider(nodes, node, p.id, p.slider);
+            var param_slider = s.dataSlider(nodes, node, p.id, p.slider);
             param_slider.on("slideStop", function() {
                 simulate()
             })
