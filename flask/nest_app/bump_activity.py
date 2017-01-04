@@ -45,9 +45,7 @@ def bump_activity(data):
     data['curtime'] = curtime
 
     events = nest.GetStatus(sd,'events')[0]
+    data['nodes'][2]['events'] = dict(map(lambda (x,y): (x,y.tolist()), events.items()))
     nest.SetStatus(sd, {'n_events': 0})
-
-    events = dict(map(lambda (x,y): (x,y.tolist()), events.items()))
-    data['events'] = events
-
+    
     return data

@@ -16,7 +16,7 @@ function init_button(data, name) {
         })
     })
 
-    $('#level_' +data.level).find('.glyphicon-ok').show()
+    $('#level_' + window.level).find('.glyphicon-ok').show()
 
     setTimeout(function() {
         $('.modelSelect').on('click', function() {
@@ -32,10 +32,10 @@ function init_button(data, name) {
         })
         $('.level').on('click', function() {
             $('.level').find('.glyphicon-ok').hide()
-            data.level = parseInt($(this).attr('level'));
+            window.level = parseInt($(this).attr('level'));
             for (var nid in data.nodes) {
                 var node = data.nodes[nid];
-                slider.update_paramSlider(node, data.level)
+                slider.update_paramSlider(node)
             }
             $(this).find('.glyphicon-ok').show()
         })
@@ -62,14 +62,14 @@ function get_network_list(data, name) {
                 data.kernel = r.data.kernel;
                 for (var nid in r.data.nodes) {
                     var node = r.data.nodes[nid];
-                    selected_node = data.nodes[nid];
+                    window.selected_node = data.nodes[nid];
                     selected_node.model = node.model;
                     models.model_selected(selected_node)
                     selected_node.params = node.params
                     if (selected_node.type == 'neuron') {
                         selected_node.n = node.n;
                     }
-                    slider.update_paramSlider(selected_node, data.level, node.params)
+                    slider.update_paramSlider(selected_node)
                 }
                 for (var lid in r.data.links) {
                     var link = r.data.links[lid];

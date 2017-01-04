@@ -1,6 +1,10 @@
 CHANGELOG
 ---------
 
+0.3.10:
+    Nest app code
+    Slider lib
+
 0.3.9:
     Links list
     Parameter level settings

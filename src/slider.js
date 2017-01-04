@@ -54,8 +54,8 @@ function create_dataSlider(ref, id, level, label, options) {
 }
 
 function update_dataSlider(id, value) {
-    $('#'+ id +'Input').slider('setValue', value)
-    $('#'+ id +'Val').html(value)
+    $('#' + id + 'Input').slider('setValue', value)
+    $('#' + id + 'Val').html(value)
 }
 
 //
@@ -79,25 +79,21 @@ function init_paramSlider(type, model) {
     })
 }
 
-function update_paramSlider(node, level, params) {
+function update_paramSlider(node) {
     var model = node.model;
-    $('option#'+model).prop('selected', true);
+    $('option#' + model).prop('selected', true);
     $('#' + node.type).find('.paramSlider').hide();
-    if (params == undefined) {
-        var ps = $('span#' + model).find('.paramSlider');
-        ps.each(function() {
-            var pid = this.id;
-            node.params[pid] = $('span#' + model).find('#' + pid + 'Input').slider('getValue');
-            $('span#' + model).find('#' + pid).attr('level') > level ? $('span#' + model).find('#' + pid).hide() : $('span#' + model).find('#' + pid).show()
-        })
-    } else {
-        for (var pid in params) {
-            var val = params[pid];
-            $('span#' + model).find('#' + pid + 'Input').slider('setValue', val);
-            $('span#' + model).find('#' + pid + 'Val').html(val);
-            $('span#' + model).find('#' + pid).attr('level') > level ? $('span#' + model).find('#' + pid).hide() : $('span#' + model).find('#' + pid).show()
+    var ps = $('span#' + model).find('.paramSlider');
+    ps.each(function() {
+        var pid = this.id;
+        if (node.params[pid] != undefined) {
+            $('span#' + model).find('#' + pid + 'Input').slider('setValue', parseFloat(node.params[pid]));
+            $('span#' + model).find('#' + pid + 'Val').html(node.params[pid]);
+        } else {
+            node.params[pid] = $('span#' + model).find('#' + pid + 'Input').slider('getValue')
         }
-    }
+        $('span#' + model).find('#' + pid).attr('level') > window.level ? $('span#' + model).find('#' + pid).hide() : $('span#' + model).find('#' + pid).show()
+    })
     $('span#' + model).show();
 }
 

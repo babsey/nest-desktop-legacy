@@ -44,19 +44,13 @@ def network_add():
 # NEST applications
 # --------------------------
 
-from nest_app.neuronal_state_activity import neuronal_state_activity
-from nest_app.spike_activity import spike_activity
+from nest_app.nest_simulation import nest_simulation
 from nest_app.bump_activity import bump_activity
 
-@app.route('/neuronal_state_activity/', methods=['POST'])
-def app_neuronal_state_activity():
+@app.route('/nest_simulation/', methods=['POST'])
+def app_nest_simulation():
     data = request.get_json()
-    return jsonify(neuronal_state_activity(data))
-
-@app.route('/spike_activity/', methods=['POST'])
-def app_spike_activity():
-    data = request.get_json()
-    return jsonify(spike_activity(data))
+    return jsonify(nest_simulation(data))
 
 @app.route('/bump_activity/', methods=['POST'])
 def app_bump_activity():

@@ -10,12 +10,12 @@ var req = require('./request');
 var slider = require("./slider");
 var scatterChart = require('./scatter-chart');
 
-data = {
+window.level = 1;
+window.data = {
+    simtime: 1000.,
     kernel: {
         grng_seed: 0,
     },
-    simtime: 1000.,
-    level: 1,
     nodes: [{
         type: 'neuron',
         model: undefined,
@@ -25,29 +25,29 @@ data = {
         type: 'input',
         model: undefined,
         params: {},
+    }, {
+        type: 'output',
+        model: 'spike_detector',
+        params: {},
     }],
-    links: []
+    links: [{
+        source: 1,
+        target: 0,
+    }, {
+        source: 0,
+        target: 0,
+        conn_spec: {
+            rule: 'fixed_outdegree',
+            outdegree: 100,
+        },
+        syn_spec: {
+            weight: -10.
+        }
+    }, {
+        source: 0,
+        target: 2,
+    }]
 }
-
-data.links.push({
-    source: 1,
-    target: 0,
-    conn_spec: 'all_to_all',
-    syn_spec: {
-        weight: 1.
-    }
-})
-data.links.push({
-    source: 0,
-    target: 0,
-    conn_spec: {
-        rule: 'fixed_outdegree',
-        outdegree: 100,
-    },
-    syn_spec: {
-        weight: -10.
-    }
-})
 
 var slider_options = {
     simtime: {
@@ -100,20 +100,26 @@ function simulate() {
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+    data.nodes.map(function (node) {
+        if ('events' in node) {
+            node.events = {}
+        }
+    })
     var sendData = {
         kernel: data.kernel,
         simtime: data.simtime,
         nodes: data.nodes,
         links: data.links,
     }
-    req.simulate('spike_activity', sendData)
+    req.simulate('nest_simulation', sendData)
         .done(function(res) {
             data.events = res.events;
             data.curtime = res.curtime;
             data.nodes[0].ids = res.nodes[0].ids;
+            data.nodes[2].events = res.nodes[2].events;
             chart.data({
-                    x: data.events['times'],
-                    y: data.events['senders']
+                    x: data.nodes[2].events['times'],
+                    y: data.nodes[2].events['senders']
                 })
                 .xlim([0, data.simtime])
                 .ylim([0, data.nodes[0].n])
@@ -121,7 +127,7 @@ function simulate() {
         })
 }
 
-chart = scatterChart('#chart')
+window.chart = scatterChart('#chart')
     .xlabel('Time (ms)')
     .ylabel('Neuron ID');
 

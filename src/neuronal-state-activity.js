@@ -1,6 +1,6 @@
 "use strict"
 
-var times, values;
+// var times, values;
 window.jQuery = window.$ = require('jquery');
 require('bootstrap');
 var d3Array = require('d3-array');
@@ -11,12 +11,12 @@ var req = require('./request');
 var slider = require("./slider");
 var lineChart = require('./line-chart');
 
-data = {
+window.level = 1;
+window.data = {
+    simtime: 1000.,
     kernel: {
         grng_seed: 0,
     },
-    simtime: 1000.,
-    level: 1,
     nodes: [{
         type: 'neuron',
         model: undefined,
@@ -27,29 +27,29 @@ data = {
         type: 'input',
         model: undefined,
         params: {},
+    }, {
+        type: 'output',
+        model: 'multimeter',
+        params: {},
     }],
-    links: []
+    links: [{
+        source: 1,
+        target: 0,
+    }, {
+        source: 0,
+        target: 0,
+        conn_spec: {
+            rule: 'fixed_outdegree',
+            outdegree: 1,
+        },
+        syn_spec: {
+            weight: -1.
+        }
+    }, {
+        source: 2,
+        target: 0,
+    }]
 }
-
-data.links.push({
-    source: 1,
-    target: 0,
-    conn_spec: 'all_to_all',
-    syn_spec: {
-        weight: 1.
-    }
-})
-data.links.push({
-    source: 0,
-    target: 0,
-    conn_spec: {
-        rule: 'fixed_outdegree',
-        outdegree: 1,
-    },
-    syn_spec: {
-        weight: -1.
-    }
-})
 
 var slider_options = {
     simtime: {
@@ -102,27 +102,33 @@ function simulate() {
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+    data.nodes.map(function (node) {
+        if ('events' in node) {
+            node.events = {}
+        }
+    })
     var sendData = {
         kernel: data.kernel,
         simtime: data.simtime,
         nodes: data.nodes,
         links: data.links,
     }
-    req.simulate('neuronal_state_activity', sendData)
+    req.simulate('nest_simulation', sendData)
         .done(function(res) {
             data.events = res.events;
             data.curtime = res.curtime;
             data.nodes[0].ids = res.nodes[0].ids;
+            data.nodes[2].events = res.nodes[2].events;
             var ids = data.nodes[0].ids;
-            var n = data.nodes[0].n;
-            times = data.events.times.filter(function(d, i) {
-                return i % n == 0
-            });
-            values = ids.map(function() {
+            window.times = []
+            window.values = ids.map(function() {
                 return []
             });
-            data.events[data.nodes[0].record_from].map(function(d, i) {
-                values[i % n].push(d)
+            data.nodes[2].events.senders.map(function(d, i) {
+                values[d-ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
+                if (d == ids[0]) {
+                    times.push(data.nodes[2].events.times[i])
+                }
             });
 
             chart.data({
@@ -136,10 +142,10 @@ function simulate() {
         })
 }
 
-chart = lineChart('#chart')
+window.chart = lineChart('#chart')
     .xlabel('Time (ms)');
 
-models.load_model_list(data.nodes)
+models.load_model_list(data.nodes, ['parrot_neuron'])
 nav.init_button(data, 'neuronal_state_activity')
 setTimeout(function() {
     events.eventHandler(data, simulate)
@@ -150,13 +156,11 @@ nav.network_added(data, simulate, 'neuronal_state_activity')
 $('#id_record').on('change', function() {
     data.nodes[0].record_from = this.value;
     var ids = data.nodes[0].ids;
-    var n = ids.length;
-
     values = ids.map(function() {
         return []
     });
-    data.events[data.nodes[0].record_from].map(function(d, i) {
-        values[i % n].push(d)
+    data.nodes[2].events.senders.map(function(d, i) {
+        values[d-ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
     });
 
     chart.data({

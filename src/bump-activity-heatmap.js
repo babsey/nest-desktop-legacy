@@ -11,12 +11,12 @@ var req = require('./request');
 var slider = require("./slider");
 var heatmapChart = require('./heatmap-chart');
 
-data = {
+window.level = 1;
+window.data = {
+    simtime: 1000.,
     kernel: {
         grng_seed: 0,
     },
-    simtime: 1000.,
-    level: 1,
     nodes: [{
         type: 'neuron',
         model: 'iaf_cond_alpha',
@@ -40,29 +40,29 @@ data = {
         type: 'input',
         model: undefined,
         params: {},
+    }, {
+        type: 'output',
+        model: 'spike_detector',
+        params: {},
     }],
-    links: []
+    links: [{
+        source: 1,
+        target: 0,
+    }, {
+        source: 0,
+        target: 0,
+        conn_spec: {
+            rule: 'fixed_outdegree',
+            outdegree: 400,
+        },
+        syn_spec: {
+            weight: -1.
+        }
+    }, {
+        source: 0,
+        target: 2,
+    }]
 }
-
-data.links.push({
-    source: 1,
-    target: 0,
-    conn_spec: 'all_to_all',
-    syn_spec: {
-        weight: 1.
-    }
-})
-data.links.push({
-    source: 0,
-    target: 0,
-    conn_spec: {
-        rule: 'fixed_outdegree',
-        outdegree: 100,
-    },
-    syn_spec: {
-        weight: -1.
-    }
-})
 
 var slider_options = {
     simtime: {
@@ -104,6 +104,11 @@ function simulate() {
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+    data.nodes.map(function (node) {
+        if ('events' in node) {
+            node.events = {}
+        }
+    })
     var sendData = {
         kernel: data.kernel,
         simtime: data.simtime,
@@ -117,10 +122,11 @@ function simulate() {
             data.nodes[0].ids = res.nodes[0].ids;
             data.nodes[0].nrow = res.nodes[0].nrow;
             data.nodes[0].ncol = res.nodes[0].ncol;
+            data.nodes[2].events = res.nodes[2].events;
 
             var h1 = d3Array.histogram()
                 .domain([1, data.nodes[0].ids.length + 1])
-                .thresholds(data.nodes[0].ids)(data.events['senders']);
+                .thresholds(data.nodes[0].ids)(data.nodes[2].events['senders']);
             var h1 = h1.map(function(d) {
                 return d.length * 1
             })
@@ -137,17 +143,16 @@ function simulate() {
         })
 }
 
-selected_node = data.nodes[0]
-
-chart = heatmapChart('#chart')
+window.chart = heatmapChart('#chart')
     .xlabel('Neuron Row ID')
     .ylabel('Neuron Col ID');
 
 models.load_model_list(data.nodes)
 nav.init_button(data, 'bump_activity')
 setTimeout(function() {
-    models.model_selected(selected_node)
-    slider.update_paramSlider(selected_node, data.level)
+    var node = data.nodes[0];
+    models.model_selected(node)
+    slider.update_paramSlider(node)
     events.eventHandler(data, simulate)
 }, 200)
 nav.network_added(data, simulate, 'bump_activity')

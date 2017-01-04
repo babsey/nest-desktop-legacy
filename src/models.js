@@ -19,9 +19,12 @@ var record_labels = {
 }
 
 var recordables = {}
-function load_model_list(nodes) {
+function load_model_list(nodes, excludes) {
     d3Request.csv('file://' + curpath + '/settings/models.csv', function(models) {
         models.forEach(function(model) {
+            if (excludes != undefined) {
+                if (excludes.indexOf(model.name) != -1) return
+            }
             if (model.recordables) {
                 recordables[model.name] = model.recordables.split(';');
             }
@@ -34,7 +37,6 @@ function load_model_list(nodes) {
 
 function model_selected(node) {
     var model = node.model;
-    node.params = {};
     if (node.type == 'neuron') {
         $('#id_record').empty()
         for (var recId in recordables[model]) {

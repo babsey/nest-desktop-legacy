@@ -1,16 +1,12 @@
 "use strict"
 
-window.$ = window.jQuery = require('jquery');
+var $ = require('jquery');
 var models = require("./models");
 var slider = require("./slider");
 
-// selected_node and selected_link are global variables.
-selected_node = null;
-selected_link = null;
-
-function eventHandler(data, simulate, update_dataSlider) {
+function eventHandler(data, simulate) {
     $('.paramSlider .sliderInput').on('slideStop', function() {
-        selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
+        window.selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
         selected_node.params[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
     })
     $('.sliderInput').on('slideStop', function() {
@@ -18,10 +14,11 @@ function eventHandler(data, simulate, update_dataSlider) {
     })
     $('.modelSelect').on('change', function() {
         var model = this.value;
-        selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
+        window.selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
         selected_node.model = model;
+        selected_node.params = {};
         models.model_selected(selected_node)
-        slider.update_paramSlider(selected_node, data.level)
+        slider.update_paramSlider(selected_node)
         setTimeout(simulate, 100)
     })
     $('.network').on('click', function() {
