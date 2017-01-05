@@ -31,6 +31,7 @@ function slider(ref, id, options) {
         tooltip: 'hide',
     };
     var options = $.extend(options_default, options);
+    $(ref).find('#' + id).find('dt').attr('title', id)
     $(ref).find('#' + id).find('dt').after('<dd></dd>');
     $(ref).find('#' + id).find('dd').append('<input id="' + id + 'Input" class="sliderInput">')
     $(ref).find('#' + id).find('dd').append('<span id="' + id + 'Val" style="margin-left:10px">' + options.value + '</span>')
@@ -48,12 +49,13 @@ function slider(ref, id, options) {
 //
 
 function create_dataSlider(ref, id, level, label, options) {
-    $(ref).append('<span id="' + id + '" class="dataSlider" level="' + level + '"></span>')
+    $(ref).append('<dl id="' + id + '" class="dataSlider" level="' + level + '"></dl>')
     $(ref).find('#' + id).append('<dt>' + label + '</dt>')
     return slider(ref, id, options);
 }
 
 function update_dataSlider(id, value) {
+    $('#' + id).attr('level') > window.level ? $('#' + id).hide() : $('#' + id).show()
     $('#' + id + 'Input').slider('setValue', value)
     $('#' + id + 'Val').html(value)
 }
@@ -64,7 +66,7 @@ function update_dataSlider(id, value) {
 
 
 function create_paramSlider(ref, id, level, label, options) {
-    $(ref).append('<span id="' + id + '" class="paramSlider" level="' + level + '"></span>')
+    $(ref).append('<dl id="' + id + '" class="paramSlider" level="' + level + '"></dl>')
     $(ref).find('#' + id).append('<dt>' + label + '</dt>')
     return slider(ref, id, options);
 }
@@ -72,9 +74,9 @@ function create_paramSlider(ref, id, level, label, options) {
 function init_paramSlider(type, model) {
     var url = 'file://' + curpath + '/settings/sliderDefaults/' + model + '.csv';
     d3Request.csv(url, row, function(ps) {
-        $('#' + type).find('.params').append('<span id="' + model + '" class="modelSlider">')
+        $('#' + type).find('.params').append('<div id="' + model + '" class="modelSlider"></div>')
         ps.forEach(function(p) {
-            var pslider = create_paramSlider('span#' + model, p.id, p.level, p.label, p.options);
+            var pslider = create_paramSlider('div#' + model, p.id, p.level, p.label, p.options);
         })
     })
 }
@@ -83,18 +85,18 @@ function update_paramSlider(node) {
     var model = node.model;
     $('option#' + model).prop('selected', true);
     $('#' + node.type).find('.paramSlider').hide();
-    var ps = $('span#' + model).find('.paramSlider');
+    var ps = $('div#' + model).find('.paramSlider');
     ps.each(function() {
         var pid = this.id;
         if (node.params[pid] != undefined) {
-            $('span#' + model).find('#' + pid + 'Input').slider('setValue', parseFloat(node.params[pid]));
-            $('span#' + model).find('#' + pid + 'Val').html(node.params[pid]);
+            $('div#' + model).find('#' + pid + 'Input').slider('setValue', parseFloat(node.params[pid]));
+            $('div#' + model).find('#' + pid + 'Val').html(node.params[pid]);
         } else {
-            node.params[pid] = $('span#' + model).find('#' + pid + 'Input').slider('getValue')
+            node.params[pid] = $('div#' + model).find('#' + pid + 'Input').slider('getValue')
         }
-        $('span#' + model).find('#' + pid).attr('level') > window.level ? $('span#' + model).find('#' + pid).hide() : $('span#' + model).find('#' + pid).show()
+        $('div#' + model).find('#' + pid).attr('level') > window.level ? $('div#' + model).find('#' + pid).hide() : $('div#' + model).find('#' + pid).show()
     })
-    $('span#' + model).show();
+    $('div#' + model).show();
 }
 
 

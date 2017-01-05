@@ -3,7 +3,7 @@ import numpy as np
 import nest
 import lib.lcrn_network as lcrn
 
-def bump_activity(data):
+def run(data):
     np.random.seed(int(data['kernel'].get('grng_seed', 0)))
 
     nest.ResetKernel()
@@ -30,6 +30,7 @@ def bump_activity(data):
     sd = nest.Create('spike_detector', params={
         'start': 100.,
     })
+    data['nodes'][2]['ids'] = sd
 
     outdegree = data['links'][1]['conn_spec']['outdegree']
     offset = neuron[0]
@@ -41,11 +42,21 @@ def bump_activity(data):
     nest.Connect(neuron,sd)
 
     nest.Simulate(data['simtime'])
-    curtime = nest.GetKernelStatus('time')
-    data['curtime'] = curtime
+    data['kernel']['time'] = nest.GetKernelStatus('time')
 
     events = nest.GetStatus(sd,'events')[0]
     data['nodes'][2]['events'] = dict(map(lambda (x,y): (x,y.tolist()), events.items()))
     nest.SetStatus(sd, {'n_events': 0})
-    
+
+    return data
+
+def resume(data):
+
+    nest.Simulate(data['simtime'])
+    data['kernel']['time'] = nest.GetKernelStatus('time')
+
+    events = nest.GetStatus(data['nodes'][2]['ids'],'events')[0]
+    data['nodes'][2]['events'] = dict(map(lambda (x,y): (x,y.tolist()), events.items()))
+    nest.SetStatus(data['nodes'][2]['ids'], {'n_events': 0})
+
     return data

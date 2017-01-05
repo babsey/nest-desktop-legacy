@@ -1,16 +1,19 @@
-dt {
-    margin-top: 10px;
-}
 #controller {
     z-index: 1000;
-    width: 330px;
+    width: 335px;
 }
 #controller-body {
-    width: 300px;
+    width: 305px;
 }
 #controller-body .panel {
     max-height: 650px;
     overflow-y: auto;
+}
+.paramSlider, .dataSlider {
+    margin-bottom: 0px;
+}
+.paramSlider dt, .dataSlider dt {
+    margin-top: 10px;
 }
 .slider-handle {
     background: #fff none repeat scroll 0 0;

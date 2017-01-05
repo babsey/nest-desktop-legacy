@@ -44,19 +44,28 @@ def network_add():
 # NEST applications
 # --------------------------
 
-from nest_app.nest_simulation import nest_simulation
-from nest_app.bump_activity import bump_activity
-
-@app.route('/nest_simulation/', methods=['POST'])
-def app_nest_simulation():
+import nest_app.simple_network as network
+@app.route('/simulate/network/', methods=['POST'])
+def simple_network_simulate():
     data = request.get_json()
-    return jsonify(nest_simulation(data))
+    return jsonify(network.run(data))
 
-@app.route('/bump_activity/', methods=['POST'])
-def app_bump_activity():
+@app.route('/simulate/network/resume/', methods=['POST'])
+def simple_network_resume():
     data = request.get_json()
-    return jsonify(bump_activity(data))
+    return jsonify(network.resume(data))
 
+
+import nest_app.gamma_network as gamma
+@app.route('/simulate/gamma/', methods=['POST'])
+def gamma_network_simulate():
+    data = request.get_json()
+    return jsonify(gamma.run(data))
+
+@app.route('/simulate/gamma/resume/', methods=['POST'])
+def gamma_network_resume():
+    data = request.get_json()
+    return jsonify(gamma.resume(data))
 
 if __name__ == '__main__':
     app.run()

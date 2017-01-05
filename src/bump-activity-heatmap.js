@@ -104,25 +104,63 @@ function simulate() {
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
-    data.nodes.map(function (node) {
-        if ('events' in node) {
-            node.events = {}
-        }
-    })
+
+    data.nodes[2].events = {};
     var sendData = {
         kernel: data.kernel,
         simtime: data.simtime,
         nodes: data.nodes,
         links: data.links,
     }
-    req.simulate('bump_activity', sendData)
+    req.simulate('bump/', sendData)
         .done(function(res) {
-            data.events = res.events;
-            data.curtime = res.curtime;
-            data.nodes[0].ids = res.nodes[0].ids;
+            data.kernel.time = res.kernel.time;
+            for (var idx in res.nodes) {
+                data.nodes[idx].ids = res.nodes[idx].ids;
+            }
             data.nodes[0].nrow = res.nodes[0].nrow;
             data.nodes[0].ncol = res.nodes[0].ncol;
             data.nodes[2].events = res.nodes[2].events;
+
+            var h1 = d3Array.histogram()
+                .domain([1, data.nodes[0].ids.length + 1])
+                .thresholds(data.nodes[0].ids)(data.nodes[2].events['senders']);
+            var h1 = h1.map(function(d) {
+                return d.length * 1
+            })
+
+            chart.xScale.domain([0, data.nodes[0].nrow])
+            chart.yScale.domain([0, data.nodes[0].ncol])
+            chart.colorScale.domain([0, 50])
+            chart.data({
+                    y: d3Array.range(0, data.nodes[0].nrow),
+                    x: d3Array.range(0, data.nodes[0].ncol),
+                    c: h1,
+                })
+                .update();
+        })
+}
+
+var running = false;
+function resume() {
+    if (!(running)) return
+    if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+
+    window.dataEvents = data.nodes[2].events;
+    data.nodes[2].events = {};
+    var sendData = {
+        kernel: data.kernel,
+        simtime: 1.,
+        nodes: data.nodes,
+        links: data.links,
+    }
+    req.simulate('bump/resume/', sendData)
+        .done(function(res) {
+            data.kernel.time = res.kernel.time;
+            for (var key in res.nodes[2].events) {
+                dataEvents[key] = dataEvents[key].concat(res.nodes[2].events[key])
+                data.nodes[2].events[key] = dataEvents[key]
+            }
 
             var h1 = d3Array.histogram()
                 .domain([1, data.nodes[0].ids.length + 1])
@@ -136,10 +174,9 @@ function simulate() {
                     x: d3Array.range(0, data.nodes[0].ncol),
                     c: h1,
                 })
-                .xlim([0, data.nodes[0].nrow])
-                .ylim([0, data.nodes[0].ncol])
-                .clim([0, 50])
                 .update();
+
+            resume()
         })
 }
 
@@ -150,9 +187,21 @@ window.chart = heatmapChart('#chart')
 models.load_model_list(data.nodes)
 nav.init_button(data, 'bump_activity')
 setTimeout(function() {
-    var node = data.nodes[0];
-    models.model_selected(node)
-    slider.update_paramSlider(node)
+    models.model_selected(data.nodes[0])
+    slider.update_paramSlider(data.nodes[0])
     events.eventHandler(data, simulate)
 }, 200)
 nav.network_added(data, simulate, 'bump_activity')
+
+$('#network-resume').on('click', function () {
+    if (running) {
+        running = false
+        $('#network-resume').find('.glyphicon').hide()
+        $('#network-resume').find('.glyphicon-play').show()
+    } else {
+        $('#network-resume').find('.glyphicon').hide()
+        $('#network-resume').find('.glyphicon-pause').show()
+        running = true
+        resume()
+    }
+})

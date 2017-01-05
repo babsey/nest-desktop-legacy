@@ -8,7 +8,7 @@ function nest-desktop {
 
     case "$1" in
         '')
-            cat ${CURPATH}/bin/help.txt
+            cat ${CURPATH}/.bin/help.txt
         ;;
         checkport)
             echo netstat -na | grep 5000
@@ -19,7 +19,7 @@ function nest-desktop {
             cd ${OLDPATH}
         ;;
         help)
-            cat ${CURPATH}/bin/help.txt
+            cat ${CURPATH}/.bin/help.txt
         ;;
         killport)
             kill `lsof -t -i:5000`
@@ -35,11 +35,11 @@ function nest-desktop {
         ;;
         start)
             cd ${CURPATH}
-            ./bin/appstart.sh
+            ./.bin/appstart.sh
             cd ${OLDPATH}
         ;;
         test)
-            ${CURPATH}/bin/test.sh
+            ${CURPATH}/.bin/test.sh
         ;;
         version)
             # https://gist.github.com/DarrenN/8c6a5b969481725a4413

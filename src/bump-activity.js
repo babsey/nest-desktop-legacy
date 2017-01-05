@@ -32,7 +32,9 @@ window.data = {
             'tau_syn_ex': 5.0,
             'tau_syn_in': 10.0,
         },
-        n: 900,
+        n: 400,
+        nrow: 20,
+        ncol: 20,
     }, {
         type: 'input',
         model: undefined,
@@ -50,7 +52,7 @@ window.data = {
         target: 0,
         conn_spec: {
             rule: 'fixed_outdegree',
-            outdegree: 10,
+            outdegree: 400,
         },
         syn_spec: {
             weight: -1.
@@ -77,8 +79,8 @@ var slider_options = {
     outdegree: {
         value: data.links[1].conn_spec.outdegree,
         min: 0,
-        max: data.nodes[0].n,
-        step: 1
+        max: 400,
+        step: 10
     }
 }
 
@@ -110,35 +112,91 @@ function simulate() {
         kernel: data.kernel,
         simtime: data.simtime,
         nodes: data.nodes,
+        links: data.links,
     }
-    req.simulate('bump_activity', sendData)
+    req.simulate('gamma/', sendData)
         .done(function(res) {
-            data.events = res.events;
-            data.curtime = res.curtime;
-            data.nodes[0].ids = res.nodes[0].ids;
+            data.kernel.time = res.kernel.time;
+            for (var idx in res.nodes) {
+                data.nodes[idx].ids = res.nodes[idx].ids;
+            }
             data.nodes[0].nrow = res.nodes[0].nrow;
             data.nodes[0].ncol = res.nodes[0].ncol;
             data.nodes[2].events = res.nodes[2].events;
 
+            if (document.getElementById('autoscale').checked) {
+                chart.xScale.domain([data.kernel.time - 1000, data.kernel.time])
+                chart.yScale.domain([0, data.nodes[0].n])
+            }
             chart.data({
                     x: data.nodes[2].events['times'],
                     y: data.nodes[2].events['senders'],
                 })
-                .xlim([0, data.curtime])
-                .ylim([0, data.nodes[0].n])
                 .update();
         })
 }
 
+var running = false;
+function resume() {
+    if (!(running)) return
+    if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+
+    window.dataEvents = data.nodes[2].events;
+    data.nodes[2].events = {};
+    var sendData = {
+        kernel: data.kernel,
+        simtime: 1.,
+        nodes: data.nodes,
+        links: data.links,
+    }
+    req.simulate('gamma/resume/', sendData)
+        .done(function(res) {
+            data.kernel.time = res.kernel.time;
+            for (var key in res.nodes[2].events) {
+                dataEvents[key] = dataEvents[key].concat(res.nodes[2].events[key])
+                data.nodes[2].events[key] = dataEvents[key]
+            }
+
+            if (document.getElementById('autoscale').checked) {
+                chart.xScale.domain([data.kernel.time - 1000, data.kernel.time])
+                chart.yScale.domain([0, data.nodes[0].n])
+            }
+            chart.data({
+                    x: data.nodes[2].events['times'],
+                    y: data.nodes[2].events['senders'],
+                })
+                .update();
+
+            resume()
+        })
+}
+
+
 window.chart = scatterChart('#chart')
     .xlabel('Time [ms]')
-    .ylabel('Neuron ID');
+    .ylabel('Neuron ID')
+    .drag();
 
 models.load_model_list(data.nodes)
 nav.init_button(data, 'bump_activity')
 nav.network_added(data, simulate, 'bump_activity')
 setTimeout(function() {
-    models.model_selected(selected_node)
-    slider.update_paramSlider(selected_node)
+    models.model_selected(data.nodes[0])
+    slider.update_paramSlider(data.nodes[0])
     events.eventHandler(data, simulate)
 }, 200)
+
+nav.network_added(data, simulate, 'bump_activity')
+
+$('#network-resume').on('click', function () {
+    if (running) {
+        running = false
+        $('#network-resume').find('.glyphicon').hide()
+        $('#network-resume').find('.glyphicon-play').show()
+    } else {
+        $('#network-resume').find('.glyphicon').hide()
+        $('#network-resume').find('.glyphicon-pause').show()
+        running = true
+        resume()
+    }
+})

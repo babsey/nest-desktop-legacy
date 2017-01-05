@@ -14,7 +14,7 @@ $(document).bind("ajaxStart", function() {
 function simulate(url, data) {
     return $.ajax({
         method: "POST",
-        url: "http://localhost:5000/" + url + "/",
+        url: "http://localhost:5000/simulate/" + url,
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
     }).fail(function(d) {

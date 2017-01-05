@@ -1,9 +1,7 @@
 "use strict"
 
-var d3Ease = require('d3-ease');
 var d3Selection = require('d3-selection');
 var d3Shape = require('d3-shape');
-var d3Transition = require('d3-transition');
 var chart = require('./chart');
 
 var line = d3Shape.line();
@@ -15,7 +13,8 @@ function _draw_line(classname) {
         .selectAll("." + classname)
         .data(chart.data().y);
 
-    lines.transition(chart.transition)
+    lines
+    // .transition(chart.transition)
         .attr("d", line);
 
     lines.enter()
@@ -35,7 +34,7 @@ function _draw_line(classname) {
             d3Selection.selectAll('#clip path')
                 .classed('active', false);
         })
-        .transition(chart.transition)
+        // .transition(chart.transition)
         .attr("style", function() {
             return 'zscore:' + (classname == 'aline' ? 1 : -1000)
         })
@@ -48,10 +47,10 @@ function _draw_line(classname) {
 function update() {
 
     d3Selection.select('#xaxis')
-        .transition(chart.transition)
+        // .transition(chart.transition)
         .call(chart.xAxis);
     d3Selection.select('#yaxis')
-        .transition(chart.transition)
+        // .transition(chart.transition)
         .call(chart.yAxis);
 
     line.x(function(d, i) {

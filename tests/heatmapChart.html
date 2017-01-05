@@ -36,15 +36,15 @@
         var chart = heatmapChart('#chart');
         var n = 10;
         var c = math.random([n * n])
+        chart.xScale.domain([0, n])
+        chart.yScale.domain([0, n])
+        chart.colorScale.domain([0, 1])
+        chart.colorScale.range(['#fff', '#000'])
         chart.data({
                 x: d3Array.range(0, n),
                 y: d3Array.range(0, n),
                 c: c,
             })
-            .xlim([0, n])
-            .ylim([0, n])
-            // .cmap(['#fff','#000'])
-            .clim([0, 1])
             .legend()
             .update();
     </script>

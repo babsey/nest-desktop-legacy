@@ -6,11 +6,11 @@ var chart = require('./chart');
 function update() {
 
     d3Selection.select('#xaxis')
-        .transition(chart.transition)
+        // .transition(chart.transition)
         .call(chart.xAxis);
 
     d3Selection.select('#yaxis')
-        .transition(chart.transition)
+        // .transition(chart.transition)
         .call(chart.yAxis);
 
     var dots = d3Selection

@@ -81,7 +81,6 @@ function update() {
         .attr("width", chart.width / parseFloat(data.x.length))
         .attr("height", chart.height / parseFloat(data.y.length))
         .style("stroke", 'white')
-        .style("fill", 'white')
         .on('mouseover', function(d) {
             d3Selection.select(this)
                 .style('opacity', .3)
@@ -91,7 +90,8 @@ function update() {
                 // .transition(t)
                 .style('opacity', 1.)
         })
-        .transition(chart.transition)
+        // .style("fill", 'white')
+        // .transition(chart.transition)
         .style("fill", function(d) {
             return chart.colorScale(d);
         });

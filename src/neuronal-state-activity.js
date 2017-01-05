@@ -20,7 +20,7 @@ window.data = {
     nodes: [{
         type: 'neuron',
         model: undefined,
-        n: 10,
+        n: 1,
         params: {},
         record_from: 'V_m',
     }, {
@@ -40,7 +40,7 @@ window.data = {
         target: 0,
         conn_spec: {
             rule: 'fixed_outdegree',
-            outdegree: 1,
+            outdegree: 0,
         },
         syn_spec: {
             weight: -1.
@@ -73,7 +73,7 @@ var slider_options = {
     outdegree: {
         value: data.links[1].conn_spec.outdegree,
         min: 0,
-        max: data.nodes[0].n,
+        max: 10,
         step: 1
     }
 }
@@ -82,7 +82,7 @@ slider.create_dataSlider('#simtime', 'simtime', 0, 'Simulation time (ms)', slide
     .on('slideStop', function(d) {
         data.simtime = d.value;
     })
-slider.create_dataSlider('#grng_seed', 'grng_seed', 0, 'Random number generated seed', slider_options.grng_seed)
+slider.create_dataSlider('#grng_seed', 'grng_seed', 2, 'Random number generated seed', slider_options.grng_seed)
     .on('slideStop', function(d) {
         data.kernel.grng_seed = d.value;
     })
@@ -102,22 +102,19 @@ function simulate() {
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
-    data.nodes.map(function (node) {
-        if ('events' in node) {
-            node.events = {}
-        }
-    })
+    data.nodes[2].events = {};
     var sendData = {
         kernel: data.kernel,
         simtime: data.simtime,
         nodes: data.nodes,
         links: data.links,
     }
-    req.simulate('nest_simulation', sendData)
+    req.simulate('network/', sendData)
         .done(function(res) {
-            data.events = res.events;
-            data.curtime = res.curtime;
-            data.nodes[0].ids = res.nodes[0].ids;
+            data.kernel.time = res.kernel.time;
+            for (var idx in res.nodes) {
+                data.nodes[idx].ids = res.nodes[idx].ids;
+            }
             data.nodes[2].events = res.nodes[2].events;
             var ids = data.nodes[0].ids;
             window.times = []
@@ -131,19 +128,69 @@ function simulate() {
                 }
             });
 
+            if(document.getElementById('autoscale').checked) {
+                chart.xScale.domain(d3Array.extent(times))
+                chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
+            }
             chart.data({
                     x: times,
                     y: values
                 })
-                .xlim(d3Array.extent(times))
-                .ylim(d3Array.extent([].concat.apply([], values)))
                 .ylabel(models.record_labels[data.nodes[0].record_from])
                 .update();
         })
 }
 
+var running = false;
+function resume() {
+    if (!(running)) return
+    if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+
+    window.dataEvents = data.nodes[2].events
+    data.nodes[2].events = {};
+
+    var sendData = {
+        kernel: data.kernel,
+        simtime: 1.,
+        nodes: data.nodes,
+        // links: data.links,
+    }
+    req.simulate('network/resume/', sendData)
+        .done(function(res) {
+            data.kernel.time = res.kernel.time;
+            for (var key in res.nodes[2].events) {
+                dataEvents[key] = dataEvents[key].concat(res.nodes[2].events[key])
+                data.nodes[2].events[key] = dataEvents[key]
+            }
+            window.times = []
+            var ids = data.nodes[0].ids;
+            window.values = ids.map(function() {
+                return []
+            });
+            data.nodes[2].events.senders.map(function(d, i) {
+                values[d-ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
+                if (d == ids[0]) {
+                    times.push(data.nodes[2].events.times[i])
+                }
+            });
+
+            if(document.getElementById('autoscale').checked) {
+                chart.xScale.domain([data.kernel.time-1000,data.kernel.time])
+                chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
+            }
+            chart.data({
+                    x: times,
+                    y: values
+                })
+                .ylabel(models.record_labels[data.nodes[0].record_from])
+                .update();
+            resume()
+        })
+}
+
 window.chart = lineChart('#chart')
-    .xlabel('Time (ms)');
+    .xlabel('Time (ms)')
+    .drag();
 
 models.load_model_list(data.nodes, ['parrot_neuron'])
 nav.init_button(data, 'neuronal_state_activity')
@@ -152,6 +199,18 @@ setTimeout(function() {
 }, 200)
 nav.network_added(data, simulate, 'neuronal_state_activity')
 
+$('#network-resume').on('click', function () {
+    if (running) {
+        running = false
+        $('#network-resume').find('.glyphicon').hide()
+        $('#network-resume').find('.glyphicon-play').show()
+    } else {
+        $('#network-resume').find('.glyphicon').hide()
+        $('#network-resume').find('.glyphicon-pause').show()
+        running = true
+        resume()
+    }
+})
 
 $('#id_record').on('change', function() {
     data.nodes[0].record_from = this.value;
@@ -163,11 +222,13 @@ $('#id_record').on('change', function() {
         values[d-ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
     });
 
+    if(document.getElementById('autoscale').checked) {
+        chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
+    }
     chart.data({
             x: times,
             y: values
         })
-        .ylim(d3Array.extent([].concat.apply([], values)))
         .ylabel(models.record_labels[data.nodes[0].record_from])
         .update();
 })

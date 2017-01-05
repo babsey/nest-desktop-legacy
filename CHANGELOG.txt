@@ -1,6 +1,13 @@
 CHANGELOG
 ---------
 
+0.3.11:
+    Add missing modules
+    Live simulation
+    Drag chart
+    Autoscale option
+    Raster plot for bump activity
+
 0.3.10:
     Nest app code
     Slider lib

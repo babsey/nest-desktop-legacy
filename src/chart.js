@@ -3,11 +3,13 @@
 var d3Array = require('d3-array');
 var d3Axis = require('d3-axis');
 var d3Ease = require('d3-ease');
+var d3Drag = require('d3-drag');
 var d3Format = require('d3-format');
 var d3Selection = require('d3-selection');
 var d3Shape = require('d3-shape');
 var d3Scale = require('d3-scale');
 var d3Transition = require('d3-transition');
+// var d3Zoom = require('d3-zoom');
 var colorbrewer = require('colorbrewer');
 
 var margin = {
@@ -50,30 +52,6 @@ function data(d) {
     return chart
 }
 
-function xlim(x) {
-    if (!arguments.length) return d3Array.extent(_data.x);
-    xScale.domain(x);
-    return chart
-}
-
-function ylim(y) {
-    if (!arguments.length) return d3Array.extent(_data.y);
-    yScale.domain(y);
-    return chart
-}
-
-function clim(c) {
-    if (!arguments.length) return _data.c;
-    colorScale.domain(c);
-    return chart
-}
-
-function cmap(c) {
-    if (!arguments.length) return colors;
-    colorScale.range(c)
-    return chart
-}
-
 function ylabel(label) {
     d3Selection.select('#ylabel')
         .text(label);
@@ -85,6 +63,43 @@ function xlabel(label) {
         .text(label);
     return chart
 }
+
+function drag() {
+    d3Selection.select('#chart')
+        .call(d3Drag.drag()
+            .on("drag", function() {
+                $('#autoscale').prop('checked', false)
+                var xlim0 = chart.xScale.domain();
+                var dx = d3Selection.event.dx;
+                chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
+                chart.update()
+            })
+        );
+    return chart;
+}
+
+// function zoom() {
+//     var xlim0;
+//     d3Selection.select('#chart')
+//         .call(d3Zoom.zoom()
+//             .scaleExtent([.5,2])
+//             .on("start", function() {
+//                 xlim0 = chart.xScale.domain()
+//             })
+//             .on("zoom", function() {
+//                 var xScale = d3Selection.event.transform.rescaleX(chart.xScale);
+//                 chart.xScale.domain(xScale.domain())
+//                 chart.update()
+//             })
+//             .on("end", function() {
+//                 xlim1 = chart.xScale.domain()
+//                 chart.xScale.domain(xlim0)
+//             })
+//         )
+//         .on("dblclick.zoom", null);
+//     return chart;
+// }
+
 
 function initChart(reference) {
     d3Selection.select(reference).html("");
@@ -135,19 +150,17 @@ var chart = {
     width: width,
     height: height,
     format: format,
-    transition : transition,
+    transition: transition,
     data: data,
-    cmap: cmap,
     xScale: xScale,
     yScale: yScale,
     colorScale: colorScale,
     xAxis: xAxis,
     yAxis: yAxis,
-    xlim: xlim,
-    ylim: ylim,
-    clim: clim,
     xlabel: xlabel,
     ylabel: ylabel,
+    drag: drag,
+    // zoom: zoom,
     initChart: initChart,
 }
 

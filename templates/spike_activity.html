@@ -38,6 +38,10 @@
             <a type="button" class="btn btn-default navbar-btn" href="../index.html">
                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
             </a>
+            <button type="button" class="btn btn-default navbar-btn" id="network-resume">
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-play"></span>
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-pause" style="display:none"></span>
+            </button>
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" id="get-network-config" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-wrench"></span>
@@ -89,15 +93,15 @@
         <div id="controller-body" class="pull-right">
             <div id="controller-panel" class="panel panel-default">
                 <div class="panel-body">
-                    <dl id="simtime"></dl>
-                    <dl id="grng_seed"></dl>
+                    <div id="simtime"></div>
+                    <div id="grng_seed"></div>
 
                     <hr>
                     <div id="input" class="model" nidx="1">
                         <select id="id_input" class="form-control modelSelect">
                             <option value="" disabled selected hidden>Select an input device</option>
                         </select>
-                        <dl class="params"></dl>
+                        <div class="params"></div>
                     </div>
 
                     <hr>
@@ -105,16 +109,22 @@
                         <select id="id_neuron" class="form-control modelSelect">
                             <option value="" disabled selected hidden>Select a neuron model</option>
                         </select>
-                        <dl class="params"></dl>
+                        <div class="params"></div>
 
                         <hr>
-                        <dl id="n"></dl>
-                        <dl id="outdegree"></dl>
+                        <div id="n"></div>
+                        <div id="outdegree"></div>
                     </div>
 
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="pull-right checkbox">
+        <label for="autoscale">
+            <input type="checkbox" name="autoscale" value="autoscale" id="autoscale" checked> Autoscale
+        </label>
     </div>
 
     <div id="chart"></div>

@@ -25,14 +25,14 @@
         var math = require('mathjs');
         var d3Array = require('d3-array');
         var lineChart = require("../src/line-chart");
-        var chart = lineChart('#chart');
 
+        var chart = lineChart('#chart');
         var n = 100;
+        chart.xScale.domain([0, n])
         chart.data({
                 x: d3Array.range(n),
-                y: math.random([10,n]),
+                y: math.random([10, n]),
             })
-            .xlim([0,n])
             .update();
     </script>
 </body>
