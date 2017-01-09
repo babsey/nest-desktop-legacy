@@ -1,6 +1,12 @@
 CHANGELOG
 ---------
 
+0.3.12:
+    Warning alert for server check
+    Better live simulation
+    Prevent server crash in live simulation
+
+
 0.3.11:
     Add missing modules
     Live simulation

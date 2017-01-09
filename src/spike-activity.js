@@ -99,6 +99,7 @@ function simulate() {
     slider.update_dataSlider('n', data.nodes[0].n)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
+    if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
 
     data.nodes[2].events = {};
@@ -108,7 +109,7 @@ function simulate() {
         nodes: data.nodes,
         links: data.links,
     }
-    req.simulate('network/', sendData)
+    req.simulate('simple/simulate/', sendData)
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var idx in res.nodes) {
@@ -117,7 +118,7 @@ function simulate() {
             data.nodes[2].events = res.nodes[2].events;
 
             if (document.getElementById('autoscale').checked) {
-                chart.xScale.domain([data.kernel.time - 1000, data.kernel.time])
+                chart.xScale.domain([data.kernel.time - data.simtime, data.kernel.time])
                 chart.yScale.domain([0, data.nodes[0].n])
             }
             chart.data({
@@ -128,8 +129,6 @@ function simulate() {
         })
 }
 
-var running = false;
-
 function resume() {
     if (!(running)) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
@@ -138,11 +137,11 @@ function resume() {
     data.nodes[2].events = {};
     var sendData = {
         kernel: data.kernel,
-        simtime: 1.,
+        simtime: 10.,
         nodes: data.nodes,
         // links: data.links,
     }
-    req.simulate('network/resume/', sendData)
+    req.simulate('simple/resume/', sendData)
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var key in res.nodes[2].events) {
@@ -152,7 +151,7 @@ function resume() {
 
 
             if (document.getElementById('autoscale').checked) {
-                chart.xScale.domain([data.kernel.time - 1000, data.kernel.time])
+                chart.xScale.domain([data.kernel.time - data.simtime, data.kernel.time])
                 chart.yScale.domain([0, data.nodes[0].n])
             }
             chart.data({
@@ -173,19 +172,6 @@ window.chart = scatterChart('#chart')
 models.load_model_list(data.nodes)
 nav.init_button(data, 'spike_activity')
 setTimeout(function() {
-    events.eventHandler(data, simulate)
+    events.eventHandler(data, simulate, resume)
 }, 200)
 nav.network_added(data, simulate, 'spike_activity')
-
-$('#network-resume').on('click', function() {
-    if (running) {
-        running = false
-        $('#network-resume').find('.glyphicon').hide()
-        $('#network-resume').find('.glyphicon-play').show()
-    } else {
-        $('#network-resume').find('.glyphicon').hide()
-        $('#network-resume').find('.glyphicon-pause').show()
-        running = true
-        resume()
-    }
-})

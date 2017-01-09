@@ -9,6 +9,10 @@
 
 <body>
     <div class="container">
+        <div id="ServerNotRunning" class="alert alert-warning alert-dismissible fade in pull-left" role="alert" style="display:none; position:absolute; width:auto">
+            <strong>Warning!</strong> The server for nest simulation is currently not running!
+        </div>
+
         <div class="pull-right" style="position: relative; right: -60px;">
             <div class="btn-group hide">
                 <button class="btn btn-default navbar-bin dropdown-toggle" type="button" data-toggle="dropdown">
@@ -24,16 +28,18 @@
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
         </div>
+
         <div class="jumbotron">
             <h1>NEST desktop</h1>
             <p>
-                A desktop application for the NEural Simulation Tool.
-                (<a href="http://www.nest-initiative.org/">http://www.nest-initiative.org/</a>)
+                A desktop application for the NEural Simulation Tool. (
+                <a href="http://www.nest-initiative.org/">http://www.nest-initiative.org/</a>)
             </p>
             <p class="hide">
                 <a class="btn btn-primary btn-lg" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
             </p>
         </div>
+    </div>
     </div>
     <div id="jumbotron-bg"></div>
 
@@ -42,45 +48,45 @@
         <div class="row">
             <div class="col-xs-12 col-sm-4 col-md-3">
                 <a href="./templates/neuronal_state_activity.html" class="thumbnail network" id="neuronal_state_activity">
-                    <div style="position:absolute">
+                    <div style="position:absolute; z-index:10">
                         <button class="btn btn-default" type="button">
                             Neuronal state activity <span class="badge"></span>
                         </button>
                     </div>
-                    <img src="./dist/img/neuronal-state-activity.png" alt="neuronal state activity">
+                    <img src="./dist/img/neuronal-state-activity.png" alt="neuronal state activity" style="opacity:.1">
                 </a>
             </div>
 
             <div class="col-xs-12 col-sm-4 col-md-3">
                 <a href="./templates/spike_activity.html" class="thumbnail network" id="spike_activity">
-                    <div style="position:absolute">
+                    <div style="position:absolute; z-index:10">
                         <button class="btn btn-default" type="button">
                             Spike activity <span class="badge"></span>
                         </button>
                     </div>
-                    <img src="./dist/img/spike-activity.png" alt="spike activity">
+                    <img src="./dist/img/spike-activity.png" alt="spike activity" style="opacity:.1">
                 </a>
             </div>
 
             <div class="col-xs-12 col-sm-4 col-md-3">
                 <a href="./templates/bump_activity.html" class="thumbnail network" id="bump_activity">
-                    <div style="position:absolute">
+                    <div style="position:absolute; z-index:10">
                         <button class="btn btn-default" type="button">
                             Bump activity <span class="badge"></span>
                         </button>
                     </div>
-                    <img src="./dist/img/spike-activity.png" alt="bump activity">
+                    <img src="./dist/img/spike-activity.png" alt="bump activity" style="opacity:.1">
                 </a>
             </div>
 
             <div class="col-xs-12 col-sm-4 col-md-3">
                 <a href="./templates/bump_activity_heatmap.html" class="thumbnail network" id="bump_activity_heatmap">
-                    <div style="position:absolute">
+                    <div style="position:absolute; z-index:10">
                         <button class="btn btn-default" type="button">
                             Bump activity (heatmap)<span class="badge"></span>
                         </button>
                     </div>
-                    <img src="./dist/img/bump-activity.png" alt="bump activity">
+                    <img src="./dist/img/bump-activity.png" alt="bump activity" style="opacity:.1">
                 </a>
             </div>
         </div>
@@ -94,12 +100,26 @@
     const req = require('./src/request');
     const shell = require("electron").shell;
 
-    $('.network').each(function() {
-        const n = $(this)
-        req.network_list(this.id).done(function(d) {
-            n.find('.badge').html(d.length)
-        })
-    })
+    req.version_check();
+    setTimeout(function () {
+        if (window.serverRunning) {
+            $('.network').each(function() {
+                const n = $(this)
+                req.network_list(this.id).done(function(d) {
+                    n.find('.badge').html(d.length)
+                    n.find('img').attr('style', 'opacity:1.0')
+                })
+            })
+        } else {
+            $('a').click(function(e) {
+                e.preventDefault();
+            });
+            $('#ServerNotRunning').show()
+            setTimeout(function() {
+                $('#ServerNotRunning').alert('close')
+            }, 2000)
+        }
+    }, 10);
 
     $(document).on('click', 'a[href^="http"]', function(event) {
         event.preventDefault();

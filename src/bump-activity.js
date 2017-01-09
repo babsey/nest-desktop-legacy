@@ -97,11 +97,13 @@ slider.create_dataSlider('#outdegree', 'outdegree', 0, 'Outdegree', slider_optio
         data.links[1].conn_spec.outdegree = d.value;
     })
 
+
 function simulate() {
     slider.update_dataSlider('simtime', data.simtime)
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
+    if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
     data.nodes.map(function (node) {
         if ('events' in node) {
@@ -114,7 +116,7 @@ function simulate() {
         nodes: data.nodes,
         links: data.links,
     }
-    req.simulate('gamma/', sendData)
+    req.simulate('gamma/simulate/', sendData)
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var idx in res.nodes) {
@@ -125,7 +127,7 @@ function simulate() {
             data.nodes[2].events = res.nodes[2].events;
 
             if (document.getElementById('autoscale').checked) {
-                chart.xScale.domain([data.kernel.time - 1000, data.kernel.time])
+                chart.xScale.domain([data.kernel.time - data.simtime, data.kernel.time])
                 chart.yScale.domain([0, data.nodes[0].n])
             }
             chart.data({
@@ -135,8 +137,6 @@ function simulate() {
                 .update();
         })
 }
-
-var running = false;
 function resume() {
     if (!(running)) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
@@ -145,7 +145,7 @@ function resume() {
     data.nodes[2].events = {};
     var sendData = {
         kernel: data.kernel,
-        simtime: 1.,
+        simtime: 10.,
         nodes: data.nodes,
         links: data.links,
     }
@@ -183,20 +183,7 @@ nav.network_added(data, simulate, 'bump_activity')
 setTimeout(function() {
     models.model_selected(data.nodes[0])
     slider.update_paramSlider(data.nodes[0])
-    events.eventHandler(data, simulate)
+    events.eventHandler(data, simulate, resume)
 }, 200)
 
 nav.network_added(data, simulate, 'bump_activity')
-
-$('#network-resume').on('click', function () {
-    if (running) {
-        running = false
-        $('#network-resume').find('.glyphicon').hide()
-        $('#network-resume').find('.glyphicon-play').show()
-    } else {
-        $('#network-resume').find('.glyphicon').hide()
-        $('#network-resume').find('.glyphicon-pause').show()
-        running = true
-        resume()
-    }
-})

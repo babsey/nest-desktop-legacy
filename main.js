@@ -40,10 +40,6 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
-
-    electron.globalShortcut.register('Esc', () => {
-        mainWindow.destroy()
-    });
 }
 
 // This method will be called when Electron has finished
@@ -66,12 +62,4 @@ app.on('activate', function() {
     if (mainWindow === null) {
         createWindow()
     }
-})
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
-app.on('will-quit', () => {
-    // Unregister all shortcuts.
-    globalShortcut.unregisterAll()
 })

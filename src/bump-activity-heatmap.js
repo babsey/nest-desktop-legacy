@@ -103,6 +103,7 @@ function simulate() {
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
+    if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
 
     data.nodes[2].events = {};
@@ -112,7 +113,7 @@ function simulate() {
         nodes: data.nodes,
         links: data.links,
     }
-    req.simulate('bump/', sendData)
+    req.simulate('gamma/simulate/', sendData)
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var idx in res.nodes) {
@@ -141,7 +142,6 @@ function simulate() {
         })
 }
 
-var running = false;
 function resume() {
     if (!(running)) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
@@ -154,7 +154,7 @@ function resume() {
         nodes: data.nodes,
         links: data.links,
     }
-    req.simulate('bump/resume/', sendData)
+    req.simulate('gamma/resume/', sendData)
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var key in res.nodes[2].events) {
@@ -189,19 +189,6 @@ nav.init_button(data, 'bump_activity')
 setTimeout(function() {
     models.model_selected(data.nodes[0])
     slider.update_paramSlider(data.nodes[0])
-    events.eventHandler(data, simulate)
+    events.eventHandler(data, simulate, resume)
 }, 200)
 nav.network_added(data, simulate, 'bump_activity')
-
-$('#network-resume').on('click', function () {
-    if (running) {
-        running = false
-        $('#network-resume').find('.glyphicon').hide()
-        $('#network-resume').find('.glyphicon-play').show()
-    } else {
-        $('#network-resume').find('.glyphicon').hide()
-        $('#network-resume').find('.glyphicon-pause').show()
-        running = true
-        resume()
-    }
-})

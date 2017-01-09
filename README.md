@@ -56,12 +56,12 @@ Install database access for Flask (for nest-desktop version ^0.3.0)
 pip install anyjson migrate flask-sqlalchemy
 ```
 
-Install nodejs with root rights
+Install nodejs with sudo
 ```
 sudo apt-get install nodejs
 ```
 
-Install [Electron](https://github.com/electron/electron) with root rights (latest tested version: 1.4.13)
+Install [Electron](https://github.com/electron/electron) globally with sudo (latest tested version: 1.4.13)
 ```
 sudo npm install electron -g
 ```
@@ -74,7 +74,7 @@ npm install nest-desktop
 ## To start
 Load nest-desktop command
 ```
-source ./node_modules/nest-desktop/bin/nest-desktop.sh
+source ./node_modules/nest-desktop/.bin/nest-desktop.sh
 ```
 
 First create a sqlite database
@@ -91,22 +91,22 @@ Keybindings to close it are 'CTRL + W' or 'Esc'
 ## For further usage
 
 Test required modules for nest-desktop
-```bash (Ubuntu)
+```
 nest-desktop test
 ```
 
 Check if port 5000 is running
-```bash (Ubuntu)
+```
 nest-desktop checkport
 ```
 
 Kill the port 5000
-```bash (Ubuntu)
+```
 nest-desktop killport
 ```
 
 Show all available commands
-```bash (Ubuntu)
+```
 nest-desktop help
 ```
 

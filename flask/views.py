@@ -5,6 +5,22 @@ from app import app, db, Network
 import anyjson as json
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return 'Hello World!'
+
+@app.route('/check/versions/', methods=['GET'])
+def check_versions():
+    versions = {}
+    try:
+        import nest
+        versions['nest'] = nest.version()
+    except:
+        versions['nest'] = -1
+
+    return jsonify(versions=versions)
+
+
 # --------------------------
 # Database
 # --------------------------
@@ -45,24 +61,24 @@ def network_add():
 # --------------------------
 
 import nest_app.simple_network as network
-@app.route('/simulate/network/', methods=['POST'])
+@app.route('/network/simple/simulate/', methods=['POST'])
 def simple_network_simulate():
     data = request.get_json()
     return jsonify(network.run(data))
 
-@app.route('/simulate/network/resume/', methods=['POST'])
+@app.route('/network/simple/resume/', methods=['POST'])
 def simple_network_resume():
     data = request.get_json()
     return jsonify(network.resume(data))
 
 
 import nest_app.gamma_network as gamma
-@app.route('/simulate/gamma/', methods=['POST'])
+@app.route('/network/gamma/simulate/', methods=['POST'])
 def gamma_network_simulate():
     data = request.get_json()
     return jsonify(gamma.run(data))
 
-@app.route('/simulate/gamma/resume/', methods=['POST'])
+@app.route('/network/gamma/resume/', methods=['POST'])
 def gamma_network_resume():
     data = request.get_json()
     return jsonify(gamma.resume(data))

@@ -52,6 +52,10 @@ def run(data):
 
 def resume(data):
 
+    nodes = data['nodes']
+    nodes[1]['params'] = dict(zip(nodes[1]['params'].keys(), map(float, nodes[1]['params'].values())))
+    nest.SetStatus(nodes[1]['ids'], nodes[1]['params'])
+
     nest.Simulate(data['simtime'])
     data['kernel']['time'] = nest.GetKernelStatus('time')
 
