@@ -173,5 +173,5 @@ models.load_model_list(data.nodes)
 nav.init_button(data, 'spike_activity')
 setTimeout(function() {
     events.eventHandler(data, simulate, resume)
-}, 200)
+}, 1000)
 nav.network_added(data, simulate, 'spike_activity')

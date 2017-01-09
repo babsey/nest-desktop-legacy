@@ -1,8 +1,0 @@
-anyjson==0.3.3
-Flask==0.11.1
-Flask-SQLAlchemy==2.1
-migrate==0.3.8
-SQLAlchemy==1.1.4
-sqlalchemy-migrate==0.10.1.dev4
-sqlparse==0.2.2
-Tempita==0.5.2

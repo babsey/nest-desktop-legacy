@@ -3,6 +3,47 @@
 var $ = require("jquery");
 require("bootstrap-slider");
 window.running = false;
+window.serverRunning = false;
+
+const Config = require('electron-config');
+const config = new Config({
+    defaults: {
+        serverURL: {
+            ip: 'localhost',
+            port: 5000,
+        }
+    }
+});
+
+let {
+    ip,
+    port
+} = config.get('serverURL');
+let serverURL = ip + ':' + port;
+// let serverURL = 'localhost:5000'
+
+function server_check() {
+    return $.ajax({
+        method: "GET",
+        url: "http://" + serverURL,
+    }).fail(function(d) {
+        console.log(d)
+    }).done(function(d) {
+        console.log(d)
+        window.serverRunning = true
+    })
+}
+
+function simulate(url, data) {
+    return $.ajax({
+        method: "POST",
+        url: "http://" + serverURL + "/network/" + url,
+        data: JSON.stringify(data),
+        contentType: 'application/json;charset=UTF-8',
+    }).fail(function(d) {
+        console.log(d)
+    })
+}
 
 $(document).bind("ajaxStart", function() {
     if (!(running)) {
@@ -14,64 +55,7 @@ $(document).bind("ajaxStart", function() {
     $('.sliderInput').slider('enable')
 })
 
-function version_check() {
-    return $.ajax({
-        method: "GET",
-        url: "http://localhost:5000/check/versions/",
-    }).fail(function(d) {
-        console.log(d)
-        window.serverRunning = false
-    }).done(function(d) {
-        console.log(d)
-        window.serverRunning = true
-    })
-}
-
-function network(id) {
-    return $.ajax({
-        method: "GET",
-        url: "http://localhost:5000/network/" + id,
-        contentType: 'application/json;charset=UTF-8',
-    }).fail(function(d) {
-        console.log(d)
-    })
-}
-
-function network_add(data) {
-    return $.ajax({
-        method: "POST",
-        url: "http://localhost:5000/network/add/",
-        data: JSON.stringify(data),
-        contentType: 'application/json;charset=UTF-8',
-    }).fail(function(d) {
-        console.log(d)
-    })
-}
-
-function network_list(nest_app) {
-    return $.ajax({
-        method: "GET",
-        url: "http://localhost:5000/network/list/" + nest_app,
-    }).fail(function(d) {
-        console.log(d)
-    })
-}
-
-function simulate(url, data) {
-    return $.ajax({
-        method: "POST",
-        url: "http://localhost:5000/network/" + url,
-        data: JSON.stringify(data),
-        contentType: 'application/json;charset=UTF-8',
-    }).fail(function(d) {
-        console.log(d)
-    })
-}
-
 module.exports = {
-    version_check: version_check,
-    network: network,
-    network_add: network_add,
-    network_list: network_list,
+    server_check: server_check,
     simulate: simulate,
 }

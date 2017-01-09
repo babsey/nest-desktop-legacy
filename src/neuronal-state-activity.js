@@ -195,7 +195,7 @@ models.load_model_list(data.nodes, ['parrot_neuron'])
 nav.init_button(data, 'neuronal_state_activity')
 setTimeout(function() {
     events.eventHandler(data, simulate, resume)
-}, 200)
+}, 1000)
 nav.network_added(data, simulate, 'neuronal_state_activity')
 
 $('#id_record').on('change', function() {

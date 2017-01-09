@@ -184,6 +184,6 @@ setTimeout(function() {
     models.model_selected(data.nodes[0])
     slider.update_paramSlider(data.nodes[0])
     events.eventHandler(data, simulate, resume)
-}, 200)
+}, 1000)
 
 nav.network_added(data, simulate, 'bump_activity')

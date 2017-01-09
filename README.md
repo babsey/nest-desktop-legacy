@@ -51,11 +51,6 @@ via pip (I encourage you to use virtualenv)
 pip install flask
 ```
 
-Install database access for Flask (for nest-desktop version ^0.3.0)
-```
-pip install anyjson migrate flask-sqlalchemy
-```
-
 Install nodejs with sudo
 ```
 sudo apt-get install nodejs
@@ -77,16 +72,11 @@ Load nest-desktop command
 source ./node_modules/nest-desktop/.bin/nest-desktop.sh
 ```
 
-First create a sqlite database
-```
-nest-desktop init
-```
-
 Run the app (with starting flask server)
 ```
 nest-desktop start
 ```
-Keybindings to close it are 'CTRL + W' or 'Esc'
+Keybindings to close the app are 'CTRL + W'
 
 ## For further usage
 

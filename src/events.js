@@ -57,8 +57,6 @@ function eventHandler(data, simulate, resume) {
     }
 }
 
-
-
 module.exports = {
     eventHandler: eventHandler
 }

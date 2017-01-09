@@ -97,16 +97,16 @@
 <script>
     window.jQuery = window.$ = require('jquery');
     require('bootstrap');
-    const req = require('./src/request');
+    const network = require('./src/network');
     const shell = require("electron").shell;
+    window.serverRunning = true;
 
-    req.version_check();
     setTimeout(function () {
         if (window.serverRunning) {
             $('.network').each(function() {
                 const n = $(this)
-                req.network_list(this.id).done(function(d) {
-                    n.find('.badge').html(d.length)
+                network.filter(this.id).exec(function(err,docs) {
+                    n.find('.badge').html(docs.length)
                     n.find('img').attr('style', 'opacity:1.0')
                 })
             })
