@@ -9,11 +9,10 @@
 
 <body>
     <div class="container">
-        <div id="ServerNotRunning" class="alert alert-warning alert-dismissible fade in pull-left" role="alert" style="display:none; position:absolute; width:auto">
-            <strong>Warning!</strong> The server for nest simulation is currently not running!
-        </div>
+        <div id="message" class="alert alert-dismissible fade in" role="alert" style="display:none; position:absolute; width:auto; top:10px"></div>
 
         <div class="pull-right" style="position: relative; right: -60px;">
+
             <div class="btn-group hide">
                 <button class="btn btn-default navbar-bin dropdown-toggle" type="button" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-eye-open"></span>
@@ -32,8 +31,8 @@
         <div class="jumbotron">
             <h1>NEST desktop</h1>
             <p>
-                A desktop application for the NEural Simulation Tool. (
-                <a href="http://www.nest-initiative.org/">http://www.nest-initiative.org/</a>)
+                A desktop application for the NEural Simulation Tool.
+                (<a href="http://www.nest-simulator.org/">http://www.nest-simulator.org/</a>)
             </p>
             <p class="hide">
                 <a class="btn btn-primary btn-lg" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
@@ -97,26 +96,30 @@
 <script>
     window.jQuery = window.$ = require('jquery');
     require('bootstrap');
-    const network = require('./src/network');
     const shell = require("electron").shell;
-    window.serverRunning = true;
+    const network = require('./src/network');
+    const req = require('./src/request');
+    window.serverRunning = false;
+    req.server_check()
 
-    setTimeout(function () {
+    $('.network').each(function() {
+        const n = $(this)
+        network.filter(this.id).exec(function(err, docs) {
+            n.find('.badge').html(docs.length)
+            n.find('img').attr('style', 'opacity:1.0')
+        })
+    })
+
+    setTimeout(function() {
         if (window.serverRunning) {
-            $('.network').each(function() {
-                const n = $(this)
-                network.filter(this.id).exec(function(err,docs) {
-                    n.find('.badge').html(docs.length)
-                    n.find('img').attr('style', 'opacity:1.0')
-                })
-            })
-        } else {
-            $('a').click(function(e) {
-                e.preventDefault();
-            });
-            $('#ServerNotRunning').show()
+            $('#message').html('<strong>Success!</strong> The server for nest simulation is currently running.').show()
             setTimeout(function() {
-                $('#ServerNotRunning').alert('close')
+                $('#message').alert('close')
+            }, 2000)
+        } else {
+            $('#message').html('<strong>Warning!</strong> The server for nest simulation is currently <strong>not</strong> running.').show()
+            setTimeout(function() {
+                $('#message').alert('close')
             }, 2000)
         }
     }, 10);

@@ -51,4 +51,8 @@ def gamma_network_resume():
     return jsonify(gamma.resume(data))
 
 if __name__ == '__main__':
-    app.run()
+    import sys
+    if len(sys.argv) > 1:
+        app.run(sys.argv[1])
+    else:
+        app.run()

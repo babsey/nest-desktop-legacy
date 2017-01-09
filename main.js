@@ -13,6 +13,7 @@ const config = new Config({
         fullscreen: false
     }
 });
+console.log(config.store)
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());

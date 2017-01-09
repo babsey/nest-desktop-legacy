@@ -2,3 +2,4 @@ node_modules
 outdated
 log
 *.pyc
+*.nedb

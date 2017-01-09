@@ -10,7 +10,7 @@ const config = new Config({
     defaults: {
         serverURL: {
             ip: 'localhost',
-            port: 5000,
+            port: '5000',
         }
     }
 });
@@ -20,12 +20,12 @@ let {
     port
 } = config.get('serverURL');
 let serverURL = ip + ':' + port;
-// let serverURL = 'localhost:5000'
+
 
 function server_check() {
     return $.ajax({
         method: "GET",
-        url: "http://" + serverURL,
+        url: "http://" + serverURL + '/',
     }).fail(function(d) {
         console.log(d)
     }).done(function(d) {
