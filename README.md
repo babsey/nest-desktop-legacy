@@ -6,9 +6,13 @@
 
 An interactive desktop application for the [NEural Simulation Tool](http://www.nest-initiative.org/).
 
+
 ## To install (Ubuntu)
 
-To install this application you'll need [NEST](http://www.nest-simulator.org/), [Flask](http://flask.pocoo.org), [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Electron](http://electron.atom.io/) installed on your computer. From your command line:
+To install this application you'll need [NEST](http://www.nest-simulator.org/), [Flask](http://flask.pocoo.org) for the server, [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Electron](http://electron.atom.io/) installed on your computer.
+
+
+### To install NEST
 
 Install standard configuration before installing NEST
 ```
@@ -45,11 +49,21 @@ Make sure that NEST is in the PYTHONPATH (or add this line in .bashrc file)
 export PYTHONPATH=$HOME/opt/nest/lib/pyton2.7/site-packages:$PYTHONPATH
 ```
 
-Install Flask
-via pip (I encourage you to use virtualenv)
+
+### to install server for NEST
+
+Install Flask via pip (I encourage you to use virtualenv)
 ```
 pip install flask
 ```
+
+Download nest-server from github
+```
+git clone https://github.com/babsey/nest-server.git
+```
+
+
+### To install nest-desktop
 
 Install nodejs with sudo
 ```
@@ -66,38 +80,40 @@ Install nest-desktop and its dependencies
 npm install nest-desktop
 ```
 
-## To start
-Load nest-desktop command
+
+Start server (with flask)
 ```
-source ./node_modules/nest-desktop/.bin/nest-desktop.sh
+cd nest-server
+python routers.py
 ```
 
-Run the app (with starting flask server)
+
+## To start
+
+### Server
+
+Start server with flask in nest-server folder
 ```
-nest-desktop start
+python routers.py
 ```
+
+
+### Desktop
+
+Run the app (with starting flask server) in nest-desktop folder
+```
+npm start
+```
+or
+```
+electron .
+```
+or
+```
+electron main.js
+```
+
 Keybindings to close the app are 'CTRL + W'
 
-## For further usage
-
-Test required modules for nest-desktop
-```
-nest-desktop test
-```
-
-Check if port 5000 is running
-```
-nest-desktop checkport
-```
-
-Kill the port 5000
-```
-nest-desktop killport
-```
-
-Show all available commands
-```
-nest-desktop help
-```
 
 #### License [MIT](LICENSE)
