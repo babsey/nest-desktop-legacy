@@ -91,7 +91,7 @@ var slider_options = {
     }
 }
 
-slider.create_dataSlider('#general', 'sim_time', 0, 'Simulation time (ms)', slider_options.sim_time)
+slider.create_dataSlider('#general', 'sim_time', 1, 'Simulation time (ms)', slider_options.sim_time)
     .on('slideStop', function(d) {
         data.sim_time = d.value;
         if (data.nodes[1].stim_time[1] < data.sim_time) {
@@ -100,11 +100,11 @@ slider.create_dataSlider('#general', 'sim_time', 0, 'Simulation time (ms)', slid
             delete data.nodes[1].params.stop
         }
     })
-slider.create_dataSlider('#general', 'grng_seed', 0, 'Random number generated seed', slider_options.grng_seed)
+slider.create_dataSlider('#general', 'grng_seed', 2, 'Random number generated seed', slider_options.grng_seed)
     .on('slideStop', function(d) {
         data.kernel.grng_seed = d.value;
     })
-slider.create_dataSlider('#input', 'stim_time', 1, 'Stimulus time', slider_options.stim_time)
+slider.create_dataSlider('#input', 'stim_time', 2, 'Stimulus time', slider_options.stim_time)
     .on('slideStop', function(d) {
         data.nodes[1].stim_time = d.value;
         data.nodes[1].params.start = d.value[0];
@@ -114,11 +114,11 @@ slider.create_dataSlider('#input', 'stim_time', 1, 'Stimulus time', slider_optio
             delete data.nodes[1].params.stop
         }
     })
-slider.create_dataSlider('#neuron', 'n', 0, 'Population size', slider_options.n)
+slider.create_dataSlider('#neuron', 'n', 2, 'Population size', slider_options.n)
     .on('slideStop', function(d) {
         data.nodes[0].n = d.value;
     })
-slider.create_dataSlider('#neuron', 'outdegree', 0, 'Outdegree', slider_options.outdegree)
+slider.create_dataSlider('#neuron', 'outdegree', 3, 'Outdegree', slider_options.outdegree)
     .on('slideStop', function(d) {
         data.links[1].conn_spec.outdegree = d.value;
     })

@@ -37,8 +37,8 @@ var yAxis = d3Axis.axisLeft(yScale);
 var format = d3Format.format(".2f");
 
 var transition = d3Transition.transition()
-    .duration(250)
-    .ease(d3Ease.easeLinear);
+    .ease(d3Ease.easeLinear)
+    .duration(1);
 
 var _data = {
     x: [],

@@ -33,14 +33,16 @@ window.data = {
             'tau_syn_ex': 5.0,
             'tau_syn_in': 10.0,
         },
-        n: 1600,
-        nrow: 40,
-        ncol: 40,
+        n: 2500,
+        nrow: 50,
+        ncol: 50,
     }, {
         type: 'input',
         model: 'noise_generator',
-        stim_time: [0, 1000],
-        params: {},
+        // stim_time: [0, 1000],
+        params: {
+            mean: 1000.
+        },
     }, {
         type: 'output',
         model: 'spike_detector',
@@ -72,14 +74,14 @@ var slider_options = {
         max: 2000,
         step: 100,
     },
-    stim_time: {
-        value: data.nodes[1].stim_time,
-        min: 0,
-        max: data.sim_time,
-        step: 10,
-        tooltip: 'show',
-        tooltip_split: true,
-    },
+    // stim_time: {
+    //     value: data.nodes[1].stim_time,
+    //     min: 0,
+    //     max: data.sim_time,
+    //     step: 10,
+    //     tooltip: 'show',
+    //     tooltip_split: true,
+    // },
     grng_seed: {
         value: data.kernel.grng_seed,
         min: 0,
@@ -94,30 +96,30 @@ var slider_options = {
     }
 }
 
-slider.create_dataSlider('#general', 'sim_time', 0, 'Simulation time (ms)', slider_options.sim_time)
+slider.create_dataSlider('#general', 'sim_time', 1, 'Simulation time (ms)', slider_options.sim_time)
     .on('slideStop', function(d) {
         data.sim_time = d.value;
-        if (data.nodes[1].stim_time[1] < data.sim_time) {
-            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
-        } else {
-            delete data.nodes[1].params.stop
-        }
+        // if (data.nodes[1].stim_time[1] < data.sim_time) {
+        //     data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        // } else {
+        //     delete data.nodes[1].params.stop
+        // }
     })
-slider.create_dataSlider('#general', 'grng_seed', 0, 'Random number generated seed', slider_options.grng_seed)
+slider.create_dataSlider('#general', 'grng_seed', 2, 'Random number generated seed', slider_options.grng_seed)
     .on('slideStop', function(d) {
         data.kernel.grng_seed = d.value;
     })
-slider.create_dataSlider('#input', 'stim_time', 1, 'Stimulus time', slider_options.stim_time)
-    .on('slideStop', function(d) {
-        data.nodes[1].stim_time = d.value;
-        data.nodes[1].params.start = d.value[0];
-        if (data.nodes[1].stim_time[1] < data.sim_time) {
-            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
-        } else {
-            delete data.nodes[1].params.stop
-        }
-    })
-slider.create_dataSlider('#neuron', 'outdegree', 0, 'Outdegree', slider_options.outdegree)
+    // slider.create_dataSlider('#input', 'stim_time', 2, 'Stimulus time', slider_options.stim_time)
+    //     .on('slideStop', function(d) {
+    //         data.nodes[1].stim_time = d.value;
+    //         data.nodes[1].params.start = d.value[0];
+    //         if (data.nodes[1].stim_time[1] < data.sim_time) {
+    //             data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+    //         } else {
+    //             delete data.nodes[1].params.stop
+    //         }
+    //     })
+slider.create_dataSlider('#neuron', 'outdegree', 3, 'Outdegree', slider_options.outdegree)
     .on('slideStop', function(d) {
         data.links[1].conn_spec.outdegree = d.value;
     })
@@ -125,15 +127,12 @@ slider.create_dataSlider('#neuron', 'outdegree', 0, 'Outdegree', slider_options.
 function simulate() {
     slider.update_dataSlider('sim_time', data.sim_time)
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
-    slider.update_dataSlider('stim_time', data.nodes[1].stim_time)
+        // slider.update_dataSlider('stim_time', data.nodes[1].stim_time)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
     if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
 
-    if (data.nodes[1].params.stop == data.sim_time) {
-        delete data.nodes[1].params.stop
-    }
     data.nodes[2].events = {};
     req.simulate({
             network: data.network,
@@ -238,3 +237,4 @@ setTimeout(function() {
     events.eventHandler(data, simulate, resume)
 }, 1000)
 nav.network_added(data, simulate, 'bump_activity')
+simulate()

@@ -106,7 +106,7 @@ slider.create_dataSlider('#general', 'grng_seed', 2, 'Random number generated se
     .on('slideStop', function(d) {
         data.kernel.grng_seed = d.value;
     })
-slider.create_dataSlider('#input', 'stim_time', 1, 'Stimulus time', slider_options.stim_time)
+slider.create_dataSlider('#input', 'stim_time', 2, 'Stimulus time', slider_options.stim_time)
     .on('slideStop', function(d) {
         data.nodes[1].stim_time = d.value;
         data.nodes[1].params.start = d.value[0];

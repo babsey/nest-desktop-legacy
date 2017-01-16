@@ -13,9 +13,11 @@ function _draw_line(classname) {
         .selectAll("." + classname)
         .data(chart.data().y);
 
-    lines
-    // .transition(chart.transition)
-        .attr("d", line);
+    if (running) {
+        lines.attr("d", line);
+    } else {
+        lines.transition(chart.transition).attr("d", line)
+    }
 
     lines.enter()
         .append("path")
@@ -34,24 +36,31 @@ function _draw_line(classname) {
             d3Selection.selectAll('#clip path')
                 .classed('active', false);
         })
-        // .transition(chart.transition)
         .attr("style", function() {
             return 'zscore:' + (classname == 'aline' ? 1 : -1000)
         })
+        .transition(chart.transition)
         .attr("d", line);
 
     lines.exit()
-        .remove()
+        .remove();
 }
 
 function update() {
 
-    d3Selection.select('#xaxis')
-        // .transition(chart.transition)
-        .call(chart.xAxis);
-    d3Selection.select('#yaxis')
-        // .transition(chart.transition)
-        .call(chart.yAxis);
+    if (running) {
+        d3Selection.select('#xaxis')
+            .call(chart.xAxis);
+        d3Selection.select('#yaxis')
+            .call(chart.yAxis);
+    } else {
+        d3Selection.select('#xaxis')
+            .transition(chart.transition)
+            .call(chart.xAxis);
+        d3Selection.select('#yaxis')
+            .transition(chart.transition)
+            .call(chart.yAxis);
+    }
 
     line.x(function(d, i) {
         return chart.xScale(chart.data().x[i]);

@@ -39,7 +39,9 @@ function model_selected(node) {
     var model = node.model;
     if (node.stim_time) {
         node.params.start = node.stim_time[0]
-        node.params.stop = node.stim_time[1]
+          if (node.stim_time[1] < data.sim_time) {
+            node.params.stop = node.stim_time[1]
+        }
     }
     if (node.type == 'neuron') {
         $('#id_record').empty()

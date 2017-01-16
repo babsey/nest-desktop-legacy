@@ -5,13 +5,19 @@ var chart = require('./chart');
 
 function update() {
 
-    d3Selection.select('#xaxis')
-        // .transition(chart.transition)
-        .call(chart.xAxis);
-
-    d3Selection.select('#yaxis')
-        // .transition(chart.transition)
-        .call(chart.yAxis);
+    if (running) {
+        d3Selection.select('#xaxis')
+            .call(chart.xAxis);
+        d3Selection.select('#yaxis')
+            .call(chart.yAxis);
+    } else {
+        d3Selection.select('#xaxis')
+            .transition(chart.transition)
+            .call(chart.xAxis);
+        d3Selection.select('#yaxis')
+            .transition(chart.transition)
+            .call(chart.yAxis);
+    }
 
     var dots = d3Selection
         .select('#clip')
