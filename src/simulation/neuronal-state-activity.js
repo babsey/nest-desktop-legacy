@@ -4,16 +4,16 @@
 window.jQuery = window.$ = require('jquery');
 require('bootstrap');
 var d3Array = require('d3-array');
-var events = require('./events');
-var models = require("./models");
-var nav = require('./navigation');
+var events = require('../events');
+var models = require("../models");
+var nav = require('../navigation');
 var req = require('./request');
-var slider = require("./slider");
-var lineChart = require('./line-chart');
+var slider = require("../slider");
+var lineChart = require('../chart/line-chart');
 
-window.level = 1;
 window.data = {
-    simtime: 1000.,
+    network: 'simple',
+    sim_time: 1000.,
     kernel: {
         grng_seed: 0,
     },
@@ -26,6 +26,7 @@ window.data = {
     }, {
         type: 'input',
         model: undefined,
+        stim_time: [0,1000],
         params: {},
     }, {
         type: 'output',
@@ -52,8 +53,8 @@ window.data = {
 }
 
 var slider_options = {
-    simtime: {
-        value: data.simtime,
+    sim_time: {
+        value: data.sim_time,
         min: 100,
         max: 2000,
         step: 100,
@@ -63,6 +64,14 @@ var slider_options = {
         min: 0,
         max: 1000,
         step: 1
+    },
+    stim_time: {
+        value: data.nodes[1].stim_time,
+        min: 0,
+        max: data.sim_time,
+        step: 10,
+        tooltip: 'show',
+        tooltip_split: true,
     },
     n: {
         value: data.nodes[0].n,
@@ -75,42 +84,73 @@ var slider_options = {
         min: 0,
         max: 10,
         step: 1
+    },
+    weight: {
+        value: data.links[1].syn_spec.weight,
+        min: -10,
+        max: 10,
+        step: .1
     }
 }
 
-slider.create_dataSlider('#simtime', 'simtime', 0, 'Simulation time (ms)', slider_options.simtime)
+slider.create_dataSlider('#general', 'sim_time', 0, 'Simulation time (ms)', slider_options.sim_time)
     .on('slideStop', function(d) {
-        data.simtime = d.value;
+        data.sim_time = d.value;
+        if (data.nodes[1].stim_time[1] < data.sim_time) {
+            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        } else {
+            delete data.nodes[1].params.stop
+        }
     })
-slider.create_dataSlider('#grng_seed', 'grng_seed', 2, 'Random number generated seed', slider_options.grng_seed)
+slider.create_dataSlider('#general', 'grng_seed', 2, 'Random number generated seed', slider_options.grng_seed)
     .on('slideStop', function(d) {
         data.kernel.grng_seed = d.value;
     })
-slider.create_dataSlider('#n', 'n', 0, 'Population size', slider_options.n)
+slider.create_dataSlider('#input', 'stim_time', 1, 'Stimulus time', slider_options.stim_time)
+    .on('slideStop', function(d) {
+        data.nodes[1].stim_time = d.value;
+        data.nodes[1].params.start = d.value[0];
+          if (data.nodes[1].stim_time[1] < data.sim_time) {
+            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        } else {
+            delete data.nodes[1].params.stop
+        }
+    })
+slider.create_dataSlider('#neuron', 'n', 2, 'Population size', slider_options.n)
     .on('slideStop', function(d) {
         data.nodes[0].n = d.value;
     })
-slider.create_dataSlider('#outdegree', 'outdegree', 0, 'Outdegree', slider_options.outdegree)
+slider.create_dataSlider('#neuron', 'outdegree', 3, 'Outdegree', slider_options.outdegree)
     .on('slideStop', function(d) {
         data.links[1].conn_spec.outdegree = d.value;
     })
+slider.create_dataSlider('#neuron', 'weight', 4, 'Weight', slider_options.weight)
+    .on('slideStop', function(d) {
+        data.links[1].syn_spec.weight = d.value;
+    })
 
 function simulate() {
-    slider.update_dataSlider('simtime', data.simtime)
+    slider.update_dataSlider('sim_time', data.sim_time)
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
+    slider.update_dataSlider('stim_time', data.nodes[1].stim_time)
     slider.update_dataSlider('n', data.nodes[0].n)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
+    slider.update_dataSlider('weight', data.links[1].syn_spec.weight)
 
     if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
-    data.nodes[2].events = {};
-    var sendData = {
-        kernel: data.kernel,
-        simtime: data.simtime,
-        nodes: data.nodes,
-        links: data.links,
+
+    if (data.nodes[1].params.stop == data.sim_time) {
+        delete data.nodes[1].params.stop
     }
-    req.simulate('simple/simulate/', sendData)
+    data.nodes[2].events = {};
+    req.simulate({
+            network: data.network,
+            kernel: data.kernel,
+            sim_time: data.sim_time,
+            nodes: data.nodes,
+            links: data.links,
+        })
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var idx in res.nodes) {
@@ -123,13 +163,13 @@ function simulate() {
                 return []
             });
             data.nodes[2].events.senders.map(function(d, i) {
-                values[d-ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
+                values[d - ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
                 if (d == ids[0]) {
                     times.push(data.nodes[2].events.times[i])
                 }
             });
 
-            if(document.getElementById('autoscale').checked) {
+            if (document.getElementById('autoscale').checked) {
                 chart.xScale.domain(d3Array.extent(times))
                 chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
             }
@@ -145,16 +185,16 @@ function simulate() {
 function resume() {
     if (!(running)) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
+
     window.dataEvents = data.nodes[2].events
     data.nodes[2].events = {};
-
-    var sendData = {
-        kernel: data.kernel,
-        simtime: 1.,
-        nodes: data.nodes,
-        // links: data.links,
-    }
-    req.simulate('simple/resume/', sendData)
+    req.resume({
+            network: data.network,
+            kernel: data.kernel,
+            sim_time: 1.,
+            nodes: data.nodes,
+            // links: data.links,
+        })
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var key in res.nodes[2].events) {
@@ -167,14 +207,14 @@ function resume() {
                 return []
             });
             data.nodes[2].events.senders.map(function(d, i) {
-                values[d-ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
+                values[d - ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
                 if (d == ids[0]) {
                     times.push(data.nodes[2].events.times[i])
                 }
             });
 
-            if(document.getElementById('autoscale').checked) {
-                chart.xScale.domain([data.kernel.time-data.simtime,data.kernel.time])
+            if (document.getElementById('autoscale').checked) {
+                chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
                 chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
             }
             chart.data({
@@ -205,10 +245,10 @@ $('#id_record').on('change', function() {
         return []
     });
     data.nodes[2].events.senders.map(function(d, i) {
-        values[d-ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
+        values[d - ids[0]].push(data.nodes[2].events[data.nodes[0].record_from][i])
     });
 
-    if(document.getElementById('autoscale').checked) {
+    if (document.getElementById('autoscale').checked) {
         chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
     }
     chart.data({
@@ -217,4 +257,12 @@ $('#id_record').on('change', function() {
         })
         .ylabel(models.record_labels[data.nodes[0].record_from])
         .update();
+})
+
+$('#autoscale').on('click', function () {
+    if (document.getElementById('autoscale').checked) {
+        chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+        chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
+        chart.update();
+    }
 })

@@ -1,8 +1,8 @@
 "use strict"
 
-var $ = require('jquery');
-var models = require("./models");
-var slider = require("./slider");
+const $ = require('jquery');
+const models = require("./models");
+const slider = require("./slider");
 window.running = false;
 
 function eventHandler(data, simulate, resume) {
@@ -30,7 +30,7 @@ function eventHandler(data, simulate, resume) {
     $('#index').on('click', function() {
         running = false
         setTimeout(function() {
-            window.location = "../index.html"
+            window.location = "index.html"
         }, 100)
     })
     $('#close').on('click', function() {

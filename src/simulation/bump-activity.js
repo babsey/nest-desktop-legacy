@@ -3,16 +3,16 @@
 // var data, chart, simulate;
 window.jQuery = require('jquery');
 require('bootstrap');
-var events = require('./events');
-var models = require("./models");
-var nav = require('./navigation');
+var events = require('../events');
+var models = require("../models");
+var nav = require('../navigation');
 var req = require('./request');
-var slider = require("./slider");
-var scatterChart = require('./scatter-chart');
+var slider = require("../slider");
+var scatterChart = require('../chart/scatter-chart');
 
-window.level = 1;
 window.data = {
-    simtime: 1000.,
+    network: 'gamma',
+    sim_time: 1000.,
     kernel: {
         grng_seed: 0,
     },
@@ -38,6 +38,7 @@ window.data = {
     }, {
         type: 'input',
         model: undefined,
+        stim_time: [0,1000],
         params: {},
     }, {
         type: 'output',
@@ -64,8 +65,8 @@ window.data = {
 }
 
 var slider_options = {
-    simtime: {
-        value: data.simtime,
+    sim_time: {
+        value: data.sim_time,
         min: 100,
         max: 2000,
         step: 100,
@@ -76,6 +77,14 @@ var slider_options = {
         max: 1000,
         step: 1
     },
+    stim_time: {
+        value: data.nodes[1].stim_time,
+        min: 0,
+        max: data.sim_time,
+        step: 10,
+        tooltip: 'show',
+        tooltip_split: true,
+    },
     outdegree: {
         value: data.links[1].conn_spec.outdegree,
         min: 0,
@@ -84,39 +93,55 @@ var slider_options = {
     }
 }
 
-slider.create_dataSlider('#simtime', 'simtime', 0, 'Simulation time (ms)', slider_options.simtime)
+slider.create_dataSlider('#general', 'sim_time', 0, 'Simulation time (ms)', slider_options.sim_time)
     .on('slideStop', function(d) {
-        data.simtime = d.value;
+        data.sim_time = d.value;
+        if (data.nodes[1].stim_time[1] < data.sim_time) {
+            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        } else {
+            delete data.nodes[1].params.stop
+        }
     })
-slider.create_dataSlider('#grng_seed', 'grng_seed', 0, 'Random number generated seed', slider_options.grng_seed)
+slider.create_dataSlider('#general', 'grng_seed', 0, 'Random number generated seed', slider_options.grng_seed)
     .on('slideStop', function(d) {
         data.kernel.grng_seed = d.value;
     })
-slider.create_dataSlider('#outdegree', 'outdegree', 0, 'Outdegree', slider_options.outdegree)
+slider.create_dataSlider('#input', 'stim_time', 1, 'Stimulus time', slider_options.stim_time)
+    .on('slideStop', function(d) {
+        data.nodes[1].stim_time = d.value;
+        data.nodes[1].params.start = d.value[0];
+        if (data.nodes[1].stim_time[1] < data.sim_time) {
+            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        } else {
+            delete data.nodes[1].params.stop
+        }
+    })
+slider.create_dataSlider('#neuron', 'outdegree', 0, 'Outdegree', slider_options.outdegree)
     .on('slideStop', function(d) {
         data.links[1].conn_spec.outdegree = d.value;
     })
 
 
 function simulate() {
-    slider.update_dataSlider('simtime', data.simtime)
+    slider.update_dataSlider('sim_time', data.sim_time)
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
+    slider.update_dataSlider('stim_time', data.nodes[1].stim_time)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
     if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
-    data.nodes.map(function (node) {
-        if ('events' in node) {
-            node.events = {}
-        }
-    })
-    var sendData = {
-        kernel: data.kernel,
-        simtime: data.simtime,
-        nodes: data.nodes,
-        links: data.links,
+
+    if (data.nodes[1].params.stop == data.sim_time) {
+        delete data.nodes[1].params.stop
     }
-    req.simulate('gamma/simulate/', sendData)
+    data.nodes[2].events = {};
+    req.simulate({
+            network: data.network,
+            kernel: data.kernel,
+            sim_time: data.sim_time,
+            nodes: data.nodes,
+            links: data.links,
+        })
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var idx in res.nodes) {
@@ -127,7 +152,7 @@ function simulate() {
             data.nodes[2].events = res.nodes[2].events;
 
             if (document.getElementById('autoscale').checked) {
-                chart.xScale.domain([data.kernel.time - data.simtime, data.kernel.time])
+                chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
                 chart.yScale.domain([0, data.nodes[0].n])
             }
             chart.data({
@@ -137,19 +162,20 @@ function simulate() {
                 .update();
         })
 }
+
 function resume() {
     if (!(running)) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
 
     window.dataEvents = data.nodes[2].events;
     data.nodes[2].events = {};
-    var sendData = {
-        kernel: data.kernel,
-        simtime: 10.,
-        nodes: data.nodes,
-        links: data.links,
-    }
-    req.simulate('gamma/resume/', sendData)
+    req.resume({
+            network: data.network,
+            kernel: data.kernel,
+            sim_time: 10.,
+            nodes: data.nodes,
+            links: data.links,
+        })
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var key in res.nodes[2].events) {
@@ -187,3 +213,10 @@ setTimeout(function() {
 }, 1000)
 
 nav.network_added(data, simulate, 'bump_activity')
+
+$('#autoscale').on('click', function () {
+    if (document.getElementById('autoscale').checked) {
+        chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+        chart.update();
+    }
+})

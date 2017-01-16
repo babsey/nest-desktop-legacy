@@ -4,16 +4,16 @@
 window.jQuery = require('jquery');
 require('bootstrap');
 var d3Array = require('d3-array');
-var events = require('./events');
-var models = require("./models");
-var nav = require('./navigation');
+var events = require('../events');
+var models = require("../models");
+var nav = require('../navigation');
 var req = require('./request');
-var slider = require("./slider");
-var heatmapChart = require('./heatmap-chart');
+var slider = require("../slider");
+var heatmapChart = require('../chart/heatmap-chart');
 
-window.level = 1;
 window.data = {
-    simtime: 1000.,
+    network: 'gamma',
+    sim_time: 100.,
     kernel: {
         grng_seed: 0,
     },
@@ -33,12 +33,13 @@ window.data = {
             'tau_syn_ex': 5.0,
             'tau_syn_in': 10.0,
         },
-        n: 400,
-        nrow: 20,
-        ncol: 20,
+        n: 1600,
+        nrow: 40,
+        ncol: 40,
     }, {
         type: 'input',
-        model: undefined,
+        model: 'noise_generator',
+        stim_time: [0, 1000],
         params: {},
     }, {
         type: 'output',
@@ -65,11 +66,19 @@ window.data = {
 }
 
 var slider_options = {
-    simtime: {
-        value: data.simtime,
+    sim_time: {
+        value: data.sim_time,
         min: 100,
         max: 2000,
         step: 100,
+    },
+    stim_time: {
+        value: data.nodes[1].stim_time,
+        min: 0,
+        max: data.sim_time,
+        step: 10,
+        tooltip: 'show',
+        tooltip_split: true,
     },
     grng_seed: {
         value: data.kernel.grng_seed,
@@ -85,35 +94,54 @@ var slider_options = {
     }
 }
 
-slider.create_dataSlider('#simtime', 'simtime', 0, 'Simulation time (ms)', slider_options.simtime)
+slider.create_dataSlider('#general', 'sim_time', 0, 'Simulation time (ms)', slider_options.sim_time)
     .on('slideStop', function(d) {
-        data.simtime = d.value;
+        data.sim_time = d.value;
+        if (data.nodes[1].stim_time[1] < data.sim_time) {
+            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        } else {
+            delete data.nodes[1].params.stop
+        }
     })
-slider.create_dataSlider('#grng_seed', 'grng_seed', 0, 'Random number generated seed', slider_options.grng_seed)
+slider.create_dataSlider('#general', 'grng_seed', 0, 'Random number generated seed', slider_options.grng_seed)
     .on('slideStop', function(d) {
         data.kernel.grng_seed = d.value;
     })
-slider.create_dataSlider('#outdegree', 'outdegree', 0, 'Outdegree', slider_options.outdegree)
+slider.create_dataSlider('#input', 'stim_time', 1, 'Stimulus time', slider_options.stim_time)
+    .on('slideStop', function(d) {
+        data.nodes[1].stim_time = d.value;
+        data.nodes[1].params.start = d.value[0];
+        if (data.nodes[1].stim_time[1] < data.sim_time) {
+            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        } else {
+            delete data.nodes[1].params.stop
+        }
+    })
+slider.create_dataSlider('#neuron', 'outdegree', 0, 'Outdegree', slider_options.outdegree)
     .on('slideStop', function(d) {
         data.links[1].conn_spec.outdegree = d.value;
     })
 
 function simulate() {
-    slider.update_dataSlider('simtime', data.simtime)
+    slider.update_dataSlider('sim_time', data.sim_time)
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
+    slider.update_dataSlider('stim_time', data.nodes[1].stim_time)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
 
     if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
 
-    data.nodes[2].events = {};
-    var sendData = {
-        kernel: data.kernel,
-        simtime: data.simtime,
-        nodes: data.nodes,
-        links: data.links,
+    if (data.nodes[1].params.stop == data.sim_time) {
+        delete data.nodes[1].params.stop
     }
-    req.simulate('gamma/simulate/', sendData)
+    data.nodes[2].events = {};
+    req.simulate({
+            network: data.network,
+            kernel: data.kernel,
+            sim_time: data.sim_time,
+            nodes: data.nodes,
+            links: data.links,
+        })
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var idx in res.nodes) {
@@ -122,20 +150,25 @@ function simulate() {
             data.nodes[0].nrow = res.nodes[0].nrow;
             data.nodes[0].ncol = res.nodes[0].ncol;
             data.nodes[2].events = res.nodes[2].events;
+            var times = data.nodes[2].events['times'];
+            var senders = data.nodes[2].events['senders'].filter(function(d, i) {
+                return times[i] > (data.kernel.time - data.sim_time)
+            })
 
             var h1 = d3Array.histogram()
                 .domain([1, data.nodes[0].ids.length + 1])
-                .thresholds(data.nodes[0].ids)(data.nodes[2].events['senders']);
+                .thresholds(data.nodes[0].ids)(senders);
             var h1 = h1.map(function(d) {
                 return d.length * 1
             })
 
             chart.xScale.domain([0, data.nodes[0].nrow])
             chart.yScale.domain([0, data.nodes[0].ncol])
-            chart.colorScale.domain([0, 50])
+            chart.colorScale.domain([0, 5])
             chart.data({
-                    y: d3Array.range(0, data.nodes[0].nrow),
+                    i: d3Array.range(0, h1.length),
                     x: d3Array.range(0, data.nodes[0].ncol),
+                    y: d3Array.range(0, data.nodes[0].nrow),
                     c: h1,
                 })
                 .update();
@@ -148,30 +181,41 @@ function resume() {
 
     window.dataEvents = data.nodes[2].events;
     data.nodes[2].events = {};
-    var sendData = {
-        kernel: data.kernel,
-        simtime: 1.,
-        nodes: data.nodes,
-        links: data.links,
-    }
-    req.simulate('gamma/resume/', sendData)
+    req.resume({
+            network: data.network,
+            kernel: data.kernel,
+            sim_time: 10.,
+            nodes: data.nodes,
+            links: data.links,
+        })
         .done(function(res) {
             data.kernel.time = res.kernel.time;
             for (var key in res.nodes[2].events) {
                 dataEvents[key] = dataEvents[key].concat(res.nodes[2].events[key])
                 data.nodes[2].events[key] = dataEvents[key]
             }
+            delete window.dataEvents
+            var times = data.nodes[2].events['times'];
+            var senders = data.nodes[2].events['senders'].filter(function(d, i) {
+                return times[i] > (data.kernel.time - data.sim_time)
+            })
+            data.nodes[2].events['senders'] = senders
+            data.nodes[2].events['times'] = times.filter(function(d, i) {
+                return times[i] > (data.kernel.time - data.sim_time)
+            })
 
             var h1 = d3Array.histogram()
                 .domain([1, data.nodes[0].ids.length + 1])
-                .thresholds(data.nodes[0].ids)(data.nodes[2].events['senders']);
+                .thresholds(data.nodes[0].ids)(senders);
             var h1 = h1.map(function(d) {
                 return d.length * 1
             })
 
+            $('#clip').empty()
             chart.data({
-                    y: d3Array.range(0, data.nodes[0].nrow),
+                    i: d3Array.range(0, h1.length),
                     x: d3Array.range(0, data.nodes[0].ncol),
+                    y: d3Array.range(0, data.nodes[0].nrow),
                     c: h1,
                 })
                 .update();
@@ -188,7 +232,9 @@ models.load_model_list(data.nodes)
 nav.init_button(data, 'bump_activity')
 setTimeout(function() {
     models.model_selected(data.nodes[0])
+    models.model_selected(data.nodes[1])
     slider.update_paramSlider(data.nodes[0])
+    slider.update_paramSlider(data.nodes[1])
     events.eventHandler(data, simulate, resume)
 }, 1000)
 nav.network_added(data, simulate, 'bump_activity')

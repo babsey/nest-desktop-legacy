@@ -2,18 +2,8 @@ const electron = require('electron');
 const app = electron.app;   // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;   // Module to create native browser window.
 
-const Config = require('electron-config');
-const config = new Config({
-    defaults: {
-        windowBounds: {
-            width: 1280,
-            height: 768
-        },
-        frame: false,
-        fullscreen: false
-    }
-});
-console.log(config.store)
+const config = require('./src/config');
+// console.log(config.store)
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
@@ -39,20 +29,20 @@ function createWindow() {
 
     let {
         width,
-        height
+        height,
     } = config.get('windowBounds');
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: width,
         height: height,
-        frame: config.get('frame'),
+        frame: config.get('window').frame,
         title: 'A NEST desktop application',
         icon: './dist/img/icon.png',
         "node-integration": true,
     });
 
-    mainWindow.setFullScreen(config.get('fullscreen'));
+    mainWindow.setFullScreen(config.get('window').fullscreen);
 
     mainWindow.on('resize', () => {
         // The event doesn't pass us the window size, so we call the `getBounds` method which returns an object with
@@ -69,7 +59,7 @@ function createWindow() {
     });
 
     // and load the index.html of the app.
-    mainWindow.loadURL('file://' + __dirname + '/index.html');
+    mainWindow.loadURL('file://' + __dirname + '/templates/index.html');
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools();

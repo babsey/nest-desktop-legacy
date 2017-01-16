@@ -58,15 +58,18 @@ function update() {
     d3Selection.select('#yaxis')
         .call(chart.yAxis);
 
+
+
     var cards = d3Selection
         .select('#clip')
         .selectAll('.card')
-        .data(chart.data().c);
+        .data(chart.data().i);
 
-    cards.selectAll('.card-fill')
-        .style("fill", function(d) {
-            return chart.colorScale(d);
-        });
+    cards.selectAll('.card-fill').remove();
+    // cards.selectAll('.card-fill')
+    //     .style("fill", function(d, i) {
+    //         return chart.colorScale(data.c[i]);
+    //     });
 
     cards.enter().append("rect")
         .attr("transform", function(d, i) {
@@ -75,8 +78,8 @@ function update() {
                 chart.yScale(data.y[parseInt(i % (data.y.length))] + 1) + ")"
         })
         .attr('class', "card-fill")
-        .attr('title', function(d) {
-            return chart.format(d)
+        .attr('title', function(d, i) {
+            return chart.format(data.c[i])
         })
         .attr("width", chart.width / parseFloat(data.x.length))
         .attr("height", chart.height / parseFloat(data.y.length))
@@ -92,8 +95,8 @@ function update() {
         })
         // .style("fill", 'white')
         // .transition(chart.transition)
-        .style("fill", function(d) {
-            return chart.colorScale(d);
+        .style("fill", function(d, i) {
+            return chart.colorScale(data.c[i]);
         });
 
     cards.exit().remove();

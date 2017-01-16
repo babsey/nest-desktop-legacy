@@ -4,23 +4,27 @@
   "description": "A NEST desktop application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
-  },
+    "start": "electron .",
+    "hello": "electron .bin/hello.js"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/babsey/nest-desktop.git"
   },
   "keywords": [
-    "NEST",
+    "interactive",
     "neuronal",
+    "network",
     "spike",
-    "activity"
+    "activity",
+    "NEST"
   ],
   "author": {
     "name": "Sebastian Spreizer"
   },
   "license": "MIT",
   "dependencies": {
+    "argsarray": "0.0.1",
     "bootstrap": "^3.3.7",
     "bootstrap-slider": "^9.5.3",
     "colorbrewer": "^1.0.0",
@@ -36,11 +40,19 @@
     "d3-selection": "^1.0.3",
     "d3-shape": "^1.0.4",
     "d3-transition": "^1.0.3",
+    "debug": "^2.6.0",
     "electron-config": "^0.2.1",
     "jquery": "^3.1.1",
-    "nedb": "^1.8.0"
+    "lie": "^3.1.0",
+    "nedb": "^1.8.0",
+    "pouchdb": "^6.1.1",
+    "pouchdb-adapter-idb": "^6.1.1",
+    "pouchdb-authentication": "^0.5.5",
+    "pouchdb-upsert": "^2.0.2",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "electron-prebuilt": "^1.4.13"
+    "electron-prebuilt": "^1.4.13",
+    "mathjs": "^3.8.1"
   }
 }

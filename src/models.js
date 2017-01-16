@@ -1,8 +1,8 @@
 "use strict"
 
-var $ = require("jquery");
-var d3Request = require('d3-request');
-var slider = require('./slider');
+const $ = require("jquery");
+const d3Request = require('d3-request');
+const slider = require('./slider');
 
 var paths = window.location.pathname.split('/')
 var curpath = paths.slice(0, paths.length - 2).join('/')
@@ -37,6 +37,10 @@ function load_model_list(nodes, excludes) {
 
 function model_selected(node) {
     var model = node.model;
+    if (node.stim_time) {
+        node.params.start = node.stim_time[0]
+        node.params.stop = node.stim_time[1]
+    }
     if (node.type == 'neuron') {
         $('#id_record').empty()
         for (var recId in recordables[model]) {

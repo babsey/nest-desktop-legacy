@@ -1,11 +1,11 @@
 id,level,value,min,max,step,label
-V_m,2,-70.0,-100.0,0.0,1.0,Membrane potential (mV)
-E_L,2,-70.0,-100.0,0.0,1.0,Leak reversal potential (mV)
-C_m,2,250.0,10.0,300.0,10.0,Capacity of the membrane (pF)
+V_m,3,-70.0,-100.0,0.0,1.0,Membrane potential (mV)
+E_L,3,-70.0,-100.0,0.0,1.0,Leak reversal potential (mV)
+C_m,3,250.0,10.0,300.0,10.0,Capacity of the membrane (pF)
 tau_m,2,10.0,0.1,20.0,0.1,Membrane time constant (ms)
 tau_syn_ex,4,0.2,0.1,4.0,0.1,Rise time of the excitatory synaptic alpha function
 tau_syn_in,4,2.0,0.1,4.0,0.1,Rise time of the inhibitory synaptic alpha function
 t_ref,3,2.0,0.1,5.0,0.1,Duration of refractory period (ms)
-V_th,3,-55.0,-100.0,100.0,1.0,Spike threshold (mV)
+V_th,2,-55.0,-100.0,100.0,1.0,Spike threshold (mV)
 V_reset,3,-70.0,-100.0,100.0,1.0,Reset Potential of the membrane (mV)
-I_e,3,0.0,-100.0,100.0,1.0,Constant external input current (pA)
+I_e,2,0.0,-100.0,100.0,1.0,Constant external input current (pA)

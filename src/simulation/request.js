@@ -1,48 +1,48 @@
 "use strict"
 
-var $ = require("jquery");
+const $ = require("jquery");
 require("bootstrap-slider");
-window.running = false;
-window.serverRunning = false;
-
-const Config = require('electron-config');
-const config = new Config({
-    defaults: {
-        serverURL: {
-            ip: 'localhost',
-            port: '5000',
-        }
-    }
-});
+const config = require('../config');
+const message = require('../message');
 
 let {
-    ip,
+    host,
     port
-} = config.get('serverURL');
-let serverURL = ip + ':' + port;
+} = config.get('nestServer');
+let serverURL = host + ':' + port;
 
+window.running = false;
+window.serverRunning = false;
 
 function server_check() {
     return $.ajax({
         method: "GET",
         url: "http://" + serverURL + '/',
     }).fail(function(d) {
-        console.log(d)
-    }).done(function(d) {
-        console.log(d)
+        message('Warning', 'The connection to the NEST server failed.')
+    }).done(function() {
         window.serverRunning = true
+        message('Success', 'The connection to the NEST server established.')
     })
 }
 
-function simulate(url, data) {
+function request(url, data) {
     return $.ajax({
         method: "POST",
-        url: "http://" + serverURL + "/network/" + url,
+        url: "http://" + serverURL + "/network/" + data.network + '/' + url,
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
     }).fail(function(d) {
-        console.log(d)
+        message('Warning', d.responseText)
     })
+}
+
+function simulate(data) {
+    return request('simulate', data)
+}
+
+function resume(data) {
+    return request('resume', data)
 }
 
 $(document).bind("ajaxStart", function() {
@@ -58,4 +58,5 @@ $(document).bind("ajaxStart", function() {
 module.exports = {
     server_check: server_check,
     simulate: simulate,
+    resume: resume
 }

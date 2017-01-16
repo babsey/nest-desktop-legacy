@@ -55,9 +55,9 @@ s.slider('level', {
     step: 1
 })
 
-function simulate(simtime) {
+function simulate(sim_time) {
     if (('neuron' in nodes) && ('input' in nodes)) {
-        req.simulate(simtime, nodes)
+        req.simulate(sim_time, nodes)
             .done(function(res) {
                 data = res
                 ts.update(data.events.times, data.events[record_from], data.time, data.pop, recordLabels[record_from]);

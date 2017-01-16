@@ -1,8 +1,9 @@
 "use strict"
 
-var $ = require("jquery");
-var d3Request = require('d3-request');
-var Slider = require("bootstrap-slider");
+const $ = require("jquery");
+const d3Request = require('d3-request');
+const Slider = require("bootstrap-slider");
+const config = require('./config')
 
 var paths = window.location.pathname.split('/')
 var curpath = paths.slice(0, paths.length - 2).join('/')
@@ -34,12 +35,23 @@ function slider(ref, id, options) {
     $(ref).find('#' + id).find('dt').attr('title', id)
     $(ref).find('#' + id).find('dt').after('<dd></dd>');
     $(ref).find('#' + id).find('dd').append('<input id="' + id + 'Input" class="sliderInput">')
-    $(ref).find('#' + id).find('dd').append('<span id="' + id + 'Val" style="margin-left:10px">' + options.value + '</span>')
+
+    if (!(Object.prototype.toString.call(options.value) === '[object Array]')) {
+        $(ref).find('#' + id).find('dd').append('<span id="' + id + 'Val" style="margin-left:10px">' + options.value + '</span>')
+    }
 
     var slider = $(ref).find('#' + id).find("#" + id + 'Input').slider(options);
     slider.on("change", function() {
         options.value = $(ref).find('#' + id).find("#" + id + 'Input').val();
-        $(ref).find('#' + id).find("#" + id + "Val").text(options.value);
+        if (!(Object.prototype.toString.call(options.value) === '[object Array]')) {
+            $(ref).find('#' + id).find("#" + id + "Val").text(options.value);
+        }
+
+        if (id == 'sim_time') {
+            var stim_timeInput = $('#stim_timeInput');
+            stim_timeInput.data('slider').options.max = parseInt(options.value);
+            stim_timeInput.slider('setValue', stim_timeInput.slider('getValue'))
+        }
     });
     return slider
 }
@@ -51,13 +63,22 @@ function slider(ref, id, options) {
 function create_dataSlider(ref, id, level, label, options) {
     $(ref).append('<dl id="' + id + '" class="dataSlider" level="' + level + '"></dl>')
     $(ref).find('#' + id).append('<dt>' + label + '</dt>')
+    $('#' + id).attr('level') > config.get('level') ? $('#' + id).hide() : $('#' + id).show()
     return slider(ref, id, options);
 }
 
 function update_dataSlider(id, value) {
-    $('#' + id).attr('level') > window.level ? $('#' + id).hide() : $('#' + id).show()
+    $('#' + id).attr('level') > config.get('level') ? $('#' + id).hide() : $('#' + id).show()
     $('#' + id + 'Input').slider('setValue', value)
     $('#' + id + 'Val').html(value)
+}
+
+function update_dataSlider_level() {
+    var ds = $('.dataSlider');
+    ds.each(function() {
+        var pid = this.id;
+        $('#' + this.id).attr('level') > config.get('level') ? $('#' + pid).hide() : $('#' + pid).show()
+    })
 }
 
 //
@@ -94,7 +115,7 @@ function update_paramSlider(node) {
         } else {
             node.params[pid] = $('div#' + model).find('#' + pid + 'Input').slider('getValue')
         }
-        $('div#' + model).find('#' + pid).attr('level') > window.level ? $('div#' + model).find('#' + pid).hide() : $('div#' + model).find('#' + pid).show()
+        $('div#' + model).find('#' + pid).attr('level') > config.get('level') ? $('div#' + model).find('#' + pid).hide() : $('div#' + model).find('#' + pid).show()
     })
     $('div#' + model).show();
 }
@@ -103,6 +124,7 @@ function update_paramSlider(node) {
 module.exports = {
     create_dataSlider: create_dataSlider,
     update_dataSlider: update_dataSlider,
+    update_dataSlider_level: update_dataSlider_level,
     init_paramSlider: init_paramSlider,
     update_paramSlider: update_paramSlider,
 };

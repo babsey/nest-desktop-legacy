@@ -18,8 +18,8 @@ var margin = {
         bottom: 30,
         left: 50
     },
-    width = 1000 - margin.left - margin.right,
-    height = 700 - margin.top - margin.bottom;
+    width = window.innerWidth - margin.left - margin.right - 334,
+    height = window.innerHeight - margin.top - margin.bottom - 10;
 
 var xScale = d3Scale.scaleLinear()
     .range([0, width]);
@@ -114,11 +114,13 @@ function initChart(reference) {
         .attr("id", "xaxis")
         .attr("class", "axis")
         .attr("transform", "translate(0," + height + ")")
+        .style('font-size', '14px')
         .call(xAxis);
 
     svg.append("g")
         .attr("id", "yaxis")
         .attr("class", "axis")
+        .style('font-size', '14px')
         .call(yAxis);
 
     svg.append("text")
@@ -126,7 +128,7 @@ function initChart(reference) {
         .attr("class", "label")
         .attr("text-anchor", "middle")
         .attr("x", width / 2)
-        .attr("y", height + margin.bottom - 5)
+        .attr("y", height + margin.bottom)
         .text("Time (ms)");
 
     svg.append("text")

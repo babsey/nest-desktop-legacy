@@ -1,5 +1,5 @@
 id,level,value,min,max,step,label
 amplitude,1,0.0,0.0,1000.0,1.0,Amplitude of sine current (pA)
-offset,2,0.0,0.0,100.0,1.0,Constant amplitude offset (pA)
-phase,2,0.0,0.0,360.0,1.0,Phase of sine current (0-360 deg)
+offset,3,0.0,0.0,100.0,1.0,Constant amplitude offset (pA)
+phase,3,0.0,0.0,360.0,1.0,Phase of sine current (0-360 deg)
 frequency,1,0.0,0.0,100.0,1.0,Frequency (Hz)
