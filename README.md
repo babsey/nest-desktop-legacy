@@ -28,7 +28,7 @@ Install nest-desktop and its dependencies
 npm install nest-desktop
 ```
 
-## To start 
+## To start
 
 Nest-desktop communicates with the nest-server-simulation to run the NEST simulation.
 Note: Make sure that the nest-server-simulation is running.
@@ -37,6 +37,35 @@ Start the app in nest-desktop folder
 ```
 npm start
 ```
+
+## To configure
+
+A simple configuration handling for your the nest-desktop application.
+
+The configuration is saved as 'config.json' file in
+- %APPDATA%/nest-desktop on Windows
+- $XDG_CONFIG_HOME or ~/.config/nest-desktop on Linux
+- ~/Library/Application Support/nest-desktop on macOS
+
+#### Window configuration
+The application create a window with these window properties - width, height, frame, fullscreen.
+
+#### Nest simulation server
+To edit the host and port if the nest simulation server operates on other computer.
+
+#### Database
+Nest-desktop stores data of the network in the database but without any simulation results to keep space low.
+
+The database name will be generated when config.json is created.
+User is able to edit the database name but it should be treated with respect.
+
+### Local database
+The data will also be stored in local database located in path defined by `localDB.path`.
+
+#### Remoted server
+If you want to contribute your networks to the server,
+edit username, password as well as host and port of the remoted database.
+
 
 ## FAQ
 
