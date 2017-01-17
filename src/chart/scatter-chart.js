@@ -5,7 +5,7 @@ var chart = require('./chart');
 
 function update() {
 
-    if (running) {
+    if (running || dragging) {
         d3Selection.select('#xaxis')
             .call(chart.xAxis);
         d3Selection.select('#yaxis')

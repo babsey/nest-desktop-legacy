@@ -34,7 +34,7 @@ function legend() {
         })
         .on('mouseout', function() {
             d3Selection.selectAll('.card')
-                // .transition(t)
+                .transition(t)
                 .style('opacity', 1.0);
         });
 
@@ -58,18 +58,12 @@ function update() {
     d3Selection.select('#yaxis')
         .call(chart.yAxis);
 
-
-
     var cards = d3Selection
         .select('#clip')
         .selectAll('.card')
         .data(chart.data().i);
 
     cards.selectAll('.card-fill').remove();
-    // cards.selectAll('.card-fill')
-    //     .style("fill", function(d, i) {
-    //         return chart.colorScale(data.c[i]);
-    //     });
 
     cards.enter().append("rect")
         .attr("transform", function(d, i) {
@@ -93,13 +87,9 @@ function update() {
                 // .transition(t)
                 .style('opacity', 1.)
         })
-        // .style("fill", 'white')
-        // .transition(chart.transition)
         .style("fill", function(d, i) {
             return chart.colorScale(data.c[i]);
         });
-
-    cards.exit().remove();
 
     if ((chart.width / parseFloat(data.x.length)) > 50) {
 

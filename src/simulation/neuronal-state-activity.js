@@ -34,9 +34,6 @@ window.data = {
         params: {},
     }],
     links: [{
-        source: 1,
-        target: 0,
-    }, {
         source: 0,
         target: 0,
         conn_spec: {
@@ -45,6 +42,12 @@ window.data = {
         },
         syn_spec: {
             weight: -1.
+        }
+    }, {
+        source: 1,
+        target: 0,
+        syn_spec: {
+            weight: 1.
         }
     }, {
         source: 2,
@@ -73,6 +76,12 @@ var slider_options = {
         tooltip: 'show',
         tooltip_split: true,
     },
+    input_weight: {
+        value: data.links[1].syn_spec.weight,
+        min: -10,
+        max: 10,
+        step: .1
+    },
     n: {
         value: data.nodes[0].n,
         min: 1,
@@ -80,13 +89,13 @@ var slider_options = {
         step: 1,
     },
     outdegree: {
-        value: data.links[1].conn_spec.outdegree,
+        value: data.links[0].conn_spec.outdegree,
         min: 0,
         max: 10,
         step: 1
     },
-    weight: {
-        value: data.links[1].syn_spec.weight,
+    recurrent_weight: {
+        value: data.links[0].syn_spec.weight,
         min: -10,
         max: 10,
         step: .1
@@ -116,26 +125,31 @@ slider.create_dataSlider('#input', 'stim_time', 2, 'Stimulus time', slider_optio
             delete data.nodes[1].params.stop
         }
     })
-slider.create_dataSlider('#neuron', 'n', 2, 'Population size', slider_options.n)
+slider.create_dataSlider('#input', 'input_weight', 4, 'Input synaptic weight', slider_options.input_weight)
+    .on('slideStop', function(d) {
+        data.links[1].syn_spec.weight = d.value;
+    })
+slider.create_dataSlider('#neuron', 'n', 3, 'Population size', slider_options.n)
     .on('slideStop', function(d) {
         data.nodes[0].n = d.value;
     })
-slider.create_dataSlider('#neuron', 'outdegree', 3, 'Outdegree', slider_options.outdegree)
+slider.create_dataSlider('#neuron', 'outdegree', 4, 'Outdegree', slider_options.outdegree)
     .on('slideStop', function(d) {
-        data.links[1].conn_spec.outdegree = d.value;
+        data.links[0].conn_spec.outdegree = d.value;
     })
-slider.create_dataSlider('#neuron', 'weight', 4, 'Weight', slider_options.weight)
+slider.create_dataSlider('#neuron', 'recurrent_weight', 4, 'Recurrent synaptic weight', slider_options.recurrent_weight)
     .on('slideStop', function(d) {
-        data.links[1].syn_spec.weight = d.value;
+        data.links[0].syn_spec.weight = d.value;
     })
 
 function simulate() {
     slider.update_dataSlider('sim_time', data.sim_time)
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
     slider.update_dataSlider('stim_time', data.nodes[1].stim_time)
+    slider.update_dataSlider('input_weight', data.links[1].syn_spec.weight)
     slider.update_dataSlider('n', data.nodes[0].n)
-    slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
-    slider.update_dataSlider('weight', data.links[1].syn_spec.weight)
+    slider.update_dataSlider('outdegree', data.links[0].conn_spec.outdegree)
+    slider.update_dataSlider('recurrent_weight', data.links[0].syn_spec.weight)
 
     if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
@@ -152,6 +166,8 @@ function simulate() {
             links: data.links,
         })
         .done(function(res) {
+            data.nodes[2].params = res.nodes[2].params
+            models.get_recordables_list(data.nodes[0], data.nodes[2])
             data.kernel.time = res.kernel.time;
             for (var idx in res.nodes) {
                 data.nodes[idx].ids = res.nodes[idx].ids;
@@ -255,7 +271,7 @@ $('#id_record').on('change', function() {
             x: times,
             y: values
         })
-        .ylabel(models.record_labels[data.nodes[0].record_from])
+        .ylabel(models.record_labels[data.nodes[0].record_from] || 'a.u.')
         .update();
 })
 

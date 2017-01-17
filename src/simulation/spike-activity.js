@@ -42,7 +42,7 @@ window.data = {
             outdegree: 100,
         },
         syn_spec: {
-            weight: -10.
+            weight: -1.
         }
     }, {
         source: 0,
@@ -83,8 +83,8 @@ var slider_options = {
         max: data.nodes[0].n,
         step: 1
     },
-    weight: {
-        value: data.links[1].syn_spec.weight,
+    recurrent_weight: {
+        value: data.links[1].syn_spec.recurrent_weight,
         min: -10,
         max: 10,
         step: .1
@@ -122,7 +122,7 @@ slider.create_dataSlider('#neuron', 'outdegree', 3, 'Outdegree', slider_options.
     .on('slideStop', function(d) {
         data.links[1].conn_spec.outdegree = d.value;
     })
-slider.create_dataSlider('#neuron', 'weight', 4, 'Weight', slider_options.weight)
+slider.create_dataSlider('#neuron', 'recurrent_weight', 4, 'Recurrent weight', slider_options.recurrent_weight)
     .on('slideStop', function(d) {
         data.links[1].syn_spec.weight = d.value;
     })
@@ -133,7 +133,7 @@ function simulate() {
     slider.update_dataSlider('stim_time', data.nodes[1].stim_time)
     slider.update_dataSlider('n', data.nodes[0].n)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
-    slider.update_dataSlider('weight', data.links[1].syn_spec.weight)
+    slider.update_dataSlider('recurrent_weight', data.links[1].syn_spec.weight)
 
     if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return

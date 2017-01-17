@@ -46,6 +46,8 @@ var _data = {
     c: [],
 };
 
+window.dragging = false
+
 function data(d) {
     if (!arguments.length) return _data;
     _data = d;
@@ -68,11 +70,13 @@ function drag() {
     d3Selection.select('#chart')
         .call(d3Drag.drag()
             .on("drag", function() {
+                dragging = true
                 $('#autoscale').prop('checked', false)
                 var xlim0 = chart.xScale.domain();
                 var dx = d3Selection.event.dx;
                 chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
                 chart.update()
+                dragging = false
             })
         );
     return chart;

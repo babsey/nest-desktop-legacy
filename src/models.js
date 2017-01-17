@@ -19,6 +19,7 @@ var record_labels = {
 }
 
 var recordables = {}
+
 function load_model_list(nodes, excludes) {
     d3Request.csv('file://' + curpath + '/settings/models.csv', function(models) {
         models.forEach(function(model) {
@@ -28,10 +29,12 @@ function load_model_list(nodes, excludes) {
             if (model.recordables) {
                 recordables[model.name] = model.recordables.split(';');
             }
-            $("<option class='modelSelect' id='" + model.name +"' value=" + model.name + ">" + model.label + "</option>").appendTo("#id_" + model.type)
+            $("<option class='modelSelect' id='" + model.name + "' value=" + model.name + ">" + model.label + "</option>").appendTo("#id_" + model.type)
             slider.init_paramSlider(model.type, model.name)
         })
-        setTimeout(function () {$('.paramSlider').hide()},100)
+        setTimeout(function() {
+            $('.paramSlider').hide()
+        }, 100)
     })
 }
 
@@ -39,24 +42,24 @@ function model_selected(node) {
     var model = node.model;
     if (node.stim_time) {
         node.params.start = node.stim_time[0]
-          if (node.stim_time[1] < data.sim_time) {
+        if (node.stim_time[1] < data.sim_time) {
             node.params.stop = node.stim_time[1]
         }
     }
-    if (node.type == 'neuron') {
-        $('#id_record').empty()
-        for (var recId in recordables[model]) {
-            var rec = recordables[model][recId];
-            $('<option val="' + rec + '">' + rec + '</option>').appendTo('#id_record')
+}
 
-        }
-        node.record_from = $('#id_record option:selected').val();
-        $('#record').show();
+function get_recordables_list(neuron, multimeter) {
+    $('#id_record').empty()
+    for (var recId in multimeter.params.record_from) {
+        var rec = multimeter.params.record_from[recId];
+        $('<option val="' + rec + '" ' + (rec == neuron.record_from ? 'selected' : '') + '>' + rec + '</option>').appendTo('#id_record')
     }
+    $('#record').show();
 }
 
 module.exports = {
     record_labels: record_labels,
     load_model_list: load_model_list,
     model_selected: model_selected,
+    get_recordables_list: get_recordables_list,
 }

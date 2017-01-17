@@ -184,7 +184,7 @@ function resume() {
             }
 
             if (document.getElementById('autoscale').checked) {
-                chart.xScale.domain([data.kernel.time - 1000, data.kernel.time])
+                chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
                 chart.yScale.domain([0, data.nodes[0].n])
             }
             chart.data({
@@ -203,7 +203,7 @@ window.chart = scatterChart('#chart')
     .ylabel('Neuron ID')
     .drag();
 
-models.load_model_list(data.nodes)
+models.load_model_list(data.nodes, ['parrot_neuron'])
 nav.init_button(data, 'bump_activity')
 nav.network_added(data, simulate, 'bump_activity')
 setTimeout(function() {

@@ -13,7 +13,7 @@ function _draw_line(classname) {
         .selectAll("." + classname)
         .data(chart.data().y);
 
-    if (running) {
+    if (running || dragging) {
         lines.attr("d", line);
     } else {
         lines.transition(chart.transition).attr("d", line)
@@ -48,7 +48,7 @@ function _draw_line(classname) {
 
 function update() {
 
-    if (running) {
+    if (running || dragging) {
         d3Selection.select('#xaxis')
             .call(chart.xAxis);
         d3Selection.select('#yaxis')

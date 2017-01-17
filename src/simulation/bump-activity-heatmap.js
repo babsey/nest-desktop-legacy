@@ -227,7 +227,7 @@ window.chart = heatmapChart('#chart')
     .xlabel('Neuron Row ID')
     .ylabel('Neuron Col ID');
 
-models.load_model_list(data.nodes)
+models.load_model_list(data.nodes, ['parrot_neuron'])
 nav.init_button(data, 'bump_activity')
 setTimeout(function() {
     models.model_selected(data.nodes[0])
