@@ -106,7 +106,7 @@
                             Bump activity <span class="badge"></span>
                         </button>
                     </div>
-                    <img src="../dist/img/spike-activity.png" alt="bump activity" style="opacity:.1">
+                    <img src="../dist/img/bump-activity.png" alt="bump activity" style="opacity:.1">
                 </a>
             </div>
 
@@ -117,7 +117,7 @@
                             Bump activity (heatmap) <span class="badge"></span>
                         </button>
                     </div>
-                    <img src="../dist/img/bump-activity.png" alt="bump activity" style="opacity:.1">
+                    <img src="../dist/img/bump-activity-heatmap.png" alt="bump activity" style="opacity:.1">
                 </a>
             </div>
         </div>
@@ -129,11 +129,11 @@
     window.jQuery = window.$ = require('jquery');
     require('bootstrap');
     const shell = require("electron").shell;
-    const config = require('../src/config');
     // const auth = require('../src/auth');
     const sync = require('../src/store/sync');
-    var q = require('../src/store/query');
+    const q = require('../src/store/query');
     const req = require('../src/simulation/request');
+    var config = require('../src/config').global();
 
     window.serverRunning = false;
     req.server_check()

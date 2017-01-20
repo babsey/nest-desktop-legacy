@@ -6,6 +6,16 @@ const slider = require("./slider");
 window.running = false;
 
 function eventHandler(data, simulate, resume) {
+    if (window.layout) {
+        $('.model').on('mouseover', function() {
+            window.selected_node = data.nodes[$(this).attr('nidx')];
+            window.selected_link = null;
+            layout.restart()
+        }).on('mouseout', function() {
+            window.selected_node = null;
+            layout.restart()
+        })
+    }
     $('.paramSlider .sliderInput').on('slideStop', function() {
         window.selected_node = data.nodes[$(this).parents('.model').attr('nidx')];
         selected_node.params[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
@@ -24,6 +34,7 @@ function eventHandler(data, simulate, resume) {
         setTimeout(simulate, 100)
     })
     $('.network').on('click', function() {
+        $('#autoscale').prop('checked', 'checked')
         running = false
         setTimeout(simulate, 100)
     })
@@ -41,18 +52,12 @@ function eventHandler(data, simulate, resume) {
     })
     if (resume) {
         $('#network-resume').on('click', function() {
-            if (running) {
-                $('#network-resume').find('.glyphicon').hide()
-                $('#network-resume').find('.glyphicon-play').show()
-                $('.dataSlider').find('.sliderInput').slider('enable')
-                running = false
-            } else {
-                $('#network-resume').find('.glyphicon').hide()
-                $('#network-resume').find('.glyphicon-pause').show()
-                $('.dataSlider').find('.sliderInput').slider('disable')
-                running = true
-                resume()
-            }
+        if (running) {
+            running = false
+        } else {
+            running = true
+            resume()
+        }
         })
     }
 }

@@ -2,8 +2,8 @@
 
 const $ = require("jquery");
 require("bootstrap-slider");
-const config = require('../config');
 const message = require('../message');
+var config = require('../config').global();
 
 let {
     host,

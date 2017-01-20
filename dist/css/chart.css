@@ -1,0 +1,59 @@
+#chart {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: fixed;
+    top: 0px;
+    z-index: -1000;
+}
+#xaxis {
+    cursor: ew-resize;
+}
+#yaxis {
+    cursor: ns-resize;
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+.bline {
+    fill: none;
+    stroke: white;
+    stroke-width: 15px;
+    opacity: 0.0;
+}
+.aline {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+#clip.active .aline:not(.active) {
+    opacity: 0.1;
+}
+#clip.active .aline.active {
+    stroke: #FF9900;
+    opacity: 1.0;
+}
+.node circle {
+    pointer-events: all;
+    stroke-width: 5px;
+}
+.node text {
+    pointer-events: none;
+    font: 14px sans-serif;
+    text-anchor: middle;
+    font-weight: bold;
+}
+.link {
+    stroke: #aaa;
+    stroke-width: 5px;
+    fill: none;
+}
+.link.inh {
+    stroke: #b34846;
+}
+.link.exc {
+    stroke: #467ab3;
+}

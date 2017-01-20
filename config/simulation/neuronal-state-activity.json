@@ -1,0 +1,87 @@
+{
+    "data": {
+        "network": "simple",
+        "kernel": {},
+        "nodes": [{
+            "type": "input",
+            "model": null,
+            "x": 0,
+            "y": 50,
+            "params": {}
+        }, {
+            "type": "neuron",
+            "model": null,
+            "x": 150,
+            "y": 0,
+            "params": {}
+        }, {
+            "type": "output",
+            "model": "multimeter",
+            "x": 300,
+            "y": 50,
+            "params": {},
+            "record_from": "V_m"
+        }],
+        "links": [{
+            "source": 0,
+            "target": 1,
+            "syn_spec": {}
+        }, {
+            "source": 1,
+            "target": 1,
+            "conn_spec": {
+                "rule": "fixed_outdegree"
+            },
+            "syn_spec": {}
+        }, {
+            "source": 1,
+            "target": 2
+        }]
+    },
+    "slider_options": {
+        "sim_time": {
+            "value": 1000.0,
+            "min": 100.0,
+            "max": 2000.0,
+            "step": 100.0
+        },
+        "grng_seed": {
+            "value": 0,
+            "min": 0,
+            "max": 1000,
+            "step": 1
+        },
+        "stim_time": {
+            "value": [0.0, 1000.0],
+            "min": 0.0,
+            "max": 1000.0,
+            "step": 10.0,
+            "tooltip": "show",
+            "tooltip_split": true
+        },
+        "input_weight": {
+            "value": 1.0,
+            "min": -10.0,
+            "max": 10.0,
+            "step": 0.1
+        },
+        "n": {
+            "value": 1,
+            "min": 1,
+            "max": 10,
+            "step": 1
+        },
+        "outdegree": {
+            "value": 0,
+            "min": 0,
+            "max": 10,
+            "step": 1
+        },
+        "recurrent_weight": {
+            "value": -1.0,
+            "min": -10.0,
+            "max": 10.0,
+            "step": 0.1
+        }
+    }
+}

@@ -2,8 +2,7 @@ const electron = require('electron');
 const app = electron.app;   // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;   // Module to create native browser window.
 
-const config = require('./src/config');
-// console.log(config.store)
+var config = require('./src/config').global();
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
@@ -36,13 +35,13 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: width,
         height: height,
-        frame: config.get('window').frame,
+        frame: config.store.window.frame,
         title: 'A NEST desktop application',
         icon: './dist/img/icon.png',
         "node-integration": true,
     });
 
-    mainWindow.setFullScreen(config.get('window').fullscreen);
+    mainWindow.setFullScreen(config.store.window.fullscreen);
 
     mainWindow.on('resize', () => {
         // The event doesn't pass us the window size, so we call the `getBounds` method which returns an object with

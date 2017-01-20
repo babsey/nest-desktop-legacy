@@ -1,138 +1,83 @@
 "use strict"
 
-// var data, chart, simulate;
 window.jQuery = require('jquery');
 require('bootstrap');
-var events = require('../events');
-var models = require("../models");
-var nav = require('../navigation');
-var req = require('./request');
-var slider = require("../slider");
-var scatterChart = require('../chart/scatter-chart');
+const events = require('../events');
+const models = require("../models");
+const nav = require('../navigation');
+const req = require('./request');
+const slider = require("../slider");
+const scatterChart = require('../chart/scatter-chart');
+var config = require('../config').simulation('bump-activity');
 
-window.data = {
-    network: 'gamma',
-    sim_time: 1000.,
-    kernel: {
-        grng_seed: 0,
-    },
-    nodes: [{
-        type: 'neuron',
-        model: 'iaf_cond_alpha',
-        params: {
-            'C_m': 200.0,
-            'E_L': -80.0,
-            'E_ex': 0.0,
-            'E_in': -64.0,
-            'V_reset': -80.0,
-            'V_th': -45.0,
-            'g_L': 12.5,
-            't_ref': 2.0,
-            'tau_minus': 20.0,
-            'tau_syn_ex': 5.0,
-            'tau_syn_in': 10.0,
-        },
-        n: 400,
-        nrow: 20,
-        ncol: 20,
-    }, {
-        type: 'input',
-        model: undefined,
-        stim_time: [0,1000],
-        params: {},
-    }, {
-        type: 'output',
-        model: 'spike_detector',
-        params: {},
-    }],
-    links: [{
-        source: 1,
-        target: 0,
-    }, {
-        source: 0,
-        target: 0,
-        conn_spec: {
-            rule: 'fixed_outdegree',
-            outdegree: 400,
-        },
-        syn_spec: {
-            weight: -1.
-        }
-    }, {
-        source: 0,
-        target: 2,
-    }]
+window.data = config.data;
+var slider_options = config.slider_options;
+
+// Update data from slider values
+data.sim_time = slider_options.sim_time.value
+data.kernel.grng_seed = slider_options.grng_seed.value
+data.nodes[0].stim_time = slider_options.stim_time.value
+data.nodes[0].params.start = slider_options.stim_time.value[0]
+if (data.nodes[0].stim_time[1] < data.sim_time) {
+    data.nodes[0].params.stop = data.nodes[0].stim_time[1]
 }
+data.links[0].syn_spec.weight = slider_options.input_weight.value
+data.links[1].conn_spec.outdegree = slider_options.outdegree.value
+data.links[1].syn_spec.weight = slider_options.recurrent_weight.value
 
-var slider_options = {
-    sim_time: {
-        value: data.sim_time,
-        min: 100,
-        max: 2000,
-        step: 100,
-    },
-    grng_seed: {
-        value: data.kernel.grng_seed,
-        min: 0,
-        max: 1000,
-        step: 1
-    },
-    stim_time: {
-        value: data.nodes[1].stim_time,
-        min: 0,
-        max: data.sim_time,
-        step: 10,
-        tooltip: 'show',
-        tooltip_split: true,
-    },
-    outdegree: {
-        value: data.links[1].conn_spec.outdegree,
-        min: 0,
-        max: 400,
-        step: 10
-    }
-}
-
-slider.create_dataSlider('#general', 'sim_time', 0, 'Simulation time (ms)', slider_options.sim_time)
+slider.create_dataSlider('#general', 'sim_time', 1, 'Simulation time (ms)', slider_options.sim_time)
     .on('slideStop', function(d) {
         data.sim_time = d.value;
-        if (data.nodes[1].stim_time[1] < data.sim_time) {
-            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        if (data.nodes[0].stim_time[1] < data.sim_time) {
+            data.nodes[0].params.stop = data.nodes[0].stim_time[1]
         } else {
-            delete data.nodes[1].params.stop
+            delete data.nodes[0].params.stop
         }
     })
-slider.create_dataSlider('#general', 'grng_seed', 0, 'Random number generated seed', slider_options.grng_seed)
+slider.create_dataSlider('#general', 'grng_seed', 2, 'Random number generated seed', slider_options.grng_seed)
     .on('slideStop', function(d) {
         data.kernel.grng_seed = d.value;
     })
-slider.create_dataSlider('#input', 'stim_time', 1, 'Stimulus time', slider_options.stim_time)
+slider.create_dataSlider('#input', 'stim_time', 2, 'Stimulus time', slider_options.stim_time)
     .on('slideStop', function(d) {
-        data.nodes[1].stim_time = d.value;
-        data.nodes[1].params.start = d.value[0];
-        if (data.nodes[1].stim_time[1] < data.sim_time) {
-            data.nodes[1].params.stop = data.nodes[1].stim_time[1]
+        data.nodes[0].stim_time = d.value;
+        data.nodes[0].params.start = d.value[0];
+        if (data.nodes[0].stim_time[1] < data.sim_time) {
+            data.nodes[0].params.stop = data.nodes[0].stim_time[1]
         } else {
-            delete data.nodes[1].params.stop
+            delete data.nodes[0].params.stop
         }
     })
-slider.create_dataSlider('#neuron', 'outdegree', 0, 'Outdegree', slider_options.outdegree)
+slider.create_dataSlider('#input', 'input_weight', 4, 'Input synaptic weight', slider_options.input_weight)
+    .on('slideStop', function(d) {
+        data.links[0].syn_spec.weight = d.value;
+    })
+slider.create_dataSlider('#neuron', 'outdegree', 2, 'Outdegree', slider_options.outdegree)
     .on('slideStop', function(d) {
         data.links[1].conn_spec.outdegree = d.value;
     })
+slider.create_dataSlider('#neuron', 'recurrent_weight', 4, 'Recurrent weight', slider_options.recurrent_weight)
+    .on('slideStop', function(d) {
+        data.links[1].syn_spec.weight = d.value;
+    })
 
-
-function simulate() {
+function update_slider(){
     slider.update_dataSlider('sim_time', data.sim_time)
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
-    slider.update_dataSlider('stim_time', data.nodes[1].stim_time)
+    slider.update_dataSlider('stim_time', data.nodes[0].stim_time)
+    slider.update_dataSlider('input_weight', data.links[0].syn_spec.weight)
     slider.update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
+    slider.update_dataSlider('recurrent_weight', data.links[1].syn_spec.weight)
+}
+
+function simulate() {
+    update_slider()
 
     if (running) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
 
-    if (data.nodes[1].params.stop == data.sim_time) {
-        delete data.nodes[1].params.stop
+    if (data.nodes[0].params.stop == data.sim_time) {
+        delete data.nodes[0].params.stop
     }
     data.nodes[2].events = {};
     req.simulate({
@@ -153,7 +98,7 @@ function simulate() {
 
             if (document.getElementById('autoscale').checked) {
                 chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-                chart.yScale.domain([0, data.nodes[0].n])
+                chart.yScale.domain([0, (data.nodes[1].nrow*data.nodes[1].ncol)])
             }
             chart.data({
                     x: data.nodes[2].events['times'],
@@ -164,6 +109,7 @@ function simulate() {
 }
 
 function resume() {
+    nav.running_update(running)
     if (!(running)) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
 
@@ -185,7 +131,7 @@ function resume() {
 
             if (document.getElementById('autoscale').checked) {
                 chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-                chart.yScale.domain([0, data.nodes[0].n])
+                chart.yScale.domain([0, (data.nodes[1].nrow*data.nodes[1].ncol)])
             }
             chart.data({
                     x: data.nodes[2].events['times'],
@@ -197,26 +143,25 @@ function resume() {
         })
 }
 
-
 window.chart = scatterChart('#chart')
     .xlabel('Time [ms]')
     .ylabel('Neuron ID')
     .drag();
 
-models.load_model_list(data.nodes, ['parrot_neuron'])
+models.load_model_list(data.nodes)
 nav.init_button(data, 'bump_activity')
-nav.network_added(data, simulate, 'bump_activity')
+slider.update_dataSlider_level()
 setTimeout(function() {
-    models.model_selected(data.nodes[0])
-    slider.update_paramSlider(data.nodes[0])
+    models.model_selected(data.nodes[1])
+    slider.update_paramSlider(data.nodes[1])
     events.eventHandler(data, simulate, resume)
+    nav.network_added(data, simulate, 'bump_activity')
 }, 1000)
-
-nav.network_added(data, simulate, 'bump_activity')
 
 $('#autoscale').on('click', function () {
     if (document.getElementById('autoscale').checked) {
         chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+        chart.yScale.domain([0, (data.nodes[1].nrow*data.nodes[1].ncol)])
         chart.update();
     }
 })

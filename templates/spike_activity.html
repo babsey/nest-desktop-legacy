@@ -5,37 +5,12 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css" />
     <link rel="stylesheet" href="../node_modules/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css" />
-    <link rel="stylesheet" href='../dist/css/scatter-chart.css'></link>
+    <link rel="stylesheet" href='../dist/css/chart.css'></link>
     <link rel="stylesheet" href='../dist/css/main.css'></link>
     <title>NEST desktop: spike activity</title>
 </head>
 
 <body>
-    <div id="message"></div>
-
-    <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <form id="network-add-form">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="network-name" class="control-label">Network:</label>
-                            <input type="text" class="form-control" id="network-name" placeholder="name">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="network-add-submit">Submit</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-
     <div id="controller" class="pull-right">
         <div class="container-fluid">
             <div class="pull-right">
@@ -48,7 +23,7 @@
                 </button>
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" id="get-network-config" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-wrench"></span>
+                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-eye-open"></span>
                     </button>
                     <ul id="network-config" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="get-network-config">
                         <li id="level_1" class="level" level="1">
@@ -103,7 +78,7 @@
                         <div id="general"></div>
 
                         <hr>
-                        <div id="input" class="model" nidx="1">
+                        <div id="input" class="model" nidx="0">
                             <select id="id_input" class="form-control modelSelect">
                                 <option value="" disabled selected hidden>Select an input device</option>
                             </select>
@@ -111,11 +86,11 @@
                         </div>
 
                         <hr>
-                        <div id="neuron" class="model" nidx="0">
+                        <div id="neuron" class="model" nidx="1">
                             <select id="id_neuron" class="form-control modelSelect">
                                 <option value="" disabled selected hidden>Select a neuron model</option>
                             </select>
-                            <div class="params"></div <hr>
+                            <div class="params"></div>
                         </div>
                     </div>
                 </div>
@@ -128,6 +103,32 @@
         </label>
     </div>
 
+    <div id="message"></div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form id="network-add-form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="network-name" class="control-label">Network:</label>
+                            <input type="text" class="form-control" id="network-name" placeholder="name">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="network-add-submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <h4 class="title">Spike activity</h4>
     <div id="chart"></div>
     <script>
         window.$ = require('jquery');

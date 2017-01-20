@@ -1,4 +1,4 @@
-id,level,value,min,max,step,label
+id,level,value,min,max,step,label,scale
 V_m,2,-65.0,-100.0,0.0,1.0,Initial membrane potential (mV)
 U_m,2,0.0,0.0,100.0,1.0,Initial membrane potential recovery variable (mV)
 I_e,2,0.0,-100.0,100.0,1.0,Constant external input current (pA)

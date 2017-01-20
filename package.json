@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "hello": "electron .bin/hello.js"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/babsey/nest-desktop.git"
@@ -30,12 +30,11 @@
     "colorbrewer": "^1.0.0",
     "d3-array": "^1.0.2",
     "d3-axis": "^1.0.4",
+    "d3-color": "^1.0.2",
     "d3-drag": "^1.0.2",
-    "d3-dsv": "^1.0.3",
     "d3-ease": "^1.0.2",
     "d3-format": "^1.0.2",
     "d3-interpolate": "^1.1.2",
-    "d3-request": "^1.0.3",
     "d3-scale": "^1.0.4",
     "d3-selection": "^1.0.3",
     "d3-shape": "^1.0.4",
@@ -43,6 +42,7 @@
     "debug": "^2.6.0",
     "electron-config": "^0.2.1",
     "jquery": "^3.1.1",
+    "jsonfile": "^2.4.0",
     "lie": "^3.1.0",
     "nedb": "^1.8.0",
     "pouchdb": "^6.1.1",

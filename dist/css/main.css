@@ -1,35 +1,3 @@
-#message {
-    position:absolute;
-    padding: 10px;
-}
-#message div {
-    margin-bottom: 5px
-}
-#controller {
-    z-index: 1000;
-    width: 334px;
-}
-#controller-body {
-    width: 303px;
-}
-.paramSlider, .dataSlider {
-    margin-bottom: 0px;
-}
-.paramSlider dt, .dataSlider dt {
-    margin-top: 10px;
-}
-.slider-handle {
-    background: #fff none repeat scroll 0 0;
-    border: 1px solid #ccc;
-}
-.slider-selection {
-    background: #dcdcdc none repeat scroll 0 0;
-}
-#chart {
-    position: fixed;
-    top: 0px;
-    z-index: -1000;
-}
 .jumbotron {
     background-color:transparent;
     height: 250px;
@@ -47,4 +15,43 @@
     position: absolute;
     z-index: -1;
     border-bottom: 1px solid #000;
+}
+
+.title{
+    position: fixed;
+    left: 70px;
+}
+
+#message {
+    position:absolute;
+    padding: 10px;
+}
+#message div {
+    margin-bottom: 5px
+}
+#controller {
+    z-index: 1000;
+    width: 334px;
+}
+#controller-body {
+    width: 303px;
+}
+/*#controller-panel {
+    background-color: transparent;
+}
+#controller-panel:hover {
+    background-color: white;
+}*/
+.paramSlider, .dataSlider {
+    margin-bottom: 0px;
+}
+.paramSlider dt, .dataSlider dt {
+    margin-top: 10px;
+}
+.slider-handle {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #ccc;
+}
+.slider-selection {
+    background: #dcdcdc none repeat scroll 0 0;
 }

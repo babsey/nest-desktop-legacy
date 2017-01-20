@@ -3,8 +3,8 @@
 const PouchDB = require('pouchdb');
 const NeDB = require('nedb');
 PouchDB.plugin(require('pouchdb-adapter-idb'));
-const config = require('../config');
 const message = require('../message');
+var config = require('../config').global();
 
 
 function remoteDB() {

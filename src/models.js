@@ -1,11 +1,8 @@
 "use strict"
 
 const $ = require("jquery");
-const d3Request = require('d3-request');
 const slider = require('./slider');
-
-var paths = window.location.pathname.split('/')
-var curpath = paths.slice(0, paths.length - 2).join('/')
+var config = require('./config');
 
 var record_labels = {
     'g_ex': 'Conductance',
@@ -20,22 +17,19 @@ var record_labels = {
 
 var recordables = {}
 
-function load_model_list(nodes, excludes) {
-    d3Request.csv('file://' + curpath + '/settings/models.csv', function(models) {
-        models.forEach(function(model) {
-            if (excludes != undefined) {
-                if (excludes.indexOf(model.name) != -1) return
-            }
-            if (model.recordables) {
-                recordables[model.name] = model.recordables.split(';');
-            }
-            $("<option class='modelSelect' id='" + model.name + "' value=" + model.name + ">" + model.label + "</option>").appendTo("#id_" + model.type)
-            slider.init_paramSlider(model.type, model.name)
-        })
-        setTimeout(function() {
-            $('.paramSlider').hide()
-        }, 100)
-    })
+function load_model_list() {
+    var modelTypes = ['input', 'neuron'];
+    for (var idx in modelTypes) {
+        var modelDefaults = config.models(modelTypes[idx])
+        for (var idx in modelDefaults) {
+            var model = modelDefaults[idx];
+            $("<option class='modelSelect' id='" + model.id + "' value=" + model.id + ">" + model.label + "</option>").appendTo("#id_" + model.type)
+            slider.init_paramSlider(model)
+        }
+    }
+    setTimeout(function() {
+        $('.paramSlider').hide()
+    }, 100)
 }
 
 function model_selected(node) {
@@ -48,13 +42,13 @@ function model_selected(node) {
     }
 }
 
-function get_recordables_list(neuron, multimeter) {
+function get_recordables_list(output) {
     $('#id_record').empty()
-    for (var recId in multimeter.params.record_from) {
-        var rec = multimeter.params.record_from[recId];
-        $('<option val="' + rec + '" ' + (rec == neuron.record_from ? 'selected' : '') + '>' + rec + '</option>').appendTo('#id_record')
+    for (var recId in output.params.record_from) {
+        var rec = output.params.record_from[recId];
+        $('<option val="' + rec + '" ' + (rec == output.record_from ? 'selected' : '') + '>' + rec + '</option>').appendTo('#id_record')
     }
-    $('#record').show();
+    $('#output').show();
 }
 
 module.exports = {

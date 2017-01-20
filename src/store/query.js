@@ -4,8 +4,8 @@ const NeDB = require('nedb');
 const PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-adapter-idb'));
 PouchDB.plugin(require('pouchdb-upsert'));
-const config = require('../config');
-var sync = require('./sync');
+var config = require('../config').global();
+const sync = require('./sync');
 sync.on()
 
 var localDB = null;

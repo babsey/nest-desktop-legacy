@@ -1,3 +1,3 @@
-id,level,value,min,max,step,label
+id,level,value,min,max,step,label,scale
 mean,1,0.0,0.0,2000.0,1.0,Mean value of the noise current (pA)
 std,1,0.0,0.0,1000.0,10.0,Standard deviation of noise current (pA)

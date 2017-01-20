@@ -1,27 +1,9 @@
 "use strict"
 
 const $ = require("jquery");
-const d3Request = require('d3-request');
 const Slider = require("bootstrap-slider");
-const config = require('./config')
-
-var paths = window.location.pathname.split('/')
-var curpath = paths.slice(0, paths.length - 2).join('/')
-
-
-function row(p) {
-    return {
-        id: p.id,
-        label: p.label,
-        level: p.level,
-        options: {
-            value: +p.value,
-            min: +p.min,
-            max: +p.max,
-            step: +p.step
-        }
-    }
-}
+var config = require('./config');
+var settings = config.global();
 
 function slider(ref, id, options) {
     var options_default = {
@@ -46,12 +28,6 @@ function slider(ref, id, options) {
         if (!(Object.prototype.toString.call(options.value) === '[object Array]')) {
             $(ref).find('#' + id).find("#" + id + "Val").text(options.value);
         }
-
-        if (id == 'sim_time') {
-            var stim_timeInput = $('#stim_timeInput');
-            stim_timeInput.data('slider').options.max = parseInt(options.value);
-            stim_timeInput.slider('setValue', stim_timeInput.slider('getValue'))
-        }
     });
     return slider
 }
@@ -63,12 +39,12 @@ function slider(ref, id, options) {
 function create_dataSlider(ref, id, level, label, options) {
     $(ref).append('<dl id="' + id + '" class="dataSlider" level="' + level + '"></dl>')
     $(ref).find('#' + id).append('<dt>' + label + '</dt>')
-    $('#' + id).attr('level') > config.get('level') ? $('#' + id).hide() : $('#' + id).show()
+    $('#' + id).attr('level') > settings.get('level') ? $('#' + id).hide() : $('#' + id).show()
     return slider(ref, id, options);
 }
 
 function update_dataSlider(id, value) {
-    $('#' + id).attr('level') > config.get('level') ? $('#' + id).hide() : $('#' + id).show()
+    $('#' + id).attr('level') > settings.get('level') ? $('#' + id).hide() : $('#' + id).show()
     $('#' + id + 'Input').slider('setValue', value)
     $('#' + id + 'Val').html(value)
 }
@@ -77,7 +53,7 @@ function update_dataSlider_level() {
     var ds = $('.dataSlider');
     ds.each(function() {
         var pid = this.id;
-        $('#' + this.id).attr('level') > config.get('level') ? $('#' + pid).hide() : $('#' + pid).show()
+        $('#' + this.id).attr('level') > settings.get('level') ? $('#' + pid).hide() : $('#' + pid).show()
     })
 }
 
@@ -92,14 +68,19 @@ function create_paramSlider(ref, id, level, label, options) {
     return slider(ref, id, options);
 }
 
-function init_paramSlider(type, model) {
-    var url = 'file://' + curpath + '/settings/sliderDefaults/' + model + '.csv';
-    d3Request.csv(url, row, function(ps) {
-        $('#' + type).find('.params').append('<div id="' + model + '" class="modelSlider"></div>')
-        ps.forEach(function(p) {
-            var pslider = create_paramSlider('div#' + model, p.id, p.level, p.label, p.options);
-        })
-    })
+function init_paramSlider(model) {
+    $('#' + model.type).find('.params').append('<div id="' + model.id + '" class="modelSlider"></div>')
+    for (var idx in model.sliderDefaults) {
+        var p = model.sliderDefaults[idx];
+        var options = {
+            value: +p.value,
+            min: +p.min,
+            max: +p.max,
+            step: +p.step,
+            scale: p.scale || 'linear'
+        }
+        var pslider = create_paramSlider('div#' + model.id, p.id, p.level, p.label, options);
+    }
 }
 
 function update_paramSlider(node) {
@@ -115,7 +96,7 @@ function update_paramSlider(node) {
         } else {
             node.params[pid] = $('div#' + model).find('#' + pid + 'Input').slider('getValue')
         }
-        $('div#' + model).find('#' + pid).attr('level') > config.get('level') ? $('div#' + model).find('#' + pid).hide() : $('div#' + model).find('#' + pid).show()
+        $('div#' + model).find('#' + pid).attr('level') > settings.get('level') ? $('div#' + model).find('#' + pid).hide() : $('div#' + model).find('#' + pid).show()
     })
     $('div#' + model).show();
 }

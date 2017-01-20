@@ -9,7 +9,7 @@ var d3Selection = require('d3-selection');
 var d3Shape = require('d3-shape');
 var d3Scale = require('d3-scale');
 var d3Transition = require('d3-transition');
-// var d3Zoom = require('d3-zoom');
+var d3Zoom = require('d3-zoom');
 var colorbrewer = require('colorbrewer');
 
 var margin = {
@@ -18,7 +18,7 @@ var margin = {
         bottom: 30,
         left: 50
     },
-    width = window.innerWidth - margin.left - margin.right - 334,
+    width = window.innerWidth - margin.left - margin.right - 10 - 324,
     height = window.innerHeight - margin.top - margin.bottom - 10;
 
 var xScale = d3Scale.scaleLinear()
@@ -47,6 +47,7 @@ var _data = {
 };
 
 window.dragging = false
+window.zooming = false
 
 function data(d) {
     if (!arguments.length) return _data;
@@ -67,14 +68,29 @@ function xlabel(label) {
 }
 
 function drag() {
-    d3Selection.select('#chart')
+    d3Selection.select('#xaxis')
+        .call(d3Drag.drag()
+            .on("drag", function() {
+                dragging = true
+
+                $('#autoscale').prop('checked', false)
+                var xlim0 = chart.xScale.domain();
+                var xx = xlim0[1] - xlim0[0]
+                var dx = d3Selection.event.dx * xx / 1000.;
+                chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
+                chart.update()
+                dragging = false
+            })
+        );
+    d3Selection.select('#yaxis')
         .call(d3Drag.drag()
             .on("drag", function() {
                 dragging = true
                 $('#autoscale').prop('checked', false)
-                var xlim0 = chart.xScale.domain();
-                var dx = d3Selection.event.dx;
-                chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
+                var ylim0 = chart.yScale.domain();
+                var yy = ylim0[1] - ylim0[0]
+                var dy = d3Selection.event.dy * yy / 1000.;
+                chart.yScale.domain([ylim0[0] + dy, ylim0[1] + dy])
                 chart.update()
                 dragging = false
             })
@@ -82,37 +98,40 @@ function drag() {
     return chart;
 }
 
-// function zoom() {
-//     var xlim0;
-//     d3Selection.select('#chart')
-//         .call(d3Zoom.zoom()
-//             .scaleExtent([.5,2])
-//             .on("start", function() {
-//                 xlim0 = chart.xScale.domain()
-//             })
-//             .on("zoom", function() {
-//                 var xScale = d3Selection.event.transform.rescaleX(chart.xScale);
-//                 chart.xScale.domain(xScale.domain())
-//                 chart.update()
-//             })
-//             .on("end", function() {
-//                 xlim1 = chart.xScale.domain()
-//                 chart.xScale.domain(xlim0)
-//             })
-//         )
-//         .on("dblclick.zoom", null);
-//     return chart;
-// }
+function zoom() {
+    // d3Selection.select('#chart')
+    //     .call(d3Zoom.zoom()
+    //         .scaleExtent([1, 10])
+    //         .on("start", function() {
+    //             zooming = true
+    //         })
+    //         .on("zoom", function () {
+    //               d3Selection.select('#chart').attr("transform", "translate(" + d3Selection.event.translate + ")scale(" + d3Selection.event.scale + ")");
+    //             }
+    //             // chart.update()
+    //         })
+    //         .on("end", function() {
+    //             zooming = false
+    //         })
+    //     )
+        // .on("dblclick.zoom", null);
+    return chart;
+}
 
 
 function initChart(reference) {
-    d3Selection.select(reference).html("");
+    // d3Selection.select(reference).html("");
 
     var svg = d3Selection.select(reference).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("g")
+        .attr("clip-path", "url(#clip)")
+        .attr('id', 'clip')
+        .attr('transform', 'translate(1,-1)');
 
     svg.append("g")
         .attr("id", "xaxis")
@@ -143,11 +162,6 @@ function initChart(reference) {
         .attr("dy", ".71em")
         .attr("text-anchor", "end");
 
-    svg.append("g")
-        .attr("clip-path", "url(#clip)")
-        .attr('id', 'clip')
-        .attr('transform', 'translate(1,-1)');
-
     return chart
 }
 
@@ -166,7 +180,7 @@ var chart = {
     xlabel: xlabel,
     ylabel: ylabel,
     drag: drag,
-    // zoom: zoom,
+    zoom: zoom,
     initChart: initChart,
 }
 

@@ -1,0 +1,88 @@
+{
+    "data": {
+        "network": "gamma",
+        "kernel": {},
+        "nodes": [{
+            "type": "input",
+            "model": null,
+            "params": {}
+        }, {
+            "type": "neuron",
+            "model": "iaf_cond_alpha",
+            "params": {
+                "C_m": 200.0,
+                "E_L": -80.0,
+                "E_ex": 0.0,
+                "E_in": -64.0,
+                "V_reset": -80.0,
+                "V_th": -45.0,
+                "g_L": 12.5,
+                "t_ref": 2.0,
+                "tau_minus": 20.0,
+                "tau_syn_ex": 5.0,
+                "tau_syn_in": 10.0
+            },
+            "nrow": 30,
+            "ncol": 30
+        }, {
+            "type": "output",
+            "model": "spike_detector",
+            "params": {}
+        }],
+        "links": [{
+            "source": 0,
+            "target": 1,
+            "syn_spec": {}
+        }, {
+            "source": 1,
+            "target": 1,
+            "conn_spec": {
+                "rule": "fixed_outdegree"
+            },
+            "syn_spec": {}
+        }, {
+            "source": 1,
+            "target": 2
+        }]
+    },
+    "slider_options": {
+        "sim_time": {
+            "value": 1000.0,
+            "min": 100.0,
+            "max": 2000.0,
+            "step": 100.0
+        },
+        "grng_seed": {
+            "value": 0,
+            "min": 0,
+            "max": 1000,
+            "step": 1
+        },
+        "stim_time": {
+            "value": [0.0, 1000.0],
+            "min": 0.0,
+            "max": 1000.0,
+            "step": 10.0,
+            "tooltip": "show",
+            "tooltip_split": true
+        },
+        "input_weight": {
+            "value": 1.0,
+            "min": 1.0,
+            "max": 10.0,
+            "step": 0.1
+        },
+        "outdegree": {
+            "value": 900,
+            "min": 0,
+            "max": 900,
+            "step": 10
+        },
+        "recurrent_weight": {
+            "value": -1.0,
+            "min": -10.0,
+            "max": -0.1,
+            "step": 0.1
+        }
+    }
+}

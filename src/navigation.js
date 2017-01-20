@@ -1,9 +1,9 @@
 "use strict"
 
-const config = require('./config');
 const models = require('./models');
 const q = require('./store/query');
 const slider = require('./slider');
+var config = require('./config').global();
 
 function init_button(data, nest_app) {
     get_network_list(data, nest_app)
@@ -17,7 +17,7 @@ function init_button(data, nest_app) {
         })
     })
 
-    $('#level_' + config.get('level')).find('.glyphicon-ok').show()
+    $("#network-config").find('#level_' + config.get('level')).find('.glyphicon-ok').show()
 
     setTimeout(function() {
         $('.modelSelect').on('click', function() {
@@ -62,6 +62,8 @@ function get_network_list(data, name) {
 
         setTimeout(function() {
             $('.network').on('click', function(d) {
+                window.running = false
+                running_update(running)
                 q.get(this.id).then(function(docs) {
                     data.sim_time = docs.data.sim_time || 1000.;
                     data.kernel = docs.data.kernel;
@@ -101,9 +103,22 @@ function network_added(data, simulate, name) {
     })
 }
 
+function running_update(running) {
+    if (running) {
+        $('#network-resume').find('.glyphicon').hide()
+        $('#network-resume').find('.glyphicon-pause').show()
+        $('.dataSlider').find('.sliderInput').slider('disable')
+    } else {
+        $('#network-resume').find('.glyphicon').hide()
+        $('#network-resume').find('.glyphicon-play').show()
+        $('.dataSlider').find('.sliderInput').slider('enable')
+    }
+}
+
 
 module.exports = {
     init_button: init_button,
     get_network_list: get_network_list,
     network_added: network_added,
+    running_update: running_update
 }
