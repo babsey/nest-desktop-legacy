@@ -1,11 +1,10 @@
 {
   "name": "nest-desktop",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A NEST desktop application",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "hello": "electron .bin/hello.js"
   },
   "repository": {
     "type": "git",
