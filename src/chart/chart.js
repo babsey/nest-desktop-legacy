@@ -9,7 +9,7 @@ var d3Selection = require('d3-selection');
 var d3Shape = require('d3-shape');
 var d3Scale = require('d3-scale');
 var d3Transition = require('d3-transition');
-var d3Zoom = require('d3-zoom');
+// var d3Zoom = require('d3-zoom');
 var colorbrewer = require('colorbrewer');
 
 var margin = {
