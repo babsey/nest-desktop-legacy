@@ -9,7 +9,7 @@ let {
     host,
     port
 } = config.get('nestServer');
-let serverURL = host + ':' + port;
+var serverURL = host + ':' + port;
 
 window.running = false;
 window.serverRunning = false;
@@ -17,12 +17,12 @@ window.serverRunning = false;
 function server_check() {
     return $.ajax({
         method: "GET",
-        url: "http://" + serverURL + '/',
+        url: "http://" + serverURL,
     }).fail(function(d) {
-        message('Warning', 'The connection to the NEST server failed.')
+        message('Warning', 'The connection to the NEST server ('+ serverURL +') failed.')
     }).done(function() {
         window.serverRunning = true
-        message('Success', 'The connection to the NEST server established.')
+        message('Success', 'The connection to the NEST server ('+ serverURL +')  established.')
     })
 }
 

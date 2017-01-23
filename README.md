@@ -6,27 +6,40 @@
 
 An interactive desktop application for the [NEural Simulation Tool](http://www.nest-initiative.org/).
 
+To install this application you'll need [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Electron](http://electron.atom.io/) installed on your computer.
 
-## To install (Ubuntu)
+If you simulate nest locally, you need [nest-server-simulation][https://github.com/babsey/nest-server-simulation] installed on your computer.
+Optional: To store network data remotely, you need [nest-server-store][https://github.com/babsey/nest-server-store] installed on remoted computer.
 
-To install this application you'll need [nest-server-simulation][https://github.com/babsey/nest-server-simulation], [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Electron](http://electron.atom.io/) installed on your computer.
+## To install requirements
 
-Optional: To store network data remotely, you need [nest-server-store][https://github.com/babsey/nest-server-store].
+### Ubuntu
 
-Install nodejs with sudo
+Install git and node with sudo
 ```
-sudo apt-get install nodejs
-```
-
-Install [Electron](https://github.com/electron/electron) globally with sudo (latest tested version: 1.4.13)
-```
-sudo npm install electron -g
+sudo apt-get install git nodejs
 ```
 
-Install nest-desktop and its dependencies
+### Mac OSX
+
+Install git and node
 ```
-npm install nest-desktop
+brew install git nodejs
 ```
+
+## To install nest-desktop
+
+Clone nest-desktop
+```
+git clone http://github.com/babsey/nest-desktop
+```
+
+Install dependencies of nest-desktop
+```
+cd nest-desktop
+npm install
+```
+
 
 ## To start
 
