@@ -19,10 +19,10 @@ function server_check() {
         method: "GET",
         url: "http://" + serverURL,
     }).fail(function(d) {
-        message('Warning', 'The connection to the NEST server ('+ serverURL +') failed.')
+        message('Warning', 'The connection to the NEST server (' + serverURL + ') failed.')
     }).done(function() {
         window.serverRunning = true
-        message('Success', 'The connection to the NEST server ('+ serverURL +')  established.')
+        message('Success', 'The connection to the NEST server (' + serverURL + ')  established.')
     })
 }
 

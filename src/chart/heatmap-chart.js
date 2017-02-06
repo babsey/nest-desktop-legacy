@@ -5,7 +5,7 @@ var d3Selection = require('d3-selection');
 var chart = require('./chart');
 
 function legend() {
-    var l = d3Selection.select('#heatmap')
+    var l = chart.g.select('#heatmap')
         .selectAll(".legend")
         .data(d3Array.range(
             chart.colorScale.domain()[0],
@@ -26,14 +26,14 @@ function legend() {
             return chart.colorScale(d)
         })
         .on('mouseover', function(d) {
-            d3Selection.selectAll('.card')
+            chart.g.selectAll('.card')
                 .filter(function(o) {
                     return o < d || o >= (d + chart.colorScale.quantiles()[0])
                 })
                 .style('opacity', .1);
         })
         .on('mouseout', function() {
-            d3Selection.selectAll('.card')
+            chart.g.selectAll('.card')
                 .transition(t)
                 .style('opacity', 1.0);
         });
@@ -50,15 +50,18 @@ function legend() {
 }
 
 function update() {
+    chart.yScale.range([chart.height, chart.height - (+chart.g.attr('height'))])
+    chart.xScale.range([0, +chart.g.attr('width')])
+
     var data = chart.data();
 
-    d3Selection.select('#xaxis')
-        .call(chart.xAxis);
+    chart.g.select('#xaxis')
+        .call(chart.xAxis());
 
-    d3Selection.select('#yaxis')
-        .call(chart.yAxis);
+    chart.g.select('#yaxis')
+        .call(chart.yAxis());
 
-    var cards = d3Selection
+    var cards = chart.g
         .select('#clip')
         .selectAll('.card')
         .data(chart.data().i);
@@ -84,7 +87,6 @@ function update() {
         })
         .on('mouseout', function(d) {
             d3Selection.select(this)
-                // .transition(t)
                 .style('opacity', 1.)
         })
         .style("fill", function(d, i) {
@@ -121,4 +123,4 @@ function update() {
 
 chart.legend = legend
 chart.update = update
-module.exports = chart.initChart
+module.exports = chart.init

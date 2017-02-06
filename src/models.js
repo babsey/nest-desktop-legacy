@@ -1,6 +1,6 @@
 "use strict"
 
-const $ = require("jquery");
+const $ = require('jquery');
 const slider = require('./slider');
 var config = require('./config');
 

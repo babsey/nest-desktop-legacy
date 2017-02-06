@@ -2,12 +2,16 @@
 
 window.jQuery = require('jquery');
 require('bootstrap');
+var d3Array = require('d3-array');
+var d3Scale = require('d3-scale');
+
 const events = require('../events');
 const models = require("../models");
 const nav = require('../navigation');
 const req = require('./request');
 const slider = require("../slider");
 const scatterChart = require('../chart/scatter-chart');
+const barChart = require('../chart/bar-chart');
 var config = require('../config').simulation('bump-activity');
 
 window.data = config.data;
@@ -61,7 +65,7 @@ slider.create_dataSlider('#neuron', 'recurrent_weight', 4, 'Recurrent weight', s
         data.links[1].syn_spec.weight = d.value;
     })
 
-function update_slider(){
+function update_slider() {
     slider.update_dataSlider('sim_time', data.sim_time)
     slider.update_dataSlider('grng_seed', data.kernel.grng_seed)
     slider.update_dataSlider('stim_time', data.nodes[0].stim_time)
@@ -96,15 +100,27 @@ function simulate() {
             data.nodes[0].ncol = res.nodes[0].ncol;
             data.nodes[2].events = res.nodes[2].events;
 
+            barchart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+            var histogram = d3Array.histogram()
+                .domain([data.kernel.time - data.sim_time, data.kernel.time])
+                .thresholds(barchart.xScale.ticks(100));
+            var psth = histogram(data.nodes[2].events['times']);
+            data.nodes[2].events.psth = psth;
+
             if (document.getElementById('autoscale').checked) {
                 chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-                chart.yScale.domain([0, (data.nodes[1].nrow*data.nodes[1].ncol)])
+                chart.yScale.domain([0, (data.nodes[1].nrow * data.nodes[1].ncol)])
+                barchart.yScale.domain([0, d3Array.max(psth, function(d) {
+                    return d.length
+                })])
             }
+
             chart.data({
                     x: data.nodes[2].events['times'],
                     y: data.nodes[2].events['senders'],
                 })
                 .update();
+            barchart.data(psth).update()
         })
 }
 
@@ -131,7 +147,7 @@ function resume() {
 
             if (document.getElementById('autoscale').checked) {
                 chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-                chart.yScale.domain([0, (data.nodes[1].nrow*data.nodes[1].ncol)])
+                chart.yScale.domain([0, (data.nodes[1].nrow * data.nodes[1].ncol)])
             }
             chart.data({
                     x: data.nodes[2].events['times'],
@@ -139,14 +155,44 @@ function resume() {
                 })
                 .update();
 
+            var histogram = d3Array.histogram()
+                .domain([data.kernel.time - data.sim_time, data.kernel.time])
+                .thresholds(d3Scale.scaleLinear().domain([data.kernel.time - data.sim_time, data.kernel.time]).ticks(100));
+            var psth = histogram(data.nodes[2].events['times']);
+            data.nodes[2].events.psth = psth;
+
+            if (document.getElementById('autoscale').checked) {
+                barchart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+                barchart.yScale.domain([0, d3Array.max(psth, function(d) {
+                    return d.length
+                })])
+            }
+            barchart.data(psth).update()
+
             resume()
         })
 }
 
-window.chart = scatterChart('#chart')
-    .xlabel('Time [ms]')
-    .ylabel('Neuron ID')
-    .drag();
+window.barchart = barChart('#chart', (window.innerHeight * 2. / 10.) - 10);
+barchart.g
+    .attr('height', window.innerHeight * 2. / 10. - 10)
+    .attr('transform', 'translate(' + barchart.margin.left + ',' + (window.innerHeight * 8. / 10. - barchart.margin.bottom + 10) + ')');
+barchart.xAxis(barchart.xScale)
+    .yAxis(barchart.yScale)
+    .xLabel('Time [ms]')
+    .yLabel('Spike count')
+    .update();
+barchart.drag();
+
+window.chart = scatterChart('#chart');
+chart.y = chart.height
+chart.g.attr('height', window.innerHeight * 7. / 10.);
+chart.g.select('#clip').attr('transform', 'translate(0,' + (+chart.g.attr('height') - chart.height) + ')');
+chart.xAxis(chart.xScale)
+    .yAxis(chart.yScale)
+    .yLabel('Neuron ID')
+    .update();
+chart.drag();
 
 models.load_model_list(data.nodes)
 nav.init_button(data, 'bump_activity')
@@ -158,10 +204,10 @@ setTimeout(function() {
     nav.network_added(data, simulate, 'bump_activity')
 }, 1000)
 
-$('#autoscale').on('click', function () {
+$('#autoscale').on('click', function() {
     if (document.getElementById('autoscale').checked) {
         chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-        chart.yScale.domain([0, (data.nodes[1].nrow*data.nodes[1].ncol)])
+        chart.yScale.domain([0, (data.nodes[1].nrow * data.nodes[1].ncol)])
         chart.update();
     }
 })

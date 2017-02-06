@@ -2,14 +2,18 @@
 
 window.jQuery = require('jquery');
 require('bootstrap');
+var d3Array = require('d3-array');
+var d3Scale = require('d3-scale');
+
 const events = require('../events')
 const models = require("../models");
 const nav = require('../navigation');
 const req = require('./request');
 const slider = require("../slider");
 const scatterChart = require('../chart/scatter-chart');
+const barChart = require('../chart/bar-chart');
 const networkLayout = require('../network-layout');
-var config = require('../config').simulation('spike-activity')
+var config = require('../config').simulation('spike-activity');
 
 window.data = config.data;
 var slider_options = config.slider_options;
@@ -54,7 +58,7 @@ slider.create_dataSlider('#input', 'input_weight', 4, 'Input synaptic weight', s
     .on('slideStop', function(d) {
         data.links[0].syn_spec.weight = d.value;
     })
-slider.create_dataSlider('#neuron', 'n', 2, 'Population size', slider_options.n)
+slider.create_dataSlider('#neuron', 'n', 1, 'Population size', slider_options.n)
     .on('slideStop', function(d) {
         data.nodes[1].n = d.value;
     })
@@ -99,15 +103,27 @@ function simulate() {
             }
             data.nodes[2].events = res.nodes[2].events;
 
+            barchart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+            var histogram = d3Array.histogram()
+                .domain([data.kernel.time - data.sim_time, data.kernel.time])
+                .thresholds(barchart.xScale.ticks(100));
+            var psth = histogram(data.nodes[2].events['times']);
+            data.nodes[2].events.psth = psth;
+
             if (document.getElementById('autoscale').checked) {
                 chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-                chart.yScale.domain([0, data.nodes[1].n])
+                chart.yScale.domain([data.nodes[1].ids[0], data.nodes[1].ids[data.nodes[1].ids.length - 1]])
+                barchart.yScale.domain([0, d3Array.max(psth, function(d) {
+                    return d.length
+                })])
             }
+
             chart.data({
                     x: data.nodes[2].events['times'],
                     y: data.nodes[2].events['senders']
                 })
                 .update();
+            barchart.data(psth).update()
         })
 }
 
@@ -132,16 +148,30 @@ function resume() {
                 data.nodes[2].events[key] = dataEvents[key]
             }
 
-
             if (document.getElementById('autoscale').checked) {
                 chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-                chart.yScale.domain([0, data.nodes[1].n])
+                chart.yScale.domain([data.nodes[1].ids[0], data.nodes[1].ids[data.nodes[1].ids.length - 1]])
             }
             chart.data({
                     x: data.nodes[2].events['times'],
                     y: data.nodes[2].events['senders']
                 })
                 .update();
+
+            var histogram = d3Array.histogram()
+                .domain([data.kernel.time - data.sim_time, data.kernel.time])
+                .thresholds(d3Scale.scaleLinear().domain([data.kernel.time - data.sim_time, data.kernel.time]).ticks(100));
+            var psth = histogram(data.nodes[2].events['times']);
+            data.nodes[2].events.psth = psth;
+
+            if (document.getElementById('autoscale').checked) {
+                barchart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+                barchart.yScale.domain([0, d3Array.max(psth, function(d) {
+                    return d.length
+                })])
+            }
+            barchart.data(psth).update()
+
             resume()
         })
 }
@@ -154,12 +184,28 @@ setTimeout(function() {
     nav.network_added(data, simulate, 'spike_activity')
 }, 1000)
 
-window.chart = scatterChart('#chart')
-    .xlabel('Time (ms)')
-    .ylabel('Neuron ID')
-    .drag();
+window.barchart = barChart('#chart', (window.innerHeight * 2. / 10.) - 10);
+barchart.g
+    .attr('height', window.innerHeight * 2. / 10. - 10)
+    .attr('transform', 'translate(' + barchart.margin.left + ',' + (window.innerHeight * 8. / 10. - barchart.margin.bottom + 10) + ')');
+barchart.xAxis(barchart.xScale)
+    .yAxis(barchart.yScale)
+    .xLabel('Time [ms]')
+    .yLabel('Spike count')
+    .update();
+barchart.drag();
 
-window.layout = networkLayout('#chart svg')
+window.chart = scatterChart('#chart');
+chart.y = chart.height
+chart.g.attr('height', window.innerHeight * 7. / 10.);
+chart.g.select('#clip').attr('transform', 'translate(0,' + (+chart.g.attr('height') - chart.height) + ')');
+chart.xAxis(chart.xScale)
+    .yAxis(chart.yScale)
+    .yLabel('Neuron ID')
+    .update();
+chart.drag();
+
+window.layout = networkLayout('#chart')
     .nodes(data.nodes)
     .links(data.links)
     .restart()
@@ -169,5 +215,11 @@ $('#autoscale').on('click', function() {
         chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
         chart.yScale.domain([0, data.nodes[1].n])
         chart.update();
+
+        barchart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+        barchart.yScale.domain([0, d3Array.max(data.nodes[2].events.psth, function(d) {
+            return d.length
+        })])
+        barchart.update();
     }
 })

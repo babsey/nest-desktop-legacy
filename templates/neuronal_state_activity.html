@@ -137,9 +137,10 @@
     </div>
 
     <h4 class="title">Neuronal state activity</h4>
-    <div id="chart"></div>
+    <svg id="chart"></svg>
     <script>
         window.$ = require('jquery');
+        $('#chart').attr('width', window.innerWidth).attr('height', window.innerHeight)
         require("../src/simulation/neuronal-state-activity.js");
     </script>
 </body>

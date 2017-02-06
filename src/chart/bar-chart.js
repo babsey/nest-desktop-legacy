@@ -1,5 +1,7 @@
 "use strict"
 
+"use strict"
+
 const $ = require('jquery');
 const d3Array = require('d3-array');
 const d3Axis = require('d3-axis');
@@ -61,7 +63,7 @@ _chart.xAxis = function(xScale) {
     _chart.g.append("g")
         .attr("id", "xaxis")
         .attr("class", "axis")
-        .attr("transform", "translate(0," + _chart.g.attr('height') + ")")
+        .attr("transform", "translate(0," + -1. * +_chart.yScale.range()[1] + _chart.height + ")")
         .style('font-size', '14px')
         .call(_xAxis);
 
@@ -76,7 +78,7 @@ _chart.yAxis = function(yScale) {
         .attr("id", "yaxis")
         .attr("class", "axis")
         .style('font-size', '14px')
-        .attr("transform", "translate(0," + (+_chart.g.attr('height') - window.innerHeight + _chart.margin.bottom + _chart.margin.top) + ")")
+        .attr("transform", "translate(0," + -1. * +_chart.yScale.range()[1] + ")")
         .call(_yAxis);
 
     return _chart
@@ -128,6 +130,8 @@ function yDrag() {
     var yy = ylim0[1] - ylim0[0];
     var ys = _chart.yScale.range();
     var dy = d3Selection.event.dy * yy / (ys[1] - ys[0]);
+    if ((ylim0[0] - dy) < 0) return
+    if (Math.floor(yy) < Math.floor(ylim0[0]) - dy) return
     _chart.yScale.domain([ylim0[0] - dy, ylim0[1] - dy])
 }
 
@@ -187,12 +191,13 @@ _chart.zoom = function() {
     return _chart;
 }
 
-_chart.init = function(reference) {
+_chart.init = function(reference, height) {
     // d3Selection.select(reference).html("");
 
     var svg = d3Selection.select(reference),
-        width = +svg.attr("width") - margin.left - margin.right,
-        height = +svg.attr("height") - margin.top - margin.bottom;
+        width = width || (+svg.attr("width") - margin.left - margin.right),
+        height = height || (+svg.attr("height") - margin.top - margin.bottom);
+
     _chart.svg = svg;
     _chart.width = width;
     _chart.height = height;
@@ -220,4 +225,99 @@ _chart.init = function(reference) {
 
 }
 
-module.exports = _chart
+
+var chart = _chart;
+
+function update() {
+    chart.xScale.range([0, +chart.g.attr('width')])
+    chart.yScale.range([+chart.g.attr('height'), 0])
+
+    if (running || dragging) {
+        chart.g.select('#xaxis')
+            .call(chart.xAxis());
+        chart.g.select('#yaxis')
+            .call(chart.yAxis());
+    } else {
+        chart.g.select('#xaxis')
+            .transition(chart.transition)
+            .call(chart.xAxis());
+        chart.g.select('#yaxis')
+            .transition(chart.transition)
+            .call(chart.yAxis());
+    }
+
+    var bins = chart.data();
+    var bars = chart.g.select('#clip')
+        .selectAll(".bar")
+        .data(bins);
+
+    if (running || dragging) {
+        bars.attr("x", function(d) {
+                return chart.xScale(d.x0)
+            })
+            .attr("y", function(d) {
+                return chart.yScale(d.length)
+            })
+            .attr("width", function(d) {
+                return chart.xScale(d.x1) - chart.xScale(d.x0)
+            })
+            .attr("height", function(d) {
+                return Math.max(0, +chart.g.attr('height') - chart.yScale(d.length));
+            });
+
+        bars.enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) {
+                return chart.xScale(d.x0)
+            })
+            .attr("width", function(d) {
+                return chart.xScale(d.x1) - chart.xScale(d.x0)
+            })
+            .attr("y", function(d) {
+                return chart.yScale(d.length)
+            })
+            .attr("height", function(d) {
+                return Math.max(0, +chart.g.attr('height') - chart.yScale(d.length));
+            });
+
+    } else {
+        bars.transition(chart.transition).attr("x", function(d) {
+                return chart.xScale(d.x0)
+            })
+            .attr("y", function(d) {
+                return chart.yScale(d.length)
+            })
+            .attr("width", function(d) {
+                return chart.xScale(d.x1) - chart.xScale(d.x0)
+            })
+            .attr("height", function(d) {
+                return Math.max(0, +chart.g.attr('height') - chart.yScale(d.length));
+            });
+
+        bars.enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) {
+                return chart.xScale(d.x0)
+            })
+            .attr("width", function(d) {
+                return chart.xScale(d.x1) - chart.xScale(d.x0)
+            })
+            .attr('y', chart.g.attr('height'))
+            .transition(chart.transition)
+            .attr("y", function(d) {
+                return chart.yScale(d.length)
+            })
+            .attr("height", function(d) {
+                return Math.max(0, +chart.g.attr('height') - chart.yScale(d.length));
+            });
+    }
+
+    bars.exit()
+        .remove()
+
+}
+
+chart.update = update;
+module.exports = chart.init;

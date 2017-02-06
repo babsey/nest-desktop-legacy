@@ -1,26 +1,26 @@
 "use strict"
 
-var d3Selection = require('d3-selection');
 var chart = require('./chart');
 
 function update() {
+    chart.yScale.range([chart.height - (+chart.g.attr('y')), chart.height - (+chart.g.attr('height')) - (+chart.g.attr('y'))])
+    chart.xScale.range([0, +chart.g.attr('width')])
 
     if (running || dragging) {
-        d3Selection.select('#xaxis')
-            .call(chart.xAxis);
-        d3Selection.select('#yaxis')
-            .call(chart.yAxis);
+        chart.g.select('#xaxis')
+            .call(chart.xAxis());
+        chart.g.select('#yaxis')
+            .call(chart.yAxis());
     } else {
-        d3Selection.select('#xaxis')
+        chart.g.select('#xaxis')
             .transition(chart.transition)
-            .call(chart.xAxis);
-        d3Selection.select('#yaxis')
+            .call(chart.xAxis());
+        chart.g.select('#yaxis')
             .transition(chart.transition)
-            .call(chart.yAxis);
+            .call(chart.yAxis());
     }
 
-    var dots = d3Selection
-        .select('#clip')
+    var dots = chart.g.select('#clip')
         .selectAll(".dot")
         .data(chart.data().x);
 
@@ -46,4 +46,4 @@ function update() {
 }
 
 chart.update = update;
-module.exports = chart.initChart;
+module.exports = chart.init;

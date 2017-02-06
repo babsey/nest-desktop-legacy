@@ -59,7 +59,7 @@ slider.create_dataSlider('#input', 'input_weight', 4, 'Input synaptic weight', s
     .on('slideStop', function(d) {
         data.links[0].syn_spec.weight = d.value;
     })
-slider.create_dataSlider('#neuron', 'n', 3, 'Population size', slider_options.n)
+slider.create_dataSlider('#neuron', 'n', 1, 'Population size', slider_options.n)
     .on('slideStop', function(d) {
         data.nodes[1].n = d.value;
     })
@@ -116,8 +116,11 @@ function simulate() {
             window.values = ids.map(function() {
                 return []
             });
+            var ylim = d3Array.extent(data.nodes[2].events[data.nodes[2].record_from]);
+            var dy = ylim[1] - ylim[0];
             data.nodes[2].events.senders.map(function(d, i) {
                 values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i])
+                    // values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i]+d*dy)
                 if (d == ids[0]) {
                     times.push(data.nodes[2].events.times[i])
                 }
@@ -131,7 +134,7 @@ function simulate() {
                     x: times,
                     y: values
                 })
-                .ylabel(models.record_labels[data.nodes[2].record_from])
+                .yLabel(models.record_labels[data.nodes[2].record_from])
                 .update();
 
             // selected_node = null;
@@ -164,7 +167,10 @@ function resume() {
             window.values = ids.map(function() {
                 return []
             });
+            var ylim = d3Array.extent(data.nodes[2].events[data.nodes[2].record_from]);
+            var dy = ylim[1] - ylim[0];
             data.nodes[2].events.senders.map(function(d, i) {
+                // values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i]+d*dy)
                 values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i])
                 if (d == ids[0]) {
                     times.push(data.nodes[2].events.times[i])
@@ -179,7 +185,7 @@ function resume() {
                     x: times,
                     y: values
                 })
-                .ylabel(models.record_labels[data.nodes[2].record_from])
+                .yLabel(models.record_labels[data.nodes[2].record_from])
                 .update();
             resume()
         })
@@ -193,11 +199,14 @@ setTimeout(function() {
     nav.network_added(data, simulate, 'neuronal_state_activity')
 }, 1000)
 
-window.chart = lineChart('#chart')
-    .xlabel('Time (ms)')
-    .drag();
+window.chart = lineChart('#chart');
+chart.xAxis(chart.xScale)
+    .yAxis(chart.yScale)
+    .xLabel('Time (ms)')
+    .update();
+chart.drag();
 
-window.layout = networkLayout('#chart svg')
+window.layout = networkLayout('#chart')
     .nodes(data.nodes)
     .links(data.links)
     .restart()
@@ -219,7 +228,7 @@ $('#id_record').on('change', function() {
             x: times,
             y: values
         })
-        .ylabel(models.record_labels[selected_node.record_from] || 'a.u.')
+        .yLabel(models.record_labels[selected_node.record_from] || 'a.u.')
         .update();
 })
 

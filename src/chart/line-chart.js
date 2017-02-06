@@ -1,6 +1,5 @@
 "use strict"
 
-var d3Selection = require('d3-selection');
 var d3Shape = require('d3-shape');
 var chart = require('./chart');
 
@@ -8,32 +7,44 @@ var line = d3Shape.line();
 
 function _draw_line(classname) {
 
-    var lines = d3Selection
-        .select('#clip')
-        .selectAll("." + classname)
+    var lines = chart.g.select('#clip')
+        .selectAll('.' + classname)
         .data(chart.data().y);
 
     if (running || dragging || zooming) {
-        lines.attr("d", line);
+        lines.attr('height', chart.height / chart.data().y.length)
+            .attr("transform", function(d, i) {
+                return "translate(0," + -1 * i * chart.height / chart.data().y.length + ")"
+            })
+            .attr("d", line);
     } else {
-        lines.transition(chart.transition).attr("d", line)
+        lines.transition(chart.transition)
+            .attr('height', chart.height / chart.data().y.length)
+            .attr("transform", function(d, i) {
+                return "translate(0," + -1 * i * chart.height / chart.data().y.length + ")"
+            })
+            .attr("d", line)
     }
 
     lines.enter()
         .append("path")
+        .attr('height', chart.height / chart.data().y.length)
+        .attr("transform", function(d, i) {
+            return "translate(0," + -1 * i * chart.height / chart.data().y.length + ")"
+        })
         .attr("class", function(d, i) {
             return classname + ' line_' + i
         })
         .on('mouseover', function(d, i) {
-            d3Selection.selectAll('#clip')
+            chart.g.selectAll('#clip')
                 .classed('active', true);
-            d3Selection.selectAll('.aline.line_' + i)
+            chart.g.selectAll('.aline.line_' + i)
                 .classed('active', true);
         })
         .on('mouseout', function(d, i) {
-            d3Selection.selectAll('#clip')
+            chart.g.selectAll('#clip')
                 .classed('active', false)
-            d3Selection.selectAll('#clip path')
+            chart.g.selectAll('#clip path')
                 .classed('active', false);
         })
         .attr("style", function() {
@@ -47,19 +58,22 @@ function _draw_line(classname) {
 }
 
 function update() {
+    chart.g.attr('height', chart.height / chart.data().y.length)
+    chart.yScale.range([chart.height, chart.height - (+chart.g.attr('height'))])
+    chart.xScale.range([0, +chart.g.attr('width')])
 
     if (running || dragging || zooming) {
-        d3Selection.select('#xaxis')
-            .call(chart.xAxis);
-        d3Selection.select('#yaxis')
-            .call(chart.yAxis);
+        chart.g.select('#xaxis')
+            .call(chart.xAxis());
+        chart.g.select('#yaxis')
+            .call(chart.yAxis());
     } else {
-        d3Selection.select('#xaxis')
+        chart.g.select('#xaxis')
             .transition(chart.transition)
-            .call(chart.xAxis);
-        d3Selection.select('#yaxis')
+            .call(chart.xAxis());
+        chart.g.select('#yaxis')
             .transition(chart.transition)
-            .call(chart.yAxis);
+            .call(chart.yAxis());
     }
 
     line.x(function(d, i) {
@@ -73,4 +87,4 @@ function update() {
 }
 
 chart.update = update;
-module.exports = chart.initChart
+module.exports = chart.init

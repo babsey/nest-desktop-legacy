@@ -139,6 +139,9 @@ setTimeout(function() {
     simulate()
 }, 1000)
 
-window.chart = heatmapChart('#chart')
-    .xlabel('Neuron Row ID')
-    .ylabel('Neuron Col ID');
+
+window.chart = heatmapChart('#chart');
+chart.xAxis(chart.xScale)
+    .yAxis(chart.yScale)
+    .xLabel('Neuron Row ID')
+    .yLabel('Neuron Col ID');

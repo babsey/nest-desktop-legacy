@@ -21,16 +21,13 @@
 .bline {
     fill: none;
     stroke: white;
-    stroke-width: 15px;
+    stroke-width: 30px;
     opacity: 0.0;
 }
 .aline {
     fill: none;
     stroke: steelblue;
     stroke-width: 1.5px;
-}
-#clip.active .aline:not(.active) {
-    opacity: 0.1;
 }
 #clip.active .aline.active {
     stroke: #FF9900;
@@ -56,4 +53,11 @@
 }
 .link.exc {
     stroke: #467ab3;
+}
+.bar {
+    fill: steelblue;
+    stroke: white;
+}
+.bar:hover {
+    fill: lightsteelblue;
 }
