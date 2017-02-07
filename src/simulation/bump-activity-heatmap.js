@@ -26,6 +26,36 @@ function update_slider() {
     slider.update_dataSlider('sim_time', data.sim_time)
 }
 
+function update() {
+    var times = data.nodes[2].events['times'];
+    var senders = data.nodes[2].events['senders'].filter(function(d, i) {
+        return times[i] > (data.kernel.time - 100)
+    })
+    data.nodes[2].events['senders'] = senders
+    data.nodes[2].events['times'] = times.filter(function(d, i) {
+        return times[i] > (data.kernel.time - 100)
+    })
+
+    var h1 = d3Array.histogram()
+        .domain([1, data.nodes[1].ids.length + 1])
+        .thresholds(data.nodes[1].ids)(senders);
+    var h1 = h1.map(function(d) {
+        return d.length * 1
+    })
+
+    $('#clip').empty()
+    chart.xScale.domain([0, data.nodes[1].nrow])
+    chart.yScale.domain([0, data.nodes[1].ncol])
+    chart.colorScale.domain([0, 5])
+    chart.data({
+            i: d3Array.range(0, h1.length),
+            x: d3Array.range(0, data.nodes[1].ncol),
+            y: d3Array.range(0, data.nodes[1].nrow),
+            c: h1,
+        })
+        .update();
+}
+
 function simulate() {
     update_slider()
 
@@ -48,26 +78,15 @@ function simulate() {
             data.nodes[1].nrow = res.nodes[1].nrow;
             data.nodes[1].ncol = res.nodes[1].ncol;
             data.nodes[2].events = res.nodes[2].events;
-            var times = data.nodes[2].events['times'];
-            var senders = data.nodes[2].events['senders'];
 
-            var h1 = d3Array.histogram()
-                .domain([1, data.nodes[1].ids.length + 1])
-                .thresholds(data.nodes[1].ids)(senders);
-            var h1 = h1.map(function(d) {
-                return d.length * 1
-            })
+            if (chart.xAxis() == null) {
+                chart.xAxis(chart.xScale)
+                    .yAxis(chart.yScale)
+                    .xLabel('Neuron Row ID')
+                    .yLabel('Neuron Col ID');
+            }
 
-            chart.xScale.domain([0, data.nodes[1].nrow])
-            chart.yScale.domain([0, data.nodes[1].ncol])
-            chart.colorScale.domain([0, 5])
-            chart.data({
-                    i: d3Array.range(0, h1.length),
-                    x: d3Array.range(0, data.nodes[1].ncol),
-                    y: d3Array.range(0, data.nodes[1].nrow),
-                    c: h1,
-                })
-                .update();
+            update()
             running = true
             resume()
         })
@@ -75,7 +94,6 @@ function simulate() {
 
 function resume() {
     nav.running_update(running)
-    $('.sliderInput').slider('enable')
     if (!(running)) return
     if ((data.nodes[0].model == undefined) || (data.nodes[1].model == undefined)) return
 
@@ -94,34 +112,9 @@ function resume() {
                 dataEvents[key] = dataEvents[key].concat(res.nodes[2].events[key])
                 data.nodes[2].events[key] = dataEvents[key]
             }
-            delete window.dataEvents
-            var times = data.nodes[2].events['times'];
-            var senders = data.nodes[2].events['senders'].filter(function(d, i) {
-                // return times[i] > (data.kernel.time - data.sim_time)
-                return times[i] > (data.kernel.time - 100)
-            })
-            data.nodes[2].events['senders'] = senders
-            data.nodes[2].events['times'] = times.filter(function(d, i) {
-                // return times[i] > (data.kernel.time - data.sim_time)
-                return times[i] > (data.kernel.time - 100)
-            })
+            delete window.dataEvents;
 
-            var h1 = d3Array.histogram()
-                .domain([1, data.nodes[1].ids.length + 1])
-                .thresholds(data.nodes[1].ids)(senders);
-            var h1 = h1.map(function(d) {
-                return d.length * 1
-            })
-
-            $('#clip').empty()
-            chart.data({
-                    i: d3Array.range(0, h1.length),
-                    x: d3Array.range(0, data.nodes[1].ncol),
-                    y: d3Array.range(0, data.nodes[1].nrow),
-                    c: h1,
-                })
-                .update();
-
+            update()
             resume()
         })
 }
@@ -139,9 +132,4 @@ setTimeout(function() {
     simulate()
 }, 1000)
 
-
 window.chart = heatmapChart('#chart');
-chart.xAxis(chart.xScale)
-    .yAxis(chart.yScale)
-    .xLabel('Neuron Row ID')
-    .yLabel('Neuron Col ID');

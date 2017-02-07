@@ -10,7 +10,7 @@ const d3Selection = require('d3-selection');
 const d3Shape = require('d3-shape');
 const d3Scale = require('d3-scale');
 const d3Transition = require('d3-transition');
-// const d3Zoom = require('d3-zoom');
+const d3Zoom = require('d3-zoom');
 const colorbrewer = require('colorbrewer');
 
 window.dragging = false
@@ -18,7 +18,7 @@ window.zooming = false
 
 var _chart = {
     margin: {
-        top: 20,
+        top: 30,
         right: 40 + 330,
         bottom: 40,
         left: 50
@@ -115,75 +115,36 @@ _chart.yLabel = function(label) {
     return _chart
 }
 
-function xDrag() {
-    var xlim0 = _chart.xScale.domain();
-    var xx = xlim0[1] - xlim0[0];
-    var xs = _chart.xScale.range();
-    var dx = d3Selection.event.dx * xx / (xs[1] - xs[0]);
-    _chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
-}
-
-function yDrag() {
-    var ylim0 = _chart.yScale.domain();
-    var yy = ylim0[1] - ylim0[0];
-    var ys = _chart.yScale.range();
-    var dy = d3Selection.event.dy * yy / (ys[1] - ys[0]);
-    _chart.yScale.domain([ylim0[0] - dy, ylim0[1] - dy])
-}
-
-_chart.drag = function() {
+_chart.onDrag = function(drag) {
+    _chart.drag = d3Drag.drag()
+        .on("start", function() {
+            dragging = true
+        })
+        .on("drag", function() {
+            drag()
+        })
+        .on("end", function() {
+            dragging = false
+        })
     _chart.g.select('#clip')
-        .call(d3Drag.drag()
-            .on("drag", function() {
-                dragging = true
-                $('#autoscale').prop('checked', false)
-                xDrag()
-                yDrag()
-                _chart.update()
-                dragging = false
-            })
-        );
-
-    _chart.g.select('#xaxis')
-        .call(d3Drag.drag()
-            .on("drag", function() {
-                dragging = true
-                $('#autoscale').prop('checked', false)
-                xDrag()
-                _chart.update()
-                dragging = false
-            })
-        );
-    _chart.g.select('#yaxis')
-        .call(d3Drag.drag()
-            .on("drag", function() {
-                dragging = true
-                $('#autoscale').prop('checked', false)
-                yDrag()
-                _chart.update()
-                dragging = false
-            })
-        );
+        .call(_chart.drag);
     return _chart;
 }
 
-_chart.zoom = function() {
-    // _chart.g.select('#_chart')
-    //     .call(d3Zoom.zoom()
-    //         .scaleExtent([1, 10])
-    //         .on("start", function() {
-    //             zooming = true
-    //         })
-    //         .on("zoom", function () {
-    //               d3Selection.select('#_chart').attr("transform", "translate(" + d3Selection.event.translate + ")scale(" + d3Selection.event.scale + ")");
-    //             }
-    //             // _chart.update()
-    //         })
-    //         .on("end", function() {
-    //             zooming = false
-    //         })
-    //     )
-    // .on("dblclick.zoom", null);
+_chart.onZoom = function(zoom) {
+    _chart.zoom = d3Zoom.zoom()
+        .scaleExtent([.1, 10])
+        .on("start", function() {
+            zooming = true
+        })
+        .on("zoom", function() {
+            zoom()
+        })
+        .on("end", function() {
+            zooming = false
+        })
+    _chart.g.select('#clip')
+        .call(_chart.zoom);
     return _chart;
 }
 

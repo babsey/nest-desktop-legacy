@@ -12,20 +12,21 @@ function slider(ref, id, options) {
         value: 1,
         step: 1,
         tooltip: 'hide',
+        show_value: true,
     };
     var options = $.extend(options_default, options);
     $(ref).find('#' + id).find('dt').attr('title', id)
     $(ref).find('#' + id).find('dt').after('<dd></dd>');
     $(ref).find('#' + id).find('dd').append('<input id="' + id + 'Input" class="sliderInput">')
 
-    if (!(Object.prototype.toString.call(options.value) === '[object Array]')) {
+    if (!(Object.prototype.toString.call(options.value) === '[object Array]') && (options.show_value)) {
         $(ref).find('#' + id).find('dd').append('<span id="' + id + 'Val" style="margin-left:10px">' + options.value + '</span>')
     }
 
     var slider = $(ref).find('#' + id).find("#" + id + 'Input').slider(options);
     slider.on("change", function() {
         options.value = $(ref).find('#' + id).find("#" + id + 'Input').val();
-        if (!(Object.prototype.toString.call(options.value) === '[object Array]')) {
+        if (!(Object.prototype.toString.call(options.value) === '[object Array]') && (options.show_value)) {
             $(ref).find('#' + id).find("#" + id + "Val").text(options.value);
         }
     });

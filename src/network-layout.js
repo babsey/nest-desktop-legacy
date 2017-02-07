@@ -128,7 +128,8 @@ function neuralNetwork(reference) {
         .attr('class', 'link dragline hidden')
         .attr('d', 'M0,0L0,0');
 
-    var g = svg.append('g');
+    var g = svg.append('g')
+        .attr('id', 'layout');
     var circle = g.selectAll(".node"),
         path = g.selectAll(".link");
 

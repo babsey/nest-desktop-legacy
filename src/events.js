@@ -21,6 +21,7 @@ function eventHandler(data, simulate, resume) {
         selected_node.params[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
     })
     $('.sliderInput').on('slideStop', function() {
+        if ($(this).parents('.model').attr('id') == 'output') return
         setTimeout(simulate, 100)
     })
     $('.modelSelect').on('change', function() {

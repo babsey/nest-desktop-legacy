@@ -3,6 +3,8 @@
 window.jQuery = window.$ = require('jquery');
 require('bootstrap');
 const d3Array = require('d3-array');
+const d3Selection = require('d3-selection');
+const d3Zoom = require('d3-zoom');
 const events = require('../events');
 const models = require("../models");
 const nav = require('../navigation');
@@ -82,6 +84,57 @@ function update_slider() {
     slider.update_dataSlider('recurrent_weight', data.links[1].syn_spec.weight)
 }
 
+function update() {
+
+    var ids = data.nodes[1].ids;
+    window.times = []
+    var ids = data.nodes[1].ids;
+    window.values = ids.map(function() {
+        return []
+    });
+
+    if (document.getElementById('autoscale').checked) {
+        d3Zoom.zoomIdentity.scale(1)
+        chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
+    }
+
+    data.nodes[2].events.senders.map(function(d, i) {
+        if ((data.nodes[2].events.times[i] >= chart.xScale.domain()[0]) && (data.nodes[2].events.times[i] < chart.xScale.domain()[1])) {
+            values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i])
+            if (d == ids[0]) {
+                times.push(data.nodes[2].events.times[i])
+            }
+        }
+    });
+    chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
+
+    chart.data({
+            x: times,
+            y: values
+        })
+        .yLabel(models.record_labels[data.nodes[2].record_from])
+        .update();
+}
+
+function drag() {
+    $('#autoscale').prop('checked', false)
+    var xlim0 = chart.xScale.domain();
+    var xx = xlim0[1] - xlim0[0];
+    var xs = chart.xScale.range();
+    var dx = d3Selection.event.dx * xx / (xs[1] - xs[0]);
+    chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
+    update()
+}
+
+function zoom() {
+    $('#autoscale').prop('checked', false)
+    var xlim0 = [data.kernel.time - data.sim_time, data.kernel.time];
+    var xx = (xlim0[0] + xlim0[1]) / 2;
+    var k = d3Selection.event.transform.k;
+    chart.xScale.domain([xx - xx / k, xx + xx / k])
+    update()
+}
+
 function simulate() {
     layout.restart()
     update_slider()
@@ -111,34 +164,16 @@ function simulate() {
                 data.nodes[idx].ids = res.nodes[idx].ids;
             }
             data.nodes[2].events = res.nodes[2].events;
-            var ids = data.nodes[1].ids;
-            window.times = []
-            window.values = ids.map(function() {
-                return []
-            });
-            var ylim = d3Array.extent(data.nodes[2].events[data.nodes[2].record_from]);
-            var dy = ylim[1] - ylim[0];
-            data.nodes[2].events.senders.map(function(d, i) {
-                values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i])
-                    // values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i]+d*dy)
-                if (d == ids[0]) {
-                    times.push(data.nodes[2].events.times[i])
-                }
-            });
 
-            if (document.getElementById('autoscale').checked) {
-                chart.xScale.domain(d3Array.extent(times))
-                chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
+            if (chart.xAxis() == null) {
+                chart.xAxis(chart.xScale)
+                    .yAxis(chart.yScale)
+                    .xLabel('Time (ms)');
+                chart
+                    .onDrag(drag)
+                    .onZoom(zoom);
             }
-            chart.data({
-                    x: times,
-                    y: values
-                })
-                .yLabel(models.record_labels[data.nodes[2].record_from])
-                .update();
-
-            // selected_node = null;
-            // selected_link = null;
+            update()
         })
 }
 
@@ -162,31 +197,8 @@ function resume() {
                 dataEvents[key] = dataEvents[key].concat(res.nodes[2].events[key])
                 data.nodes[2].events[key] = dataEvents[key]
             }
-            window.times = []
-            var ids = data.nodes[1].ids;
-            window.values = ids.map(function() {
-                return []
-            });
-            var ylim = d3Array.extent(data.nodes[2].events[data.nodes[2].record_from]);
-            var dy = ylim[1] - ylim[0];
-            data.nodes[2].events.senders.map(function(d, i) {
-                // values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i]+d*dy)
-                values[d - ids[0]].push(data.nodes[2].events[data.nodes[2].record_from][i])
-                if (d == ids[0]) {
-                    times.push(data.nodes[2].events.times[i])
-                }
-            });
 
-            if (document.getElementById('autoscale').checked) {
-                chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-                chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
-            }
-            chart.data({
-                    x: times,
-                    y: values
-                })
-                .yLabel(models.record_labels[data.nodes[2].record_from])
-                .update();
+            update()
             resume()
         })
 }
@@ -200,12 +212,6 @@ setTimeout(function() {
 }, 1000)
 
 window.chart = lineChart('#chart');
-chart.xAxis(chart.xScale)
-    .yAxis(chart.yScale)
-    .xLabel('Time (ms)')
-    .update();
-chart.drag();
-
 window.layout = networkLayout('#chart')
     .nodes(data.nodes)
     .links(data.links)
@@ -232,10 +238,4 @@ $('#id_record').on('change', function() {
         .update();
 })
 
-$('#autoscale').on('click', function() {
-    if (document.getElementById('autoscale').checked) {
-        chart.xScale.domain([data.kernel.time - data.sim_time, data.kernel.time])
-        chart.yScale.domain(d3Array.extent([].concat.apply([], values)))
-        chart.update();
-    }
-})
+$('#autoscale').on('click', update)

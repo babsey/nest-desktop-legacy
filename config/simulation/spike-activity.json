@@ -19,6 +19,7 @@
             "model": "spike_detector",
             "x": 300,
             "y": 0,
+            "binwidth": 10.0,
             "params": {}
         }],
         "links": [{
@@ -81,6 +82,12 @@
             "min": -10.0,
             "max": 10.0,
             "step": 0.1
+        },
+        "binwidth": {
+            "value": 1,
+            "ticks": [0, 1, 2, 3, 4],
+            "ticks_labels": [5, 10, 20, 50, 100],
+            "show_value": false
         }
     }
 }

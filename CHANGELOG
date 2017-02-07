@@ -1,6 +1,10 @@
 CHANGELOG
 ---------
 
+0.5.3:
+    Zoom chart
+    histogram binwidth
+
 0.5.2:
     Stacked line chart
     Bar chart
