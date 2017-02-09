@@ -1,6 +1,6 @@
 "use strict"
 
-var chart = require('./chart');
+const chart = require('./chart');
 
 function update() {
     chart.yScale.range([chart.height - (+chart.g.attr('y')), chart.height - (+chart.g.attr('height')) - (+chart.g.attr('y'))])

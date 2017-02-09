@@ -1,9 +1,5 @@
 "use strict"
 
-const $ = require('jquery');
-const slider = require('./slider');
-var config = require('../config');
-
 var record_labels = {
     'g_ex': 'Conductance',
     'g_in': 'Conductance',
@@ -16,21 +12,6 @@ var record_labels = {
 }
 
 var recordables = {}
-
-function load_model_list() {
-    var modelTypes = ['input', 'neuron'];
-    for (var idx in modelTypes) {
-        var modelDefaults = config.models(modelTypes[idx])
-        for (var idx in modelDefaults) {
-            var model = modelDefaults[idx];
-            $("<option class='modelSelect' id='" + model.id + "' value=" + model.id + ">" + model.label + "</option>").appendTo("." + model.type + 'Select')
-            slider.init_paramSlider(model)
-        }
-    }
-    setTimeout(function() {
-        $('.paramSlider').hide()
-    }, 100)
-}
 
 function model_selected(node) {
     $('#node_' + node.id).find('option#' + node.model).prop('selected', true);
@@ -53,7 +34,6 @@ function get_recordables_list(output) {
 
 module.exports = {
     record_labels: record_labels,
-    load_model_list: load_model_list,
     model_selected: model_selected,
     get_recordables_list: get_recordables_list,
 }

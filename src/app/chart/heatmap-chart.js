@@ -1,7 +1,6 @@
 "use strict"
 
-var d3 = require('d3');
-var chart = require('./chart');
+const chart = require('./chart');
 
 function legend() {
     var l = chart.g.select('#heatmap')

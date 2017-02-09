@@ -1,7 +1,5 @@
 "use strict"
 
-const $ = require('jquery');
-const d3 = require('d3');
 const colorbrewer = require('colorbrewer');
 
 window.dragging = false
@@ -38,6 +36,8 @@ var _data = {
     y: [],
     c: [],
 };
+
+_chart.line = d3.line();
 
 _chart.data = function(d) {
     if (!arguments.length) return _data;

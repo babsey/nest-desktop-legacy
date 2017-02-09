@@ -132,11 +132,12 @@
     // const auth = require('../auth');
     const sync = require('./app/store/sync');
     const q = require('./app/store/query');
-    const req = require('./app/lib/request');
+
+    window.app = require('./app/app');
     var config = require('./app/config').global();
 
     window.serverRunning = false;
-    req.server_check()
+    app.request.server_check()
 
     function update_network() {
 
@@ -157,7 +158,7 @@
     });
 
     $('.simulation').on('click', function(event) {
-        localStorage.setItem("lastSimulation", this.id);
+        localStorage.setItem("currentSimulation", this.id);
     });
 </script>
 

@@ -1,9 +1,7 @@
 "use strict"
 
-const $ = require("jquery");
 const Slider = require("bootstrap-slider");
-var config = require('../config');
-var settings = config.global();
+var config_global = require('../config').global();
 
 function slider(ref, id, options) {
     var options_default = {
@@ -41,21 +39,100 @@ function create_dataSlider(ref, id, value, options) {
     options.value = value
     $(ref).append('<dl id="' + id + '" class="dataSlider" level="' + options.level + '"></dl>')
     $(ref).find('#' + id).append('<dt>' + options.label + '</dt>')
-    $('#' + id).attr('level') > settings.get('level') ? $('#' + id).hide() : $('#' + id).show()
+    $('#' + id).attr('level') > config_global.get('level') ? $('#' + id).hide() : $('#' + id).show()
     return slider(ref, id, options);
 }
 
-function update_dataSlider(id, value) {
-    $('#' + id).attr('level') > settings.get('level') ? $('#' + id).hide() : $('#' + id).show()
+function _update_dataSlider(id, value) {
+    $('#' + id).attr('level') > config_global.get('level') ? $('#' + id).hide() : $('#' + id).show()
     $('#' + id + 'Input').slider('setValue', value)
     $('#' + id + 'Val').html(value)
+}
+
+function update_dataSlider() {
+    var slider_options = config.simulation(simulation).slider_options;
+    _update_dataSlider('sim_time', data.sim_time)
+    _update_dataSlider('grng_seed', data.kernel.grng_seed)
+    _update_dataSlider('stim_time', data.nodes[0].stim_time)
+    _update_dataSlider('n', data.nodes[1].n)
+    _update_dataSlider('input_weight', data.links[0].syn_spec.weight)
+    _update_dataSlider('outdegree', data.links[1].conn_spec.outdegree)
+    _update_dataSlider('recurrent_weight', data.links[1].syn_spec.weight)
+    if (slider_options.binwidth) {
+        _update_dataSlider('binwidth', slider_options.binwidth.ticks_labels.indexOf(data.nodes[2].binwidth))
+    }
+}
+
+function init_dataSlider() {
+
+    var slider_options = config.simulation(simulation).slider_options;
+    if (slider_options.sim_time) {
+        create_dataSlider('#global', 'sim_time', data.sim_time, slider_options.sim_time)
+            .on('slideStop', function(d) {
+                data.sim_time = d.value;
+                if (data.nodes[0].stim_time[1] < data.sim_time) {
+                    data.nodes[0].params.stop = data.nodes[0].stim_time[1]
+                } else {
+                    delete data.nodes[0].params.stop
+                }
+            })
+    }
+    if (slider_options.grng_seed) {
+        create_dataSlider('#global', 'grng_seed', data.kernel.grng_seed, slider_options.grng_seed)
+            .on('slideStop', function(d) {
+                data.kernel.grng_seed = d.value;
+            })
+    }
+    if (slider_options.stim_time) {
+        create_dataSlider('#node_0', 'stim_time', data.nodes[0].stim_time, slider_options.stim_time)
+            .on('slideStop', function(d) {
+                data.nodes[0].stim_time = d.value;
+                data.nodes[0].params.start = d.value[0];
+                if (data.nodes[0].stim_time[1] < data.sim_time) {
+                    data.nodes[0].params.stop = data.nodes[0].stim_time[1]
+                } else {
+                    delete data.nodes[0].params.stop
+                }
+            })
+    }
+    if (slider_options.input_weight) {
+        create_dataSlider('#node_0', 'input_weight', data.links[0].syn_spec.weight, slider_options.input_weight)
+            .on('slideStop', function(d) {
+                data.links[0].syn_spec.weight = d.value;
+            })
+    }
+    if (slider_options.n) {
+        create_dataSlider('#node_1', 'n', data.nodes[1].n, slider_options.n)
+            .on('slideStop', function(d) {
+                data.nodes[1].n = d.value;
+            })
+    }
+    if (slider_options.outdegree) {
+        create_dataSlider('#node_1', 'outdegree', data.links[1].conn_spec.outdegree, slider_options.outdegree)
+            .on('slideStop', function(d) {
+                data.links[1].conn_spec.outdegree = d.value;
+            })
+    }
+    if (slider_options.recurrent_weight) {
+        create_dataSlider('#node_1', 'recurrent_weight', data.links[1].syn_spec.weight, slider_options.recurrent_weight)
+            .on('slideStop', function(d) {
+                data.links[1].syn_spec.weight = d.value;
+            })
+    }
+    if (slider_options.binwidth) {
+        create_dataSlider('#node_2', 'binwidth', slider_options.binwidth.ticks_labels.indexOf(data.nodes[2].binwidth), slider_options.binwidth)
+            .on('slideStop', function(d) {
+                data.nodes[2].binwidth = slider_options.binwidth.ticks_labels[d.value];
+            })
+    }
+    update_dataSlider()
 }
 
 function update_dataSlider_level() {
     var ds = $('.dataSlider');
     ds.each(function() {
         var pid = this.id;
-        $('#' + this.id).attr('level') > settings.get('level') ? $('#' + pid).hide() : $('#' + pid).show()
+        $('#' + this.id).attr('level') > config_global.get('level') ? $('#' + pid).hide() : $('#' + pid).show()
     })
 }
 
@@ -71,7 +148,7 @@ function create_paramSlider(ref, id, options) {
 }
 
 function init_paramSlider(ref, model) {
-    $(ref).append('<div class="'+ model.id +' modelSlider" style="display:none"></div>')
+    $(ref).append('<div class="' + model.id + ' modelSlider" style="display:none"></div>')
     for (var idx in model.sliderDefaults) {
         var p = model.sliderDefaults[idx];
         var options = {
@@ -100,13 +177,14 @@ function update_paramSlider(node) {
         } else {
             node.params[pid] = modelSlider.find('#' + pid + 'Input').slider('getValue')
         }
-        modelSlider.find('#' + pid).attr('level') > settings.get('level') ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
+        modelSlider.find('#' + pid).attr('level') > config_global.get('level') ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
     ref.find('.' + model).show();
 }
 
 
 module.exports = {
+    init_dataSlider: init_dataSlider,
     create_dataSlider: create_dataSlider,
     update_dataSlider: update_dataSlider,
     update_dataSlider_level: update_dataSlider_level,

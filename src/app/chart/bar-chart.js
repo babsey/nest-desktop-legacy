@@ -1,6 +1,6 @@
 "use strict"
 
-var chart = require('./chart1');
+const chart = require('./chart1');
 
 function update() {
     chart.xScale.range([0, +chart.g.attr('width')])

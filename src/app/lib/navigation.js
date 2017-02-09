@@ -1,25 +1,21 @@
 "use strict"
 
-const models = require('./models');
-const slider = require('./slider');
 const q = require('../store/query');
-var config = require('../config');
+var config_global = require('../config').global();
 
-function init_controller(nodes) {
-    nodes.map(function(node, nidx) {
+function init_controller() {
+    data.nodes.map(function(node, nidx) {
         $('#controller-panel .panel-body').append('<hr>')
         $('#controller-panel .panel-body').append('<div id="node_' + nidx + '" class="model ' + node.type + '" nidx="' + nidx + '"></div>')
-
         if (node.type == 'neuron' || node.type == 'input') {
             $('#controller-panel .panel-body').find('#node_' + nidx).append('<select id="select_' + nidx + '" class="' + node.type + 'Select form-control modelSelect"></select>')
             $('<option disabled selected hidden> Select an ' + node.type + ' device </option> ').appendTo("#select_" + nidx)
-
             $('#node_' + nidx).append('<div class="params"></div>')
             var modelDefaults = config.models(node.type)
             for (var midx in modelDefaults) {
                 var model = modelDefaults[midx];
                 $("<option class='modelSelect' id='" + model.id + "' value=" + model.id + ">" + model.label + "</option>").appendTo("#select_" + nidx)
-                slider.init_paramSlider('#node_' + nidx + ' .params', model)
+                app.slider.init_paramSlider('#node_' + nidx + ' .params', model)
             }
         } else if (node.type == 'output') {
             if (node.model == 'multimeter') {
@@ -28,56 +24,33 @@ function init_controller(nodes) {
                 $('<select id="id_record" class="form-control"></select>').appendTo('#node_' + nidx + ' .form-group')
             }
         }
-
+    })
+    app.slider.init_dataSlider()
+    data.nodes.map(function(node) {
+        if (node.model) {
+            app.models.model_selected(node)
+            app.slider.update_paramSlider(node)
+        }
     })
 }
 
-function init_button(data, nest_app) {
-    var config_global = config.global()
-    get_network_list(data, nest_app)
-
+function init_button(simulate) {
+    get_network_list(simulate)
     $('#network-add-submit').on('click', function(e) {
         q.add({
             date: new Date,
             name: $('#network-add-form #network-name').val(),
-            nest_app: nest_app,
+            nest_app: simulation,
             data: data
         })
     })
-
     $("#network-config").find('#level_' + config_global.get('level')).find('.glyphicon-ok').show()
-
-    setTimeout(function() {
-        $('.modelSelect').on('click', function() {
-            if ((data.nodes[0].model != undefined) && (data.nodes[1].model != undefined)) {
-                $('#network-add').attr('disabled', false)
-            }
-        })
-
-        $('.sliderInput').on('slideStop', function() {
-            if ((data.nodes[0].model != undefined) && (data.nodes[1].model != undefined)) {
-                $('#network-add').attr('disabled', false)
-            }
-        })
-        $('.level').on('click', function() {
-            $('.level').find('.glyphicon-ok').hide()
-            config_global.set('level', parseInt($(this).attr('level')))
-            slider.update_dataSlider_level()
-            for (var nid in data.nodes) {
-                var node = data.nodes[nid];
-                if (node.model) {
-                    slider.update_paramSlider(node)
-                }
-            }
-            $(this).find('.glyphicon-ok').show()
-        })
-    }, 100)
 }
 
-function get_network_list(data, name) {
+function get_network_list(simulate) {
     $('#get-network-list').attr('disabled', 'disabled')
     $('#network-list').empty()
-    q.filter_by_nest_app(name).then(function(response) {
+    q.filter_by_nest_app(simulation).then(function(response) {
         if (response.length == 0) return
         for (var i = 0; i < response.length; i++) {
             var doc = q.get(response[i]).then(function(docs) {
@@ -89,11 +62,10 @@ function get_network_list(data, name) {
             });
         }
         $('#get-network-list').attr('disabled', false)
-
         setTimeout(function() {
             $('.network').on('click', function(d) {
-                window.running = false
-                running_update(running)
+                $('#autoscale').prop('checked', 'checked')
+                run(false)
                 q.get(this.id).then(function(docs) {
                     data.sim_time = docs.data.sim_time || 1000.;
                     data.kernel = docs.data.kernel;
@@ -101,39 +73,28 @@ function get_network_list(data, name) {
                         var node = docs.data.nodes[nid];
                         window.selected_node = data.nodes[nid];
                         selected_node.model = node.model;
-                        models.model_selected(selected_node)
+                        app.models.model_selected(selected_node)
                         selected_node.params = node.params
                         if (selected_node.type == 'neuron') {
                             selected_node.n = node.n;
                         }
-                        slider.update_paramSlider(selected_node)
+                        app.slider.update_paramSlider(selected_node)
                     }
                     for (var lid in docs.data.links) {
                         var link = docs.data.links[lid];
                         data.links[lid] = link;
                     }
-                    slider.update_dataSlider_level()
+                    app.slider.update_dataSlider()
                     $('#network-add').attr('disabled', 'disabled');
-                })
-            })
-        }, 10)
-    })
-}
-
-function network_added(data, simulate, name) {
-    $('#network-add-submit').on('click', function() {
-        setTimeout(function() {
-            get_network_list(data, name)
-            setTimeout(function() {
-                $('.network').on('click', function() {
                     setTimeout(simulate, 100)
                 })
-            }, 100)
+            })
         }, 100)
     })
 }
 
-function running_update(running) {
+function run(running) {
+    window.running = running
     if (running) {
         $('#network-resume').find('.glyphicon').hide()
         $('#network-resume').find('.glyphicon-pause').show()
@@ -150,6 +111,5 @@ module.exports = {
     init_controller: init_controller,
     init_button: init_button,
     get_network_list: get_network_list,
-    network_added: network_added,
-    running_update: running_update
+    run: run
 }

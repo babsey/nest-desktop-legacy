@@ -1,9 +1,6 @@
 "use strict"
 
-var d3 = require('d3');
-var chart = require('./chart');
-
-var line = d3.line();
+const chart = require('./chart');
 
 function _draw_line(classname) {
 
@@ -16,14 +13,14 @@ function _draw_line(classname) {
             .attr("transform", function(d, i) {
                 return "translate(0," + -1 * i * chart.height / chart.data().y.length + ")"
             })
-            .attr("d", line);
+            .attr("d", chart.line);
     } else {
         lines.transition(chart.transition)
             .attr('height', chart.height / chart.data().y.length)
             .attr("transform", function(d, i) {
                 return "translate(0," + -1 * i * chart.height / chart.data().y.length + ")"
             })
-            .attr("d", line)
+            .attr("d", chart.line)
     }
 
     lines.enter()
@@ -51,7 +48,7 @@ function _draw_line(classname) {
             return 'zscore:' + (classname == 'aline' ? 1 : -1000)
         })
         .transition(chart.transition)
-        .attr("d", line);
+        .attr("d", chart.line);
 
     lines.exit()
         .remove();
@@ -76,7 +73,7 @@ function update() {
             .call(chart.yAxis());
     }
 
-    line.x(function(d, i) {
+    chart.line.x(function(d, i) {
         return chart.xScale(chart.data().x[i]);
     }).y(function(d) {
         return chart.yScale(d);

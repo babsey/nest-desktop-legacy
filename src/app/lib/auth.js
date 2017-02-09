@@ -3,7 +3,7 @@
 const PouchDB = require('pouchdb');
 const auth = require('../store/auth');
 const q = require('../store/query');
-var config = require('../config').global();
+var config_global = require('../config').global();
 
 function login(name, password, reset_db) {
     config.set('user', {
@@ -13,7 +13,7 @@ function login(name, password, reset_db) {
     auth.update_db_name()
 
     if (reset_db) {
-        var localDB = new PouchDB(config.get('db_name'), {
+        var localDB = new PouchDB(config_global.get('db_name'), {
             adapter: 'idb'
         });
         localDB.destroy()
@@ -28,7 +28,7 @@ function logout(reset_db) {
     })
 
     if (reset_db) {
-        var localDB = new PouchDB(config.get('db_name'), {
+        var localDB = new PouchDB(config_global.get('db_name'), {
             adapter: 'idb'
         });
         localDB.destroy()

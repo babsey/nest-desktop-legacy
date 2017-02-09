@@ -1,6 +1,5 @@
 "use strict"
 
-const $ = require('jquery')
 const uuidV4 = require('uuid/v4');
 
 function message(mode, content) {

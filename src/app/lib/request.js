@@ -1,28 +1,24 @@
 "use strict"
 
-const $ = require("jquery");
 require("bootstrap-slider");
-const message = require('./message');
-var config = require('../config').global();
+var config_global = require('../config').global();
+window.running = false;
 
 let {
     host,
     port
-} = config.get('nestServer');
+} = config_global.get('nestServer');
 var serverURL = host + ':' + port;
-
-window.running = false;
-window.serverRunning = false;
 
 function server_check() {
     return $.ajax({
         method: "GET",
         url: "http://" + serverURL,
     }).fail(function(d) {
-        message('Warning', 'The connection to the NEST server (' + serverURL + ') failed.')
+        app.message('Warning', 'The connection to the NEST server (' + serverURL + ') failed.')
     }).done(function() {
         window.serverRunning = true
-        message('Success', 'The connection to the NEST server (' + serverURL + ')  established.')
+        app.message('Success', 'The connection to the NEST server (' + serverURL + ')  established.')
     })
 }
 

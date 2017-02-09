@@ -112,9 +112,19 @@
     <h4 class="title">Nest desktop</h4>
     <svg id="chart"></svg>
     <script>
-        window.$ = require('jquery');
-        var simulation = localStorage['lastSimulation'];
+        window.$ = window.jQuery = require('jquery');
+        window.d3 = require('d3');
+        window.config = require('../app/config');
+        window.app = require('../app/app');
+        window.simulation = localStorage['currentSimulation'];
+
+        window.serverRunning = false;
+        window.running = false;
+        window.data = config.simulation(simulation).data;
+
         $('.title').html(simulation)
+        app.navigation.init_controller()
+
         $('#chart').attr('width', window.innerWidth).attr('height', window.innerHeight)
         require('../app/simulation/'+ simulation +'.js');
     </script>

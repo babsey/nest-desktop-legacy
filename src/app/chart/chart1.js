@@ -1,7 +1,5 @@
 "use strict"
 
-const $ = require('jquery');
-const d3 = require('d3');
 const colorbrewer = require('colorbrewer');
 
 window.dragging = false

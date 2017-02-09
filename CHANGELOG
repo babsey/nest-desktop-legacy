@@ -1,6 +1,13 @@
 CHANGELOG
 ---------
 
+0.5.5:
+    Reorganize code structure
+
+0.5.4:
+    Merging templates
+    Reorganize code structure
+
 0.5.3:
     Zoom chart
     histogram binwidth
