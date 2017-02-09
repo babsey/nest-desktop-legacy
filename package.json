@@ -27,6 +27,7 @@
     "bootstrap": "^3.3.7",
     "bootstrap-slider": "^9.5.3",
     "colorbrewer": "^1.0.0",
+    "d3": "^4.5.0",
     "d3-array": "^1.0.2",
     "d3-axis": "^1.0.4",
     "d3-color": "^1.0.2",

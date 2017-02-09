@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Heatmap Chart</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href='../assets/css/chart.css'></link>
+    <link rel="stylesheet" href='../assets/css/styles.css'></link>
+</head>
+
+<body>
+    <div id="controller" class="container pull-right">
+        <div class="pull-right">
+            <a type="button" class="btn btn-default navbar-btn" href="../index.html">
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
+            </a>
+            <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </div>
+    </div>
+
+    <div id="chart"></div>
+    <script>
+        var math = require('mathjs');
+        var d3 = require('d3');
+        var colorbrewer = require('colorbrewer');
+        var heatmapChart = require("../app/chart/heatmap-chart");
+
+        function random(n) {
+            return Array.apply(null, Array(n)).map(function(_, i) {
+                return Math.random();
+            });
+        }
+
+        var chart = heatmapChart('#chart');
+        var n = 10;
+        var c = math.random([n * n])
+        chart.xScale.domain([0, n])
+        chart.yScale.domain([0, n])
+        chart.colorScale.domain([0, 1])
+        chart.colorScale.range(['#fff', '#000'])
+        chart.data({
+                x: d3.range(0, n),
+                y: d3.range(0, n),
+                c: c,
+            })
+            .legend()
+            .update();
+    </script>
+</body>
+
+</html>

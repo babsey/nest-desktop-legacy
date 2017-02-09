@@ -1,0 +1,55 @@
+.jumbotron {
+    background-color:transparent;
+    height: 250px;
+}
+#jumbotron-bg {
+    background-image: url(../img/neuron-network_invert0.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position-x: center;
+    background-size: cover;
+    width: 100%;
+    height: 250px;
+    opacity: 0.2;
+    top: 0px;
+    position: absolute;
+    z-index: -1;
+    border-bottom: 1px solid #000;
+}
+.title {
+    position: fixed;
+    left: 70px;
+}
+#message {
+    position:absolute;
+    padding: 10px;
+}
+#message div {
+    margin-bottom: 5px
+}
+#controller {
+    z-index: 1000;
+    width: 334px;
+}
+#controller-body {
+    width: 303px;
+}
+/*#controller-panel {
+    background-color: transparent;
+}
+#controller-panel:hover {
+    background-color: white;
+}*/
+.paramSlider, .dataSlider {
+    margin-bottom: 0px;
+}
+.paramSlider dt, .dataSlider dt {
+    margin-top: 10px;
+}
+.slider-handle {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #ccc;
+}
+.slider-selection {
+    background: #dcdcdc none repeat scroll 0 0;
+}

@@ -1,0 +1,106 @@
+{
+    "data": {
+        "network": "simple",
+        "kernel": {},
+        "nodes": [{
+            "type": "input",
+            "model": "dc_generator",
+            "x": 0,
+            "y": 50,
+            "params": {
+                "amplitude": 10.0,
+                "start": 50.0,
+                "stop": 1050.0
+            }
+        }, {
+            "type": "neuron",
+            "model": "iaf_psc_exp",
+            "x": 100,
+            "y": 0,
+            "params": {
+                "tau_m": 40.0,
+                "t_ref": 2.0,
+                "tau_syn_ex": 1.5,
+                "tau_syn_in": 1.5,
+                "C_m": 40.0,
+                "V_reset": 0.0,
+                "E_L": 0.0,
+                "V_m": 0.0,
+                "V_th": 15.0
+            }
+        }, {
+            "type": "neuron",
+            "model": "iaf_psc_exp",
+            "x": 200,
+            "y": 0,
+            "params": {
+                "tau_m": 40.0,
+                "t_ref": 2.0,
+                "tau_syn_ex": 1.5,
+                "tau_syn_in": 1.5,
+                "C_m": 40.0,
+                "V_reset": 0.0,
+                "E_L": 0.0,
+                "V_m": 0.0,
+                "V_th": 15.0
+            }
+        }, {
+            "type": "output",
+            "model": "multimeter",
+            "x": 300,
+            "y": 50,
+            "params": {},
+            "record_from": "V_m"
+        }],
+        "links": [{
+            "source": 0,
+            "target": 1,
+            "syn_spec": {}
+        }, {
+            "source": 1,
+            "target": 2,
+            "syn_spec": {
+                "model": "tsodysk_synapse",
+                "tau_psc": 1.5,
+                "tau_rec": 130.0,
+                "tau_fac": 530.0,
+                "U": 0.03,
+                "delay": 0.1,
+                "weight": 1540.0,
+                "u": 0.0,
+                "x": 1.0
+            }
+        }, {
+            "source": 2,
+            "target": 3
+        }]
+    },
+    "slider_options": {
+        "sim_time": {
+            "value": 1000.0,
+            "min": 100.0,
+            "max": 2000.0,
+            "step": 100.0
+        },
+        "grng_seed": {
+            "value": 0,
+            "min": 0,
+            "max": 1000,
+            "step": 1
+        },
+        "stim_time": {
+            "value": [0.0, 1000.0],
+            "min": 0.0,
+            "max": 1000.0,
+            "step": 10.0,
+            "tooltip": "show",
+            "tooltip_split": true
+        },
+        "input_weight": {
+            "value": 1.0,
+            "min": -10.0,
+            "max": 10.0,
+            "step": 0.1
+        }
+    }
+}

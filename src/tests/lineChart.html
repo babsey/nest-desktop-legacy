@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Line chart</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href='../assets/css/chart.css'></link>
+    <link rel="stylesheet" href='../assets/css/main.css'></link>
+</head>
+
+<body>
+    <div id="controller" class="container pull-right">
+        <div class="pull-right">
+            <a type="button" class="btn btn-default navbar-btn" href="../index.html">
+                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
+            </a>
+            <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </div>
+    </div>
+
+    <div id="chart"></div>
+    <script>
+        var math = require('mathjs');
+        var d3 = require('d3');
+        var lineChart = require("../app/chart/line-chart");
+
+        var chart = lineChart('#chart');
+        var n = 100;
+        chart.xScale.domain([0, n])
+        chart.data({
+                x: d3.range(n),
+                y: math.random([10, n]),
+            })
+            .update();
+    </script>
+</body>
+
+</html>

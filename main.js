@@ -2,7 +2,7 @@ const electron = require('electron');
 const app = electron.app;   // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;   // Module to create native browser window.
 
-var config = require('./src/config').global();
+var config = require('./src/app/config').global();
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
@@ -37,7 +37,7 @@ function createWindow() {
         height: height,
         frame: config.store.window.frame,
         title: 'A NEST desktop application',
-        icon: './dist/img/icon.png',
+        icon: './src/assets/img/icon.png',
         "node-integration": true,
     });
 
@@ -58,7 +58,7 @@ function createWindow() {
     });
 
     // and load the index.html of the app.
-    mainWindow.loadURL('file://' + __dirname + '/index.html');
+    mainWindow.loadURL('file://' + __dirname + '/src/index.html');
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools();
