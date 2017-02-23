@@ -27,6 +27,7 @@
     "bootstrap": "^3.3.7",
     "bootstrap-slider": "^9.5.3",
     "colorbrewer": "^1.0.0",
+    "configstore": "^3.0.0",
     "d3": "^4.5.0",
     "debug": "^2.6.0",
     "electron": "^1.4.15",

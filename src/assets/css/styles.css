@@ -3,7 +3,7 @@
     height: 250px;
 }
 #jumbotron-bg {
-    background-image: url(../img/neuron-network_invert0.jpg);
+    background-image: url(../img/background.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position-x: center;
@@ -16,13 +16,18 @@
     z-index: -1;
     border-bottom: 1px solid #000;
 }
-.title {
+#header {
     position: fixed;
     left: 70px;
 }
+/*#title {
+    text-transform:capitalize;
+}*/
 #message {
-    position:absolute;
+    position: absolute;
+    left: 300px;
     padding: 10px;
+    z-index: 1000;
 }
 #message div {
     margin-bottom: 5px
@@ -33,6 +38,13 @@
 }
 #controller-body {
     width: 303px;
+}
+#tabs{
+    padding:5px
+}
+.panel-body {
+    padding: 10px 15px;
+    margin: 4px 0px;
 }
 /*#controller-panel {
     background-color: transparent;

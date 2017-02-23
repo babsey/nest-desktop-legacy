@@ -1,0 +1,79 @@
+{
+    "_id": "bump-activity",
+    "name": "Bump activity",
+    "user": "default",
+    "runSimulation": true,
+    "network": "gamma",
+    "sim_time": 1000.0,
+    "res_time": 100.0,
+    "kernel": {
+        "grng_seed": 0
+    },
+    "nodes": [{
+        "id": 0,
+        "type": "input",
+        "model": "noise_generator",
+        "x": 0,
+        "y": 0,
+        "stim_time": [0.0, 1000.0],
+        "params": {
+            "mean": 1000.0,
+            "std": 250.0
+        }
+    }, {
+        "id": 1,
+        "type": "neuron",
+        "model": "iaf_cond_alpha",
+        "x": 150,
+        "y": 50,
+        "n": 900,
+        "nrow": 30,
+        "ncol": 30,
+        "params": {
+            "C_m": 200.0,
+            "E_L": -80.0,
+            "E_ex": 0.0,
+            "E_in": -64.0,
+            "V_reset": -80.0,
+            "V_th": -45.0,
+            "g_L": 12.5,
+            "t_ref": 2.0,
+            "tau_minus": 20.0,
+            "tau_syn_ex": 5.0,
+            "tau_syn_in": 10.0
+        }
+    }, {
+        "id": 2,
+        "type": "output",
+        "model": "spike_detector",
+        "x": 300,
+        "y": 0,
+        "nbins": 100,
+        "params": {
+            "start": 100.0
+        }
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 1,
+        "syn_spec": {
+            "weight": 1.0
+        }
+    }, {
+        "id": 1,
+        "source": 1,
+        "target": 1,
+        "conn_spec": {
+            "rule": "fixed_outdegree",
+            "outdegree": 900
+        },
+        "syn_spec": {
+            "weight": -1.0
+        }
+    }, {
+        "id": 2,
+        "source": 1,
+        "target": 2
+    }]
+}

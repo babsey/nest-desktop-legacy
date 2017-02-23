@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css" />
+    <link rel="stylesheet" href='../assets/css/chart.css'></link>
+    <link rel="stylesheet" href='../assets/css/styles.css'></link>
+    <title>NEST Desktop</title>
+</head>
+
+<body>
+    <div id="message"></div>
+
+    <div id="content">
+        <div id="controller" class="pull-right">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-default navbar-btn" id="index">
+                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
+                    </button>
+                    <button type="button" class="btn btn-default navbar-btn" id="simulation-resume" disabled>
+                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-play"></span>
+                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-pause" style="display:none"></span>
+                    </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" id="get-simulation-config" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-eye-open"></span>
+                        </button>
+                        <ul id="simulation-config" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="get-simulation-config">
+                            <li id="level_1" class="level" level="1">
+                                <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span>
+                            Rookie
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
+                            </a>
+                            </li>
+                            <li id="level_2" class="level" level="2">
+                                <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span>
+                            Beginner
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
+                            </a>
+                            </li>
+                            <li id="level_3" class="level" level="3">
+                                <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span>
+                            Advanced
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
+                            </a>
+                            </li>
+                            <li id="level_4" class="level" level="4">
+                                <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span>
+                            Expert
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
+                            </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-default navbar-btn" id="simulation-add" data-toggle="modal" data-target="#myModal" disabled>
+                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span>
+                    </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" id="get-simulation-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
+                        </button>
+                        <ul id="simulation-list" class="dropdown-menu dropdown-menu-right" aria-labelledby="get-simulation-list"></ul>
+                    </div>
+                    <!-- <button type="button" class="btn btn-default navbar-btn" id="download">
+                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-download-alt"></span>
+                </button> -->
+                    <button type="button" class="btn btn-default navbar-btn" onclick="$('#controller-body').toggle()">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    </button>
+                    <button type="button" class="btn btn-default navbar-btn" id="close">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+
+                <div id="controller-body" class="pull-right">
+                    <div id="controller-panel" class="panel panel-default">
+                        <!-- <div class="panel-body"> -->
+                        <div id="global" class="panel-body"></div>
+                        <div id="kernel" class="panel-body"></div>
+
+                        <div id="tabs">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#nodes" aria-controls="nodes" role="tab" data-toggle="tab">Nodes</a></li>
+                                <li role="presentation"><a href="#connections" aria-controls="connections" role="tab" data-toggle="tab">Connections</a></li>
+                                <li role="presentation"><a href="#synapses" aria-controls="synapses" role="tab" data-toggle="tab">Synapses</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="nodes"></div>
+                                <div role="tabpanel" class="tab-pane" id="connections"></div>
+                                <div role="tabpanel" class="tab-pane" id="synapses"></div>
+                            </div>
+
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right checkbox">
+            <label for="autoscale">
+                <input type="checkbox" name="autoscale" value="autoscale" id="autoscale" checked> Autoscale
+            </label>
+        </div>
+
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form id="simulation-add-form">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="simulation-name" class="control-label">Simulation:</label>
+                                <input type="text" class="form-control" id="simulation-name" placeholder="name">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-add-submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="header">
+            <h4 id="title"></h4>
+            <span id="subtitle"></span>
+        </div>
+        <svg id="chart"></svg>
+    </div>
+
+    <script>
+        window.$ = window.jQuery = require('jquery');
+        window.app = require('../app');
+        app.db.init()
+        app.simulation.load(location.search.split('simulation=')[1])
+        app.events.buttonHandler()
+    </script>
+</body>
+
+</html>

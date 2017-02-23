@@ -1,0 +1,10 @@
+{
+    "windowBounds": {
+        "width": 1280,
+        "height": 720
+    },
+    "window": {
+        "frame": false,
+        "fullscreen": false
+    }
+}

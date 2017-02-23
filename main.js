@@ -1,8 +1,13 @@
-const electron = require('electron');
-const app = electron.app;   // Module to control application life.
-const BrowserWindow = electron.BrowserWindow;   // Module to create native browser window.
+"use strict"
 
-var config = require('./src/app/config').global();
+const electron = require('electron');
+const app = electron.app; // Module to control application life.
+const BrowserWindow = electron.BrowserWindow; // Module to create native browser window.
+
+const Config = require('electron-config');
+var config = new Config({
+    defaults: require('jsonfile').readFileSync(__dirname + '/src/config/electronDefaults.json')
+});
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
@@ -23,7 +28,6 @@ app.on('window-all-closed', function() {
     }
 })
 
-
 function createWindow() {
 
     let {
@@ -38,7 +42,7 @@ function createWindow() {
         frame: config.store.window.frame,
         title: 'A NEST desktop application',
         icon: './src/assets/img/icon.png',
-        "node-integration": true,
+        // "node-integration": true,
     });
 
     mainWindow.setFullScreen(config.store.window.fullscreen);
@@ -84,3 +88,43 @@ app.on('activate', function() {
         createWindow()
     }
 })
+
+const fs = require('fs');
+const path = require('path');
+
+var main = {};
+main.capturePage = function(filepath) {
+    var filepath = __dirname + path.sep + filepath;
+
+    let {
+        width,
+        height,
+    } = config.get('windowBounds');
+
+    var clipRect = {
+        x: 0,
+        y: 0,
+        width: width - 330,
+        height: width
+    };
+
+    var clipRect = {
+        x: 0,
+        y: 0,
+        width: width - 330,
+        height: height
+    };
+    mainWindow.capturePage(clipRect, function(imageBuffer) {
+        fs.writeFile(filepath, imageBuffer.resize({
+            'height': 480
+        }).toPng(), function(err) {
+            if (err) {
+                console.log("ERROR Failed to save file", err);
+            } else {
+                console.log('Screen captured in ' + filepath)
+            }
+        });
+    });
+}
+
+module.exports = main;

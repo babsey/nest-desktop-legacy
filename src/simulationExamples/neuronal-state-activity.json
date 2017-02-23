@@ -1,0 +1,65 @@
+{
+    "_id": "neuronal-state-activity",
+    "name": "Neuronal state activity",
+    "user": "default",
+    "layout": true,
+    "runSimulation": true,
+    "network": "simple",
+    "sim_time": 1000.0,
+    "res_time": 10.0,
+    "kernel": {
+        "grng_seed": 0
+    },
+    "nodes": [{
+        "id": 0,
+        "type": "input",
+        "model": "poisson_generator",
+        "x": 0,
+        "y": 50,
+        "stim_time": [0.0, 2000.0],
+        "params": {
+            "rate": 10.0
+        }
+    }, {
+        "id": 1,
+        "type": "neuron",
+        "model": "iaf_cond_alpha",
+        "x": 150,
+        "y": 0,
+        "n": 10,
+        "params": {}
+    }, {
+        "id": 2,
+        "type": "output",
+        "model": "multimeter",
+        "x": 300,
+        "y": 50,
+        "params": {},
+        "record_from": "V_m"
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 1,
+        "syn_spec": {
+            "model": "static_synapse",
+            "weight": 1.0
+        }
+    }, {
+        "id": 1,
+        "source": 1,
+        "target": 1,
+        "conn_spec": {
+            "rule": "fixed_outdegree",
+            "outdegree": 0
+        },
+        "syn_spec": {
+            "model": "static_synapse",
+            "weight": -1.0
+        }
+    }, {
+        "id": 2,
+        "source": 1,
+        "target": 2
+    }]
+}

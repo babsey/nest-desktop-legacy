@@ -1,0 +1,94 @@
+[{
+    "type": "synapse",
+    "id": "static_synapse",
+    "label": "Synapse type for static connections",
+    "sliderDefaults": [{
+        "id": "weight",
+        "level": 1,
+        "value": 1.0,
+        "min": -100.0,
+        "max": 200.0,
+        "step": 1.0,
+        "label": "Synaptic weight"
+    }, {
+        "id": "delay",
+        "level": 2,
+        "value": 1.0,
+        "min": 1.0,
+        "max": 100.0,
+        "step": 1.0,
+        "label": "Synaptic delay"
+    }]
+}, {
+    "type": "synapse",
+    "id": "tsodyks_synapse",
+    "label": "Synapse type with short term plasticity",
+    "sliderDefaults": [{
+        "id": "weight",
+        "level": 1,
+        "value": 1.0,
+        "min": -100.0,
+        "max": 300.0,
+        "step": 1.0,
+        "label": "Synaptic weight"
+    }, {
+        "id": "delay",
+        "level": 2,
+        "value": 1.0,
+        "min": 1.0,
+        "max": 100.0,
+        "step": 0.1,
+        "label": "Synaptic delay"
+    }, {
+        "id": "U",
+        "level": 2,
+        "value": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "label": "Maximum probability of release"
+    }, {
+        "id": "tau_psc",
+        "level": 2,
+        "value": 1.0,
+        "min": 1.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Time constants of synaptic current"
+    }, {
+        "id": "tau_fac",
+        "level": 3,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Time constant for facilitation [ms]"
+    }, {
+        "id": "tau_rec",
+        "level": 3,
+        "value": 800.0,
+        "min": 0.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Time constant for depression [ms]"
+    }, {
+        "id": "x",
+        "level": 3,
+        "value": 1.0,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "label": "Initial fraction of synaptic vesicles in the readily releasable pool"
+    }, {
+        "id": "y",
+        "level": 3,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "label": "Initial fraction of synaptic vesicles in the synaptic cleft"
+    }]
+}]
