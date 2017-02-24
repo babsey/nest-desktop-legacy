@@ -73,7 +73,7 @@ events.controllerHandler = function() {
     $('#autoscale').on('click', app.simulation.update)
 
     $('#id_record').on('change', function() {
-
+        console.log('aa')
         var recNode = app.data.nodes.filter(function(node) {
             return node.type == 'output'
         })[0]
@@ -98,6 +98,12 @@ events.controllerHandler = function() {
             .yLabel(app.model.record_labels[recNode.record_from] || 'a.u.')
             .update();
     })
+
+    // $('#myScrollspy').find('a').on('click', function(e) {
+    //     e.preventDefault();
+    //     $($(this).attr('href'))[0].scrollIntoView();
+    //     scrollBy(0, -50);
+    // });
 }
 
 events.buttonHandler = function() {

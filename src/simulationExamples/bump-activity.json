@@ -1,7 +1,8 @@
 {
     "_id": "bump-activity",
     "name": "Bump activity",
-    "user": "default",
+    "group": "example",
+    "user": "architect",
     "runSimulation": true,
     "network": "gamma",
     "sim_time": 1000.0,

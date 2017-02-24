@@ -1,7 +1,8 @@
 {
     "_id": "who-is-faster",
     "name": "Who is faster?",
-    "user": "default",
+    "group": "example",
+    "user": "architect",
     "layout": true,
     "runSimulation": true,
     "network": "simple",

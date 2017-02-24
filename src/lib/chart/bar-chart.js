@@ -4,8 +4,8 @@ const d3 = require("d3");
 
 var barchart = {
     margin: {
-        top: 30,
-        right: 40 + 330,
+        top: 10,
+        right: 40,
         bottom: 40,
         left: 50
     },
@@ -140,10 +140,10 @@ barchart.onZoom = function(zoom) {
     return barchart;
 }
 
-barchart.init = function(reference, height) {
+barchart.init = function(reference, size) {
     var svg = d3.select(reference),
-        width = +svg.attr("width") - margin.left - margin.right,
-        height = height || (+svg.attr("height") - margin.top - margin.bottom);
+        width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
+        height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
     barchart.svg = svg;
     barchart.width = width;
     barchart.height = height;
@@ -154,7 +154,7 @@ barchart.init = function(reference, height) {
     var g = svg.append("g")
         .attr('height', height)
         .attr('width', width)
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) +")");
     barchart.g = g;
 
     var clip = g.append("g")

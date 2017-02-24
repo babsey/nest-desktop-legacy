@@ -53,8 +53,8 @@ heatmap.init = function() {
     }
 
     $('#chart').empty()
-    heatmap.chart = app.chart.heatmapChart('#chart');
-    var heatmapchart = heatmap.chart;
+    var heatmapchart = app.chart.heatmapChart('#chart', {});
+    heatmap.chart = heatmapchart;
     heatmapchart.xAxis(heatmapchart.xScale)
         .yAxis(heatmapchart.yScale)
         .xLabel('Neuron Row ID')

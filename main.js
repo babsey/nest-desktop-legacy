@@ -103,16 +103,9 @@ main.capturePage = function(filepath) {
 
     var clipRect = {
         x: 0,
-        y: 0,
-        width: width - 330,
-        height: width
-    };
-
-    var clipRect = {
-        x: 0,
-        y: 0,
-        width: width - 330,
-        height: height
+        y: 50,
+        width: width - 370,
+        height: height - 50
     };
     mainWindow.capturePage(clipRect, function(imageBuffer) {
         fs.writeFile(filepath, imageBuffer.resize({

@@ -52,28 +52,28 @@ function _update_dataSlider(id, value) {
 }
 
 slider.init_globalSlider = function(options) {
-    slider.create_dataSlider('#global', options.id, options)
+    slider.create_dataSlider('#global .content', options.id, options)
         .on('slideStop', function(d) {
             app.data[options.id] = d.value
         })
 }
 
 slider.init_kernelSlider = function(options) {
-    slider.create_dataSlider('#kernel', options.id, options)
+    slider.create_dataSlider('#kernel .content', options.id, options)
         .on('slideStop', function(d) {
             app.data.kernel[options.id] = d.value
         })
 }
 
 slider.init_popSlider = function(nidx, options) {
-    slider.create_dataSlider('#node_' + nidx, options.id, options)
+    slider.create_dataSlider('#node_' + nidx +' .content', options.id, options)
         .on('slideStop', function(d) {
             app.data.nodes[nidx].n = d.value
         })
 }
 
 slider.init_binSlider = function(nidx, options) {
-    slider.create_dataSlider('#node_' + nidx, options.id, options)
+    slider.create_dataSlider('#node_' + nidx +' .content', options.id, options)
         .on('slideStop', function(d) {
             app.data.nodes[nidx].nbins = options.ticks_labels[d.value]
         })
@@ -117,7 +117,7 @@ slider.init_modelSlider = function(ref, model) {
 }
 
 slider.update_kernelSlider = function() {
-    var ref = $("#kernel");
+    var ref = $("#kernel .content");
     var modelSlider = ref.find('.' + model);
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;

@@ -1,7 +1,8 @@
 {
     "_id": "ei-activity",
     "name": "EI activity",
-    "user": "default",
+    "group": "example",
+    "user": "architect",
     "layout": true,
     "runSimulation": true,
     "network": "simple",

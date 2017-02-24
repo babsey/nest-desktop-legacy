@@ -4,8 +4,8 @@ const d3 = require("d3");
 
 var chart = {
     margin: {
-        top: 30,
-        right: 40 + 330,
+        top: 10,
+        right: 40,
         bottom: 40,
         left: 50
     },
@@ -56,7 +56,7 @@ chart.yAxis = function(yScale) {
         .attr("id", "yaxis")
         .attr("class", "axis")
         .style('font-size', '14px')
-        .attr("transform", "translate(0," + (+chart.g.attr('height') - window.innerHeight + chart.margin.bottom + chart.margin.top) + ")")
+        .attr("transform", "translate(0,0)")
         .call(_yAxis);
 
     return chart
@@ -128,10 +128,10 @@ chart.onZoom = function(zoom) {
     return chart;
 }
 
-chart.init = function(reference) {
+chart.init = function(reference, size) {
     var svg = d3.select(reference),
-        width = +svg.attr("width") - margin.left - margin.right,
-        height = +svg.attr("height") - margin.top - margin.bottom;
+        width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
+        height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
     chart.svg = svg;
     chart.width = width;
     chart.height = height;
@@ -142,7 +142,7 @@ chart.init = function(reference) {
     var g = svg.append("g")
         .attr('height', height)
         .attr('width', width)
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) +")");
     chart.g = g;
 
     var clip = g.append("g")

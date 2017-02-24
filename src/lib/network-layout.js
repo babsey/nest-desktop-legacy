@@ -220,7 +220,7 @@ layout.restart = function() {
 
     layout.circle.selectAll('circle').remove()
     layout.circle.append("circle")
-        .attr("r", 25)
+        .attr("r", 23)
         .style('stroke', function(d, i) {
             return layout.colors[i % 10];
         })

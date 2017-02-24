@@ -4,7 +4,7 @@
     -ms-user-select: none;
     user-select: none;
     position: fixed;
-    top: 0px;
+    top: 50px;
     z-index: -1000;
 }
 #clip {
@@ -35,7 +35,7 @@
 }
 .node circle {
     pointer-events: all;
-    stroke-width: 5px;
+    stroke-width: 3px;
 }
 .node text {
     pointer-events: none;

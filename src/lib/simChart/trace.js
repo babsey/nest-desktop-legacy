@@ -72,8 +72,8 @@ trace.init = function() {
     }
 
     $('#chart').empty()
-    trace.chart = app.chart.lineChart('#chart');
-    var linechart = trace.chart;
+    var linechart = app.chart.lineChart('#chart', {});
+    trace.linechart = linechart;
     linechart.xAxis(linechart.xScale)
         .yAxis(linechart.yScale)
         .xLabel('Time (ms)');

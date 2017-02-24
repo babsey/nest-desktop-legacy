@@ -3,15 +3,15 @@
 var navigation = {};
 
 navigation.init_controller = function() {
-    $('#global').empty()
+    $('#global .content').empty()
     var modelDefaults = app.config.modelSlider('global')
     for (var midx in modelDefaults) {
         var model = modelDefaults[midx];
         model.value = app.data[model.id];
         app.slider.init_globalSlider(model)
-        }
+    }
 
-    $('#kernel').empty()
+    $('#kernel .content').empty()
     var modelDefaults = app.config.modelSlider('kernel')
     var model = modelDefaults[0];
     model.value = app.data.kernel[model.id];
@@ -21,21 +21,26 @@ navigation.init_controller = function() {
     var nodeDefaults = app.config.modelSlider('node')
     var divNodes = $('#nodes');
     divNodes.empty()
-    app.data.nodes.map(function(node, nidx) {
-        divNodes.append('<div id="node_' + nidx + '" class="panel-body node ' + node.type + '" nidx="' + nidx + '"></div>')
-        var divNode = divNodes.find('#node_' + nidx)
-        divNode.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[nidx])
-        divNode.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[nidx])
-        divNode.append('<select id="select_' + nidx + '" class="' + node.type + 'Select modelSelect form-control"></select>')
+    app.data.nodes.map(function(node) {
+        $("#myScrollspy .nav").append('<li><a class="node_' + node.id + '" href="#node_' + node.id + '">' + node.type.charAt(0).toUpperCase() + '</a></li>')
+
+        divNodes.append('<div id="node_' + node.id + '" class="panel-body node ' + node.type + '" nidx="' + node.id + '"></div>')
+        divNodes.find('#node_' + node.id).append('<hr>')
+        divNodes.find('#node_' + node.id).append('<div class="content"></div>')
+        var divNode = divNodes.find('#node_' + node.id).find('.content')
+            // divNode.append('<div style="height:50px"></div>')
+        divNode.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[node.id])
+            // divNode.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[node.id])
+        divNode.append('<select id="select_' + node.id + '" class="' + node.type + 'Select modelSelect form-control"></select>')
         divNode.find(' .modelSelect').append('<option disabled selected hidden>Select an ' + node.type + ' device</option> ')
 
         if (node.type == 'neuron' || node.type == 'input') {
             nodeDefaults[0].value = node.n || 1
-            app.slider.init_popSlider(nidx, nodeDefaults[0])
+            app.slider.init_popSlider(node.id, nodeDefaults[0])
         }
         if (node.model == 'spike_detector') {
             nodeDefaults[1].value = nodeDefaults[1].ticks_labels.indexOf(node.nbins) || 1
-            app.slider.init_binSlider(nidx, nodeDefaults[1])
+            app.slider.init_binSlider(node.id, nodeDefaults[1])
         }
 
         divNode.append('<div class="modelSlider"></div>')
@@ -43,7 +48,7 @@ navigation.init_controller = function() {
         for (var midx in modelDefaults) {
             var model = modelDefaults[midx];
             divNode.find(' .modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
-            app.slider.init_modelSlider('#node_' + nidx + ' .modelSlider', model)
+            app.slider.init_modelSlider('#node_' + node.id + ' .modelSlider', model)
 
         }
 
@@ -66,7 +71,9 @@ navigation.init_controller = function() {
 
         // Connection
         divConnections.append('<div id="conn_' + link.id + '" class="panel-body link synapse" lidx="' + link.id + '"></div>')
-        var divConnLink = divConnections.find('#conn_' + link.id)
+        divConnections.find('#conn_' + link.id).append('<hr>')
+        divConnections.find('#conn_' + link.id).append('<div class="content"></div>')
+        var divConnLink = divConnections.find('#conn_' + link.id).find('.content')
         divConnLink.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[link.source])
         divConnLink.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[link.target])
         divConnLink.append('<select class="connSelect modelSelect form-control"></select>')
@@ -83,7 +90,9 @@ navigation.init_controller = function() {
 
         // Synapse
         divSynapses.append('<div id="syn_' + link.id + '" class="panel-body link synapse" lidx="' + link.id + '"></div>')
-        var divSynLink = divSynapses.find('#syn_' + link.id)
+        divSynapses.find('#syn_' + link.id).append('<hr>')
+        divSynapses.find('#syn_' + link.id).append('<div class="content"></div>')
+        var divSynLink = divSynapses.find('#syn_' + link.id).find('.content')
         divSynLink.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[link.source])
         divSynLink.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[link.target])
         divSynLink.append('<select class="synSelect modelSelect form-control"></select>')
@@ -125,8 +134,8 @@ navigation.load_simulationList = function() {
             $('.simulation').on('click', function(d) {
                 app.simulation.stop()
                 location.href = location.origin + location.pathname + '?simulation=' + this.id
-                // $('#autoscale').prop('checked', true)
-                // app.simulation.load(this.id)
+                    // $('#autoscale').prop('checked', true)
+                    // app.simulation.load(this.id)
             })
         }, 100)
     })

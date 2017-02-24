@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -113,14 +114,17 @@
 
     setTimeout(function() {
         app.simulation.list({
-            'user': 'default'
+            'group': 'example'
         }, '#sim-default')
         app.simulation.list({
-            'user': 'nest-initiative'
+            'group': 'nest-example'
         }, '#sim-nest')
         app.simulation.list({
             'user': app.config.app().get('user.name')
         }, '#sim-user')
+        // app.simulation.list({
+        //     'group': 'public'
+        // }, '#sim-public')
         setTimeout(function() {
             $('#content').fadeIn()
         }, 100)

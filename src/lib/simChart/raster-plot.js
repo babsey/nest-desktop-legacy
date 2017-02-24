@@ -33,7 +33,7 @@ rasterPlot.init = function() {
 
         }
 
-        scatterchart.yScale.domain(d3.extent(source))
+        scatterchart.yScale.domain([0, d3.max(source)])
         scatterchart.data({
                 x: times,
                 y: senders
@@ -81,11 +81,10 @@ rasterPlot.init = function() {
     }
 
     $('#chart').empty()
-    rasterPlot.scatterchart = app.chart.scatterChart('#chart');
-    var scatterchart = rasterPlot.scatterchart;
-    scatterchart.y = scatterchart.height
-    scatterchart.g.attr('height', window.innerHeight * 7. / 10.);
-    scatterchart.g.select('#clip').attr('transform', 'translate(0,' + (+scatterchart.g.attr('height') - scatterchart.height) + ')');
+    var scatterchart = app.chart.scatterChart('#chart', {
+        height: (window.innerHeight - 50) * 8. / 10.
+    });
+    rasterPlot.scatterchart = scatterchart;
     scatterchart
         .xAxis(scatterchart.xScale)
         .yAxis(scatterchart.yScale)
@@ -93,10 +92,11 @@ rasterPlot.init = function() {
     scatterchart.onDrag(drag);
     scatterchart.onZoom(zoom);
 
-    rasterPlot.barchart = app.chart.barChart('#chart', (window.innerHeight * 2. / 10.) - 30);
-    var barchart = rasterPlot.barchart;
-    barchart.g.attr('height', window.innerHeight * 2. / 10. - 30)
-        .attr('transform', 'translate(' + barchart.margin.left + ',' + (window.innerHeight * 8. / 10. - barchart.margin.bottom + 30) + ')');
+    var barchart = app.chart.barChart('#chart', {
+        y: (window.innerHeight - 50) * 8. / 10.,
+        height: (window.innerHeight - 50) * 2. / 10.
+    });
+    rasterPlot.barchart = barchart;
     barchart.xAxis(barchart.xScale)
         .yAxis(barchart.yScale)
         .xLabel('Time [ms]')

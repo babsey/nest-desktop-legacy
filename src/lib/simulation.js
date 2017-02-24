@@ -143,7 +143,7 @@ simulation.init = function() {
     app.selected_node = null;
     app.selected_link = null;
 
-    $('#chart').attr('width', window.innerWidth).attr('height', window.innerHeight)
+    $('#chart').attr('width', window.innerWidth - 350).attr('height', window.innerHeight-50)
 
     var output = app.data.nodes.filter(function(node) {
             return node.type == 'output'

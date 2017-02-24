@@ -83,6 +83,9 @@ edit username, password as well as host and port of the remoted database.
 
 ## FAQ
 
+#### Where are the data about simulation stored?
+Saved data about simulation are stored in NeDB database ./data/*.db
+
 #### How can I reload the window?
 Keybinding to reload the app is 'CTRL + R' (Linux) or 'CMD + R' (Mac OSX)
 
@@ -90,9 +93,11 @@ Keybinding to reload the app is 'CTRL + R' (Linux) or 'CMD + R' (Mac OSX)
 Keybinding to close the window is 'CTRL + W' (Linux) or 'CMD + W' (Mac OSX)
 In Linux the app will be closed when the window is closed.
 
-#### How can I close the app?
-Keybinding to close the window is 'CMD + Q' (Mac OSX)
+#### How can I close the app (only for Mac OSX)?
+Keybinding to close the window is 'CMD + Q'
 
+#### How can I update the thumbnails?
+Just remove image files in ./data/images/ and then resimulate
 
 
 #### License [MIT](LICENSE)

@@ -1,7 +1,8 @@
 {
     "_id": "neuronal-state-activity",
     "name": "Neuronal state activity",
-    "user": "default",
+    "group": "example",
+    "user": "architect",
     "layout": true,
     "runSimulation": true,
     "network": "simple",

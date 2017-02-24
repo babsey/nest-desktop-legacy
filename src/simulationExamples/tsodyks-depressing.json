@@ -1,6 +1,7 @@
 {
     "_id": "tsodyks-depressing",
     "name": "Tsodyks depressing",
+    "group": "nest-example",
     "user": "nest-initiative",
     "layout": true,
     "runSimulation": true,
@@ -15,7 +16,7 @@
         "type": "input",
         "model": "dc_generator",
         "x": 0,
-        "y": 50,
+        "y": 0,
         "params": {
             "amplitude": 215.0,
             "start": 50.0,
@@ -26,7 +27,7 @@
         "type": "neuron",
         "model": "iaf_psc_exp",
         "x": 100,
-        "y": 0,
+        "y": 100,
         "params": {
             "C_m": 400.0,
             "E_L": 0.0,
@@ -43,7 +44,7 @@
         "type": "neuron",
         "model": "iaf_psc_exp",
         "x": 200,
-        "y": 0,
+        "y": 50,
         "params": {
             "C_m": 400.0,
             "E_L": 0.0,
@@ -60,7 +61,7 @@
         "type": "output",
         "model": "multimeter",
         "x": 300,
-        "y": 50,
+        "y": 100,
         "record_from": "V_m",
         "params": {
             "interval": 1.0

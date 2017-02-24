@@ -62,6 +62,7 @@ db.get = function(id) {
 }
 
 db.add = function(data) {
+    data._parentId = data._id;
     data._id = uuidV4();
     data._rev = null;
     data.nodes.forEach(function(node) {
