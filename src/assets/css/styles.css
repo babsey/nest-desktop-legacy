@@ -1,9 +1,13 @@
+body {
+    position: relative;
+}
 .jumbotron {
-    background-color:transparent;
+    background-color: transparent;
     height: 250px;
+    padding-bottom: 0px;
 }
 #jumbotron-bg {
-    background-image: url(../img/neuron-network_invert0.jpg);
+    background-image: url(../img/background.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position-x: center;
@@ -16,30 +20,106 @@
     z-index: -1;
     border-bottom: 1px solid #000;
 }
-.title {
+#header {
     position: fixed;
     left: 70px;
 }
+
+/*#title {
+    text-transform:capitalize;
+}*/
+
+.navbar {
+    margin-bottom: 0px;
+    background-color: white
+}
 #message {
-    position:absolute;
+    position: absolute;
+    left: 300px;
     padding: 10px;
+    z-index: 1000;
 }
 #message div {
     margin-bottom: 5px
 }
 #controller {
-    z-index: 1000;
-    width: 334px;
+    /*z-index: 1000;*/
+    position: relative
 }
 #controller-body {
-    width: 303px;
+    width: 304px;
 }
+#myScrollspy {
+    position: fixed;
+    right: 366px;
+}
+.nav-pills {
+    top: 51px;
+    position: fixed;
+}
+.nav-pills li a {
+    border-radius: 25px;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+.nav-pills li.active a, .nav-pills li.active a:focus, .nav-pills li.active a:hover {
+    background-color: white !important;
+    color: black;
+}
+.nav-pills li .node_0 {
+    border: 3px solid #1f77b4 !important;
+}
+.nav-pills li .node_1 {
+    border: 3px solid #ff7f0e !important;
+}
+.nav-pills li .node_2 {
+    border: 3px solid #2ca02c !important;
+}
+.nav-pills li .node_3 {
+    border: 3px solid #d62728 !important;
+}
+.nav-pills li .node_4 {
+    border: 3px solid #9467bd !important;
+}
+.nav-pills li .node_5 {
+    border: 3px solid #8c564b !important;
+}
+.nav-pills li .node_6 {
+    border: 3px solid #e377c2 !important;
+}
+.nav-pills li .node_7 {
+    border: 3px solid #7f7f7f !important;
+}
+.nav-pills li .node_8 {
+    border: 3px solid #bcbd22 !important;
+}
+.nav-pills li .node_9 {
+    border: 3px solid #17becf !important;
+}
+#controller-panel {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+#tabs {
+    padding: 5px
+}
+.panel-body {
+    padding: 0px;
+    margin: 0px;
+}
+.panel-body .content {
+    padding: 10px 15px;
+    margin: 4px 0px;
+}
+
 /*#controller-panel {
     background-color: transparent;
 }
 #controller-panel:hover {
     background-color: white;
 }*/
+
 .paramSlider, .dataSlider {
     margin-bottom: 0px;
 }

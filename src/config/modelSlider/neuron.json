@@ -1,0 +1,834 @@
+[{
+    "type": "neuron",
+    "id": "aeif_cond_alpha",
+    "label": "AEIF cond alpha",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "E_L",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Leak reversal potential (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "C_m",
+        "level": 2,
+        "value": 250,
+        "min": 1,
+        "max": 300,
+        "step": 1,
+        "label": "Capacity of the membrane (pF)"
+    }, {
+        "id": "g_l",
+        "level": 2,
+        "value": 25,
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "label": "Leak conductance (nS)"
+    }, {
+        "id": "E_ex",
+        "level": 3,
+        "value": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "Excitatory reversal potential (mV)"
+    }, {
+        "id": "E_in",
+        "level": 3,
+        "value": -85,
+        "min": -100,
+        "max": 0,
+        "step": 1,
+        "label": "Inhibitory reversal potential (mV)"
+    }, {
+        "id": "V_th",
+        "level": 3,
+        "value": -55,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Spike threshold (mV)"
+    }, {
+        "id": "V_reset",
+        "level": 3,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Reset Potential of the membrane (mV)"
+    }, {
+        "id": "t_ref",
+        "level": 3,
+        "value": 2,
+        "min": 0.1,
+        "max": 5,
+        "step": 0.1,
+        "label": "Duration of refractory period (ms)"
+    }, {
+        "id": "tau_syn_ex",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the excitatory synaptic alpha function"
+    }, {
+        "id": "tau_syn_in",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the inhibitory synaptic alpha function"
+    }]
+}, {
+    "type": "neuron",
+    "id": "aeif_cond_exp",
+    "label": "AEIF cond exp",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "E_L",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Leak reversal potential (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "C_m",
+        "level": 2,
+        "value": 250,
+        "min": 1,
+        "max": 300,
+        "step": 1,
+        "label": "Capacity of the membrane (pF)"
+    }, {
+        "id": "g_l",
+        "level": 2,
+        "value": 25,
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "label": "Leak conductance (nS)"
+    }, {
+        "id": "E_ex",
+        "level": 3,
+        "value": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "Excitatory reversal potential (mV)"
+    }, {
+        "id": "E_in",
+        "level": 3,
+        "value": -85,
+        "min": -100,
+        "max": 0,
+        "step": 1,
+        "label": "Inhibitory reversal potential (mV)"
+    }, {
+        "id": "V_th",
+        "level": 3,
+        "value": -55,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Spike threshold (mV)"
+    }, {
+        "id": "V_reset",
+        "level": 3,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Reset Potential of the membrane (mV)"
+    }, {
+        "id": "t_ref",
+        "level": 3,
+        "value": 2,
+        "min": 0.1,
+        "max": 5,
+        "step": 0.1,
+        "label": "Duration of refractory period (ms)"
+    }, {
+        "id": "tau_syn_ex",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the excitatory synaptic exp function"
+    }, {
+        "id": "tau_syn_in",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the inhibitory synaptic exp function"
+    }]
+}, {
+    "type": "neuron",
+    "id": "iaf_cond_alpha",
+    "label": "IAF cond alpha",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "E_L",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Leak reversal potential (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "C_m",
+        "level": 2,
+        "value": 250,
+        "min": 1,
+        "max": 300,
+        "step": 1,
+        "label": "Capacity of the membrane (pF)"
+    }, {
+        "id": "g_l",
+        "level": 2,
+        "value": 25,
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "label": "Leak conductance (nS)"
+    }, {
+        "id": "E_ex",
+        "level": 3,
+        "value": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "Excitatory reversal potential (mV)"
+    }, {
+        "id": "E_in",
+        "level": 3,
+        "value": -85,
+        "min": -100,
+        "max": 0,
+        "step": 1,
+        "label": "Inhibitory reversal potential (mV)"
+    }, {
+        "id": "V_th",
+        "level": 3,
+        "value": -55,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Spike threshold (mV)"
+    }, {
+        "id": "V_reset",
+        "level": 3,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Reset Potential of the membrane (mV)"
+    }, {
+        "id": "t_ref",
+        "level": 3,
+        "value": 2,
+        "min": 0.1,
+        "max": 5,
+        "step": 0.1,
+        "label": "Duration of refractory period (ms)"
+    }, {
+        "id": "tau_syn_ex",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the excitatory synaptic alpha function"
+    }, {
+        "id": "tau_syn_in",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the inhibitory synaptic alpha function"
+    }]
+}, {
+    "type": "neuron",
+    "id": "iaf_cond_exp",
+    "label": "IAF cond exp",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "E_L",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Leak reversal potential (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "C_m",
+        "level": 2,
+        "value": 250,
+        "min": 1,
+        "max": 300,
+        "step": 1,
+        "label": "Capacity of the membrane (pF)"
+    }, {
+        "id": "g_l",
+        "level": 2,
+        "value": 25,
+        "min": 1,
+        "max": 30,
+        "step": 1,
+        "label": "Leak conductance (nS)"
+    }, {
+        "id": "E_ex",
+        "level": 3,
+        "value": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "Excitatory reversal potential (mV)"
+    }, {
+        "id": "E_in",
+        "level": 3,
+        "value": -85,
+        "min": -100,
+        "max": 0,
+        "step": 1,
+        "label": "Inhibitory reversal potential (mV)"
+    }, {
+        "id": "V_th",
+        "level": 3,
+        "value": -55,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Spike threshold (mV)"
+    }, {
+        "id": "V_reset",
+        "level": 3,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Reset Potential of the membrane (mV)"
+    }, {
+        "id": "t_ref",
+        "level": 3,
+        "value": 2,
+        "min": 0.1,
+        "max": 5,
+        "step": 0.1,
+        "label": "Duration of refractory period (ms)"
+    }, {
+        "id": "tau_syn_ex",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the excitatory synaptic exp function"
+    }, {
+        "id": "tau_syn_in",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the inhibitory synaptic exp function"
+    }]
+}, {
+    "type": "neuron",
+    "id": "iaf_neuron",
+    "label": "IAF neuron",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "E_L",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Leak reversal potential (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "C_m",
+        "level": 2,
+        "value": 250,
+        "min": 1,
+        "max": 300,
+        "step": 1,
+        "label": "Capacity of the membrane (pF)"
+    }, {
+        "id": "tau_m",
+        "level": 2,
+        "value": 10,
+        "min": 0.1,
+        "max": 20,
+        "step": 0.1,
+        "label": "Membrane time constant (ms)"
+    }, {
+        "id": "V_th",
+        "level": 3,
+        "value": -55,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Spike threshold (mV)"
+    }, {
+        "id": "V_reset",
+        "level": 3,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Reset Potential of the membrane (mV)"
+    }, {
+        "id": "t_ref",
+        "level": 3,
+        "value": 2,
+        "min": 0.1,
+        "max": 5,
+        "step": 0.1,
+        "label": "Duration of refractory period (ms)"
+    }, {
+        "id": "tau_syn",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Time constant of postsynaptic currents (ms)"
+    }]
+}, {
+    "type": "neuron",
+    "id": "iaf_psc_alpha",
+    "label": "IAF psc alpha",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "E_L",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Leak reversal potential (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "C_m",
+        "level": 2,
+        "value": 250,
+        "min": 1,
+        "max": 300,
+        "step": 1,
+        "label": "Capacity of the membrane (pF)"
+    }, {
+        "id": "tau_m",
+        "level": 2,
+        "value": 10,
+        "min": 0.1,
+        "max": 20,
+        "step": 0.1,
+        "label": "Membrane time constant (ms)"
+    }, {
+        "id": "V_th",
+        "level": 3,
+        "value": -55,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Spike threshold (mV)"
+    }, {
+        "id": "V_reset",
+        "level": 3,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Reset Potential of the membrane (mV)"
+    }, {
+        "id": "t_ref",
+        "level": 3,
+        "value": 2,
+        "min": 0.1,
+        "max": 5,
+        "step": 0.1,
+        "label": "Duration of refractory period (ms)"
+    }, {
+        "id": "tau_syn_ex",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the excitatory synaptic alpha function"
+    }, {
+        "id": "tau_syn_in",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Rise time of the inhibitory synaptic alpha function"
+    }]
+}, {
+    "type": "neuron",
+    "id": "iaf_psc_exp",
+    "label": "IAF psc exp",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "E_L",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Leak reversal potential (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "C_m",
+        "level": 2,
+        "value": 250,
+        "min": 1,
+        "max": 300,
+        "step": 1,
+        "label": "Capacity of the membrane (pF)"
+    }, {
+        "id": "tau_m",
+        "level": 2,
+        "value": 10,
+        "min": 0.1,
+        "max": 20,
+        "step": 0.1,
+        "label": "Membrane time constant (ms)"
+    }, {
+        "id": "V_th",
+        "level": 3,
+        "value": -55,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Spike threshold (mV)"
+    }, {
+        "id": "V_reset",
+        "level": 3,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Reset Potential of the membrane (mV)"
+    }, {
+        "id": "t_ref",
+        "level": 3,
+        "value": 2,
+        "min": 0.1,
+        "max": 5,
+        "step": 0.1,
+        "label": "Duration of refractory period (ms)"
+    }, {
+        "id": "tau_syn_ex",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Time constant of postsynaptic excitatory currents (ms)"
+    }, {
+        "id": "tau_syn_in",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Time constant of postsynaptic inhibitory currents (ms)"
+    }]
+}, {
+    "type": "neuron",
+    "id": "izhikevich",
+    "label": "izhikevich",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -65,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "U_m",
+        "level": 2,
+        "value": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential recovery variable (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "a",
+        "level": 2,
+        "value": 0.02,
+        "min": 0.01,
+        "max": 0.1,
+        "step": 0.01,
+        "label": "Time scale of recovery variable"
+    }, {
+        "id": "b",
+        "level": 2,
+        "value": 0.2,
+        "min": 0.1,
+        "max": 1,
+        "step": 0.01,
+        "label": "Sensitivity of recovery variable"
+    }, {
+        "id": "V_th",
+        "level": 3,
+        "value": 30,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "Spike threshold (mV)"
+    }, {
+        "id": "c",
+        "level": 3,
+        "value": -65,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "After-spike reset value of V_m"
+    }, {
+        "id": "d",
+        "level": 3,
+        "value": 8,
+        "min": 0.1,
+        "max": 20,
+        "step": 1,
+        "label": "After-spike reset value of U_m"
+    }]
+}, {
+    "type": "neuron",
+    "id": "mat2_psc_exp",
+    "label": "MAT2 psc exp",
+    "sliderDefaults": [{
+        "id": "V_m",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Initial membrane potential (mV)"
+    }, {
+        "id": "E_L",
+        "level": 2,
+        "value": -70,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Leak reversal potential (mV)"
+    }, {
+        "id": "I_e",
+        "level": 2,
+        "value": 0,
+        "min": -100,
+        "max": 100,
+        "step": 1,
+        "label": "Constant external input current (pA)"
+    }, {
+        "id": "C_m",
+        "level": 2,
+        "value": 250,
+        "min": 1,
+        "max": 300,
+        "step": 1,
+        "label": "Capacity of the membrane (pF)"
+    }, {
+        "id": "tau_m",
+        "level": 2,
+        "value": 10,
+        "min": 0.1,
+        "max": 20,
+        "step": 0.1,
+        "label": "Membrane time constant (ms)"
+    }, {
+        "id": "tau_1",
+        "level": 3,
+        "value": 10,
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "label": "Short time constant of adaptive threshold (mV)"
+    }, {
+        "id": "tau_2",
+        "level": 3,
+        "value": 200,
+        "min": 100,
+        "max": 400,
+        "step": 1,
+        "label": "Long time constant of adaptive threshold (mV)"
+    }, {
+        "id": "alpha_1",
+        "level": 3,
+        "value": 37,
+        "min": 20,
+        "max": 100,
+        "step": 1,
+        "label": "Amplitude of short time threshold adaption (mV)"
+    }, {
+        "id": "alpha_2",
+        "level": 3,
+        "value": 2,
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "label": "Amplitude of long time threshold adaption (mV)"
+    }, {
+        "id": "omega",
+        "level": 3,
+        "value": -51,
+        "min": -100,
+        "step": 1,
+        "label": "Resting spike threshold (mV)"
+    }, {
+        "id": "t_ref",
+        "level": 3,
+        "value": 2,
+        "min": 0.1,
+        "max": 5,
+        "step": 0.1,
+        "label": "Duration of refractory period (ms)"
+    }, {
+        "id": "tau_syn_ex",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Time constant of postsynaptic excitatory currents (ms)"
+    }, {
+        "id": "tau_syn_in",
+        "level": 4,
+        "value": 2,
+        "min": 0.1,
+        "max": 4,
+        "step": 0.1,
+        "label": "Time constant of postsynaptic inhibitory currents (ms)"
+    }]
+}, {
+    "type": "neuron",
+    "id": "parrot_neuron",
+    "label": "Parrot neuron",
+    "sliderDefaults": []
+}]

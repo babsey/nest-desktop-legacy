@@ -1,6 +1,14 @@
 CHANGELOG
 ---------
 
+0.6.0:
+    Major structure reorganization
+    Screen captions for thumbnails
+    Color identification of nodes and links
+    Options and slider for connections and synapses
+    Tabs for nodes, connections and synapses
+    Scrollspy for nodes
+
 0.5.5:
     Reorganize code structure
 
@@ -10,7 +18,7 @@ CHANGELOG
 
 0.5.3:
     Zoom chart
-    histogram binwidth
+    Histogram binwidth
 
 0.5.2:
     Stacked line chart

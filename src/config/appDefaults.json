@@ -1,0 +1,25 @@
+{
+    "user": {
+        "id": "",
+        "name": "",
+        "password": ""
+    },
+    "db": {
+        "name": "",
+        "remote": {
+            "host": "",
+            "port": ""
+        },
+        "local": {
+            "path": "data"
+        }
+    },
+    "nest": {
+        "version": "",
+        "server": {
+            "host": "localhost",
+            "port": "5000"
+        }
+    },
+    "level": 1
+}

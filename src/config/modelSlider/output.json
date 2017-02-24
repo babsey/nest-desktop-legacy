@@ -1,0 +1,71 @@
+[{
+    "type": "output",
+    "id": "multimeter",
+    "label": "Multimeter",
+    "chart": "trace",
+    "sliderDefaults": [{
+        "id": "start",
+        "label": "Start time of recording (ms)",
+        "level": 2,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 1000.0,
+        "step": 1.0
+    }, {
+        "id": "stop",
+        "label": "Stop time of recording (ms)",
+        "level": 2,
+        "value": 1000.0,
+        "min": 0.0,
+        "max": 10000.0,
+        "step": 1.0
+    }]
+}, {
+    "type": "output",
+    "id": "spike_detector",
+    "label": "Spike detector",
+    "chart": "raster-plot",
+    "sliderDefaults": [{
+        "id": "start",
+        "label": "Start time of recording (ms)",
+        "level": 2,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 100000.0,
+        "step": 1.0,
+        "scale": "logarithmic"
+    }, {
+        "id": "stop",
+        "label": "Stop time of recording (ms)",
+        "level": 2,
+        "value": 10000.0,
+        "min": 0.0,
+        "max": 100000.0,
+        "step": 1.0,
+        "scale": "logarithmic"
+    }]
+}, {
+    "type": "output",
+    "id": "voltmeter",
+    "label": "Voltmeter",
+    "chart": "trace",
+    "sliderDefaults": [{
+        "id": "start",
+        "label": "Start time of recording (ms)",
+        "level": 2,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 100000.0,
+        "step": 1.0,
+        "scale": "logarithmic"
+    }, {
+        "id": "stop",
+        "label": "Stop time of recording (ms)",
+        "level": 2,
+        "value": 10000.0,
+        "min": 0.0,
+        "max": 100000.0,
+        "step": 1.0,
+        "scale": "logarithmic"
+    }]
+}]

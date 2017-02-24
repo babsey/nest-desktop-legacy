@@ -1,0 +1,97 @@
+{
+    "_id": "tsodyks-depressing",
+    "name": "Tsodyks depressing",
+    "group": "nest-example",
+    "user": "nest-initiative",
+    "layout": true,
+    "runSimulation": true,
+    "network": "simple",
+    "sim_time": 1000.0,
+    "res_time": 10.0,
+    "kernel": {
+        "grng_seed": 0
+    },
+    "nodes": [{
+        "id": 0,
+        "type": "input",
+        "model": "dc_generator",
+        "x": 0,
+        "y": 0,
+        "params": {
+            "amplitude": 215.0,
+            "start": 50.0,
+            "stop": 1050.0
+        }
+    }, {
+        "id": 1,
+        "type": "neuron",
+        "model": "iaf_psc_exp",
+        "x": 100,
+        "y": 100,
+        "params": {
+            "C_m": 400.0,
+            "E_L": 0.0,
+            "V_m": 0.0,
+            "V_reset": 0.0,
+            "V_th": 15.0,
+            "t_ref": 2.0,
+            "tau_m": 40.0,
+            "tau_syn_ex": 3.0,
+            "tau_syn_in": 3.0
+        }
+    }, {
+        "id": 2,
+        "type": "neuron",
+        "model": "iaf_psc_exp",
+        "x": 200,
+        "y": 50,
+        "params": {
+            "C_m": 400.0,
+            "E_L": 0.0,
+            "V_m": 0.0,
+            "V_reset": 0.0,
+            "V_th": 15.0,
+            "t_ref": 2.0,
+            "tau_m": 40.0,
+            "tau_syn_ex": 3.0,
+            "tau_syn_in": 3.0
+        }
+    }, {
+        "id": 3,
+        "type": "output",
+        "model": "multimeter",
+        "x": 300,
+        "y": 100,
+        "record_from": "V_m",
+        "params": {
+            "interval": 1.0
+        }
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 1,
+        "syn_spec": {
+            "weight": 1.0
+        }
+    }, {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "syn_spec": {
+            "U": 0.5,
+            "delay": 0.1,
+            "model": "tsodyks_synapse",
+            "tau_fac": 0.0,
+            "tau_psc": 3.0,
+            "tau_rec": 800.0,
+            "y": 0.0,
+            "weight": 250.0,
+            "x": 1.0
+        }
+    }, {
+        "id": 2,
+        "source": 2,
+        "target": 3
+    }]
+}
