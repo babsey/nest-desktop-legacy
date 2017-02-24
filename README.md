@@ -56,13 +56,12 @@ npm start
 
 A simple configuration handling for your the nest-desktop application.
 
-The configuration is saved as 'config.json' file in
-- %APPDATA%/nest-desktop on Windows
-- $XDG_CONFIG_HOME or ~/.config/nest-desktop on Linux
-- ~/Library/Application Support/nest-desktop on Mac OSX
+### For the app
 
-#### Window configuration
-The application create a window with these window properties - width, height, frame, fullscreen.
+The configuration for the app is saved as 'nest-desktop.json' file in
+- %APPDATA%/configstore on Windows
+- $XDG_CONFIG_HOME or ~/.config/configstore on Linux
+- ~/Library/Application Support/configstore on Mac OSX
 
 #### Nest simulation server
 To edit the host and port if the nest simulation server operates on other computer.
@@ -81,10 +80,21 @@ If you want to contribute your networks to the server,
 edit username, password as well as host and port of the remoted database.
 
 
+### For the window interface with electron
+
+The configuration for the electron is saved as 'config.json' file in
+- %APPDATA%/nest-desktop on Windows
+- $XDG_CONFIG_HOME or ~/.config/nest-desktop on Linux
+- ~/Library/Application Support/nest-desktop on Mac OSX
+
+#### Window configuration
+The application create a window with these window properties - width, height, frame, fullscreen.
+
+
 ## FAQ
 
 #### Where are the data about simulation stored?
-Saved data about simulation are stored in NeDB database ./data/*.db
+Saved data about simulation are stored as NeDB database in ./data/*.db
 
 #### How can I reload the window?
 Keybinding to reload the app is 'CTRL + R' (Linux) or 'CMD + R' (Mac OSX)
@@ -97,7 +107,7 @@ In Linux the app will be closed when the window is closed.
 Keybinding to close the window is 'CMD + Q'
 
 #### How can I update the thumbnails?
-Just remove image files in ./data/images/ and then resimulate
+Just remove image files in ./data/images/ and then resimulate.
 
 
 #### License [MIT](LICENSE)
