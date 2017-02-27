@@ -1,6 +1,10 @@
 CHANGELOG
 ---------
 
+0.6.1:
+    Colored traces for identification
+    Bug fixed to improve performance
+
 0.6.0:
     Major structure reorganization
     Screen captions for thumbnails
