@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css" />
+    <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href='../assets/css/chart.css'></link>
     <link rel="stylesheet" href='../assets/css/styles.css'></link>
     <title>NEST Desktop</title>
@@ -45,13 +46,18 @@
                 <button type="button" class="btn btn-default navbar-btn" id="index">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
                 </button>
+                <button type="button" class="btn btn-default navbar-btn" onclick="$('#layout').toggle()">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                </button>
                 <button type="button" class="btn btn-default navbar-btn" id="simulation-resume" disabled>
-                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-play"></span>
-                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-pause" style="display:none"></span>
+                    <i class="fa fa-play" aria-hidden="true"></i>
+                    <i class="fa fa-pause" aria-hidden="true" style="display:none"></i>
+                    <!-- <span class="glyphicon glyphicon-menu-glyphicon glyphicon-play"></span>
+                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-pause" style="display:none"></span> -->
                 </button>
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" id="get-simulation-config" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-eye-open"></span>
+                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                     </button>
                     <ul id="simulation-config" class="dropdown-menu" role="menu" aria-labelledby="get-simulation-config">
                         <li id="level_1" class="level" level="1">
@@ -92,11 +98,9 @@
                 <!-- <button type="button" class="btn btn-default navbar-btn" id="download">
             <span class="glyphicon glyphicon-menu-glyphicon glyphicon-download-alt"></span>
         </button> -->
-                <button type="button" class="btn btn-default navbar-btn" onclick="$('#controller-body').toggle()">
-                    <span class="glyphicon glyphicon-menu-hamburger"></span>
-                </button>
                 <button type="button" class="btn btn-default navbar-btn" id="close">
-                    <span class="glyphicon glyphicon-remove"></span>
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <!-- <span class="glyphicon glyphicon-remove"></span> -->
                 </button>
             </div>
 

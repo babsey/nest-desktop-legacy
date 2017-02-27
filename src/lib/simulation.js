@@ -30,21 +30,19 @@ simulation.list = function(q, ref) {
 simulation.export = function() {
     const config = app.config.app()
     var filepath = __dirname + '/../../' + config.get('db.local.path') + '/exports/' + app.data.name + '.json'
-    jsonfile.writeFileSync(filepath, app.data, {
-        spaces: 4
-    })
+    jsonfile.writeFileSync(filepath, app.data)
 }
 
 simulation.run = function(ongoing) {
     app.running = (ongoing == true)
     if (app.running) {
-        $('#simulation-resume').find('.glyphicon').hide()
-        $('#simulation-resume').find('.glyphicon-pause').show()
+        $('#simulation-resume').find('.fa').hide()
+        $('#simulation-resume').find('.fa-pause').show()
         $('.dataSlider').find('.sliderInput').slider('disable')
         app.simulation.resume()
     } else {
-        $('#simulation-resume').find('.glyphicon').hide()
-        $('#simulation-resume').find('.glyphicon-play').show()
+        $('#simulation-resume').find('.fa').hide()
+        $('#simulation-resume').find('.fa-play').show()
         $('.dataSlider').find('.sliderInput').slider('enable')
     }
 }
@@ -61,10 +59,11 @@ simulation.simulate = function() {
     if (app.running) return
     var mId = app.message.show('Info', 'The simulation is running. Please wait.');
 
-    var recNode = app.data.nodes.filter(function(node) {
-            return node.type == 'output'
-        })[0]
-    recNode.events = {};
+    app.data.nodes.filter(function(node) {
+        return node.type == 'output'
+    }).map(function(recNode) {
+        recNode.events = {};
+    })
     setTimeout(function() {
         app.request.request({
                 network: app.data.network,
@@ -74,20 +73,24 @@ simulation.simulate = function() {
                 links: app.data.links,
             })
             .done(function(res) {
-                recNode.params = res.nodes[recNode.id].params
-                if (recNode.model == 'multimeter') {
-                    if (!(recNode.record_from in recNode.events)) {
-                        recNode.record_from = 'V_m'
-                    }
-                    app.model.get_recordables_list(recNode)
-                } else if (recNode.model == 'voltmeter') {
-                    recNode.record_from = 'V_m'
-                }
                 app.data.kernel.time = res.kernel.time;
                 for (var idx in res.nodes) {
                     app.data.nodes[idx].ids = res.nodes[idx].ids;
                 }
-                recNode.events = res.nodes[recNode.id].events;
+                app.data.nodes.filter(function(node) {
+                    return node.type == 'output'
+                }).map(function(recNode) {
+                    recNode.params = res.nodes[recNode.id].params
+                    if (recNode.model == 'multimeter') {
+                        if (!(recNode.record_from in recNode.events)) {
+                            recNode.record_from = 'V_m'
+                        }
+                        app.model.get_recordables_list(recNode)
+                    } else if (recNode.model == 'voltmeter') {
+                        recNode.record_from = 'V_m'
+                    }
+                    recNode.events = res.nodes[recNode.id].events;
+                })
                 app.simulation.update()
 
                 var filepath = '../data/images/' + app.data._id + '.png'
@@ -95,7 +98,7 @@ simulation.simulate = function() {
                     app.screen.capture(app.data._id)
                 }
                 app.message.hide(mId)
-                // $('#content').fadeIn()
+                    // $('#content').fadeIn()
             })
     }, 10)
 }
@@ -104,8 +107,8 @@ simulation.resume = function() {
     if (!(app.running)) return
 
     var recNode = app.data.nodes.filter(function(node) {
-            return node.type == 'output'
-        })[0]
+        return node.type == 'output'
+    })[0]
     var dataEvents = recNode.events
     recNode.events = {};
     app.request.request({
@@ -127,6 +130,16 @@ simulation.resume = function() {
         })
 }
 
+simulation.update = function() {
+    var outputs = app.data.nodes.filter(function(node) {
+        return node.type == 'output'
+    })
+
+    outputs.map(function(output, idx) {
+        app.simChart[output.chart || app.simChart.fromModel[output.model]].update(output)
+    })
+}
+
 simulation.init = function() {
     var date = app.format.date(app.data.createdAt)
     $('#title').html(app.data.name)
@@ -143,12 +156,15 @@ simulation.init = function() {
     app.selected_node = null;
     app.selected_link = null;
 
-    $('#chart').attr('width', window.innerWidth - 350).attr('height', window.innerHeight-50)
+    $('#chart').attr('width', window.innerWidth - 350).attr('height', window.innerHeight - 50)
 
-    var output = app.data.nodes.filter(function(node) {
-            return node.type == 'output'
-        })[0]
-    app.simChart[output.chart || app.simChart.fromModel[output.model]].init()
+    var outputs = app.data.nodes.filter(function(node) {
+        return node.type == 'output'
+    })
+
+    outputs.map(function(output, idx) {
+        app.simChart[output.chart || app.simChart.fromModel[output.model]].init(output, outputs.length, idx)
+    })
 
     if (app.data.layout) {
         app.mousedown_link = null;

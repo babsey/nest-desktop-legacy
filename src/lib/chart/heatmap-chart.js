@@ -65,7 +65,7 @@ chart.yAxis = function(yScale) {
         .attr("id", "yaxis")
         .attr("class", "axis")
         .style('font-size', '14px')
-        .attr("transform", "translate(0," + (+chart.g.attr('height') - window.innerHeight + chart.margin.bottom + chart.margin.top) + ")")
+        .attr("transform", "translate(0,0)")
         .call(_yAxis);
 
     return chart

@@ -97,7 +97,7 @@ layout.ticked = function() {
             return d.syn_spec ? (d.syn_spec.weight < 0 ? layout.pathColor.inh : layout.pathColor.exc) : layout.pathColor.exc
         })
         .style("stroke-width", function(d) {
-            return Math.min(10, Math.max(5, (d.syn_spec ? Math.abs(d.syn_spec.weight) : 5)))
+            return Math.min(10, Math.max(5, (d.syn_spec ? Math.abs(d.syn_spec.weight/5) : 5)))
         })
         .style("stroke-dasharray", function(d) {
             return d === app.selected_link ? '10, 2' : '';
@@ -125,7 +125,7 @@ layout.restart = function() {
     if (app.data.nodes.length == 0) return
 
     // Apply the general update pattern to the links.
-    layout.path = layout.path.data(app.data.links, function(d) {
+    layout.path = layout.path.data(app.data.links.filter(function(d) {return !(app.data.nodes[d.source].hidden || app.data.nodes[d.target].hidden)}), function(d) {
         return d.source + "-" + d.target;
     });
     layout.path.exit().remove();
@@ -145,7 +145,7 @@ layout.restart = function() {
     layout.path.append("path");
 
     // Apply the general update pattern to the nodes.
-    layout.circle = layout.circle.data(app.data.nodes, function(d) {
+    layout.circle = layout.circle.data(app.data.nodes.filter(function(d) {return !d.hidden}), function(d) {
         return d.index;
     });
     layout.circle.exit().remove();
@@ -221,8 +221,8 @@ layout.restart = function() {
     layout.circle.selectAll('circle').remove()
     layout.circle.append("circle")
         .attr("r", 23)
-        .style('stroke', function(d, i) {
-            return layout.colors[i % 10];
+        .style('stroke', function(d) {
+            return layout.colors[d.id % 10];
         })
 
     layout.circle.selectAll('text').remove()
@@ -230,7 +230,7 @@ layout.restart = function() {
         .attr("dx", 0)
         .attr("dy", ".35em")
         .text(function(d) {
-            return d.name || d.type.charAt(0).toUpperCase();
+            return d.model == 'parrot_neuron' ? 'P' : d.type.charAt(0).toUpperCase();
         });
 
     layout.circle.selectAll('title').remove()

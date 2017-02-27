@@ -78,20 +78,22 @@
         <div class="container">
             <div id="sim-default">
                 <h4>Default simulations</h4>
-                <div class="row simulation-list">
-                </div>
+                <div class="row simulation-list"></div>
             </div>
 
             <div id="sim-nest">
                 <h4>Example simulations of NEST simulator</h4>
-                <div class="row simulation-list">
-                </div>
+                <div class="row simulation-list"></div>
             </div>
 
             <div id="sim-user">
                 <h4>Your simulations</h4>
-                <div class="row simulation-list">
-                </div>
+                <div class="row simulation-list"></div>
+            </div>
+
+            <div id="sim-nuspic-1">
+                <h4>Nuspic I simulations</h4>
+                <div class="row simulation-list"></div>
             </div>
         </div>
 </body>
@@ -122,6 +124,9 @@
         app.simulation.list({
             'user': app.config.app().get('user.name')
         }, '#sim-user')
+        app.simulation.list({
+            'group': 'nuspic-1'
+        }, '#sim-nuspic-1')
         // app.simulation.list({
         //     'group': 'public'
         // }, '#sim-public')
