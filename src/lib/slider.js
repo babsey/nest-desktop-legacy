@@ -100,6 +100,7 @@ var create_modelSlider = function(ref, id, options) {
 }
 
 slider.init_modelSlider = function(ref, model) {
+    $(ref).empty()
     $(ref).append('<div class="model ' + model.id + '" style="display:none"></div>')
     for (var idx in model.sliderDefaults) {
         var p = model.sliderDefaults[idx];

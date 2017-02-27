@@ -21,15 +21,17 @@ navigation.init_controller = function() {
     var nodeDefaults = app.config.modelSlider('node')
     var divNodes = $('#nodes');
     divNodes.empty()
+    $('#myScrollspy .nav').empty()
     app.data.nodes.map(function(node) {
-        $("#myScrollspy .nav").append('<li><a class="node_' + node.id + '" href="#node_' + node.id + '">' + node.type.charAt(0).toUpperCase() + '</a></li>')
+        if (node.hidden) return
+        $('#myScrollspy .nav').append('<li><a class="node_' + node.id + '" href="#node_' + node.id + '">' + (node.model == 'parrot_neuron' ? 'P' : node.type.charAt(0).toUpperCase()) + '</a></li>')
 
         divNodes.append('<div id="node_' + node.id + '" class="panel-body node ' + node.type + '" nidx="' + node.id + '"></div>')
         divNodes.find('#node_' + node.id).append('<hr>')
         divNodes.find('#node_' + node.id).append('<div class="content"></div>')
         var divNode = divNodes.find('#node_' + node.id).find('.content')
             // divNode.append('<div style="height:50px"></div>')
-        divNode.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[node.id])
+        divNode.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[node.id % 10])
             // divNode.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[node.id])
         divNode.append('<select id="select_' + node.id + '" class="' + node.type + 'Select modelSelect form-control"></select>')
         divNode.find(' .modelSelect').append('<option disabled selected hidden>Select an ' + node.type + ' device</option> ')
@@ -48,8 +50,9 @@ navigation.init_controller = function() {
         for (var midx in modelDefaults) {
             var model = modelDefaults[midx];
             divNode.find(' .modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
-            app.slider.init_modelSlider('#node_' + node.id + ' .modelSlider', model)
-
+            if (model.id == node.model) {
+                app.slider.init_modelSlider('#node_' + node.id + ' .modelSlider', model)
+            }
         }
 
         if (node.type == 'output') {
@@ -68,14 +71,15 @@ navigation.init_controller = function() {
     var divSynapses = $('#synapses');
     divSynapses.empty()
     app.data.links.map(function(link) {
+        if (app.data.nodes[link.source].hidden || app.data.nodes[link.target].hidden) return
 
         // Connection
         divConnections.append('<div id="conn_' + link.id + '" class="panel-body link synapse" lidx="' + link.id + '"></div>')
         divConnections.find('#conn_' + link.id).append('<hr>')
         divConnections.find('#conn_' + link.id).append('<div class="content"></div>')
         var divConnLink = divConnections.find('#conn_' + link.id).find('.content')
-        divConnLink.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[link.source])
-        divConnLink.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[link.target])
+        divConnLink.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[link.source % 10])
+        divConnLink.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[link.target % 10])
         divConnLink.append('<select class="connSelect modelSelect form-control"></select>')
         divConnLink.find('.modelSelect').append('<option disabled selected hidden>Select a connection rule</option> ')
         divConnLink.append('<div class="connSlider"></div>')
@@ -83,7 +87,10 @@ navigation.init_controller = function() {
         for (var midx in modelDefaults) {
             var model = modelDefaults[midx];
             divConnLink.find('.connSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
-            app.slider.init_modelSlider('#conn_' + link.id + ' .connSlider', model)
+            if (link.conn_spec == null) continue
+            if (model.id == link.conn_spec.rule) {
+                app.slider.init_modelSlider('#conn_' + link.id + ' .connSlider', model)
+            }
         }
         divConnLink.find('.connSelect').find('option#' + (link.conn_spec ? link.conn_spec.rule || 'all_to_all' : 'all_to_all')).prop('selected', true);
         app.slider.update_connSlider(link)
@@ -93,8 +100,8 @@ navigation.init_controller = function() {
         divSynapses.find('#syn_' + link.id).append('<hr>')
         divSynapses.find('#syn_' + link.id).append('<div class="content"></div>')
         var divSynLink = divSynapses.find('#syn_' + link.id).find('.content')
-        divSynLink.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[link.source])
-        divSynLink.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[link.target])
+        divSynLink.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[link.source % 10])
+        divSynLink.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[link.target % 10])
         divSynLink.append('<select class="synSelect modelSelect form-control"></select>')
         divSynLink.find('.modelSelect').append('<option disabled selected hidden>Select a synapse</option> ')
         divSynLink.append('<div class="synSlider"></div>')
@@ -102,7 +109,10 @@ navigation.init_controller = function() {
         for (var midx in modelDefaults) {
             var model = modelDefaults[midx];
             divSynLink.find('.modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
-            app.slider.init_modelSlider('#syn_' + link.id + ' .synSlider', model)
+            if (link.syn_spec == null) continue
+            if (model.id == link.syn_spec.model) {
+                app.slider.init_modelSlider('#syn_' + link.id + ' .synSlider', model)
+            }
         }
         divSynLink.find('.modelSelect').find('option#' + (link.syn_spec ? link.syn_spec.model || 'static_synapse' : 'static_synapse')).prop('selected', true);
         app.slider.update_synSlider(link)

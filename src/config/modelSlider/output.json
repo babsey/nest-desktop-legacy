@@ -15,7 +15,7 @@
         "id": "stop",
         "label": "Stop time of recording (ms)",
         "level": 2,
-        "value": 1000.0,
+        "value": 10000.0,
         "min": 0.0,
         "max": 10000.0,
         "step": 1.0

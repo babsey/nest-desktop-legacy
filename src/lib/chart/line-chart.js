@@ -174,14 +174,14 @@ function _draw_line(classname) {
     if (app.running || app.dragging || app.zooming) {
         lines.attr('height', chart.height / chart.data().y.length)
             .attr("transform", function(d, i) {
-                return "translate(0," + -1 * i * chart.height / chart.data().y.length + ")"
+                return "translate(0," + -1 * (chart.data().y.length - i-1) * chart.height / chart.data().y.length + ")"
             })
             .attr("d", chart.line);
     } else {
         lines.transition(chart.transition)
             .attr('height', chart.height / chart.data().y.length)
             .attr("transform", function(d, i) {
-                return "translate(0," + -1 * i * chart.height / chart.data().y.length + ")"
+                return "translate(0," + -1 * (chart.data().y.length - i-1) * chart.height / chart.data().y.length + ")"
             })
             .attr("d", chart.line)
     }
@@ -190,7 +190,7 @@ function _draw_line(classname) {
         .append("path")
         .attr('height', chart.height / chart.data().y.length)
         .attr("transform", function(d, i) {
-            return "translate(0," + -1 * i * chart.height / chart.data().y.length + ")"
+            return "translate(0," + -1 * (chart.data().y.length - i-1) * chart.height / chart.data().y.length + ")"
         })
         .attr("class", function(d, i) {
             return classname + ' line_' + i
@@ -209,6 +209,9 @@ function _draw_line(classname) {
         })
         .attr("style", function() {
             return 'zscore:' + (classname == 'aline' ? 1 : -1000)
+        })
+        .attr("style", function(d, i) {
+            return 'stroke:' + chart.data().c[i]
         })
         .transition(chart.transition)
         .attr("d", chart.line);

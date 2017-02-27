@@ -2,34 +2,59 @@
 
 var events = {};
 
-events.controllerHandler = function() {
-    if (app.layout) {
-        $('.model').on('mouseover', function() {
-            app.selected_node = app.data.nodes[$(this).attr('nidx')];
-            app.selected_link = null;
-            app.layout.restart()
-        }).on('mouseout', function() {
-            app.selected_node = null;
-            app.layout.restart()
-        })
-    }
-    $('#nodes .modelSelect').on('change', function() {
+
+events.nodeSlider = function() {
+    $('#nodes .modelSlider .sliderInput').on('slideStop', function() {
+        app.selected_node = app.data.nodes[$(this).parents('.node').attr('nidx')];
+        app.selected_node.params[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
+        app.simulation.simulate()
+    })
+}
+
+events.connSlider = function() {
+    $('#connections .connSlider .sliderInput').on('slideStop', function() {
+        app.selected_link = app.data.links[$(this).parents('.link').attr('lidx')];
+        app.selected_link.conn_spec[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
+        app.networkLayout.restart()
+        app.simulation.simulate()
+    })
+}
+
+events.synSlider = function() {
+    $('#synapses .synSlider .sliderInput').on('slideStop', function() {
+        app.selected_link = app.data.links[$(this).parents('.link').attr('lidx')];
+        app.selected_link.syn_spec[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
+        app.networkLayout.restart()
+        app.simulation.simulate()
+    })
+}
+
+events.dataSlider = function() {
+    $('.dataSlider .sliderInput').on('slideStop', function() {
+        if ($(this).parents('.node').hasClass('output')) {
+            app.simulation.update()
+        } else {
+            app.simulation.simulate()
+        }
+    })
+}
+
+events.model_select = function() {
+    $('#nodes .modelSelect').on('change', function(d,i) {
         app.simulation.run(false)
         app.selected_node = app.data.nodes[$(this).parents('.node').attr('nidx')];
         app.selected_node.model = this.value;
         app.selected_node.params = {};
         app.model.node_selected(app.selected_node)
+        var modelDefaults = app.config.modelSlider(app.selected_node.type)[($(this).prop('selectedIndex')-1)]
+        app.slider.init_modelSlider('#node_' + app.selected_node.id + ' .modelSlider', modelDefaults)
         app.slider.update_nodeSlider(app.selected_node)
+        events.nodeSlider()
         if (app.selected_node.type == 'output') {
             app.simulation.init()
         } else {
             app.simulation.simulate()
         }
-    })
-    $('#nodes .modelSlider .sliderInput').on('slideStop', function() {
-        app.selected_node = app.data.nodes[$(this).parents('.node').attr('nidx')];
-        app.selected_node.params[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
-        app.simulation.simulate()
     })
     $('#connections .modelSelect').on('change', function() {
         app.simulation.run(false)
@@ -38,7 +63,11 @@ events.controllerHandler = function() {
             rule: this.value
         };
         app.model.conn_selected(app.selected_link)
+        var modelDefaults = app.config.modelSlider('connection')[($(this).prop('selectedIndex')-1)]
+        console.log(modelDefaults)
+        app.slider.init_modelSlider('#conn_' + app.selected_link.id + ' .connSlider', modelDefaults)
         app.slider.update_connSlider(app.selected_link)
+        events.connSlider()
         app.simulation.simulate()
     })
     $('#synapses .modelSelect').on('change', function() {
@@ -48,28 +77,31 @@ events.controllerHandler = function() {
             model: this.value
         };
         app.model.syn_selected(app.selected_link)
+        var modelDefaults = app.config.modelSlider('synapse')[($(this).prop('selectedIndex')-1)]
+        app.slider.init_modelSlider('#syn_' + app.selected_link.id + ' .synSlider', modelDefaults)
         app.slider.update_synSlider(app.selected_link)
+        events.synSlider()
         app.simulation.simulate()
     })
-    $('#connections .connSlider .sliderInput').on('slideStop', function() {
-        app.selected_link = app.data.links[$(this).parents('.link').attr('lidx')];
-        app.selected_link.conn_spec[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
-        app.networkLayout.restart()
-        app.simulation.simulate()
-    })
-    $('#synapses .synSlider .sliderInput').on('slideStop', function() {
-        app.selected_link = app.data.links[$(this).parents('.link').attr('lidx')];
-        app.selected_link.syn_spec[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
-        app.networkLayout.restart()
-        app.simulation.simulate()
-    })
-    $('.dataSlider .sliderInput').on('slideStop', function() {
-        if ($(this).parents('.node').hasClass('output')) {
-            app.simulation.update()
-        } else {
-            app.simulation.simulate()
-        }
-    })
+}
+
+events.controllerHandler = function() {
+    // if (app.layout) {
+    //     $('.model').on('mouseover', function() {
+    //         app.selected_node = app.data.nodes[$(this).attr('nidx')];
+    //         app.selected_link = null;
+    //         app.layout.restart()
+    //     }).on('mouseout', function() {
+    //         app.selected_node = null;
+    //         app.layout.restart()
+    //     })
+    // }
+    events.model_select()
+    events.nodeSlider()
+    events.connSlider()
+    events.synSlider()
+    events.dataSlider()
+
     $('#autoscale').on('click', app.simulation.update)
 
     $('#id_record').on('change', function() {
@@ -145,6 +177,7 @@ events.buttonHandler = function() {
         app.data.user = app.config.app().get('user.name') || process.env.USER;
         app.data.createdAt = date;
         app.data.updatedAt = date;
+        app.data.group = 'user';
         $('#title').html(app.data.name)
         $('#subtitle').empty()
         var date = app.format.date(app.data.createdAt)

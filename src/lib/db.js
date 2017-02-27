@@ -62,7 +62,7 @@ db.get = function(id) {
 }
 
 db.add = function(data) {
-    data._parentId = data._id;
+    data.parentId = data._id;
     data._id = uuidV4();
     data._rev = null;
     data.nodes.forEach(function(node) {
@@ -91,7 +91,7 @@ db.filter_by_network = function(network) {
     })
 }
 
-db.export = function(id) {
+db.export = function(data) {
     const config = app.config.app()
     db.get(id).exec(function(err, doc) {
         if (err) return
