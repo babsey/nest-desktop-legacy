@@ -15,19 +15,18 @@ rasterPlot.update = function(recNode) {
     var barchart = rasterPlot.barchart;
     if (document.getElementById('autoscale').checked) {
         scatterchart.g.select('#clip').call(d3.zoom().transform, d3.zoomIdentity);
-        scatterchart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
         barchart.g.select('#clip').call(d3.zoom().transform, d3.zoomIdentity);
-        barchart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
     }
     var times = recNode.events['times']
     var senders = recNode.events['senders'].filter(function(d, i) {
-        return times[i] > scatterchart.xScale.domain()[0] && times[i] < scatterchart.xScale.domain()[1]
+        return times[i] > app.simChart.xScale.domain()[0] && times[i] < app.simChart.xScale.domain()[1]
     })
     var times = times.filter(function(d) {
-        return d > scatterchart.xScale.domain()[0] && d < scatterchart.xScale.domain()[1]
+        return d > app.simChart.xScale.domain()[0] && d < app.simChart.xScale.domain()[1]
     })
 
-    scatterchart.yScale.domain([0, d3.max(source)])
+    scatterchart.yScale.domain([d3.max(source)+1, 0])
+    scatterchart.xScale.domain(app.simChart.xScale.domain())
     scatterchart.data({
             x: times,
             y: senders
@@ -36,13 +35,14 @@ rasterPlot.update = function(recNode) {
     var nbins = recNode.nbins || 100
     barchart.nbins(nbins).npop(source.length)
     var histogram = d3.histogram()
-        .domain(barchart.xScale.domain())
-        .thresholds(barchart.xScale.ticks(nbins));
+        .domain(app.simChart.xScale.domain())
+        .thresholds(app.simChart.xScale.ticks(nbins));
     var psth = histogram(recNode.events['times']);
     recNode.events.psth = psth;
     barchart.yScale.domain([0, d3.max(psth, function(d) {
         return barchart.yVal(d.length)
     })])
+    barchart.xScale.domain(app.simChart.xScale.domain())
     barchart.data(psth).update()
 
     if (app.layout) {
@@ -60,9 +60,8 @@ rasterPlot.init = function(recNode, noutputs, cidx) {
         var xx = xlim0[1] - xlim0[0];
         var xs = scatterchart.xScale.range();
         var dx = d3.event.dx * xx / (xs[1] - xs[0]);
-        scatterchart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
-        barchart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
-        rasterPlot.update(recNode)
+        app.simChart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
+        app.simChart.update()
     }
 
     function zoom() {
@@ -71,13 +70,12 @@ rasterPlot.init = function(recNode, noutputs, cidx) {
         // var xlim0 = [data.kernel.time - data.sim_time, data.kernel.time];
         var xx = (xlim0[0] + xlim0[1]) / 2;
         var k = d3.event.transform.k;
-        scatterchart.xScale.domain([xx - xx / k, xx + xx / k])
-        barchart.xScale.domain([xx - xx / k, xx + xx / k])
-        rasterPlot.update(recNode)
+        app.simChart.xScale.domain([xx - xx / k, xx + xx / k])
+        app.simChart.update()
     }
 
-    var height = parseInt($('#chart').attr('height')) / noutputs
     // $('#chart').empty()
+    var height = parseInt($('#chart').attr('height')) / noutputs
     var scatterchart = app.chart.scatterChart('#chart', {
         y: height * cidx,
         height: height * 7. / 10.,

@@ -18,21 +18,23 @@ navigation.init_controller = function() {
     app.slider.init_kernelSlider(model)
     var borderWidth = '4px';
 
+    var colors = app.simChart.colors;
+
     var nodeDefaults = app.config.modelSlider('node')
     var divNodes = $('#nodes');
     divNodes.empty()
     $('#myScrollspy .nav').empty()
     app.data.nodes.map(function(node) {
-        if (node.hidden) return
-        $('#myScrollspy .nav').append('<li><a class="node_' + node.id + '" href="#node_' + node.id + '">' + (node.model == 'parrot_neuron' ? 'P' : node.type.charAt(0).toUpperCase()) + '</a></li>')
+        // if (node.hidden) return
+        $('#myScrollspy .nav').append('<li><a style="border: 3px solid ' + colors[node.id % colors.length] + '" class="node_' + node.id + '" href="#node_' + node.id + '">' + (node.model == 'parrot_neuron' ? 'P' : node.type.charAt(0).toUpperCase()) + '</a></li>')
 
         divNodes.append('<div id="node_' + node.id + '" class="panel-body node ' + node.type + '" nidx="' + node.id + '"></div>')
         divNodes.find('#node_' + node.id).append('<hr>')
         divNodes.find('#node_' + node.id).append('<div class="content"></div>')
         var divNode = divNodes.find('#node_' + node.id).find('.content')
             // divNode.append('<div style="height:50px"></div>')
-        divNode.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[node.id % 10])
-            // divNode.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[node.id])
+        divNode.css('border-left', borderWidth + ' solid ' + colors[node.id % colors.length])
+            // divNode.css('border-right', borderWidth + ' solid ' + colors[node.id % colors.length])
         divNode.append('<select id="select_' + node.id + '" class="' + node.type + 'Select modelSelect form-control"></select>')
         divNode.find(' .modelSelect').append('<option disabled selected hidden>Select an ' + node.type + ' device</option> ')
 
@@ -78,8 +80,8 @@ navigation.init_controller = function() {
         divConnections.find('#conn_' + link.id).append('<hr>')
         divConnections.find('#conn_' + link.id).append('<div class="content"></div>')
         var divConnLink = divConnections.find('#conn_' + link.id).find('.content')
-        divConnLink.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[link.source % 10])
-        divConnLink.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[link.target % 10])
+        divConnLink.css('border-left', borderWidth + ' solid ' + colors[link.source % colors.length])
+        divConnLink.css('border-right', borderWidth + ' solid ' + colors[link.target % colors.length])
         divConnLink.append('<select class="connSelect modelSelect form-control"></select>')
         divConnLink.find('.modelSelect').append('<option disabled selected hidden>Select a connection rule</option> ')
         divConnLink.append('<div class="connSlider"></div>')
@@ -100,8 +102,8 @@ navigation.init_controller = function() {
         divSynapses.find('#syn_' + link.id).append('<hr>')
         divSynapses.find('#syn_' + link.id).append('<div class="content"></div>')
         var divSynLink = divSynapses.find('#syn_' + link.id).find('.content')
-        divSynLink.css('border-left', borderWidth + ' solid ' + app.networkLayout.colors[link.source % 10])
-        divSynLink.css('border-right', borderWidth + ' solid ' + app.networkLayout.colors[link.target % 10])
+        divSynLink.css('border-left', borderWidth + ' solid ' + colors[link.source % colors.length])
+        divSynLink.css('border-right', borderWidth + ' solid ' + colors[link.target % colors.length])
         divSynLink.append('<select class="synSelect modelSelect form-control"></select>')
         divSynLink.find('.modelSelect').append('<option disabled selected hidden>Select a synapse</option> ')
         divSynLink.append('<div class="synSlider"></div>')
@@ -125,7 +127,7 @@ navigation.init_controller = function() {
     //         app.models.model_selected(node)
     //     }
     // })
-    $("#simulation-config").find('#level_' + app.config.app().get('level')).find('.glyphicon-ok').show()
+    $("#simulation-config").find('#level_' + app.config.app().get('simulation.level')).find('.glyphicon-ok').show()
     navigation.load_simulationList()
 }
 

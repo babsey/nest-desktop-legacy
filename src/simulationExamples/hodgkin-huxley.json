@@ -55,14 +55,6 @@
         "params": {}
     }, {
         "id": 6,
-        "type": "output",
-        "model": "voltmeter",
-        "x": 0,
-        "y": 0,
-        "hidden": true,
-        "params": {}
-    }, {
-        "id": 7,
         "type": "input",
         "model": "noise_generator",
         "x": 0,
@@ -73,7 +65,7 @@
             "std": 25.0
         }
     }, {
-        "id": 8,
+        "id": 7,
         "type": "input",
         "model": "poisson_generator",
         "x": 550,
@@ -84,7 +76,7 @@
             "stop": 600.0
         }
     }, {
-        "id": 9,
+        "id": 8,
         "type": "input",
         "model": "poisson_generator",
         "x": 370,
@@ -94,6 +86,14 @@
             "start": 400.0,
             "stop": 900.0
         }
+    }, {
+        "id": 9,
+        "type": "output",
+        "model": "voltmeter",
+        "x": 0,
+        "y": 0,
+        "hidden": true,
+        "params": {}
     }, {
         "id": 10,
         "type": "output",
@@ -217,92 +217,92 @@
         }
     }, {
         "id": 14,
-        "source": 0,
-        "target": 6
-    }, {
-        "id": 15,
-        "source": 1,
-        "target": 6
-    }, {
-        "id": 16,
-        "source": 2,
-        "target": 6
-    }, {
-        "id": 17,
-        "source": 3,
-        "target": 6
-    }, {
-        "id": 18,
-        "source": 4,
-        "target": 6
-    }, {
-        "id": 19,
-        "source": 5,
-        "target": 6
-    }, {
-        "id": 20,
-        "source": 7,
+        "source": 6,
         "target": 0,
         "syn_spec": {
             "weight": 1.0,
             "delay": 2.0
         }
     }, {
-        "id": 21,
-        "source": 7,
+        "id": 15,
+        "source": 6,
         "target": 1,
         "syn_spec": {
             "weight": 1.0,
             "delay": 2.0
         }
     }, {
-        "id": 22,
-        "source": 7,
+        "id": 16,
+        "source": 6,
         "target": 2,
         "syn_spec": {
             "weight": 1.0,
             "delay": 2.0
         }
     }, {
-        "id": 23,
-        "source": 7,
+        "id": 17,
+        "source": 6,
         "target": 3,
         "syn_spec": {
             "weight": 1.0,
             "delay": 2.0
         }
     }, {
-        "id": 24,
-        "source": 7,
+        "id": 18,
+        "source": 6,
         "target": 4,
         "syn_spec": {
             "weight": 1.0,
             "delay": 2.0
         }
     }, {
-        "id": 25,
-        "source": 7,
+        "id": 19,
+        "source": 6,
         "target": 5,
         "syn_spec": {
             "weight": 1.0,
             "delay": 2.0
         }
     }, {
-        "id": 26,
-        "source": 8,
+        "id": 20,
+        "source": 7,
         "target": 0
     }, {
-        "id": 27,
-        "source": 8,
+        "id": 21,
+        "source": 7,
         "target": 1
     }, {
-        "id": 28,
-        "source": 9,
+        "id": 22,
+        "source": 8,
         "target": 2
     }, {
-        "id": 29,
-        "source": 9,
+        "id": 23,
+        "source": 8,
         "target": 3
+    }, {
+        "id": 24,
+        "source": 0,
+        "target": 9
+    }, {
+        "id": 25,
+        "source": 1,
+        "target": 9
+    }, {
+        "id": 26,
+        "source": 2,
+        "target": 9
+    }, {
+        "id": 27,
+        "source": 3,
+        "target": 9
+    }, {
+        "id": 28,
+        "source": 4,
+        "target": 9
+    }, {
+        "id": 29,
+        "source": 5,
+        "target": 9
     }, {
         "id": 30,
         "source": 0,

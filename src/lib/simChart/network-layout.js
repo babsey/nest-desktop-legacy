@@ -4,7 +4,6 @@ const d3 = require("d3");
 
 var layout = {};
 
-layout.colors = d3.schemeCategory10;
 layout.pathColor = {
     inh: '#b34846',
     exc: '#467ab3'
@@ -110,8 +109,9 @@ layout.ticked = function() {
         return "translate(" + d.x + "," + d.y + ")";
     });
 
+    var colors = app.simChart.colors;
     layout.circle.selectAll('circle').style('fill', function(d, i) {
-        return (d === app.selected_node) ? d3.rgb(layout.colors[d.index % 10]).brighter().toString() : "white";
+        return (d === app.selected_node) ? d3.rgb(colors[d.index % colors.length]).brighter().toString() : "white";
     });
 
     layout.circle.selectAll('title')
@@ -219,10 +219,12 @@ layout.restart = function() {
         .merge(layout.circle)
 
     layout.circle.selectAll('circle').remove()
+
+    var colors = app.simChart.colors;
     layout.circle.append("circle")
         .attr("r", 23)
         .style('stroke', function(d) {
-            return layout.colors[d.id % 10];
+            return colors[d.id % colors.length];
         })
 
     layout.circle.selectAll('text').remove()

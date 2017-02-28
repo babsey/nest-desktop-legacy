@@ -15,7 +15,7 @@ events.connSlider = function() {
     $('#connections .connSlider .sliderInput').on('slideStop', function() {
         app.selected_link = app.data.links[$(this).parents('.link').attr('lidx')];
         app.selected_link.conn_spec[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
-        app.networkLayout.restart()
+        app.simChart.simChart.restart()
         app.simulation.simulate()
     })
 }
@@ -24,7 +24,7 @@ events.synSlider = function() {
     $('#synapses .synSlider .sliderInput').on('slideStop', function() {
         app.selected_link = app.data.links[$(this).parents('.link').attr('lidx')];
         app.selected_link.syn_spec[$(this).parents('.paramSlider').attr('id')] = parseFloat(this.value)
-        app.networkLayout.restart()
+        app.simChart.simChart.restart()
         app.simulation.simulate()
     })
 }
@@ -32,7 +32,7 @@ events.synSlider = function() {
 events.dataSlider = function() {
     $('.dataSlider .sliderInput').on('slideStop', function() {
         if ($(this).parents('.node').hasClass('output')) {
-            app.simulation.update()
+            app.simChart.update()
         } else {
             app.simulation.simulate()
         }
@@ -102,7 +102,7 @@ events.controllerHandler = function() {
     events.synSlider()
     events.dataSlider()
 
-    $('#autoscale').on('click', app.simulation.update)
+    $('#autoscale').on('click', app.simChart.update)
 
     $('#id_record').on('change', function() {
         console.log('aa')
@@ -152,7 +152,7 @@ events.buttonHandler = function() {
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
     $('.level').on('click', function() {
         $('.level').find('.glyphicon-ok').hide()
-        app.config.app().set('level', parseInt($(this).attr('level')))
+        app.config.app().set('simulation.level', parseInt($(this).attr('level')))
         for (var nid in app.data.nodes) {
             var node = app.data.nodes[nid];
             if (node.model) {

@@ -75,27 +75,7 @@
 
         <div id="jumbotron-bg"></div>
 
-        <div class="container">
-            <div id="sim-default">
-                <h4>Default simulations</h4>
-                <div class="row simulation-list"></div>
-            </div>
-
-            <div id="sim-nest">
-                <h4>Example simulations of NEST simulator</h4>
-                <div class="row simulation-list"></div>
-            </div>
-
-            <div id="sim-user">
-                <h4>Your simulations</h4>
-                <div class="row simulation-list"></div>
-            </div>
-
-            <div id="sim-nuspic-1">
-                <h4>Nuspic I simulations</h4>
-                <div class="row simulation-list"></div>
-            </div>
-        </div>
+        <div id="simulations" class="container"></div>
 </body>
 
 <script>
@@ -115,21 +95,17 @@
     });
 
     setTimeout(function() {
-        app.simulation.list({
-            'group': 'example'
-        }, '#sim-default')
-        app.simulation.list({
-            'group': 'nest-example'
-        }, '#sim-nest')
-        app.simulation.list({
-            'user': app.config.app().get('user.name')
-        }, '#sim-user')
-        app.simulation.list({
-            'group': 'nuspic-1'
-        }, '#sim-nuspic-1')
-        // app.simulation.list({
-        //     'group': 'public'
-        // }, '#sim-public')
+
+        var groups = app.config.app().get('simulation.groups');
+        groups.map(function(grp) {
+            $('#simulations').append('<div id="sim-' + grp.id + '"></div>')
+            $('#sim-' + grp.id).append('<h4>' + grp.name + ' simulations</h4>')
+            $('#sim-' + grp.id).append('<div class="row simulation-list"></div>')
+            app.simulation.list({
+                group: grp.id
+            }, '#sim-' + grp.id)
+        })
+
         setTimeout(function() {
             $('#content').fadeIn()
         }, 100)

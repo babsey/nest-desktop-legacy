@@ -12,7 +12,6 @@ var app = {
     message: require(__dirname + '/lib/message'),
     model: require(__dirname + '/lib/model'),
     navigation: require(__dirname + '/lib/navigation'),
-    networkLayout: require(__dirname + '/lib/network-layout'),
     request: require(__dirname + '/lib/request'),
     screen: require(__dirname + '/lib/screen'),
     simChart: require(__dirname + '/lib/sim-chart'),

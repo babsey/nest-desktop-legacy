@@ -21,5 +21,20 @@
             "port": "5000"
         }
     },
-    "level": 1
+    "simulation": {
+        "level": 1,
+        "groups": [{
+            "id": "user",
+            "name": "User"
+        },{
+            "id": "example",
+            "name": "Example"
+        },{
+            "id": "nest-example",
+            "name": "NEST example"
+        },{
+            "id": "nuspic-1",
+            "name": "NuSPIC 1"
+        }]
+    }
 }

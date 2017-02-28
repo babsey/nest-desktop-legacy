@@ -91,7 +91,7 @@ simulation.simulate = function() {
                     }
                     recNode.events = res.nodes[recNode.id].events;
                 })
-                app.simulation.update()
+                app.simChart.update()
 
                 var filepath = '../data/images/' + app.data._id + '.png'
                 if (!fs.existsSync(__dirname + path.sep + '..' + path.sep + filepath)) {
@@ -125,28 +125,12 @@ simulation.resume = function() {
                 recNode.events[key] = dataEvents[key]
             }
             dataEvents = null;
-            app.simulation.update()
+            app.simChart.update()
             app.simulation.resume()
         })
 }
 
-simulation.update = function() {
-    var outputs = app.data.nodes.filter(function(node) {
-        return node.type == 'output'
-    })
-
-    outputs.map(function(output, idx) {
-        app.simChart[output.chart || app.simChart.fromModel[output.model]].update(output)
-    })
-}
-
 simulation.init = function() {
-    var date = app.format.date(app.data.createdAt)
-    $('#title').html(app.data.name)
-    $('#subtitle').empty()
-    $('#subtitle').append(date ? '<span style="margin-left:20px">' + date + '</span>' : '')
-    $('#subtitle').append(app.data.user ? '<span style="margin-left:20px">' + app.data.user + '</span>' : '')
-
     app.running = false;
     app.drawing = false;
     app.zooming = false;
@@ -155,24 +139,20 @@ simulation.init = function() {
     // mouse event vars
     app.selected_node = null;
     app.selected_link = null;
+    app.mousedown_link = null;
+    app.mousedown_node = null;
+    app.mouseup_node = null;
 
-    $('#chart').attr('width', window.innerWidth - 350).attr('height', window.innerHeight - 50)
+    var date = app.format.date(app.data.createdAt)
+    $('#title').html(app.data.name)
+    $('#subtitle').empty()
+    $('#subtitle').append(date ? '<span style="margin-left:20px">' + date + '</span>' : '')
+    $('#subtitle').append(app.data.user ? '<span style="margin-left:20px">' + app.data.user + '</span>' : '')
 
-    var outputs = app.data.nodes.filter(function(node) {
-        return node.type == 'output'
-    })
-
-    outputs.map(function(output, idx) {
-        app.simChart[output.chart || app.simChart.fromModel[output.model]].init(output, outputs.length, idx)
-    })
-
+    app.simChart.init()
     if (app.data.layout) {
-        app.mousedown_link = null;
-        app.mousedown_node = null;
-        app.mouseup_node = null;
-        app.networkLayout.init('#chart')
+        app.simChart.networkLayout.init('#chart')
     }
-
     app.navigation.init_controller()
     app.events.controllerHandler()
     if (app.data.runSimulation) {

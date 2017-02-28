@@ -10,9 +10,6 @@ function fillArray(value, len) {
     return arr;
 }
 
-trace.colors = d3.schemeCategory10;
-
-
 trace.update = function(recNode) {
     if (recNode.events.senders.length == 0) return
 
@@ -22,10 +19,11 @@ trace.update = function(recNode) {
         return app.data.nodes[link.source].ids
     }))
 
+    var colors = app.simChart.colors;
     var c = d3.merge(app.data.links.filter(function(link) {
         return link.target == recNode.id
     }).map(function(link) {
-        return fillArray(trace.colors[app.data.nodes[link.source].id], app.data.nodes[link.source].ids.length)
+        return fillArray(colors[app.data.nodes[link.source].id % colors.length], app.data.nodes[link.source].ids.length)
     }))
 
     app.simulation.data = {
@@ -39,11 +37,10 @@ trace.update = function(recNode) {
     var linechart = trace.linechart;
     if (document.getElementById('autoscale').checked) {
         linechart.g.select('#clip').call(d3.zoom().transform, d3.zoomIdentity);
-        linechart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
     }
 
     recNode.events.senders.map(function(d, i) {
-        if ((recNode.events.times[i] >= linechart.xScale.domain()[0]) && (recNode.events.times[i] < linechart.xScale.domain()[1])) {
+        if ((recNode.events.times[i] >= app.simChart.xScale.domain()[0]) && (recNode.events.times[i] < app.simChart.xScale.domain()[1])) {
             app.simulation.data.y[d - source[0]].push(recNode.events[recNode.record_from][i])
             if (d == source[0]) {
                 app.simulation.data.x.push(recNode.events.times[i])
@@ -51,6 +48,7 @@ trace.update = function(recNode) {
         }
     });
     linechart.yScale.domain(d3.extent([].concat.apply([], app.simulation.data.y)))
+    linechart.xScale.domain(app.simChart.xScale.domain())
     linechart.data(app.simulation.data)
         .yLabel(app.model.record_labels[recNode.record_from])
         // .yLabel(app.model.record_labels[app.selected_node.record_from] || 'a.u.')
@@ -73,8 +71,8 @@ trace.init = function(recNode, noutputs, cidx) {
         var xx = xlim0[1] - xlim0[0];
         var xs = linechart.xScale.range();
         var dx = d3.event.dx * xx / (xs[1] - xs[0]);
-        linechart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
-        trace.update(recNode)
+        app.simChart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
+        app.simChart.update()
     }
 
     function zoom() {
@@ -83,12 +81,12 @@ trace.init = function(recNode, noutputs, cidx) {
         // var xlim0 = [data.kernel.time - data.sim_time, data.kernel.time];
         var xx = (xlim0[0] + xlim0[1]) / 2;
         var k = d3.event.transform.k;
-        linechart.xScale.domain([xx - xx / k, xx + xx / k])
-        trace.update(recNode)
+        app.simChart.xScale.domain([xx - xx / k, xx + xx / k])
+        app.simChart.update()
     }
 
-    var height = parseInt($('#chart').attr('height')) / noutputs
     // $('#chart').empty()
+    var height = parseInt($('#chart').attr('height')) / noutputs
     var linechart = app.chart.lineChart('#chart', {
         y: height * cidx,
         height: height,
@@ -100,7 +98,6 @@ trace.init = function(recNode, noutputs, cidx) {
     linechart
         .onDrag(drag)
         .onZoom(zoom);
-
 }
 
 module.exports = trace

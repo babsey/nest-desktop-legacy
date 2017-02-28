@@ -41,12 +41,14 @@ var slider = {};
 slider.create_dataSlider = function(ref, id, options) {
     $(ref).append('<dl id="' + id + '" class="dataSlider" level="' + options.level + '"></dl>')
     $(ref).find('#' + id).append('<dt>' + options.label + '</dt>')
-    $('#' + id).attr('level') > app.config.app().get('level') ? $('#' + id).hide() : $('#' + id).show()
+    var level = app.config.app().get('simulation.level');
+    $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
     return _slider(ref, id, options);
 }
 
 function _update_dataSlider(id, value) {
-    $('#' + id).attr('level') > app.app.app().get('level') ? $('#' + id).hide() : $('#' + id).show()
+    var level = app.config.app().get('simulation.level');
+    $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
     $('#' + id + 'Input').slider('setValue', value)
     $('#' + id + 'Val').html(value)
 }
@@ -82,9 +84,10 @@ slider.init_binSlider = function(nidx, options) {
 
 slider.update_dataSlider_level = function() {
     var ds = $('.dataSlider');
+    var level = app.config.app().get('simulation.level');
     ds.each(function() {
         var pid = this.id;
-        $('#' + this.id).attr('level') > app.config.app().get('level') ? $('#' + pid).hide() : $('#' + pid).show()
+        $('#' + this.id).attr('level') > level ? $('#' + pid).hide() : $('#' + pid).show()
     })
 }
 
@@ -120,6 +123,7 @@ slider.init_modelSlider = function(ref, model) {
 slider.update_kernelSlider = function() {
     var ref = $("#kernel .content");
     var modelSlider = ref.find('.' + model);
+    var level = app.config.app().get('simulation.level');
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
         if (node.params[pid] != undefined) {
@@ -128,7 +132,7 @@ slider.update_kernelSlider = function() {
         } else {
             node.params[pid] = modelSlider.find('#' + pid + 'Input').slider('getValue')
         }
-        modelSlider.find('#' + pid).attr('level') > app.config.app().get('level') ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
+        modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
 }
 
@@ -137,7 +141,7 @@ slider.update_nodeSlider = function(node) {
     var model = node.model;
     ref.find('.modelSlider .model').hide();
     var modelSlider = ref.find('.' + model);
-    var level = app.config.app().get('level')
+    var level = app.config.app().get('simulation.level');
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
         if (node.params[pid] != undefined) {
@@ -157,7 +161,7 @@ slider.update_connSlider = function(link) {
     var ref = $("#conn_" + link.id);
     ref.find('.connSlider .model').hide();
     var ruleSlider = ref.find('.' + rule);
-    var level = app.config.app().get('level')
+    var level = app.config.app().get('simulation.level');
     ruleSlider.find('.paramSlider').each(function() {
         var pid = this.id;
         if (link.conn_spec[pid] != undefined) {
@@ -177,7 +181,7 @@ slider.update_synSlider = function(link) {
     var ref = $("#syn_" + link.id);
     ref.find('.synSlider .model').hide();
     var modelSlider = ref.find('.' + model);
-    var level = app.config.app().get('level')
+    var level = app.config.app().get('simulation.level')
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
         if (link.syn_spec[pid] != undefined) {
