@@ -30,6 +30,34 @@
             </div>
         </div>
     </div> -->
+
+    <div id="simulation-detail" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-4">
+                            <a class="thumbnail">
+                                <img class="image">
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-8">
+                            <div class="description"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-default">Go</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="content" style="display:none">
         <div class="container-fluid">
             <div class="pull-right">
@@ -74,7 +102,6 @@
         </div>
 
         <div id="jumbotron-bg"></div>
-
         <div id="simulations" class="container"></div>
 </body>
 
@@ -82,6 +109,7 @@
     window.jQuery = $ = require('jquery')
     require('bootstrap');
     const shell = require("electron").shell;
+    const path = require('path');
     const fs = require('fs');
 
     window.app = require('./app');
@@ -103,12 +131,25 @@
             $('#sim-' + grp.id).append('<div class="row simulation-list"></div>')
             app.simulation.list({
                 group: grp.id
-            }, '#sim-' + grp.id)
+            }).exec(function(err, docs) {
+                if (docs.length == 0) return
+                docs.map(function(doc) {
+                    $('#sim-' + grp.id).find('.simulation-list').append(app.render.simulationThumbnails(doc))
+                })
+            });
         })
 
         setTimeout(function() {
-            $('#content').fadeIn()
-        }, 100)
+            $('#content').fadeIn('fast')
+                // $('[data-toggle="tooltip"]').tooltip();
+            $('.simulation').on('click', function() {
+                $('#simulation-detail').find('.modal-title').html($(this).find('a').attr('title'))
+                $('#simulation-detail').find('.description').html($(this).find('.description').html())
+                $('#simulation-detail').find('.image').attr('src', $(this).find('img').attr('src'))
+                $('#simulation-detail').find('a').attr('href', $(this).find('a').attr('href'))
+                $('#simulation-detail').modal('show')
+            })
+        }, 200)
     }, fs.existsSync(__dirname + '/../data/' + app.config.app().get('db.name') + '.db') ? 1 : 1000)
 </script>
 

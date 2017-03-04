@@ -1,8 +1,8 @@
 {
     "_id": "bump-activity",
     "name": "Bump activity",
-    "group": "example",
-    "user": "architect",
+    "group": "user",
+    "user": "spreizer",
     "runSimulation": true,
     "network": "gamma",
     "sim_time": 1000.0,
@@ -16,6 +16,7 @@
         "model": "noise_generator",
         "x": 0,
         "y": 0,
+        "color": "#ff7f0e",
         "stim_time": [0.0, 1000.0],
         "params": {
             "mean": 1000.0,
@@ -27,6 +28,7 @@
         "model": "iaf_cond_alpha",
         "x": 150,
         "y": 50,
+        "color": "#1f77b4",
         "n": 900,
         "nrow": 30,
         "ncol": 30,

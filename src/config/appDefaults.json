@@ -23,6 +23,10 @@
     },
     "simulation": {
         "level": 1,
+        "chart": {
+            "color": false,
+            "layout": true
+        },
         "groups": [{
             "id": "user",
             "name": "User"

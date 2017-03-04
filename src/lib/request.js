@@ -27,7 +27,7 @@ request.server_check = function() {
 }
 
 request.request = function(data) {
-    var url = "http://" + request.serverURL() + "/network/" + app.data.network + '/' + (app.running ? 'resume' : 'simulate')
+    var url = "http://" + request.serverURL() + "/network/" + app.data.network + '/' + (app.simulation.running ? 'resume' : 'simulate')
     return $.ajax({
         method: "POST",
         url: url,
@@ -39,10 +39,10 @@ request.request = function(data) {
 }
 
 $(document).bind("ajaxStart", function() {
-    if (!(app.running)) {
-        $("select").attr("disabled", 'disabled');
-        $('.sliderInput').slider('disable')
-    }
+    // if (!(app.simulation.running)) {
+    $("select").attr("disabled", 'disabled');
+    $('.sliderInput.onlySimulate').slider('disable')
+    // }
 }).bind('ajaxStop', function() {
     $("select").attr("disabled", false);
     $('.sliderInput').slider('enable')

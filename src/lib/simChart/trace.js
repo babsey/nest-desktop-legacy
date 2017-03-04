@@ -2,14 +2,6 @@
 
 var trace = {}
 
-function fillArray(value, len) {
-    var arr = [];
-    for (var i = 0; i < len; i++) {
-        arr.push(value);
-    }
-    return arr;
-}
-
 trace.update = function(recNode) {
     if (recNode.events.senders.length == 0) return
 
@@ -23,7 +15,7 @@ trace.update = function(recNode) {
     var c = d3.merge(app.data.links.filter(function(link) {
         return link.target == recNode.id
     }).map(function(link) {
-        return fillArray(colors[app.data.nodes[link.source].id % colors.length], app.data.nodes[link.source].ids.length)
+        return app.format.fillArray(colors[app.data.nodes[link.source].id % colors.length], app.data.nodes[link.source].ids.length)
     }))
 
     app.simulation.data = {
@@ -47,20 +39,9 @@ trace.update = function(recNode) {
             }
         }
     });
-    linechart.yScale.domain(d3.extent([].concat.apply([], app.simulation.data.y)))
-    linechart.xScale.domain(app.simChart.xScale.domain())
     linechart.data(app.simulation.data)
-        .yLabel(app.model.record_labels[recNode.record_from])
-        // .yLabel(app.model.record_labels[app.selected_node.record_from] || 'a.u.')
-        .update();
-
-    if (app.layout) {
-        app.layout.restart()
-    }
-
-    $('#simulation-add').attr('disabled', false)
-    $('#simulation-resume').attr('disabled', false)
-
+    app.simChart.yLabel(linechart, app.model.record_labels[recNode.record_from])
+    linechart.update();
 }
 
 trace.init = function(recNode, noutputs, cidx) {
@@ -86,18 +67,11 @@ trace.init = function(recNode, noutputs, cidx) {
     }
 
     // $('#chart').empty()
-    var height = parseInt($('#chart').attr('height')) / noutputs
-    var linechart = app.chart.lineChart('#chart', {
+    var height = parseInt($('#dataChart').attr('height')) / noutputs
+    trace.linechart = app.chart.lineChart('#dataChart', {
         y: height * cidx,
         height: height,
     });
-    trace.linechart = linechart;
-    linechart.xAxis(linechart.xScale)
-        .yAxis(linechart.yScale)
-        .xLabel('Time (ms)');
-    linechart
-        .onDrag(drag)
-        .onZoom(zoom);
 }
 
 module.exports = trace

@@ -2,7 +2,7 @@
 
 const d3 = require("d3");
 
-var barchart = {
+var chart = {
     margin: {
         top: 10,
         right: 40,
@@ -12,152 +12,58 @@ var barchart = {
     y: 0
 };
 
-var margin = barchart.margin;
-barchart.xScale = d3.scaleLinear();
-barchart.yScale = d3.scaleLinear();
-barchart.format = d3.format(".2f");
-
-barchart.transition = d3.transition()
-    .ease(d3.easeLinear)
-    .duration(1);
+var margin = chart.margin;
+chart.xScale = d3.scaleLinear();
+chart.yScale = d3.scaleLinear();
+chart.format = d3.format(".2f");
 
 var _xAxis, _yAxis;
 
 var _data = [];
 
-barchart.data = function(d) {
+chart.data = function(d) {
     if (!arguments.length) return _data;
     _data = d;
-    return barchart
+    return chart
 }
 
 var _npop = 1;
-barchart.npop = function(d) {
+chart.npop = function(d) {
     if (!arguments.length) return _npop;
     _npop = d;
-    return barchart
+    return chart
+}
+
+var _sources = [];
+chart.sources = function(d) {
+    if (!arguments.length) return _sources;
+    _sources = d;
+    return chart
 }
 
 var _nbins = 1.;
-barchart.nbins = function(d) {
+chart.nbins = function(d) {
     if (!arguments.length) return _nbins;
     _nbins = d;
-    return barchart
+    return chart
 }
 
-barchart.xAxis = function(xScale) {
-    if (!arguments.length) return _xAxis;
-    _xAxis = d3.axisBottom(xScale);
+chart.init = function(reference, size) {
+    var g = d3.select(reference),
+        width = (size.width ? size.width : +g.attr("width")) - margin.left - margin.right,
+        height = (size.height ? size.height : +g.attr("height")) - margin.top - margin.bottom;
+    chart.width = width;
+    chart.height = height;
 
-    barchart.g.append("g")
-        .attr("id", "xaxis")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + -1. * +barchart.yScale.range()[1] + barchart.height + ")")
-        // .attr("transform", "translate(0," + barchart.height + ")")
-        .style('font-size', '14px')
-        .call(_xAxis);
+    chart.xScale.range([0, width])
+    chart.yScale.range([height, 0])
 
-    return barchart
-}
-
-barchart.yAxis = function(yScale) {
-    if (!arguments.length) return _yAxis;
-    _yAxis = d3.axisLeft(yScale).ticks(3);
-
-    barchart.g.append("g")
-        .attr("id", "yaxis")
-        .attr("class", "axis")
-        .style('font-size', '14px')
-        .attr("transform", "translate(0," + -1. * +barchart.yScale.range()[1] + ")")
-        .call(_yAxis);
-
-    return barchart
-}
-
-barchart.xLabel = function(label) {
-    if (!document.getElementsByTagName("xlabel").length) {
-        barchart.g.append("text")
-            .attr("id", "xlabel")
-            .attr("class", "label")
-            .attr("text-anchor", "middle")
-            .attr("x", +barchart.g.attr('width') / 2)
-            .attr("y", +barchart.g.attr('height') + 30)
-            .text("Time (ms)");
-    }
-
-    barchart.g.select('#xlabel')
-        .text(label);
-    return barchart
-}
-
-barchart.yLabel = function(label) {
-    if (!document.getElementsByTagName("ylabel").length) {
-        barchart.g.append("text")
-            .attr("id", "ylabel")
-            .attr("class", "label")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -1. * +barchart.yScale.range()[1])
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .attr("text-anchor", "end");
-    }
-
-    barchart.g.select('#ylabel')
-        .text(label);
-    return barchart
-}
-
-barchart.onDrag = function(drag) {
-    barchart.drag = d3.drag()
-        .on("start", function() {
-            app.dragging = true
-        })
-        .on("drag", function() {
-            drag()
-        })
-        .on("end", function() {
-            app.dragging = false
-        })
-    barchart.g.select('#clip')
-        .call(barchart.drag);
-    return barchart;
-}
-
-barchart.onZoom = function(zoom) {
-    barchart.zoom = d3.zoom()
-        .scaleExtent([.1, 10])
-        .on("start", function() {
-            app.zooming = true
-        })
-        .on("zoom", function() {
-            zoom()
-        })
-        .on("end", function() {
-            app.zooming = false
-        })
-    barchart.g.select('#clip')
-        .call(barchart.zoom);
-    return barchart;
-}
-
-barchart.init = function(reference, size) {
-    var svg = d3.select(reference),
-        width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
-        height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
-    barchart.svg = svg;
-    barchart.width = width;
-    barchart.height = height;
-
-    barchart.xScale.range([0, width])
-    barchart.yScale.range([height, 0])
-
-    var g = svg.append("g")
+    chart.g = g.append("g")
         .attr('height', height)
         .attr('width', width)
-        .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) +")");
-    barchart.g = g;
+        .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) + ")");
 
-    var clip = g.append("g")
+    var clip = chart.g.append("g")
         .attr("clip-path", "url(#clip)")
         .attr('id', 'clip');
 
@@ -167,102 +73,130 @@ barchart.init = function(reference, size) {
         .attr('height', height)
         .attr('fill', 'white');
 
-    return barchart
+    app.simChart.xAxis(chart);
+    app.simChart.yAxis(chart);
+    app.simChart.xLabel(chart, 'Time [ms]');
+    app.simChart.yLabel(chart, 'Spike count');
+    app.simChart.onDrag(chart);
+    app.simChart.onZoom(chart);
 
+    return chart
 }
 
-barchart.yVal = function(y) {
-    return y // barchart.npop() * 1000. // barchart.binwidth()
+chart.yVal = function(d, idx) {
+    idx = idx || 'total'
+    if (typeof idx == 'number' || idx == 'total') {
+        var y = d[idx]
+    } else {
+        var y = idx.map(function(i) {
+            return d[i]
+        }).reduce(function(acc, val) {
+            return acc + val
+        })
+    }
+    return y // chart.npop() * 1000. // chart.binwidth()
 }
 
 //
 // Bar-chart
 //
 
-barchart.update = function() {
-    barchart.xScale.range([0, +barchart.g.attr('width')])
-    barchart.yScale.range([+barchart.g.attr('height'), 0])
+chart.update = function() {
+    chart.xScale.range([0, +chart.g.attr('width')])
+    chart.yScale.range([+chart.g.attr('height'), 0])
 
-    if (app.running || app.dragging || app.zooming) {
-        barchart.g.select('#xaxis')
-            .call(barchart.xAxis());
-        barchart.g.select('#yaxis')
-            .call(barchart.yAxis());
+    if (app.selected_node && app.selected_node.type == 'neuron') {
+        var nidx = app.selected_node.id;
+        var idx = app.selected_node.ids.map(function(d) {
+            return chart.sources().indexOf(d)
+        });
     } else {
-        barchart.g.select('#xaxis')
-            .transition(barchart.transition)
-            .call(barchart.xAxis());
-        barchart.g.select('#yaxis')
-            .transition(barchart.transition)
-            .call(barchart.yAxis());
+        var nidx = null;
+        var idx = 'total';
     }
 
-    var bars = barchart.g.select('#clip')
+    chart.xScale.domain(app.simChart.xScale.domain())
+    chart.yScale.domain([0, d3.max(chart.data(), function(d) {
+        return chart.yVal(d, 'total')
+    })])
+
+    var transition = !(app.simulation.running || app.simChart.dragging || app.simChart.zooming || app.simChart.resizing || app.mouseover)
+    app.simChart.axesUpdate(chart, transition)
+
+    var bars = chart.g.select('#clip')
         .selectAll(".bar")
-        .data(barchart.data());
-    barchart.bars = bars;
+        .data(chart.data());
+    chart.bars = bars;
 
-    if (app.running || app.dragging || app.zooming) {
-        bars.attr("x", function(d) {
-                return barchart.xScale(d.x0)
+    var colors = app.simChart.colors
+    if (transition) {
+        bars
+            .attr("x", function(d) {
+                return chart.xScale(d.x0)
             })
             .attr("width", function(d) {
-                return barchart.xScale(d.x1) - barchart.xScale(d.x0)
+                return chart.xScale(d.x1) - chart.xScale(d.x0)
             })
+            .transition(app.simChart.transition)
             .attr("y", function(d) {
-                return barchart.yScale(barchart.yVal(d.length))
+                return chart.yScale(chart.yVal(d, idx))
             })
             .attr("height", function(d) {
-                return Math.max(0, +barchart.g.attr('height') - barchart.yScale(barchart.yVal(d.length)));
-            });
+                return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
+            })
+            .style("fill", nidx ? colors[nidx] : '');
 
         bars.enter()
             .append("rect")
             .attr("class", "bar")
             .attr("x", function(d) {
-                return barchart.xScale(d.x0)
+                return chart.xScale(d.x0)
             })
             .attr("width", function(d) {
-                return barchart.xScale(d.x1) - barchart.xScale(d.x0)
+                return chart.xScale(d.x1) - chart.xScale(d.x0)
             })
+            .attr('y', chart.g.attr('height'))
+            .transition(app.simChart.transition)
             .attr("y", function(d) {
-                return barchart.yScale(barchart.yVal(d.length))
+                return chart.yScale(chart.yVal(d, idx))
             })
             .attr("height", function(d) {
-                return Math.max(0, +barchart.g.attr('height') - barchart.yScale(barchart.yVal(d.length)));
-            });
-
+                return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
+            })
+            .style("fill", nidx ? colors[nidx] : '');
     } else {
-        bars.transition(barchart.transition).attr("x", function(d) {
-                return barchart.xScale(d.x0)
+        bars
+            .attr("x", function(d) {
+                return chart.xScale(d.x0)
             })
             .attr("width", function(d) {
-                return barchart.xScale(d.x1) - barchart.xScale(d.x0)
+                return chart.xScale(d.x1) - chart.xScale(d.x0)
             })
             .attr("y", function(d) {
-                return barchart.yScale(barchart.yVal(d.length))
+                return chart.yScale(chart.yVal(d, idx))
             })
             .attr("height", function(d) {
-                return Math.max(0, +barchart.g.attr('height') - barchart.yScale(barchart.yVal(d.length)));
-            });
+                return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
+            })
+            .style("fill", nidx ? colors[nidx] : '');
 
         bars.enter()
             .append("rect")
             .attr("class", "bar")
             .attr("x", function(d) {
-                return barchart.xScale(d.x0)
+                return chart.xScale(d.x0)
             })
             .attr("width", function(d) {
-                return barchart.xScale(d.x1) - barchart.xScale(d.x0)
+                return chart.xScale(d.x1) - chart.xScale(d.x0)
             })
-            .attr('y', barchart.g.attr('height'))
-            .transition(barchart.transition)
+            .attr('y', chart.g.attr('height'))
             .attr("y", function(d) {
-                return barchart.yScale(barchart.yVal(d.length))
+                return chart.yScale(chart.yVal(d, idx))
             })
             .attr("height", function(d) {
-                return Math.max(0, +barchart.g.attr('height') - barchart.yScale(barchart.yVal(d.length)));
-            });
+                return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
+            })
+            .style("fill", nidx ? colors[nidx] : '');
     }
 
     bars.exit()
@@ -270,4 +204,4 @@ barchart.update = function() {
 
 }
 
-module.exports = barchart.init;
+module.exports = chart.init;

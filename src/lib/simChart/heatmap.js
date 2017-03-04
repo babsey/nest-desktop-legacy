@@ -31,10 +31,10 @@ heatmap.update = function(recNode) {
     var sourceId = app.data.links.find(function(x) {
         return x.target == recNode.id
     }).source
-    heatmapchart.xScale.domain([0, app.data.nodes[sourceId].nrow])
-    heatmapchart.yScale.domain([0, app.data.nodes[sourceId].ncol])
-    heatmapchart.colorScale.domain([0, 5])
-    heatmapchart.data({
+    heatmap.chart.xScale.domain([0, app.data.nodes[sourceId].nrow])
+    heatmap.chart.yScale.domain([0, app.data.nodes[sourceId].ncol])
+    heatmap.chart.colorScale.domain([0, 5])
+    heatmap.chart.data({
             i: d3.range(0, h1.length),
             x: d3.range(0, app.data.nodes[sourceId].ncol),
             y: d3.range(0, app.data.nodes[sourceId].nrow),
@@ -49,16 +49,15 @@ heatmap.update = function(recNode) {
 heatmap.init = function(recNode, noutputs, cidx) {
 
     // $('#chart').empty()
-    var height = parseInt($('#chart').attr('height')) / noutputs
-    var heatmapchart = app.chart.heatmapChart('#chart',  {
+    var height = parseInt($('#dataChart').attr('height')) / noutputs
+    heatmap.chart = app.chart.heatmapChart('#dataChart',  {
         y: height * cidx,
         height: height,
     });
-    heatmap.chart = heatmapchart;
-    heatmapchart.xAxis(heatmapchart.xScale)
-        .yAxis(heatmapchart.yScale)
-        .xLabel('Neuron Row ID')
-        .yLabel('Neuron Col ID');
+    app.simChart.xAxis(heatmap.chart);
+    app.simChart.yAxis(heatmap.chart);
+    app.simChart.xLabel(heatmap.chart, 'Neuron Row ID');
+    app.simChart.yLabel(heatmap.chart, 'Neuron Col ID');
 }
 
 module.exports = heatmap;

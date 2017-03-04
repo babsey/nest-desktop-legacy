@@ -1,8 +1,8 @@
 {
     "_id": "bump-activity-heatmap",
     "name": "Bump activity heatmap",
-    "group": "example",
-    "user": "architect",
+    "group": "user",
+    "user": "spreizer",
     "runSimulation": true,
     "network": "gamma",
     "sim_time": 10.0,

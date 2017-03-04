@@ -2,7 +2,12 @@
 
 const d3 = require("d3");
 
-var layout = {};
+var layout = {
+    mousedown_link: null,
+    mousedown_node: null,
+    mouseup_node: null,
+    drawing: false,
+};
 
 layout.pathColor = {
     inh: '#b34846',
@@ -10,13 +15,13 @@ layout.pathColor = {
 };
 
 layout.resetMouseVars = function() {
-    app.mousedown_node = null;
-    app.mouseup_node = null;
-    app.mousedown_link = null;
+    layout.mousedown_node = null;
+    layout.mouseup_node = null;
+    layout.mousedown_link = null;
 };
 
 layout.dragstarted = function(d) {
-    app.dragging = true;
+    app.simChart.dragging = true;
     if (!d3.event.active) layout.simulation.alpha(1).restart();
     d.fx = d.x;
     d.fy = d.y;
@@ -32,7 +37,7 @@ layout.dragended = function(d) {
     if (!d3.event.active) layout.simulation.alpha(0);
     d.fx = null;
     d.fy = null;
-    app.dragging = false;
+    app.simChart.dragging = false;
 }
 
 layout.draw_path = function(d) {
@@ -96,7 +101,7 @@ layout.ticked = function() {
             return d.syn_spec ? (d.syn_spec.weight < 0 ? layout.pathColor.inh : layout.pathColor.exc) : layout.pathColor.exc
         })
         .style("stroke-width", function(d) {
-            return Math.min(10, Math.max(5, (d.syn_spec ? Math.abs(d.syn_spec.weight/5) : 5)))
+            return Math.min(10, Math.max(5, (d.syn_spec ? Math.abs(d.syn_spec.weight / 5) : 5)))
         })
         .style("stroke-dasharray", function(d) {
             return d === app.selected_link ? '10, 2' : '';
@@ -120,24 +125,29 @@ layout.ticked = function() {
         });
 }
 
-layout.restart = function() {
+layout.update = function() {
     // console.log(mousedown_node,mouseup_node,selected_node,mousedown_link,selected_link)
     if (app.data.nodes.length == 0) return
 
+    if (app.selected_node) {
+        $($('#nodeScrollspy').find('.node_' + app.selected_node.id).find('a').attr('href'))[0].scrollIntoView();
+    }
+
     // Apply the general update pattern to the links.
-    layout.path = layout.path.data(app.data.links.filter(function(d) {return !(app.data.nodes[d.source].hidden || app.data.nodes[d.target].hidden)}), function(d) {
-        return d.source + "-" + d.target;
-    });
+    layout.path = layout.path.data(app.data.links.filter(function(d) {
+        return !(app.data.nodes[d.source].hidden || app.data.nodes[d.target].hidden)
+    }));
+
     layout.path.exit().remove();
     layout.path = layout.path.enter().append("g")
         .attr('class', 'link')
         .on('mousedown', function(d) {
             // select link
-            app.mousedown_link = d;
-            if (app.mousedown_link === app.selected_link) app.selected_link = null;
-            else app.selected_link = app.mousedown_link;
+            layout.mousedown_link = d;
+            if (layout.mousedown_link === app.selected_link) app.selected_link = null;
+            else app.selected_link = layout.mousedown_link;
             app.selected_node = null;
-            layout.restart()
+            layout.update()
         })
         .merge(layout.path)
 
@@ -145,13 +155,14 @@ layout.restart = function() {
     layout.path.append("path");
 
     // Apply the general update pattern to the nodes.
-    layout.circle = layout.circle.data(app.data.nodes.filter(function(d) {return !d.hidden}), function(d) {
+    layout.circle = layout.circle.data(app.data.nodes.filter(function(d) {
+        return !d.hidden
+    }), function(d) {
         return d.index;
     });
     layout.circle.exit().remove();
     layout.circle = layout.circle.enter().append("g")
         .attr("class", "node")
-        .call(layout.drag)
         .on('mouseover', function(d) {
             // enlarge target node
             d3.select(this).select('circle').attr('transform', function(d) {
@@ -166,21 +177,25 @@ layout.restart = function() {
         })
         .on('mousedown', function(d) {
             // select node
-            app.mousedown_node = d;
-            if (app.mousedown_node === app.selected_node) app.selected_node = null;
-            else app.selected_node = app.mousedown_node;
+            layout.mousedown_node = d;
+            if (layout.mousedown_node === app.selected_node) app.selected_node = null;
+            else app.selected_node = layout.mousedown_node;
             app.selected_link = null;
+
+            if (app.simChart.rasterPlot.barchart) {
+                app.simChart.rasterPlot.barchart.update()
+            }
 
             // reposition drag line
             // if (layout.drawing) return
             layout.drag_line
                 .style('marker-end', 'url(#end-arrow)')
-                .classed('hidden', false)
-                .attr('d', 'M' + app.mousedown_node.x + ',' + app.mousedown_node.y + 'L' + app.mousedown_node.x + ',' + app.mousedown_node.y);
-            layout.restart()
+                .classed('hidden', !layout.drawing)
+                .attr('d', 'M' + layout.mousedown_node.x + ',' + layout.mousedown_node.y + 'L' + layout.mousedown_node.x + ',' + layout.mousedown_node.y);
+            layout.update()
         })
         .on('mouseup', function(d) {
-            if (!app.mousedown_node) return;
+            if (!layout.mousedown_node) return;
 
             // needed by FF
             layout.drag_line
@@ -188,15 +203,16 @@ layout.restart = function() {
                 .style('marker-end', '');
 
             // check for drag-to-self
-            app.mouseup_node = d;
-            if (app.mouseup_node.id == app.mousedown_node.id) {
+            layout.mouseup_node = d;
+
+            if (layout.mouseup_node.id == layout.mousedown_node.id) {
                 layout.resetMouseVars();
-                return;
+                return
             }
 
             // add link to graph (update if exists)
-            var source = app.mousedown_node;
-            var target = app.mouseup_node;
+            var source = layout.mousedown_node;
+            var target = layout.mouseup_node;
 
             var link = app.data.links.filter(function(l) {
                 return (app.data.nodes[l.source] === source && app.data.nodes[l.target] === target);
@@ -211,11 +227,13 @@ layout.restart = function() {
                 app.data.links.push(link);
             }
 
-            // select new link
+            // select new node
             app.selected_link = link;
             app.selected_node = null;
-            layout.restart()
+
+            layout.update()
         })
+        .call(layout.drag)
         .merge(layout.circle)
 
     layout.circle.selectAll('circle').remove()
@@ -250,37 +268,33 @@ layout.restart = function() {
 
 layout.mousemove = function() {
     // console.log(mousedown_node, mousedown_link)
-    if (!app.mousedown_node) return;
-
+    if (!layout.mousedown_node) return;
     var point = d3.mouse(this);
-
     // update drag line
     laoyut.drag_line
-        .attr('d', 'M' + app.mousedown_node.x + ',' + app.mousedown_node.y + 'L' + point[0] + ',' + point[1]);
-    layout.restart()
+        .attr('d', 'M' + layout.mousedown_node.x + ',' + layout.mousedown_node.y + 'L' + point[0] + ',' + point[1]);
+    layout.update()
 }
 
 layout.mouseup = function() {
-    if (app.mousedown_node) {
+    if (layout.mousedown_node) {
         // hide drag line
         layout.drag_line
             .classed('hidden', true)
             .style('marker-end', '');
     }
-
     // because :active only works in WebKit?
-    laoyut.svg.classed('active', false);
-
+    laoyut.g.classed('active', false);
     // clear mouse event vars
-    layout.restart()
+    layout.update()
 }
 
 layout.dblclick = function() {
     // because :active only works in WebKit?
-    laoyut.svg.classed('active', true);
+    laoyut.g.classed('active', true);
 
     // if (mousedown_node || mousedown_link) return;
-    if (!app.drawing) return
+    if (!layout.drawing) return
 
     var point = d3.mouse(this);
     app.selected_node = {
@@ -294,26 +308,23 @@ layout.dblclick = function() {
         vy: 0
     }
     app.data.nodes.push(app.selected_node)
-    layout.restart()
+    layout.update()
 }
 
 
 layout.init = function(reference) {
-
     layout.lastNodeId = app.data.nodes.length;
     layout.lastLinkId = app.data.links.length;
-
     layout.drag = d3.drag()
-        .on("start", app.drawing ? null : layout.dragstarted)
-        .on("drag", app.drawing ? null : layout.dragged)
-        .on("end", app.drawing ? null : layout.dragended);
-
-    layout.svg = d3.select(reference);
-    layout.width = +layout.svg.attr("width");
-    layout.height = +layout.svg.attr("height");
+        .on("start", layout.drawing ? null : layout.dragstarted)
+        .on("drag", layout.drawing ? null : layout.dragged)
+        .on("end", layout.drawing ? null : layout.dragended);
+    layout.g = d3.select(reference);
+    layout.width = +layout.g.attr("width");
+    layout.height = +layout.g.attr("height");
 
     // build the arrow.
-    layout.svg.append("svg:defs").selectAll("marker")
+    layout.g.append("svg:defs").selectAll("marker")
         .data(["end-arrow"]) // Different link/path types can be defined here
         .enter().append("svg:marker") // This section adds in the arrows
         .attr("id", String)
@@ -327,7 +338,7 @@ layout.init = function(reference) {
         .attr("d", "M0,-1.5L3,0L0,1.5");
 
     // build the circle.
-    layout.svg.append("svg:defs").selectAll("marker")
+    layout.g.append("svg:defs").selectAll("marker")
         .data(["end-circle"]) // Different link/path types can be defined here
         .enter().append("svg:marker") // This section adds in the arrows
         .attr("id", String)
@@ -350,22 +361,22 @@ layout.init = function(reference) {
         .on("tick", layout.ticked);
 
     // line displayed when dragging new nodes
-    layout.drag_line = layout.svg.append('path')
+    layout.drag_line = layout.g.append('path')
         .attr('class', 'link dragline hidden')
         .attr('d', 'M0,0L0,0');
 
-    layout.g = layout.svg.append('g')
-        .attr('id', 'layout');
-    layout.circle = layout.g.selectAll(".node");
-    layout.path = layout.g.selectAll(".link");
+    layout.nodes = layout.g.append('g').attr('id', 'nodes')
+    layout.links = layout.g.append('g').attr('id', 'links')
+
+    layout.circle = layout.nodes.selectAll(".node");
+    layout.path = layout.links.selectAll(".link");
 
     // // app starts here
-    // layout.svg.on('mousemove', layout.mousemove)
+    // layout.g.on('mousemove', layout.mousemove)
     //     .on('mouseup', layout.mouseup)
     //     .on('dblckick', layout.dblclick);
 
-    layout.restart()
+    layout.update()
 }
-
 
 module.exports = layout

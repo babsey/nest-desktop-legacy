@@ -68,14 +68,14 @@ slider.init_kernelSlider = function(options) {
 }
 
 slider.init_popSlider = function(nidx, options) {
-    slider.create_dataSlider('#node_' + nidx +' .content', options.id, options)
+    slider.create_dataSlider('#node_' + nidx +' .content .nodeSlider', options.id, options)
         .on('slideStop', function(d) {
             app.data.nodes[nidx].n = d.value
         })
 }
 
 slider.init_binSlider = function(nidx, options) {
-    slider.create_dataSlider('#node_' + nidx +' .content', options.id, options)
+    slider.create_dataSlider('#node_' + nidx +' .content .nodeSlider', options.id, options)
         .on('slideStop', function(d) {
             app.data.nodes[nidx].nbins = options.ticks_labels[d.value]
         })

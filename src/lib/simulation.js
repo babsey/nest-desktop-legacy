@@ -7,24 +7,7 @@ const jsonfile = require('jsonfile');
 var simulation = {}
 
 simulation.list = function(q, ref) {
-    app.db.localDB.find(q).exec(function(err, docs) {
-        if (docs.length == 0) return
-        docs.map(function(doc) {
-            $(ref).find('.simulation-list').append('<div id="' + doc._id + '"class="col-xs-12 col-sm-4 col-md-3"></div>')
-
-            var href = './templates/simulation.html?simulation=' + doc._id
-            $('#' + doc._id).append('<div class="thumbnail simulation"></div>')
-            $('#' + doc._id).find('.thumbnail').append('<div style="position:absolute; z-index:10"><button class="btn btn-default"  type="button">' + doc.name + '</button></div>')
-            $('#' + doc._id).find('.thumbnail').append('<a href="' + href + '"></a>')
-
-            var filepath = '../data/images/' + doc._id + '.png'
-            if (fs.existsSync(__dirname + path.sep + '..' + path.sep + filepath)) {
-                $('#' + doc._id).find('a').append('<img src="' + filepath + '">')
-            } else {
-                $('#' + doc._id).find('a').append('<img src="assets/img/simulation_default.png">')
-            }
-        })
-    });
+    return app.db.localDB.find(q)
 }
 
 simulation.export = function() {
@@ -33,9 +16,9 @@ simulation.export = function() {
     jsonfile.writeFileSync(filepath, app.data)
 }
 
-simulation.run = function(ongoing) {
-    app.running = (ongoing == true)
-    if (app.running) {
+simulation.run = function(running) {
+    simulation.running = (running == true)
+    if (simulation.running) {
         $('#simulation-resume').find('.fa').hide()
         $('#simulation-resume').find('.fa-pause').show()
         $('.dataSlider').find('.sliderInput').slider('disable')
@@ -48,15 +31,15 @@ simulation.run = function(ongoing) {
 }
 
 simulation.resumeToggle = function() {
-    app.simulation.run(!app.running)
+    simulation.run(!simulation.running)
 }
 
 simulation.stop = function() {
-    app.running = false
+    simulation.running = false
 }
 
 simulation.simulate = function() {
-    if (app.running) return
+    if (simulation.running) return
     var mId = app.message.show('Info', 'The simulation is running. Please wait.');
 
     app.data.nodes.filter(function(node) {
@@ -75,7 +58,10 @@ simulation.simulate = function() {
             .done(function(res) {
                 app.data.kernel.time = res.kernel.time;
                 for (var idx in res.nodes) {
-                    app.data.nodes[idx].ids = res.nodes[idx].ids;
+                    var node = app.data.nodes[idx]
+                    node.ids = res.nodes[idx].ids;
+                    var title = app.format.replaceAll(node.model, '_', ' ') + '\nId: ' + app.format.truncate(node.ids)
+                    $('#myScrollspy .nav').find('.node_' + node.id).attr('title', title)
                 }
                 app.data.nodes.filter(function(node) {
                     return node.type == 'output'
@@ -104,7 +90,7 @@ simulation.simulate = function() {
 }
 
 simulation.resume = function() {
-    if (!(app.running)) return
+    if (!(simulation.running)) return
 
     var recNode = app.data.nodes.filter(function(node) {
         return node.type == 'output'
@@ -131,17 +117,9 @@ simulation.resume = function() {
 }
 
 simulation.init = function() {
-    app.running = false;
-    app.drawing = false;
-    app.zooming = false;
-    app.dragging = false;
-
-    // mouse event vars
+    simulation.running = false;
     app.selected_node = null;
     app.selected_link = null;
-    app.mousedown_link = null;
-    app.mousedown_node = null;
-    app.mouseup_node = null;
 
     var date = app.format.date(app.data.createdAt)
     $('#title').html(app.data.name)
@@ -149,18 +127,16 @@ simulation.init = function() {
     $('#subtitle').append(date ? '<span style="margin-left:20px">' + date + '</span>' : '')
     $('#subtitle').append(app.data.user ? '<span style="margin-left:20px">' + app.data.user + '</span>' : '')
 
+    app.navigation.init()
     app.simChart.init()
-    if (app.data.layout) {
-        app.simChart.networkLayout.init('#chart')
-    }
-    app.navigation.init_controller()
-    app.events.controllerHandler()
+    app.controller.init()
     if (app.data.runSimulation) {
         app.simulation.simulate()
     }
 }
 
 simulation.load = function(id) {
+
     app.db.get(id)
         .exec(function(err, docs) {
             app.data = docs;

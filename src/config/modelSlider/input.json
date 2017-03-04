@@ -113,7 +113,7 @@
         "level": 1,
         "value": 1.0,
         "min": 1.0,
-        "max": 10000.0,
+        "max": 100000.0,
         "step": 1.0,
         "scale": "logarithmic",
         "label": "Mean firing rate (Hz)"

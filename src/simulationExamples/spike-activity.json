@@ -17,6 +17,7 @@
         "model": "poisson_generator",
         "x": 0,
         "y": 0,
+        "color": "#ff7f0e",
         "stim_time": [0.0, 1000.0],
         "params": {
             "rate": 1000.0
@@ -28,6 +29,7 @@
         "x": 150,
         "y": 50,
         "n": 100,
+        "color": "#1f77b4",
         "params": {}
     }, {
         "id": 2,

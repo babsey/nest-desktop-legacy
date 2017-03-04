@@ -43,100 +43,6 @@ chart.data = function(d) {
     return chart
 }
 
-chart.xAxis = function(xScale) {
-    if (!arguments.length) return _xAxis;
-    _xAxis = d3.axisBottom(xScale);
-
-    chart.g.append("g")
-        .attr("id", "xaxis")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + chart.g.attr('height') + ")")
-        .style('font-size', '14px')
-        .call(_xAxis);
-
-    return chart
-}
-
-chart.yAxis = function(yScale) {
-    if (!arguments.length) return _yAxis;
-    _yAxis = d3.axisLeft(yScale).ticks(3);
-
-    chart.g.append("g")
-        .attr("id", "yaxis")
-        .attr("class", "axis")
-        .style('font-size', '14px')
-        .attr("transform", "translate(0,0)")
-        .call(_yAxis);
-
-    return chart
-}
-
-chart.xLabel = function(label) {
-    if (!document.getElementsByTagName("xlabel").length) {
-        chart.g.append("text")
-            .attr("id", "xlabel")
-            .attr("class", "label")
-            .attr("text-anchor", "middle")
-            .attr("x", +chart.g.attr('width') / 2)
-            .attr("y", +chart.g.attr('height') + 30)
-            .text("Time (ms)");
-    }
-
-    chart.g.select('#xlabel')
-        .text(label);
-    return chart
-}
-
-chart.yLabel = function(label) {
-    if (!document.getElementsByTagName("ylabel").length) {
-        chart.g.append("text")
-            .attr("id", "ylabel")
-            .attr("class", "label")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -1. * +chart.yScale.range()[1])
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .attr("text-anchor", "end");
-    }
-
-    chart.g.select('#ylabel')
-        .text(label);
-    return chart
-}
-
-chart.onDrag = function(drag) {
-    chart.drag = d3.drag()
-        .on("start", function() {
-            dragging = true
-        })
-        .on("drag", function() {
-            drag()
-        })
-        .on("end", function() {
-            dragging = false
-        })
-    chart.g.select('#clip')
-        .call(chart.drag);
-    return chart;
-}
-
-chart.onZoom = function(zoom) {
-    chart.zoom = d3.zoom()
-        .scaleExtent([.1, 10])
-        .on("start", function() {
-            zooming = true
-        })
-        .on("zoom", function() {
-            zoom()
-        })
-        .on("end", function() {
-            zooming = false
-        })
-    chart.g.select('#clip')
-        .call(chart.zoom);
-    return chart;
-}
-
 chart.init = function(reference,size) {
     var svg = d3.select(reference),
         width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
@@ -165,7 +71,6 @@ chart.init = function(reference,size) {
         .attr('fill', 'white');
 
     return chart
-
 }
 
 //
@@ -223,12 +128,7 @@ function update() {
     chart.xScale.range([0, +chart.g.attr('width')])
 
     var data = chart.data();
-
-    chart.g.select('#xaxis')
-        .call(chart.xAxis());
-
-    chart.g.select('#yaxis')
-        .call(chart.yAxis());
+    app.simChart.axesUpdate(chart,false)
 
     var cards = chart.g
         .select('#clip')

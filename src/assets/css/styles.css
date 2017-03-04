@@ -24,11 +24,17 @@ body {
     position: fixed;
     left: 70px;
 }
-
-/*#title {
-    text-transform:capitalize;
-}*/
-
+.tooltip-inner {
+    white-space: pre-wrap;
+    min-width: 400px;
+    text-align: left;
+}
+.thumbnail {
+    cursor: pointer;
+}
+.description {
+    white-space: pre-wrap;
+}
 .navbar {
     margin-bottom: 0px;
     background-color: white
@@ -49,9 +55,13 @@ body {
 #controller-body {
     width: 304px;
 }
-#myScrollspy {
+#nodeScrollspy {
     position: fixed;
     right: 366px;
+}
+.nav-stacked li {
+    margin-top: 0px !important;
+    padding-top: 2px;
 }
 .nav-pills {
     top: 51px;
@@ -62,6 +72,9 @@ body {
     color: black;
     font-weight: bold;
     text-align: center;
+}
+.nav-pills li.active a {
+    border-radius: 20px;
 }
 .nav-pills li.active a, .nav-pills li.active a:focus, .nav-pills li.active a:hover {
     background-color: white !important;
@@ -96,10 +109,22 @@ body {
 .paramSlider dt, .dataSlider dt {
     margin-top: 10px;
 }
-.slider-handle {
+.slider-horizontal .slider-track {
+    height: 1px !important;
+    margin-top: 0px !important;
+}
+.slider-horizontal.slider-disabled .slider-track {
+    border: 1px solid #ccc !important;
+}
+.slider-horizontal .slider-handle {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 2px solid #ccc;
+}
+.slider-horizontal.slider-disabled .slider-handle {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 2px solid #ccc !important;
+}
+.slider-horizontal .slider-tick {
     background: #fff none repeat scroll 0 0;
     border: 1px solid #ccc;
-}
-.slider-selection {
-    background: #dcdcdc none repeat scroll 0 0;
 }

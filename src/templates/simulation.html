@@ -11,7 +11,7 @@
     <title>NEST Desktop</title>
 </head>
 
-<body data-spy="scroll" data-target="#myScrollspy" data-offset="50">
+<body data-spy="scroll" data-target="#nodeScrollspy" data-offset="50">
     <div id="message"></div>
 
     <!-- Modal -->
@@ -25,6 +25,7 @@
                             <label for="simulation-name" class="control-label">Simulation:</label>
                             <input type="text" class="form-control" id="simulation-name" placeholder="name">
                         </div>
+                        <textarea type="text" class="form-control" id="simulation-description" placeholder="description"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -46,14 +47,14 @@
                 <button type="button" class="btn btn-default navbar-btn" id="index">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
                 </button>
-                <button type="button" class="btn btn-default navbar-btn" onclick="$('#layout').toggle()">
-                    <i class="fa fa-share-alt" aria-hidden="true"></i>
-                </button>
                 <button type="button" class="btn btn-default navbar-btn" id="simulation-resume" disabled>
                     <i class="fa fa-play" aria-hidden="true"></i>
                     <i class="fa fa-pause" aria-hidden="true" style="display:none"></i>
                     <!-- <span class="glyphicon glyphicon-menu-glyphicon glyphicon-play"></span>
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-pause" style="display:none"></span> -->
+                </button>
+                <button type="button" class="btn btn-default navbar-btn" id="layout-button">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
                 </button>
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" id="get-simulation-config" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -61,28 +62,28 @@
                     </button>
                     <ul id="simulation-config" class="dropdown-menu" role="menu" aria-labelledby="get-simulation-config">
                         <li id="level_1" class="level" level="1">
-                            <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span>
-                    Rookie
-                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
-                    </a>
+                            <a href="#">
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
                         </li>
                         <li id="level_2" class="level" level="2">
-                            <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span>
-                    Beginner
-                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
-                    </a>
+                            <a href="#">
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
                         </li>
                         <li id="level_3" class="level" level="3">
-                            <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span>
-                    Advanced
-                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
-                    </a>
+                            <a href="#">
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
                         </li>
                         <li id="level_4" class="level" level="4">
-                            <a href="#"><span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span>
-                    Expert
-                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok" style="display:none"></span>
-                    </a>
+                            <a href="#">
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -109,6 +110,9 @@
                     <label for="autoscale">
                         <input type="checkbox" name="autoscale" value="autoscale" id="autoscale" checked> Autoscale
                     </label>
+                    <label for="color">
+                        <input type="checkbox" name="color" value="color" id="color"> Color
+                    </label>
                 </span>
             </div>
         </div>
@@ -118,16 +122,20 @@
         <div id="controller" class="pull-right">
             <div class="container-fluid">
 
-                <nav id="myScrollspy">
-                    <ul class="nav nav-pills nav-stacked"></ul>
-                </nav>
-
                 <div id="controller-body">
+
+                    <nav id="nodeScrollspy">
+                        <ul class="nav nav-pills nav-stacked"></ul>
+                    </nav>
 
                     <div id="controller-panel" class="panel" style="margin-top: 50px">
                         <!-- <div class="panel-body"> -->
-                        <div id="global" class="panel-body"><div class="content"></div></div>
-                        <div id="kernel" class="panel-body"><div class="content"></div></div>
+                        <div id="global" class="panel-body">
+                            <div class="content"></div>
+                        </div>
+                        <div id="kernel" class="panel-body">
+                            <div class="content"></div>
+                        </div>
 
                         <div id="tabs">
 
@@ -141,9 +149,6 @@
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="nodes">
-                                    <nav id="myScrollspy" style="position:fixed; right:360px">
-                                        <ul class="nav nav-pills nav-stacked"></ul>
-                                    </nav>
                                     <div class=".content"></div>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="connections">
@@ -160,7 +165,10 @@
             </div>
         </div>
 
-        <svg id="chart"></svg>
+        <svg id="chart">
+            <g id="dataChart"></g>
+            <g id="layout" style="display: none"></g>
+        </svg>
     </div>
 
     <script>
@@ -168,7 +176,6 @@
         window.app = require('../app');
         app.db.init()
         app.simulation.load(location.search.split('simulation=')[1])
-        app.events.buttonHandler()
     </script>
 </body>
 

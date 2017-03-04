@@ -1,13 +1,26 @@
 [{
     "type": "synapse",
-    "id": "static_synapse",
-    "label": "Synapse type for static connections",
+    "id": "gap_junction",
+    "label": "Gap junction",
     "sliderDefaults": [{
         "id": "weight",
         "level": 1,
         "value": 1.0,
         "min": -100.0,
-        "max": 200.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "label": "Synaptic weight"
+    }]
+}, {
+    "type": "synapse",
+    "id": "static_synapse",
+    "label": "Static synapse",
+    "sliderDefaults": [{
+        "id": "weight",
+        "level": 1,
+        "value": 1.0,
+        "min": -100.0,
+        "max": 1000.0,
         "step": 1.0,
         "label": "Synaptic weight"
     }, {
@@ -22,13 +35,13 @@
 }, {
     "type": "synapse",
     "id": "tsodyks_synapse",
-    "label": "Synapse type with short term plasticity",
+    "label": "Short term plasticity (Tsodyks synapse)",
     "sliderDefaults": [{
         "id": "weight",
         "level": 1,
         "value": 1.0,
         "min": -100.0,
-        "max": 300.0,
+        "max": 1000.0,
         "step": 1.0,
         "label": "Synaptic weight"
     }, {

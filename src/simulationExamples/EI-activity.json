@@ -17,93 +17,115 @@
         "model": "poisson_generator",
         "x": 0,
         "y": 50,
+        "color": "#2ca02c",
         "stim_time": [0.0, 1000.0],
         "params": {
             "rate": 1000.0
         }
     }, {
         "id": 1,
+        "type": "input",
+        "model": "poisson_generator",
+        "x": 400,
+        "y": 50,
+        "color": "#ff7f0e",
+        "stim_time": [0.0, 1000.0],
+        "params": {
+            "rate": 1000.0
+        }
+    }, {
+        "id": 2,
         "type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 100,
         "y": 100,
         "n": 400,
+        "color": "#1f77b4",
         "params": {}
     }, {
-        "id": 2,
+        "id": 3,
         "type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 300,
         "y": 100,
         "n": 100,
+        "color": "#d62728",
         "params": {}
     }, {
-        "id": 3,
+        "id": 4,
         "type": "output",
         "model": "spike_detector",
         "x": 200,
         "y": 0,
+        "hidden": true,
         "nbins": 100,
         "params": {}
     }],
     "links": [{
         "id": 0,
         "source": 0,
-        "target": 1,
+        "target": 2,
         "syn_spec": {
             "weight": 1.0
         }
     }, {
         "id": 1,
         "source": 1,
-        "target": 1,
-        "conn_spec": {
-            "rule": "fixed_outdegree",
-            "outdegree": 40
-        },
+        "target": 3,
         "syn_spec": {
-            "weight": 0.0
+            "weight": -1.0
         }
     }, {
         "id": 2,
-        "source": 1,
+        "source": 2,
         "target": 2,
         "conn_spec": {
             "rule": "fixed_outdegree",
-            "outdegree": 10
+            "outdegree": 0
         },
         "syn_spec": {
-            "weight": 4.0
+            "weight": 1.0
         }
     }, {
         "id": 3,
         "source": 2,
-        "target": 1,
-        "conn_spec": {
-            "rule": "fixed_outdegree",
-            "outdegree": 40
-        },
-        "syn_spec": {
-            "weight": -4.0
-        }
-    }, {
-        "id": 4,
-        "source": 2,
-        "target": 2,
+        "target": 3,
         "conn_spec": {
             "rule": "fixed_outdegree",
             "outdegree": 10
+        },
+        "syn_spec": {
+            "weight": 1.0
+        }
+    }, {
+        "id": 4,
+        "source": 3,
+        "target": 2,
+        "conn_spec": {
+            "rule": "fixed_outdegree",
+            "outdegree": 40
         },
         "syn_spec": {
             "weight": -4.0
         }
     }, {
         "id": 5,
-        "source": 1,
-        "target": 3
+        "source": 3,
+        "target": 3,
+        "conn_spec": {
+            "rule": "fixed_outdegree",
+            "outdegree": 0
+        },
+        "syn_spec": {
+            "weight": -4.0
+        }
     }, {
         "id": 6,
         "source": 2,
-        "target": 3
+        "target": 4
+    }, {
+        "id": 7,
+        "source": 3,
+        "target": 4
     }]
 }

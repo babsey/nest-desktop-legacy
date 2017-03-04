@@ -1,6 +1,7 @@
 {
     "_id": "tsodyks-facilitating",
     "name": "Tsodyks facilitating",
+    "description": "This scripts simulates two neurons. One is driven with dc-input and connected to the other one with a facilitating tsodyks synapse. The membrane potential trace of the second neuron is recorded. \n\nThis example reproduces figure 1B of Tsodyks et al. (1998) \n**Neural Networks with Dynamic Synapses**. \n*Neural computation*, http://dx.doi.org/10.1162/089976698300017502 \n\nThis example is analog to ``Tsodyks depressing``, except that different synapse parameters are used. Here, a small facilitation parameter ``U`` causes a slow saturation of the synaptic efficacy (Eq. 2.2), enabling a facilitating behavior.",
     "group": "nest-example",
     "user": "nest-initiative",
     "layout": true,
