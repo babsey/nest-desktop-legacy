@@ -2,6 +2,10 @@ CHANGELOG
 ---------
 
 0.6.3:
+    Color options
+    Render lib
+    Grouped simulation in dropdown
+    Popover image for simulation dropdown
     Responsive chart (for resizing)
     Simulation description
 
