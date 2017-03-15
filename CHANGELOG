@@ -1,6 +1,14 @@
 CHANGELOG
 ---------
 
+0.7.0:
+    Network editor
+    Disable/enable nodes and links
+    Multiple charts
+    Data hash for db
+    Simulation protocols
+    More simulation examples
+
 0.6.3:
     Color options
     Render lib
