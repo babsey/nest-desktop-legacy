@@ -31,11 +31,11 @@
     opacity: 1.0;
 }
 #dataChart .bar {
-    fill: steelblue;
-    stroke: white;
+    fill: #333;
+    stroke: #fff;
 }
 #dataChart .bar:hover {
-    fill: lightsteelblue;
+    fill: #666;
 }
 #networkLayout {
     cursor: pointer;

@@ -29,7 +29,7 @@ const config = app.config.app();
 // Create directories in config.get('db.local.path')
 var dirnames = ['.', 'images', 'exports', 'protocols'];
 dirnames.map(function(dirname) {
-    var dirpath = path.join(__dirname, '..', '..', config.get('db.local.path'), dirname);
+    var dirpath = path.join(__dirname, '..', config.get('db.local.path'), dirname);
     if (fs.existsSync(dirpath)) return
     fs.mkdirSync(dirpath)
 })

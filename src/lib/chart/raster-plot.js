@@ -18,12 +18,18 @@ rasterPlot.update = function(output) {
     var scatterChart = rasterPlot.scatterChart;
     var barChart = rasterPlot.barChart;
 
-    output.source = d3.merge(app.data.links.filter(function(link) {
+    output.senders = d3.merge(app.data.links.filter(function(link) {
         return link.target == output.node.id
     }).map(function(link) {
         return app.data.nodes[link.source].ids
     }))
-    var nbins = output.nbins || 100
+    output.sources = app.data.links.filter(function(link) {
+        return link.target == output.node.id
+    }).map(function(link) {
+        return app.data.nodes[link.source].id
+    })
+
+    var nbins = output.node.nbins || 100
     var histogram = d3.histogram()
         .domain(app.chart.xScale.domain())
         .thresholds(app.chart.xScale.ticks(nbins));
@@ -60,10 +66,10 @@ rasterPlot.update = function(output) {
             c: c
         }
 
-    scatterChart.yScale.domain([d3.max(output.source) + 1, 0])
-    scatterChart.update(output.data.dots);
+    scatterChart.yScale.domain(d3.extent(output.senders))
+    scatterChart.update(output);
 
-    var hist = output.source.map(function(s) {
+    var hist = output.senders.map(function(s) {
             return histogram(output.events['times'].filter(function(d, i) {
                 return output.events['senders'][i] == s
             }))
@@ -108,7 +114,7 @@ rasterPlot.update = function(output) {
     //     // c: c
     // };
 
-    barChart.update(output.data.bars, output.source)
+    barChart.update(output)
 
     // var linechart = rasterPlot.linechart;
     // linechart.yScale.domain(d3.extent([].concat.apply([], app.simulation.data.y.map(function(d) {return d.total}))))

@@ -38,11 +38,16 @@ events.synSlider = function() {
 
 events.dataSlider = function() {
     $('.dataSlider .sliderInput').on('slideStop', function() {
-        if ($(this).parents('.node').hasClass('output') && app.chart.rasterPlot.barchart) {
-            app.chart.rasterPlot.update(app.data.nodes[$(this).parents('.node').data('id')])
-        } else {
-            // app.changes.nodes[$(this).parents('.node').data('id')][$(this).parents('.dataSlider').attr('id')] = parseFloat(this.value)
+        if (!$(this).parents('.node').hasClass('output')) {
             app.simulation.simulate()
+            return
+        }
+        var recId = $(this).parents('.node').data('id')
+        var output = app.simulation.outputs.find(function(output) {
+            return output.node.id == recId
+        })
+        if (output.chart.barChart) {
+            output.chart.update(output)
         }
     })
 }
@@ -125,9 +130,7 @@ events.controller = function() {
         }
         app.selected_link = null;
         app.chart.networkLayout.update()
-        if (app.chart.rasterPlot.barchart) {
-            app.chart.update()
-        }
+        app.chart.update()
     })
     events.model_select()
     events.nodeSlider()

@@ -22,15 +22,17 @@ chart.yVal = function(d, idx) {
     return y // chart.npop() * 1000. // chart.binwidth()
 }
 
-chart.update = function(data, sources) {
+chart.update = function(output) {
+    if (!output.data) return
+    var data = output.data.bars;
     chart.xScale.range([0, +chart.g.attr('width')])
     chart.yScale.range([+chart.g.attr('height'), 0])
 
-    if (app.selected_node && app.selected_node.type == 'neuron') {
+    if (app.selected_node && app.selected_node.type == 'neuron' && output.sources.indexOf(app.selected_node.id) != -1) {
         var nidx = app.selected_node.id;
         var idx = app.selected_node.ids.map(function(d) {
-            return sources.indexOf(d)
-        });
+            return output.senders.indexOf(d);
+        })
     } else {
         var nidx = null;
         var idx = 'total';
