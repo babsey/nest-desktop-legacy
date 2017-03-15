@@ -1,6 +1,10 @@
 CHANGELOG
 ---------
 
+0.7.1:
+    Fixed bugs
+    Black bars
+
 0.7.0:
     Network editor
     Disable/enable nodes and links
