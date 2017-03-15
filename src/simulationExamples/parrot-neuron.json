@@ -3,8 +3,6 @@
     "name": "Parrot neuron",
     "group": "example",
     "user": "architect",
-    "layout": true,
-    "runSimulation": true,
     "network": "simple",
     "sim_time": 1000.0,
     "res_time": 10.0,
@@ -61,10 +59,6 @@
         "id": 1,
         "source": 1,
         "target": 2,
-        "conn_spec": {
-            "rule": "fixed_outdegree",
-            "outdegree": 5.0
-        },
         "syn_spec": {
             "model": "static_synapse",
             "weight": 1.0,
@@ -74,10 +68,6 @@
         "id": 2,
         "source": 1,
         "target": 3,
-        "conn_spec": {
-            "rule": "fixed_outdegree",
-            "outdegree": 5.0
-        },
         "syn_spec": {
             "model": "static_synapse",
             "weight": -1.0,

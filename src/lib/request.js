@@ -1,6 +1,6 @@
 "use strict"
 
-require("bootstrap-slider");
+require('bootstrap-slider');
 var request = {};
 
 request.serverURL = function() {
@@ -14,9 +14,9 @@ request.serverURL = function() {
 
 request.server_check = function() {
     var serverURL = request.serverURL()
-    var url = "http://" + serverURL
+    var url = 'http://' + serverURL
     return $.ajax({
-        method: "GET",
+        method: 'GET',
         url: url,
     }).fail(function(d) {
         app.message.show('Warning', 'The connection to the NEST server (' + serverURL + ') failed.', 2000)
@@ -27,9 +27,9 @@ request.server_check = function() {
 }
 
 request.request = function(data) {
-    var url = "http://" + request.serverURL() + "/network/" + app.data.network + '/' + (app.simulation.running ? 'resume' : 'simulate')
+    var url = 'http://' + request.serverURL() + '/network/' + app.data.network + '/' + (app.simulation.running ? 'resume' : 'simulate')
     return $.ajax({
-        method: "POST",
+        method: 'POST',
         url: url,
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
@@ -38,13 +38,13 @@ request.request = function(data) {
     })
 }
 
-$(document).bind("ajaxStart", function() {
-    // if (!(app.simulation.running)) {
-    $("select").attr("disabled", 'disabled');
-    $('.sliderInput.onlySimulate').slider('disable')
-    // }
+$(document).bind('ajaxStart', function() {
+    if (!(app.simulation.running)) {
+        $('select').attr('disabled', 'disabled');
+        $('.sliderInput').slider('disable')
+    }
 }).bind('ajaxStop', function() {
-    $("select").attr("disabled", false);
+    $('select:not(.disabled)').attr('disabled', false);
     $('.sliderInput').slider('enable')
 })
 

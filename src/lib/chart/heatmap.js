@@ -2,22 +2,21 @@
 
 var heatmap = {};
 
-
-heatmap.update = function(recNode) {
-    if (recNode.events.senders.length == 0) return
+heatmap.update = function(output) {
+    if (output.events.senders.length == 0) return
 
     var source = d3.merge(app.data.links.filter(function(link) {
-        return link.target == recNode.id
+        return link.target == output.node.id
     }).map(function(link) {
         return app.data.nodes[link.source].ids
     }))
 
-    var times = recNode.events['times'];
-    var senders = recNode.events['senders'].filter(function(d, i) {
+    var times = output.events['times'];
+    var senders = output.events['senders'].filter(function(d, i) {
         return times[i] > (app.data.kernel.time - 100)
     })
-    recNode.events['senders'] = senders
-    recNode.events['times'] = times.filter(function(d, i) {
+    output.events['senders'] = senders
+    output.events['times'] = times.filter(function(d, i) {
         return times[i] > (app.data.kernel.time - 100)
     })
 
@@ -29,7 +28,7 @@ heatmap.update = function(recNode) {
     })
     $('#clip').empty()
     var sourceId = app.data.links.find(function(x) {
-        return x.target == recNode.id
+        return x.target == output.id
     }).source
     heatmap.chart.xScale.domain([0, app.data.nodes[sourceId].nrow])
     heatmap.chart.yScale.domain([0, app.data.nodes[sourceId].ncol])
@@ -46,18 +45,19 @@ heatmap.update = function(recNode) {
     $('#simulation-resume').attr('disabled', false)
 }
 
-heatmap.init = function(recNode, noutputs, cidx) {
+heatmap.init = function(idx) {
 
     // $('#chart').empty()
-    var height = parseInt($('#dataChart').attr('height')) / noutputs
-    heatmap.chart = app.chart.heatmapChart('#dataChart',  {
-        y: height * cidx,
+    var height = parseInt($('#dataChart').data('height')) / app.simulation.outputs.length
+    heatmap.chart = require(__dirname + '/core/heatmap-chart');
+    heatmap.chart.init('#dataChart',  {
+        y: height * idx,
         height: height,
     });
-    app.simChart.xAxis(heatmap.chart);
-    app.simChart.yAxis(heatmap.chart);
-    app.simChart.xLabel(heatmap.chart, 'Neuron Row ID');
-    app.simChart.yLabel(heatmap.chart, 'Neuron Col ID');
+    app.chart.xAxis(heatmap.chart);
+    app.chart.yAxis(heatmap.chart);
+    app.chart.xLabel(heatmap.chart, 'Neuron Row ID');
+    app.chart.yLabel(heatmap.chart, 'Neuron Col ID');
 }
 
 module.exports = heatmap;

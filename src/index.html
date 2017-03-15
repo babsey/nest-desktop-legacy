@@ -41,7 +41,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6 col-md-4">
-                            <a class="thumbnail">
+                            <a class="thumbnail go">
                                 <img class="image">
                             </a>
                         </div>
@@ -51,7 +51,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a type="button" class="btn btn-default">Go</a>
+                    <a id="paper" type="button" class="btn btn-default external" style="display:none">Paper</a>
+                    <a type="button" class="btn btn-default go">Go</a>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -93,10 +94,10 @@
             <div class="jumbotron">
                 <h1>NEST desktop</h1>
                 <p>
-                    A desktop application for the NEural Simulation Tool. (<a href="http://www.nest-simulator.org/">http://www.nest-simulator.org/</a>)
+                    A desktop application for the NEural Simulation Tool. (<a href="http://www.nest-simulator.org/" class="external">http://www.nest-simulator.org/</a>)
                 </p>
                 <p class="hide">
-                    <a class="btn btn-primary btn-lg" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
+                    <a class="btn btn-primary btn-lg external" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
                 </p>
             </div>
         </div>
@@ -117,7 +118,7 @@
     app.request.server_check()
 
     $('#user').html('Hi, ' + (app.config.app().get('user.name') || 'guest'))
-    $('a[href^="http"]').on('click', function(event) {
+    $('.external').on('click', function(event) {
         event.preventDefault();
         shell.openExternal(this.href);
     });
@@ -134,20 +135,25 @@
             }).exec(function(err, docs) {
                 if (docs.length == 0) return
                 docs.map(function(doc) {
-                    $('#sim-' + grp.id).find('.simulation-list').append(app.render.simulationThumbnails(doc))
+                    $('#sim-' + grp.id).find('.simulation-list').append(app.renderer.simulationThumbnails(doc))
                 })
             });
         })
 
         setTimeout(function() {
-            $('#content').fadeIn('fast')
+            $('#content').fadeIn('fast');
                 // $('[data-toggle="tooltip"]').tooltip();
             $('.simulation').on('click', function() {
-                $('#simulation-detail').find('.modal-title').html($(this).find('a').attr('title'))
-                $('#simulation-detail').find('.description').html($(this).find('.description').html())
-                $('#simulation-detail').find('.image').attr('src', $(this).find('img').attr('src'))
-                $('#simulation-detail').find('a').attr('href', $(this).find('a').attr('href'))
-                $('#simulation-detail').modal('show')
+                $('#simulation-detail').find('.modal-title').html($(this).find('a').attr('title'));
+                $('#simulation-detail').find('.description').html($(this).find('.description').html());
+                $('#simulation-detail').find('.image').attr('src', $(this).find('img').attr('src'));
+                if ($(this).attr('data-doi') == 'undefined') {
+                    $('#simulation-detail').find('#paper').hide();
+                } else {
+                    $('#simulation-detail').find('#paper').attr('href', 'http://dx.doi.org/' + $(this).data('doi')).show();
+                }
+                $('#simulation-detail').find('.go').attr('href', $(this).find('a').attr('href'));
+                $('#simulation-detail').modal('show');
             })
         }, 200)
     }, fs.existsSync(__dirname + '/../data/' + app.config.app().get('db.name') + '.db') ? 1 : 1000)

@@ -20,7 +20,7 @@
         "level": 1,
         "value": 1.0,
         "min": -100.0,
-        "max": 1000.0,
+        "max": 100.0,
         "step": 1.0,
         "label": "Synaptic weight"
     }, {

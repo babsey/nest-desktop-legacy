@@ -1,10 +1,8 @@
 {
-    "_id": "ei-activity",
-    "name": "EI activity",
+    "_id": "ei-networks",
+    "name": "EI networks",
     "group": "example",
     "user": "architect",
-    "layout": true,
-    "runSimulation": true,
     "network": "simple",
     "sim_time": 1000.0,
     "res_time": 10.0,

@@ -1,11 +1,9 @@
 {
     "_id": "aeif-neuron-model",
     "name": "Adaptive exponential integrate and fire model",
-    "description": "This example tests the adaptive integrate and fire model (AdEx) according to Brette and Gerstner (2005) J. Neurophysiology and reproduces figure 2.C of the paper. \n\nNote that Brette&Gerstner give the value for b in nA. To be consistent with the other parameters in the equations, b must be converted to pA (pico Ampere).",
+    "description": "This simulation tests the adaptive integrate and fire model (AdEx) according to Brette and Gerstner (2005) J. Neurophysiology and reproduces figure 2.C of the paper. \n\nNote that Brette&Gerstner give the value for b in nA. To be consistent with the other parameters in the equations, b must be converted to pA (pico Ampere).",
     "group": "nest-example",
     "user": "nest-initiative",
-    "layout": true,
-    "runSimulation": true,
     "network": "simple",
     "sim_time": 1000.0,
     "res_time": 10.0,

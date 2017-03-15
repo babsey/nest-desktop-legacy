@@ -1,0 +1,113 @@
+{
+    "_id": "synfire-chain",
+    "name": "Synfire chain",
+    "description": "This simulation generates a synfire chain which is essentially a feed-forward network of neurons with many layers (or pools). The synfire chain is when activity in such a cascade of pools is arranged like a volley of spikes propagating synchronously from pool to pool.\n\nThis simulation represents Diesmann et al. (1999) 'Stable propagation of synchronous spiking in cortical neural networks'",
+    "doi": "10.1038/990101",
+    "group": "bnn",
+    "user": "architect",
+    "network": "simple",
+    "sim_time": 500.0,
+    "res_time": 10.0,
+    "kernel": {
+        "grng_seed": 0
+    },
+    "nodes": [{
+        "id": 0,
+        "type": "input",
+        "model": "pulsepacket_generator",
+        "x": 0,
+        "y": 0,
+        "params": {
+            "pulse_times": [100.0, 200.0, 300.0, 400.0],
+            "activity": 15.0
+        }
+    }, {
+        "id": 1,
+        "type": "neuron",
+        "model": "iaf_psc_exp",
+        "n": 50,
+        "x": 100,
+        "y": 100,
+        "params": {
+            "I_e": 360.0,
+            "t_ref": 15.0
+        }
+    }, {
+        "id": 2,
+        "type": "neuron",
+        "model": "iaf_psc_exp",
+        "n": 50,
+        "x": 200,
+        "y": 100,
+        "params": {
+            "I_e": 360.0,
+            "t_ref": 15.0
+        }
+    }, {
+        "id": 3,
+        "type": "neuron",
+        "model": "iaf_psc_exp",
+        "n": 50,
+        "x": 300,
+        "y": 100,
+        "params": {
+            "I_e": 360.0,
+            "t_ref": 15.0
+        }
+    }, {
+        "id": 4,
+        "type": "output",
+        "model": "spike_detector",
+        "nbins": 50,
+        "hidden": true,
+        "params": {}
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 1,
+        "conn_spec": {
+            "rule": "fixed_outdegree",
+            "outdegree": 15
+        },
+        "syn_spec": {
+            "weight": 25.0
+        }
+    }, {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "conn_spec": {
+            "rule": "fixed_outdegree",
+            "outdegree": 15
+        },
+        "syn_spec": {
+            "weight": 25.0,
+            "delay": 10.0
+        }
+    }, {
+        "id": 2,
+        "source": 2,
+        "target": 3,
+        "conn_spec": {
+            "rule": "fixed_outdegree",
+            "outdegree": 15
+        },
+        "syn_spec": {
+            "weight": 25.0,
+            "delay": 10.0
+        }
+    }, {
+        "id": 3,
+        "source": 1,
+        "target": 4
+    }, {
+        "id": 4,
+        "source": 2,
+        "target": 4
+    }, {
+        "id": 5,
+        "source": 3,
+        "target": 4
+    }]
+}

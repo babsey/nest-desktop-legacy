@@ -18,95 +18,107 @@ controller.init = function() {
     app.slider.init_kernelSlider(model)
     var borderWidth = '4px';
 
-    var colors = app.simChart.colors;
+    var colors = app.chart.colors();
 
     var nodeDefaults = app.config.modelSlider('node');
-    $('#nodes').empty()
+    $('#nodes .controller').empty()
     $('#nodeScrollspy .nav').empty()
     app.data.nodes.map(function(node) {
         // if (node.hidden) return
-        $('#nodeScrollspy .nav').append(app.render.scrollspy(node))
-        $('#nodes').append(app.render.node(node))
+        $('#nodes .controller').append(app.renderer.node(node))
+        var divNode = $('#nodes').find('.node[data-id=' + node.id + '] .content')
+        var modelDefaults = app.config.modelSlider(node.type);
+        for (var midx in modelDefaults) {
+            var model = modelDefaults[midx];
+            divNode.find('.modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
+        }
+        divNode.find('option#' + node.model).prop('selected', true);
+        divNode.find('.modelSelect').toggleClass('disabled', node.disabled || false)
+        divNode.find('.glyphicon-remove').toggle(node.disabled || false)
+        divNode.find('.glyphicon-ok').toggle(!node.disabled && true)
+            // divNode.find('.modelSelect').prop('disabled', node.disabled || false)
+        if (node.disabled) return
+
+        $('#nodeScrollspy .nav').append(app.renderer.scrollspy(node))
         if (node.type == 'neuron' || node.type == 'input') {
-            nodeDefaults[0].value = node.n || 1
-            app.slider.init_popSlider(node.id, nodeDefaults[0])
+            nodeDefaults.npop.value = node.n || 1
+            app.slider.init_popSlider(node, nodeDefaults.npop)
+        }
+        if (node.type == 'input') {
+            nodeDefaults.stim_time.max = app.data.sim_time
+            nodeDefaults.stim_time.value = [(node.params.start || 0), (node.params.stop || app.data.sim_time)]
+            app.slider.init_stimSlider(node, nodeDefaults.stim_time)
         }
         if (node.model == 'spike_detector') {
-            nodeDefaults[1].value = nodeDefaults[1].ticks_labels.indexOf(node.nbins) || 1
-            app.slider.init_binSlider(node.id, nodeDefaults[1])
+            nodeDefaults.nbins.value = nodeDefaults.nbins.ticks_labels.indexOf(node.nbins) || 1
+            app.slider.init_binSlider(node, nodeDefaults.nbins)
         }
-        var divNode = $('#nodes').find('#node_' + node.id).find('.content')
-        var modelDefaults = app.config.modelSlider(node.type)
-        for (var midx in modelDefaults) {
-            var model = modelDefaults[midx];
-            divNode.find(' .modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
-            if (model.id == node.model) {
-                app.slider.init_modelSlider('#node_' + node.id + ' .modelSlider', model)
-            }
-        }
+        var colors = app.chart.colors();
+        $('.node[data-id=' + node.id + '] .slider-selection').css('background', colors[node.id % colors.length])
+        $('.node[data-id=' + node.id + '] .slider-handle').css('border', '2px solid ' + colors[node.id % colors.length])
 
+        if (node.model) {
+            app.slider.init_modelSlider('#nodes .node[data-id=' + node.id + '] .modelSlider', modelDefaults.filter(function(d) {
+                return d.id == node.model;
+            })[0])
+        }
         if (node.type == 'output') {
             if (node.model == 'multimeter') {
-                divNode.append('<div class="recSelect form-group"></div>')
-                divNode.find('.recSelect').append('<label for="id_record">Record from</label>')
-                divNode.find('.recSelect').append('<select id="id_record" class="form-control"></select>')
+                divNode.append('<div class="recSelect form-group hideOnDrawing"></div>')
+                divNode.find('.recSelect').append('<label for="record_' + node.id + '">Record from</label>')
+                divNode.find('.recSelect').append('<select id="record_' + node.id + '" class="record form-control"></select>')
             }
         }
-
-        divNode.find('option#' + node.model).prop('selected', true);
         app.slider.update_nodeSlider(node)
-
-        divNode.find('.slider-selection').css('background', colors[node.id % colors.length])
-        divNode.find('.slider-handle').css('border', '2px solid ' + colors[node.id % colors.length])
     })
 
-    $('#connections').empty();
-    $('#synapses').empty();
-    app.data.links.map(function(link) {
-        if (app.data.nodes[link.source].hidden || app.data.nodes[link.target].hidden) return
+    var drawing = app.chart.networkLayout.drawing;
+    if (!drawing) {
+        $('#connections .controller').empty();
+        $('#synapses .controller').empty();
+        app.data.links.map(function(link) {
+            if (app.data.nodes[link.source].hidden || app.data.nodes[link.target].hidden) return
+            if (app.data.nodes[link.source].disabled || app.data.nodes[link.target].disabled) return
+                // if (app.data.nodes[link.target].type == 'output') return
 
-        // Connection
-        $('#connections').append(app.render.connection(link))
-        var divConnLink = $('#connections').find('#conn_' + link.id).find('.content')
-        var modelDefaults = app.config.modelSlider('connection')
-        for (var midx in modelDefaults) {
-            var model = modelDefaults[midx];
-            divConnLink.find('.connSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
-            if (link.conn_spec == null) continue
-            if (model.id == link.conn_spec.rule) {
-                app.slider.init_modelSlider('#conn_' + link.id + ' .connSlider', model)
+            // Connection
+            $('#connections .controller').append(app.renderer.connection(link))
+            var divConnLink = $('#connections').find('.link[data-id=' + link.id + '] .content')
+            var modelDefaults = app.config.modelSlider('connection')
+            for (var midx in modelDefaults) {
+                var model = modelDefaults[midx];
+                divConnLink.find('.connSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
             }
-        }
-        divConnLink.find('.connSelect').find('option#' + (link.conn_spec ? link.conn_spec.rule || 'all_to_all' : 'all_to_all')).prop('selected', true);
-        app.slider.update_connSlider(link)
+            var connRule = (link.conn_spec ? (link.conn_spec.rule || 'all_to_all') : 'all_to_all')
+            divConnLink.find('.connSelect').find('option#' + connRule).prop('selected', true);
+            divConnLink.find('.modelSelect').toggleClass('disabled', link.disabled || false)
+            divConnLink.find('.glyphicon-remove').toggle(link.disabled || false)
+            divConnLink.find('.glyphicon-ok').toggle(!link.disabled && true)
+            if (link.disabled) return
 
-        divConnLink.find('.slider-selection').css('background', colors[link.source % colors.length])
-        divConnLink.find('.slider-handle').css('border', '2px solid ' + colors[link.source % colors.length])
+            app.slider.init_modelSlider('#connections .link[data-id=' + link.id + '] .modelSlider', modelDefaults.filter(function(d) {
+                return d.id == connRule;
+            })[0])
+            app.slider.update_connSlider(link)
 
-
-        // Synapse
-        $('#synapses').append(app.render.synapse(link))
-        var divSynLink =  $('#synapses').find('#syn_' + link.id).find('.content')
-        var modelDefaults = app.config.modelSlider('synapse')
-        for (var midx in modelDefaults) {
-            var model = modelDefaults[midx];
-            divSynLink.find('.modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
-            if (link.syn_spec == null) continue
-            if (model.id == link.syn_spec.model) {
-                app.slider.init_modelSlider('#syn_' + link.id + ' .synSlider', model)
+            // Synapse
+            $('#synapses .controller').append(app.renderer.synapse(link))
+            var divSynLink = $('#synapses').find('.link[data-id=' + link.id + '] .content')
+            var modelDefaults = app.config.modelSlider('synapse')
+            for (var midx in modelDefaults) {
+                var model = modelDefaults[midx];
+                divSynLink.find('.modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
             }
-        }
-        if (!link.syn_spec || !link.syn_spec.model) {
-            var model = modelDefaults[1];
-            app.slider.init_modelSlider('#syn_' + link.id + ' .synSlider', model)
-        }
-        divSynLink.find('.modelSelect').find('option#' + (link.syn_spec ? link.syn_spec.model || 'static_synapse' : 'static_synapse')).prop('selected', true);
-        app.slider.update_synSlider(link)
+            var synModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
+            divSynLink.find('.modelSelect').find('option#' + synModel).prop('selected', true);
 
-        divSynLink.find('.slider-selection').css('background', colors[link.source % colors.length])
-        divSynLink.find('.slider-handle').css('border', '2px solid ' + colors[link.source % colors.length])
-
-    })
+            app.slider.init_modelSlider('#synapses .link[data-id=' + link.id + '] .modelSlider', modelDefaults.filter(function(d) {
+                return d.id == synModel;
+            })[0])
+            app.slider.update_synSlider(link)
+        })
+    }
+    $('.hideOnDrawing').toggle(!drawing)
 
     // app.slider.init_dataSlider()
     // data.nodes.map(function(node) {
@@ -114,7 +126,7 @@ controller.init = function() {
     //         app.models.model_selected(node)
     //     }
     // })
-    
+
     app.events.controller()
 }
 

@@ -3,7 +3,6 @@
     "name": "Bump activity",
     "group": "user",
     "user": "spreizer",
-    "runSimulation": true,
     "network": "gamma",
     "sim_time": 1000.0,
     "res_time": 100.0,

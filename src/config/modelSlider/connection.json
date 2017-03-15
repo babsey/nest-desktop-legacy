@@ -28,7 +28,7 @@
         "level": 1,
         "value": 1,
         "min": 0,
-        "max": 1000,
+        "max": 100,
         "step": 1,
         "label": "Outdegree"
     }]

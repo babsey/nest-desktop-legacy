@@ -1,84 +1,15 @@
 "use strict"
 
-const d3 = require("d3");
-const colorbrewer = require('colorbrewer');
-
-var chart = {
-    margin: {
-        top: 10,
-        right: 40,
-        bottom: 40,
-        left: 50
-    },
-    y: 0
-};
-
-var margin = chart.margin;
-chart.xScale = d3.scaleLinear();
-chart.yScale = d3.scaleLinear();
-
-var colors = colorbrewer.Blues[9]
-chart.colorScale = d3.scaleQuantile()
-    .range(colors);
-
-chart.format = d3.format(".2f");
-
-chart.transition = d3.transition()
-    .ease(d3.easeLinear)
-    .duration(1);
-
-var _xAxis, _yAxis;
-
-var _data = {
-    x: [],
-    y: [],
-    c: [],
-};
-
-chart.line = d3.line();
-
-chart.data = function(d) {
-    if (!arguments.length) return _data;
-    _data = d;
-    return chart
-}
-
-chart.init = function(reference,size) {
-    var svg = d3.select(reference),
-        width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
-        height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
-    chart.svg = svg;
-    chart.width = width;
-    chart.height = height;
-
-    chart.xScale.range([0, width])
-    chart.yScale.range([height, 0])
-
-    var g = svg.append("g")
-        .attr('height', height)
-        .attr('width', width)
-        .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) +")");
-    chart.g = g;
-
-    var clip = g.append("g")
-        .attr("clip-path", "url(#clip)")
-        .attr('id', 'clip');
-
-    // add area for dragging event
-    clip.append("rect")
-        .attr('width', width)
-        .attr('height', height)
-        .attr('fill', 'white');
-
-    return chart
-}
-
 //
 // Heatmap-chart
 //
 
+const d3 = require("d3");
+const colorbrewer = require('colorbrewer');
 
-function legend() {
+var chart = {};
+
+chart.legend = function() {
     var l = chart.g.select('#heatmap')
         .selectAll(".legend")
         .data(d3.range(
@@ -108,7 +39,7 @@ function legend() {
         })
         .on('mouseout', function() {
             chart.g.selectAll('.card')
-                .transition(t)
+                .transition(app.chart.transition)
                 .style('opacity', 1.0);
         });
 
@@ -118,17 +49,15 @@ function legend() {
         .attr("dy", ".35em")
         .attr("text-anchor", "end")
         .text(function(d) {
-            return chart.format(d)
+            return app.chart.format(d)
         });
     return chart
 }
 
-function update() {
+chart.update = function(data) {
     chart.yScale.range([chart.height, chart.height - (+chart.g.attr('height'))])
     chart.xScale.range([0, +chart.g.attr('width')])
-
-    var data = chart.data();
-    app.simChart.axesUpdate(chart,false)
+    app.chart.axesUpdate(chart,false)
 
     var cards = chart.g
         .select('#clip')
@@ -190,6 +119,47 @@ function update() {
 
 }
 
-chart.legend = legend
-chart.update = update
-module.exports = chart.init
+chart.init = function(reference,size) {
+    var margin = {
+            top: 10,
+            right: 40,
+            bottom: 40,
+            left: 50
+        };
+
+    var svg = d3.select(reference),
+        width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
+        height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
+    chart.svg = svg;
+    chart.width = width;
+    chart.height = height;
+
+    chart.xScale = d3.scaleLinear();
+    chart.xScale.range([0, width])
+    chart.yScale = d3.scaleLinear();
+    chart.yScale.range([height, 0])
+
+    var colors = colorbrewer.Blues[9]
+    chart.colorScale = d3.scaleQuantile()
+        .range(colors);
+
+    var g = svg.append("g")
+        .attr('height', height)
+        .attr('width', width)
+        .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) +")");
+    chart.g = g;
+
+    var clip = g.append("g")
+        .attr("clip-path", "url(#clip)")
+        .attr('id', 'clip');
+
+    // add area for dragging event
+    clip.append("rect")
+        .attr('width', width)
+        .attr('height', height)
+        .attr('fill', 'white');
+
+    return chart
+}
+
+module.exports = chart

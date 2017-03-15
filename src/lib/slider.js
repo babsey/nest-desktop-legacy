@@ -2,6 +2,8 @@
 
 const Slider = require("bootstrap-slider");
 
+var slider = {};
+
 function _slider(ref, id, options) {
     var options_default = {
         min: 0,
@@ -30,22 +32,6 @@ function _slider(ref, id, options) {
     return slider
 }
 
-
-
-//
-// slider for data values
-//
-
-var slider = {};
-
-slider.create_dataSlider = function(ref, id, options) {
-    $(ref).append('<dl id="' + id + '" class="dataSlider" level="' + options.level + '"></dl>')
-    $(ref).find('#' + id).append('<dt>' + options.label + '</dt>')
-    var level = app.config.app().get('simulation.level');
-    $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
-    return _slider(ref, id, options);
-}
-
 function _update_dataSlider(id, value) {
     var level = app.config.app().get('simulation.level');
     $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
@@ -53,71 +39,13 @@ function _update_dataSlider(id, value) {
     $('#' + id + 'Val').html(value)
 }
 
-slider.init_globalSlider = function(options) {
-    slider.create_dataSlider('#global .content', options.id, options)
-        .on('slideStop', function(d) {
-            app.data[options.id] = d.value
-        })
-}
-
-slider.init_kernelSlider = function(options) {
-    slider.create_dataSlider('#kernel .content', options.id, options)
-        .on('slideStop', function(d) {
-            app.data.kernel[options.id] = d.value
-        })
-}
-
-slider.init_popSlider = function(nidx, options) {
-    slider.create_dataSlider('#node_' + nidx +' .content .nodeSlider', options.id, options)
-        .on('slideStop', function(d) {
-            app.data.nodes[nidx].n = d.value
-        })
-}
-
-slider.init_binSlider = function(nidx, options) {
-    slider.create_dataSlider('#node_' + nidx +' .content .nodeSlider', options.id, options)
-        .on('slideStop', function(d) {
-            app.data.nodes[nidx].nbins = options.ticks_labels[d.value]
-        })
-}
-
-
-slider.update_dataSlider_level = function() {
+slider.update_dataSlider = function() {
     var ds = $('.dataSlider');
     var level = app.config.app().get('simulation.level');
     ds.each(function() {
         var pid = this.id;
         $('#' + this.id).attr('level') > level ? $('#' + pid).hide() : $('#' + pid).show()
     })
-}
-
-//
-// slider for parameter values of a model
-//
-
-
-var create_modelSlider = function(ref, id, options) {
-    $(ref).append('<dl id="' + id + '" class="paramSlider" level="' + options.level + '"></dl>')
-    $(ref).find('#' + id).append('<dt>' + options.label + '</dt>')
-    return _slider(ref, id, options);
-}
-
-slider.init_modelSlider = function(ref, model) {
-    $(ref).empty()
-    $(ref).append('<div class="model ' + model.id + '" style="display:none"></div>')
-    for (var idx in model.sliderDefaults) {
-        var p = model.sliderDefaults[idx];
-        var options = {
-            value: +p.value,
-            label: p.label,
-            level: p.level,
-            min: +p.min,
-            max: +p.max,
-            step: +p.step,
-            scale: p.scale || 'linear'
-        }
-        create_modelSlider(ref + ' .' + model.id, p.id, options);
-    }
 }
 
 slider.update_kernelSlider = function() {
@@ -137,10 +65,7 @@ slider.update_kernelSlider = function() {
 }
 
 slider.update_nodeSlider = function(node) {
-    var ref = $("#node_" + node.id);
-    var model = node.model;
-    ref.find('.modelSlider .model').hide();
-    var modelSlider = ref.find('.' + model);
+    var modelSlider = $('#nodes .node[data-id=' + node.id + '] .modelSlider');
     var level = app.config.app().get('simulation.level');
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
@@ -152,35 +77,35 @@ slider.update_nodeSlider = function(node) {
         }
         modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
-    ref.find('.' + model).show();
+    var colors = app.chart.colors();
+    modelSlider.find('.slider-selection').css('background', colors[node.id % colors.length])
+    modelSlider.find('.slider-handle').css('border', '2px solid ' + colors[node.id % colors.length])
 }
 
 slider.update_connSlider = function(link) {
     if (link.conn_spec == undefined) return
-    var rule = link.conn_spec.rule || 'all_to_all';
-    var ref = $("#conn_" + link.id);
-    ref.find('.connSlider .model').hide();
-    var ruleSlider = ref.find('.' + rule);
+    var connRule = (link.conn_spec ? (link.conn_spec.rule || 'all_to_all') : 'all_to_all')
+    var modelSlider = $('#connections .link[data-id=' + link.id + ']');
     var level = app.config.app().get('simulation.level');
-    ruleSlider.find('.paramSlider').each(function() {
+    modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
         if (link.conn_spec[pid] != undefined) {
-            ruleSlider.find('#' + pid + 'Input').slider('setValue', parseFloat(link.conn_spec[pid]));
-            ruleSlider.find('#' + pid + 'Val').html(link.conn_spec[pid]);
+            modelSlider.find('#' + pid + 'Input').slider('setValue', parseFloat(link.conn_spec[pid]));
+            modelSlider.find('#' + pid + 'Val').html(link.conn_spec[pid]);
         } else {
-            link.conn_spec[pid] = ruleSlider.find('#' + pid + 'Input').slider('getValue')
+            link.conn_spec[pid] = modelSlider.find('#' + pid + 'Input').slider('getValue')
         }
-        ruleSlider.find('#' + pid).attr('level') > level ? ruleSlider.find('#' + pid).hide() : ruleSlider.find('#' + pid).show()
+        modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
-    ref.find('.' + rule).show();
+    var colors = app.chart.colors();
+    modelSlider.find('.slider-selection').css('background', colors[link.source % colors.length])
+    modelSlider.find('.slider-handle').css('border', '2px solid ' + colors[link.source % colors.length])
+
 }
 
 slider.update_synSlider = function(link) {
-    if (link.syn_spec == undefined) return
-    var model = link.syn_spec.model || 'static_synapse';
-    var ref = $("#syn_" + link.id);
-    ref.find('.synSlider .model').hide();
-    var modelSlider = ref.find('.' + model);
+    var synModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
+    var modelSlider = $('#synapses .link[data-id=' + link.id + ']');
     var level = app.config.app().get('simulation.level')
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
@@ -192,7 +117,82 @@ slider.update_synSlider = function(link) {
         }
         modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
-    ref.find('.' + model).show();
+    var colors = app.chart.colors();
+    modelSlider.find('.slider-selection').css('background', colors[link.source % colors.length])
+    modelSlider.find('.slider-handle').css('border', '2px solid ' + colors[link.source % colors.length])
+
+}
+
+slider.create_dataSlider = function(ref, id, options) {
+    $(ref).append('<dl id="' + id + '" class="dataSlider" level="' + options.level + '"></dl>')
+    $(ref).find('#' + id).append('<dt>' + options.label + '</dt>')
+    var level = app.config.app().get('simulation.level');
+    $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
+    return _slider(ref, id, options);
+}
+
+slider.init_globalSlider = function(options) {
+    slider.create_dataSlider('#global .content', options.id, options)
+        .on('slideStop', function(d) {
+            app.data[options.id] = d.value
+        })
+}
+
+slider.init_kernelSlider = function(options) {
+    slider.create_dataSlider('#kernel .content', options.id, options)
+        .on('slideStop', function(d) {
+            app.data.kernel[options.id] = d.value
+        })
+}
+
+slider.init_popSlider = function(node, options) {
+    slider.create_dataSlider('.node[data-id=' + node.id + '] .nodeSlider', options.id, options)
+        .on('slideStop', function(d) {
+            app.data.nodes[node.id].n = d.value
+        })
+}
+
+slider.init_stimSlider = function(node, options) {
+    slider.create_dataSlider('.node[data-id=' + node.id + '] .nodeSlider', options.id, options)
+        .on('slideStop', function(d) {
+            console.log(d.value)
+            node.params.start = d.value[0]
+            delete node.params.stop
+            if (d.value[1] < app.data.sim_time) {
+                node.params.stop = d.value[1]
+            }
+        })
+}
+
+slider.init_binSlider = function(node, options) {
+    slider.create_dataSlider('.node[data-id=' + node.id + '] .nodeSlider', options.id, options)
+        .on('slideStop', function(d) {
+            app.data.nodes[node.id].nbins = options.ticks_labels[d.value]
+        })
+}
+
+var create_modelSlider = function(ref, id, options) {
+    $(ref).append('<dl id="' + id + '" class="paramSlider" level="' + options.level + '"></dl>')
+    $(ref).find('#' + id).append('<dt>' + options.label + '</dt>')
+    return _slider(ref, id, options);
+}
+
+slider.init_modelSlider = function(ref, model) {
+    $(ref).empty()
+    $(ref).append('<div class="model ' + model.id + '"></div>')
+    for (var idx in model.sliderDefaults) {
+        var p = model.sliderDefaults[idx];
+        var options = {
+            value: +p.value,
+            label: p.label,
+            level: p.level,
+            min: +p.min,
+            max: +p.max,
+            step: +p.step,
+            scale: p.scale || 'linear'
+        }
+        create_modelSlider(ref + ' .' + model.id, p.id, options);
+    }
 }
 
 module.exports = slider;

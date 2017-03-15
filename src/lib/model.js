@@ -31,10 +31,10 @@ model.syn_selected = function(link) {
 }
 
 model.get_recordables_list = function(output) {
-    $('#id_record').empty()
+    $('.record').empty()
     for (var recId in output.params.record_from) {
         var rec = output.params.record_from[recId];
-        $('<option val="' + rec + '" ' + (rec == output.record_from ? 'selected' : '') + '>' + rec + '</option>').appendTo('#id_record')
+        $('.record').append('<option val="' + rec + '" ' + (rec == output.record_from ? 'selected' : '') + '>' + rec + '</option>')
     }
     $('#output').show();
 }

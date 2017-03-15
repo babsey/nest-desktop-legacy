@@ -37,6 +37,7 @@
     "jsonfile": "^2.4.0",
     "lie": "^3.1.0",
     "nedb": "^1.8.0",
+    "object-hash": "^1.1.7",
     "pouchdb": "^6.1.1",
     "pouchdb-adapter-idb": "^6.1.1",
     "pouchdb-authentication": "^0.5.5",

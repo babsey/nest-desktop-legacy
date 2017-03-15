@@ -1,11 +1,10 @@
 {
     "_id": "tsodyks-facilitating",
     "name": "Tsodyks facilitating",
-    "description": "This scripts simulates two neurons. One is driven with dc-input and connected to the other one with a facilitating tsodyks synapse. The membrane potential trace of the second neuron is recorded. \n\nThis example reproduces figure 1B of Tsodyks et al. (1998) \n**Neural Networks with Dynamic Synapses**. \n*Neural computation*, http://dx.doi.org/10.1162/089976698300017502 \n\nThis example is analog to ``Tsodyks depressing``, except that different synapse parameters are used. Here, a small facilitation parameter ``U`` causes a slow saturation of the synaptic efficacy (Eq. 2.2), enabling a facilitating behavior.",
+    "description": "This simulation shows the plasticity of a synapse. One neuron is driven with dc-input and connected to the other one with a facilitating tsodyks synapse. The membrane potential trace of the second neuron is recorded. \n\nIt reproduces figure 1B of Tsodyks et al. (1998) \n**Neural Networks with Dynamic Synapses**. \n*Neural computation*, \n\nNote that it is analog to ``Tsodyks depressing``, except that different synapse parameters are used. Here, a small facilitation parameter ``U`` causes a slow saturation of the synaptic efficacy (Eq. 2.2), enabling a facilitating behavior.",
+    "doi": "10.1162/089976698300017502",
     "group": "nest-example",
     "user": "nest-initiative",
-    "layout": true,
-    "runSimulation": true,
     "network": "simple",
     "sim_time": 1000.0,
     "res_time": 10.0,
@@ -60,12 +59,11 @@
     }, {
         "id": 3,
         "type": "output",
-        "model": "multimeter",
+        "model": "voltmeter",
         "x": 300,
         "y": 0,
-        "record_from": "V_m",
         "params": {
-            "interval": 1.0
+            "interval": 0.1
         }
     }],
     "links": [{

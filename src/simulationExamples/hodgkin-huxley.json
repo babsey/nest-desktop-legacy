@@ -4,8 +4,6 @@
     "description": "Alan Lloyd Hodgkin and Andrew Huxley described the model in 1952 to explain the ionic mechanisms underlying the initiation and propagation of action potentials in the squid giant axon. \nThey received the 1963 Nobel Prize in Physiology or Medicine for this work on the basis of nerve 'action potentials,' the electrical impulses which enable the activity of an organism to be coordinated by a central nervous system. Their findings led them to hypothesize ion channels, which were confirmed only decades later. [wikipedia]",
     "group": "nuspic-1",
     "user": "architect",
-    "layout": true,
-    "runSimulation": true,
     "network": "simple",
     "sim_time": 1000.0,
     "res_time": 10.0,

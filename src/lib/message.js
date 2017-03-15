@@ -5,21 +5,20 @@ const uuidV4 = require('uuid/v4');
 var message = {};
 
 message.show = function(mode, content, duration) {
-    var messageID = uuidV4();
-    $('#message').append('<div id="' + messageID + '" class="' + mode + '"><strong>' + mode + '!</strong> ' + content + '</div>')
+    var messageId = uuidV4();
+    $('#message .content').append('<div id="' + messageId + '" class="' + mode + '"><strong>' + mode + '</strong> ' + content + '</div>')
 
     if (duration) {
-        setTimeout(function() {
-            $('#' + messageID).fadeOut('slow', function() {
-                $('#' + messageID).remove()
-            })
+        var timeoutId = setTimeout(function() {
+            $('#' + messageId).fadeOut('slow')
         }, duration)
+        $('#' + messageId).data('timeoutId', timeoutId)
     }
-    return messageID
+    return messageId
 }
 
-message.hide = function(messageID) {
-    $('#' + messageID).remove()
+message.hide = function(messageId) {
+    return $('#' + messageId).hide()
 }
 
 module.exports = message

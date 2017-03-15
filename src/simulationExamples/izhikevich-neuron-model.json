@@ -1,0 +1,193 @@
+{
+    "_id": "izhikevich-neuron-model",
+    "name": "Izhikevich neuron model",
+    "description": "This simulation shows the biological plausibility and computational efficiency of some of the most useful models of spiking and bursting neurons according to Eugene M. Izhikevich (2004) 'Which Model to Use for Cortical Spiking Neurons?'",
+    "doi": "10.1109/TNN.2004.832719",
+    "group": "example",
+    "user": "architect",
+    "network": "simple",
+    "sim_time": 500.0,
+    "res_time": 10.0,
+    "kernel": {
+        "grng_seed": 0,
+        "resolution": 0.1
+    },
+    "nodes": [{
+        "id": 0,
+        "type": "input",
+        "model": "dc_generator",
+        "label": "DC",
+        "x": 0,
+        "y": 150,
+        "stim_time": [100.0, 1000.0],
+        "params": {
+            "amplitude": 15.0,
+            "start": 100.0
+        }
+    }, {
+        "id": 1,
+        "type": "neuron",
+        "model": "izhikevich",
+        "label": "RS",
+        "title": "Regular spiking",
+        "x": 150,
+        "y": 0,
+        "params": {
+            "a": 0.02,
+            "b": 0.2,
+            "c": -65.0,
+            "d": 8.0
+        }
+    }, {
+        "id": 2,
+        "type": "neuron",
+        "model": "izhikevich",
+        "x": 150,
+        "y": 50,
+        "label": "IB",
+        "title": "Instrinically bursting",
+        "params": {
+            "a": 0.02,
+            "b": 0.2,
+            "c": -55.0,
+            "d": 4.0
+        }
+    }, {
+        "id": 3,
+        "type": "neuron",
+        "model": "izhikevich",
+        "x": 150,
+        "y": 100,
+        "label": "CH",
+        "title": "Chattering",
+        "params": {
+            "a": 0.02,
+            "b": 0.2,
+            "c": -50.0,
+            "d": 2.0
+        }
+    }, {
+        "id": 4,
+        "type": "neuron",
+        "model": "izhikevich",
+        "x": 150,
+        "y": 150,
+        "label": "FS",
+        "title": "Fast spiking",
+        "params": {
+            "a": 0.1,
+            "b": 0.2,
+            "c": -65.0,
+            "d": 2.0
+        }
+    }, {
+        "id": 5,
+        "type": "neuron",
+        "model": "izhikevich",
+        "x": 150,
+        "y": 200,
+        "label": "TC",
+        "title": "Thalamo-cortical",
+        "params": {
+            "a": 0.02,
+            "b": 0.25,
+            "c": -65.0,
+            "d": 0.05
+        }
+    }, {
+        "id": 6,
+        "type": "neuron",
+        "model": "izhikevich",
+        "x": 150,
+        "y": 250,
+        "label": "RZ",
+        "title": "Resonator",
+        "params": {
+            "a": 0.1,
+            "b": 0.25,
+            "c": -65.0,
+            "d": 2.0
+        }
+    }, {
+        "id": 7,
+        "type": "neuron",
+        "model": "izhikevich",
+        "x": 150,
+        "y": 300,
+        "label": "LTS",
+        "title": "Low-threshold-spiking",
+        "params": {
+            "a": 0.02,
+            "b": 0.25,
+            "c": -65.0,
+            "d": 2.0
+        }
+    }, {
+        "id": 8,
+        "type": "output",
+        "model": "voltmeter",
+        "label": "VM",
+        "x": 300,
+        "y": 150,
+        "params": {
+            "interval": 0.1
+        }
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 1
+    }, {
+        "id": 1,
+        "source": 0,
+        "target": 2
+    }, {
+        "id": 2,
+        "source": 0,
+        "target": 3
+    }, {
+        "id": 3,
+        "source": 0,
+        "target": 4
+    }, {
+        "id": 4,
+        "source": 0,
+        "target": 5
+    }, {
+        "id": 5,
+        "source": 0,
+        "target": 6
+    }, {
+        "id": 6,
+        "source": 0,
+        "target": 7
+    }, {
+        "id": 7,
+        "source": 1,
+        "target": 8
+    }, {
+        "id": 8,
+        "source": 2,
+        "target": 8
+    }, {
+        "id": 9,
+        "source": 3,
+        "target": 8
+    }, {
+        "id": 10,
+        "source": 4,
+        "target": 8
+    }, {
+        "id": 11,
+        "source": 5,
+        "target": 8
+    }, {
+        "id": 12,
+        "source": 6,
+        "target": 8
+    }, {
+        "id": 13,
+        "source": 7,
+        "target": 8
+    }]
+}

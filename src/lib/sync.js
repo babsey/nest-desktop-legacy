@@ -3,6 +3,7 @@
 const PouchDB = require('pouchdb');
 const NeDB = require('nedb');
 PouchDB.plugin(require('pouchdb-adapter-idb'));
+const hash = require('object-hash');
 
 var sync = {};
 
@@ -68,13 +69,16 @@ sync.defaults = function() {
         app.db.localDB.findOne({
             _id: sim._id
         }).exec(function(err, docs) {
-            if (docs != null) return
-            app.db.localDB.insert(sim)
+            if (docs == null) {
+                app.db.localDB.insert(sim)
+            } else if (app.hash(docs) != app.hash(sim)) {
+                app.db.localDB.update({_id: docs._id}, sim)
+            }
         })
     })
 }
 
-sync.on = function() {
+sync.all = function() {
     sync.remoteDB()
     sync.localDB()
     sync.defaults()

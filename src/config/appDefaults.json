@@ -23,22 +23,22 @@
     },
     "simulation": {
         "level": 1,
-        "chart": {
-            "color": false,
-            "layout": true
-        },
         "groups": [{
             "id": "user",
             "name": "User"
-        },{
+        }, {
             "id": "example",
             "name": "Example"
-        },{
+        }, {
             "id": "nest-example",
             "name": "NEST example"
-        },{
+        }, {
             "id": "nuspic-1",
             "name": "NuSPIC 1"
         }]
+    },
+    "chart": {
+        "color": false,
+        "networkLayout": true
     }
 }

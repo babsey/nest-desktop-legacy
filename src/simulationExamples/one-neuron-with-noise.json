@@ -1,11 +1,9 @@
 {
     "_id": "one-neuron-with-noise",
     "name": "One neuron with noise",
-    "description": "This example shows the activity of one neuron receiving two poisson inputs.",
+    "description": "This simulation shows the activity of one neuron receiving two poisson inputs.",
     "group": "nest-example",
     "user": "nest-initiative",
-    "layout": true,
-    "runSimulation": true,
     "network": "simple",
     "sim_time": 1000.0,
     "res_time": 10.0,
