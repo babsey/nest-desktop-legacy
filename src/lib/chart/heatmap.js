@@ -28,18 +28,18 @@ heatmap.update = function(output) {
     })
     $('#clip').empty()
     var sourceId = app.data.links.find(function(x) {
-        return x.target == output.id
+        return x.target == output.node.id
     }).source
+
     heatmap.chart.xScale.domain([0, app.data.nodes[sourceId].nrow])
     heatmap.chart.yScale.domain([0, app.data.nodes[sourceId].ncol])
     heatmap.chart.colorScale.domain([0, 5])
-    heatmap.chart.data({
-            i: d3.range(0, h1.length),
-            x: d3.range(0, app.data.nodes[sourceId].ncol),
-            y: d3.range(0, app.data.nodes[sourceId].nrow),
-            c: h1,
-        })
-        .update();
+    heatmap.chart.update({
+        i: d3.range(0, h1.length),
+        x: d3.range(0, app.data.nodes[sourceId].ncol),
+        y: d3.range(0, app.data.nodes[sourceId].nrow),
+        c: h1,
+    });
 
     $('#simulation-add').attr('disabled', false)
     $('#simulation-resume').attr('disabled', false)
@@ -50,7 +50,7 @@ heatmap.init = function(idx) {
     // $('#chart').empty()
     var height = parseInt($('#dataChart').data('height')) / app.simulation.outputs.length
     heatmap.chart = require(__dirname + '/core/heatmap-chart');
-    heatmap.chart.init('#dataChart',  {
+    heatmap.chart.init('#dataChart', {
         y: height * idx,
         height: height,
     });

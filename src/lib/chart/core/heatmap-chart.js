@@ -9,13 +9,13 @@ const colorbrewer = require('colorbrewer');
 
 var chart = {};
 
-chart.legend = function() {
+chart.legend = function(scale) {
     var l = chart.g.select('#heatmap')
         .selectAll(".legend")
         .data(d3.range(
-            chart.colorScale.domain()[0],
-            chart.colorScale.domain()[1],
-            chart.colorScale.domain()[1] / 5.))
+            scale.domain()[0],
+            scale.domain()[1],
+            scale.domain()[1] / 5.))
         .enter().append("g")
         .attr("class", "legend")
         .attr("transform", function(d, i) {
@@ -28,12 +28,12 @@ chart.legend = function() {
         .attr("width", 18)
         .attr("height", 18)
         .attr("fill", function(d) {
-            return chart.colorScale(d)
+            return scale(d)
         })
         .on('mouseover', function(d) {
             chart.g.selectAll('.card')
                 .filter(function(o) {
-                    return o < d || o >= (d + chart.colorScale.quantiles()[0])
+                    return o < d || o >= (d + scale.quantiles()[0])
                 })
                 .style('opacity', .1);
         })
@@ -62,7 +62,7 @@ chart.update = function(data) {
     var cards = chart.g
         .select('#clip')
         .selectAll('.card')
-        .data(chart.data().i);
+        .data(data.i);
 
     cards.selectAll('.card-fill').remove();
 
@@ -74,7 +74,7 @@ chart.update = function(data) {
         })
         .attr('class', "card-fill")
         .attr('title', function(d, i) {
-            return chart.format(data.c[i])
+            return app.chart.format(data.c[i])
         })
         .attr("width", chart.width / parseFloat(data.x.length))
         .attr("height", chart.height / parseFloat(data.y.length))
@@ -95,7 +95,7 @@ chart.update = function(data) {
 
         cards.selectAll('text')
             .text(function(d) {
-                return chart.format(d)
+                return app.chart.format(d)
             })
 
         cards.enter().append("text")
@@ -107,7 +107,7 @@ chart.update = function(data) {
             .attr("x", chart.xScale(.5))
             .attr("y", chart.yScale(.5))
             .text(function(d) {
-                return chart.format(d)
+                return app.chart.format(d)
             })
             .attr("fill", function(d) {
                 return d <= .5 ? "#000" : "#fff"
