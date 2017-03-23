@@ -69,6 +69,7 @@ sync.defaults = function() {
         app.db.localDB.findOne({
             _id: sim._id
         }).exec(function(err, docs) {
+            sim.version = process.env.npm_package_version
             if (docs == null) {
                 app.db.localDB.insert(sim)
             } else if (app.hash(docs) != app.hash(sim)) {

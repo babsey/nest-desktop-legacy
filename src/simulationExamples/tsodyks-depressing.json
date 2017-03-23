@@ -9,7 +9,8 @@
     "sim_time": 1000.0,
     "res_time": 10.0,
     "kernel": {
-        "grng_seed": 0
+        "grng_seed": 0,
+        "resolution": 0.1
     },
     "nodes": [{
         "id": 0,

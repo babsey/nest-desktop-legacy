@@ -1,6 +1,13 @@
 CHANGELOG
 ---------
 
+0.7.3:
+    Clear network
+    Enable/disable simulation protocols
+
+0.7.2:
+    Colored/black bar for single/multiple sources
+
 0.7.1:
     Fixed bugs
     Black bars

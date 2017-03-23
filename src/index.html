@@ -2,114 +2,114 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href='./assets/css/styles.css'></link>
+    <meta charset='utf-8'>
+    <link rel='stylesheet' href='../node_modules/bootstrap/dist/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='./assets/css/styles.css'></link>
     <title>NEST Desktop</title>
 </head>
 
 <body>
-    <div id="message"></div>
+    <div id='message'></div>
 
-    <!-- <div id="login" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="login-form">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="password">Name:</label>
-                            <input type="text" class="form-control" id="name">
+    <!-- <div id='login' class='modal fade' role='dialog'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <form id='login-form'>
+                    <div class='modal-body'>
+                        <div class='form-group'>
+                            <label for='password'>Name:</label>
+                            <input type='text' class='form-control' id='name'>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Password:</label>
-                            <input type="password" class="form-control" id="password">
+                        <div class='form-group'>
+                            <label for='password'>Password:</label>
+                            <input type='password' class='form-control' id='password'>
                         </div>
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="login-submit">Login</button>
+                        <button type='submit' class='btn btn-primary' data-dismiss='modal' id='login-submit'>Login</button>
                     </div>
                 </form>
             </div>
         </div>
     </div> -->
 
-    <div id="simulation-detail" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"></h4>
+    <div id='simulation-detail' class='modal fade' role='dialog'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                    <h4 class='modal-title'></h4>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-4">
-                            <a class="thumbnail go">
-                                <img class="image">
+                <div class='modal-body'>
+                    <div class='row'>
+                        <div class='col-sm-6 col-md-4'>
+                            <a class='thumbnail go'>
+                                <img class='image'>
                             </a>
                         </div>
-                        <div class="col-sm-6 col-md-8">
-                            <div class="description"></div>
+                        <div class='col-sm-6 col-md-8'>
+                            <div class='description'></div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <a id="paper" type="button" class="btn btn-default external" style="display:none">Paper</a>
-                    <a type="button" class="btn btn-default go">Go</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div class='modal-footer'>
+                    <a id='paper' type='button' class='btn btn-default external' style='display:none'>Paper</a>
+                    <a type='button' class='btn btn-default go'>Go</a>
+                    <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="content" style="display:none">
-        <div class="container-fluid">
-            <div class="pull-right">
+    <div id='content' style='display:none'>
+        <div class='container-fluid'>
+            <div class='pull-right'>
 
-                <div class="btn-group hide">
-                    <button class="btn btn-default navbar-bin dropdown-toggle" type="button" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-eye-open"></span>
+                <div class='btn-group hide'>
+                    <button class='btn btn-default navbar-bin dropdown-toggle' type='button' data-toggle='dropdown'>
+                        <span class='glyphicon glyphicon-eye-open'></span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="./tests/lineChart.html">Line chart</a></li>
-                        <li><a href="./tests/scatterChart.html">Scatter chart</a></li>
-                        <li><a href="./tests/heatmapChart.html">Heatmap chart</a></li>
+                    <ul class='dropdown-menu dropdown-menu-right'>
+                        <li><a href='./tests/lineChart.html'>Line chart</a></li>
+                        <li><a href='./tests/scatterChart.html'>Scatter chart</a></li>
+                        <li><a href='./tests/heatmapChart.html'>Heatmap chart</a></li>
                     </ul>
                 </div>
-                <span id="user"></span>
-                <!-- <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#login">
-                <span class="glyphicon glyphicon-user"></span>
+                <span id='user'></span>
+                <!-- <button type='button' class='btn btn-default navbar-btn' data-toggle='modal' data-target='#login'>
+                <span class='glyphicon glyphicon-user'></span>
             </button>
-            <button type="button" class="btn btn-default" id="logout" style="display:none">
-                <span class="glyphicon glyphicon-log-out"></span>
+            <button type='button' class='btn btn-default' id='logout' style='display:none'>
+                <span class='glyphicon glyphicon-log-out'></span>
             </button> -->
 
 
-                <button type="button" class="btn btn-default navbar-btn" onclick="window.close()">
-                    <span class="glyphicon glyphicon-remove"></span>
+                <button type='button' class='btn btn-default navbar-btn' onclick='window.close()'>
+                    <span class='glyphicon glyphicon-remove'></span>
                 </button>
             </div>
         </div>
 
-        <div class="container">
-            <div id="message" class="alert alert-dismissible fade in" role="alert" style="display:none; position:absolute; width:auto; top:10px"></div>
+        <div class='container'>
+            <div id='message' class='alert alert-dismissible fade in' role='alert' style='display:none; position:absolute; width:auto; top:10px'></div>
 
-            <div class="jumbotron">
+            <div class='jumbotron'>
                 <h1>NEST desktop</h1>
                 <p>
-                    A desktop application for the NEural Simulation Tool. (<a href="http://www.nest-simulator.org/" class="external">http://www.nest-simulator.org/</a>)
+                    A desktop application for the NEural Simulation Tool. (<a href='http://www.nest-simulator.org/' class='external'>http://www.nest-simulator.org/</a>)
                 </p>
-                <p class="hide">
-                    <a class="btn btn-primary btn-lg external" href="https://www.npmjs.com/package/nest-desktop" role="button">Learn more</a>
+                <p class='hide'>
+                    <a class='btn btn-primary btn-lg external' href='https://www.npmjs.com/package/nest-desktop' role='button'>Learn more</a>
                 </p>
             </div>
         </div>
 
-        <div id="jumbotron-bg"></div>
-        <div id="simulations" class="container"></div>
+        <div id='jumbotron-bg'></div>
+        <div id='simulations' class='container'></div>
 </body>
 
 <script>
     window.jQuery = $ = require('jquery')
     require('bootstrap');
-    const shell = require("electron").shell;
+    const shell = require('electron').shell;
     const path = require('path');
     const fs = require('fs');
 
@@ -137,12 +137,13 @@
                 docs.map(function(doc) {
                     $('#sim-' + grp.id).find('.simulation-list').append(app.renderer.simulationThumbnails(doc))
                 })
+
             });
         })
 
         setTimeout(function() {
             $('#content').fadeIn('fast');
-                // $('[data-toggle="tooltip"]').tooltip();
+            // $('[data-toggle='tooltip']').tooltip();
             $('.simulation').on('click', function() {
                 $('#simulation-detail').find('.modal-title').html($(this).find('a').attr('title'));
                 $('#simulation-detail').find('.description').html($(this).find('.description').html());
@@ -155,6 +156,17 @@
                 $('#simulation-detail').find('.go').attr('href', $(this).find('a').attr('href'));
                 $('#simulation-detail').modal('show');
             })
+
+            var tallest = 0;
+            $('img').each(function() {
+                var thisHeight = $(this).height();
+                if (thisHeight > tallest) {
+                    tallest = thisHeight;
+                }
+            });
+            $('.thumbnail').each(function() {
+                $(this).height(tallest);
+            });
         }, 200)
     }, fs.existsSync(__dirname + '/../data/' + app.config.app().get('db.name') + '.db') ? 1 : 1000)
 </script>

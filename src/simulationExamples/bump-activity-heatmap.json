@@ -14,6 +14,8 @@
         "id": 0,
         "type": "input",
         "model": "noise_generator",
+        "x": 0,
+        "y": 0,
         "params": {
             "mean": 1000.0,
             "std": 250.0
@@ -24,6 +26,8 @@
         "model": "iaf_cond_alpha",
         "nrow": 30,
         "ncol": 30,
+        "x": 100,
+        "y": 0,
         "params": {
             "C_m": 200.0,
             "E_L": -80.0,
@@ -42,6 +46,8 @@
         "type": "output",
         "model": "spike_detector",
         "chart": "heatmap",
+        "x": 200,
+        "y": 0,
         "params": {
             "start": 100.0
         }

@@ -23,20 +23,19 @@
 }
 #dataChart .aline {
     fill: none;
-    stroke: steelblue;
+    stroke: black;
     stroke-width: 1.5px;
 }
 #dataChart #clip.active .aline.active {
     stroke: #FF9900;
-    opacity: 1.0;
 }
 #dataChart .bar {
-    fill: #333;
-    stroke: #fff;
+    /*fill: white;*/
+    stroke: white;
 }
-#dataChart .bar:hover {
-    fill: #666;
-}
+/*#dataChart .bar:hover {
+    fill: #ccc;
+}*/
 #networkLayout {
     cursor: pointer;
 }

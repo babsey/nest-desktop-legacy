@@ -1,4 +1,5 @@
 {
+    "version": "",
     "user": {
         "id": "",
         "name": "",
@@ -15,7 +16,6 @@
         }
     },
     "nest": {
-        "version": "",
         "server": {
             "host": "localhost",
             "port": "5000"

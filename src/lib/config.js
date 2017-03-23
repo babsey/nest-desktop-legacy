@@ -18,6 +18,9 @@ config.app = function() {
     if (!conf.get('user.name')) {
         conf.set('user.name', process.env.USER);
     }
+    if (!conf.get('version')) {
+        conf.set('version', process.env.npm_package_version);
+    }
     if (!conf.get('db.name')) {
         conf.set('db.name', uuidV4())
     }

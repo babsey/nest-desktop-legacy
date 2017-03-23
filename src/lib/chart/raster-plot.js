@@ -1,33 +1,22 @@
 "use strict"
 
-var rasterPlot = {
-}
+var rasterPlot = {}
 
 rasterPlot.update = function(output) {
-    if (output.events.senders.length == 0) {
-        rasterPlot.scatterChart.update({
-                x: [],
-                y: [],
-                c: []
-            });
-        rasterPlot.barChart.update([]);
-        return
-    }
-    output.data = {}
-
     var scatterChart = rasterPlot.scatterChart;
     var barChart = rasterPlot.barChart;
-
-    output.senders = d3.merge(app.data.links.filter(function(link) {
-        return link.target == output.node.id
-    }).map(function(link) {
-        return app.data.nodes[link.source].ids
-    }))
-    output.sources = app.data.links.filter(function(link) {
-        return link.target == output.node.id
-    }).map(function(link) {
-        return app.data.nodes[link.source].id
-    })
+    output.data = {
+        dots: {
+            x: [],
+            y: [],
+        },
+        bars: [],
+    }
+    if (output.events.senders.length == 0) {
+        rasterPlot.scatterChart.update(output);
+        rasterPlot.barChart.update(output);
+        return
+    }
 
     var nbins = output.node.nbins || 100
     var histogram = d3.histogram()
@@ -61,12 +50,12 @@ rasterPlot.update = function(output) {
     })
 
     output.data.dots = {
-            x: times,
-            y: senders,
-            c: c
-        }
+        x: times,
+        y: senders,
+        c: c
+    }
 
-    scatterChart.yScale.domain(d3.extent(output.senders))
+    scatterChart.yScale.domain([d3.max(output.senders)+1, d3.min(output.senders)-1])
     scatterChart.update(output);
 
     var hist = output.senders.map(function(s) {

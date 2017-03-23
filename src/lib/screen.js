@@ -1,15 +1,15 @@
 "use strict"
 
+const fs = require('fs');
 const path = require('path');
 
 var screen = {}
-screen.capture = function(id) {
+screen.capture = function(data, overwrite) {
     const config = app.config.app()
-    var url = 'templates/simulation.html?simulation=' + id
-    var filepath = config.get('db.local.path') + path.sep + 'images' + path.sep + id + '.png'
-    setTimeout(function() {
-        require('electron').remote.require('./main').capturePage(filepath);
-    },1000)
+    var filepath = config.get('db.local.path') + path.sep + 'images' + path.sep + data._id + '.png'
+    var pardir = __dirname + path.sep + '..' + path.sep + '..'
+    if ((fs.existsSync(pardir + path.sep + filepath)) && !overwrite) return
+    require('electron').remote.require('./main').capturePage(filepath);
 }
 
 module.exports = screen;

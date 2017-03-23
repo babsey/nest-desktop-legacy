@@ -142,6 +142,8 @@ networkLayout.ticked = function() {
 
 networkLayout.update = function() {
     // console.log(mousedown_node,mouseup_node,selected_node,mousedown_link,selected_link)
+    networkLayout.circle.exit().remove();
+    networkLayout.path.exit().remove();
     if (app.data.nodes.length == 0) return
 
     // Apply the general update pattern to the links.
@@ -182,7 +184,6 @@ networkLayout.update = function() {
             d3.select(this).select('circle').attr('transform', function(d) {
                 return 'scale(1.1)';
             });
-
             networkLayout.ticked()
         })
         .on('mouseout', function(d) {
@@ -191,7 +192,6 @@ networkLayout.update = function() {
             d3.select(this).select('circle').attr('transform', function(d) {
                 return '';
             });
-
             networkLayout.ticked()
         })
         .on('mousedown', function(d) {
@@ -208,7 +208,6 @@ networkLayout.update = function() {
                 if (node.length == 0) return
                 $((node).find('a').attr('href'))[0].scrollIntoView();
             }
-
 
             // reposition drag line
             networkLayout.drag_line
@@ -239,9 +238,18 @@ networkLayout.update = function() {
             var source = networkLayout.mousedown_node;
             var target = networkLayout.mouseup_node;
 
-            if (target.type == 'input') return
-            if (source.type == 'output') return
-            if (source.type == 'input' && target.type == 'output') return
+            if (target.type == 'input') {
+                app.message.show('Error!', 'Inputs can not be targets.', 2000)
+                return
+            }
+            if (source.type == 'output') {
+                app.message.show('Error!', 'Outputs can not be sources.', 2000)
+                return
+            }
+            if (source.type == 'input' && target.type == 'output') {
+                app.message.show('Error!', 'Inputs can not connect to outputs directly.', 2000)
+                return
+            }
 
             var link = app.data.links.filter(function(l) {
                 return (app.data.nodes[l.source] === source && app.data.nodes[l.target] === target);
@@ -347,7 +355,8 @@ networkLayout.mousedown = function() {
                 app.selected_node.y = point[1];
                 app.data.nodes.push(app.selected_node)
                 if (d == 'neuron') {
-                    var link = networkLayout.addLink(app.selected_node, app.selected_node)
+                    var link = networkLayout.addLink(app.selected_node, app.selected_node);
+                    link.disabled = true;
                     app.data.links.push(link)
                 }
                 networkLayout.update()
@@ -365,7 +374,7 @@ networkLayout.mousemove = function() {
     // console.log('mousemove')
     if (!networkLayout.mousedown_node) return
     if (networkLayout.mousedown_node.type == 'output') return
-        // app.selected_node = networkLayout.mousedown_node;
+    // app.selected_node = networkLayout.mousedown_node;
     var point = d3.mouse(this);
     // update drag line
     networkLayout.drag_line
@@ -396,7 +405,7 @@ networkLayout.mouseup = function() {
 }
 
 networkLayout.init = function(reference) {
-    networkLayout.drawing = false;
+    $(reference).empty()
     networkLayout.lastNodeId = app.data.nodes.length;
     networkLayout.lastLinkId = app.data.links.length;
     networkLayout.drag = d3.drag()

@@ -45,6 +45,8 @@ renderer.simulationDropdown = function(doc) {
 renderer.simulationProtocol = function(data) {
     var div = [];
     // div.push(app.format.truncate(data.hash))
+    div.push('<img style="width:250px" src="' + $('#' + data._id).data('img') + '" />')
+    div.push('<small>')
     data.nodes.map(function(node) {
         div.push('<h4>' + app.format.nodeTitle(node) + '</h4>')
         if (node.n) {
@@ -60,6 +62,7 @@ renderer.simulationProtocol = function(data) {
         }
         div.push('</dl>')
     })
+    div.push('</small>')
     return div.join('')
 }
 

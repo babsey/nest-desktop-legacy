@@ -148,6 +148,9 @@ chart.update = function() {
     })
     $('#simulation-add').attr('disabled', false)
     $('#simulation-resume').attr('disabled', false)
+    setTimeout(function() {
+        app.screen.capture(app.data, false)
+    }, 500)
 }
 
 chart.init = function() {

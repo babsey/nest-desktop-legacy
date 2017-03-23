@@ -31,9 +31,9 @@ db.add = function(data) {
             node.events = {};
         }
     })
+    data.version = process.env.npm_package_version
     db.indexDB.put(data)
     app.sync.localDB()
-
     setTimeout(function() {
         app.screen.capture(data._id)
     }, 1000)
@@ -56,7 +56,7 @@ db.export = function(data) {
     const config = app.config.app()
     db.get(id).exec(function(err, doc) {
         if (err) return
-        var filepath = path.join(__dirname, '..', '..', config.get('db.local.path'), 'exports', id + '.json')
+        var filepath = path.join(__dirname, '..', config.get('db.local.path'), 'exports', id + '.json')
         jsonfile.writeFileSync(filepath, doc, {
             spaces: 4
         })
@@ -68,6 +68,7 @@ db.init = function() {
     var db_name = config.get('db.name')
     var filename = path.join(config.get('db.local.path'), db_name + '.db')
 
+    // Create a indexDB for synchroning with remoteDB if set
     db.indexDB = new PouchDB(db_name, {
         adapter: 'idb'
     });

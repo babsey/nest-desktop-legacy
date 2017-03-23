@@ -4,6 +4,14 @@
     "label": "Multimeter",
     "chart": "trace",
     "sliderDefaults": [{
+        "id": "interval",
+        "label": "Time interval of recording (ms)",
+        "level": 2,
+        "value": 1.0,
+        "min": 0.1,
+        "max": 1.0,
+        "step": 0.1
+    }, {
         "id": "start",
         "label": "Start time of recording (ms)",
         "level": 2,
@@ -50,6 +58,14 @@
     "label": "Voltmeter",
     "chart": "trace",
     "sliderDefaults": [{
+        "id": "interval",
+        "label": "Time interval of recording (ms)",
+        "level": 2,
+        "value": 1.0,
+        "min": 0.1,
+        "max": 1.0,
+        "step": 0.1
+    }, {
         "id": "start",
         "label": "Start time of recording (ms)",
         "level": 2,

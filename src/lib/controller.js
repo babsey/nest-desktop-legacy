@@ -13,12 +13,14 @@ controller.init = function() {
 
     $('#kernel .content').empty()
     var modelDefaults = app.config.modelSlider('kernel')
-    var model = modelDefaults[0];
-    model.value = app.data.kernel[model.id];
-    app.slider.init_kernelSlider(model)
-    var borderWidth = '4px';
+    for (var midx in modelDefaults) {
+        var model = modelDefaults[midx];
+        model.value = app.data.kernel[model.id];
+        app.slider.init_kernelSlider(model)
+    }
 
     var colors = app.chart.colors();
+    var borderWidth = '4px';
 
     var nodeDefaults = app.config.modelSlider('node');
     $('#nodes .controller').empty()

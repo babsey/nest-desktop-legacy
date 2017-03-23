@@ -40,7 +40,7 @@ chart.update = function(output) {
 
     chart.xScale.domain(app.chart.xScale.domain())
     chart.yScale.domain([0, d3.max(data, function(d) {
-        return chart.yVal(d, 'total')
+        return chart.yVal(d, idx.length == 1 ? idx[0]: idx)
     })])
 
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
@@ -52,6 +52,8 @@ chart.update = function(output) {
     chart.bars = bars;
 
     var colors = app.chart.colors()
+    var cidx = (output.sources.length == 1 ? output.sources[0] : nidx)
+    var color = app.config.app().get('chart.color') ? colors[cidx || (output.node.id % colors.length)] : ''
     if (transition) {
         bars
             .attr("x", function(d) {
@@ -67,7 +69,7 @@ chart.update = function(output) {
             .attr("height", function(d) {
                 return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
             })
-            .style("fill", nidx ? colors[nidx] : '');
+            .style("fill", color);
 
         bars.enter()
             .append("rect")
@@ -86,7 +88,7 @@ chart.update = function(output) {
             .attr("height", function(d) {
                 return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
             })
-            .style("fill", nidx ? colors[nidx] : '');
+            .style("fill", color);
     } else {
         bars
             .attr("x", function(d) {
@@ -101,7 +103,7 @@ chart.update = function(output) {
             .attr("height", function(d) {
                 return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
             })
-            .style("fill", nidx ? colors[nidx] : '');
+            .style("fill", color);
 
         bars.enter()
             .append("rect")
@@ -119,7 +121,7 @@ chart.update = function(output) {
             .attr("height", function(d) {
                 return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
             })
-            .style("fill", nidx ? colors[nidx] : '');
+            .style("fill", color);
     }
 
     bars.exit()

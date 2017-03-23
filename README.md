@@ -30,24 +30,35 @@ brew install git nodejs
 
 ## To install NEST Desktop
 
-Clone nest-desktop from github
+Clone nest-desktop from github.
 ```
 git clone http://github.com/babsey/nest-desktop
 ```
 
-Install dependencies of nest-desktop
+Install required dependencies for nest-desktop.
 ```
 cd nest-desktop
+npm install
+```
+
+## To update NEST Desktop
+
+pull the latest version of nest-desktop from github (in nest-desktop folder).
+```
+git pull
+```
+
+Install required dependencies for nest-desktop.
+```
 npm install
 ```
 
 
 ## To start
 
-Nest-desktop communicates with the nest-server-simulation to run the NEST simulation.
-Note: Make sure that the nest-server-simulation is running.
+Nest-desktop communicates with the nest-server-simulation to run the NEST simulation. Note: Make sure that the nest-server-simulation is running.
 
-Start the app in nest-desktop folder
+Start the app in nest-desktop folder.
 ```
 npm start
 ```
@@ -93,21 +104,35 @@ The application create a window with these window properties - width, height, fr
 
 ## FAQ
 
-#### Where are the data about simulation stored?
+#### Why is the app not working?
+First, be assure that you installed all required npm packages (`npm install`).
+
+If still not working, the database may be deprecated. In this case, delete the config file or just empty `db_name` in config file (stored as `nest-desktop.json` in configstore), then restart the app. It will generate new config file and new database. (I am working on a better solution.)
+
+#### Where are the data of simulation stored?
 Saved data about simulation are stored as NeDB database in ./data/*.db
+
+#### Where are the protocols of simulation stored?
+Protocols about simulation are stored as NeDB database in ./data/protocols/*.db
+
+#### Where are the thumbnails of simulation stored?
+Thumbnails are stored in ./data/images/
+
+#### Why is the protocol not working?
+Just remove db files in ./data/protocols/
+
+#### How can I update the thumbnails?
+Just click the button 'capture screen'
+For the hard case, remove image files in ./data/images/ and then resimulate.
 
 #### How can I reload the window?
 Keybinding to reload the app is 'CTRL + R' (Linux) or 'CMD + R' (Mac OSX)
 
 #### How can I close the window?
-Keybinding to close the window is 'CTRL + W' (Linux) or 'CMD + W' (Mac OSX)
-In Linux the app will be closed when the window is closed.
+Keybinding to close the window is 'CTRL + W' (Linux) or 'CMD + W' (Mac OSX). In Linux the app will be closed when the window is closed.
 
 #### How can I close the app (only for Mac OSX)?
 Keybinding to close the window is 'CMD + Q'
-
-#### How can I update the thumbnails?
-Just remove image files in ./data/images/ and then resimulate.
 
 
 #### License [MIT](LICENSE)

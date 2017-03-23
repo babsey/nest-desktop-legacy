@@ -1,7 +1,5 @@
 "use strict"
 
-const fs = require('fs');
-const path = require('path');
 const jsonfile = require('jsonfile');
 
 var simulation = {
@@ -41,12 +39,17 @@ simulation.stop = function() {
 }
 
 simulation.simulate = function() {
+    if (app.chart.networkLayout.drawing) return
     if (simulation.running) return
     if (simulation.outputs.length == 0) return
+    if (simulation.outputs.filter(function(output) { return output.node.model != undefined}).length == 0) return
+    if (simulation.outputs.filter(function(output) { return !(output.node.disabled == true)}).length == 0) return
+
     var mId = app.message.show('Info', 'The simulation is running. Please wait.');
     var data = $.extend(true, {}, app.data);
     setTimeout(function() {
         var tic = new Date();
+        console.log(tic)
         app.request.request({
                 network: app.data.network,
                 kernel: app.data.kernel,
@@ -74,15 +77,19 @@ simulation.simulate = function() {
                         output.node.record_from = 'V_m'
                     }
                     output.events = res.nodes[output.node.id].events;
+                    output.senders = d3.merge(app.data.links.filter(function(link) {
+                        return link.target == output.node.id
+                    }).map(function(link) {
+                        return app.data.nodes[link.source].ids ? app.data.nodes[link.source].ids : []
+                    }))
+                    output.sources = app.data.links.filter(function(link) {
+                        return link.target == output.node.id
+                    }).map(function(link) {
+                        return app.data.nodes[link.source].id
+                    })
                 })
                 app.chart.update()
-
-                var filepath = '../data/images/' + app.data._id + '.png'
-                if (!fs.existsSync(__dirname + path.sep + '..' + path.sep + filepath)) {
-                    app.screen.capture(app.data._id)
-                }
                 app.message.hide(mId).remove()
-
                 var toe = new Date;
                 var ts = {
                     tic: tic,
@@ -105,11 +112,17 @@ simulation.resume = function() {
             links: app.data.links,
         })
         .done(function(res) {
+            if (!simulation.running) return
             app.data.kernel.time = res.kernel.time;
             simulation.outputs.map(function(output) {
                 for (var key in res.nodes[output.node.id].events) {
                     output.events[key] = output.events[key].concat(res.nodes[output.node.id].events[key])
                 }
+                output.senders = d3.merge(app.data.links.filter(function(link) {
+                    return link.target == output.node.id
+                }).map(function(link) {
+                    return app.data.nodes[link.source].ids
+                }))
             })
             app.chart.update()
             app.simulation.resume()
@@ -139,7 +152,14 @@ simulation.update = function() {
     simulation.outputs = app.data.nodes.filter(function(node) {
         return node.type == 'output'
     }).map(function(node) {
-        return {node: node}
+        return {
+            node: node,
+            sources: app.data.links.filter(function(link) {
+                return link.target == node.id
+            }).map(function(link) {
+                return app.data.nodes[link.source].id
+            })
+        }
     })
 
     app.data.links.map(function(link) {
@@ -147,9 +167,6 @@ simulation.update = function() {
         link.syn_spec = link.syn_spec ? link.syn_spec : {}
     })
 
-    app.chart.networkLayout.drawing = false;
-    $('.disableOnDrawing').toggleClass('disabled', false)
-    $('.hideOnDrawing').show()
     app.chart.init()
     app.controller.init()
     app.simulation.simulate()

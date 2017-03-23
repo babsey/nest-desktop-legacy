@@ -50,6 +50,7 @@
         "id": 1,
         "source": 1,
         "target": 1,
+        "disabled": true,
         "conn_spec": {
             "rule": "fixed_outdegree",
             "outdegree": 0

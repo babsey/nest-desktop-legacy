@@ -140,25 +140,19 @@ events.controller = function() {
 
     $('.record').on('change', function() {
         var id = $(this).parents('.node').data('id');
-        console.log(this.value)
         var output = app.simulation.outputs.filter(function(output) {
             return output.node.id == id
         })[0];
         output.node.record_from = this.value
-        var source = d3.merge(app.data.links.filter(function(link) {
-            return link.target == output.node.id
-        }).map(function(link) {
-            return app.data.nodes[link.source].ids
-        }))
-        if (source.length == 0) return
-        output.data.y = source.map(function() {
+        output.data.y = output.senders.map(function() {
             return []
         });
         output.events.senders.map(function(d, i) {
-            output.data.y[d - source[0]].push(output.events[output.node.record_from][i])
+            var idx = output.senders.indexOf(d);
+            output.data.y[idx].push(output.events[output.node.record_from][i])
         });
         if ($('#autoscale').prop('checked')) {
-            app.chart.trace.linechart.yScale.domain(d3.extent([].concat.apply([], output.data.y)))
+            output.chart.lineChart.yScale.domain(d3.extent([].concat.apply([], output.data.y)))
         }
         app.chart.update();
     })

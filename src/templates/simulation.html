@@ -43,29 +43,37 @@
             </div>
 
             <div class="navbar-right">
-                <div id="protocol" class="btn-group" style="display:none">
-                    <button type="button" class="btn btn-default dropdown-toggle" id="get-protocol-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span id="protocol-label">No protocol</span></button>
-                    <ul id="protocol-list" class="dropdown-menu dropdown-menu-left" aria-labelledby="get-protocol-list"></ul>
+                <div id="protocol" class="btn-group">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" id="get-protocol-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span id="protocol-label">No protocol</span>
+                        </button>
+                        <ul id="protocol-list" class="dropdown-menu dropdown-menu-left" aria-labelledby="get-protocol-list"></ul>
+
+                    </div>
+                    <button type="button" class="btn btn-default" id="view-protocol" title="Protocol simulations automatically">
+                        <i class="fa fa-history"></i>
+                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-remove" style="display:none"></span>
+                    </button>
                 </div>
 
                 <button type="button" class="btn btn-default navbar-btn" id="index">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
                 </button>
-                <button type="button" class="btn btn-default navbar-btn" id="edit-network" title="Edit network">
+                <button type="button" class="btn btn-default" id="edit-network" title="Edit network">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button type="button" class="btn btn-default navbar-btn disableOnDrawing" id="simulation-resume" disabled>
+                <button type="button" class="btn btn-default navbar-btn disableOnDrawing" id="simulation-resume" disabled title="Run simulation continuously">
                     <i class="fa fa-play" aria-hidden="true"></i>
                     <i class="fa fa-pause" aria-hidden="true" style="display:none"></i>
                     <!-- <span class="glyphicon glyphicon-menu-glyphicon glyphicon-play"></span>
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-pause" style="display:none"></span> -->
                 </button>
-                <button type="button" class="btn btn-default navbar-btn disableOnDrawing" id="simulation-add" data-toggle="modal" data-target="#myModal" disabled>
+                <button type="button" class="btn btn-default navbar-btn disableOnDrawing" id="simulation-add" data-toggle="modal" data-target="#myModal" disabled title="Save this simulation">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span>
                 </button>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" id="get-simulation-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <button type="button" class="btn btn-default dropdown-toggle" id="get-simulation-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Load a simulation">
                         <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
                     </button>
                     <ul id="simulation-list" class="dropdown-menu dropdown-menu-right" aria-labelledby="get-simulation-list"></ul>
@@ -75,13 +83,19 @@
         </button> -->
 
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Edit settings and more actions">
                         <i class="fa fa-cog" aria-hidden="true"></i>
                     </button>
                     <ul id="config" class="dropdown-menu" role="menu" aria-labelledby="get-simulation-config">
-                        <li id="view-protocol">
+                        <li id="chart-color" title="Colorify charts by nodes">
                             <a href="#">
-                                <i class="fa fa-history"></i> Protocol
+                                <i class="fa fa-line-chart"></i> Color
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
+                        </li>
+                        <li id="view-networkLayout" title="View network layout">
+                            <a href="#">
+                                <i class="fa fa-share-alt" aria-hidden="true"></i> Network layout
                                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
                             </a>
                         </li>
@@ -111,16 +125,14 @@
                             </a>
                         </li>
                         <li class="divider"></li>
-                        <li id="chart-color">
+                        <li id="capture-screen" title="Capture screen for thumbnail">
                             <a href="#">
-                                <i class="fa fa-line-chart"></i> Color
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                <span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Capture screen
                             </a>
                         </li>
-                        <li id="view-networkLayout">
+                        <li id="clear-network" title="Clear the network">
                             <a href="#">
-                                <i class="fa fa-share-alt" aria-hidden="true"></i> Network layout
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Clear network
                             </a>
                         </li>
                     </ul>
@@ -156,6 +168,7 @@
                     </nav>
 
                     <div id="controller-panel" class="panel" style="margin-top: 50px">
+                        <small>
                         <!-- <div class="panel-body"> -->
                         <div id="global" class="panel-body hideOnDrawing">
                             <div class="content"></div>
@@ -185,8 +198,8 @@
                                     <div class="controller"></div>
                                 </div>
                             </div>
-
                         </div>
+                        </small>
                     </div>
                 </div>
             </div>
