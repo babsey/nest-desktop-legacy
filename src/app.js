@@ -21,6 +21,7 @@ var app = {
     simulation: require(__dirname + '/lib/simulation'),
     slider: require(__dirname + '/lib/slider'),
     sync: require(__dirname + '/lib/sync'),
+    validation: require(__dirname + '/lib/validation'),
 };
 
 const fs = require('fs');

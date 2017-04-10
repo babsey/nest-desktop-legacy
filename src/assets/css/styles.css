@@ -133,7 +133,7 @@ body {
     margin: 0px;
 }
 .panel-body .content {
-    padding: 10px 15px;
+    padding: 11px;
     margin: 4px 0px;
 }
 /*#controller-panel {
@@ -151,8 +151,8 @@ body {
 .paramSlider, .dataSlider {
     margin-bottom: 0px;
 }
-.paramSlider dt, .dataSlider dt {
-    margin-top: 10px;
+.slider-horizontal {
+    width: 200px !important;
 }
 .slider-horizontal .slider-track {
     height: 1px !important;
@@ -172,4 +172,18 @@ body {
 .slider-horizontal .slider-tick {
     background: #fff none repeat scroll 0 0;
     border: 1px solid #ccc;
+}
+
+select.form-control {
+    width: 95%;
+}
+
+input.form-control {
+    height: 23px;
+    padding: 0;
+    border: 0px;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
 }

@@ -2,14 +2,49 @@
 
 // Events for the controller
 
+const joi = require('joi');
+
 var events = {};
+
+
 
 events.nodeSlider = function() {
     $('#nodes .modelSlider .sliderInput').on('slideStop', function() {
         app.selected_node = app.data.nodes[$(this).parents('.node').data('id')];
-        var param = $(this).parents('.paramSlider').attr('id');
-        app.selected_node.params[param] = parseFloat(this.value)
-            // app.changes.nodes[$(this).parents('.node').data('id')][param] = parseFloat(this.value)
+        var pkey = $(this).parents('.paramSlider').attr('id');
+        app.selected_node.params[pkey] = parseFloat(this.value)
+        app.simulation.simulate()
+    })
+}
+
+events.nodeValInput = function() {
+    $('#nodes .modelSlider input.paramVal').on('change', function() {
+        app.selected_node = app.data.nodes[$(this).parents('.node').data('id')];
+        var pkey = $(this).parents('.paramSlider').attr('id');
+        var pvalue = $(this).val()
+        var schema = $(this).data('schema')
+        var valid = app.validation.validate(pkey, pvalue, schema)
+        $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
+        $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
+        $(this).parents('.form-group').find('.help-block').html(valid.error)
+        if (valid.error != null) return
+        app.selected_node.params[pkey] = pvalue
+        app.slider.update_nodeSlider(app.selected_node)
+        app.simulation.simulate()
+    })
+
+    $('#nodes .dataSlider input.paramVal').on('change', function() {
+        app.selected_node = app.data.nodes[$(this).parents('.node').data('id')];
+        var pkey = $(this).parents('.dataSlider').attr('id');
+        var pvalue = $(this).val()
+        var schema = $(this).data('schema')
+        var valid = app.validation.validate(pkey, pvalue, schema)
+        $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
+        $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
+        $(this).parents('.form-group').find('.help-block').html(valid.error)
+        if (valid.error != null) return
+        app.selected_node[pkey] = valid.value
+        app.slider.update_dataSlider()
         app.simulation.simulate()
     })
 }
@@ -20,7 +55,6 @@ events.connSlider = function() {
         var param = $(this).parents('.paramSlider').attr('id');
         app.selected_link.conn_spec[param] = parseFloat(this.value)
         app.chart.networkLayout.update()
-            // app.changes.links[$(this).parents('.link').data('id')][param] = parseFloat(this.value)
         app.simulation.simulate()
     })
 }
@@ -31,23 +65,22 @@ events.synSlider = function() {
         var param = $(this).parents('.paramSlider').attr('id');
         app.selected_link.syn_spec[param] = parseFloat(this.value)
         app.chart.networkLayout.update()
-            // app.changes.links[$(this).parents('.link').data('id')][param] = parseFloat(this.value)
         app.simulation.simulate()
     })
 }
 
 events.dataSlider = function() {
     $('.dataSlider .sliderInput').on('slideStop', function() {
-        if (!$(this).parents('.node').hasClass('output')) {
+        if (!$(this).parents('.node').hasClass('recorder')) {
             app.simulation.simulate()
             return
         }
         var recId = $(this).parents('.node').data('id')
-        var output = app.simulation.outputs.find(function(output) {
-            return output.node.id == recId
+        var recorder = app.simulation.recorders.find(function(recorder) {
+            return recorder.node.id == recId
         })
-        if (output.chart.barChart) {
-            output.chart.update(output)
+        if (recorder.chart.barChart) {
+            recorder.chart.update(recorder)
         }
     })
 }
@@ -63,12 +96,54 @@ events.model_select = function() {
             app.chart.networkLayout.update()
             return
         }
-        var modelDefaults = app.config.modelSlider(app.selected_node.type)[($(this).prop('selectedIndex') - 1)]
+        var modelDefaults = app.config.nest(app.selected_node.element_type)[($(this).prop('selectedIndex') - 1)]
         app.slider.init_modelSlider('#nodes .node[data-id="' + app.selected_node.id + '"] .modelSlider', modelDefaults)
-            // app.slider.init_modelSlider('#node_' + app.selected_node.id + ' .modelSlider', modelDefaults)
+        // app.slider.init_modelSlider('#node_' + app.selected_node.id + ' .modelSlider', modelDefaults)
         app.slider.update_nodeSlider(app.selected_node)
         events.nodeSlider()
-        if (app.selected_node.type == 'output') {
+        if (modelDefaults.params) {
+            modelDefaults.params.map(function(param) {
+                $('#nodes .node[data-id=' + app.selected_node.id + '] .content').append('<div id=' + param.id + ' class="param ' + param.id + ' form-group"></div>')
+                var p = $('#nodes .node[data-id=' + app.selected_node.id + '] .' + param.id)
+                p.append('<label for="' + param.id + 'Input ' + app.selected_node.id + '">' + param.label + '</label>')
+                p.append('<div><input data-schema="array" type="text" class="form-control" name="' + param.id + '" id="' + param.id + 'Input ' + app.selected_node.id + '"/></div>')
+                p.append('<div class="help-block"></div>')
+            })
+        }
+        $('#nodes input[type=text]').on('change', function(d) {
+            var pkey = $(this).parents('.param').attr('id');
+            var pvalue = '[' + $(this).val() + ']'
+            var schema = $(this).data('schema')
+            var valid = app.validation.validate(pkey, pvalue, schema)
+            $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
+            $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
+            $(this).parents('.form-group').find('.help-block').html(valid.error)
+            if (valid.error != null) return
+            app.selected_node.params[pkey] = valid.value
+            app.slider.update_slider()
+            app.simulation.simulate()
+        })
+
+        app.data.links.filter(function(link) {
+            return link.target == app.selected_node.id
+        }).map(function(link) {
+            delete link.syn_spec.receptor_type
+            var divSynLink = $('#synapses').find('.link[data-id=' + link.id + '] .content')
+            divSynLink.find('.recSelect').hide().empty()
+            if (app.selected_node.model != 'iaf_cond_alpha_mc') return
+
+            var receptorModels = app.config.nest('receptor')[app.selected_node.model]
+
+            link.syn_spec.receptor_type = 1
+            for (var ridx in receptorModels) {
+                var model = receptorModels[ridx];
+                divSynLink.find('.recSelect').append('<option id="' + ridx + '" value="' + model.id + '"' + (model.id == 1 ? 'selected' : '') + '>' + model.label + '</option>')
+            }
+            divSynLink.find('.recSelect').show()
+        })
+
+
+        if (app.selected_node.element_type == 'recorder') {
             app.simulation.update()
         } else {
             // app.changes.nodes[nidx]['model'] = this.value;
@@ -89,12 +164,11 @@ events.model_select = function() {
             rule: this.value
         };
         app.model.conn_selected(app.selected_link)
-        var modelDefaults = app.config.modelSlider('connection')[($(this).prop('selectedIndex') - 1)]
-        console.log(modelDefaults)
+        var modelDefaults = app.config.nest('connection')[($(this).prop('selectedIndex') - 1)]
         app.slider.init_modelSlider('#connections .link[data-id="' + app.selected_link.id + '"] .modelSlider', modelDefaults)
         app.slider.update_connSlider(app.selected_link)
         events.connSlider()
-            // app.changes.links[lidx]['connRule'] = this.value;
+        // app.changes.links[lidx]['connRule'] = this.value;
         app.simulation.simulate()
     })
     $('#connections .disableLink').on('click', function() {
@@ -104,20 +178,28 @@ events.model_select = function() {
         var disabled = link.disabled || false
         app.simulation.update()
     })
-    $('#synapses .modelSelect').on('change', function() {
+    $('#synapses .synSelect').on('change', function() {
         app.simulation.run(false)
         app.selected_link = app.data.links[$(this).parents('.link').data('id')];
         app.selected_link.syn_spec = {
             model: this.value
         };
         app.model.syn_selected(app.selected_link)
-        var modelDefaults = app.config.modelSlider('synapse')[($(this).prop('selectedIndex') - 1)]
+        var modelDefaults = app.config.nest('synapse')[($(this).prop('selectedIndex') - 1)]
         app.slider.init_modelSlider('#synapses .link[data-id="' + app.selected_link.id + '"] .modelSlider', modelDefaults)
         app.slider.update_synSlider(app.selected_link)
         events.synSlider()
-            // app.changes.links[lidx]['synModel'] = this.value;
+        // app.changes.links[lidx]['synModel'] = this.value;
         app.simulation.simulate()
     })
+
+    $('#synapses .recSelect').on('change', function() {
+        app.simulation.run(false)
+        app.selected_link = app.data.links[$(this).parents('.link').data('id')];
+        app.selected_link.syn_spec.receptor_type = parseInt(this.value)
+        app.simulation.simulate()
+    })
+
 }
 
 events.controller = function() {
@@ -134,25 +216,35 @@ events.controller = function() {
     })
     events.model_select()
     events.nodeSlider()
+    events.nodeValInput()
     events.connSlider()
     events.synSlider()
     events.dataSlider()
 
     $('.record').on('change', function() {
         var id = $(this).parents('.node').data('id');
-        var output = app.simulation.outputs.filter(function(output) {
-            return output.node.id == id
+        var recorder = app.simulation.recorders.filter(function(recorder) {
+            return recorder.node.id == id
         })[0];
-        output.node.record_from = this.value
-        output.data.y = output.senders.map(function() {
-            return []
-        });
-        output.events.senders.map(function(d, i) {
-            var idx = output.senders.indexOf(d);
-            output.data.y[idx].push(output.events[output.node.record_from][i])
-        });
+        var rec = this.value;
+        recorder.node.record_from = recorder.node.params.record_from.filter(function(record_from) {
+            return record_from.startsWith(rec)
+        })
+        recorder.data.senders = []
+        recorder.data.recs = []
+        var y = recorder.node.record_from.map(function(record_from, ridx) {
+            return recorder.senders.map(function(s, i) {
+                recorder.data.recs.push(ridx)
+                recorder.data.senders.push(i)
+                return recorder.events[record_from].filter(function(r, i) {
+                    return recorder.events.senders[i] == s
+                })
+            })
+        })
+        recorder.data.y = [].concat.apply([], y);
+
         if ($('#autoscale').prop('checked')) {
-            output.chart.lineChart.yScale.domain(d3.extent([].concat.apply([], output.data.y)))
+            recorder.chart.lineChart.yScale.domain(d3.extent([].concat.apply([], recorder.data.y)))
         }
         app.chart.update();
     })

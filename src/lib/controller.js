@@ -4,7 +4,7 @@ var controller = {};
 
 controller.init = function() {
     $('#global .content').empty()
-    var modelDefaults = app.config.modelSlider('global')
+    var modelDefaults = app.config.nest('global')
     for (var midx in modelDefaults) {
         var model = modelDefaults[midx];
         model.value = app.data[model.id];
@@ -12,7 +12,7 @@ controller.init = function() {
     }
 
     $('#kernel .content').empty()
-    var modelDefaults = app.config.modelSlider('kernel')
+    var modelDefaults = app.config.nest('kernel')
     for (var midx in modelDefaults) {
         var model = modelDefaults[midx];
         model.value = app.data.kernel[model.id];
@@ -22,14 +22,14 @@ controller.init = function() {
     var colors = app.chart.colors();
     var borderWidth = '4px';
 
-    var nodeDefaults = app.config.modelSlider('node');
+    var nodeDefaults = app.config.nest('node');
     $('#nodes .controller').empty()
     $('#nodeScrollspy .nav').empty()
     app.data.nodes.map(function(node) {
         // if (node.hidden) return
         $('#nodes .controller').append(app.renderer.node(node))
         var divNode = $('#nodes').find('.node[data-id=' + node.id + '] .content')
-        var modelDefaults = app.config.modelSlider(node.type);
+        var modelDefaults = app.config.nest(node.element_type);
         for (var midx in modelDefaults) {
             var model = modelDefaults[midx];
             divNode.find('.modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
@@ -38,15 +38,15 @@ controller.init = function() {
         divNode.find('.modelSelect').toggleClass('disabled', node.disabled || false)
         divNode.find('.glyphicon-remove').toggle(node.disabled || false)
         divNode.find('.glyphicon-ok').toggle(!node.disabled && true)
-            // divNode.find('.modelSelect').prop('disabled', node.disabled || false)
+        // divNode.find('.modelSelect').prop('disabled', node.disabled || false)
         if (node.disabled) return
 
         $('#nodeScrollspy .nav').append(app.renderer.scrollspy(node))
-        if (node.type == 'neuron' || node.type == 'input') {
+        if (node.element_type == 'neuron' || node.element_type == 'stimulator') {
             nodeDefaults.npop.value = node.n || 1
             app.slider.init_popSlider(node, nodeDefaults.npop)
         }
-        if (node.type == 'input') {
+        if (node.element_type == 'stimulator') {
             nodeDefaults.stim_time.max = app.data.sim_time
             nodeDefaults.stim_time.value = [(node.params.start || 0), (node.params.stop || app.data.sim_time)]
             app.slider.init_stimSlider(node, nodeDefaults.stim_time)
@@ -63,8 +63,16 @@ controller.init = function() {
             app.slider.init_modelSlider('#nodes .node[data-id=' + node.id + '] .modelSlider', modelDefaults.filter(function(d) {
                 return d.id == node.model;
             })[0])
+            if (modelDefaults.params) {
+                modelDefaults.params.map(function(param) {
+                    $('#nodes .node[data-id=' + node.id + ']').append('<div id="' + param.id + '" class="form-group"></div>')
+                    $('#nodes .node[data-id=' + node.id + '] #' + param.id).append('<label for="' + param.id + 'Input"/>' + param.label + '</label>')
+                    $('#nodes .node[data-id=' + node.id + '] #' + param.id).append('<input type="text" class="form-control" name="' + param.id + '" id="' + param.id + 'Input"/>')
+                })
+            }
+
         }
-        if (node.type == 'output') {
+        if (node.element_type == 'recorder') {
             if (node.model == 'multimeter') {
                 divNode.append('<div class="recSelect form-group hideOnDrawing"></div>')
                 divNode.find('.recSelect').append('<label for="record_' + node.id + '">Record from</label>')
@@ -81,12 +89,12 @@ controller.init = function() {
         app.data.links.map(function(link) {
             if (app.data.nodes[link.source].hidden || app.data.nodes[link.target].hidden) return
             if (app.data.nodes[link.source].disabled || app.data.nodes[link.target].disabled) return
-                // if (app.data.nodes[link.target].type == 'output') return
+            // if (app.data.nodes[link.target].element_type == 'recorder') return
 
             // Connection
             $('#connections .controller').append(app.renderer.connection(link))
             var divConnLink = $('#connections').find('.link[data-id=' + link.id + '] .content')
-            var modelDefaults = app.config.modelSlider('connection')
+            var modelDefaults = app.config.nest('connection')
             for (var midx in modelDefaults) {
                 var model = modelDefaults[midx];
                 divConnLink.find('.connSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
@@ -106,18 +114,43 @@ controller.init = function() {
             // Synapse
             $('#synapses .controller').append(app.renderer.synapse(link))
             var divSynLink = $('#synapses').find('.link[data-id=' + link.id + '] .content')
-            var modelDefaults = app.config.modelSlider('synapse')
-            for (var midx in modelDefaults) {
-                var model = modelDefaults[midx];
-                divSynLink.find('.modelSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
-            }
-            var synModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
-            divSynLink.find('.modelSelect').find('option#' + synModel).prop('selected', true);
 
-            app.slider.init_modelSlider('#synapses .link[data-id=' + link.id + '] .modelSlider', modelDefaults.filter(function(d) {
-                return d.id == synModel;
+            var synapseModels = app.config.nest('synapse')
+            for (var midx in synapseModels) {
+                var model = synapseModels[midx];
+                divSynLink.find('.synSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
+            }
+            var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
+            divSynLink.find('.synSelect').find('option#' + synapseModel).prop('selected', true);
+
+            // delete link.syn_spec.receptor_type
+            if (app.data.nodes[link.target].model == 'iaf_cond_alpha_mc') {
+                var receptorModels = app.config.nest('receptor')['iaf_cond_alpha_mc']
+                if (!('receptor_type' in link.syn_spec) || link.syn_spec.receptor_type == 0) {
+                    link.syn_spec.receptor_type = 1
+                }
+                divSynLink.find('.recSelect').empty()
+                for (var ridx in receptorModels) {
+                    var model = receptorModels[ridx];
+                    divSynLink.find('.recSelect').append('<option id="' + ridx + '" value="' + model.id + '"' + (model.id == 1 ? 'selected' : '') + '>' + model.label + '</option>')
+                }
+                $('#synapses').find('.link[data-id=' + link.id + '] .content').find('.recSelect').show()
+            } else {
+                link.syn_spec.receptor_type = 0
+            }
+
+            divSynLink.find('.recSelect').on('change', function() {
+                app.simulation.run(false)
+                app.selected_link = app.data.links[$(this).parents('.link').data('id')];
+                app.selected_link.syn_spec.receptor_type = parseInt(this.value)
+                app.simulation.simulate()
+            })
+
+            app.slider.init_modelSlider('#synapses .link[data-id=' + link.id + '] .modelSlider', synapseModels.filter(function(d) {
+                return d.id == synapseModel;
             })[0])
             app.slider.update_synSlider(link)
+
         })
     }
     $('.hideOnDrawing').toggle(!drawing)

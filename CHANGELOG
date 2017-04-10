@@ -1,6 +1,18 @@
 CHANGELOG
 ---------
 
+0.8.0:
+    Correcting default parameter of neurons
+    Receptor types
+    Input validation lib
+    Value Input
+    Multirecording traces
+    Rename: input -> stimulator, output -> recorder, type -> element_type
+    Spike generator
+    Neuron models: hh_psc_alpha, iaf_cond_alpha_mc
+    More simulation examples
+    Chart color grouping
+
 0.7.2:
     Clear network
     Enable/disable simulation protocols

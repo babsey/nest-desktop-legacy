@@ -87,12 +87,25 @@
                         <i class="fa fa-cog" aria-hidden="true"></i>
                     </button>
                     <ul id="config" class="dropdown-menu" role="menu" aria-labelledby="get-simulation-config">
-                        <li id="chart-color" title="Colorify charts by nodes">
+                        <li id="chart-color" title="Colorify charts">
                             <a href="#">
                                 <i class="fa fa-line-chart"></i> Color
                                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
                             </a>
                         </li>
+                        <li id="colorByNode" class="color" data-group="node" title="Colorify charts by nodes">
+                            <a href="#">
+                                <i class="fa fa-ellipsis-h"></i> by node
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
+                        </li>
+                        <li id="colorByRecording" class="color" data-group="recording" title="Colorify charts by recordings">
+                            <a href="#">
+                                <i class="fa fa-ellipsis-h"></i> by recording
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
                         <li id="view-networkLayout" title="View network layout">
                             <a href="#">
                                 <i class="fa fa-share-alt" aria-hidden="true"></i> Network layout

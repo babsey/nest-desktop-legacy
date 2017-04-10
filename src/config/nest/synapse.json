@@ -1,5 +1,5 @@
 [{
-    "type": "synapse",
+    "element_type": "synapse",
     "id": "gap_junction",
     "label": "Gap junction",
     "sliderDefaults": [{
@@ -7,12 +7,12 @@
         "level": 1,
         "value": 1.0,
         "min": -100.0,
-        "max": 1000.0,
+        "max": 100.0,
         "step": 1.0,
         "label": "Synaptic weight"
     }]
 }, {
-    "type": "synapse",
+    "element_type": "synapse",
     "id": "static_synapse",
     "label": "Static synapse",
     "sliderDefaults": [{
@@ -33,7 +33,7 @@
         "label": "Synaptic delay"
     }]
 }, {
-    "type": "synapse",
+    "element_type": "synapse",
     "id": "tsodyks_synapse",
     "label": "Short term plasticity (Tsodyks synapse)",
     "sliderDefaults": [{
@@ -41,7 +41,7 @@
         "level": 1,
         "value": 1.0,
         "min": -100.0,
-        "max": 1000.0,
+        "max": 100.0,
         "step": 1.0,
         "label": "Synaptic weight"
     }, {
@@ -65,7 +65,7 @@
         "level": 2,
         "value": 1.0,
         "min": 1.0,
-        "max": 1000.0,
+        "max": 100.0,
         "step": 1.0,
         "scale": "logarithmic",
         "label": "Time constants of synaptic current"
@@ -74,7 +74,7 @@
         "level": 3,
         "value": 0.0,
         "min": 0.0,
-        "max": 1000.0,
+        "max": 100.0,
         "step": 1.0,
         "scale": "logarithmic",
         "label": "Time constant for facilitation [ms]"

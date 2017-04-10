@@ -1,7 +1,7 @@
 {
     "_id": "one-neuron-with-noise",
     "name": "One neuron with noise",
-    "description": "This simulation shows the activity of one neuron receiving two poisson inputs.",
+    "description": "This simulation shows the activity of one neuron receiving two poisson stimulators.",
     "group": "nest-example",
     "user": "nest-initiative",
     "network": "simple",
@@ -12,7 +12,7 @@
     },
     "nodes": [{
         "id": 0,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_psc_alpha",
         "x": 150,
         "y": 50,
@@ -21,7 +21,7 @@
         "params": {}
     }, {
         "id": 1,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "poisson_generator",
         "x": 0,
         "y": 0,
@@ -31,7 +31,7 @@
         }
     }, {
         "id": 2,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "poisson_generator",
         "x": 0,
         "y": 100,
@@ -41,14 +41,15 @@
         }
     }, {
         "id": 3,
-        "type": "output",
+        "element_type": "recorder",
         "model": "voltmeter",
         "x": 300,
         "y": 0,
-        "params": {}
+        "params": {},
+        "record_from": ["V_m"]
     }, {
         "id": 4,
-        "type": "output",
+        "element_type": "recorder",
         "model": "spike_detector",
         "x": 300,
         "y": 100,

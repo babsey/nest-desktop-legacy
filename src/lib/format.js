@@ -14,12 +14,12 @@ format.replaceAll = function(str, find, replace) {
 
 format.nodeLabel = function(node) {
     if (node.label) { return node.label }
-    return (node.model == 'parrot_neuron' ? 'P' : node.type.charAt(0).toUpperCase())
+    return (node.model == 'parrot_neuron' ? 'P' : node.element_type.charAt(0).toUpperCase())
 }
 
 format.nodeTitle = function(node) {
     if (node.title) { return node.title }
-    var title = node.model || node.type
+    var title = node.model || node.element_type
     return app.format.replaceAll(title, '_', ' ').charAt(0).toUpperCase() + title.slice(1)
 }
 

@@ -1,7 +1,7 @@
 {
     "_id": "tsodyks-depressing",
     "name": "Tsodyks depressing",
-    "description": "This simulation shows the plasticity of a synapse. One neuron is driven with dc-input and connected to the other one with a depressing tsodyks synapse. The membrane potential trace of the second neuron is recorded. \n\nIt reproduces figure 1A of Tsodyks et al. (1998) \n**Neural Networks with Dynamic Synapses**. \n*Neural computation* \n\nNote that it is analog to ``Tsodyks facilitating``, except that different synapse parameters are used. Here, a large facilitation parameter ``U`` causes a fast saturation of the synaptic efficacy (Eq. 2.2), disabling a facilitating behavior.",
+    "description": "This simulation shows the plasticity of a synapse. One neuron is driven with dc-stimulator and connected to the other one with a depressing tsodyks synapse. The membrane potential trace of the second neuron is recorded. \n\nIt reproduces figure 1A of Tsodyks et al. (1998) \n**Neural Networks with Dynamic Synapses**. \n*Neural computation* \n\nNote that it is analog to ``Tsodyks facilitating``, except that different synapse parameters are used. Here, a large facilitation parameter ``U`` causes a fast saturation of the synaptic efficacy (Eq. 2.2), disabling a facilitating behavior.",
     "doi": "10.1162/089976698300017502",
     "group": "nest-example",
     "user": "nest-initiative",
@@ -14,7 +14,7 @@
     },
     "nodes": [{
         "id": 0,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "dc_generator",
         "x": 0,
         "y": 0,
@@ -25,7 +25,7 @@
         }
     }, {
         "id": 1,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_psc_exp",
         "x": 100,
         "y": 100,
@@ -42,7 +42,7 @@
         }
     }, {
         "id": 2,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_psc_exp",
         "x": 200,
         "y": 50,
@@ -59,7 +59,7 @@
         }
     }, {
         "id": 3,
-        "type": "output",
+        "element_type": "recorder",
         "model": "voltmeter",
         "x": 300,
         "y": 100,

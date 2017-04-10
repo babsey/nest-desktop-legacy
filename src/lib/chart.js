@@ -66,6 +66,49 @@ chart.yLabel = function(chart, label) {
         .text(label);
 }
 
+chart.legend = function(chart, data, color) {
+    chart.g.selectAll('.legends').remove()
+    if (!app.config.app().get('chart.color.show')) return
+
+    var width = d3.max(data.map(function(d) {return d.length})) * 9
+    var legend = chart.g.append('g')
+        .attr('class', 'legends')
+        .selectAll('.legend')
+        .data(data)
+        .enter()
+        .append('g')
+        .attr('class', 'legend');
+
+    legend.append('rect')
+        .attr('x', chart.width - width)
+        .attr('y', function(d, i) {
+            return i * 20 - 5;
+        })
+        .attr('width', width)
+        .attr('height', 20)
+        .style('fill', 'white');
+
+    legend.append('rect')
+        .attr('x', chart.width - width)
+        .attr('y', function(d, i) {
+            return i * 20;
+        })
+        .attr('width', 10)
+        .attr('height', 10)
+        .style('fill', function(d,i) {
+            return color[i];
+        });
+
+    legend.append('text')
+        .attr('x', chart.width - width + 12)
+        .attr('y', function(d, i) {
+            return (i * 20) + 9;
+        })
+        .text(function(d) {
+            return d;
+        });
+}
+
 chart.dragstarted = function() {
     chart.dragging = true
 }
@@ -142,9 +185,9 @@ chart.update = function() {
     if ($('#autoscale').prop('checked')) {
         chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
     }
-    app.simulation.outputs.map(function(output) {
-        if (!output.node.model) return
-        output.chart.update(output)
+    app.simulation.recorders.map(function(recorder) {
+        if (!recorder.node.model) return
+        recorder.chart.update(recorder)
     })
     $('#simulation-add').attr('disabled', false)
     $('#simulation-resume').attr('disabled', false)
@@ -198,12 +241,12 @@ chart.init = function() {
         })
     }
 
-    app.simulation.outputs.map(function(output, idx) {
-        if (!output.node.model) return
-        var outputChart = output.node.chart || chart.fromOutputNode[output.node.model]
-        output.chart = require(__dirname + '/chart/' + outputChart)
-        output.chart.init(idx)
-        delete require.cache[require.resolve(__dirname + '/chart/' + outputChart)]
+    app.simulation.recorders.map(function(recorder, idx) {
+        if (!recorder.node.model) return
+        var recorderChart = recorder.node.chart || chart.fromOutputNode[recorder.node.model]
+        recorder.chart = require(__dirname + '/chart/' + recorderChart)
+        recorder.chart.init(idx)
+        delete require.cache[require.resolve(__dirname + '/chart/' + recorderChart)]
     })
 
     app.chart.networkLayout.init()
@@ -218,7 +261,7 @@ chart.events = function() {
         app.resizing = true
         app.chart.init()
         app.chart.update()
-            // app.chart.networkLayout.update()
+        // app.chart.networkLayout.update()
         app.resizing = false
     });
 }

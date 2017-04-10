@@ -1,5 +1,5 @@
 [{
-    "type": "input",
+    "element_type": "stimulator",
     "id": "ac_generator",
     "label": "AC generator",
     "sliderDefaults": [{
@@ -38,7 +38,7 @@
         "label": "Frequency (Hz)"
     }]
 }, {
-    "type": "input",
+    "element_type": "stimulator",
     "id": "dc_generator",
     "label": "DC generator",
     "sliderDefaults": [{
@@ -52,7 +52,7 @@
         "label": "Amplitude of current (pA)"
     }]
 }, {
-    "type": "input",
+    "element_type": "stimulator",
     "id": "mip_generator",
     "label": "MIP generator",
     "sliderDefaults": [{
@@ -82,7 +82,7 @@
         "label": "Copy probability"
     }]
 }, {
-    "type": "input",
+    "element_type": "stimulator",
     "id": "noise_generator",
     "label": "Noise generator",
     "sliderDefaults": [{
@@ -105,7 +105,7 @@
         "label": "Standard deviation of noise current (pA)"
     }]
 }, {
-    "type": "input",
+    "element_type": "stimulator",
     "id": "poisson_generator",
     "label": "Poisson generator",
     "sliderDefaults": [{
@@ -113,21 +113,13 @@
         "level": 1,
         "value": 1.0,
         "min": 1.0,
-        "max": 100000.0,
+        "max": 1000.0,
         "step": 1.0,
         "scale": "logarithmic",
         "label": "Mean firing rate (Hz)"
-    }, {
-        "id": "offset",
-        "level": 4,
-        "value": 0.0,
-        "min": 0.0,
-        "max": 10.0,
-        "step": 1.0,
-        "label": "Time origin of device timer (ms)"
     }]
 }, {
-    "type": "input",
+    "element_type": "stimulator",
     "id": "pulsepacket_generator",
     "label": "Gaussian pulse packet generator",
     "sliderDefaults": [{
@@ -156,24 +148,19 @@
     "label": "Standard deviation of spike times in each pulse (ms)"
     }]
 }, {
-    "type": "input",
+    "element_type": "stimulator",
     "id": "spike_generator",
     "label": "Spike generator",
-    "sliderDefaults": [{
+    "params": [{
         "id": "spike_times",
-        "level": 5,
-        "value": 1.0,
-        "min": 1.0,
-        "max": 10.0,
-        "step": 1.0,
+        "level": 1,
+        "element_type": "Array",
         "label": "Times of spike (ms)"
     }, {
         "id": "spike_weights",
-        "level": 5,
-        "value": 1.0,
-        "min": 1.0,
-        "max": 10.0,
-        "step": 1.0,
-        "label": "The weight of spike (ms)"
-    }]
+        "level": 2,
+        "element_type": "Array",
+        "label": "Weights of spike (pA)"
+    }],
+    "sliderDefaults": []
 }]

@@ -238,16 +238,16 @@ networkLayout.update = function() {
             var source = networkLayout.mousedown_node;
             var target = networkLayout.mouseup_node;
 
-            if (target.type == 'input') {
+            if (target.element_type == 'stimulator') {
                 app.message.show('Error!', 'Inputs can not be targets.', 2000)
                 return
             }
-            if (source.type == 'output') {
+            if (source.element_type == 'recorder') {
                 app.message.show('Error!', 'Outputs can not be sources.', 2000)
                 return
             }
-            if (source.type == 'input' && target.type == 'output') {
-                app.message.show('Error!', 'Inputs can not connect to outputs directly.', 2000)
+            if (source.element_type == 'stimulator' && target.element_type == 'recorder') {
+                app.message.show('Error!', 'Inputs can not connect to recorders directly.', 2000)
                 return
             }
 
@@ -293,7 +293,7 @@ networkLayout.update = function() {
     // networkLayout.circle.selectAll('title').remove()
     // networkLayout.circle.append('title')
     //     .text(function(d) {
-    //         return d.type;
+    //         return d.element_type;
     //     })
 
     if (networkLayout.drawing) {
@@ -323,8 +323,8 @@ networkLayout.mousedown = function() {
     var point = d3.mouse(this);
     var colors = app.chart.colors();
 
-    var types = ['output', 'neuron', 'input']
-    types.map(function(d, i) {
+    var element_types = ['recorder', 'neuron', 'stimulator']
+    element_types.map(function(d, i) {
         var select = networkLayout.g.append('g')
             .attr('class', 'select')
             .attr('transform', 'translate(' + point[0] + ',' + point[1] + ')')
@@ -350,7 +350,7 @@ networkLayout.mousedown = function() {
             })
             .on('mouseup', function() {
                 app.selected_node = networkLayout.addNode()
-                app.selected_node.type = d;
+                app.selected_node.element_type = d;
                 app.selected_node.x = point[0];
                 app.selected_node.y = point[1];
                 app.data.nodes.push(app.selected_node)
@@ -373,7 +373,7 @@ networkLayout.mousedown = function() {
 networkLayout.mousemove = function() {
     // console.log('mousemove')
     if (!networkLayout.mousedown_node) return
-    if (networkLayout.mousedown_node.type == 'output') return
+    if (networkLayout.mousedown_node.element_type == 'recorder') return
     // app.selected_node = networkLayout.mousedown_node;
     var point = d3.mouse(this);
     // update drag line

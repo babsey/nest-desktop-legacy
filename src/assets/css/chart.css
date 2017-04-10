@@ -67,3 +67,6 @@
 #networkLayout .link.exc {
     stroke: #467ab3;
 }
+#networkLayout .legends {
+    fill: white;
+}

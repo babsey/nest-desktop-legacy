@@ -11,7 +11,7 @@
     },
     "nodes": [{
         "id": 0,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "poisson_generator",
         "x": 0,
         "y": 0,
@@ -21,7 +21,7 @@
         }
     }, {
         "id": 1,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "parrot_neuron",
         "x": 100,
         "y": 50,
@@ -29,7 +29,7 @@
         "params": {}
     }, {
         "id": 2,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 200,
         "y": 0,
@@ -37,7 +37,7 @@
         "params": {}
     }, {
         "id": 3,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 200,
         "y": 100,
@@ -45,7 +45,7 @@
         "params": {}
     }, {
         "id": 4,
-        "type": "output",
+        "element_type": "recorder",
         "model": "voltmeter",
         "x": 300,
         "y": 50,

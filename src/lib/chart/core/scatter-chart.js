@@ -7,9 +7,9 @@
 const d3 = require("d3");
 var chart = {};
 
-chart.update = function(output) {
-    if (!output.data) return
-    var data = output.data.dots;
+chart.update = function(recorder) {
+    if (!recorder.data) return
+    var data = recorder.data.dots;
     chart.yScale.range([chart.height - (+chart.g.attr('y')), chart.height - (+chart.g.attr('height')) - (+chart.g.attr('y'))])
     chart.xScale.range([0, +chart.g.attr('width')])
     chart.xScale.domain(app.chart.xScale.domain())
@@ -21,7 +21,7 @@ chart.update = function(output) {
         .selectAll(".dot")
         .data(data.x);
 
-    var color = app.config.app().get('chart.color');
+    var color = app.config.app().get('chart.color.show');
     dots.attr("fill", function(d, i) {
             return color ? data.c[i] : ''
         })

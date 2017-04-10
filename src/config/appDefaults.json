@@ -38,7 +38,10 @@
         }]
     },
     "chart": {
-        "color": false,
+        "color": {
+            "show": false,
+            "group": "node"
+        },
         "networkLayout": true
     }
 }

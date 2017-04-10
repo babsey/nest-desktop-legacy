@@ -2,23 +2,23 @@
 
 var rasterPlot = {}
 
-rasterPlot.update = function(output) {
+rasterPlot.update = function(recorder) {
     var scatterChart = rasterPlot.scatterChart;
     var barChart = rasterPlot.barChart;
-    output.data = {
+    recorder.data = {
         dots: {
             x: [],
             y: [],
         },
         bars: [],
     }
-    if (output.events.senders.length == 0) {
-        rasterPlot.scatterChart.update(output);
-        rasterPlot.barChart.update(output);
+    if (recorder.events.senders.length == 0) {
+        rasterPlot.scatterChart.update(recorder);
+        rasterPlot.barChart.update(recorder);
         return
     }
 
-    var nbins = output.node.nbins || 100
+    var nbins = recorder.node.nbins || 100
     var histogram = d3.histogram()
         .domain(app.chart.xScale.domain())
         .thresholds(app.chart.xScale.ticks(nbins));
@@ -31,13 +31,13 @@ rasterPlot.update = function(output) {
         })
     })
 
-    barChart.recId = output.node.id;
+    barChart.recId = recorder.node.id;
     if (document.getElementById('autoscale').checked) {
         scatterChart.g.select('#clip').call(d3.zoom().transform, d3.zoomIdentity);
         barChart.g.select('#clip').call(d3.zoom().transform, d3.zoomIdentity);
     }
-    var times = output.events['times']
-    var senders = output.events['senders'].filter(function(d, i) {
+    var times = recorder.events['times']
+    var senders = recorder.events['senders'].filter(function(d, i) {
         return times[i] > app.chart.xScale.domain()[0] && times[i] < app.chart.xScale.domain()[1]
     })
     var times = times.filter(function(d) {
@@ -49,18 +49,18 @@ rasterPlot.update = function(output) {
         return colors[gids[d] % colors.length]
     })
 
-    output.data.dots = {
+    recorder.data.dots = {
         x: times,
         y: senders,
         c: c
     }
 
-    scatterChart.yScale.domain([d3.max(output.senders)+1, d3.min(output.senders)-1])
-    scatterChart.update(output);
+    scatterChart.yScale.domain([d3.max(recorder.senders)+1, d3.min(recorder.senders)-1])
+    scatterChart.update(recorder);
 
-    var hist = output.senders.map(function(s) {
-            return histogram(output.events['times'].filter(function(d, i) {
-                return output.events['senders'][i] == s
+    var hist = recorder.senders.map(function(s) {
+            return histogram(recorder.events['times'].filter(function(d, i) {
+                return recorder.events['senders'][i] == s
             }))
         })
         // var psth = hist.map(function(d) {
@@ -68,7 +68,7 @@ rasterPlot.update = function(output) {
         //         return dd.length
         //     })
         // })
-    output.data.bars = hist[0].map(function(col, i) {
+    recorder.data.bars = hist[0].map(function(col, i) {
         var h = hist.map(function(row) {
             return row[i].length
         })
@@ -80,7 +80,7 @@ rasterPlot.update = function(output) {
         return h
     });
     // console.log(psth)
-    // var hist = histogram(output.events['times']);
+    // var hist = histogram(recorder.events['times']);
     // var psth = hist.map(function(d) {
     //     return {total: d.length}
     // })
@@ -93,7 +93,7 @@ rasterPlot.update = function(output) {
 
     // var colors = app.chart.colors();
     // var c = d3.merge(app.data.links.filter(function(link) {
-    //     return link.target == output.id
+    //     return link.target == recorder.id
     // }).map(function(link) {
     //     return app.format.fillArray(colors[app.data.nodes[link.source].id % colors.length], app.data.nodes[link.source].ids.length)
     // }))
@@ -103,13 +103,13 @@ rasterPlot.update = function(output) {
     //     // c: c
     // };
 
-    barChart.update(output)
+    barChart.update(recorder)
 
     // var linechart = rasterPlot.linechart;
     // linechart.yScale.domain(d3.extent([].concat.apply([], app.simulation.data.y.map(function(d) {return d.total}))))
     // linechart.xScale.domain(app.chart.xScale.domain())
     // linechart.data(app.simulation.data)
-    //     // .yLabel(app.model.record_labels[output.record_from])
+    //     // .yLabel(app.model.record_labels[recorder.record_from])
     //     // .yLabel(app.model.record_labels[app.selected_node.record_from] || 'a.u.')
     //     .update();
 }
@@ -117,7 +117,7 @@ rasterPlot.update = function(output) {
 rasterPlot.init = function(idx) {
 
     // $('#chart').empty()
-    var height = parseInt($('#dataChart').attr('height')) / app.simulation.outputs.length
+    var height = parseInt($('#dataChart').attr('height')) / app.simulation.recorders.length
     rasterPlot.scatterChart = require(__dirname + '/core/scatter-chart');
     rasterPlot.scatterChart.init('#dataChart', {
         y: height * idx,

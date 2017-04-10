@@ -1,39 +1,39 @@
 [{
-    "type": "connection",
+    "element_type": "connection",
     "id": "all_to_all",
     "label": "All to all"
 }, {
-    "type": "connection",
+    "element_type": "connection",
     "id": "one_to_one",
     "label": "One to one"
 }, {
-    "type": "connection",
+    "element_type": "connection",
     "id": "fixed_indegree",
     "label": "Fixed indegree",
     "sliderDefaults": [{
         "id": "indegree",
         "level": 1,
         "value": 1,
-        "min": 0,
+        "min": 1,
         "max": 1000,
         "step": 1,
         "label": "Indegree"
     }]
 }, {
-    "type": "connection",
+    "element_type": "connection",
     "id": "fixed_outdegree",
     "label": "Fixed outdegree",
     "sliderDefaults": [{
         "id": "outdegree",
         "level": 1,
         "value": 1,
-        "min": 0,
+        "min": 1,
         "max": 100,
         "step": 1,
         "label": "Outdegree"
     }]
 }, {
-    "type": "connection",
+    "element_type": "connection",
     "id": "fixed_total_number",
     "label": "Fixed total number",
     "sliderDefaults": [{
@@ -47,7 +47,7 @@
         "label": "N"
     }]
 }, {
-    "type": "connection",
+    "element_type": "connection",
     "id": "pairwise_bernoulli",
     "label": "Pairwise Bernoulli",
     "sliderDefaults": [{

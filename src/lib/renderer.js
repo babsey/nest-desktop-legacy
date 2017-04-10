@@ -75,7 +75,7 @@ renderer.simulationPopover = function(d) {
 
 renderer.scrollspy = function(node) {
     var div = [];
-    div.push('<li class="node ' + node.type + '" data-id="' + node.id + '">')
+    div.push('<li class="node ' + node.element_type + '" data-id="' + node.id + '">')
     var colors = app.chart.colors()
     div.push('<a href="#node_' + node.id + '" ' + 'style="border: 3px solid' + colors[node.id % colors.length] + '; padding: 10px 0px"')
     div.push(' title="' + app.format.nodeTitle(node) + '">')
@@ -86,7 +86,7 @@ renderer.scrollspy = function(node) {
 
 renderer.node = function(node) {
     var div = [];
-    div.push('<div id="node_' + node.id + '" data-id="' + node.id + '" class="panel-body node ' + node.type + ' node_' + node.id + '">')
+    div.push('<div id="node_' + node.id + '" data-id="' + node.id + '" class="panel-body node ' + node.element_type + ' node_' + node.id + '">')
     div.push('<hr class="hideOnDrawing">')
     div.push('<div class="content"')
     div.push(' style="')
@@ -94,8 +94,8 @@ renderer.node = function(node) {
     div.push('border-left: 4px solid ' + colors[node.id % colors.length])
     div.push('" >')
     div.push('<div class="btn-group">')
-    div.push('<select data-id="' + node.id + '" class="' + node.type + 'Select modelSelect form-control btn btn-default">')
-    div.push('<option disabled selected hidden>Select an ' + node.type + ' device</option>')
+    div.push('<select data-id="' + node.id + '" class="' + node.element_type + 'Select modelSelect form-control btn btn-default">')
+    div.push('<option disabled selected hidden>Select an ' + node.element_type + ' device</option>')
     div.push('</select>')
     div.push('<button class="btn btn-default disableNode">')
     div.push('<span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok"></span>')
@@ -144,6 +144,9 @@ renderer.synapse = function(link) {
     div.push('" >')
     div.push('<select class="synSelect modelSelect form-control">')
     div.push('<option disabled selected hidden>Select a synapse model</option>')
+    div.push('</select>')
+    div.push('<select class="recSelect modelSelect form-control" style="display:none">')
+    div.push('<option disabled selected hidden>Select a receptor</option>')
     div.push('</select>')
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')

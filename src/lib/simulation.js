@@ -1,6 +1,7 @@
 "use strict"
 
 const jsonfile = require('jsonfile');
+const flat = require('flat');
 
 var simulation = {
     data: {}
@@ -41,9 +42,13 @@ simulation.stop = function() {
 simulation.simulate = function() {
     if (app.chart.networkLayout.drawing) return
     if (simulation.running) return
-    if (simulation.outputs.length == 0) return
-    if (simulation.outputs.filter(function(output) { return output.node.model != undefined}).length == 0) return
-    if (simulation.outputs.filter(function(output) { return !(output.node.disabled == true)}).length == 0) return
+    if (simulation.recorders.length == 0) return
+    if (simulation.recorders.filter(function(recorder) {
+            return recorder.node.model != undefined
+        }).length == 0) return
+    if (simulation.recorders.filter(function(recorder) {
+            return !(recorder.node.disabled == true)
+        }).length == 0) return
 
     var mId = app.message.show('Info', 'The simulation is running. Please wait.');
     var data = $.extend(true, {}, app.data);
@@ -54,7 +59,12 @@ simulation.simulate = function() {
                 network: app.data.network,
                 kernel: app.data.kernel,
                 sim_time: app.data.sim_time,
-                nodes: app.data.nodes,
+                nodes: flat.unflatten(app.data.nodes.map(function(node) {
+                    node.params = flat.unflatten(node.params, {
+                        delimiter: '__'
+                    })
+                    return node
+                })),
                 links: app.data.links,
             })
             .done(function(res) {
@@ -66,37 +76,37 @@ simulation.simulate = function() {
                     var title = app.format.nodeTitle(node)
                     $('#myScrollspy .nav').find('.node_' + node.id).attr('title', title)
                 }
-                simulation.outputs.map(function(output) {
-                    output.node.params = res.nodes[output.node.id].params
-                    if (output.node.model == 'multimeter') {
-                        if (!(output.node.record_from in res.nodes[output.node.id].events)) {
-                            output.node.record_from = 'V_m'
-                        }
-                        app.model.get_recordables_list(output.node)
-                    } else if (output.node.model == 'voltmeter') {
-                        output.node.record_from = 'V_m'
+                simulation.recorders.map(function(recorder) {
+                    recorder.node.params = res.nodes[recorder.node.id].params
+                    if (recorder.node.model == 'multimeter') {
+                        recorder.node.record_from = recorder.node.params.record_from.filter(function(record_from) {
+                            return record_from.startsWith('V_m')
+                        })
+                        app.model.get_recordables_list(recorder.node)
+                    } else if (recorder.node.model == 'voltmeter') {
+                        recorder.node.record_from = ['V_m']
                     }
-                    output.events = res.nodes[output.node.id].events;
-                    output.senders = d3.merge(app.data.links.filter(function(link) {
-                        return link.target == output.node.id
+                    recorder.events = res.nodes[recorder.node.id].events;
+                    recorder.senders = d3.merge(app.data.links.filter(function(link) {
+                        return link.target == recorder.node.id
                     }).map(function(link) {
                         return app.data.nodes[link.source].ids ? app.data.nodes[link.source].ids : []
                     }))
-                    output.sources = app.data.links.filter(function(link) {
-                        return link.target == output.node.id
+                    recorder.sources = app.data.links.filter(function(link) {
+                        return link.target == recorder.node.id
                     }).map(function(link) {
                         return app.data.nodes[link.source].id
                     })
-                })
-                app.chart.update()
-                app.message.hide(mId).remove()
+                });
+                app.chart.update();
+                app.message.hide(mId).remove();
                 var toe = new Date;
                 var ts = {
                     tic: tic,
                     toc: toc,
                     toe: toe
                 };
-                app.protocol.add(data)
+                app.protocol.add(data);
             })
     }, 10)
 }
@@ -114,12 +124,12 @@ simulation.resume = function() {
         .done(function(res) {
             if (!simulation.running) return
             app.data.kernel.time = res.kernel.time;
-            simulation.outputs.map(function(output) {
-                for (var key in res.nodes[output.node.id].events) {
-                    output.events[key] = output.events[key].concat(res.nodes[output.node.id].events[key])
+            simulation.recorders.map(function(recorder) {
+                for (var key in res.nodes[recorder.node.id].events) {
+                    recorder.events[key] = recorder.events[key].concat(res.nodes[recorder.node.id].events[key])
                 }
-                output.senders = d3.merge(app.data.links.filter(function(link) {
-                    return link.target == output.node.id
+                recorder.senders = d3.merge(app.data.links.filter(function(link) {
+                    return link.target == recorder.node.id
                 }).map(function(link) {
                     return app.data.nodes[link.source].ids
                 }))
@@ -149,8 +159,8 @@ simulation.update = function() {
     }
     $('#subtitle').append(app.data.user ? '<span style="margin-left:20px">' + app.data.user + '</span>' : '')
 
-    simulation.outputs = app.data.nodes.filter(function(node) {
-        return node.type == 'output'
+    simulation.recorders = app.data.nodes.filter(function(node) {
+        return node.element_type == 'recorder' && !node.disabled
     }).map(function(node) {
         return {
             node: node,

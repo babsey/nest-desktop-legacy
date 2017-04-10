@@ -12,7 +12,7 @@
     },
     "nodes": [{
         "id": 0,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "noise_generator",
         "x": 0,
         "y": 0,
@@ -22,7 +22,7 @@
         }
     }, {
         "id": 1,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "nrow": 30,
         "ncol": 30,
@@ -43,7 +43,7 @@
         }
     }, {
         "id": 2,
-        "type": "output",
+        "element_type": "recorder",
         "model": "spike_detector",
         "chart": "heatmap",
         "x": 200,

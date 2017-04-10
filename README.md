@@ -6,9 +6,10 @@
 
 An interactive desktop application for the [NEural Simulation Tool](http://www.nest-initiative.org/).
 
-To install this application you'll need [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Electron](http://electron.atom.io/) installed on your computer.
+To install this application you'll need [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Electron](http://electron.atom.io/) installed on your computer. Required version for node at least v6.10.xx and npm v3.10.xx.
 
 If you simulate nest locally, you need [nest-server-simulation](https://github.com/babsey/nest-server-simulation) installed on your computer.
+I tested the application with NEST v2.12.
 
 Optional: To store network data remotely, you need [nest-server-store](https://github.com/babsey/nest-server-store) installed on remoted computer.
 
@@ -16,12 +17,19 @@ Optional: To store network data remotely, you need [nest-server-store](https://g
 
 ### Ubuntu
 
-Install git and node with sudo
+Install git with sudo
 ```
-sudo apt-get install git nodejs
+sudo apt-get install git
 ```
 
-### Mac OSX
+Install node with sudo
+```
+sudo apt-get install nodejs
+```
+or compile from [source code](https://nodejs.org/en/download/)
+Note that nodejs should be removed if you want to install node from source code.
+
+### Mac OSX (>=10.10)
 
 Install git and node
 ```
@@ -107,13 +115,17 @@ The application create a window with these window properties - width, height, fr
 #### Why is the app not working?
 First, be assure that you installed all required npm packages (`npm install`).
 
-If still not working, the database may be deprecated. In this case, delete the config file or just empty `db_name` in config file (stored as `nest-desktop.json` in configstore), then restart the app. It will generate new config file and new database. (I am working on a better solution.)
+If still not working, the configuation may be deprecated. In this case, delete the config file or just empty `db_name` in config file (stored as `nest-desktop.json` in configstore), then restart the app. It will generate new config file and new database.
+
+If still not working, the database may be deprecated. In this case, delete the all files in ./data/, then restart the app.
+
+Besides, I am working on a better solution.
 
 #### Where are the data of simulation stored?
-Saved data about simulation are stored as NeDB database in ./data/*.db
+Saved data about simulation are stored as NeDB database in ./data/\*.db
 
 #### Where are the protocols of simulation stored?
-Protocols about simulation are stored as NeDB database in ./data/protocols/*.db
+Protocols about simulation are stored as NeDB database in ./data/protocols/\*.db
 
 #### Where are the thumbnails of simulation stored?
 Thumbnails are stored in ./data/images/

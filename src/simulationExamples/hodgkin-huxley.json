@@ -12,49 +12,49 @@
     },
     "nodes": [{
         "id": 0,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 210,
         "y": 310,
         "params": {}
     }, {
         "id": 1,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 490,
         "y": 100,
         "params": {}
     }, {
         "id": 2,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 240,
         "y": 0,
         "params": {}
     }, {
         "id": 3,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 415,
         "y": 230,
         "params": {}
     }, {
         "id": 4,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 280,
         "y": 180,
         "params": {}
     }, {
         "id": 5,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 445,
         "y": 405,
         "params": {}
     }, {
         "id": 6,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "noise_generator",
         "x": 0,
         "y": 0,
@@ -65,7 +65,7 @@
         }
     }, {
         "id": 7,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "poisson_generator",
         "x": 550,
         "y": 230,
@@ -76,7 +76,7 @@
         }
     }, {
         "id": 8,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "poisson_generator",
         "x": 370,
         "y": 0,
@@ -87,7 +87,7 @@
         }
     }, {
         "id": 9,
-        "type": "output",
+        "element_type": "recorder",
         "model": "voltmeter",
         "x": 0,
         "y": 0,
@@ -95,7 +95,7 @@
         "params": {}
     }, {
         "id": 10,
-        "type": "output",
+        "element_type": "recorder",
         "model": "spike_detector",
         "x": 0,
         "y": 0,

@@ -13,7 +13,7 @@
     },
     "nodes": [{
         "id": 0,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "aeif_cond_alpha",
         "x": 150,
         "y": 50,
@@ -24,7 +24,7 @@
         }
     }, {
         "id": 1,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "dc_generator",
         "x": 0,
         "y": 0,
@@ -36,7 +36,7 @@
         }
     }, {
         "id": 2,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "dc_generator",
         "x": 0,
         "y": 100,
@@ -48,7 +48,7 @@
         }
     }, {
         "id": 3,
-        "type": "output",
+        "element_type": "recorder",
         "model": "voltmeter",
         "x": 300,
         "y": 100,

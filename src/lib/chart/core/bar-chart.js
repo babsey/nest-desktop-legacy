@@ -22,16 +22,16 @@ chart.yVal = function(d, idx) {
     return y // chart.npop() * 1000. // chart.binwidth()
 }
 
-chart.update = function(output) {
-    if (!output.data) return
-    var data = output.data.bars;
+chart.update = function(recorder) {
+    if (!recorder.data) return
+    var data = recorder.data.bars;
     chart.xScale.range([0, +chart.g.attr('width')])
     chart.yScale.range([+chart.g.attr('height'), 0])
 
-    if (app.selected_node && app.selected_node.type == 'neuron' && output.sources.indexOf(app.selected_node.id) != -1) {
+    if (app.selected_node && app.selected_node.element_type == 'neuron' && recorder.sources.indexOf(app.selected_node.id) != -1) {
         var nidx = app.selected_node.id;
         var idx = app.selected_node.ids.map(function(d) {
-            return output.senders.indexOf(d);
+            return recorder.senders.indexOf(d);
         })
     } else {
         var nidx = null;
@@ -52,8 +52,8 @@ chart.update = function(output) {
     chart.bars = bars;
 
     var colors = app.chart.colors()
-    var cidx = (output.sources.length == 1 ? output.sources[0] : nidx)
-    var color = app.config.app().get('chart.color') ? colors[cidx || (output.node.id % colors.length)] : ''
+    var cidx = (recorder.sources.length == 1 ? recorder.sources[0] : nidx)
+    var color = app.config.app().get('chart.color.show') ? colors[cidx || (recorder.node.id % colors.length)] : ''
     if (transition) {
         bars
             .attr("x", function(d) {

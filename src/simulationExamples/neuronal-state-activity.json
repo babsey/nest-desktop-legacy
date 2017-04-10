@@ -11,7 +11,7 @@
     },
     "nodes": [{
         "id": 0,
-        "type": "input",
+        "element_type": "stimulator",
         "model": "poisson_generator",
         "x": 400,
         "y": 550,
@@ -22,7 +22,7 @@
         }
     }, {
         "id": 1,
-        "type": "neuron",
+        "element_type": "neuron",
         "model": "iaf_cond_alpha",
         "x": 550,
         "y": 500,
@@ -31,12 +31,12 @@
         "params": {}
     }, {
         "id": 2,
-        "type": "output",
+        "element_type": "recorder",
         "model": "multimeter",
         "x": 700,
         "y": 550,
         "params": {},
-        "record_from": "V_m"
+        "record_from": ["V_m"]
     }],
     "links": [{
         "id": 0,

@@ -27,8 +27,8 @@ config.app = function() {
     return conf
 }
 
-config.modelSlider = function(name) {
-    return jsonfile.readFileSync(__dirname + '/../config/modelSlider/' + name + '.json')
+config.nest = function(name) {
+    return jsonfile.readFileSync(__dirname + '/../config/nest/' + name + '.json')
 }
 
 config.simulation = function(name) {

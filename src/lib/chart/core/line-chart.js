@@ -18,13 +18,13 @@ function _draw_line(data, classname) {
         return 'stroke:' + (app.selected_node ? data.c[i] : '')
     })
 
-    var color = app.config.app().get('chart.color');
+    var color = app.config.app().get('chart.color.show');
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     if (transition) {
         lines.transition(app.chart.transition)
-            .attr('height', chart.height / data.y.length)
+            .attr('height', chart.height / data.n)
             .attr("transform", function(d, i) {
-                return "translate(0," + -1 * (data.y.length - i - 1) * chart.height / data.y.length + ")"
+                return "translate(0," + -1 * (data.n - (i%data.n) - 1) * chart.height / data.n + ")"
             })
             .attr("style", function(d, i) {
                 return 'stroke:' + (color ? data.c[i] : '')
@@ -33,9 +33,9 @@ function _draw_line(data, classname) {
 
         lines.enter()
             .append("path")
-            .attr('height', chart.height / data.y.length)
+            .attr('height', chart.height / data.n)
             .attr("transform", function(d, i) {
-                return "translate(0," + -1 * (data.y.length - i - 1) * chart.height / data.y.length + ")"
+                return "translate(0," + -1 * (data.n - (i%data.n) - 1) * chart.height / data.n + ")"
             })
             .attr("class", function(d, i) {
                 return classname + ' line_' + i
@@ -59,11 +59,11 @@ function _draw_line(data, classname) {
                 return 'stroke:' + (color ? data.c[i] : '')
             })
             .transition(app.chart.transition)
-            .attr("d", chart.line);
+            .attr("d", function(d) { return chart.line(d)});
     } else {
-        lines.attr('height', chart.height / data.y.length)
+        lines.attr('height', chart.height / data.n)
             .attr("transform", function(d, i) {
-                return "translate(0," + -1 * (data.y.length - i - 1) * chart.height / data.y.length + ")"
+                return "translate(0," + -1 * (data.n - (i%data.n) - 1) * chart.height / data.n + ")"
             })
             .attr("style", function(d, i) {
                 return 'stroke:' + (color ? data.c[i] : '')
@@ -72,9 +72,9 @@ function _draw_line(data, classname) {
 
         lines.enter()
             .append("path")
-            .attr('height', chart.height / data.y.length)
+            .attr('height', chart.height / data.n)
             .attr("transform", function(d, i) {
-                return "translate(0," + -1 * (data.y.length - i - 1) * chart.height / data.y.length + ")"
+                return "translate(0," + -1 * (data.n - (i%data.n) - 1) * chart.height / data.n + ")"
             })
             .attr("class", function(d, i) {
                 return classname + ' line_' + i
@@ -105,7 +105,7 @@ function _draw_line(data, classname) {
 }
 
 chart.update = function(data) {
-    chart.g.attr('height', chart.height / data.y.length)
+    chart.g.attr('height', chart.height / data.n)
     chart.yScale.range([chart.height, chart.height - (+chart.g.attr('height'))])
     chart.xScale.range([0, +chart.g.attr('width')])
     chart.xScale.domain(app.chart.xScale.domain())

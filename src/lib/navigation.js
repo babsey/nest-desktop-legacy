@@ -26,9 +26,16 @@ navigation.events = function() {
     })
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
     $('#chart-color').on('click', function() {
-        var color = app.config.app().get('chart.color') || false
-        app.config.app().set('chart.color', !color)
+        var color = app.config.app().get('chart.color.show') || false
+        app.config.app().set('chart.color.show', !color)
         $('#chart-color').find('.glyphicon-ok').toggle(!color)
+        app.chart.update()
+    })
+    $('.color').on('click', function() {
+        var colorGroup = $(this).data('group')
+        app.config.app().set('chart.color.group', colorGroup )
+        $('.color').find('.glyphicon-ok').hide()
+        $('.color[data-group=' + colorGroup + ']').find('.glyphicon-ok').show()
         app.chart.update()
     })
     $('#view-networkLayout').on('click', function() {
@@ -68,7 +75,7 @@ navigation.events = function() {
         app.selected_node = null;
         app.data.nodes = []
         app.data.links = []
-        app.simulation.outputs = [];
+        app.simulation.recorders = [];
         app.simulation.update()
         var drawing = true;
         app.chart.networkLayout.drawing = drawing;
@@ -107,9 +114,10 @@ navigation.events = function() {
 }
 
 navigation.init = function() {
-    $("#config").find('#level_' + app.config.app().get('simulation.level')).find('.glyphicon-ok').show()
     $("#config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().get('simulation.protocol') || false)
-    $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().get('chart.color') || false)
+    $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().get('chart.color.show') || false)
+    $("#config").find('.color[data-group=' + app.config.app().get('chart.color.group') + ']').find('.glyphicon-ok').show()
+    $("#config").find('#level_' + app.config.app().get('simulation.level')).find('.glyphicon-ok').show()
 
     // Load protocol list
     app.protocol.init()
