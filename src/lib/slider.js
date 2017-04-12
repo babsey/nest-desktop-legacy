@@ -12,6 +12,8 @@ function _slider(ref, id, options) {
         step: 1,
         tooltip: 'hide',
         show_value: true,
+        natural_arrow_keys: true,
+        focus: true,
     };
     var options = $.extend(options_default, options);
     $(ref).find('#' + id).append('<div class="form-group row"></div>')
@@ -27,6 +29,10 @@ function _slider(ref, id, options) {
         if (!(Object.prototype.toString.call(options.value) === '[object Array]') && (options.show_value)) {
             $(ref).find('#' + id).find("#" + id + "Val").val(options.value);
         }
+        app.lastSliderChanged = $(ref).find('#' + id)
+    });
+    $(ref).find('#' + id).find(".slider-handle").on("mouseover", function() {
+        $(this).focus();
     });
     return slider
 }

@@ -187,3 +187,6 @@ input.form-control {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
 }
+.slider-handle:focus{
+    cursor: pointer;
+}

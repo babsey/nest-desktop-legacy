@@ -60,7 +60,7 @@
         "level": 1,
         "value": 1.0,
         "min": 1.0,
-        "max": 10000.0,
+        "max": 1000.0,
         "step": 1.0,
         "scale": "logarithmic",
         "label": "Mean firing rate (Hz)"
@@ -90,7 +90,7 @@
         "level": 1,
         "value": 0.0,
         "min": 0.0,
-        "max": 10000.0,
+        "max": 1000.0,
         "step": 1,
         "scale": "logarithmic",
         "label": "Mean value of the noise current (pA)"
@@ -99,7 +99,7 @@
         "level": 1,
         "value": 0.0,
         "min": 0.0,
-        "max": 10000.0,
+        "max": 1000.0,
         "step": 1.0,
         "scale": "logarithmic",
         "label": "Standard deviation of noise current (pA)"
@@ -146,6 +146,19 @@
     "max": 10.0,
     "step": 1.0,
     "label": "Standard deviation of spike times in each pulse (ms)"
+    }]
+}, {
+    "element_type": "stimulator",
+    "id": "spike_dilutor",
+    "label": "Spike dilutor",
+    "sliderDefaults": [{
+        "id": "p_copy",
+        "level": 2,
+        "value": 1.0,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "label": "Copy probability"
     }]
 }, {
     "element_type": "stimulator",

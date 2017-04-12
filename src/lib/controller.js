@@ -132,9 +132,10 @@ controller.init = function() {
                 divSynLink.find('.recSelect').empty()
                 for (var ridx in receptorModels) {
                     var model = receptorModels[ridx];
-                    divSynLink.find('.recSelect').append('<option id="' + ridx + '" value="' + model.id + '"' + (model.id == 1 ? 'selected' : '') + '>' + model.label + '</option>')
+                    divSynLink.find('.recSelect').append('<option id="rec'+ link.id +'_' + model.id + '" value="' + model.id + '"' + (model.id == 1 ? 'selected' : '') + '>' + model.label + '</option>')
                 }
                 $('#synapses').find('.link[data-id=' + link.id + '] .content').find('.recSelect').show()
+                divSynLink.find('.recSelect').find('option#rec'+ link.id +'_' + link.syn_spec.receptor_type || 0).prop('selected', true);
             } else {
                 link.syn_spec.receptor_type = 0
             }

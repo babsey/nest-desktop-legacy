@@ -31,13 +31,13 @@ navigation.events = function() {
         $('#chart-color').find('.glyphicon-ok').toggle(!color)
         app.chart.update()
     })
-    $('.color').on('click', function() {
-        var colorGroup = $(this).data('group')
-        app.config.app().set('chart.color.group', colorGroup )
-        $('.color').find('.glyphicon-ok').hide()
-        $('.color[data-group=' + colorGroup + ']').find('.glyphicon-ok').show()
-        app.chart.update()
-    })
+    // $('.color').on('click', function() {
+    //     var colorGroup = $(this).data('group')
+    //     app.config.app().set('chart.color.group', colorGroup )
+    //     $('.color').find('.glyphicon-ok').hide()
+    //     $('.color[data-group=' + colorGroup + ']').find('.glyphicon-ok').show()
+    //     app.chart.update()
+    // })
     $('#view-networkLayout').on('click', function() {
         var networkLayout = !app.config.app().get('chart.networkLayout') || false
         app.config.app().set('chart.networkLayout', networkLayout)

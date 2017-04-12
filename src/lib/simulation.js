@@ -79,9 +79,16 @@ simulation.simulate = function() {
                 simulation.recorders.map(function(recorder) {
                     recorder.node.params = res.nodes[recorder.node.id].params
                     if (recorder.node.model == 'multimeter') {
-                        recorder.node.record_from = recorder.node.params.record_from.filter(function(record_from) {
-                            return record_from.startsWith('V_m')
-                        })
+                        if (recorder.node.record_from) {
+                            var record_from = recorder.node.record_from.filter(function(record_from) {
+                                return recorder.node.params.record_from.indexOf(record_from) != -1
+                            })
+                            recorder.node.record_from = record_from;
+                        } else {
+                            recorder.node.record_from = recorder.node.params.record_from.filter(function(record_from) {
+                                return record_from.indexOf('V_m') != -1
+                            })
+                        }
                         app.model.get_recordables_list(recorder.node)
                     } else if (recorder.node.model == 'voltmeter') {
                         recorder.node.record_from = ['V_m']

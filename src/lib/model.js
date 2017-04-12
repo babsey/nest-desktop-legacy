@@ -2,17 +2,20 @@
 
 var model = {};
 model.record_labels = {
-    'g_ex': 'Conductance of excitatory input',
-    'g_in': 'Conductance of inhibitory input',
-    'input_currents_ex': 'Current of excitatory input (pA)',
-    'input_currents_in': 'Current of excitatory input (pA)',
+    'g_ex': 'Excitatory conductance (nS)',
+    'g_in': 'Inhibitory conductance (nS)',
+    'input_currents_ex': 'Incoming excitatory currents (pA)',
+    'input_currents_in': 'Incoming inhibitory currents (pA)',
+    'I_syn_ex': 'Total excitatory synaptic current (pA)',
+    'I_syn_in': 'Total inhibitory synaptic current (pA)',
     'V_m': 'Membrane pontential (mV)',
     'V_th': 'Spike threshold (mV)',
-    'weighted_spikes_ex': 'Spikes of excitatory input',
-    'weighted_spikes_in': 'Spikes of inhibitory input',
-    'Act_m': 'Activation m',
-    'Act_h': 'Activation h',
-    'Inact_n': 'Inactivation n',
+    'weighted_spikes_ex': 'Weighted incoming excitatory spikes',
+    'weighted_spikes_in': 'Weighted incoming inhibitory spikes',
+    'ct_': 'Activation of conductances',
+    'Act_m': 'Activation of Na+ conductance',
+    'Act_h': 'Inactivation of Na+ conductance',
+    'Inact_n': 'Activation of K+ conductance',
     'V_m.d': 'Distal membrane pontential (mV)',
     'V_m.p': 'Proximal membrane pontential (mV)',
     'V_m.s': 'Soma membrane pontential (mV)',
@@ -22,7 +25,22 @@ model.record_labels = {
     'g_in.d': 'Distal conductance of inhibitory input',
     'g_in.p': 'Proximal conductance of inhibitory input',
     'g_in.s': 'Soma conductance of inhibitory input',
-    't_ref_remain': 'Remaining refactory time (s)',
+    't_ref_remaining': 'Time remaining till end of refractory state (s)',
+}
+
+model.record_legends = {
+    'Act_m': 'Activation of Na+ conductance',
+    'Act_h': 'Inactivation of Na+ conductance',
+    'Inact_n': 'Activation of K+ conductance',
+    'V_m.d': 'Distal',
+    'V_m.p': 'Proximal',
+    'V_m.s': 'Soma',
+    'g_ex.d': 'Distal',
+    'g_ex.p': 'Proximal',
+    'g_ex.s': 'Soma',
+    'g_in.d': 'Distal',
+    'g_in.p': 'Proximal',
+    'g_in.s': 'Soma',
 }
 
 model.node_selected = function(node) {
@@ -57,6 +75,10 @@ model.get_recordables_list = function(recorder) {
         ['V_m', 'g_ex', 'g_in'].map(function(rec) {
             recObj.append('<option value="' + rec + '" ' + (rec == recorder.record_from ? 'selected' : '') + '>' + (model.record_labels[rec] || rec) + '</option>')
         })
+    }
+    if (sources.indexOf('hh_psc_alpha') != -1) {
+        var rec = 'ct_'
+        recObj.append('<option value="' + rec + '" ' + (rec == recorder.record_from ? 'selected' : '') + '>' + (model.record_labels[rec] || rec) + '</option>')
     }
     for (var recId in recorder.params.record_from) {
         var rec = recorder.params.record_from[recId];

@@ -1,6 +1,14 @@
 CHANGELOG
 ---------
 
+0.8.1:
+    Fixed bugs
+    Automatic color grouping
+    Activation of conductance in hh neuron model
+    Slider focus after simulation
+    Spike dilutor
+    Legend labels
+
 0.8.0:
     Correcting default parameter of neurons
     Receptor types

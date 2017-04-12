@@ -13,11 +13,12 @@
     },
     "nodes": [{
         "id": 0,
-        "model": "poisson_generator",
+        "model": "noise_generator",
         "params": {
-            "offset": 0,
-            "rate": 3,
-            "start": 0
+            "mean": 1.0,
+            "std": 25.0,
+            "start": 100.0,
+            "stop": 900.0
         },
         "stim_time": [0, 2000],
         "element_type": "stimulator",
@@ -51,8 +52,8 @@
         "model": "voltmeter",
         "params": {
             "interval": 0.1,
-            "start": 300,
-            "stop": 10000
+            "start": 0.0,
+            "stop": 10000.0
         },
         "element_type": "recorder",
         "x": 300,
@@ -69,75 +70,29 @@
                 "Inact_n",
                 "V_m"
             ],
-            "start": 300,
-            "stop": 10000
+            "start": 0.0,
+            "stop": 10000.0
         },
-        "record_from": "Act_h",
+        "record_from": ["Act_h", "Act_m", "Inact_n"],
         "element_type": "recorder",
         "x": 300,
         "y": 100
-    }, {
-        "id": 4,
-        "model": "multimeter",
-        "params": {
-            "interval": 0.1,
-            "record_from": ["Act_h",
-                "Act_m",
-                "I_syn_ex",
-                "I_syn_in",
-                "Inact_n",
-                "V_m"
-            ],
-            "start": 300,
-            "stop": 10000
-        },
-        "record_from": "Act_m",
-        "element_type": "recorder",
-        "x": 300,
-        "y": 150
-    }, {
-        "id": 5,
-        "model": "multimeter",
-        "params": {
-            "interval": 0.1,
-            "record_from": ["Act_h",
-                "Act_m",
-                "I_syn_ex",
-                "I_syn_in",
-                "Inact_n",
-                "V_m"
-            ],
-            "start": 300,
-            "stop": 10000
-        },
-        "record_from": "Inact_n",
-        "element_type": "recorder",
-        "x": 300,
-        "y": 200
     }],
     "links": [{
-        "conn_spec": {},
         "id": 0,
         "source": 0,
+        "target": 1,
         "syn_spec": {
-            "delay": 1,
-            "model": "static_synapse",
-            "weight": 1
-        },
-        "target": 1
+            "weight": 11.0
+        }
     }, {
-        "conn_spec": {
-            "outdegree": 0,
-            "rule": "fixed_outdegree"
-        },
-        "disabled": true,
         "id": 1,
+        "disabled": true,
         "source": 1,
+        "target": 1,
         "syn_spec": {
-            "model": "static_synapse",
-            "weight": -1
-        },
-        "target": 1
+            "weight": -1.0
+        }
     }, {
         "id": 2,
         "source": 1,
@@ -146,13 +101,5 @@
         "id": 3,
         "source": 1,
         "target": 3
-    }, {
-        "id": 4,
-        "source": 1,
-        "target": 4
-    }, {
-        "id": 5,
-        "source": 1,
-        "target": 5
     }]
 }

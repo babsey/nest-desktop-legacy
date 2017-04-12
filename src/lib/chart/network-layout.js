@@ -238,16 +238,16 @@ networkLayout.update = function() {
             var source = networkLayout.mousedown_node;
             var target = networkLayout.mouseup_node;
 
-            if (target.element_type == 'stimulator') {
-                app.message.show('Error!', 'Inputs can not be targets.', 2000)
+            if (target.element_type == 'stimulator' && target.model != 'spike_dilutor') {
+                app.message.show('Error!', 'Stimulators can not be targets.', 2000)
                 return
             }
             if (source.element_type == 'recorder') {
-                app.message.show('Error!', 'Outputs can not be sources.', 2000)
+                app.message.show('Error!', 'Recorders can not be sources.', 2000)
                 return
             }
             if (source.element_type == 'stimulator' && target.element_type == 'recorder') {
-                app.message.show('Error!', 'Inputs can not connect to recorders directly.', 2000)
+                app.message.show('Error!', 'Stimulators can not connect to recorders directly.', 2000)
                 return
             }
 
