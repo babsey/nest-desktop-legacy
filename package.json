@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "A NEST desktop application",
   "main": "main.js",
   "scripts": {
