@@ -53,10 +53,10 @@ db.filter_by_network = function(network) {
 }
 
 db.export = function(data) {
-    const config = app.config.app()
+    var configApp = app.config.app()
     db.get(id).exec(function(err, doc) {
         if (err) return
-        var filepath = path.join(__dirname, '..', config.get('db.local.path'), 'exports', id + '.json')
+        var filepath = path.join(process.cwd(), configApp.datapath, 'exports', id + '.json')
         jsonfile.writeFileSync(filepath, doc, {
             spaces: 4
         })
@@ -64,9 +64,9 @@ db.export = function(data) {
 }
 
 db.init = function() {
-    var config = app.config.app()
-    var db_name = config.get('db.name')
-    var filename = path.join(config.get('db.local.path'), db_name + '.db')
+    var configApp = app.config.app()
+    var db_name = configApp.db.name
+    var filename = path.join(process.cwd(), configApp.datapath, db_name + '.db')
 
     // Create a indexDB for synchroning with remoteDB if set
     db.indexDB = new PouchDB(db_name, {

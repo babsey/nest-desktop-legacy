@@ -6,11 +6,11 @@ const path = require('path');
 const fs = require('fs');
 
 renderer.simulationThumbnails = function(doc) {
-    var filepath = '../data/images/' + doc._id + '.png';
-    if (fs.existsSync(__dirname + path.sep + '..' + path.sep + filepath)) {
-        var src = filepath;
+    var configApp = app.config.app();
+    if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', doc._id + '.png'))) {
+        var src = path.join(process.cwd(), configApp.datapath, 'images', doc._id + '.png');
     } else {
-        var src = './assets/img/simulation_default.png';
+        var src = path.join(__dirname, '..', 'assets', 'img', 'simulation_default.png');
     }
     var div = [];
     div.push('<div id="' + doc._id + '"class="simulation col-xs-12 col-sm-4 col-md-3" data-doi="' + doc.doi + '">')
@@ -26,11 +26,11 @@ renderer.simulationThumbnails = function(doc) {
 }
 
 renderer.simulationDropdown = function(doc) {
-    var filepath = '../../data/images/' + doc._id + '.png';
-    if (fs.existsSync(__dirname + path.sep + filepath)) {
-        var src = filepath
+    var configApp = app.config.app();
+    if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', doc._id + '.png'))) {
+        var src = path.join(process.cwd(), configApp.datapath, 'images', doc._id + '.png');
     } else {
-        var src = '../assets/img/simulation_default.png'
+        var src = path.join(__dirname, '..', 'assets', 'img', 'simulation_default.png');
     }
     var div = [];
     div.push('<li>')

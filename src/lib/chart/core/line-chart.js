@@ -18,7 +18,7 @@ function _draw_line(data, classname) {
         return 'stroke:' + (app.selected_node ? data.c[i] : '')
     })
 
-    var color = app.config.app().get('chart.color.show');
+    var color = app.config.app().chart.color;
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     if (transition) {
         lines.transition(app.chart.transition)

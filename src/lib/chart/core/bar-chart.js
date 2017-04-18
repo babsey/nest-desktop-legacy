@@ -53,7 +53,7 @@ chart.update = function(recorder) {
 
     var colors = app.chart.colors()
     var cidx = (recorder.sources.length == 1 ? recorder.sources[0] : nidx)
-    var color = app.config.app().get('chart.color.show') ? colors[cidx || (recorder.node.id % colors.length)] : ''
+    var color = app.config.app().chart.color ? colors[cidx || (recorder.node.id % colors.length)] : ''
     if (transition) {
         bars
             .attr("x", function(d) {

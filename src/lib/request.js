@@ -7,7 +7,7 @@ request.serverURL = function() {
     let {
         host,
         port
-    } = app.config.app().get('nest.server');
+    } = app.config.app().nest.server;
     var serverURL = host + ':' + port;
     return serverURL
 }

@@ -116,8 +116,9 @@
     window.app = require('./app');
     app.db.init()
     app.request.server_check()
+    var configApp = app.config.app();
 
-    $('#user').html('Hi, ' + (app.config.app().get('user.name') || 'guest'))
+    $('#user').html('Hi, ' + (configApp.user.name || 'guest'))
     $('.external').on('click', function(event) {
         event.preventDefault();
         shell.openExternal(this.href);
@@ -125,7 +126,7 @@
 
     setTimeout(function() {
 
-        var groups = app.config.app().get('simulation.groups');
+        var groups = configApp.simulation.groups;
         groups.map(function(grp) {
             $('#simulations').append('<div id="sim-' + grp.id + '"></div>')
             $('#sim-' + grp.id).append('<h4>' + grp.name + ' simulations</h4>')
@@ -168,7 +169,7 @@
                 $(this).height(tallest);
             });
         }, 200)
-    }, fs.existsSync(__dirname + '/../data/' + app.config.app().get('db.name') + '.db') ? 1 : 1000)
+    }, fs.existsSync(path.join(process.cwd(), configApp.datapath, configApp.db.name + '.db')) ? 1 : 1000)
 </script>
 
 </html>

@@ -4,7 +4,7 @@
         "height": 720
     },
     "window": {
-        "frame": false,
+        "frame": true,
         "fullscreen": false
     }
 }

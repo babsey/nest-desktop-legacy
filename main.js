@@ -4,10 +4,9 @@ const electron = require('electron');
 const app = electron.app; // Module to control application life.
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window.
 
-const Config = require('electron-config');
-var config = new Config({
-    defaults: require('jsonfile').readFileSync(__dirname + '/src/config/electronDefaults.json')
-});
+const fs = require('fs');
+const path = require('path');
+const jsonfile = require('jsonfile');
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
@@ -29,23 +28,25 @@ app.on('window-all-closed', function() {
 })
 
 function createWindow() {
+    console.log('Starting the application')
+    var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
 
     let {
         width,
         height,
-    } = config.get('windowBounds');
+    } = configElectron.windowBounds;
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: width,
         height: height,
-        frame: config.store.window.frame,
+        frame: configElectron.window.frame,
         title: 'A NEST desktop application',
-        icon: './src/assets/img/icon.png',
+        icon: path.join(__dirname, 'src', 'assets', 'img', 'icon.png'),
         // "node-integration": true,
     });
 
-    mainWindow.setFullScreen(config.store.window.fullscreen);
+    mainWindow.setFullScreen(configElectron.window.fullscreen);
 
     mainWindow.on('resize', () => {
         // The event doesn't pass us the window size, so we call the `getBounds` method which returns an object with
@@ -55,14 +56,22 @@ function createWindow() {
             height
         } = mainWindow.getBounds();
         // Now that we have them, save them using the `set` method.
-        config.set('windowBounds', {
-            width,
-            height
-        });
+        configElectron.windowBounds = {
+            width: width,
+            height: height
+        };
+
+        jsonfile.writeFile(path.join(process.cwd(), 'config', 'electron.json'), configElectron, {
+            spaces: 4
+        }, function(err) {
+            if (err) {
+                console.error(err)
+            }
+        })
     });
 
     // and load the index.html of the app.
-    mainWindow.loadURL('file://' + __dirname + '/src/index.html');
+    mainWindow.loadURL(path.join('file://', __dirname, 'src', 'index.html'));
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools();
@@ -79,7 +88,10 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+
+require('./init').then((onFulfilled, onRejected) => {
+    app.on('ready', createWindow)
+});
 
 app.on('activate', function() {
     // On OS X it's common to re-create a window in the app when the
@@ -89,17 +101,15 @@ app.on('activate', function() {
     }
 })
 
-const fs = require('fs');
-const path = require('path');
 
 var main = {};
 main.capturePage = function(filepath) {
-    var filepath = __dirname + path.sep + filepath;
+    var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
 
     let {
         width,
         height,
-    } = config.get('windowBounds');
+    } = configElectron.windowBounds;
 
     var clipRect = {
         x: 0,
@@ -112,7 +122,7 @@ main.capturePage = function(filepath) {
             'height': 480
         }).toPng(), function(err) {
             if (err) {
-                console.log("ERROR Failed to save file", err);
+                console.error("ERROR Failed to save file", err);
             } else {
                 console.log('Screen captured in ' + filepath)
             }

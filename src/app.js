@@ -3,6 +3,8 @@
 window.d3 = require('d3');
 require('bootstrap');
 
+const path = require('path');
+
 var app = {
     db: require(__dirname + '/lib/db'),
     chart: require(__dirname + '/lib/chart'),
@@ -23,16 +25,5 @@ var app = {
     sync: require(__dirname + '/lib/sync'),
     validation: require(__dirname + '/lib/validation'),
 };
-
-const fs = require('fs');
-const path = require('path');
-const config = app.config.app();
-// Create directories in config.get('db.local.path')
-var dirnames = ['.', 'images', 'exports', 'protocols'];
-dirnames.map(function(dirname) {
-    var dirpath = path.join(__dirname, '..', config.get('db.local.path'), dirname);
-    if (fs.existsSync(dirpath)) return
-    fs.mkdirSync(dirpath)
-})
 
 module.exports = app

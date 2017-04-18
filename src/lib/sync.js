@@ -8,9 +8,9 @@ const hash = require('object-hash');
 var sync = {};
 
 sync.remoteDB = function() {
-    var config = app.config.app();
-    if (!(config.get('db.remote.host')) || !(config.get('user.name'))) return
-    var db_name = config.get('db.name');
+    var configApp = app.config.app();
+    if (!(configApp.db.remote.host) || !(configApp.user.name)) return
+    var db_name = configApp.db.name;
     var indexDB = new PouchDB(db_name, {
         adapter: 'idb'
     });
@@ -18,12 +18,12 @@ sync.remoteDB = function() {
     let {
         host,
         port
-    } = app.config.get('db.remote');
+    } = configApp.db.remote;
 
     let {
         name,
         password
-    } = config.get('user');
+    } = configApp.user;
 
     var remoteDB = new PouchDB('http://' + host + ':' + port + '/' + db_name, {
         skip_setup: true,

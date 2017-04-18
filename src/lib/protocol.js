@@ -1,8 +1,9 @@
 "use strict"
 
 const NeDB = require('nedb');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const jsonfile = require('jsonfile')
 
 var protocol = {};
 
@@ -11,11 +12,11 @@ protocol.all = function() {
 }
 
 protocol.addDropdown = function(data) {
-    var filepath = '../../data/images/' + data._id + '.png';
-    if (fs.existsSync(__dirname + path.sep + filepath)) {
-        var src = filepath
+    var configApp = app.config.app();
+    if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png'))) {
+        var src = path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png');
     } else {
-        var src = '../assets/img/simulation_default.png'
+        var src = path.join(__dirname, '..', 'assets', 'img', 'simulation_default.png');
     }
     var datetime = app.format.datetime(data.updatedAt)
     $('#protocol-list').append('<li><a href="#" data-id="' + data._id + '" id="' + data._id + '" data-img="' + src + '" rel="popover" class="protocol">' + datetime + '</a></li>')
@@ -39,7 +40,7 @@ protocol.updateDropdown = function(data) {
 }
 
 protocol.update = function() {
-    var view = app.config.app().get('simulation.protocol') || false
+    var view = app.config.app().simulation.protocol || false
     app.protocol.all().sort({
         updatedAt: -1
     }).exec(function(err, docs) {
@@ -57,13 +58,16 @@ protocol.update = function() {
     $('#view-protocol').find('.fa-history').toggle(view)
 
     $('#view-protocol').on('click', function() {
-        app.config.app().set('simulation.protocol', !view)
+        var configApp = app.config.app();
+        configApp.simulation.protocol = !view
+        app.config.save('app', configApp)
         protocol.update()
     })
 }
 
 protocol.init = function() {
-    var filename = path.join(app.config.app().get('db.local.path'), 'protocols', app.simulation.id + '.db')
+    var configApp = app.config.app()
+    var filename = path.join(process.cwd(), configApp.datapath, 'protocols', app.simulation.id + '.db')
     protocol.db = new NeDB({
         filename: filename,
         timestampData: true,
@@ -73,7 +77,7 @@ protocol.init = function() {
 }
 
 protocol.add = function(data) {
-    if (!app.config.app().get('simulation.protocol')) return
+    if (!app.config.app().simulation.protocol) return
     data.hash = app.hash(data);
     delete data._id;
     delete data.updatedAt;
@@ -88,7 +92,12 @@ protocol.add = function(data) {
             })
         } else {
             protocol.db.insert(data, function(err, newDocs) {
-                protocol.update()
+                setTimeout(function() {
+                    app.screen.capture(newDocs, false)
+                    setTimeout(function() {
+                        protocol.update()
+                    }, 500)
+                }, 500)
             })
         }
     })

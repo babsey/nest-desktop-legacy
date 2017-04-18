@@ -21,7 +21,7 @@ chart.update = function(recorder) {
         .selectAll(".dot")
         .data(data.x);
 
-    var color = app.config.app().get('chart.color.show');
+    var color = app.config.app().chart.color;
     dots.attr("fill", function(d, i) {
             return color ? data.c[i] : ''
         })

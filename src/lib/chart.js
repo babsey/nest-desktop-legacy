@@ -68,7 +68,7 @@ chart.yLabel = function(chart, label) {
 
 chart.legend = function(chart, data, color) {
     chart.g.selectAll('.legends').remove()
-    if (!app.config.app().get('chart.color.show')) return
+    if (!app.config.app().chart.color) return
 
     var width = d3.max(data.map(function(d) {return d.length})) * 9
     var legend = chart.g.append('g')
@@ -250,7 +250,7 @@ chart.init = function() {
     })
 
     app.chart.networkLayout.init()
-    app.chart.networkLayout.toggle(app.config.app().get('chart.networkLayout'))
+    app.chart.networkLayout.toggle(app.config.app().chart.networkLayout)
     app.chart.events()
 }
 

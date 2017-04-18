@@ -10,9 +10,6 @@
         "remote": {
             "host": "",
             "port": ""
-        },
-        "local": {
-            "path": "data"
         }
     },
     "nest": {
@@ -38,10 +35,8 @@
         }]
     },
     "chart": {
-        "color": {
-            "show": false,
-            "group": "node"
-        },
+        "color": false,
         "networkLayout": true
-    }
+    },
+    "datapath": "./data"
 }

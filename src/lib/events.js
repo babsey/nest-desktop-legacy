@@ -6,8 +6,6 @@ const joi = require('joi');
 
 var events = {};
 
-
-
 events.nodeSlider = function() {
     $('#nodes .modelSlider .sliderInput').on('slideStop', function() {
         app.selected_node = app.data.nodes[$(this).parents('.node').data('id')];

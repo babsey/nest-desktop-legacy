@@ -1,6 +1,10 @@
 CHANGELOG
 ---------
 
+0.8.2:
+    Local configuration
+    Initialization of config and data
+
 0.8.1:
     Fixed bugs
     Automatic color grouping

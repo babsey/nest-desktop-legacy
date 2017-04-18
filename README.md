@@ -77,10 +77,7 @@ A simple configuration handling for your the nest-desktop application.
 
 ### For the app
 
-The configuration for the app is saved as 'nest-desktop.json' file in
-- %APPDATA%/configstore on Windows
-- $XDG_CONFIG_HOME or ~/.config/configstore on Linux
-- ~/Library/Application Support/configstore on Mac OSX
+The configuration for the app is saved as `app.json` file in `./config` folder
 
 #### Nest simulation server
 To edit the host and port if the nest simulation server operates on other computer.
@@ -88,11 +85,11 @@ To edit the host and port if the nest simulation server operates on other comput
 #### Database
 Nest-desktop stores data of the network in the database but without any simulation results to keep space low.
 
-The database name will be generated when config.json is created.
+The database name will be generated in the initialization step.
 User is able to edit the database name but it should be treated with respect.
 
 ### Local database
-The data will also be stored in local database located in path defined by `localDB.path`.
+The data will also be stored in local database located in path defined by `datapath` in `app.json`.
 
 #### Remoted server
 If you want to contribute your networks to the server,
@@ -101,10 +98,7 @@ edit username, password as well as host and port of the remoted database.
 
 ### For the window interface with electron
 
-The configuration for the electron is saved as 'config.json' file in
-- %APPDATA%/nest-desktop on Windows
-- $XDG_CONFIG_HOME or ~/.config/nest-desktop on Linux
-- ~/Library/Application Support/nest-desktop on Mac OSX
+The configuration for the electron is saved as `electron.json` file in `./config` folder.
 
 #### Window configuration
 The application create a window with these window properties - width, height, frame, fullscreen.
@@ -115,27 +109,27 @@ The application create a window with these window properties - width, height, fr
 #### Why is the app not working?
 First, be assure that you installed all required npm packages (`npm install`).
 
-If still not working, the configuation may be deprecated. In this case, delete the config file or just empty `db_name` in config file (stored as `nest-desktop.json` in configstore), then restart the app. It will generate new config file and new database.
+If still not working, the configuation may be deprecated. In this case, delete the config file or just empty `db_name` in the config file (`app.json`), then restart the app. It will generate new config file and new database.
 
-If still not working, the database may be deprecated. In this case, delete the all files in ./data/, then restart the app.
+If still not working, the database may be deprecated. In this case, delete the all files in `./data`, then restart the app.
 
-Besides, I am working on a better solution.
+However, I am working on a better solution.
 
 #### Where are the data of simulation stored?
-Saved data about simulation are stored as NeDB database in ./data/\*.db
+Saved data of the simulation are stored as NeDB database in `./data/\*.db`.
 
 #### Where are the protocols of simulation stored?
-Protocols about simulation are stored as NeDB database in ./data/protocols/\*.db
+Protocols of the simulation are stored as NeDB database in `./data/protocols/\*.db`.
 
 #### Where are the thumbnails of simulation stored?
-Thumbnails are stored in ./data/images/
+Thumbnails of the simulation are stored in `./data/images/`.
 
 #### Why is the protocol not working?
-Just remove db files in ./data/protocols/
+Just remove db files in `./data/protocols/`.
 
 #### How can I update the thumbnails?
-Just click the button 'capture screen'
-For the hard case, remove image files in ./data/images/ and then resimulate.
+Just click the button 'capture screen'.
+For the hard case, remove image files in `./data/images/` and then resimulate.
 
 #### How can I reload the window?
 Keybinding to reload the app is 'CTRL + R' (Linux) or 'CMD + R' (Mac OSX)
@@ -145,6 +139,10 @@ Keybinding to close the window is 'CTRL + W' (Linux) or 'CMD + W' (Mac OSX). In 
 
 #### How can I close the app (only for Mac OSX)?
 Keybinding to close the window is 'CMD + Q'
+
+#### What are S, R and N in circled nodes stand for?
+These node elements are different typed.
+S stands for stimulator, as well as R for recorder and N for neuron.
 
 
 #### License [MIT](LICENSE)

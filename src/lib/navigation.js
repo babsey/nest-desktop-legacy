@@ -17,7 +17,7 @@ navigation.events = function() {
         $('.nav-tabs a[href="#nodes"]').tab('show');
         $('.hideOnDrawing').toggle(!drawing)
         $('.disableOnDrawing').toggleClass('disabled', drawing)
-        var networkLayout = app.config.app().get('chart.networkLayout')
+        var networkLayout = app.config.app().chart.networkLayout
         app.chart.networkLayout.toggle(drawing || networkLayout)
         app.chart.networkLayout.update()
         if (drawing) return
@@ -26,27 +26,35 @@ navigation.events = function() {
     })
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
     $('#chart-color').on('click', function() {
-        var color = app.config.app().get('chart.color.show') || false
-        app.config.app().set('chart.color.show', !color)
+        var color = app.config.app().chart.color || false
+        var configApp = app.config.app();
+        configApp.chart.color = !color;
+        app.config.save('app', configApp)
         $('#chart-color').find('.glyphicon-ok').toggle(!color)
         app.chart.update()
     })
     // $('.color').on('click', function() {
     //     var colorGroup = $(this).data('group')
-    //     app.config.app().set('chart.color.group', colorGroup )
+    //     var configApp = app.config.app();
+    //     configApp.chart.color.group = colorGroup;
+    //     app.config.save('app', configApp)
     //     $('.color').find('.glyphicon-ok').hide()
     //     $('.color[data-group=' + colorGroup + ']').find('.glyphicon-ok').show()
     //     app.chart.update()
     // })
     $('#view-networkLayout').on('click', function() {
-        var networkLayout = !app.config.app().get('chart.networkLayout') || false
-        app.config.app().set('chart.networkLayout', networkLayout)
+        var networkLayout = !app.config.app().chart.networkLayout || false
+        var configApp = app.config.app();
+        configApp.chart.networkLayout = networkLayout;
+        app.config.save('app', configApp)
         app.chart.networkLayout.toggle(networkLayout)
     })
     $('.level').on('click', function() {
         $('.level').find('.glyphicon-ok').hide()
         $(this).find('.glyphicon-ok').show()
-        app.config.app().set('simulation.level', parseInt($(this).attr('level')))
+        var configApp = app.config.app()
+        configApp.simulation.level = parseInt($(this).attr('level'))
+        app.config.save('app', configApp)
         if (app.chart.networkLayout.drawing) return
         for (var nid in app.data.nodes) {
             var node = app.data.nodes[nid];
@@ -90,7 +98,7 @@ navigation.events = function() {
         app.data.name = $('#simulation-add-form #simulation-name').val()
         app.data.description = $('#simulation-add-form #simulation-description').val()
         var date = new Date;
-        app.data.user = app.config.app().get('user.name') || process.env.USER;
+        app.data.user = app.config.app().user.name || process.env.USER;
         app.data.createdAt = date;
         app.data.updatedAt = date;
         app.data.group = 'user';
@@ -114,10 +122,10 @@ navigation.events = function() {
 }
 
 navigation.init = function() {
-    $("#config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().get('simulation.protocol') || false)
-    $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().get('chart.color.show') || false)
-    $("#config").find('.color[data-group=' + app.config.app().get('chart.color.group') + ']').find('.glyphicon-ok').show()
-    $("#config").find('#level_' + app.config.app().get('simulation.level')).find('.glyphicon-ok').show()
+    $("#config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().simulation.protocol || false)
+    $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color.show || false)
+    $("#config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
+    $("#config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
 
     // Load protocol list
     app.protocol.init()
@@ -125,7 +133,7 @@ navigation.init = function() {
     // Load simulation list
     $('#get-simulation-list').attr('disabled', 'disabled')
     $('#simulation-list').empty()
-    var groups = app.config.app().get('simulation.groups');
+    var groups = app.config.app().simulation.groups;
     groups.map(function(grp, idx) {
         app.simulation.list({
             group: grp.id
