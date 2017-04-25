@@ -1,0 +1,79 @@
+{
+    "_id": "day2_ex1_sod-pot-curr-voltage-clamp",
+    "name": "Sodium and potassium currents under voltage clamp conditions",
+    "group": "BioPhyNeuNet_day2",
+    "res_time": 1,
+    "sim_time": 1000.0,
+    "user": "architect",
+    "network": "simple",
+    "version": "0.7.2",
+    "abscissa": "currents",
+    "running": false,
+    "kernel": {
+        "grng_seed": 0
+    },
+    "nodes": [{
+        "id": 0,
+        "model": "hh_psc_alpha",
+        "n": 1,
+        "params": {
+            "C_m": 250,
+            "E_K": -77,
+            "E_L": -54,
+            "E_Na": 50,
+            "I_e": 0,
+            "V_m": -65,
+            "g_K": 3600,
+            "g_Na": 12000,
+            "g_l": 30,
+            "tau_ex": 2,
+            "tau_in": 2
+        },
+        "element_type": "neuron",
+        "x": 150,
+        "y": 50
+    }, {
+        "id": 1,
+        "model": "step_current_generator",
+        "amplitude_dtime": 1.0,
+        "amplitude_value_max": 1.0,
+        "params": {},
+        "element_type": "stimulator",
+        "x": 0,
+        "y": 100
+    }, {
+        "id": 2,
+        "model": "voltmeter",
+        "series": "overlap",
+        "params": {
+            "stop": 10000.0
+        },
+        "element_type": "recorder",
+        "x": 300,
+        "y": 0
+    }, {
+        "id": 3,
+        "model": "multimeter",
+        "series": "overlap",
+        "params": {
+            "stop": 10000.0
+        },
+        "record_from": ["Act_h", "Act_m", "Inact_n"],
+        "element_type": "recorder",
+        "x": 300,
+        "y": 100
+    }],
+    "links": [{
+        "id": 0,
+        "source": 1,
+        "target": 0
+    }, {
+        "id": 1,
+        "source": 0,
+        "target": 2
+    }, {
+        "id": 2,
+        "source": 0,
+        "target": 3
+    }]
+}

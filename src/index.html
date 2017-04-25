@@ -5,10 +5,12 @@
     <meta charset='utf-8'>
     <link rel='stylesheet' href='../node_modules/bootstrap/dist/css/bootstrap.min.css' />
     <link rel='stylesheet' href='./assets/css/styles.css'></link>
-    <title>Biophysics of Neurons and Networks</title>
+    <title>NEST Desktop</title>
 </head>
 
 <body>
+    <div id='message'></div>
+
     <!-- <div id='login' class='modal fade' role='dialog'>
         <div class='modal-dialog'>
             <div class='modal-content'>
@@ -84,17 +86,14 @@
                     <span class='glyphicon glyphicon-remove'></span>
                 </button>
             </div>
-                <div id='message'></div>
         </div>
 
         <div class='container'>
             <div id='message' class='alert alert-dismissible fade in' role='alert' style='display:none; position:absolute; width:auto; top:10px'></div>
 
             <div class='jumbotron'>
-                <h1>Biophysics of Neurons and Networks</h1>
-                <p class='hide'>
-                    A desktop application for the NEural Simulation Tool. (<a href='http://www.nest-simulator.org/' class='external'>http://www.nest-simulator.org/</a>)
-                </p>
+                <h1 id="title"></h1>
+                <p id="subtitle"></p>
                 <p class='hide'>
                     <a class='btn btn-primary btn-lg external' href='https://www.npmjs.com/package/nest-desktop' role='button'>Learn more</a>
                 </p>
@@ -116,8 +115,11 @@
     app.db.init()
     app.request.server_check()
     var configApp = app.config.app();
+    $('title').html(configApp.title)
+    $('#title').html(configApp.title)
+    $('#subtitle').html(configApp.subtitle)
 
-    $('#user').html('Hi, ' + (configApp.user.name || 'guest'))
+    $('#user').html('Hi ' + (configApp.user.name || 'guest'))
     $('.external').on('click', function(event) {
         event.preventDefault();
         shell.openExternal(this.href);

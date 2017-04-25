@@ -1,0 +1,51 @@
+{
+    "_id": "day1_ex4_dc_single_neuron",
+    "name": "Noise injection into single neuron",
+    "group": "BioPhyNeuNet_day1",
+    "user": "architect",
+    "network": "simple",
+    "sim_time": 1000.0,
+    "res_time": 10.0,
+    "kernel": {
+        "grng_seed": 0
+    },
+    "nodes": [{
+        "id": 0,
+        "element_type": "stimulator",
+        "model": "noise_generator",
+        "x": 400,
+        "y": 550,
+        "stim_time": [200.0, 700.0],
+        "params": {
+            "mean": 0.0,
+            "std": 1.0,
+            "start": 200.0,
+            "stop": 700.0
+        }
+    }, {
+        "id": 1,
+        "element_type": "neuron",
+        "model": "iaf_psc_alpha",
+        "x": 550,
+        "y": 500,
+        "n": 1,
+        "params": {}
+    }, {
+        "id": 2,
+        "element_type": "recorder",
+        "model": "voltmeter",
+        "x": 700,
+        "y": 550,
+        "params": {},
+        "record_from": ["V_m"]
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 1
+    }, {
+        "id": 1,
+        "source": 1,
+        "target": 2
+    }]
+}

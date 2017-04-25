@@ -8,7 +8,7 @@ const uuidV4 = require('uuid/v4');
 var config = {};
 
 config.app = function() {
-    return require( path.join(process.cwd(), 'config', 'app.json'));
+    return require(path.join(process.cwd(), 'config', 'app.json'));
 }
 
 config.save = function(filename, config) {
@@ -22,14 +22,14 @@ config.save = function(filename, config) {
 }
 
 config.nest = function(name) {
-        return jsonfile.readFileSync(path.join(process.cwd(), 'config', 'nest', name + '.json'))
-        }
+    return jsonfile.readFileSync(path.join(process.cwd(), 'config', 'nest', name + '.json'))
+}
 
-        config.simulation = function(name) {
-            if (name == undefined) {
-                return fs.readdirSync(path.join(__dirname, '..', 'simulationExamples'))
-            }
-            return jsonfile.readFileSync(path.join(__dirname, '..', 'simulationExamples', name + '.json'))
-        }
+config.simulation = function(name) {
+    if (name == undefined) {
+        return fs.readdirSync(path.join(process.cwd(), 'config', 'simulation'))
+    }
+    return jsonfile.readFileSync(path.join(process.cwd(), 'config', 'simulation', name + '.json'))
+}
 
-        module.exports = config
+module.exports = config

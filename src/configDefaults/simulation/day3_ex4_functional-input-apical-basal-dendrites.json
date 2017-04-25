@@ -1,0 +1,88 @@
+{
+    "_id": "day3_ex4_functional-input-apical-basal-dendrites",
+    "name": "Functional input to apical vs. basal dendrites",
+    "group": "BioPhyNeuNet_day3",
+    "user": "architect",
+    "network": "simple",
+    "sim_time": 1000.0,
+    "res_time": 10.0,
+    "kernel": {
+        "grng_seed": 0
+    },
+    "nodes": [{
+        "id": 0,
+        "element_type": "stimulator",
+        "model": "spike_generator",
+        "x": 400,
+        "y": 450,
+        "params": {
+            "spike_times": [100.0]
+        }
+    }, {
+        "id": 1,
+        "element_type": "stimulator",
+        "model": "spike_generator",
+        "x": 400,
+        "y": 550,
+        "params": {
+            "spike_times": [400.0]
+        }
+    }, {
+        "id": 2,
+        "element_type": "stimulator",
+        "model": "spike_generator",
+        "x": 400,
+        "y": 650,
+        "params": {
+            "spike_times": [700.0]
+        }
+    }, {
+        "id": 3,
+        "element_type": "neuron",
+        "model": "iaf_cond_alpha_mc",
+        "x": 550,
+        "y": 500,
+        "n": 1,
+        "params": {}
+    }, {
+        "id": 4,
+        "element_type": "recorder",
+        "model": "multimeter",
+        "x": 700,
+        "y": 400,
+        "params": {},
+        "record_from": ["V_m.d", "V_m.p", "V_m.s"]
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 3,
+        "syn_spec": {
+            "model": "static_synapse",
+            "receptor_type": 5,
+            "weight": 11.0
+        }
+    }, {
+        "id": 1,
+        "source": 1,
+        "target": 3,
+        "syn_spec": {
+            "model": "static_synapse",
+            "receptor_type": 3,
+            "weight": 11.0
+        }
+    }, {
+        "id": 2,
+        "source": 2,
+        "target": 3,
+        "syn_spec": {
+            "model": "static_synapse",
+            "receptor_type": 1,
+            "weight": 11.0
+        }
+    }, {
+        "id": 3,
+        "source": 3,
+        "target": 4
+    }]
+}

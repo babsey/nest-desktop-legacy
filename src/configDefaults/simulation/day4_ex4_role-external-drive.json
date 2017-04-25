@@ -1,0 +1,55 @@
+{
+    "_id": "day4_ex2_role-external-drive",
+    "name": "The role of external drive",
+    "group": "BioPhyNeuNet_day4",
+    "user": "architect",
+    "network": "simple",
+    "sim_time": 1000.0,
+    "res_time": 10.0,
+    "kernel": {
+        "grng_seed": 0
+    },
+    "nodes": [{
+        "id": 0,
+        "element_type": "stimulator",
+        "model": "poisson_generator",
+        "x": 0,
+        "y": 0,
+        "params": {
+            "rate": 1000.0
+        }
+    }, {
+        "id": 1,
+        "element_type": "neuron",
+        "model": "iaf_cond_alpha",
+        "x": 150,
+        "y": 50,
+        "n": 100,
+        "params": {}
+    }, {
+        "id": 2,
+        "element_type": "recorder",
+        "model": "spike_detector",
+        "x": 300,
+        "y": 100,
+        "nbins": 100,
+        "params": {}
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 1,
+        "syn_spec": {
+            "weight": 10.0
+        }
+    }, {
+        "id": 1,
+        "source": 1,
+        "target": 1,
+        "disabled": true
+    }, {
+        "id": 2,
+        "source": 1,
+        "target": 2
+    }]
+}

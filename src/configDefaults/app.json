@@ -1,4 +1,6 @@
 {
+    "title": "NEST Desktop",
+    "subtitle": "A desktop application for the NEural Simulation Tool.",
     "version": "",
     "user": {
         "id": "",
@@ -21,17 +23,17 @@
     "simulation": {
         "level": 1,
         "groups": [{
-            "id": "BioPhyNeuNet_day1",
-            "name": "<strong>Day 1</strong>: Numerical simulation of simple neuron models"
+            "id": "user",
+            "name": "User"
         }, {
-            "id": "BioPhyNeuNet_day2",
-            "name": "<strong>Day 2</strong>: The Hodgekin-Huxley theory of the action potential"
+            "id": "example",
+            "name": "Example"
         }, {
-            "id": "BioPhyNeuNet_day3",
-            "name": "<strong>Day 3</strong>: Multi-compartment neuron models"
+            "id": "nest-example",
+            "name": "NEST example"
         }, {
-            "id": "BioPhyNeuNet_day4",
-            "name": "<strong>Day 4</strong>: Chemical synapses and recurrent networks"
+            "id": "nuspic-1",
+            "name": "NuSPIC 1"
         }]
     },
     "chart": {

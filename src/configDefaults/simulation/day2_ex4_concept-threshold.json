@@ -1,0 +1,105 @@
+{
+    "_id": "day2_ex4_concept-threshold",
+    "name": "The concept of 'threshold'",
+    "group": "BioPhyNeuNet_day2",
+    "res_time": 1,
+    "sim_time": 1000.0,
+    "user": "architect",
+    "network": "simple",
+    "version": "0.7.2",
+    "kernel": {
+        "grng_seed": 0,
+        "resolution": 0.1
+    },
+    "nodes": [{
+        "id": 0,
+        "model": "noise_generator",
+        "params": {
+            "mean": 1.0,
+            "std": 25.0,
+            "start": 100.0,
+            "stop": 900.0
+        },
+        "stim_time": [0, 2000],
+        "element_type": "stimulator",
+        "x": 0,
+        "y": 100
+    }, {
+        "id": 1,
+        "model": "hh_psc_alpha",
+        "n": 1,
+        "params": {
+            "Act_h": 0.6,
+            "Act_m": 0.05,
+            "C_m": 250,
+            "E_K": -77,
+            "E_L": -54,
+            "E_Na": 50,
+            "I_e": 0,
+            "Inact_n": 0.3,
+            "V_m": -70,
+            "g_K": 3600,
+            "g_Na": 12000,
+            "g_l": 30,
+            "tau_ex": 2,
+            "tau_in": 2
+        },
+        "element_type": "neuron",
+        "x": 150,
+        "y": 100
+    }, {
+        "id": 2,
+        "model": "voltmeter",
+        "params": {
+            "interval": 0.1,
+            "start": 0.0,
+            "stop": 10000.0
+        },
+        "element_type": "recorder",
+        "x": 300,
+        "y": 0
+    }, {
+        "id": 3,
+        "model": "multimeter",
+        "params": {
+            "interval": 0.1,
+            "record_from": ["Act_h",
+                "Act_m",
+                "I_syn_ex",
+                "I_syn_in",
+                "Inact_n",
+                "V_m"
+            ],
+            "start": 0.0,
+            "stop": 10000.0
+        },
+        "record_from": ["Act_h", "Act_m", "Inact_n"],
+        "element_type": "recorder",
+        "x": 300,
+        "y": 100
+    }],
+    "links": [{
+        "id": 0,
+        "source": 0,
+        "target": 1,
+        "syn_spec": {
+            "weight": 11.0
+        }
+    }, {
+        "id": 1,
+        "disabled": true,
+        "source": 1,
+        "target": 1,
+        "syn_spec": {
+            "weight": -1.0
+        }
+    }, {
+        "id": 2,
+        "source": 1,
+        "target": 2
+    }, {
+        "id": 3,
+        "source": 1,
+        "target": 3
+    }]
+}
