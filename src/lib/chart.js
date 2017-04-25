@@ -9,7 +9,8 @@ var chart = {
         'voltmeter': 'trace',
         'multimeter': 'trace',
         'spike_detector': 'raster-plot',
-    }
+    },
+    data: {},
 };
 
 chart.format = d3.format(".2f");
@@ -17,61 +18,63 @@ chart.format = d3.format(".2f");
 chart.transition = d3.transition()
     .ease(d3.easeLinear);
 
-chart.xAxis = function(chart) {
-    chart.xAxis = d3.axisBottom(chart.xScale);
-    chart.g.append("g")
+chart.xAxis = function(c) {
+    c.xAxis = d3.axisBottom(c.xScale);
+    c.g.append("g")
         .attr("id", "xaxis")
         .attr("class", "axis")
-        .attr("transform", "translate(0," + chart.height + ")")
+        .attr("transform", "translate(0," + c.height + ")")
         .style('font-size', '14px')
-        .call(chart.xAxis);
+        .call(c.xAxis);
 }
 
-chart.yAxis = function(chart) {
-    chart.yAxis = d3.axisLeft(chart.yScale).ticks(3);
-    chart.g.append("g")
+chart.yAxis = function(c) {
+    c.yAxis = d3.axisLeft(c.yScale).ticks(3);
+    c.g.append("g")
         .attr("id", "yaxis")
         .attr("class", "axis")
         .style('font-size', '14px')
         .attr("transform", "translate(0,0)")
-        .call(chart.yAxis);
+        .call(c.yAxis);
 }
 
-chart.xLabel = function(chart, label) {
-    if (!document.getElementsByTagName("xlabel").length) {
-        chart.g.append("text")
-            .attr("id", "xlabel")
-            .attr("class", "label")
+chart.xLabel = function(c, id, label) {
+    if (!document.getElementById(id)) {
+        c.g.append("text")
+            .attr("id", id)
+            .attr("class", "xlabel label")
             .attr("text-anchor", "middle")
-            .attr("x", +chart.g.attr('width') / 2)
-            .attr("y", +chart.g.attr('height') + 30)
+            .attr("x", +c.g.attr('width') / 2)
+            .attr("y", +c.g.attr('height') + 30)
             .text("Time (ms)");
     }
-    chart.g.select('#xlabel')
+    c.g.select("#" + id)
         .text(label);
 }
 
-chart.yLabel = function(chart, label) {
-    if (!document.getElementsByTagName("ylabel").length) {
-        chart.g.append("text")
-            .attr("id", "ylabel")
-            .attr("class", "label")
+chart.yLabel = function(c, id, label) {
+    if (!document.getElementById(id)) {
+        c.g.append("text")
+            .attr("id", id)
+            .attr("class", "ylabel label")
             .attr("transform", "rotate(-90)")
-            .attr("x", -1. * +chart.yScale.range()[1])
+            .attr("x", -1. * +c.yScale.range()[1])
             .attr("y", 6)
             .attr("dy", ".71em")
             .attr("text-anchor", "end");
     }
-    chart.g.select('#ylabel')
+    c.g.select("#" + id)
         .text(label);
 }
 
-chart.legend = function(chart, data, color) {
-    chart.g.selectAll('.legends').remove()
-    if (!app.config.app().chart.color) return
+chart.legend = function(c, data, color) {
+    c.g.selectAll('.legends').remove()
+    // if (!chart.color) return
 
-    var width = d3.max(data.map(function(d) {return d.length})) * 9
-    var legend = chart.g.append('g')
+    var width = d3.max(data.map(function(d) {
+        return d.length
+    })) * 9
+    var legend = c.g.append('g')
         .attr('class', 'legends')
         .selectAll('.legend')
         .data(data)
@@ -80,7 +83,7 @@ chart.legend = function(chart, data, color) {
         .attr('class', 'legend');
 
     legend.append('rect')
-        .attr('x', chart.width - width)
+        .attr('x', c.width - width)
         .attr('y', function(d, i) {
             return i * 20 - 5;
         })
@@ -89,18 +92,18 @@ chart.legend = function(chart, data, color) {
         .style('fill', 'white');
 
     legend.append('rect')
-        .attr('x', chart.width - width)
+        .attr('x', c.width - width)
         .attr('y', function(d, i) {
             return i * 20;
         })
         .attr('width', 10)
         .attr('height', 10)
-        .style('fill', function(d,i) {
+        .style('fill', function(d, i) {
             return color[i];
         });
 
     legend.append('text')
-        .attr('x', chart.width - width + 12)
+        .attr('x', c.width - width + 12)
         .attr('y', function(d, i) {
             return (i * 20) + 9;
         })
@@ -164,29 +167,54 @@ chart.onZoom = function(d) {
         .call(zoom);
 }
 
-chart.axesUpdate = function(chart, transition) {
+chart.axesUpdate = function(c, transition) {
     if (transition) {
-        chart.g.select('#xaxis')
-            .transition(chart.transition)
-            .call(chart.xAxis);
-        chart.g.select('#yaxis')
-            .transition(chart.transition)
-            .call(chart.yAxis);
+        c.g.select('#xaxis')
+            .transition(c.transition)
+            .call(c.xAxis);
+        c.g.select('#yaxis')
+            .transition(c.transition)
+            .call(c.yAxis);
     } else {
-        chart.g.select('#xaxis')
-            .call(chart.xAxis);
-        chart.g.select('#yaxis')
-            .call(chart.yAxis);
+        c.g.select('#xaxis')
+            .call(c.xAxis);
+        c.g.select('#yaxis')
+            .call(c.yAxis);
+    }
+}
+
+chart.scaling = function() {
+    if ($('#autoscale').prop('checked')) {
+        if (app.simulation.running) {
+            app.chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
+        } else {
+            app.chart.xScale.domain(d3.extent(app.chart.data[app.chart.abscissa]))
+        }
     }
 }
 
 chart.update = function() {
     if (chart.networkLayout.drawing) return
-    if ($('#autoscale').prop('checked')) {
-        chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
-    }
+    chart.scaling()
     app.simulation.recorders.map(function(recorder) {
         if (!recorder.node.model) return
+        recorder.data = recorder.senders.map(function(sender, sidx) {
+            var data = {};
+            Object.keys(recorder.events).map(function(d) {
+                data[d] = recorder.events[d].filter(function(d, i) {
+                    return recorder.events.senders[i] == sender
+                })
+            })
+            data.color = app.chart.colors()[sidx]
+            return data
+        })
+        recorder.senders.map(function(sender, sidx) {
+            app.simulation.stimulators.map(function(stimulator) {
+                Object.keys(stimulator.events).map(function(ekey) {
+                    recorder.data[sidx][ekey] = stimulator.events[ekey]
+                })
+            })
+        })
         recorder.chart.update(recorder)
     })
     $('#simulation-add').attr('disabled', false)
@@ -197,6 +225,7 @@ chart.update = function() {
 }
 
 chart.init = function() {
+
     chart.zooming = false;
     chart.dragging = false;
 
@@ -241,6 +270,7 @@ chart.init = function() {
         })
     }
 
+    chart.abscissa = app.data.abscissa || 'times';
     app.simulation.recorders.map(function(recorder, idx) {
         if (!recorder.node.model) return
         var recorderChart = recorder.node.chart || chart.fromOutputNode[recorder.node.model]
@@ -251,12 +281,8 @@ chart.init = function() {
 
     app.chart.networkLayout.init()
     app.chart.networkLayout.toggle(app.config.app().chart.networkLayout)
-    app.chart.events()
-}
 
-chart.events = function() {
     $('#autoscale').on('click', app.chart.update)
-
     window.addEventListener('resize', function() {
         app.resizing = true
         app.chart.init()

@@ -4,6 +4,7 @@ var model = {};
 model.record_labels = {
     'g_ex': 'Excitatory conductance (nS)',
     'g_in': 'Inhibitory conductance (nS)',
+    'currents': 'Currents (pA)',
     'input_currents_ex': 'Incoming excitatory currents (pA)',
     'input_currents_in': 'Incoming inhibitory currents (pA)',
     'I_syn_ex': 'Total excitatory synaptic current (pA)',
@@ -26,6 +27,7 @@ model.record_labels = {
     'g_in.p': 'Proximal conductance of inhibitory input',
     'g_in.s': 'Soma conductance of inhibitory input',
     't_ref_remaining': 'Time remaining till end of refractory state (s)',
+    'times': 'Time (ms)',
 }
 
 model.record_legends = {

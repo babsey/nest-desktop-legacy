@@ -55,19 +55,19 @@ rasterPlot.update = function(recorder) {
         c: c
     }
 
-    scatterChart.yScale.domain([d3.max(recorder.senders)+1, d3.min(recorder.senders)-1])
+    scatterChart.yScale.domain([d3.max(recorder.senders) + 1, d3.min(recorder.senders) - 1])
     scatterChart.update(recorder);
 
     var hist = recorder.senders.map(function(s) {
-            return histogram(recorder.events['times'].filter(function(d, i) {
-                return recorder.events['senders'][i] == s
-            }))
-        })
-        // var psth = hist.map(function(d) {
-        //     return d.map(function(dd) {
-        //         return dd.length
-        //     })
-        // })
+        return histogram(recorder.events['times'].filter(function(d, i) {
+            return recorder.events['senders'][i] == s
+        }))
+    })
+    // var psth = hist.map(function(d) {
+    //     return d.map(function(dd) {
+    //         return dd.length
+    //     })
+    // })
     recorder.data.bars = hist[0].map(function(col, i) {
         var h = hist.map(function(row) {
             return row[i].length
@@ -119,13 +119,13 @@ rasterPlot.init = function(idx) {
     // $('#chart').empty()
     var height = parseInt($('#dataChart').attr('height')) / app.simulation.recorders.length
     rasterPlot.scatterChart = require(__dirname + '/core/scatter-chart');
-    rasterPlot.scatterChart.init('#dataChart', {
+    rasterPlot.scatterChart.init('#dataChart', idx, {
         y: height * idx,
         height: height * 7. / 10.,
     });
     delete require.cache[require.resolve(__dirname + '/core/scatter-chart')]
     rasterPlot.barChart = require(__dirname + '/core/bar-chart');
-    rasterPlot.barChart.init('#dataChart', {
+    rasterPlot.barChart.init('#dataChart', idx, {
         y: height * (7. / 10. + idx),
         height: height * 3. / 10.,
     });

@@ -104,6 +104,7 @@ renderer.node = function(node) {
     div.push('</div>')
     div.push('<div class="nodeSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
+    div.push('<div class="selection hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')
     return div.join('')
 }

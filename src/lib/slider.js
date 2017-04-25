@@ -18,7 +18,7 @@ function _slider(ref, id, options) {
     var options = $.extend(options_default, options);
     $(ref).find('#' + id).append('<div class="form-group row"></div>')
     var formGroup = $(ref).find('#' + id).find('.form-group')
-    formGroup.append('<label for="' + id + 'Val" style="padding-left:15px">'+ options.label +'</label>')
+    formGroup.append('<label for="' + id + 'Val" style="padding-left:15px;min-width: 200px;">'+ options.label +'</label>')
     formGroup.append('<div class="col-md-9"><input id="' + id + 'Input" class="sliderInput"></div>')
     formGroup.append('<div class="col-md-3" style="padding-left:5px"><input data-schema="number" type="text" id="' + id + 'Val" class="paramVal form-control" value="'+ options.value +'"/></div>')
     formGroup.append('<div class="help-block" style="padding-left:15px"></div>')
@@ -143,45 +143,6 @@ slider.create_dataSlider = function(ref, id, options) {
     var level = app.config.app().simulation.level;
     $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
     return _slider(ref, id, options);
-}
-
-slider.init_globalSlider = function(options) {
-    slider.create_dataSlider('#global .content', options.id, options)
-        .on('slideStop', function(d) {
-            app.data[options.id] = d.value
-        })
-}
-
-slider.init_kernelSlider = function(options) {
-    slider.create_dataSlider('#kernel .content', options.id, options)
-        .on('slideStop', function(d) {
-            app.data.kernel[options.id] = d.value
-        })
-}
-
-slider.init_popSlider = function(node, options) {
-    slider.create_dataSlider('.node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-        .on('slideStop', function(d) {
-            app.data.nodes[node.id].n = d.value
-        })
-}
-
-slider.init_stimSlider = function(node, options) {
-    slider.create_dataSlider('.node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-        .on('slideStop', function(d) {
-            node.params.start = d.value[0]
-            delete node.params.stop
-            if (d.value[1] < app.data.sim_time) {
-                node.params.stop = d.value[1]
-            }
-        })
-}
-
-slider.init_binSlider = function(node, options) {
-    slider.create_dataSlider('.node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-        .on('slideStop', function(d) {
-            app.data.nodes[node.id].nbins = options.ticks_labels[d.value]
-        })
 }
 
 var create_modelSlider = function(ref, id, options) {

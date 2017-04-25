@@ -123,7 +123,7 @@ navigation.events = function() {
 
 navigation.init = function() {
     $("#config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().simulation.protocol || false)
-    $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color.show || false)
+    $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
     $("#config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
     $("#config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
 

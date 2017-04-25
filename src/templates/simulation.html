@@ -52,13 +52,16 @@
 
                     </div>
                     <button type="button" class="btn btn-default" id="view-protocol" title="Protocol simulations automatically">
-                        <i class="fa fa-history"></i>
+                        <i class="fa fa-history" style="display:none"></i>
                         <span class="glyphicon glyphicon-menu-glyphicon glyphicon-remove" style="display:none"></span>
                     </button>
                 </div>
 
                 <button type="button" class="btn btn-default navbar-btn" id="index">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
+                </button>
+                <button type="button" class="btn btn-default navbar-btn" id="simulation-refresh" title="Refresh the simulation" onclick="location.reload()">
+                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon glyphicon-refresh"></span>
                 </button>
                 <button type="button" class="btn btn-default" id="edit-network" title="Edit network">
                     <i class="fa fa-pencil"></i>
@@ -69,9 +72,9 @@
                     <!-- <span class="glyphicon glyphicon-menu-glyphicon glyphicon-play"></span>
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-pause" style="display:none"></span> -->
                 </button>
-                <button type="button" class="btn btn-default navbar-btn disableOnDrawing" id="simulation-add" data-toggle="modal" data-target="#myModal" disabled title="Save this simulation">
+                <!-- <button type="button" class="btn btn-default navbar-btn disableOnDrawing" id="simulation-add" data-toggle="modal" data-target="#myModal" disabled title="Save this simulation">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span>
-                </button>
+                </button> -->
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" id="get-simulation-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Load a simulation">
                         <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
@@ -183,7 +186,7 @@
                     <div id="controller-panel" class="panel" style="margin-top: 50px">
                         <small>
                         <!-- <div class="panel-body"> -->
-                        <div id="global" class="panel-body hideOnDrawing">
+                        <div id="simulation" class="panel-body hideOnDrawing">
                             <div class="content"></div>
                         </div>
                         <div id="kernel" class="panel-body hideOnDrawing">

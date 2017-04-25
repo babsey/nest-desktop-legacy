@@ -57,7 +57,7 @@ chart.legend = function(scale) {
 chart.update = function(data) {
     chart.yScale.range([chart.height, chart.height - (+chart.g.attr('height'))])
     chart.xScale.range([0, +chart.g.attr('width')])
-    app.chart.axesUpdate(chart,false)
+    app.chart.axesUpdate(chart, false)
 
     var cards = chart.g
         .select('#clip')
@@ -119,18 +119,17 @@ chart.update = function(data) {
 
 }
 
-chart.init = function(reference,size) {
+chart.init = function(reference, id, size) {
     var margin = {
-            top: 10,
-            right: 40,
-            bottom: 40,
-            left: 50
-        };
+        top: 10,
+        right: 40,
+        bottom: 40,
+        left: 50
+    };
 
     var svg = d3.select(reference),
         width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
         height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
-    chart.svg = svg;
     chart.width = width;
     chart.height = height;
 
@@ -146,7 +145,7 @@ chart.init = function(reference,size) {
     var g = svg.append("g")
         .attr('height', height)
         .attr('width', width)
-        .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) +")");
+        .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) + ")");
     chart.g = g;
 
     var clip = g.append("g")

@@ -15,7 +15,8 @@ chart.update = function(recorder) {
     chart.xScale.domain(app.chart.xScale.domain())
 
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
-    app.chart.axesUpdate(chart,transition)
+    app.chart.axesUpdate(chart, transition)
+    app.chart.xLabel(chart, 'xLabel_' + app.simulation.recorders.indexOf(recorder), (app.model.record_labels[app.chart.abscissa] || app.chart.abscissa))
 
     var dots = chart.g.select('#clip')
         .selectAll(".dot")
@@ -50,18 +51,17 @@ chart.update = function(recorder) {
 }
 
 
-chart.init = function(reference, size) {
+chart.init = function(reference, id, size) {
     var margin = {
-            top: 10,
-            right: 40,
-            bottom: 40,
-            left: 50
-        };
+        top: 10,
+        right: 40,
+        bottom: 40,
+        left: 50
+    };
 
     var svg = d3.select(reference),
         width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
         height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
-    chart.svg = svg;
     chart.width = width;
     chart.height = height;
 
@@ -87,8 +87,8 @@ chart.init = function(reference, size) {
 
     app.chart.xAxis(chart);
     app.chart.yAxis(chart);
-    // app.chart.xLabel(chart, 'Time [ms]');
-    app.chart.yLabel(chart, 'Neuron ID');
+    // app.chart.xLabel(chart, 'xLabel_'+id, 'Time [ms]');
+    app.chart.yLabel(chart, 'yLabel_' + id, 'Neuron ID');
     app.chart.onDrag(chart);
     app.chart.onZoom(chart);
 }

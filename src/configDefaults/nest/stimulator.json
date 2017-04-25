@@ -6,7 +6,7 @@
         "id": "amplitude",
         "level": 1,
         "value": 1.0,
-        "min": 1.0,
+        "min": 0.0,
         "max": 1000.0,
         "step": 1.0,
         "scale": "logarithmic",
@@ -45,7 +45,7 @@
         "id": "amplitude",
         "level": 1,
         "value": 1.0,
-        "min": 1.0,
+        "min": 0.0,
         "max": 1000.0,
         "step": 1.0,
         "scale": "logarithmic",
@@ -171,9 +171,25 @@
         "label": "Times of spike (ms)"
     }, {
         "id": "spike_weights",
-        "level": 2,
+        "level": 1,
         "element_type": "Array",
         "label": "Weights of spike (pA)"
+    }],
+    "sliderDefaults": []
+}, {
+    "element_type": "stimulator",
+    "id": "step_current_generator",
+    "label": "Step current generator",
+    "params": [{
+        "id": "amplitude_times",
+        "level": 1,
+        "element_type": "Array",
+        "label": "Times at which current changes (ms)"
+    }, {
+        "id": "amplitude_values",
+        "level": 1,
+        "element_type": "Array",
+        "label": "Amplitudes of step current current (pA)"
     }],
     "sliderDefaults": []
 }]

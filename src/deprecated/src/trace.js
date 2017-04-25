@@ -59,7 +59,7 @@ function trace(reference) {
 
     svg.append("text")
         .attr("id", "xlabel")
-        .attr("class", "label")
+        .attr("class", "xlabel")
         .attr("text-anchor", "middle")
         .attr("x", width / 2)
         .attr("y", height + margin.bottom - 5)

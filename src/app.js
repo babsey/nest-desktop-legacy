@@ -10,7 +10,6 @@ var app = {
     chart: require(__dirname + '/lib/chart'),
     config: require(__dirname + '/lib/config'),
     controller: require(__dirname + '/lib/controller'),
-    events: require(__dirname + '/lib/events'),
     format: require(__dirname + '/lib/format'),
     hash: require(__dirname + '/lib/hash'),
     message: require(__dirname + '/lib/message'),

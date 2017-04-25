@@ -89,7 +89,6 @@ simulation.simulate = function() {
                                 return record_from.indexOf('V_m') != -1
                             })
                         }
-                        app.model.get_recordables_list(recorder.node)
                     } else if (recorder.node.model == 'voltmeter') {
                         recorder.node.record_from = ['V_m']
                     }
@@ -104,7 +103,30 @@ simulation.simulate = function() {
                     }).map(function(link) {
                         return app.data.nodes[link.source].id
                     })
+                    app.chart.data.times = recorder.events.times.filter(function(d, i) {
+                        return ((recorder.events.senders[i] == recorder.senders[0]))
+                    })
+                    app.controller.node.update(recorder.node)
                 });
+                simulation.stimulators.map(function(stimulator) {
+                    stimulator.events = {}
+                    if (stimulator.node.model == 'step_current_generator') {
+                        var ats = [].concat.apply([0], stimulator.node.params.amplitude_times, [app.data.kernel.time]);
+                        var avs = [].concat.apply([0], stimulator.node.params.amplitude_values, [stimulator.node.amplitude_value_max]);
+                        var a = numeric.div(ats, (app.data.kernel.resolution || 1.0))
+                        var b = numeric.round(a)
+                        var c = b.map(function(d, i) {
+                            if (i == 0) return stimulator.node.amplitude_dtime
+                            return d - b[i - 1]
+                        })
+                        var x = c.map(function(d, i) {
+                            return numeric.rep([d], avs[i] * (stimulator.node.n || 1))
+                        })
+                        stimulator.events.currents = [].concat.apply([], x);
+                    }
+                    app.controller.node.update(stimulator.node)
+                })
+                app.controller.update()
                 app.chart.update();
                 app.message.hide(mId).remove();
                 var toe = new Date;
@@ -131,6 +153,9 @@ simulation.resume = function() {
         .done(function(res) {
             if (!simulation.running) return
             app.data.kernel.time = res.kernel.time;
+            if ($('#autoscale').prop('checked')) {
+                app.chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
+            }
             simulation.recorders.map(function(recorder) {
                 for (var key in res.nodes[recorder.node.id].events) {
                     recorder.events[key] = recorder.events[key].concat(res.nodes[recorder.node.id].events[key])
@@ -140,13 +165,18 @@ simulation.resume = function() {
                 }).map(function(link) {
                     return app.data.nodes[link.source].ids
                 }))
+                app.chart.data.times = recorder.events.times.filter(function(d, i) {
+                    return ((recorder.events.senders[i] == recorder.senders[0]))
+                })
             })
+            app.controller.update()
             app.chart.update()
             app.simulation.resume()
         })
 }
 
 simulation.update = function() {
+
     simulation.running = false;
     app.selected_node = null;
     app.selected_link = null;
@@ -175,6 +205,18 @@ simulation.update = function() {
                 return link.target == node.id
             }).map(function(link) {
                 return app.data.nodes[link.source].id
+            })
+        }
+    })
+    simulation.stimulators = app.data.nodes.filter(function(node) {
+        return node.element_type == 'stimulator' && !node.disabled
+    }).map(function(node) {
+        return {
+            node: node,
+            targets: app.data.links.filter(function(link) {
+                return link.source == node.id
+            }).map(function(link) {
+                return app.data.nodes[link.target].id
             })
         }
     })

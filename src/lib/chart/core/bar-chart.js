@@ -45,6 +45,7 @@ chart.update = function(recorder) {
 
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     app.chart.axesUpdate(chart, transition)
+    app.chart.xLabel(chart, 'xLabel_' + app.simulation.recorders.indexOf(recorder), (app.model.record_labels[app.chart.abscissa] || app.chart.abscissa))
 
     var bars = chart.g.select('#clip')
         .selectAll(".bar")
@@ -129,7 +130,7 @@ chart.update = function(recorder) {
 
 }
 
-chart.init = function(reference, size) {
+chart.init = function(reference, id, size) {
 
     var margin = {
         top: 10,
@@ -166,8 +167,8 @@ chart.init = function(reference, size) {
 
     app.chart.xAxis(chart);
     app.chart.yAxis(chart);
-    app.chart.xLabel(chart, 'Time [ms]');
-    app.chart.yLabel(chart, 'Spike count');
+    app.chart.xLabel(chart, 'xLabel_'+id, 'Time [ms]');
+    app.chart.yLabel(chart, 'yLabel_'+id, 'Spike count');
     app.chart.onDrag(chart);
     app.chart.onZoom(chart);
 }
