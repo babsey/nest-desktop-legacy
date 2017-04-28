@@ -1,6 +1,17 @@
 CHANGELOG
 ---------
 
+0.9.0:
+    Point info of line chart
+    View raw data of simulation
+    Clipboard module to copy raw json
+    Optimize protocol button
+    Simulation to configDefaults folder
+    Better query for simulation and protocol to load page
+    Allow to modify custom title and subtitle
+    Time and current abscissa (step current)
+    Script for building package for Linux-x64 (electron-packager required)
+
 0.8.2:
     Local configuration
     Initialization of config and data
@@ -8,7 +19,7 @@ CHANGELOG
 0.8.1:
     Fixed bugs
     Automatic color grouping
-    Activation of conductance in hh neuron model
+    Activation of conductance in HH neuron model
     Slider focus after simulation
     Spike dilutor
     Legend labels
