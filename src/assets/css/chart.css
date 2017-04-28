@@ -1,3 +1,9 @@
+#point {
+    position: fixed;
+    left: 15px;
+    top: 45px;
+}
+
 #chart {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -7,66 +13,104 @@
     top: 50px;
     z-index: -1000;
 }
+
 #dataChart #clip {
-    cursor: ew-resize;
+    cursor: crosshair;
+    z-index: 1000;
 }
+
+#dataChart #clip.active .aline.active {
+    stroke: #FF9900;
+    z-index: 1000;
+}
+
 #dataChart .axis path, #dataChart .axis line {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
 }
-#dataChart .bline {
-    fill: none;
-    stroke: white;
-    stroke-width: 30px;
-    opacity: 0.0;
-}
-#dataChart .aline {
+
+#dataChart .line {
     fill: none;
     stroke: black;
     stroke-width: 1.5px;
+    pointer-events: all;
+    z-index: 1;
 }
-#dataChart #clip.active .aline.active {
-    stroke: #FF9900;
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+    z-index: 100;
 }
+
+.focus {
+    z-index: 10;
+}
+
+.focus circle {
+    fill: black;
+    stroke: none;
+    cursor: crosshair;
+    z-index: 10;
+}
+
+.hover-line {
+    stroke: black;
+    stroke-width: 2px;
+    stroke-dasharray: 3, 3;
+    pointer-events: all;
+    z-index: 10;
+}
+
 #dataChart .bar {
     /*fill: white;*/
     stroke: white;
 }
+
+
 /*#dataChart .bar:hover {
     fill: #ccc;
 }*/
+
 #networkLayout {
     cursor: pointer;
 }
+
 #networkLayout .node circle {
     fill: white;
     pointer-events: all;
     stroke-width: 3px;
 }
+
 #networkLayout .node text {
     pointer-events: none;
     font: 14px sans-serif;
     text-anchor: middle;
     font-weight: bold;
 }
+
 #networkLayout g.select text {
     pointer-events: none;
     font: 14px sans-serif;
     text-anchor: middle;
     font-weight: bold;
 }
+
 #networkLayout .link {
     stroke: #aaa;
     stroke-width: 5px;
     fill: none;
 }
+
 #networkLayout .link.inh {
     stroke: #b34846;
 }
+
 #networkLayout .link.exc {
     stroke: #467ab3;
 }
+
 #networkLayout .legends {
     fill: white;
 }

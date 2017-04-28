@@ -1,6 +1,6 @@
 {
-    "_id": "day2_ex1_sod-pot-curr-voltage-clamp",
-    "name": "Sodium and potassium currents under voltage clamp conditions",
+    "_id": "day2_ex1_sod-pot-curr-clamp",
+    "name": "Sodium and potassium currents under current clamp conditions",
     "group": "BioPhyNeuNet_day2",
     "res_time": 1,
     "sim_time": 1000.0,

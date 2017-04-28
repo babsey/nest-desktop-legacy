@@ -1,5 +1,6 @@
 "use strict"
 
+const math = require('mathjs');
 const jsonfile = require('jsonfile');
 const flat = require('flat');
 
@@ -93,41 +94,51 @@ simulation.simulate = function() {
                         recorder.node.record_from = ['V_m']
                     }
                     recorder.events = res.nodes[recorder.node.id].events;
-                    recorder.senders = d3.merge(app.data.links.filter(function(link) {
-                        return link.target == recorder.node.id
-                    }).map(function(link) {
-                        return app.data.nodes[link.source].ids ? app.data.nodes[link.source].ids : []
-                    }))
+                    recorder.senders = math.sort(recorder.events.senders.filter((v, i, a) => a.indexOf(v) === i));
                     recorder.sources = app.data.links.filter(function(link) {
                         return link.target == recorder.node.id
                     }).map(function(link) {
                         return app.data.nodes[link.source].id
                     })
-                    app.chart.data.times = recorder.events.times.filter(function(d, i) {
-                        return ((recorder.events.senders[i] == recorder.senders[0]))
-                    })
+                    if (['voltmeter', 'multimeter'].indexOf(recorder.node.model) != -1) {
+                        app.chart.data.times = recorder.events.times.filter(function(d, i) {
+                            return ((recorder.events.senders[i] == recorder.senders[0]))
+                        })
+                    } else if (!app.chart.data.times) {
+                        app.chart.data.times = d3.extent(recorder.events.times)
+                    }
                     app.controller.node.update(recorder.node)
                 });
+                var nodeDefaults = app.config.nest('node');
                 simulation.stimulators.map(function(stimulator) {
                     stimulator.events = {}
                     if (stimulator.node.model == 'step_current_generator') {
-                        var ats = [].concat.apply([0], stimulator.node.params.amplitude_times, [app.data.kernel.time]);
-                        var avs = [].concat.apply([0], stimulator.node.params.amplitude_values, [stimulator.node.amplitude_value_max]);
-                        var a = numeric.div(ats, (app.data.kernel.resolution || 1.0))
-                        var b = numeric.round(a)
-                        var c = b.map(function(d, i) {
-                            if (i == 0) return stimulator.node.amplitude_dtime
-                            return d - b[i - 1]
-                        })
-                        var x = c.map(function(d, i) {
-                            return numeric.rep([d], avs[i] * (stimulator.node.n || 1))
-                        })
-                        stimulator.events.currents = [].concat.apply([], x);
+                        if (stimulator.node.params.amplitude_times.length == app.chart.data.times.length) {
+                            stimulator.events.currents = stimulator.node.params.amplitude_values
+                        } else {
+                            var amplitudes = [].concat.apply([0], stimulator.node.params.amplitude_values).filter(function(d, i) {
+                                var time = stimulator.node.params.amplitude_times[i - 1];
+                                return time <= (stimulator.node.params.stop || app.data.sim_time)
+                            });
+                            var times = [].concat.apply([0], stimulator.node.params.amplitude_times).filter(function(d, i) {
+                                return d <= (stimulator.node.params.stop || app.data.sim_time)
+                            });
+                            var times_rounded = numeric.round(numeric.div(times, (app.data.kernel.resolution || 1.0)))
+                            var dtimes = times_rounded.map(function(time, i) {
+                                if (i == 0) return (stimulator.node.amplitude_dtime || nodeDefaults.amplitude_dtime.value) / (app.data.kernel.resolution || 1.0);
+                                return time - times_rounded[i - 1]
+                            })
+                            var amplitude_series = dtimes.map(function(dt, i) {
+                                return numeric.rep([dt], amplitudes[i] * (stimulator.node.n || 1))
+                            })
+                            stimulator.events.currents = [].concat.apply([], amplitude_series).slice(0, app.chart.data.times.length);
+                        }
                     }
                     app.controller.node.update(stimulator.node)
                 })
                 app.controller.update()
                 app.chart.update();
+                app.protocol.update()
                 app.message.hide(mId).remove();
                 var toe = new Date;
                 var ts = {
@@ -135,7 +146,14 @@ simulation.simulate = function() {
                     toc: toc,
                     toe: toe
                 };
-                app.protocol.add(data);
+                if (app.simulation.protocol) {
+                    app.protocol.add(data);
+                }
+                if (app.simulation.id == app.data._id) {
+                    $('#raw-data').find('a').attr('href', './raw_data.html?simulation=' + app.simulation.id)
+                } else {
+                    $('#raw-data').find('a').attr('href', './raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
+                }
             })
     }, 10)
 }
@@ -180,14 +198,7 @@ simulation.update = function() {
     simulation.running = false;
     app.selected_node = null;
     app.selected_link = null;
-    // app.changes = {
-    //     nodes: app.data.nodes.map(function() {
-    //         return {}
-    //     }),
-    //     links: app.data.links.map(function() {
-    //         return {}
-    //     })
-    // }
+
     $('#title').html(app.data.name)
     $('#subtitle').empty()
     if (app.data.createdAt) {
@@ -225,7 +236,6 @@ simulation.update = function() {
         link.conn_spec = link.conn_spec ? link.conn_spec : {}
         link.syn_spec = link.syn_spec ? link.syn_spec : {}
     })
-
     app.chart.init()
     app.controller.init()
     app.simulation.simulate()
@@ -234,13 +244,27 @@ simulation.update = function() {
 simulation.init = function() {
     app.db.init()
     app.navigation.init()
+    app.protocol.init()
+
     setTimeout(function() {
-        app.db.get(app.simulation.id)
-            .exec(function(err, docs) {
-                app.data = docs;
-                app.simulation.update()
-            })
+        if (app.protocol.id) {
+            app.protocol.get(app.protocol.id)
+                .exec(function(err, docs) {
+                    app.data = docs;
+                    app.simulation.update()
+                })
+        } else {
+            app.db.get(app.simulation.id)
+                .exec(function(err, docs) {
+                    app.data = docs;
+                    app.simulation.update()
+                })
+        }
     }, 200)
+
+
 }
+
+
 
 module.exports = simulation;

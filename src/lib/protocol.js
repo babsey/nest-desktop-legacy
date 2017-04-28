@@ -26,7 +26,7 @@ protocol.addDropdown = function(data) {
         trigger: 'hover',
         content: app.renderer.simulationProtocol(data)
     });
-    $('#' + data._id).on('click', function(e) {
+    $('#' + data._id).off('click').on('click', function(e) {
         e.preventDefault()
         app.data = data;
         $('#protocol-label').html(datetime)
@@ -34,33 +34,103 @@ protocol.addDropdown = function(data) {
     })
 }
 
-protocol.updateDropdown = function(data) {
+protocol.removeDropdown = function(data) {
     $('#' + data._id).remove()
-        // protocol.addDropdown(data)
+    // protocol.addDropdown(data)
+}
+
+protocol.add = function(data) {
+    var configApp = app.config.app()
+    var data = $.extend({}, data)
+    data.user = configApp.user.name;
+    data.version = configApp.version;
+    data.nodes.map(function(node) {
+        delete node.ids
+        delete node.index
+        delete node.vx
+        delete node.vy
+        var pkeys = Object.keys(node.params);
+        pkeys.map(function(pkey) {
+            if (typeof(node.params[pkey]) == 'object') {
+                delete node.params[pkey]
+            }
+        })
+    })
+    data.hash = app.hash(data);
+    delete data._id;
+    delete data.updatedAt;
+    protocol.db.findOne({
+        hash: data.hash
+    }).exec(function(err, doc) {
+        if (doc) {
+            protocol.db.update({
+                hash: data.hash,
+            }, data, {}, function() {
+                new Promise((resolve, reject) => {
+                    app.screen.capture(doc, true)
+                    resolve('captured')
+                }).then((onResolved) => {
+                    protocol.update()
+                })
+            })
+        } else {
+            protocol.db.insert(data, (err, newDocs) => {
+                app.data._id = newDocs._id
+                if (app.simulation.id == app.data._id) {
+                    $('#raw-data').find('a').attr('href', './raw_data.html?simulation=' + app.simulation.id)
+                } else {
+                    $('#raw-data').find('a').attr('href', './raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
+                }
+                new Promise((resolve, reject) => {
+                    app.screen.capture(newDocs, true)
+                    resolve('captured')
+                }).then((onResolved) => {
+                    protocol.update()
+                })
+            })
+        }
+    })
+}
+
+protocol.get = function(id) {
+    return protocol.db.findOne({
+        _id: id
+    })
 }
 
 protocol.update = function() {
-    var view = app.config.app().simulation.protocol || false
+    $('#protocol').toggleClass('btn-primary', app.simulation.protocol || false)
     app.protocol.all().sort({
         updatedAt: -1
     }).exec(function(err, docs) {
         if (docs.length == 0) return
         $('#protocol-list').empty()
-            // $('#protocol-list .protocol').popover('dispose')
         docs.map(function(doc, idx) {
-            // if (idx==0) return
             protocol.addDropdown(doc)
         })
         $('#protocol-label').html(app.format.datetime(docs[0].updatedAt))
     })
-    // $('#get-protocol-list').toggleClass('disabled', !view)
-    $('#view-protocol').find('.glyphicon-remove').toggle(!view)
-    $('#view-protocol').find('.fa-history').toggle(view)
+}
 
+protocol.events = function() {
+    var DELAY = 700,
+        clicks = 0,
+        timer = null;
+    $('#protocol').on('click', function() {
+        clicks++; //count clicks
+        if (clicks === 1) {
+            timer = setTimeout(function() {
+                protocol.add(app.data)
+                clicks = 0; //after action performed, reset counter
+            }, DELAY);
+        } else {
+            clearTimeout(timer); //prevent single-click action
+            app.simulation.protocol = !(app.simulation.protocol || false)
+            clicks = 0; //after action performed, reset counter
+        }
+        protocol.update()
+    })
     $('#view-protocol').on('click', function() {
-        var configApp = app.config.app();
-        configApp.simulation.protocol = !view
-        app.config.save('app', configApp)
         protocol.update()
     })
 }
@@ -74,33 +144,6 @@ protocol.init = function() {
         autoload: true,
     })
     protocol.update()
-}
-
-protocol.add = function(data) {
-    if (!app.config.app().simulation.protocol) return
-    data.hash = app.hash(data);
-    delete data._id;
-    delete data.updatedAt;
-    protocol.db.findOne({
-        hash: data.hash
-    }).exec(function(err, doc) {
-        if (doc) {
-            protocol.db.update({
-                hash: data.hash,
-            }, data, {}, function() {
-                protocol.update()
-            })
-        } else {
-            protocol.db.insert(data, function(err, newDocs) {
-                setTimeout(function() {
-                    app.screen.capture(newDocs, false)
-                    setTimeout(function() {
-                        protocol.update()
-                    }, 500)
-                }, 500)
-            })
-        }
-    })
 }
 
 module.exports = protocol

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.css" />
+    <style>
+        .content {
+            margin-top: 10px
+        }
+
+        img {
+            width: 100%;
+        }
+
+        pre {
+            outline: 1px solid #ccc;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .string {
+            color: darkred;
+        }
+
+        .number {
+            color: navy;
+        }
+
+        .boolean {
+            color: purple;
+        }
+
+        .null {
+            color: magenta;
+        }
+
+        .key {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="col-md-5">
+            <div class="content">
+                <div>
+                    <a class="btn btn-default">
+                        <i class="fa fa-arrow-left"></i>
+                    </a>
+                </div>
+                <img>
+                <textarea id="raw_data" style="opacity:0.0; width: 100%; height: 0px"></textarea>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="content" style="position:relative">
+                <div style="position:absolute; right:15px; top:10px">
+                    <button id="copy" class="btn btn-default" data-clipboard-target="#raw_data">
+                        <i class="fa fa-clipboard"></i>
+                    </button>
+                </div>
+                <pre></pre>
+            </div>
+        </div>
+    </div>
+    <script>
+        const fs = require('fs');
+        const path = require('path');
+        const Clipboard = require('clipboard');
+
+        window.$ = window.jQuery = require('jquery');
+        window.app = require('../app');
+        var query = app.query(location.search);
+        app.simulation.id = query.simulation;
+        app.protocol.id = query.protocol;
+
+        app.db.init()
+        app.protocol.init()
+
+        var render = function() {
+            var configApp = app.config.app();
+            if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', app.data._id + '.png'))) {
+                var src = path.join(process.cwd(), configApp.datapath, 'images', app.data._id + '.png');
+            } else {
+                var src = path.join(__dirname, '..', 'assets', 'img', 'simulation_default.png');
+            }
+            if (app.simulation.id == app.data._id) {
+                $('a').attr('href', './simulation.html?simulation=' + app.simulation.id)
+            } else {
+                $('a').attr('href', './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
+            }
+            $('img').attr('src', src)
+            $('textarea').html(JSON.stringify(app.data, undefined, 4))
+            $('pre').append(app.format.syntaxHighlight(JSON.stringify(app.data, undefined, 4)))
+            var clipboard = new Clipboard('#copy');
+
+        }
+
+        setTimeout(function() {
+            if (app.protocol.id) {
+                app.protocol.get(app.protocol.id)
+                    .exec(function(err, docs) {
+                        app.data = docs;
+                        render()
+                    })
+            } else {
+                app.db.get(app.simulation.id)
+                    .exec(function(err, docs) {
+                        app.data = docs;
+                        render()
+                    })
+            }
+        }, 200)
+    </script>
+</body>
+
+</html>

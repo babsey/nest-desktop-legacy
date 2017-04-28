@@ -11,11 +11,20 @@ var chart = {
     data: {}
 };
 
-function _draw_line(classname, series) {
+chart.subplot = function(i) {
+    return -1 * (chart.data.n - (i % chart.data.n) - 1) * chart.height / chart.data.n
+};
+
+
+chart.draw_line = function(series) {
 
     var lines = chart.g.select('#clip')
-        .selectAll('.' + classname)
+        .selectAll('.line')
         .data(chart.data.y);
+
+    var g = lines.enter()
+        .append('g')
+        .attr('class', 'subplot')
 
     lines.attr("style", function(d, i) {
         return 'stroke:' + (app.selected_node ? chart.data.c[i] : '')
@@ -25,7 +34,7 @@ function _draw_line(classname, series) {
         return -1 * (chart.data.n - (i % chart.data.n) - 1) * chart.height / chart.data.n
     };
     var color = function(i) {
-        return app.config.app().chart.color ? chart.data.c[i] : ''
+        return app.config.app().chart.color ? chart.data.c[i%chart.data.c.length] : ''
     };
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     if (transition) {
@@ -33,22 +42,21 @@ function _draw_line(classname, series) {
             .attr('height', chart.height / chart.data.n)
             .attr("transform", function(d, i) {
                 if (series == 'overlap') return
-                return "translate(0," + subplot(i) + ")"
+                return "translate(0," + chart.subplot(i) + ")"
             })
             .attr("style", function(d, i) {
                 return 'stroke:' + color(i)
             })
             .attr("d", chart.line);
 
-        lines.enter()
-            .append("path")
+        g.append("path")
             .attr('height', chart.height / chart.data.n)
+            .attr("class", function(d, i) {
+                return 'line line_' + i
+            })
             .attr("transform", function(d, i) {
                 if (series == 'overlap') return
-                return "translate(0," + subplot(i) + ")"
-            })
-            .attr("class", function(d, i) {
-                return classname + ' line_' + i
+                return "translate(0," + chart.subplot(i) + ")"
             })
             .on('mouseover', function(d, i) {
                 chart.g.selectAll('#clip')
@@ -62,9 +70,7 @@ function _draw_line(classname, series) {
                 chart.g.selectAll('#clip path')
                     .classed('active', false);
             })
-            .attr("style", function() {
-                return 'zscore:' + (classname == 'aline' ? 1 : -1000)
-            })
+            .attr("style", 'zscore: 1')
             .attr("style", function(d, i) {
                 return 'stroke:' + color(i)
             })
@@ -72,26 +78,34 @@ function _draw_line(classname, series) {
             .attr("d", function(d) {
                 return chart.line(d)
             });
+
     } else {
         lines.attr('height', chart.height / chart.data.n)
             .attr("transform", function(d, i) {
                 if (series == 'overlap') return
-                return "translate(0," + subplot(i) + ")"
+                return "translate(0," + chart.subplot(i) + ")"
             })
             .attr("style", function(d, i) {
                 return 'stroke:' + color(i)
             })
             .attr("d", chart.line)
 
-        lines.enter()
-            .append("path")
+        lines.selectAll('.overlay')
+            .attr("width", chart.width)
+            .attr("height", chart.height / chart.data.n)
+            .attr("transform", function(d, i) {
+                if (series == 'overlap') return
+                return "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")"
+            })
+
+        g.append("path")
             .attr('height', chart.height / chart.data.n)
             .attr("transform", function(d, i) {
                 if (series == 'overlap') return
-                return "translate(0," + subplot(i) + ")"
+                return "translate(0," + chart.subplot(i) + ")"
             })
             .attr("class", function(d, i) {
-                return classname + ' line_' + i
+                return 'line line_' + i
             })
             .on('mouseover', function(d, i) {
                 chart.g.selectAll('#clip')
@@ -105,14 +119,38 @@ function _draw_line(classname, series) {
                 chart.g.selectAll('#clip path')
                     .classed('active', false);
             })
-            .attr("style", function() {
-                return 'zscore:' + (classname == 'aline' ? 1 : -1000)
-            })
+            .attr("style", 'zscore: 1')
             .attr("style", function(d, i) {
                 return 'stroke:' + color(i)
             })
             .attr("d", chart.line);
     }
+
+    lines.selectAll('.overlay')
+        .attr("width", chart.width)
+        .attr("height", chart.height / chart.data.n)
+        .attr("transform", function(d, i) {
+            if (series == 'overlap') return
+            return "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")"
+        })
+
+    var overlay = g.append('rect')
+        .attr('class', 'overlay')
+        .attr("width", chart.width)
+        .attr("height", chart.height / chart.data.n)
+        .attr("transform", function(d, i) {
+            if (series == 'overlap') return
+            return "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")"
+        })
+
+    overlay.on("mouseover", function() {
+            chart.focus.style("display", null);
+        })
+        .on("mouseout", function() {
+            $('#point').empty()
+            chart.focus.style("display", "none");
+        })
+        .on("mousemove", chart.tooltip)
 
     lines.exit()
         .remove();
@@ -133,11 +171,10 @@ chart.update = function(recorder) {
         })
     })[0]
     if (recorder.node.record_from.length == 1) {
-        chart.data.c = [].concat.apply([], app.data.links.filter(function(link) {
-            return link.target == recorder.node.id
-        }).map(function(link, idx) {
-            return app.format.fillArray(recorder.data[idx].color, (app.data.nodes[link.source].n || 1))
-        }))
+        chart.data.c = recorder.data.map(function(d) {
+            return d.color
+        })
+        chart.data.legend = null
     } else if (recorder.node.record_from.length > 1) {
         var colors = colorbrewer['Dark2'][3]
         chart.data.c = recorder.node.record_from.map(function(r, i) {
@@ -147,14 +184,13 @@ chart.update = function(recorder) {
             return app.model.record_legends[r]
         })
     }
-    chart.data.n = recorder.node.series == 'overlap' ? 1 : recorder.senders.length
+    chart.data.n = recorder.node.series == 'overlap' ? 1 : (recorder.senders.length * recorder.node.record_from.length)
 
-    chart.g.attr('height', recorder.node.series == "overlap" ? chart.height : chart.height / recorder.data.length)
+    chart.g.attr('height', recorder.node.series == "overlap" ? chart.height : chart.height / chart.data.n)
     chart.xScale.range([0, +chart.g.attr('width')])
     chart.yScale.range([chart.height, chart.height - (+chart.g.attr('height'))])
     chart.xScale.domain(app.chart.xScale.domain())
     chart.yScale.domain(d3.extent([].concat.apply([], chart.data.y)))
-
 
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     app.chart.axesUpdate(chart, transition)
@@ -169,18 +205,52 @@ chart.update = function(recorder) {
         return chart.yScale(d);
     });
 
-    _draw_line('aline', recorder.node.series)
-    _draw_line('bline', recorder.node.series)
+    var bisect = d3.bisector(function(d) {
+        return d;
+    }).left;
 
-    if (chart.data.legend) {
-        app.chart.legend(chart, chart.data.legend, chart.data.c)
+    chart.tooltip = function(d, i) {
+        var x = chart.data.x;
+        var y = chart.data.y[i];
+        var offset = chart.subplot(i);
+        var x0 = chart.xScale.invert(d3.mouse(this)[0]);
+
+        var idx = bisect(x, x0, 1),
+            d0 = x[idx - 1],
+            d1 = x[idx],
+            idx = x0 - y[idx - 1] > y[idx] - x0 ? idx : idx - 1;
+        chart.focus.attr("transform", function() {
+            return "translate(" + chart.xScale(x[idx]) + "," + (+chart.yScale(y[idx]) + offset) + ")"
+        });
+        // chart.focus.select("text").text(function() {
+        //     return app.format.number(x[idx], 1) + ', ' + app.format.number(y[idx]);
+        // });
+        $('#point').html(function() {
+            return app.format.number(x[idx], 1) + ', ' + app.format.number(y[idx]);
+        })
+        chart.focus.select(".y-hover-line").attr("x1", function() {
+            return chart.width - chart.xScale(x[idx])
+        });
+        chart.focus.select(".y-hover-line").attr("x2", function() {
+            return -chart.xScale(x[idx])
+        });
+        chart.focus.select(".x-hover-line").attr("y1", function() {
+            return -chart.yScale(y[idx]) - offset
+        });
+        chart.focus.select(".x-hover-line").attr("y2", function() {
+            return chart.height - chart.yScale(y[idx]) - offset
+        });
+
     }
+
+    chart.draw_line(recorder.node.series)
+    app.chart.legend(chart, chart.data.legend, chart.data.c)
 }
 
 chart.init = function(reference, id, size) {
 
     var margin = {
-        top: 10,
+        top: 20,
         right: 40,
         bottom: 40,
         left: 50
@@ -202,15 +272,44 @@ chart.init = function(reference, id, size) {
         .attr('width', width)
         .attr("transform", "translate(" + (margin.left + (size.x ? size.x : 0)) + "," + (margin.top + (size.y ? size.y : 0)) + ")");
 
+    chart.focus = chart.g.append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+
+    chart.focus.append("line")
+        .attr("class", "x-hover-line hover-line")
+        .attr("y1", 0)
+        .attr("y2", chart.height);
+
+    chart.focus.append("line")
+        .attr("class", "y-hover-line hover-line")
+        .attr("x1", 0)
+        .attr("x2", chart.width);
+
+    chart.focus.append("circle")
+        .attr("r", 2.5);
+
+    chart.focus.append("rect")
+        .attr("x", 15)
+        .attr("y", "-17")
+        .attr('height', 16)
+        .attr('width', 85)
+        .attr('fill', 'white');
+
+    chart.focus.append("text")
+        .attr("x", 15)
+        .attr("dy", "-.31em");
+
+
     var clip = chart.g.append("g")
         .attr("clip-path", "url(#clip)")
         .attr('id', 'clip');
-
-    // add area for dragging event
-    clip.append("rect")
-        .attr('width', width)
-        .attr('height', height)
-        .attr('fill', 'white');
+    //
+    // // Add area for dragging event
+    // clip.append("rect")
+    //     .attr('width', width)
+    //     .attr('height', height)
+    //     .attr('fill', 'white');
 
     app.chart.xAxis(chart);
     app.chart.yAxis(chart);

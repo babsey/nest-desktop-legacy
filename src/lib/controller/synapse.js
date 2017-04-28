@@ -38,6 +38,7 @@ synController.update = function(link) {
         app.slider.update_synSlider(link)
     }
     synElem.find('.modelSlider .sliderInput').on('slideStop', function() {
+        app.selected_node = null;
         app.selected_link = link;
         var param = $(this).parents('.paramSlider').attr('id');
         app.selected_link.syn_spec[param] = parseFloat(this.value)
@@ -45,6 +46,7 @@ synController.update = function(link) {
         app.simulation.simulate()
     })
     synElem.find('input.paramVal').on('change', function() {
+        app.selected_node = null;
         app.selected_link = link;
         var pkey = $(this).parents('.paramSlider').attr('id');
         var pvalue = $(this).val()
@@ -60,6 +62,7 @@ synController.update = function(link) {
     })
     synElem.find('.recSelect').on('change', function() {
         app.simulation.run(false)
+        app.selected_node = null;
         app.selected_link = link;
         app.selected_link.syn_spec.receptor_type = parseInt(this.value)
         app.simulation.simulate()
@@ -81,6 +84,7 @@ synController.init = function(link) {
     synElem.find('.synSelect').find('option#' + synapseModel).prop('selected', true);
     synElem.find('.synSelect').on('change', function() {
         app.simulation.run(false)
+        app.selected_node = null;
         app.selected_link = link;
         app.selected_link.syn_spec = {
             model: this.value

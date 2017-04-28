@@ -7,6 +7,15 @@ const numeric = require('numeric');
 
 var nodeController = {}
 
+nodeController.amplitude = function(dtime, dvalue) {
+    var times = math.range(dtime, app.data.sim_time, dtime)._data;
+    var amplitudes = math.range(dvalue, dvalue * (times.length + 10), dvalue)._data;
+    return {
+        times: times,
+        values: amplitudes.slice(0, times.length)
+    }
+}
+
 nodeController.update = function(node) {
     var nodeDefaults = app.config.nest('node');
     var nodeElem = $('#nodes').find('.node[data-id=' + node.id + '] .content');
@@ -18,9 +27,13 @@ nodeController.update = function(node) {
         app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
             .on('slideStop', function(d) {
                 app.data.nodes[node.id].n = d.value
+                if (node.element_type == 'neuron') {
+                    app.chart.init()
+                }
                 app.simulation.simulate()
             })
         nodeElem.find('.nodeSlider #n input.paramVal').on('change', function() {
+            app.selected_link = null;
             app.selected_node = node;
             var pkey = $(this).parents('.dataSlider').attr('id');
             var pvalue = $(this).val()
@@ -30,8 +43,11 @@ nodeController.update = function(node) {
             $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
             $(this).parents('.form-group').find('.help-block').html(valid.error)
             if (valid.error != null) return
-            app.selected_node[pkey] = valid.value
+            node[pkey] = valid.value
             app.slider.update_dataSlider()
+            if (node.element_type == 'neuron') {
+                app.chart.init()
+            }
             app.simulation.simulate()
         })
     }
@@ -60,30 +76,102 @@ nodeController.update = function(node) {
                 })
         }
         if (node.model == 'step_current_generator') {
+            var amplitude_dtime = node.amplitude_dtime || nodeDefaults.amplitude_dtime.value;
+            var amplitude_dvalue = (node.amplitude_dvalue || nodeDefaults.amplitude_dvalue.value);
+            // var amplitude_value_max = (node.amplitude_value_max || nodeDefaults.amplitude_value_max.value);
             var options = nodeDefaults.amplitude_dtime;
-            options.value = node.amplitude_dtime || 1.0;
-            node.params.amplitude_times = math.range(options.value, app.data.sim_time, options.value)._data
-            var amplitude_value_max = (node.amplitude_value_max || nodeDefaults.amplitude_value_max.value);
-            node.params.amplitude_values = numeric.linspace(amplitude_value_max / node.params.amplitude_times.length, amplitude_value_max, node.params.amplitude_times.length)
+            options.value = amplitude_dtime;
+            var amplitude = nodeController.amplitude(amplitude_dtime, amplitude_dvalue)
+            node.params.amplitude_times = amplitude.times;
+            node.params.amplitude_values = amplitude.values;
             app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
                 .on('slideStop', function(d) {
                     node.amplitude_dtime = d.value;
-                    node.params.amplitude_times = math.range(node.amplitude_dtime, app.data.sim_time, node.amplitude_dtime)._data
-                    var amplitude_value_max = (node.amplitude_value_max || nodeDefaults.amplitude_value_max.value);
-                    node.params.amplitude_values = numeric.linspace(amplitude_value_max / node.params.amplitude_times.length, amplitude_value_max, node.params.amplitude_times.length)
+                    var amplitude_dvalue = (node.amplitude_dvalue || nodeDefaults.amplitude_dvalue.value);
+                    var amplitude = nodeController.amplitude(node.amplitude_dtime, amplitude_dvalue)
+                    node.params.amplitude_times = amplitude.times;
+                    node.params.amplitude_values = amplitude.values;
                     app.simulation.simulate()
                 })
-            var options = nodeDefaults.amplitude_value_max;
-            options.value = node.amplitude_value_max || 1.0;
+            nodeElem.find('#amplitude_dtimeVal').on('change', function() {
+                app.selected_link = null;
+                app.selected_node = node;
+                var pkey = $(this).parents('.paramSlider').attr('id');
+                var pvalue = $(this).val()
+                var schema = $(this).data('schema')
+                var valid = app.validation.validate(pkey, pvalue, schema)
+                $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
+                $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
+                $(this).parents('.form-group').find('.help-block').html(valid.error)
+                if (valid.error != null) return
+                node.amplitude_dtime = valid.value;
+                var amplitude_dvalue = (node.amplitude_dvalue || nodeDefaults.amplitude_dvalue.value);
+                var amplitude = nodeController.amplitude(node.amplitude_dtime, amplitude_dvalue)
+                node.params.amplitude_times = amplitude.times;
+                node.params.amplitude_values = amplitude.values;
+                app.slider.update_nodeSlider(node)
+                app.simulation.simulate()
+            })
+            var options = nodeDefaults.amplitude_dvalue;
+            options.value = amplitude_dvalue;
             app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
                 .on('slideStop', function(d) {
-                    node.amplitude_value_max = d.value;
-                    node.params.amplitude_times = math.range(node.amplitude_dtime, app.data.sim_time, node.amplitude_dtime)._data
-                    var amplitude_value_max = (node.amplitude_value_max || nodeDefaults.amplitude_value_max.value);
-                    node.params.amplitude_values = numeric.linspace(amplitude_value_max / node.params.amplitude_times.length, amplitude_value_max, node.params.amplitude_times.length)
+                    node.amplitude_dvalue = d.value;
+                    var amplitude_dtime = node.amplitude_dtime || nodeDefaults.amplitude_dtime.value;
+                    var amplitude = nodeController.amplitude(amplitude_dtime, node.amplitude_dvalue)
+                    node.params.amplitude_times = amplitude.times;
+                    node.params.amplitude_values = amplitude.values;
                     app.simulation.simulate()
                 })
+            nodeElem.find('#amplitude_dvalueVal').on('change', function() {
+                app.selected_link = null;
+                app.selected_node = node;
+                var pkey = $(this).parents('.paramSlider').attr('id');
+                var pvalue = $(this).val()
+                var schema = $(this).data('schema')
+                var valid = app.validation.validate(pkey, pvalue, schema)
+                $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
+                $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
+                $(this).parents('.form-group').find('.help-block').html(valid.error)
+                if (valid.error != null) return
+                node.amplitude_dvalue = valid.value;
+                var amplitude_dtime = node.amplitude_dtime || nodeDefaults.amplitude_dtime.value;
+                var amplitude = nodeController.amplitude(amplitude_dtime, node.amplitude_dvalue)
+                node.params.amplitude_times = amplitude.times;
+                node.params.amplitude_values = amplitude.values;
+                app.slider.update_nodeSlider(node)
+                app.simulation.simulate()
+            })
+            // var options = nodeDefaults.amplitude_value_max;
+            // options.value = amplitude_value_max;
+            // app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
+            //     .on('slideStop', function(d) {
+            //         node.amplitude_value_max = d.value;
+            //         var amplitude_dtime = node.amplitude_dtime || nodeDefaults.amplitude_dtime.value;
+            //         node.params.amplitude_times = math.range(amplitude_dtime, app.data.sim_time, amplitude_dtime)._data
+            //         node.params.amplitude_values = numeric.linspace(node.amplitude_value_max / node.params.amplitude_times.length, node.amplitude_value_max, node.params.amplitude_times.length)
+            //         app.simulation.simulate()
+            //     })
+            // nodeElem.find('#amplitude_value_maxVal').on('change', function() {
+            //     app.selected_link = null;
+            //     app.selected_node = node;
+            //     var pkey = $(this).parents('.paramSlider').attr('id');
+            //     var pvalue = $(this).val()
+            //     var schema = $(this).data('schema')
+            //     var valid = app.validation.validate(pkey, pvalue, schema)
+            //     $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
+            //     $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
+            //     $(this).parents('.form-group').find('.help-block').html(valid.error)
+            //     if (valid.error != null) return
+            //     node.amplitude_value_max = valid.value;
+            //     var amplitude_dtime = node.amplitude_dtime || nodeDefaults.amplitude_dtime.value;
+            //     node.params.amplitude_times = math.range(amplitude_dtime, app.data.sim_time, amplitude_dtime)._data
+            //     node.params.amplitude_values = numeric.linspace(node.amplitude_value_max / node.params.amplitude_times.length, node.amplitude_value_max, node.params.amplitude_times.length)
+            //     app.slider.update_nodeSlider(node)
+            //     app.simulation.simulate()
+            // })
         }
+
     }
     if (node.element_type == 'recorder') {
         var options = nodeDefaults.rec_time;
@@ -136,6 +224,7 @@ nodeController.update = function(node) {
         })
     }
     nodeElem.find('.modelSlider input.paramVal').on('change', function() {
+        app.selected_link = null;
         app.selected_node = node;
         var pkey = $(this).parents('.paramSlider').attr('id');
         var pvalue = $(this).val()
@@ -146,8 +235,7 @@ nodeController.update = function(node) {
         $(this).parents('.form-group').find('.help-block').html(valid.error)
         if (valid.error != null) return
         app.selected_node.params[pkey] = valid.value
-        console.log(pkey, valid)
-        app.slider.update_nodeSlider(app.selected_node)
+        app.slider.update_nodeSlider(node)
         app.simulation.simulate()
     })
     nodeElem.find('.selection').empty()
@@ -185,19 +273,21 @@ nodeController.update = function(node) {
             app.chart.update();
         })
 
-        nodeElem.find('.selection').append('<div class="seriesSelect form-group hideOnDrawing"></div>')
-        nodeElem.find('.seriesSelect').append('<label for="series_' + node.id + '">Data series</label>')
-        nodeElem.find('.seriesSelect').append('<select data-id="' + node.id + '" id="series_' + node.id + '" class="series form-control"></select>')
-        nodeElem.find('#series_' + node.id).append('<option value="overlap">Overlap</option>')
-        nodeElem.find('#series_' + node.id).append('<option value="stack">Stack</option>')
-        nodeElem.find('#series_' + node.id).val(node.series)
-        $('#series_' + node.id).on('change', function() {
-            var recorder = app.simulation.recorders.find(function(recorder) {
-                return recorder.node.id == node.id;
+        if (['voltmeter', 'multimeter'].indexOf(node.model) != -1) {
+            nodeElem.find('.selection').append('<div class="seriesSelect form-group hideOnDrawing"></div>')
+            nodeElem.find('.seriesSelect').append('<label for="series_' + node.id + '">Data series</label>')
+            nodeElem.find('.seriesSelect').append('<select data-id="' + node.id + '" id="series_' + node.id + '" class="series form-control"></select>')
+            nodeElem.find('#series_' + node.id).append('<option value="overlap">Overlap</option>')
+            nodeElem.find('#series_' + node.id).append('<option value="stack">Stack</option>')
+            nodeElem.find('#series_' + node.id).val((node.series || 'stack'))
+            $('#series_' + node.id).on('change', function() {
+                var recorder = app.simulation.recorders.find(function(recorder) {
+                    return recorder.node.id == node.id;
+                })
+                recorder.node.series = this.value;
+                recorder.chart.update(recorder)
             })
-            recorder.node.series = this.value;
-            recorder.chart.update(recorder)
-        })
+        }
     }
     app.slider.update_nodeSlider(node);
 }
@@ -216,11 +306,14 @@ nodeController.init = function(node) {
     nodeElem.find('.glyphicon-ok').toggle(!node.disabled && true)
     nodeElem.find('.modelSelect').on('change', function(d, i) {
         app.simulation.run(false)
+        app.selected_link = null
         app.selected_node = node
-        app.selected_node.model = this.value;
-        app.selected_node.params = {};
-        app.model.node_selected(app.selected_node)
-        nodeController.update(app.selected_node)
+        node.model = this.value;
+        node.params = {};
+
+        app.controller.simulation.init()
+        app.model.node_selected(node)
+        nodeController.update(node)
 
         if (app.chart.networkLayout.drawing) {
             app.chart.networkLayout.update()
@@ -228,7 +321,7 @@ nodeController.init = function(node) {
         }
 
         app.data.links.filter(function(link) {
-            return link.target == app.selected_node.id
+            return link.target == node.id
         }).map(function(link) {
             connController.update(link)
             synController.update(link)

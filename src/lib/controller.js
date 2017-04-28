@@ -33,7 +33,7 @@ controller.initLinks = function() {
 }
 
 controller.update = function () {
-    controller.simulation.init()
+    controller.simulation.update()
 }
 
 controller.init = function() {

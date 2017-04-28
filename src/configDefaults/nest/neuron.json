@@ -573,7 +573,7 @@
         "min": 1.0,
         "max": 30.0,
         "step": 1.0,
-        "label": "Proximal peak conductance (nS)"
+        "label": "Proximal leak conductance (nS)"
     }, {
         "id": "proximal__E_ex",
         "level": 3,

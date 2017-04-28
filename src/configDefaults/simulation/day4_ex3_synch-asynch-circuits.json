@@ -4,20 +4,22 @@
     "group": "BioPhyNeuNet_day4",
     "user": "architect",
     "network": "simple",
-    "sim_time": 1000.0,
-    "res_time": 10.0,
+    "sim_time": 2000,
+    "res_time": 10,
     "kernel": {
-        "grng_seed": 0
+        "grng_seed": 0,
+        "time": 2000,
+        "resolution": 1
     },
     "nodes": [{
         "id": 0,
         "element_type": "stimulator",
-        "model": "poisson_generator",
+        "model": "step_current_generator",
         "x": 0,
-        "y": 0,
-        "params": {
-            "rate": 1000.0
-        }
+        "y": 100,
+        "amplitude_dtime": 20,
+        "amplitude_dvalue": 1,
+        "params": {}
     }, {
         "id": 1,
         "element_type": "neuron",
@@ -25,79 +27,110 @@
         "x": 150,
         "y": 50,
         "n": 100,
-        "params": {}
+        "params": {
+            "V_m": -70,
+            "E_L": -70,
+            "I_e": 250,
+            "C_m": 250,
+            "g_L": 17,
+            "E_ex": 0,
+            "E_in": -85,
+            "V_th": -55,
+            "V_reset": -60,
+            "t_ref": 2,
+            "tau_syn_ex": 0.2,
+            "tau_syn_in": 2
+        }
     }, {
         "id": 2,
-        "element_type": "neuron",
-        "model": "iaf_cond_alpha",
-        "x": 150,
-        "y": 150,
-        "n": 100,
-        "params": {}
-    }, {
-        "id": 3,
         "element_type": "recorder",
         "model": "spike_detector",
         "x": 300,
-        "y": 100,
-        "nbins": 100,
-        "params": {}
+        "y": 0,
+        "nbins": 20,
+        "params": {},
+        "disabled": false
+    }, {
+        "id": 3,
+        "model": "voltmeter",
+        "element_type": "recorder",
+        "x": 300,
+        "y": 200,
+        "params": {
+            "interval": 1
+        },
+        "record_from": [
+            "V_m"
+        ],
+        "series": "stack",
+        "disabled": true
+    }, {
+        "id": 4,
+        "model": "iaf_cond_alpha",
+        "params": {
+            "V_m": -70,
+            "E_L": -70,
+            "I_e": 250,
+            "C_m": 250,
+            "g_L": 17,
+            "E_ex": 0,
+            "E_in": -85,
+            "V_th": -55,
+            "V_reset": -60,
+            "t_ref": 2,
+            "tau_syn_ex": 0.2,
+            "tau_syn_in": 2
+        },
+        "element_type": "neuron",
+        "x": 150,
+        "y": 200,
+        "n": 100
     }],
     "links": [{
         "id": 0,
         "source": 0,
-        "target": 1,
-        "syn_spec": {
-            "weight": 10.0
-        }
+        "target": 1
     }, {
         "id": 1,
-        "source": 0,
-        "target": 2,
-        "disabled": true,
-        "syn_spec": {
-            "weight": 10.0
+        "source": 1,
+        "target": 1,
+        "disabled": false,
+        "conn_spec": {
+            "rule": "fixed_outdegree",
+            "outdegree": 20
         }
     }, {
         "id": 2,
         "source": 1,
-        "target": 1,
-        "disabled": true
+        "target": 2
     }, {
         "id": 3,
         "source": 1,
-        "target": 2,
+        "target": 3,
         "conn_spec": {
-            "rule": "fixed_outdegree",
-            "outdegree": 10
-        },
-        "syn_spec": {
-            "weight": -10.0
+            "rule": "fixed_total_number",
+            "N": 5
         }
     }, {
         "id": 4,
-        "source": 2,
-        "target": 1,
-        "disabled": true,
-        "conn_spec": {
-            "rule": "fixed_outdegree",
-            "outdegree": 10
-        },
-        "syn_spec": {
-            "weight": -10.0
-        }
-    },{
-        "id": 5,
-        "source": 2,
-        "target": 2,
+        "source": 4,
+        "target": 4,
         "disabled": true
-    },{
+    }, {
+        "id": 5,
+        "source": 0,
+        "target": 4
+    }, {
         "id": 6,
-        "source": 1,
-        "target": 3
+        "source": 4,
+        "target": 3,
+        "conn_spec": {
+            "rule": "fixed_total_number",
+            "N": 5
+        }
     }, {
         "id": 7,
-        "source": 2,
-        "target": 3
+        "source": 4,
+        "target": 2
     }]
 }

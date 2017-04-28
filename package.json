@@ -27,6 +27,7 @@
     "argsarray": "0.0.1",
     "bootstrap": "^3.3.7",
     "bootstrap-slider": "^9.5.3",
+    "clipboard": "^1.6.1",
     "colorbrewer": "^1.0.0",
     "d3": "^4.5.0",
     "debug": "^2.6.0",

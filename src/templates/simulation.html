@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href='../assets/css/chart.css'></link>
     <link rel="stylesheet" href='../assets/css/styles.css'></link>
-    <title>NEST Desktop</title>
+    <title></title>
 </head>
 
 <body data-spy="scroll" data-target="#nodeScrollspy">
@@ -43,7 +43,7 @@
             </div>
 
             <div class="navbar-right">
-                <div id="protocol" class="btn-group">
+                <div id="view-protocol" class="btn-group">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle" id="get-protocol-list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <span id="protocol-label">No protocol</span>
@@ -51,16 +51,15 @@
                         <ul id="protocol-list" class="dropdown-menu dropdown-menu-left" aria-labelledby="get-protocol-list"></ul>
 
                     </div>
-                    <button type="button" class="btn btn-default" id="view-protocol" title="Protocol simulations automatically">
-                        <i class="fa fa-history" style="display:none"></i>
-                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-remove" style="display:none"></span>
+                    <button type="button" class="btn btn-default" id="protocol" title="Click: Protocol simulations; Doubleclick: De-/Activate automatic protocolling">
+                        <i class="fa fa-history"></i>
                     </button>
                 </div>
 
                 <button type="button" class="btn btn-default navbar-btn" id="index">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
                 </button>
-                <button type="button" class="btn btn-default navbar-btn" id="simulation-refresh" title="Refresh the simulation" onclick="location.reload()">
+                <button type="button" class="btn btn-default navbar-btn" id="simulation-refresh" title="Refresh the simulation">
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon glyphicon-refresh"></span>
                 </button>
                 <button type="button" class="btn btn-default" id="edit-network" title="Edit network">
@@ -141,6 +140,11 @@
                             </a>
                         </li>
                         <li class="divider"></li>
+                        <li id="raw-data" title="View raw data of the simulation">
+                            <a href="">
+                                <i class="fa fa-eye"></i> View raw data
+                            </a>
+                        </li>
                         <li id="capture-screen" title="Capture screen for thumbnail">
                             <a href="#">
                                 <span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Capture screen
@@ -221,6 +225,7 @@
             </div>
         </div>
 
+        <div id="point"></div>
         <svg id="chart">
             <g id="dataChart" class="hideOnDrawing"></g>
             <g id="networkLayout" style="display: none"></g>
@@ -230,7 +235,11 @@
     <script>
         window.$ = window.jQuery = require('jquery');
         window.app = require('../app');
-        app.simulation.id = location.search.split('simulation=')[1]
+        var configApp = app.config.app();
+        $('title').html(configApp.title)
+        var query = app.query(location.search);
+        app.simulation.id = query.simulation;
+        app.protocol.id = query.protocol;
         app.simulation.init()
     </script>
 </body>

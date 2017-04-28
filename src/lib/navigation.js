@@ -4,10 +4,25 @@ var navigation = {};
 
 
 navigation.events = function() {
+
+    // Load protocol events
+    app.protocol.events()
+
     $('#index').on('click', function() {
         app.simulation.stop()
         setTimeout(function() {
             window.location = "../index.html"
+        }, 100)
+    })
+    $('#simulation-refresh').on('click', function() {
+        app.simulation.stop()
+        setTimeout(function() {
+            if (app.simulation.id == app.data._id) {
+                    var location = './simulation.html?simulation=' + app.simulation.id
+                } else {
+                    var location = './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id
+                }
+            window.location = location
         }, 100)
     })
     $('#edit-network').on('click', function() {
@@ -126,9 +141,6 @@ navigation.init = function() {
     $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
     $("#config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
     $("#config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
-
-    // Load protocol list
-    app.protocol.init()
 
     // Load simulation list
     $('#get-simulation-list').attr('disabled', 'disabled')

@@ -52,10 +52,16 @@
     }, {
         "id": 4,
         "element_type": "recorder",
-        "model": "spike_detector",
+        "model": "voltmeter",
         "x": 200,
         "y": 0,
-        "hidden": true,
+        "params": {}
+    }, {
+        "id": 5,
+        "element_type": "recorder",
+        "model": "spike_detector",
+        "x": 200,
+        "y": 200,
         "nbins": 200,
         "params": {}
     }],
@@ -121,10 +127,26 @@
     }, {
         "id": 6,
         "source": 2,
-        "target": 4
+        "target": 4,
+        "conn_spec": {
+            "rule": "fixed_total_number",
+            "N": 8
+        }
     }, {
         "id": 7,
         "source": 3,
-        "target": 4
+        "target": 4,
+        "conn_spec": {
+            "rule": "fixed_total_number",
+            "N": 2
+        }
+    }, {
+        "id": 8,
+        "source": 2,
+        "target": 5
+    }, {
+        "id": 9,
+        "source": 3,
+        "target": 5
     }]
 }

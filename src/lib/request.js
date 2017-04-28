@@ -46,9 +46,9 @@ $(document).bind('ajaxStart', function() {
 }).bind('ajaxStop', function() {
     $('select:not(.disabled)').attr('disabled', false);
     $('.sliderInput').slider('enable')
-    if (app.lastSliderChanged) {
-        app.lastSliderChanged.find('.min-slider-handle').focus()
-    }
+    // if (app.lastSliderChanged) {
+    //     app.lastSliderChanged.find('.min-slider-handle').focus()
+    // }
 })
 
 module.exports = request;

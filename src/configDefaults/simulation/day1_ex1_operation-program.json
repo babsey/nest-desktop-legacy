@@ -1,7 +1,7 @@
 {
-    "_id": "day4_ex1_networks-dynamics",
-    "name": "Building networks and exploring emergent dynamics",
-    "group": "BioPhyNeuNet_day4",
+    "_id": "day1_ex1_operation-program",
+    "name": "Operation of the program",
+    "group": "BioPhyNeuNet_day1",
     "user": "architect",
     "network": "simple",
     "sim_time": 1000.0,

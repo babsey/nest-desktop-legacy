@@ -15,5 +15,18 @@ kernelController.init = function() {
                 app.simulation.simulate()
             })
     }
+    kernelElem.find('input.paramVal').on('change', function() {
+        var pkey = $(this).parents('.dataSlider').attr('id');
+        var pvalue = $(this).val()
+        var schema = $(this).data('schema')
+        var valid = app.validation.validate(pkey, pvalue, schema)
+        $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
+        $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
+        $(this).parents('.form-group').find('.help-block').html(valid.error)
+        if (valid.error != null) return
+        app.data.kernel[pkey] = valid.value
+        app.slider.update_dataSlider()
+        app.simulation.simulate()
+    })
 }
 module.exports = kernelController;

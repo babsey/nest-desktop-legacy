@@ -17,7 +17,7 @@
         "y": 500,
         "n": 1,
         "params": {
-            "tau_m": 1.0
+            "tau_m": 10.0
         }
     }, {
         "id": 1,
@@ -27,7 +27,7 @@
         "y": 450,
         "stim_time": [100.0, 600.0],
         "params": {
-            "amplitude": 1.0,
+            "amplitude": 100.0,
             "start": 100.0,
             "stop": 600.0
         }
@@ -39,7 +39,7 @@
         "y": 550,
         "stim_time": [1100.0, 1600.0],
         "params": {
-            "amplitude": 1.0,
+            "amplitude": 100.0,
             "start": 1100.0,
             "stop": 1600.0
         }

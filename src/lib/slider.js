@@ -31,9 +31,9 @@ function _slider(ref, id, options) {
         }
         app.lastSliderChanged = $(ref).find('#' + id)
     });
-    $(ref).find('#' + id).find(".slider-handle").on("mouseover", function() {
-        $(this).focus();
-    });
+    // $(ref).find('#' + id).find(".slider-handle").on("mouseover", function() {
+    //     $(this).focus();
+    // });
     return slider
 }
 

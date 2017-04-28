@@ -56,14 +56,14 @@ body {
 #message {
     padding: 10px 20px;
 }
-#protocol {
+#view-protocol {
     width: 220px;
 }
-#protocol #get-protocol-list {
+#view-protocol #get-protocol-list {
     text-align: left;
     width: 180px;
 }
-#protocol #protocol-list {
+#view-protocol #protocol-list {
     width: 180px;
 }
 #protocol-list .popover {

@@ -44,8 +44,8 @@ chart.xLabel = function(c, id, label) {
             .attr("id", id)
             .attr("class", "xlabel label")
             .attr("text-anchor", "middle")
-            .attr("x", +c.g.attr('width') / 2)
-            .attr("y", +c.g.attr('height') + 30)
+            .attr("x", +c.width / 2)
+            .attr("y", +c.height + 30)
             .text("Time (ms)");
     }
     c.g.select("#" + id)
@@ -64,12 +64,13 @@ chart.yLabel = function(c, id, label) {
             .attr("text-anchor", "end");
     }
     c.g.select("#" + id)
+        .attr("x", -1. * +c.yScale.range()[1])
         .text(label);
 }
 
 chart.legend = function(c, data, color) {
     c.g.selectAll('.legends').remove()
-    // if (!chart.color) return
+    if (!data) return
 
     var width = d3.max(data.map(function(d) {
         return d.length
@@ -188,7 +189,8 @@ chart.scaling = function() {
         if (app.simulation.running) {
             app.chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
         } else {
-            app.chart.xScale.domain(d3.extent(app.chart.data[app.chart.abscissa]))
+            // app.chart.xScale.domain(d3.extent(app.chart.data[app.chart.abscissa]))
+            app.chart.xScale.domain([d3.min(app.chart.data[app.chart.abscissa]) - 0.01, d3.max(app.chart.data[app.chart.abscissa]) + 0.01])
         }
     }
 }
@@ -205,7 +207,15 @@ chart.update = function() {
                     return recorder.events.senders[i] == sender
                 })
             })
-            data.color = app.chart.colors()[sidx]
+            var links = app.data.links.filter(function(link) {
+                return link.target == recorder.node.id && app.data.nodes[link.source].ids.indexOf(sender) != -1
+            })
+            if (links.length == 1) {
+                var link = links[0]
+                data.color = app.chart.colors()[app.data.nodes[link.source].id]
+            } else {
+                data.color = app.chart.colors()[sidx]
+            }
             return data
         })
         recorder.senders.map(function(sender, sidx) {
@@ -290,6 +300,7 @@ chart.init = function() {
         // app.chart.networkLayout.update()
         app.resizing = false
     });
+
 }
 
 module.exports = chart;
