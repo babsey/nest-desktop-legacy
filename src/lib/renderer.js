@@ -79,7 +79,8 @@ renderer.scrollspy = function(node) {
     var colors = app.chart.colors()
     div.push('<a href="#node_' + node.id + '" ' + 'style="border: 3px solid' + colors[node.id % colors.length] + '; padding: 10px 0px"')
     div.push(' title="' + app.format.nodeTitle(node) + '">')
-    div.push(app.format.nodeLabel(node))
+    // div.push(app.format.nodeLabel(node))
+    div.push(node.id)
     div.push('</a></li>')
     return div.join('')
 }

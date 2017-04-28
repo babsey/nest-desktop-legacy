@@ -49,6 +49,8 @@ protocol.add = function(data) {
         delete node.index
         delete node.vx
         delete node.vy
+        delete node.fx
+        delete node.fy
         var pkeys = Object.keys(node.params);
         pkeys.map(function(pkey) {
             if (typeof(node.params[pkey]) == 'object') {

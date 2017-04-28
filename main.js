@@ -114,7 +114,7 @@ main.capturePage = function(filepath) {
     var clipRect = {
         x: 0,
         y: 50,
-        width: width - 381,
+        width: width - 333,
         height: height - 50
     };
     mainWindow.capturePage(clipRect, function(imageBuffer) {
