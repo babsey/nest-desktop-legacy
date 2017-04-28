@@ -11,7 +11,14 @@ console.log('Initializing configuration and data in ' + appPath)
 module.exports = new Promise((resolve, reject) => {
     // Copy config file from defaults
     if (!fs.existsSync(path.join(appPath, 'config'))) {
-        var cmd = 'rsync -avz ' + path.join(__dirname, 'src', 'configDefaults', '* ') + ' ' + path.join(appPath, 'config');
+        var cmd = 'rsync -avz ' + path.join(__dirname, 'src', 'configDefaults', '*.json') + ' ' + path.join(appPath, 'config');
+        var exec = require('child_process').exec;
+        exec(cmd, function(error, stdout, stderr) {
+            if (error) {
+                console.error(error)
+            }
+        });
+        var cmd = 'rsync -avz ' + path.join(__dirname, 'src', 'configDefaults', 'nest') + ' ' + path.join(appPath, 'config');
         var exec = require('child_process').exec;
         exec(cmd, function(error, stdout, stderr) {
             if (error) {
@@ -19,6 +26,13 @@ module.exports = new Promise((resolve, reject) => {
             }
         });
     }
+    var cmd = 'rsync -avz ' + path.join(__dirname, 'src', 'configDefaults', 'simulation') + ' ' + path.join(appPath, 'config');
+    var exec = require('child_process').exec;
+    exec(cmd, function(error, stdout, stderr) {
+        if (error) {
+            console.error(error)
+        }
+    });
     resolve('Done')
 }).then((onResolved, onRejected) => {
     if (fs.existsSync(path.join(appPath, 'config'))) {
@@ -54,7 +68,7 @@ module.exports = new Promise((resolve, reject) => {
 }).then((onResolved, onRejected) => {
     // Create directories in data
     var configApp = require(path.join(appPath, 'config', 'app.json'));
-    var dirnames = ['.', 'images', 'exports', 'protocols'];
+    var dirnames = ['.', 'images', 'protocols'];
     dirnames.map(function(dirname) {
         var dirpath = path.join(appPath, configApp.datapath, dirname);
         if (fs.existsSync(dirpath)) return
