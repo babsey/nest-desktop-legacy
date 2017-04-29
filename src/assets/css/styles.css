@@ -55,6 +55,7 @@ body {
 }
 #message {
     padding: 10px 20px;
+    max-width: 400px
 }
 #view-protocol {
     width: 220px;

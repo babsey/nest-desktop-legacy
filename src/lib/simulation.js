@@ -51,6 +51,7 @@ simulation.simulate = function() {
             return !(recorder.node.disabled == true)
         }).length == 0) return
 
+    $('#message .content').empty()
     var mId = app.message.show('Info', 'The simulation is running. Please wait.');
     var data = $.extend(true, {}, app.data);
     setTimeout(function() {
@@ -68,17 +69,22 @@ simulation.simulate = function() {
                 })),
                 links: app.data.links,
             })
-            .done(function(res) {
+            .done(function(response) {
                 var toc = new Date();
-                app.data.kernel.time = res.kernel.time;
-                for (var idx in res.nodes) {
+                if (response.error) {
+                    app.message.hide(mId).remove();
+                    app.message.show('Warning', response.error);
+                    return
+                }
+                app.data.kernel.time = response.data.kernel.time;
+                for (var idx in response.data.nodes) {
                     var node = app.data.nodes[idx]
-                    node.ids = res.nodes[idx].ids;
+                    node.ids = response.data.nodes[idx].ids;
                     var title = app.format.nodeTitle(node)
                     $('#myScrollspy .nav').find('.node_' + node.id).attr('title', title)
                 }
                 simulation.recorders.map(function(recorder) {
-                    recorder.node.params = res.nodes[recorder.node.id].params
+                    recorder.node.params = response.data.nodes[recorder.node.id].params
                     if (recorder.node.model == 'multimeter') {
                         if (recorder.node.record_from) {
                             var record_from = recorder.node.record_from.filter(function(record_from) {
@@ -93,7 +99,7 @@ simulation.simulate = function() {
                     } else if (recorder.node.model == 'voltmeter') {
                         recorder.node.record_from = ['V_m']
                     }
-                    recorder.events = res.nodes[recorder.node.id].events;
+                    recorder.events = response.data.nodes[recorder.node.id].events;
                     recorder.senders = math.sort(recorder.events.senders.filter((v, i, a) => a.indexOf(v) === i));
                     recorder.sources = app.data.links.filter(function(link) {
                         return link.target == recorder.node.id
@@ -168,15 +174,19 @@ simulation.resume = function() {
             nodes: app.data.nodes,
             links: app.data.links,
         })
-        .done(function(res) {
+        .done(function(response) {
+            if (response.error) {
+                app.message.show('Warning', response.error, 2000)
+                return
+            }
             if (!simulation.running) return
-            app.data.kernel.time = res.kernel.time;
+            app.data.kernel.time = response.data.kernel.time;
             if ($('#autoscale').prop('checked')) {
                 app.chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
             }
             simulation.recorders.map(function(recorder) {
-                for (var key in res.nodes[recorder.node.id].events) {
-                    recorder.events[key] = recorder.events[key].concat(res.nodes[recorder.node.id].events[key])
+                for (var key in response.data.nodes[recorder.node.id].events) {
+                    recorder.events[key] = recorder.events[key].concat(response.data.nodes[recorder.node.id].events[key])
                 }
                 recorder.senders = d3.merge(app.data.links.filter(function(link) {
                     return link.target == recorder.node.id
