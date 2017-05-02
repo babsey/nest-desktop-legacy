@@ -9,8 +9,8 @@ const d3 = require("d3");
 var chart = {};
 
 chart.yVal = function(d, idx) {
-    idx = idx || 'total'
-    if (typeof idx == 'number' || idx == 'total') {
+    idx = idx || 'y';
+    if (typeof idx == 'number' || idx == 'y') {
         var y = d[idx]
     } else {
         var y = idx.map(function(i) {
@@ -19,12 +19,13 @@ chart.yVal = function(d, idx) {
             return acc + val
         })
     }
-    return y // chart.npop() * 1000. // chart.binwidth()
+    return y
 }
 
 chart.update = function(recorder) {
-    if (!recorder.data) return
-    var data = recorder.data.bars;
+    chart.g.style('display', 'none')
+    if (!chart.data) return
+
     chart.xScale.range([0, +chart.g.attr('width')])
     chart.yScale.range([+chart.g.attr('height'), 0])
 
@@ -35,12 +36,12 @@ chart.update = function(recorder) {
         })
     } else {
         var nidx = null;
-        var idx = 'total';
+        var idx = 'y';
     }
 
     chart.xScale.domain(app.chart.xScale.domain())
-    chart.yScale.domain([0, d3.max(data, function(d) {
-        return chart.yVal(d, idx.length == 1 ? idx[0]: idx)
+    chart.yScale.domain([0, d3.max(chart.data, function(d) {
+        return chart.yVal(d, idx.length == 1 ? idx[0] : idx)
     })])
 
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
@@ -49,7 +50,7 @@ chart.update = function(recorder) {
 
     var bars = chart.g.select('#clip')
         .selectAll(".bar")
-        .data(data);
+        .data(chart.data);
     chart.bars = bars;
 
     var colors = app.chart.colors()
@@ -128,6 +129,7 @@ chart.update = function(recorder) {
     bars.exit()
         .remove()
 
+    chart.g.style('display', null)
 }
 
 chart.init = function(reference, id, size) {
@@ -167,8 +169,8 @@ chart.init = function(reference, id, size) {
 
     app.chart.xAxis(chart);
     app.chart.yAxis(chart);
-    app.chart.xLabel(chart, 'xLabel_'+id, 'Time [ms]');
-    app.chart.yLabel(chart, 'yLabel_'+id, 'Spike count');
+    app.chart.xLabel(chart, 'xLabel_' + id, 'Time [ms]');
+    app.chart.yLabel(chart, 'yLabel_' + id, 'Spike count');
     app.chart.onDrag(chart);
     app.chart.onZoom(chart);
 }

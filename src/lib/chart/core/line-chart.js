@@ -4,7 +4,6 @@
 // Line chart
 //
 
-const colorbrewer = require('colorbrewer');
 const d3 = require("d3");
 
 var chart = {
@@ -157,34 +156,10 @@ chart.draw_line = function(series) {
 }
 
 chart.update = function(recorder) {
+    chart.g.style('display', 'none')
+
+    if (!chart.data.x) return
     chart.xScale.domain(app.chart.xScale.domain())
-    chart.data.y = [].concat.apply([], recorder.data.map(function(d) {
-        return recorder.node.record_from.map(function(r) {
-            return d[r].filter(function(d, i) {
-                return app.chart.data[app.chart.abscissa][i] > app.chart.xScale.domain()[0] && app.chart.data[app.chart.abscissa][i] <= app.chart.xScale.domain()[1]
-            })
-        })
-    }))
-    chart.data.x = recorder.data.map(function(d) {
-        return d[app.chart.abscissa].filter(function(dd) {
-            return dd > app.chart.xScale.domain()[0] && dd <= app.chart.xScale.domain()[1]
-        })
-    })[0]
-    if (recorder.node.record_from.length == 1) {
-        chart.data.c = recorder.data.map(function(d) {
-            return d.color
-        })
-        chart.data.legend = null
-    } else if (recorder.node.record_from.length > 1) {
-        var colors = colorbrewer['Dark2'][3]
-        chart.data.c = recorder.node.record_from.map(function(r, i) {
-            return colors[i]
-        })
-        chart.data.legend = recorder.node.record_from.map(function(r, i) {
-            return app.model.record_legends[r]
-        })
-    }
-    chart.data.n = recorder.node.series == 'overlap' ? 1 : (recorder.senders.length * recorder.node.record_from.length)
 
     chart.g.attr('height', recorder.node.series == "overlap" ? chart.height : chart.height / chart.data.n)
     chart.xScale.range([0, +chart.g.attr('width')])
@@ -245,6 +220,8 @@ chart.update = function(recorder) {
 
     chart.draw_line(recorder.node.series)
     app.chart.legend(chart, chart.data.legend, chart.data.c)
+
+    chart.g.style('display', null)
 }
 
 chart.init = function(reference, id, size) {
@@ -288,13 +265,13 @@ chart.init = function(reference, id, size) {
 
     chart.focus.append("circle")
         .attr("r", 2.5);
-
-    chart.focus.append("rect")
-        .attr("x", 15)
-        .attr("y", "-17")
-        .attr('height', 16)
-        .attr('width', 85)
-        .attr('fill', 'white');
+    //
+    // chart.focus.append("rect")
+    //     .attr("x", 15)
+    //     .attr("y", "-17")
+    //     .attr('height', 16)
+    //     .attr('width', 85)
+    //     .attr('fill', 'white');
 
     chart.focus.append("text")
         .attr("x", 15)

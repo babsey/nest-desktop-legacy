@@ -9,10 +9,6 @@ model.record_labels = {
     'input_currents_in': 'Incoming inhibitory currents (pA)',
     'I_syn_ex': 'Total excitatory synaptic current (pA)',
     'I_syn_in': 'Total inhibitory synaptic current (pA)',
-    'V_m': 'Membrane pontential (mV)',
-    'V_th': 'Spike threshold (mV)',
-    'weighted_spikes_ex': 'Weighted incoming excitatory spikes',
-    'weighted_spikes_in': 'Weighted incoming inhibitory spikes',
     'ct_': 'Activation of conductances',
     'Act_m': 'Activation of Na+ conductance',
     'Act_h': 'Inactivation of Na+ conductance',
@@ -26,8 +22,14 @@ model.record_labels = {
     'g_in.d': 'Distal conductance of inhibitory input',
     'g_in.p': 'Proximal conductance of inhibitory input',
     'g_in.s': 'Soma conductance of inhibitory input',
+    'count': 'Spike counts',
+    'rate': 'Firing rate [spikes/sec]',
     't_ref_remaining': 'Time remaining till end of refractory state (s)',
     'times': 'Time (ms)',
+    'V_m': 'Membrane pontential (mV)',
+    'V_th': 'Spike threshold (mV)',
+    'weighted_spikes_ex': 'Weighted incoming excitatory spikes',
+    'weighted_spikes_in': 'Weighted incoming inhibitory spikes',
 }
 
 model.record_legends = {

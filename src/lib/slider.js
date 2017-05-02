@@ -18,7 +18,7 @@ function _slider(ref, id, options) {
     var options = $.extend(options_default, options);
     $(ref).find('#' + id).append('<div class="form-group row"></div>')
     var formGroup = $(ref).find('#' + id).find('.form-group')
-    formGroup.append('<label for="' + id + 'Val" style="padding-left:15px;min-width: 200px;">'+ options.label +'</label>')
+    formGroup.append('<label for="' + id + 'Val" title="'+ id +'" style="padding-left:15px;min-width: 200px;">'+ options.label +'</label>')
     formGroup.append('<div class="col-md-9"><input id="' + id + 'Input" class="sliderInput"></div>')
     formGroup.append('<div class="col-md-3" style="padding-left:5px"><input data-schema="number" type="text" id="' + id + 'Val" class="paramVal form-control" value="'+ options.value +'"/></div>')
     formGroup.append('<div class="help-block" style="padding-left:15px"></div>')

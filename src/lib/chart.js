@@ -22,7 +22,7 @@ chart.xAxis = function(c) {
     c.xAxis = d3.axisBottom(c.xScale);
     c.g.append("g")
         .attr("id", "xaxis")
-        .attr("class", "axis")
+        .attr("class", "axis yaxis")
         .attr("transform", "translate(0," + c.height + ")")
         .style('font-size', '14px')
         .call(c.xAxis);
@@ -32,7 +32,7 @@ chart.yAxis = function(c) {
     c.yAxis = d3.axisLeft(c.yScale).ticks(3);
     c.g.append("g")
         .attr("id", "yaxis")
-        .attr("class", "axis")
+        .attr("class", "axis yaxis")
         .style('font-size', '14px')
         .attr("transform", "translate(0,0)")
         .call(c.yAxis);
@@ -187,10 +187,10 @@ chart.axesUpdate = function(c, transition) {
 chart.scaling = function() {
     if ($('#autoscale').prop('checked')) {
         if (app.simulation.running) {
-            app.chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
+            app.chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time]).nice()
         } else {
-            // app.chart.xScale.domain(d3.extent(app.chart.data[app.chart.abscissa]))
-            app.chart.xScale.domain([d3.min(app.chart.data[app.chart.abscissa]) - 0.01, d3.max(app.chart.data[app.chart.abscissa]) + 0.01])
+            app.chart.xScale.domain(d3.extent(app.chart.data[app.chart.abscissa])).nice()
+            // app.chart.xScale.domain([d3.min(app.chart.data[app.chart.abscissa]) - 0.01, d3.max(app.chart.data[app.chart.abscissa]) + 0.01]).nice()
         }
     }
 }

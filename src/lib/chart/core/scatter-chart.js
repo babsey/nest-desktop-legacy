@@ -5,14 +5,18 @@
 //
 
 const d3 = require("d3");
-var chart = {};
+var chart = {
+    data: {}
+};
 
 chart.update = function(recorder) {
-    if (!recorder.data) return
-    var data = recorder.data.dots;
+    chart.g.style('display', 'none')
+
+    if (!chart.data.x) return
     chart.yScale.range([chart.height - (+chart.g.attr('y')), chart.height - (+chart.g.attr('height')) - (+chart.g.attr('y'))])
     chart.xScale.range([0, +chart.g.attr('width')])
     chart.xScale.domain(app.chart.xScale.domain())
+    chart.yScale.domain([d3.max(recorder.senders) + 1, d3.min(recorder.senders) - 1])
 
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     app.chart.axesUpdate(chart, transition)
@@ -20,34 +24,36 @@ chart.update = function(recorder) {
 
     var dots = chart.g.select('#clip')
         .selectAll(".dot")
-        .data(data.x);
+        .data(chart.data.x);
 
     var color = app.config.app().chart.color;
     dots.attr("fill", function(d, i) {
-            return color ? data.c[i] : ''
+            return color ? chart.data.c[i] : ''
         })
         .attr("cx", function(d) {
             return chart.xScale(d);
         })
         .attr("cy", function(d, i) {
-            return chart.yScale(data.y[i]);
+            return chart.yScale(chart.data.y[i]);
         })
 
     dots.enter().append("circle")
         .attr("class", "dot")
         .attr("r", 2)
         .attr("fill", function(d, i) {
-            return color ? data.c[i] : ''
+            return color ? chart.data.c[i] : ''
         })
         .attr("cx", function(d) {
             return chart.xScale(d);
         })
         .attr("cy", function(d, i) {
-            return chart.yScale(data.y[i]);
+            return chart.yScale(chart.data.y[i]);
         }).merge(dots);
 
     dots.exit()
         .remove();
+
+    chart.g.style('display', null)
 }
 
 
