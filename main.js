@@ -28,7 +28,7 @@ app.on('window-all-closed', function() {
 })
 
 function createWindow() {
-    console.log('Starting the application')
+    console.log('Creating the window')
     var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
 
     let {
@@ -90,7 +90,9 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 
 require('./init').then((onFulfilled, onRejected) => {
-    app.on('ready', createWindow)
+    if (!onRejected) {
+        app.on('ready', createWindow)
+    }
 });
 
 app.on('activate', function() {
@@ -118,15 +120,25 @@ main.capturePage = function(filepath) {
         height: height - 50
     };
     mainWindow.capturePage(clipRect, function(imageBuffer) {
-        fs.writeFile(filepath, imageBuffer.resize({
-            'height': 480
-        }).toPng(), function(err) {
-            if (err) {
-                console.error("ERROR Failed to save file", err);
-            } else {
-                console.log('Screen captured in ' + filepath)
+        if (configElectron.screenshot.resize) {
+            if (configElectron.screenshot.width) {
+                var imageBuffer = imageBuffer.resize({
+                    width: configElectron.screenshot.width
+                })
+            } else if (configElectron.screenshot.height) {
+                var imageBuffer = imageBuffer.resize({
+                    height: configElectron.screenshot.height
+                })
             }
-        });
+        }
+        fs.writeFile(filepath, imageBuffer.toPng(),
+            function(err) {
+                if (err) {
+                    console.error("ERROR Failed to save file", err);
+                } else {
+                    console.log('Screen captured in ' + filepath)
+                }
+            });
     });
 }
 

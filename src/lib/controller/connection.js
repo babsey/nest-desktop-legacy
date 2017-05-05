@@ -14,7 +14,7 @@ connController.update = function(link) {
         app.selected_node = null;
         app.selected_link = link;
         var param = $(this).parents('.paramSlider').attr('id');
-        app.selected_link.conn_spec[param] = parseFloat(this.value)
+        link.conn_spec[param] = parseFloat(this.value)
         app.chart.networkLayout.update()
         app.simulation.simulate()
     })
@@ -29,7 +29,7 @@ connController.update = function(link) {
         $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
         $(this).parents('.form-group').find('.help-block').html(valid.error)
         if (valid.error != null) return
-        app.selected_link.conn_spec[pkey] = valid.value
+        link.conn_spec[pkey] = valid.value
         app.slider.update_connSlider(link)
         app.simulation.simulate()
     })
@@ -50,10 +50,10 @@ connController.init = function(link) {
         app.simulation.run(false)
         app.selected_node = null;
         app.selected_link = link;
-        app.selected_link.conn_spec = {
+        link.conn_spec = {
             rule: this.value
         };
-        app.model.conn_selected(app.selected_link)
+        app.model.conn_selected(link)
         connController.update(link)
         app.simulation.simulate()
     })
@@ -63,7 +63,8 @@ connController.init = function(link) {
     connElem.find('.glyphicon-ok').toggle(!link.disabled && true)
     connElem.find('.disableLink').on('click', function() {
         app.simulation.run(false)
-        var link = app.data.links[$(this).parents('.link').data('id')]
+        app.selected_node = null;
+        app.selected_link = link;
         link.disabled = !link.disabled;
         var disabled = link.disabled || false
         app.simulation.update()

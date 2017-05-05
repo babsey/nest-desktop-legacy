@@ -22,13 +22,6 @@ synController.update = function(link) {
         link.syn_spec.receptor_type = 0
     }
 
-    synElem.find('.recSelect').on('change', function() {
-        app.simulation.run(false)
-        app.selected_link = app.data.links[$(this).parents('.link').data('id')];
-        app.selected_link.syn_spec.receptor_type = parseInt(this.value)
-        app.simulation.simulate()
-    })
-
     var synapseModels = app.config.nest('synapse');
     var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
     if (app.data.nodes[link.target].type != 'recorder') {
@@ -37,11 +30,18 @@ synController.update = function(link) {
         })[0])
         app.slider.update_synSlider(link)
     }
+    synElem.find('.recSelect').on('change', function() {
+        app.simulation.run(false)
+        app.selected_node = null;
+        app.selected_link = link;
+        link.syn_spec.receptor_type = parseInt(this.value)
+        app.simulation.simulate()
+    })
     synElem.find('.modelSlider .sliderInput').on('slideStop', function() {
         app.selected_node = null;
         app.selected_link = link;
         var param = $(this).parents('.paramSlider').attr('id');
-        app.selected_link.syn_spec[param] = parseFloat(this.value)
+        link.syn_spec[param] = parseFloat(this.value)
         app.chart.networkLayout.update()
         app.simulation.simulate()
     })
@@ -56,15 +56,8 @@ synController.update = function(link) {
         $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
         $(this).parents('.form-group').find('.help-block').html(valid.error)
         if (valid.error != null) return
-        app.selected_link.syn_spec[pkey] = valid.value
-        app.slider.update_synSlider(app.selected_link)
-        app.simulation.simulate()
-    })
-    synElem.find('.recSelect').on('change', function() {
-        app.simulation.run(false)
-        app.selected_node = null;
-        app.selected_link = link;
-        app.selected_link.syn_spec.receptor_type = parseInt(this.value)
+        link.syn_spec[pkey] = valid.value
+        app.slider.update_synSlider(link)
         app.simulation.simulate()
     })
 }
@@ -86,10 +79,10 @@ synController.init = function(link) {
         app.simulation.run(false)
         app.selected_node = null;
         app.selected_link = link;
-        app.selected_link.syn_spec = {
+        link.syn_spec = {
             model: this.value
         };
-        app.model.syn_selected(app.selected_link)
+        app.model.syn_selected(link)
         synController.update(link)
         app.simulation.simulate()
     })

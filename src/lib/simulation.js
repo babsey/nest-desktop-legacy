@@ -73,7 +73,7 @@ simulation.simulate = function() {
                 var toc = new Date();
                 if (response.error) {
                     app.message.hide(mId).remove();
-                    app.message.show('Warning', response.error);
+                    app.message.show('NEST Error:', response.error);
                     return
                 }
                 app.data.kernel.time = response.data.kernel.time;

@@ -6,5 +6,9 @@
     "window": {
         "frame": true,
         "fullscreen": false
+    },
+    "screenshot": {
+        "resize": true,
+        "height": 480
     }
 }

@@ -65,20 +65,43 @@ nodeController.update = function(node) {
                 app.simulation.simulate()
             })
         if (node.model == 'spike_generator') {
+            var spike_dtime = node.spike_dtime || nodeDefaults.spike_dtime.value;
+            var spike_weight = node.spike_weight || nodeDefaults.spike_weight.value
+            node.params.spike_times = math.range(spike_dtime, app.data.sim_time, spike_dtime)._data
+            node.params.spike_weights = numeric.rep([node.params.spike_times.length], spike_weight)
             var options = nodeDefaults.spike_dtime;
-            options.value = node.spike_dtime || 1.0;
+            options.value = node.spike_dtime;
             app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
                 .on('slideStop', function(d) {
                     node.spike_dtime = d.value
                     node.params.spike_times = math.range(node.spike_dtime, app.data.sim_time, node.spike_dtime)._data
-                    node.params.spike_weights = numeric.rep([node.params.spike_times.length], node.spike_weight || 1)
+                    node.params.spike_weights = numeric.rep([node.params.spike_times.length], node.spike_weight || nodeDefaults.spike_weight.value)
                     app.simulation.simulate()
                 })
+            nodeElem.find('#spike_dtimeVal').on('change', function() {
+                app.selected_link = null;
+                app.selected_node = node;
+                var pkey = $(this).parents('.paramSlider').attr('id');
+                var pvalue = $(this).val()
+                var schema = $(this).data('schema')
+                var valid = app.validation.validate(pkey, pvalue, schema)
+                $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
+                $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
+                $(this).parents('.form-group').find('.help-block').html(valid.error)
+                if (valid.error != null) return
+                node.spike_dtime = valid.value;
+                node.params.spike_times = math.range(node.spike_dtime, app.data.sim_time, node.spike_dtime)._data
+                node.params.spike_weights = numeric.rep([node.params.spike_times.length], node.spike_weight || nodeDefaults.spike_weight.value)
+                app.slider.update_nodeSlider(node)
+                app.simulation.simulate()
+            })
         }
         if (node.model == 'step_current_generator') {
             var amplitude_dtime = node.amplitude_dtime || nodeDefaults.amplitude_dtime.value;
             var amplitude_dvalue = (node.amplitude_dvalue || nodeDefaults.amplitude_dvalue.value);
-            // var amplitude_value_max = (node.amplitude_value_max || nodeDefaults.amplitude_value_max.value);
+            var amplitude = nodeController.amplitude(amplitude_dtime, amplitude_dvalue);
+            node.params.amplitude_times = amplitude.times;
+            node.params.amplitude_values = amplitude.values;
             var options = nodeDefaults.amplitude_dtime;
             options.value = amplitude_dtime;
             var amplitude = nodeController.amplitude(amplitude_dtime, amplitude_dvalue)
@@ -88,7 +111,7 @@ nodeController.update = function(node) {
                 .on('slideStop', function(d) {
                     node.amplitude_dtime = d.value;
                     var amplitude_dvalue = (node.amplitude_dvalue || nodeDefaults.amplitude_dvalue.value);
-                    var amplitude = nodeController.amplitude(node.amplitude_dtime, amplitude_dvalue)
+                    var amplitude = nodeController.amplitude(node.amplitude_dtime, amplitude_dvalue);
                     node.params.amplitude_times = amplitude.times;
                     node.params.amplitude_values = amplitude.values;
                     app.simulation.simulate()
@@ -106,7 +129,7 @@ nodeController.update = function(node) {
                 if (valid.error != null) return
                 node.amplitude_dtime = valid.value;
                 var amplitude_dvalue = (node.amplitude_dvalue || nodeDefaults.amplitude_dvalue.value);
-                var amplitude = nodeController.amplitude(node.amplitude_dtime, amplitude_dvalue)
+                var amplitude = nodeController.amplitude(node.amplitude_dtime, amplitude_dvalue);
                 node.params.amplitude_times = amplitude.times;
                 node.params.amplitude_values = amplitude.values;
                 app.slider.update_nodeSlider(node)
@@ -196,7 +219,7 @@ nodeController.update = function(node) {
                         return recorder.node.id == node.id;
                     })
                     // if (recorder.chart.barChart) {
-                        recorder.chart.update(recorder)
+                    recorder.chart.update(recorder)
                     // }
                 })
         }

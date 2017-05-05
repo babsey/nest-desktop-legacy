@@ -450,7 +450,7 @@
         "id": "g_pd",
         "level": 2,
         "value": 1.0,
-        "min": 0.1,
+        "min": 0.0,
         "max": 100.0,
         "step": 0.1,
         "label": "Conductance connecting proximal and distal dendrite (nS)"
@@ -458,7 +458,7 @@
         "id": "g_sp",
         "level": 2,
         "value": 2.5,
-        "min": 0.1,
+        "min": 0.0,
         "max": 100.0,
         "step": 0.1,
         "label": "Conductance connecting soma and proximal dendrite (nS)"
