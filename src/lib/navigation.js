@@ -18,10 +18,10 @@ navigation.events = function() {
         app.simulation.stop()
         setTimeout(function() {
             if (app.simulation.id == app.data._id) {
-                    var location = './simulation.html?simulation=' + app.simulation.id
-                } else {
-                    var location = './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id
-                }
+                var location = './simulation.html?simulation=' + app.simulation.id
+            } else {
+                var location = './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id
+            }
             window.location = location
         }, 100)
     })
@@ -39,6 +39,31 @@ navigation.events = function() {
         $('#autoscale').prop('checked', 'checked')
         app.simulation.update()
     })
+
+    var DELAY = 300,
+        clicks = 0,
+        timer = null;
+    $('#simulation-run').on('click', function() {
+        if (app.simulation.runAfterChange) {
+            app.simulation.runAfterChange = !app.simulation.runAfterChange
+            $('#simulation-run').toggleClass('btn-primary', app.simulation.runAfterChange)
+            return
+        }
+
+        clicks++; //count clicks
+        if (clicks === 1) {
+            timer = setTimeout(function() {
+                app.simulation.simulate(true)
+                clicks = 0; //after action performed, reset counter
+            }, DELAY);
+        } else {
+            clearTimeout(timer); //prevent single-click action
+            app.simulation.runAfterChange = !app.simulation.runAfterChange
+            $('#simulation-run').toggleClass('btn-primary', app.simulation.runAfterChange)
+            clicks = 0; //after action performed, reset counter
+        }
+    })
+
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
     $('#chart-color').on('click', function() {
         var color = app.config.app().chart.color || false

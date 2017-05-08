@@ -119,6 +119,11 @@ protocol.events = function() {
         clicks = 0,
         timer = null;
     $('#protocol').on('click', function() {
+        if (app.simulation.protocol) {
+            app.simulation.protocol = !(app.simulation.protocol || false)
+            protocol.update()
+            return
+        }
         clicks++; //count clicks
         if (clicks === 1) {
             timer = setTimeout(function() {

@@ -40,8 +40,9 @@ simulation.stop = function() {
     simulation.running = false
 }
 
-simulation.simulate = function() {
+simulation.simulate = function(run) {
     if (app.chart.networkLayout.drawing) return
+    if (!(simulation.runAfterChange || run)) return
     if (simulation.running) return
     if (simulation.recorders.length == 0) return
     if (simulation.recorders.filter(function(recorder) {
