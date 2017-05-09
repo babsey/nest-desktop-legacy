@@ -207,6 +207,7 @@ networkLayout.update = function() {
                 var node = $('#nodeScrollspy .node[data-id="' + app.selected_node.id + '"]');
                 if (node.length == 0) return
                 $((node).find('a').attr('href'))[0].scrollIntoView();
+                scrollBy(0, -50);
             }
 
             // reposition drag line

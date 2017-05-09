@@ -19,7 +19,7 @@ chart.yVal = function(d, idx) {
             return acc + val
         })
     }
-    return y
+    return y || 0
 }
 
 chart.update = function(recorder) {

@@ -66,6 +66,83 @@ renderer.simulationProtocol = function(data) {
     return div.join('')
 }
 
+renderer.simulationNodes = function(data) {
+    var div = [];
+    // div.push(app.format.truncate(data.hash))
+    div.push('<h4>Nodes</h4>')
+    div.push('<table>')
+    data.nodes.map(function(node, idx) {
+        div.push('<tr class="hline">')
+        div.push('<td style="min-width:100px">ID</td>')
+        div.push('<td>' + node.id + '</td>')
+        div.push('</tr>')
+        div.push('<tr>')
+        div.push('<td style="min-width:100px">node model</td>')
+        div.push('<td>' + app.format.nodeTitle(node) + '</td>')
+        div.push('</tr>')
+        if (node.n) {
+            div.push('<tr>')
+            div.push('<td>n</td>')
+            div.push('<td>' + node.n + '</td>')
+            div.push('</tr>')
+        }
+        for (var pkey in node.params) {
+            div.push('<tr>')
+            div.push('<td>' + pkey + '</td>')
+            div.push('<td>' + node.params[pkey] + '</td>')
+            div.push('</tr>')
+        }
+    })
+    div.push('</table>')
+    return div.join('')
+}
+
+renderer.simulationLinks = function(data) {
+    var div = [];
+    div.push('<h4>Links</h4>')
+    div.push('<table>')
+    data.links.map(function(link) {
+        if (link.disabled) return
+        div.push('<tr class="hline">')
+        div.push('<td style="min-width:100px">source</td>')
+        div.push('<td>' + link.source + '</td>')
+        div.push('</tr>')
+        div.push('<tr>')
+        div.push('<td>target</td>')
+        div.push('<td>' + link.target + '</td>')
+        div.push('</tr>')
+        div.push('<tr>')
+        div.push('<td>connection rule</td>')
+        div.push('<td>' + (link.conn_spec ? link.conn_spec.rule || 'all_to_all' : 'all_to_all') + '</td>')
+        div.push('</tr>')
+        if (link.conn_spec) {
+            Object.keys(link.conn_spec).map(function(ckey) {
+                if (ckey == 'rule') return
+                div.push('<tr>')
+                div.push('<td>' + ckey + '</td>')
+                div.push('<td>' + link.conn_spec[ckey] + '</td>')
+                div.push('</tr>')
+            })
+        }
+        div.push('<tr>')
+        div.push('<td>synapse model</td>')
+        div.push('<td>' + (link.syn_spec ? link.syn_spec.model || 'static_synapse' : 'static_synapse') + '</td>')
+        div.push('</tr>')
+        if (link.syn_spec) {
+            Object.keys(link.syn_spec).map(function(skey) {
+                if (skey == 'model') return
+                div.push('<tr>')
+                div.push('<td>' + skey + '</td>')
+                div.push('<td>' + link.syn_spec[skey] + '</td>')
+                div.push('</tr>')
+            })
+        }
+    })
+    div.push('</table>')
+    return div.join('')
+}
+
+
 renderer.simulationPopover = function(d) {
     var div = [];
     div.push('<div>Created at ' + $(d).data('date') + '</div>')
@@ -79,7 +156,7 @@ renderer.scrollspy = function(node) {
     var colors = app.chart.colors()
     div.push('<a href="#node_' + node.id + '" ' + 'style="border: 3px solid' + colors[node.id % colors.length] + '; padding: 10px 0px"')
     div.push(' title="' + app.format.nodeTitle(node) + '">')
-    // div.push(app.format.nodeLabel(node))
+        // div.push(app.format.nodeLabel(node))
     div.push(node.id)
     div.push('</a></li>')
     return div.join('')
@@ -88,12 +165,12 @@ renderer.scrollspy = function(node) {
 renderer.node = function(node) {
     var div = [];
     div.push('<div id="node_' + node.id + '" data-id="' + node.id + '" class="panel-body node ' + node.element_type + ' node_' + node.id + '">')
-    div.push('<hr class="hideOnDrawing">')
     div.push('<div class="content"')
     div.push(' style="')
     var colors = app.chart.colors()
     div.push('border-left: 4px solid ' + colors[node.id % colors.length])
     div.push('" >')
+    div.push('<label style="padding-left:15px;min-width: 200px;">Model</label>')
     div.push('<div class="btn-group">')
     div.push('<select data-id="' + node.id + '" class="' + node.element_type + 'Select modelSelect form-control btn btn-default">')
     div.push('<option disabled selected hidden>Select an ' + node.element_type + ' device</option>')
@@ -107,19 +184,20 @@ renderer.node = function(node) {
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('<div class="selection hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')
+        // div.push('<hr>')
     return div.join('')
 }
 
 renderer.connection = function(link) {
     var div = []
     div.push('<div data-id="' + link.id + '" class="panel-body link">')
-    div.push('<hr>')
     div.push('<div class="content"')
     div.push('style="')
     var colors = app.chart.colors()
     div.push('border-left: 4px solid ' + colors[link.source % colors.length] + '; ')
     div.push('border-right: 4px solid ' + colors[link.target % colors.length])
     div.push('" >')
+    div.push('<label style="padding-left:15px;min-width: 200px;">Rule</label>')
     div.push('<div class="btn-group">')
     div.push('<select class="connSelect modelSelect form-control btn btn-default">')
     div.push('<option disabled selected hidden>Select a connection rule</option>')
@@ -131,27 +209,31 @@ renderer.connection = function(link) {
     div.push('</div>')
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')
+        // div.push('<hr>')
     return div.join('')
 }
 
 renderer.synapse = function(link) {
     var div = []
     div.push('<div data-id="' + link.id + '" class="panel-body link">')
-    div.push('<hr>')
     div.push('<div class="content"')
     div.push('style="')
     var colors = app.chart.colors()
     div.push('border-left: 4px solid ' + colors[link.source % colors.length] + '; ')
     div.push('border-right: 4px solid ' + colors[link.target % colors.length])
     div.push('" >')
+    div.push('<label style="padding-left:15px;min-width: 200px;">Model</label>')
+    div.push('<div>')
     div.push('<select class="synSelect modelSelect form-control">')
     div.push('<option disabled selected hidden>Select a synapse model</option>')
     div.push('</select>')
     div.push('<select class="recSelect modelSelect form-control" style="display:none">')
     div.push('<option disabled selected hidden>Select a receptor</option>')
     div.push('</select>')
+    div.push('</div>')
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')
+        // div.push('<hr>')
     return div.join('')
 }
 

@@ -45,8 +45,10 @@ navigation.events = function() {
         timer = null;
     $('#simulation-run').on('click', function() {
         if (app.simulation.runAfterChange) {
-            app.simulation.runAfterChange = !app.simulation.runAfterChange
+            app.simulation.runAfterChange = false
             $('#simulation-run').toggleClass('btn-primary', app.simulation.runAfterChange)
+            configApp.simulation.runAfterChange = app.simulation.runAfterChange
+            app.config.save('app', configApp)
             return
         }
 
@@ -60,28 +62,30 @@ navigation.events = function() {
             clearTimeout(timer); //prevent single-click action
             app.simulation.runAfterChange = !app.simulation.runAfterChange
             $('#simulation-run').toggleClass('btn-primary', app.simulation.runAfterChange)
+            configApp.simulation.runAfterChange = app.simulation.runAfterChange
+            app.config.save('app', configApp)
             clicks = 0; //after action performed, reset counter
         }
     })
 
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
     $('#chart-color').on('click', function() {
-        var color = app.config.app().chart.color || false
-        var configApp = app.config.app();
-        configApp.chart.color = !color;
-        app.config.save('app', configApp)
-        $('#chart-color').find('.glyphicon-ok').toggle(!color)
-        app.chart.update()
-    })
-    // $('.color').on('click', function() {
-    //     var colorGroup = $(this).data('group')
-    //     var configApp = app.config.app();
-    //     configApp.chart.color.group = colorGroup;
-    //     app.config.save('app', configApp)
-    //     $('.color').find('.glyphicon-ok').hide()
-    //     $('.color[data-group=' + colorGroup + ']').find('.glyphicon-ok').show()
-    //     app.chart.update()
-    // })
+            var color = app.config.app().chart.color || false
+            var configApp = app.config.app();
+            configApp.chart.color = !color;
+            app.config.save('app', configApp)
+            $('#chart-color').find('.glyphicon-ok').toggle(!color)
+            app.chart.update()
+        })
+        // $('.color').on('click', function() {
+        //     var colorGroup = $(this).data('group')
+        //     var configApp = app.config.app();
+        //     configApp.chart.color.group = colorGroup;
+        //     app.config.save('app', configApp)
+        //     $('.color').find('.glyphicon-ok').hide()
+        //     $('.color[data-group=' + colorGroup + ']').find('.glyphicon-ok').show()
+        //     app.chart.update()
+        // })
     $('#view-networkLayout').on('click', function() {
         var networkLayout = !app.config.app().chart.networkLayout || false
         var configApp = app.config.app();
@@ -112,6 +116,7 @@ navigation.events = function() {
             }
         }
         app.slider.update_dataSlider()
+        app.controller.update()
     })
     $('#capture-screen').on('click', function() {
         app.screen.capture(app.data, true)
@@ -151,8 +156,8 @@ navigation.events = function() {
     })
     $('.simulation').on('click', function(d) {
         app.simulation.stop()
-        // app.simulation.id = this.id
-        // app.simulation.init()
+            // app.simulation.id = this.id
+            // app.simulation.init()
         location.href = location.origin + location.pathname + '?simulation=' + this.id
     })
     $('#close').on('click', function() {
@@ -162,6 +167,8 @@ navigation.events = function() {
 }
 
 navigation.init = function() {
+    $('#simulation-run').toggleClass('btn-primary', app.config.app().simulation.runAfterChange || false)
+    app.simulation.runAfterChange = app.config.app().simulation.runAfterChange;
     $("#config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().simulation.protocol || false)
     $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
     $("#config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()

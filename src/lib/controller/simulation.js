@@ -52,11 +52,8 @@ simulationController.init = function() {
         app.simulation.simulate()
     })
 
-    simElem.append('<div id="abscissa" class="form-group hideOnDrawing" style="display:none"></div>')
+    simElem.append('<div id="abscissa" class="form-group" style="display:none"></div>')
     simElem.find('#abscissa').append('<label for="abscissaSelect">Abscissa</label>')
     simElem.find('#abscissa').append('<select id="abscissaSelect" class="form-control"></select>')
-    simElem.find('#abscissaSelect').append('<option value="times">' + app.model.record_labels.times + '</option>')
-    simElem.find('#abscissa').toggle(simElem.find('#abscissaSelect option').length > 1)
-    $("#simulation-resume").toggleClass('disabled', app.chart.abscissa != 'times')
 }
 module.exports = simulationController;

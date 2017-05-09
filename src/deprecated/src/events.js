@@ -267,11 +267,6 @@ events.controller = function() {
     //     app.chart.update();
     // })
 
-    // $('#myScrollspy').find('a').on('click', function(e) {
-    //     e.preventDefault();
-    //     $($(this).attr('href'))[0].scrollIntoView();
-    //     scrollBy(0, -50);
-    // });
 }
 
 
