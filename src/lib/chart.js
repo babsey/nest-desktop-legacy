@@ -297,7 +297,7 @@ chart.init = function() {
         app.resizing = true
         app.chart.init()
         app.chart.update()
-        // app.chart.networkLayout.update()
+        app.controller.update()
         app.resizing = false
     });
 

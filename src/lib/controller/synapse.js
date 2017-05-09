@@ -24,7 +24,7 @@ synController.update = function(link) {
 
     var synapseModels = app.config.nest('synapse');
     var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
-    if (app.data.nodes[link.target].type != 'recorder') {
+    if (app.data.nodes[link.target].element_type != 'recorder') {
         app.slider.init_modelSlider('#synapses .link[data-id=' + link.id + '] .modelSlider', synapseModels.filter(function(d) {
             return d.id == synapseModel;
         })[0])
@@ -75,6 +75,9 @@ synController.init = function(link) {
     }
     var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
     synElem.find('.synSelect').find('option#' + synapseModel).prop('selected', true);
+    if (app.data.nodes[link.target].element_type == 'recorder' || app.data.nodes[link.source].element_type == 'stimulator') {
+        synElem.find('.synSelect').addClass('disabled')
+    }
     synElem.find('.synSelect').on('change', function() {
         app.simulation.run(false)
         app.selected_node = null;

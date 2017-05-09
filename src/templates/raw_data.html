@@ -39,33 +39,51 @@
         .key {
             color: black;
         }
+
+        td {
+            min-width: 150px;
+        }
+
+        .hline {
+            border-top: 1px solid black;
+        }
+
+        td:first-child {
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container-fluid">
-        <div class="col-md-5">
-            <div class="content">
-                <div>
-                    <a class="btn btn-default">
-                        <i class="fa fa-arrow-left"></i>
-                    </a>
-                </div>
+        <div class="content" style="position:fixed">
+            <a class="btn btn-default">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <div class="content" style="position:fixed; top:50px">
                 <img>
-                <textarea id="raw_data" style="opacity:0.0; width: 100%; height: 0px"></textarea>
             </div>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-3">
+            <div id="nodes"></div>
+        </div>
+        <div class="col-md-3">
+            <div id="links"></div>
+        </div>
+        <!-- <div class="col-md-7">
             <div class="content" style="position:relative">
-                <div style="position:absolute; right:15px; top:10px">
+                <div style="position:absolute; right:15px; top:10px; display: none">
                     <button id="copy" class="btn btn-default" data-clipboard-target="#raw_data">
                         <i class="fa fa-clipboard"></i>
                     </button>
                 </div>
                 <pre></pre>
+                <textarea id="raw_data" style="display:none; opacity:0.0; width: 100%; height: 0px"></textarea>
             </div>
-        </div>
+        </div> -->
     </div>
     <script>
         const fs = require('fs');
@@ -94,10 +112,11 @@
                 $('a').attr('href', './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
             }
             $('img').attr('src', src)
-            $('textarea').html(JSON.stringify(app.data, undefined, 4))
-            $('pre').append(app.format.syntaxHighlight(JSON.stringify(app.data, undefined, 4)))
-            var clipboard = new Clipboard('#copy');
-
+                // $('textarea').html(JSON.stringify(app.data, undefined, 4))
+                // $('pre').append(app.format.syntaxHighlight(JSON.stringify(app.data, undefined, 4)))
+                // var clipboard = new Clipboard('#copy');
+            $('#nodes').html(app.renderer.simulationNodes(app.data))
+            $('#links').html(app.renderer.simulationLinks(app.data))
         }
 
         setTimeout(function() {
