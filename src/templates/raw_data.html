@@ -9,41 +9,12 @@
         .content {
             margin-top: 10px
         }
-
         img {
             width: 100%;
         }
-
-        pre {
-            outline: 1px solid #ccc;
-            padding: 5px;
-            margin: 5px;
-        }
-
-        .string {
-            color: darkred;
-        }
-
-        .number {
-            color: navy;
-        }
-
-        .boolean {
-            color: purple;
-        }
-
-        .null {
-            color: magenta;
-        }
-
-        .key {
-            color: black;
-        }
-
         td {
             min-width: 150px;
         }
-
         .hline {
             border-top: 1px solid black;
         }
@@ -57,13 +28,13 @@
 <body>
 
     <div class="container-fluid">
-        <div class="content" style="position:fixed">
+        <div class="content">
             <a class="btn btn-default">
                 <i class="fa fa-arrow-left"></i>
             </a>
         </div>
         <div class="col-md-6">
-            <div class="content" style="position:fixed; top:50px">
+            <div class="content">
                 <img>
             </div>
         </div>
@@ -88,7 +59,7 @@
     <script>
         const fs = require('fs');
         const path = require('path');
-        const Clipboard = require('clipboard');
+        // const Clipboard = require('clipboard');
 
         window.$ = window.jQuery = require('jquery');
         window.app = require('../app');

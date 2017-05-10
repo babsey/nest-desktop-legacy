@@ -21,7 +21,7 @@
         }
     },
     "simulation": {
-        "runAfterChange": false,
+        "runAfterChange": true,
         "level": 1,
         "groups": [{
             "id": "user",
