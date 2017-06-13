@@ -1,10 +1,14 @@
 CHANGELOG
 ---------
 
+0.9.3:
+    Better organisation for navigation
+    View of documented and raw data
+
 0.9.2:
     Better view for raw data
     Enable/disable simulation after change
-    Partial scrolling    
+    Partial scrolling
 
 0.9.1:
     Error message, update nest-server-simulation

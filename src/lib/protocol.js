@@ -119,6 +119,7 @@ protocol.events = function() {
         clicks = 0,
         timer = null;
     $('#protocol').on('click', function() {
+        if (app.chart.networkLayout.drawing) return
         if (app.simulation.protocol) {
             app.simulation.protocol = !(app.simulation.protocol || false)
             protocol.update()

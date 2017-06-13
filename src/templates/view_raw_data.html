@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.css" />
+    <style>
+        .content {
+            margin: 10px 0px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="content">
+            <a class="btn btn-default">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+
+            <button id="copy" class="btn btn-default" data-clipboard-target="#raw_data">
+                <i class="fa fa-clipboard"></i>
+            </button>
+        </div>
+
+        <pre id="raw_data"></pre>
+    </div>
+    <script>
+        const fs = require('fs');
+        const path = require('path');
+        const Clipboard = require('clipboard');
+
+        window.$ = window.jQuery = require('jquery');
+        window.app = require('../app');
+        var query = app.query(location.search);
+        app.simulation.id = query.simulation;
+        app.protocol.id = query.protocol;
+
+        app.db.init()
+        app.protocol.init()
+
+        var render = function() {
+            var configApp = app.config.app();
+            if (app.simulation.id == app.data._id) {
+                $('a').attr('href', './simulation.html?simulation=' + app.simulation.id)
+            } else {
+                $('a').attr('href', './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
+            }
+            $('#raw_data').html(JSON.stringify(app.data, undefined, 4))
+            var clipboard = new Clipboard('#copy');
+        }
+
+        setTimeout(function() {
+            if (app.protocol.id) {
+                app.protocol.get(app.protocol.id)
+                    .exec(function(err, docs) {
+                        app.data = docs;
+                        render()
+                    })
+            } else {
+                app.db.get(app.simulation.id)
+                    .exec(function(err, docs) {
+                        app.data = docs;
+                        render()
+                    })
+            }
+        }, 200)
+    </script>
+</body>
+
+</html>

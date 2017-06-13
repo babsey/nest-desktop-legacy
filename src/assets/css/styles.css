@@ -88,7 +88,7 @@ body {
   padding: 0;
   margin: 0
 }
-#config {
+.config {
     width: 200px;
 }
 #controller {
@@ -96,7 +96,7 @@ body {
     position: relative
 }
 #controller-body {
-    width: 324px;
+    width: 325px;
 }
 #nodeScrollspy {
     position: fixed;
@@ -162,10 +162,10 @@ hr {
     background-color: white;
 }*/
 #nodes .modelSelect {
-    width: 218px;
+    width: 220px;
 }
 #connections .modelSelect {
-    width: 214px;
+    width: 220px;
 }
 .paramSlider, .dataSlider {
     margin-bottom: 0px;

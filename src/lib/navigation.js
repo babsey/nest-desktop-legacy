@@ -8,13 +8,19 @@ navigation.events = function() {
     // Load protocol events
     app.protocol.events()
 
+    $('.spinOnHover').hover(function() {
+        $(this).find(' .fa').addClass('fa-spin');
+    }, function() {
+        $(this).find(' .fa').removeClass('fa-spin');
+    });
+
     $('#index').on('click', function() {
         app.simulation.stop()
         setTimeout(function() {
             window.location = "../index.html"
         }, 100)
     })
-    $('#simulation-refresh').on('click', function() {
+    $('#app-refresh').on('click', function() {
         app.simulation.stop()
         setTimeout(function() {
             if (app.simulation.id == app.data._id) {
@@ -25,57 +31,76 @@ navigation.events = function() {
             window.location = location
         }, 100)
     })
+    $('#chart-color').on('click', function() {
+        var color = app.config.app().chart.color || false
+        var configApp = app.config.app();
+        configApp.chart.color = !color;
+        app.config.save('app', configApp)
+        $('#chart-color').find('.glyphicon-ok').toggle(!color)
+        app.chart.update()
+    })
     $('#edit-network').on('click', function() {
-        var drawing = !app.chart.networkLayout.drawing;
+        var drawing = true;
         app.chart.networkLayout.drawing = drawing;
-        $('#edit-network').toggleClass('active', drawing)
-        $('.nav-tabs a[href="#nodes"]').tab('show');
-        $('.hideOnDrawing').toggle(!drawing)
-        $('.disableOnDrawing').toggleClass('disabled', drawing)
         var networkLayout = app.config.app().chart.networkLayout
         app.chart.networkLayout.toggle(drawing || networkLayout)
         app.chart.networkLayout.update()
-        if (drawing) return
+        $('.nav-tabs a[href="#nodes"]').tab('show');
+        $('.hideOnDrawing').toggle(!drawing)
+        $('.disableOnDrawing').toggleClass('disabled', drawing)
+        $('#edit-button').show()
+    })
+    $('#edit-cancel').on('click', function() {
+        if (app.simulation.id == app.data._id) {
+            var location = './simulation.html?simulation=' + app.simulation.id
+        } else {
+            var location = './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id
+        }
+        window.location = location
+    })
+    $('#edit-save').on('click', function() {
+        var drawing = false;
+        app.chart.networkLayout.drawing = drawing;
+        var networkLayout = app.config.app().chart.networkLayout
+        app.chart.networkLayout.toggle(drawing || networkLayout)
+        app.chart.networkLayout.update()
+        $('.nav-tabs a[href="#nodes"]').tab('show');
+        $('.hideOnDrawing').toggle(!drawing)
+        $('.disableOnDrawing').toggleClass('disabled', drawing)
+        $('#edit-button').hide()
         $('#autoscale').prop('checked', 'checked')
         app.simulation.update()
     })
-
-    var DELAY = 300,
-        clicks = 0,
-        timer = null;
-    $('#simulation-run').on('click', function() {
-        if (app.simulation.runAfterChange) {
-            app.simulation.runAfterChange = false
-            $('#simulation-run').toggleClass('btn-primary', app.simulation.runAfterChange)
-            configApp.simulation.runAfterChange = app.simulation.runAfterChange
-            app.config.save('app', configApp)
-            return
-        }
-
-        clicks++; //count clicks
-        if (clicks === 1) {
-            timer = setTimeout(function() {
-                app.simulation.simulate(true)
-                clicks = 0; //after action performed, reset counter
-            }, DELAY);
-        } else {
-            clearTimeout(timer); //prevent single-click action
-            app.simulation.runAfterChange = !app.simulation.runAfterChange
-            $('#simulation-run').toggleClass('btn-primary', app.simulation.runAfterChange)
-            configApp.simulation.runAfterChange = app.simulation.runAfterChange
-            app.config.save('app', configApp)
-            clicks = 0; //after action performed, reset counter
-        }
+    $('#clear-network').on('click', function() {
+        app.simulation.stop()
+        app.selected_node = null;
+        app.selected_node = null;
+        app.data.nodes = []
+        app.data.links = []
+        app.simulation.recorders = [];
+        app.simulation.update()
+        var drawing = true;
+        app.chart.networkLayout.drawing = drawing;
+        app.chart.networkLayout.toggle(drawing)
+        app.chart.networkLayout.update()
+        $('.nav-tabs a[href="#nodes"]').tab('show');
+        $('.hideOnDrawing').toggle(!drawing)
+        $('.disableOnDrawing').toggleClass('disabled', drawing)
+        $('#edit-button').show()
     })
-
+    $('.simulation-run').on('click', app.simulation.simulate)
+    $('#run-after-change').on('click', function() {
+        var runAfterChange = app.config.app().simulation.runAfterChange || false
+        var configApp = app.config.app();
+        configApp.simulation.runAfterChange = !runAfterChange;
+        app.simulation.runAfterChange = !runAfterChange;
+        app.config.save('app', configApp)
+        $('#run-after-change').find('.glyphicon-ok').toggle(!runAfterChange)
+    })
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
-    $('#chart-color').on('click', function() {
-            var color = app.config.app().chart.color || false
-            var configApp = app.config.app();
-            configApp.chart.color = !color;
-            app.config.save('app', configApp)
-            $('#chart-color').find('.glyphicon-ok').toggle(!color)
-            app.chart.update()
+    $('#capture-screen').on('click', function() {
+            app.screen.capture(app.data, true)
+            app.protocol.update()
         })
         // $('.color').on('click', function() {
         //     var colorGroup = $(this).data('group')
@@ -118,27 +143,6 @@ navigation.events = function() {
         app.slider.update_dataSlider()
         app.controller.update()
     })
-    $('#capture-screen').on('click', function() {
-        app.screen.capture(app.data, true)
-        app.protocol.update()
-    })
-    $('#clear-network').on('click', function() {
-        app.simulation.stop()
-        app.selected_node = null;
-        app.selected_node = null;
-        app.data.nodes = []
-        app.data.links = []
-        app.simulation.recorders = [];
-        app.simulation.update()
-        var drawing = true;
-        app.chart.networkLayout.drawing = drawing;
-        $('#edit-network').toggleClass('active', drawing)
-        $('.nav-tabs a[href="#nodes"]').tab('show');
-        $('.hideOnDrawing').toggle(!drawing)
-        $('.disableOnDrawing').toggleClass('disabled', drawing)
-        app.chart.networkLayout.toggle(drawing)
-        app.chart.networkLayout.update()
-    })
     $('#simulation-add-submit').on('click', function(e) {
         app.data.name = $('#simulation-add-form #simulation-name').val()
         app.data.description = $('#simulation-add-form #simulation-description').val()
@@ -167,12 +171,12 @@ navigation.events = function() {
 }
 
 navigation.init = function() {
-    $('#simulation-run').toggleClass('btn-primary', app.config.app().simulation.runAfterChange || false)
     app.simulation.runAfterChange = app.config.app().simulation.runAfterChange;
-    $("#config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().simulation.protocol || false)
-    $("#config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
-    $("#config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
-    $("#config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
+    $(".config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().simulation.protocol || false)
+    $(".config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
+    $(".config").find('#run-after-change').find('.glyphicon-ok').toggle(app.config.app().simulation.runAfterChange || false)
+    $(".config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
+    $("#slider-config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
 
     // Load simulation list
     $('#get-simulation-list').attr('disabled', 'disabled')

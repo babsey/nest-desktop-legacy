@@ -21,13 +21,13 @@ simulation.export = function() {
 simulation.run = function(running) {
     simulation.running = (running == true)
     if (simulation.running) {
-        $('#simulation-resume').find('.fa').hide()
-        $('#simulation-resume').find('.fa-pause').show()
+        $('#simulation-resume').find('.resume').hide()
+        $('#simulation-resume').find('#simulation-stop').show()
         $('.dataSlider').find('.sliderInput').slider('disable')
         app.simulation.resume()
     } else {
-        $('#simulation-resume').find('.fa').hide()
-        $('#simulation-resume').find('.fa-play').show()
+        $('#simulation-resume').find('.resume').hide()
+        $('#simulation-resume').find('#simulation-start').show()
         $('.dataSlider').find('.sliderInput').slider('enable')
     }
 }
@@ -157,9 +157,11 @@ simulation.simulate = function(run) {
                     app.protocol.add(data);
                 }
                 if (app.simulation.id == app.data._id) {
-                    $('#raw-data').find('a').attr('href', './raw_data.html?simulation=' + app.simulation.id)
+                    $('#view-data').find('a').attr('href', './view_data.html?simulation=' + app.simulation.id)
+                    $('#view-raw-data').find('a').attr('href', './view_raw_data.html?simulation=' + app.simulation.id)
                 } else {
-                    $('#raw-data').find('a').attr('href', './raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
+                    $('#view-data').find('a').attr('href', './view_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
+                    $('#view-raw-data').find('a').attr('href', './view_raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
                 }
             })
     }, 10)

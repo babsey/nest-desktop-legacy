@@ -10,7 +10,7 @@
 }, {
     "id": "res_time",
     "label": "Resume simulation time (ms)",
-    "level": 5,
+    "level": 4,
     "min": 1.0,
     "max": 20.0,
     "step": 1.0,
