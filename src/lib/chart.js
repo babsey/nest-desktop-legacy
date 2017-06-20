@@ -186,7 +186,7 @@ chart.axesUpdate = function(c, transition) {
 
 chart.scaling = function() {
     if ($('#autoscale').prop('checked')) {
-        if (app.simulation.running) {
+        if (app.simulation.running || (app.chart.abscissa == 'times')) {
             app.chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
         } else {
             app.chart.xScale.domain(d3.extent(app.chart.data[app.chart.abscissa])).nice()

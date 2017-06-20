@@ -16,7 +16,7 @@ connController.update = function(link) {
         var param = $(this).parents('.paramSlider').attr('id');
         link.conn_spec[param] = parseFloat(this.value)
         app.chart.networkLayout.update()
-        app.simulation.simulate()
+        app.simulation.reset()
     })
     connElem.find('input.paramVal').on('change', function() {
         app.selected_node = null;
@@ -31,7 +31,7 @@ connController.update = function(link) {
         if (valid.error != null) return
         link.conn_spec[pkey] = valid.value
         app.slider.update_connSlider(link)
-        app.simulation.simulate()
+        app.simulation.reset()
     })
 }
 
@@ -55,13 +55,14 @@ connController.init = function(link) {
         };
         app.model.conn_selected(link)
         connController.update(link)
-        app.simulation.simulate()
+        app.simulation.reset()
     })
 
     connElem.find('.connSelect').toggleClass('disabled', link.disabled || false)
     connElem.find('.glyphicon-remove').toggle(link.disabled || false)
     connElem.find('.glyphicon-ok').toggle(!link.disabled && true)
     connElem.find('.disableLink').on('click', function() {
+        app.data.kernel.time = 0.0                                              // Reset simulation
         app.simulation.run(false)
         app.selected_node = null;
         app.selected_link = link;

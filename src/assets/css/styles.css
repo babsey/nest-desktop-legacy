@@ -49,7 +49,7 @@ body {
 }
 .navbar {
     height: 50px;
-    margin-right:15px;
+    margin-right: 15px;
     margin-bottom: 0px;
     /*background-color: white;*/
 }
@@ -71,22 +71,22 @@ body {
     width: 300px;
 }
 #protocol-list .popover dl {
-  width: 100%;
-  overflow: hidden;
-  padding: 0;
-  margin: 0
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0
 }
 #protocol-list .popover dt {
-  float: left;
-  width: 50%;
-  padding: 0;
-  margin: 0
+    float: left;
+    width: 50%;
+    padding: 0;
+    margin: 0
 }
 #protocol-list .popover dd {
-  float: left;
-  width: 50%;
-  padding: 0;
-  margin: 0
+    float: left;
+    width: 50%;
+    padding: 0;
+    margin: 0
 }
 .config {
     width: 200px;
@@ -134,9 +134,11 @@ body {
     padding: 0px 0px;
     margin: 0px;
 }
+
 /*.controller {
     margin-top: -50px;
 }*/
+
 #tabs {
     padding: 5px
 }
@@ -155,12 +157,14 @@ hr {
     margin-top: 0;
     margin-bottom: 0;
 }
+
 /*#controller-panel {
     background-color: transparent;
 }
 #controller-panel:hover {
     background-color: white;
 }*/
+
 #nodes .modelSelect {
     width: 220px;
 }
@@ -192,15 +196,12 @@ hr {
     background: #fff none repeat scroll 0 0;
     border: 1px solid #ccc;
 }
-
 .form-group {
     margin-bottom: 0;
 }
-
 select.form-control {
     width: 95%;
 }
-
 input.form-control {
     height: 23px;
     padding: 0;
@@ -210,6 +211,10 @@ input.form-control {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
 }
-.slider-handle:focus{
+.slider-handle:focus {
     cursor: pointer;
+}
+#simulation-description {
+    min-height: 300px;
+    margin: 10px 0;
 }

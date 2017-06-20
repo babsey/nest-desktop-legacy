@@ -87,7 +87,7 @@ synController.init = function(link) {
         };
         app.model.syn_selected(link)
         synController.update(link)
-        app.simulation.simulate()
+        app.simulation.reset()
     })
     synController.update(link)
 }

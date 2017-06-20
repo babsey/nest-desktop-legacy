@@ -16,11 +16,11 @@
 <body data-spy="scroll" data-target="#nodeScrollspy" data-offset="50" style="overflow: hidden;">
 
     <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
+    <div id="simulation-add-dialog" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-                <form id="simulation-add-form">
+                <form id="simulation-form">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="simulation-name" class="control-label">Simulation:</label>
@@ -30,7 +30,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-add-submit">Submit</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-add-submit" style="display:none">Add</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-edit-submit" style="display:none">Edit</button>
                     </div>
                 </form>
             </div>
@@ -113,19 +114,37 @@
                         <i class="fa fa-cog" aria-hidden="true"></i>
                     </button>
 
-                    <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Simulation menu">
+                    <button id="simulation-config-button" type="button" class="btn btn-default dropdown-toggle disableOnDrawing" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Simulation menu">
                         <b class="caret" aria-hidden="true"></b>
                     </button>
                     <ul id="simulation-config" class="dropdown-menu config" role="menu" aria-labelledby="get-simulation-config">
+                        <li id="run-after-change" title="Run simulation after change">
+                            <a href="#">
+                                <i class="fa fa-magic" aria-hidden="true"></i> Run after change
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
+                        </li>
+                        <li id="auto-reset" title="Reset simulation automatically">
+                            <a href="#">
+                                <i class="fa fa-eraser" aria-hidden="true"></i> Automatic reset
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
+                        </li>
+                        <li id="random-seed" title="Randomize seed for simulations">
+                            <a href="#">
+                                <i class="fa fa-random" aria-hidden="true"></i> Randomize seed
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
                         <li class="simulation-run spinOnHover" title="Run simulation">
                             <a href="#">
                                 <i class="fa fa-cog" aria-hidden="true"></i> Run simulation
                             </a>
                         </li>
-                        <li id="run-after-change" title="Run simulation after change">
+                        <li id="simulation-reset" title="Reset simulation">
                             <a href="#">
-                                <i class="fa fa-magic" aria-hidden="true"></i> Run after change
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                <i class="fa fa-repeat" aria-hidden="true"></i> Reset simulation
                             </a>
                         </li>
                         <li class="divider"></li>
@@ -133,17 +152,14 @@
                             <a href="#">
                                 <div id="simulation-start" class="resume" title="Run simulation continuously">
                                     <i class="fa fa-play" aria-hidden="true"></i> Simulate continuously
-                                    </div>
+                                </div>
                                 <div id="simulation-stop" class="resume" style="display:none" title="Pause simulation">
                                     <i class="fa fa-pause" aria-hidden="true"></i> Pause simulation
-                                    </div>
+                                </div>
                                 <!-- <span class="glyphicon glyphicon-menu-glyphicon glyphicon-play"></span>
                                             <span class="glyphicon glyphicon-menu-glyphicon glyphicon-pause" style="display:none"></span> -->
                             </a>
                         </li>
-                        <!-- <li type="button" class="btn btn-default navbar-btn disableOnDrawing" id="simulation-add" data-toggle="modal" data-target="#myModal" disabled title="Save this simulation">
-                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span>
-                    </li> -->
                         <li class="divider"></li>
                         <li id="capture-screen" title="Capture screen for thumbnail">
                             <a href="#">
@@ -160,6 +176,17 @@
                                 <i class="fa fa-code"></i> View raw data
                             </a>
                         </li>
+                        <li class="divider"></li>
+                        <li id="simulation-add" data-toggle="modal" data-target="#simulation-add-dialog" title="Save this simulation">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span> Add simulation
+                            </a>
+                        </li>
+                        <li id="simulation-edit" data-toggle="modal" data-target="#simulation-add-dialog" title="Save this simulation" style="display:none">
+                            <a href="#">
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-edit"></span> Edit simulation
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -167,37 +194,6 @@
             <span class="glyphicon glyphicon-menu-glyphicon glyphicon-download-alt"></span>
         </button> -->
 
-                <!-- <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Edit settings and more actions">
-                        <i class="fa fa-sliders" aria-hidden="true"></i>
-                    </button>
-                    <ul id="config" class="dropdown-menu" role="menu" aria-labelledby="get-config">
-                        <li id="level_1" class="level" level="1">
-                            <a href="#">
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                        <li id="level_2" class="level" level="2">
-                            <a href="#">
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                        <li id="level_3" class="level" level="3">
-                            <a href="#">
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                        <li id="level_4" class="level" level="4">
-                            <a href="#">
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </div> -->
                 <button type="button" class="btn btn-default navbar-btn" id="close">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>

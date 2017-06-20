@@ -27,7 +27,8 @@ request.server_check = function() {
 }
 
 request.request = function(data) {
-    var url = 'http://' + request.serverURL() + '/network/' + app.data.network + '/' + (app.simulation.running ? 'resume' : 'simulate')
+    var running = (!(app.data.kernel.time == 0.0) || app.simulation.running) ? 'resume' : 'simulate'
+    var url = 'http://' + request.serverURL() + '/network/' + app.data.network + '/' + running
     return $.ajax({
         method: 'POST',
         url: url,

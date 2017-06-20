@@ -13,14 +13,16 @@ function _slider(ref, id, options) {
         tooltip: 'hide',
         show_value: true,
         natural_arrow_keys: true,
-        focus: true,
+        // focus: true,
     };
     var options = $.extend(options_default, options);
     $(ref).find('#' + id).append('<div class="form-group row"></div>')
     var formGroup = $(ref).find('#' + id).find('.form-group')
-    formGroup.append('<label for="' + id + 'Val" title="'+ id +'" style="padding-left:15px;min-width: 200px;">'+ options.label +'</label>')
+    formGroup.append('<label for="' + id + 'Val" title="' + id + '" style="padding-left:15px;min-width: 200px;">' + options.label + '</label>')
     formGroup.append('<div class="col-md-9"><input id="' + id + 'Input" class="sliderInput"></div>')
-    formGroup.append('<div class="col-md-3" style="padding-left:5px"><input data-schema="number" type="text" id="' + id + 'Val" class="paramVal form-control" value="'+ options.value +'"/></div>')
+    if (options.show_value) {
+        formGroup.append('<div class="col-md-3" style="padding-left:5px"><input data-schema="number" type="text" id="' + id + 'Val" class="paramVal form-control" value="' + options.value + '"/></div>')
+    }
     formGroup.append('<div class="help-block" style="padding-left:15px"></div>')
 
     var slider = $(ref).find('#' + id).find("#" + id + 'Input').slider(options);
@@ -29,7 +31,7 @@ function _slider(ref, id, options) {
         if (!(Object.prototype.toString.call(options.value) === '[object Array]') && (options.show_value)) {
             $(ref).find('#' + id).find("#" + id + "Val").val(options.value);
         }
-        app.lastSliderChanged = $(ref).find('#' + id)
+        // app.lastSliderChanged = $(ref).find('#' + id)
     });
     // $(ref).find('#' + id).find(".slider-handle").on("mouseover", function() {
     //     $(this).focus();
@@ -48,24 +50,42 @@ slider.update_dataSlider = function() {
     var ds = $('.dataSlider');
     var level = app.config.app().simulation.level;
     ds.each(function() {
-        var pid = this.id;
-        $('#' + this.id).attr('level') > level ? $('#' + pid).hide() : $('#' + pid).show()
+        $('#' + this.id).attr('level') > level ? $('#' + this.id).hide() : $('#' + this.id).show()
     })
 }
 
-slider.update_kernelSlider = function(model) {
-    var ref = $("#kernel .content");
-    var modelSlider = ref.find('.' + model);
+slider.update_simulationSlider = function() {
+    var ref = $("#simulation .content");
     var level = app.config.app().simulation.level;
-    modelSlider.find('.paramSlider').each(function() {
-        var pid = this.id;
-        if (node.params[pid] != undefined) {
-            modelSlider.find('#' + pid + 'Input').slider('setValue', parseFloat(app.data.kernel[pid]));
-            modelSlider.find('#' + pid + 'Val').val(app.data.kernel[pid]);
-        } else {
-            node.params[pid] = modelSlider.find('#' + pid + 'Input').slider('getValue')
+    ref.find('.dataSlider').each(function() {
+        var value = app.data[this.id];
+        if (value) {
+            ref.find('#' + this.id + 'Input').slider('setValue', parseFloat(value));
+            ref.find('#' + this.id + 'Val').val(value);
         }
-        modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
+        $('#' + this.id).attr('level') > level ? $('#' + this.id).hide() : $('#' + this.id).show()
+    })
+}
+
+slider.update_kernelSlider = function() {
+    var ref = $("#kernel .content");
+    var level = app.config.app().simulation.level;
+    var modelDefaults = app.config.nest('kernel');
+    ref.find('.dataSlider').each(function() {
+        var kid = this.id;
+        var options = modelDefaults.find(function(d) {return d.id == kid });
+        if (app.data.kernel[kid] == undefined) {
+            var value = modelDefaults.value;
+        } else {
+            var value = (options.show_value == false ? options.ticks_labels.indexOf(app.data.kernel[kid]) : app.data.kernel[kid])
+        }
+        if (value != undefined) {
+            ref.find('#' + kid + 'Input').slider('setValue', parseFloat(value));
+            if (options.show_value != false) {
+                ref.find('#' + kid + 'Val').val(value);
+            }
+        }
+        ref.find('#' + kid).attr('level') > level ? ref.find('#' + kid).hide() : ref.find('#' + kid).show()
     })
 }
 

@@ -22,6 +22,8 @@
     },
     "simulation": {
         "runAfterChange": true,
+        "autoReset": true,
+        "randomSeed": false,
         "level": 1,
         "groups": [{
             "id": "user",
@@ -32,9 +34,6 @@
         }, {
             "id": "nest-example",
             "name": "NEST example"
-        }, {
-            "id": "nuspic-1",
-            "name": "NuSPIC 1"
         }]
     },
     "chart": {

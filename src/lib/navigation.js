@@ -2,6 +2,12 @@
 
 var navigation = {};
 
+navigation.update_randomSeed = function (){
+    var configApp = app.config.app();
+    configApp.simulation.randomSeed = app.simulation.randomSeed;
+    app.config.save('app', configApp)
+    $('#random-seed').find('.glyphicon-ok').toggle(app.simulation.randomSeed)
+}
 
 navigation.events = function() {
 
@@ -88,7 +94,6 @@ navigation.events = function() {
         $('.disableOnDrawing').toggleClass('disabled', drawing)
         $('#edit-button').show()
     })
-    $('.simulation-run').on('click', app.simulation.simulate)
     $('#run-after-change').on('click', function() {
         var runAfterChange = app.config.app().simulation.runAfterChange || false
         var configApp = app.config.app();
@@ -97,6 +102,21 @@ navigation.events = function() {
         app.config.save('app', configApp)
         $('#run-after-change').find('.glyphicon-ok').toggle(!runAfterChange)
     })
+    $('#auto-reset').on('click', function() {
+        var autoReset = app.config.app().simulation.autoReset || false
+        var configApp = app.config.app();
+        configApp.simulation.autoReset = !autoReset;
+        app.simulation.autoReset = !autoReset;
+        app.config.save('app', configApp)
+        $('#auto-reset').find('.glyphicon-ok').toggle(!autoReset)
+    })
+    $('#random-seed').on('click', function() {
+        var randomSeed = app.config.app().simulation.randomSeed || false
+        app.simulation.randomSeed = !randomSeed;
+        navigation.update_randomSeed()
+    })
+    $('.simulation-run').on('click', app.simulation.simulate)
+    $('#simulation-reset').on('click', app.simulation.reset)
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
     $('#capture-screen').on('click', function() {
             app.screen.capture(app.data, true)
@@ -143,13 +163,24 @@ navigation.events = function() {
         app.slider.update_dataSlider()
         app.controller.update()
     })
+    $('#simulation-config-button').on('click', function() {
+        if (app.data.group == 'user') {
+            $('#simulation-edit').show()
+        } else {
+            $('#simulation-edit').hide()
+        }
+    })
+    $('#simulation-add').on('click', function(e) {
+        $('#simulation-add-submit').show()
+    })
     $('#simulation-add-submit').on('click', function(e) {
-        app.data.name = $('#simulation-add-form #simulation-name').val()
-        app.data.description = $('#simulation-add-form #simulation-description').val()
+        $(this).hide()
+        app.data.name = $('#simulation-form #simulation-name').val()
+        app.data.description = $('#simulation-form #simulation-description').val()
         var date = new Date;
-        app.data.user = app.config.app().user.name || process.env.USER;
         app.data.createdAt = date;
         app.data.updatedAt = date;
+        app.data.user = app.config.app().user.name || process.env.USER;
         app.data.group = 'user';
         $('#title').html(app.data.name)
         $('#subtitle').empty()
@@ -157,6 +188,26 @@ navigation.events = function() {
         $('#subtitle').append(date ? '<span style="margin-left:20px">' + date + '</span>' : '')
         $('#subtitle').append(app.data.user ? '<span style="margin-left:20px">' + app.data.user + '</span>' : '')
         app.db.add(app.data)
+        app.simulation.id = app.data._id
+        app.navigation.update()
+    })
+    $('#simulation-edit').on('click', function(e) {
+        $('#simulation-form #simulation-name').val(app.data.name)
+        $('#simulation-form #simulation-description').val(app.data.description)
+        if (app.data.group = 'user') {
+            $('#simulation-edit-submit').show()
+        }
+    })
+    $('#simulation-edit-submit').on('click', function(e) {
+        $(this).hide()
+        app.data.name = $('#simulation-form #simulation-name').val()
+        app.data.description = $('#simulation-form #simulation-description').val()
+        var date = new Date;
+        app.data.updatedAt = date;
+        app.data.user = app.config.app().user.name || process.env.USER;
+        app.data.group = 'user';
+        $('#title').html(app.data.name)
+        app.db.update(app.data)
     })
     $('.simulation').on('click', function(d) {
         app.simulation.stop()
@@ -170,14 +221,7 @@ navigation.events = function() {
     })
 }
 
-navigation.init = function() {
-    app.simulation.runAfterChange = app.config.app().simulation.runAfterChange;
-    $(".config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().simulation.protocol || false)
-    $(".config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
-    $(".config").find('#run-after-change').find('.glyphicon-ok').toggle(app.config.app().simulation.runAfterChange || false)
-    $(".config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
-    $("#slider-config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
-
+navigation.update = function() {
     // Load simulation list
     $('#get-simulation-list').attr('disabled', 'disabled')
     $('#simulation-list').empty()
@@ -212,6 +256,23 @@ navigation.init = function() {
         });
         app.navigation.events()
     }, 1000)
+
+}
+
+navigation.init = function() {
+    app.simulation.runAfterChange = app.config.app().simulation.runAfterChange;
+    app.simulation.autoReset = app.config.app().simulation.autoReset;
+    app.simulation.randomSeed = app.config.app().simulation.randomSeed;
+    $(".config").find('#view-protocol').find('.glyphicon-ok').toggle(app.config.app().simulation.protocol || false)
+    $(".config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
+    $(".config").find('#run-after-change').find('.glyphicon-ok').toggle(app.config.app().simulation.runAfterChange || false)
+    $(".config").find('#auto-reset').find('.glyphicon-ok').toggle(app.config.app().simulation.autoReset || false)
+    $(".config").find('#random-seed').find('.glyphicon-ok').toggle(app.config.app().simulation.randomSeed || false)
+    $(".config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
+    $("#slider-config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
+
+    navigation.update()
+
 }
 
 module.exports = navigation;

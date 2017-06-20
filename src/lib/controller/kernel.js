@@ -5,18 +5,26 @@ var kernelController = {};
 kernelController.init = function() {
     var kernelElem = $('#kernel .content')
     kernelElem.empty()
-    var modelDefaults = app.config.nest('kernel')
+    var modelDefaults = app.config.nest('kernel');
     for (var midx in modelDefaults) {
         var model = modelDefaults[midx];
-        model.value = app.data.kernel[model.id];
         app.slider.create_dataSlider('#kernel .content', model.id, model)
             .on('slideStop', function(d) {
-                app.data.kernel[$(this).parents('.dataSlider').attr('id')] = d.value
+                if ($(this).parents('.dataSlider').attr('id') == 'grng_seed') {
+                    app.simulation.randomSeed = false;
+                    app.navigation.update_randomSeed()
+                }
+                var value = model.ticks_labels[d.value] || d.value;
+                app.data.kernel[$(this).parents('.dataSlider').attr('id')] = value;
                 app.simulation.simulate()
             })
     }
     kernelElem.find('input.paramVal').on('change', function() {
         var pkey = $(this).parents('.dataSlider').attr('id');
+        if (pkey == 'grng_seed') {
+            app.simulation.randomSeed = false;
+            app.navigation.update_randomSeed()
+        }
         var pvalue = $(this).val()
         var schema = $(this).data('schema')
         var valid = app.validation.validate(pkey, pvalue, schema)
@@ -25,8 +33,9 @@ kernelController.init = function() {
         $(this).parents('.form-group').find('.help-block').html(valid.error)
         if (valid.error != null) return
         app.data.kernel[pkey] = valid.value
-        app.slider.update_dataSlider()
+        app.slider.update_kernelSlider()
         app.simulation.simulate()
     })
+    app.slider.update_kernelSlider()
 }
 module.exports = kernelController;

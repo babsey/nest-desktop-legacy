@@ -48,7 +48,7 @@ simulationController.init = function() {
         $(this).parents('.form-group').find('.help-block').html(valid.error)
         if (valid.error != null) return
         app.data[pkey] = valid.value
-        app.slider.update_dataSlider()
+        app.slider.update_simulationSlider()
         app.simulation.simulate()
     })
 

@@ -5,7 +5,7 @@ const jsonfile = require('jsonfile');
 const flat = require('flat');
 
 var simulation = {
-    data: {}
+    running: false,
 }
 
 simulation.list = function(q, ref) {
@@ -51,6 +51,13 @@ simulation.simulate = function(run) {
     if (simulation.recorders.filter(function(recorder) {
             return !(recorder.node.disabled == true)
         }).length == 0) return
+    if (app.simulation.autoReset) {
+        app.data.kernel.time = 0.0;
+    }
+    if (app.simulation.randomSeed) {
+        app.data.kernel.grng_seed = parseInt(Math.random() * 1000);
+        app.slider.update_kernelSlider()
+    }
 
     $('#message .content').empty()
     var mId = app.message.show('Info', 'The simulation is running. Please wait.');
@@ -59,6 +66,7 @@ simulation.simulate = function(run) {
         var tic = new Date();
         console.log(tic)
         app.request.request({
+                id: app.data._id,
                 network: app.data.network,
                 kernel: app.data.kernel,
                 sim_time: app.data.sim_time,
@@ -77,7 +85,6 @@ simulation.simulate = function(run) {
                     app.message.show('NEST Error:', response.error);
                     return
                 }
-                app.data.kernel.time = response.data.kernel.time;
                 for (var idx in response.data.nodes) {
                     var node = app.data.nodes[idx]
                     node.ids = response.data.nodes[idx].ids;
@@ -100,7 +107,13 @@ simulation.simulate = function(run) {
                     } else if (recorder.node.model == 'voltmeter') {
                         recorder.node.record_from = ['V_m']
                     }
-                    recorder.events = response.data.nodes[recorder.node.id].events;
+                    if (app.data.kernel.time == 0.0) {
+                        recorder.events = response.data.nodes[recorder.node.id].events;
+                    } else {
+                        for (var key in response.data.nodes[recorder.node.id].events) {
+                            recorder.events[key] = recorder.events[key].concat(response.data.nodes[recorder.node.id].events[key])
+                        }
+                    }
                     recorder.senders = math.sort(recorder.events.senders.filter((v, i, a) => a.indexOf(v) === i));
                     recorder.sources = app.data.links.filter(function(link) {
                         return link.target == recorder.node.id
@@ -143,6 +156,7 @@ simulation.simulate = function(run) {
                     }
                     app.controller.node.update(stimulator.node)
                 })
+                app.data.kernel.time = response.data.kernel.time;
                 app.controller.update()
                 app.chart.update();
                 app.protocol.update()
@@ -167,10 +181,17 @@ simulation.simulate = function(run) {
     }, 10)
 }
 
+simulation.reset = function() {
+    app.data.kernel.time = 0.0
+    $('#autoscale').prop('checked', 'checked')
+    simulation.simulate()
+}
+
 simulation.resume = function() {
     if (!(simulation.running)) return
 
     app.request.request({
+            id: app.data._id,
             network: app.data.network,
             kernel: app.data.kernel,
             sim_time: app.data.res_time || 1.,
@@ -258,26 +279,23 @@ simulation.init = function() {
     app.db.init()
     app.navigation.init()
     app.protocol.init()
-
     setTimeout(function() {
         if (app.protocol.id) {
             app.protocol.get(app.protocol.id)
                 .exec(function(err, docs) {
                     app.data = docs;
+                    app.data.kernel.time = 0.0;
                     app.simulation.update()
                 })
         } else {
             app.db.get(app.simulation.id)
                 .exec(function(err, docs) {
                     app.data = docs;
+                    app.data.kernel.time = 0.0;
                     app.simulation.update()
                 })
         }
     }, 200)
-
-
 }
-
-
 
 module.exports = simulation;

@@ -30,7 +30,7 @@ nodeController.update = function(node) {
                 if (node.element_type == 'neuron') {
                     app.chart.init()
                 }
-                app.simulation.simulate()
+                app.simulation.reset()
             })
         nodeElem.find('.nodeSlider #n input.paramVal').on('change', function() {
             app.selected_link = null;
@@ -48,7 +48,7 @@ nodeController.update = function(node) {
             if (node.element_type == 'neuron') {
                 app.chart.init()
             }
-            app.simulation.simulate()
+            app.simulation.reset()
         })
     }
     if (node.element_type == 'stimulator') {
@@ -316,7 +316,7 @@ nodeController.update = function(node) {
             node.record_from = node.record_from || ['count'];
             node.PSTHchart = node.PSTHchart || 'bar';
             nodeElem.find('.selection').append('<div class="psthSelect form-group hideOnDrawing"></div>')
-            nodeElem.find('.psthSelect').append('<label for="psth_' + node.id + '">Chart for PSTH</label>')
+            nodeElem.find('.psthSelect').append('<label for="psth_' + node.id + '">Chart view for PSTH</label>')
             nodeElem.find('.psthSelect').append('<select data-id="' + node.id + '" id="psthChart_' + node.id + '" class="psth form-control"></select>')
             nodeElem.find('#psthChart_' + node.id).append('<option value="bar" class="form-control">Bar chart</option>')
             nodeElem.find('#psthChart_' + node.id).append('<option value="line" class="form-control">Line chart</option>')
@@ -381,14 +381,17 @@ nodeController.init = function(node) {
             synController.update(link)
         })
 
+
+        app.data.kernel.time = 0.0
         if (app.selected_node.element_type == 'recorder') {
             app.simulation.update()
         } else {
-            app.simulation.simulate()
+            app.simulation.reset()
         }
     })
 
     nodeElem.find('.disableNode').on('click', function() {
+        app.data.kernel.time = 0.0                                              // Reset simulation
         app.simulation.run(false)
         node.disabled = !node.disabled;
         var disabled = node.disabled || false

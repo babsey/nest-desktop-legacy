@@ -22,6 +22,10 @@ db.get = function(id) {
     })
 }
 
+db.update = function(data) {
+    db.localDB.update({_id: data._id}, data, {}, function() {});
+}
+
 db.add = function(data) {
     data.parentId = data._id;
     data._id = uuidV4();
@@ -33,7 +37,7 @@ db.add = function(data) {
     })
     data.version = process.env.npm_package_version
     db.indexDB.put(data)
-    app.sync.localDB()
+    app.sync.all()
     setTimeout(function() {
         app.screen.capture(data._id)
     }, 1000)
