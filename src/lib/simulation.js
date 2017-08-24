@@ -55,8 +55,8 @@ simulation.simulate = function(run) {
         app.data.kernel.time = 0.0;
     }
     if (app.simulation.randomSeed) {
-        app.data.kernel.grng_seed = parseInt(Math.random() * 1000);
-        app.slider.update_kernelSlider()
+        app.data.random_seed = parseInt(Math.random() * 1000);
+        app.slider.update_simulationSlider()
     }
 
     $('#message .content').empty()
@@ -69,6 +69,7 @@ simulation.simulate = function(run) {
                 id: app.data._id,
                 network: app.data.network,
                 kernel: app.data.kernel,
+                random_seed: app.data.random_seed,
                 sim_time: app.data.sim_time,
                 nodes: flat.unflatten(app.data.nodes.map(function(node) {
                     node.params = flat.unflatten(node.params, {

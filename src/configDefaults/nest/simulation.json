@@ -1,4 +1,12 @@
 [{
+    "id": "random_seed",
+    "label": "Random number generated seed",
+    "level": 3,
+    "min": 0,
+    "max": 1000,
+    "value": 0,
+    "step": 1
+}, {
     "id": "sim_time",
     "label": "Simulation time (ms)",
     "level": 2,

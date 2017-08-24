@@ -1,10 +1,10 @@
 [{
-    "id": "grng_seed",
-    "label": "Random number generated seed",
-    "level": 3,
-    "min": 0,
-    "max": 1000,
-    "value": 0,
+    "id": "local_num_threads",
+    "label": "Local number of threads",
+    "level": 4,
+    "min": 1,
+    "max": 16,
+    "value": 1,
     "step": 1
 }, {
     "id": "resolution",

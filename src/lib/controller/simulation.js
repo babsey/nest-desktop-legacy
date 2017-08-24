@@ -34,12 +34,20 @@ simulationController.init = function() {
         model.value = app.data[model.id];
         app.slider.create_dataSlider('#simulation .content', model.id, model)
             .on('slideStop', function(d) {
+                if ($(this).parents('.dataSlider').attr('id') == 'random_seed') {
+                    app.simulation.randomSeed = false;
+                    app.navigation.update_randomSeed()
+                }
                 app.data[$(this).parents('.dataSlider').attr('id')] = d.value
                 app.simulation.simulate()
             })
     }
     simElem.find('input.paramVal').on('change', function() {
         var pkey = $(this).parents('.dataSlider').attr('id');
+        if (pkey == 'random_seed') {
+            app.simulation.randomSeed = false;
+            app.navigation.update_randomSeed()
+        }
         var pvalue = $(this).val()
         var schema = $(this).data('schema')
         var valid = app.validation.validate(pkey, pvalue, schema)

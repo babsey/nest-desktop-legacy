@@ -10,10 +10,6 @@ kernelController.init = function() {
         var model = modelDefaults[midx];
         app.slider.create_dataSlider('#kernel .content', model.id, model)
             .on('slideStop', function(d) {
-                if ($(this).parents('.dataSlider').attr('id') == 'grng_seed') {
-                    app.simulation.randomSeed = false;
-                    app.navigation.update_randomSeed()
-                }
                 var value = model.ticks_labels[d.value] || d.value;
                 app.data.kernel[$(this).parents('.dataSlider').attr('id')] = value;
                 app.simulation.simulate()
@@ -21,10 +17,6 @@ kernelController.init = function() {
     }
     kernelElem.find('input.paramVal').on('change', function() {
         var pkey = $(this).parents('.dataSlider').attr('id');
-        if (pkey == 'grng_seed') {
-            app.simulation.randomSeed = false;
-            app.navigation.update_randomSeed()
-        }
         var pvalue = $(this).val()
         var schema = $(this).data('schema')
         var valid = app.validation.validate(pkey, pvalue, schema)
