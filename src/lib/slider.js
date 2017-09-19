@@ -73,7 +73,9 @@ slider.update_kernelSlider = function() {
     var modelDefaults = app.config.nest('kernel');
     ref.find('.dataSlider').each(function() {
         var kid = this.id;
-        var options = modelDefaults.find(function(d) {return d.id == kid });
+        var options = modelDefaults.find(function(d) {
+            return d.id == kid
+        });
         if (app.data.kernel[kid] == undefined) {
             var value = modelDefaults.value;
         } else {

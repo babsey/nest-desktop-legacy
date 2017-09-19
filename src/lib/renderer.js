@@ -156,7 +156,7 @@ renderer.scrollspy = function(node) {
     var colors = app.chart.colors()
     div.push('<a href="#node_' + node.id + '" ' + 'style="border: 3px solid' + colors[node.id % colors.length] + '; padding: 10px 0px"')
     div.push(' title="' + app.format.nodeTitle(node) + '">')
-        // div.push(app.format.nodeLabel(node))
+    // div.push(app.format.nodeLabel(node))
     div.push(node.id)
     div.push('</a></li>')
     return div.join('')
@@ -184,7 +184,7 @@ renderer.node = function(node) {
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('<div class="selection hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')
-        // div.push('<hr>')
+    // div.push('<hr>')
     return div.join('')
 }
 
@@ -209,7 +209,7 @@ renderer.connection = function(link) {
     div.push('</div>')
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')
-        // div.push('<hr>')
+    // div.push('<hr>')
     return div.join('')
 }
 
@@ -233,7 +233,7 @@ renderer.synapse = function(link) {
     div.push('</div>')
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')
-        // div.push('<hr>')
+    // div.push('<hr>')
     return div.join('')
 }
 

@@ -62,7 +62,7 @@ connController.init = function(link) {
     connElem.find('.glyphicon-remove').toggle(link.disabled || false)
     connElem.find('.glyphicon-ok').toggle(!link.disabled && true)
     connElem.find('.disableLink').on('click', function() {
-        app.data.kernel.time = 0.0                                              // Reset simulation
+        app.data.kernel.time = 0.0 // Reset simulation
         app.simulation.run(false)
         app.selected_node = null;
         app.selected_link = link;

@@ -217,7 +217,7 @@ networkLayout.update = function() {
                 .attr('d', 'M' + networkLayout.mousedown_node.x + ',' + networkLayout.mousedown_node.y + 'L' + networkLayout.mousedown_node.x + ',' + networkLayout.mousedown_node.y);
 
             app.chart.update()
-                // networkLayout.ticked()
+            // networkLayout.ticked()
         })
         .on('mouseup', function(d) {
             // console.log('node mouseup')
@@ -317,7 +317,7 @@ networkLayout.mousedown = function() {
 
     // console.log('mousedown')
     if (!networkLayout.drawing) return
-        // because :active only works in WebKit?
+    // because :active only works in WebKit?
     d3.select('#chart').classed('active', true);
     if (networkLayout.mousedown_node || networkLayout.mousedown_link) return
 

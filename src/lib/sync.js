@@ -73,7 +73,9 @@ sync.defaults = function() {
             if (docs == null) {
                 app.db.localDB.insert(sim)
             } else if (app.hash(docs) != app.hash(sim)) {
-                app.db.localDB.update({_id: docs._id}, sim)
+                app.db.localDB.update({
+                    _id: docs._id
+                }, sim)
             }
         })
     })

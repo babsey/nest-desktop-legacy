@@ -23,7 +23,9 @@ db.get = function(id) {
 }
 
 db.update = function(data) {
-    db.localDB.update({_id: data._id}, data, {}, function() {});
+    db.localDB.update({
+        _id: data._id
+    }, data, {}, function() {});
 }
 
 db.add = function(data) {

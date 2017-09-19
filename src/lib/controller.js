@@ -32,10 +32,10 @@ controller.initLinks = function() {
     $('.hideOnDrawing').toggle(!drawing)
 }
 
-controller.update = function () {
+controller.update = function() {
     controller.simulation.update()
     controller.height = window.innerHeight - $('.tab-content')[0].offsetTop - 10
-    $('.tab-content').css('max-height', controller.height+'px')
+    $('.tab-content').css('max-height', controller.height + 'px')
 }
 
 controller.init = function() {

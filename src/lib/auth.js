@@ -16,7 +16,7 @@ function login(name, password, reset_db) {
             adapter: 'idb'
         });
         localDB.destroy()
-        setTimeout(q.init,100)
+        setTimeout(q.init, 100)
     }
 }
 
@@ -31,7 +31,7 @@ function logout(reset_db) {
             adapter: 'idb'
         });
         localDB.destroy()
-        setTimeout(q.init,100)
+        setTimeout(q.init, 100)
     }
 }
 

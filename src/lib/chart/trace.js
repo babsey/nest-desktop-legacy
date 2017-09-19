@@ -7,7 +7,11 @@ var trace = {}
 trace.update = function(recorder) {
 
     var lineChart = trace.lineChart;
-    lineChart.data = {x:[],y:[],n:1};
+    lineChart.data = {
+        x: [],
+        y: [],
+        n: 1
+    };
 
     if (recorder.events.senders.length == 0) {
         trace.update(recorder)

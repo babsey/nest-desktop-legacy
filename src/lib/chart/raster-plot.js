@@ -92,7 +92,7 @@ rasterPlot.update = function(recorder) {
         }
         barChart.data = psth
     }
-    
+
     scatterChart.update(recorder);
     lineChart.update(recorder);
     barChart.update(recorder)

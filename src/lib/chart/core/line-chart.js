@@ -33,7 +33,7 @@ chart.draw_line = function(series) {
         return -1 * (chart.data.n - (i % chart.data.n) - 1) * chart.height / chart.data.n
     };
     var color = function(i) {
-        return app.config.app().chart.color ? chart.data.c[i%chart.data.c.length] : ''
+        return app.config.app().chart.color ? chart.data.c[i % chart.data.c.length] : ''
     };
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     if (transition) {

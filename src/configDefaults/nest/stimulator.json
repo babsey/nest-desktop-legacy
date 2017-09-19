@@ -139,13 +139,13 @@
         "step": 1,
         "label": "Number of spikes per pulse"
     }, {
-    "id": "sdev",
-    "level": 3,
-    "value": 0.0,
-    "min": 0.0,
-    "max": 10.0,
-    "step": 1.0,
-    "label": "Standard deviation of spike times in each pulse (ms)"
+        "id": "sdev",
+        "level": 3,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 10.0,
+        "step": 1.0,
+        "label": "Standard deviation of spike times in each pulse (ms)"
     }]
 }, {
     "element_type": "stimulator",

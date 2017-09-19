@@ -14,7 +14,7 @@ message.show = function(mode, content, duration) {
         }, duration)
         $('#' + messageId).data('timeoutId', timeoutId)
     }
-    $('#'+ messageId).on('mouseover', function() {
+    $('#' + messageId).on('mouseover', function() {
         message.hide(messageId)
     })
     return messageId

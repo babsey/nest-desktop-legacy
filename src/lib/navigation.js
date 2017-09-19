@@ -2,7 +2,7 @@
 
 var navigation = {};
 
-navigation.update_randomSeed = function (){
+navigation.update_randomSeed = function() {
     var configApp = app.config.app();
     configApp.simulation.randomSeed = app.simulation.randomSeed;
     app.config.save('app', configApp)
@@ -119,18 +119,18 @@ navigation.events = function() {
     $('#simulation-reset').on('click', app.simulation.reset)
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
     $('#capture-screen').on('click', function() {
-            app.screen.capture(app.data, true)
-            app.protocol.update()
-        })
-        // $('.color').on('click', function() {
-        //     var colorGroup = $(this).data('group')
-        //     var configApp = app.config.app();
-        //     configApp.chart.color.group = colorGroup;
-        //     app.config.save('app', configApp)
-        //     $('.color').find('.glyphicon-ok').hide()
-        //     $('.color[data-group=' + colorGroup + ']').find('.glyphicon-ok').show()
-        //     app.chart.update()
-        // })
+        app.screen.capture(app.data, true)
+        app.protocol.update()
+    })
+    // $('.color').on('click', function() {
+    //     var colorGroup = $(this).data('group')
+    //     var configApp = app.config.app();
+    //     configApp.chart.color.group = colorGroup;
+    //     app.config.save('app', configApp)
+    //     $('.color').find('.glyphicon-ok').hide()
+    //     $('.color[data-group=' + colorGroup + ']').find('.glyphicon-ok').show()
+    //     app.chart.update()
+    // })
     $('#view-networkLayout').on('click', function() {
         var networkLayout = !app.config.app().chart.networkLayout || false
         var configApp = app.config.app();
@@ -211,8 +211,8 @@ navigation.events = function() {
     })
     $('.simulation').on('click', function(d) {
         app.simulation.stop()
-            // app.simulation.id = this.id
-            // app.simulation.init()
+        // app.simulation.id = this.id
+        // app.simulation.init()
         location.href = location.origin + location.pathname + '?simulation=' + this.id
     })
     $('#close').on('click', function() {
