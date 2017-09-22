@@ -26,10 +26,11 @@ protocol.addDropdown = function(data) {
         trigger: 'hover',
         content: app.renderer.simulationProtocol(data)
     });
-    $('#' + data._id).off('click').on('click', function(e) {
+    $('#' + data._id).on('click', function(e) {
         e.preventDefault()
         app.data = data;
         $('#protocol-label').html(datetime)
+        app.navigation.editNetwork(false)
         app.simulation.update()
     })
 }
@@ -41,24 +42,10 @@ protocol.removeDropdown = function(data) {
 
 protocol.add = function(data) {
     var configApp = app.config.app()
-    var data = $.extend({}, data)
-    data.user = configApp.user.name;
-    data.version = configApp.version;
-    data.nodes.map(function(node) {
-        delete node.ids
-        delete node.index
-        delete node.vx
-        delete node.vy
-        delete node.fx
-        delete node.fy
-        var pkeys = Object.keys(node.params);
-        pkeys.map(function(pkey) {
-            if (typeof(node.params[pkey]) == 'object') {
-                delete node.params[pkey]
-            }
-        })
-    })
-    data.hash = app.hash(data);
+    var data = app.db.clone(app.data);
+    data.user = configApp.user.id;
+    data.version = process.env.npm_package_version;
+    app.db.clean(data);
     delete data._id;
     delete data.updatedAt;
     protocol.db.findOne({

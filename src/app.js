@@ -6,10 +6,11 @@ require('bootstrap');
 const path = require('path');
 
 var app = {
-    db: require(__dirname + '/lib/db'),
+    __dirname: __dirname,
     chart: require(__dirname + '/lib/chart'),
     config: require(__dirname + '/lib/config'),
     controller: require(__dirname + '/lib/controller'),
+    db: require(__dirname + '/lib/db'),
     format: require(__dirname + '/lib/format'),
     hash: require(__dirname + '/lib/hash'),
     message: require(__dirname + '/lib/message'),
@@ -22,8 +23,10 @@ var app = {
     simulation: require(__dirname + '/lib/simulation'),
     slider: require(__dirname + '/lib/slider'),
     sync: require(__dirname + '/lib/sync'),
-    validation: require(__dirname + '/lib/validation'),
+    validation: require(__dirname + '/lib/validation')
 };
+
+app.DEBUG = false;
 
 app.query = function getQueryParams(qs) {
     qs = qs.split('+').join(' ');

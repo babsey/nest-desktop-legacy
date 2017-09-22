@@ -1,2 +1,0 @@
-id,level,value,min,max,step,label,scale
-amplitude,1,1.0,1.0,1000.0,1.0,Amplitude of sine current (pA)

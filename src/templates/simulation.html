@@ -89,14 +89,14 @@
                                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
                             </a>
                         </li>
-                        <li id="view-networkLayout" title="View network layout">
+                        <li id="view-networkLayout" title="View network layout" class="disableOnDrawing">
                             <a href="#">
                                 <i class="fa fa-eye" aria-hidden="true"></i> View network layout
                                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
                             </a>
                         </li>
                         <li class="divider"></li>
-                        <li id="edit-network" title="Edit network">
+                        <li id="edit-network" title="Edit network" class="disableOnDrawing">
                             <a href="#">
                                 <i class="fa fa-pencil"></i> Edit network
                             </a>
@@ -210,6 +210,7 @@
     </nav>
 
     <div id="content">
+
         <div id="controller" class="pull-right">
             <div class="">
 
@@ -221,6 +222,7 @@
 
                     <div id="controller-panel" class="panel" style="margin-top: 50px">
                         <small>
+
                         <!-- <div class="panel-body"> -->
                         <div id="simulation" class="panel-body hideOnDrawing">
                             <div class="content"></div>
@@ -284,10 +286,11 @@
                             </div>
                         </div>
 
-                            <div id="edit-button" style="float:right; margin-right:25px; display:none">
-                                <button id="edit-cancel" class="btn btn-default">Cancel</button>
-                                <button id="edit-save" class="btn btn-primary">Save</button>
-                            </div>
+                        <div id="edit-network-button" style="float:right; margin-right:25px; display:none">
+                            Editor mode is on.
+                            <button id="edit-network-cancel" class="btn btn-default">Cancel</button>
+                            <button id="edit-network-save" class="btn btn-primary">Save</button>
+                        </div>
 
                         </small>
                     </div>

@@ -5,7 +5,8 @@
     "user": {
         "id": "",
         "name": "",
-        "password": ""
+        "password": "",
+        "group": "public"
     },
     "db": {
         "name": "",
@@ -26,14 +27,14 @@
         "randomSeed": false,
         "level": 1,
         "groups": [{
-            "id": "user",
-            "name": "User"
+            "id": "nest-desktop",
+            "name": "NEST desktop"
         }, {
-            "id": "example",
-            "name": "Example"
+            "id": "nest-initiative",
+            "name": "NEST initiative"
         }, {
-            "id": "nest-example",
-            "name": "NEST example"
+            "id": "public",
+            "name": "Public"
         }]
     },
     "chart": {

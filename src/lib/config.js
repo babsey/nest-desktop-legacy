@@ -1,6 +1,5 @@
 "use strict"
 
-const fs = require('fs');
 const path = require('path');
 const jsonfile = require('jsonfile');
 const uuidV4 = require('uuid/v4');
@@ -23,13 +22,6 @@ config.save = function(filename, config) {
 
 config.nest = function(name) {
     return jsonfile.readFileSync(path.join(process.cwd(), 'config', 'nest', name + '.json'))
-}
-
-config.simulation = function(name) {
-    if (name == undefined) {
-        return fs.readdirSync(path.join(process.cwd(), 'config', 'simulation'))
-    }
-    return jsonfile.readFileSync(path.join(process.cwd(), 'config', 'simulation', name + '.json'))
 }
 
 module.exports = config

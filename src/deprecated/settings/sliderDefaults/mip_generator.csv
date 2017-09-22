@@ -1,4 +1,0 @@
-id,level,value,min,max,step,label,scale
-rate,1,0.0,0.0,100.0,1.0,Mean firing rate of the mother process (Hz)
-mother_seed,2,0.0,0.0,100.0,1.0,Seed of RNG of mother process
-p_copy,2,1.0,0.0,1.0,.01,Copy probability

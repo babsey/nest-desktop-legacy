@@ -61,16 +61,17 @@ simulation.simulate = function(run) {
 
     $('#message .content').empty()
     var mId = app.message.show('Info', 'The simulation is running. Please wait.');
-    var data = $.extend(true, {}, app.data);
+    var data = app.db.clone(app.data);
     setTimeout(function() {
-        var tic = new Date();
-        console.log(tic)
+        if (app.DEBUG) {
+            console.log('Simulation is starting.')
+        }
         app.request.request({
                 id: app.data._id,
                 network: app.data.network,
                 kernel: app.data.kernel,
-                random_seed: app.data.random_seed,
-                sim_time: app.data.sim_time,
+                random_seed: app.data.random_seed || 0,
+                sim_time: app.data.sim_time || 1000.,
                 nodes: flat.unflatten(app.data.nodes.map(function(node) {
                     node.params = flat.unflatten(node.params, {
                         delimiter: '__'
@@ -80,18 +81,22 @@ simulation.simulate = function(run) {
                 links: app.data.links,
             })
             .done(function(response) {
-                var toc = new Date();
+                if (app.DEBUG) {
+                    console.log('Simulation is finished.')
+                }
                 if (response.error) {
                     app.message.hide(mId).remove();
                     app.message.show('NEST Error:', response.error);
                     return
                 }
+                app.message.log('Update nodes from NEST.')
                 for (var idx in response.data.nodes) {
                     var node = app.data.nodes[idx]
                     node.ids = response.data.nodes[idx].ids;
                     var title = app.format.nodeTitle(node)
                     $('#nodeScrollspy .nav').find('.node_' + node.id).attr('title', title)
                 }
+                app.message.log('Get data from recorders.')
                 simulation.recorders.map(function(recorder) {
                     recorder.node.params = response.data.nodes[recorder.node.id].params
                     if (recorder.node.model == 'multimeter') {
@@ -139,10 +144,10 @@ simulation.simulate = function(run) {
                         } else {
                             var amplitudes = [].concat.apply([0], stimulator.node.params.amplitude_values).filter(function(d, i) {
                                 var time = stimulator.node.params.amplitude_times[i - 1];
-                                return time <= (stimulator.node.params.stop || app.data.sim_time)
+                                return time <= (stimulator.node.params.stop || app.data.sim_time || 1000.)
                             });
                             var times = [].concat.apply([0], stimulator.node.params.amplitude_times).filter(function(d, i) {
-                                return d <= (stimulator.node.params.stop || app.data.sim_time)
+                                return d <= (stimulator.node.params.stop || app.data.sim_time || 1000.)
                             });
                             var times_rounded = numeric.round(numeric.div(times, (app.data.kernel.resolution || 1.0)))
                             var dtimes = times_rounded.map(function(time, i) {
@@ -162,12 +167,6 @@ simulation.simulate = function(run) {
                 app.chart.update();
                 app.protocol.update()
                 app.message.hide(mId).remove();
-                var toe = new Date;
-                var ts = {
-                    tic: tic,
-                    toc: toc,
-                    toe: toe
-                };
                 if (app.simulation.protocol) {
                     app.protocol.add(data);
                 }
@@ -195,7 +194,7 @@ simulation.resume = function() {
             id: app.data._id,
             network: app.data.network,
             kernel: app.data.kernel,
-            sim_time: app.data.res_time || 1.,
+            sim_time: app.data.res_time || 10.,
             nodes: app.data.nodes,
             links: app.data.links,
         })
@@ -207,7 +206,7 @@ simulation.resume = function() {
             if (!simulation.running) return
             app.data.kernel.time = response.data.kernel.time;
             if ($('#autoscale').prop('checked')) {
-                app.chart.xScale.domain([app.data.kernel.time - app.data.sim_time, app.data.kernel.time])
+                app.chart.xScale.domain([app.data.kernel.time - (app.data.sim_time), app.data.kernel.time])
             }
             simulation.recorders.map(function(recorder) {
                 for (var key in response.data.nodes[recorder.node.id].events) {
@@ -235,13 +234,6 @@ simulation.update = function() {
     app.selected_link = null;
 
     $('#title').html(app.data.name)
-    $('#subtitle').empty()
-    if (app.data.createdAt) {
-        var date = app.format.date(app.data.createdAt)
-        $('#subtitle').append(date ? '<span style="margin-left:20px">' + date + '</span>' : '')
-    }
-    $('#subtitle').append(app.data.user ? '<span style="margin-left:20px">' + app.data.user + '</span>' : '')
-
     simulation.recorders = app.data.nodes.filter(function(node) {
         return node.element_type == 'recorder' && !node.disabled
     }).map(function(node) {
@@ -274,6 +266,7 @@ simulation.update = function() {
     app.chart.init()
     app.controller.init()
     app.simulation.simulate()
+    app.navigation.editNetwork((app.data.nodes.length == 0))
 }
 
 simulation.init = function() {
@@ -286,13 +279,18 @@ simulation.init = function() {
                 .exec(function(err, docs) {
                     app.data = docs;
                     app.data.kernel.time = 0.0;
+                    app.data.sim_time = app.data.sim_time ? app.data.sim_time : 1000.0;
                     app.simulation.update()
                 })
         } else {
             app.db.get(app.simulation.id)
                 .exec(function(err, docs) {
                     app.data = docs;
+                    if (app.data.kernel == undefined) {
+                        app.data.kernel = {}
+                    }
                     app.data.kernel.time = 0.0;
+                    app.data.sim_time = app.data.sim_time ? app.data.sim_time : 1000.0;
                     app.simulation.update()
                 })
         }

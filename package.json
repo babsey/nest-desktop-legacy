@@ -1,54 +1,50 @@
 {
-    "name": "nest-desktop",
-    "version": "0.9.3",
-    "description": "A NEST desktop application",
-    "main": "main.js",
-    "scripts": {
-        "start": "electron .",
-        "package-linux-ia32": "electron-packager . --overwrite --platform=linux --arch=ia32 --icon=./src/assets/img/nest_logo.png --prune=true --out=release-builds",
-        "package-linux-x64": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=./src/assets/img/nest_logo.png --prune=true --out=release-builds",
-        "package-win32-ia32": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=./src/assets/img/nest_logo.png --prune=true --out=release-builds",
-        "package-win32-x64": "electron-packager . --overwrite --platform=win32 --arch=x64 --icon=./src/assets/img/nest_logo.png --prune=true --out=release-builds"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/babsey/nest-desktop.git"
-    },
-    "keywords": [
-        "interactive",
-        "neuronal",
-        "network",
-        "spike",
-        "activity",
-        "NEST"
-    ],
-    "author": {
-        "name": "Sebastian Spreizer"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "argsarray": "0.0.1",
-        "bootstrap": "^3.3.7",
-        "bootstrap-slider": "^9.5.3",
-        "clipboard": "^1.6.1",
-        "colorbrewer": "^1.0.0",
-        "d3": "^4.5.0",
-        "debug": "^2.6.0",
-        "electron": "^1.4.15",
-        "flat": "^2.0.1",
-        "font-awesome": "^4.7.0",
-        "joi": "^10.4.1",
-        "jquery": "^3.1.1",
-        "jsonfile": "^2.4.0",
-        "lie": "^3.1.0",
-        "mathjs": "^3.8.1",
-        "nedb": "^1.8.0",
-        "numeric": "^1.2.6",
-        "object-hash": "^1.1.7",
-        "pouchdb": "^6.1.1",
-        "pouchdb-adapter-idb": "^6.1.1",
-        "pouchdb-authentication": "^0.5.5",
-        "pouchdb-upsert": "^2.0.2",
-        "uuid": "^3.0.1"
-    }
+  "name": "nest-desktop",
+  "version": "0.9.3",
+  "description": "A NEST desktop application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=./src/assets/img/nest_logo.png --prune=true --out=release-builds"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/babsey/nest-desktop.git"
+  },
+  "keywords": [
+    "interactive",
+    "neuronal",
+    "network",
+    "spike",
+    "activity",
+    "NEST"
+  ],
+  "author": {
+    "name": "Sebastian Spreizer"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-slider": "^9.8.1",
+    "clipboard": "^1.7.1",
+    "colorbrewer": "^1.0.0",
+    "d3": "^4.10.2",
+    "electron": "^1.7.6",
+    "flat": "^2.0.1",
+    "font-awesome": "^4.7.0",
+    "joi": "^10.6.0",
+    "jquery": "^3.2.1",
+    "jsonfile": "^2.4.0",
+    "mathjs": "^3.16.3",
+    "nedb": "^1.8.0",
+    "numeric": "^1.2.6",
+    "object-hash": "^1.1.8",
+    "pouchdb": "^6.3.4",
+    "pouchdb-upsert": "^2.2.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "debug": "^2.6.8",
+    "electron-packager": "^9.1.0"
+  }
 }

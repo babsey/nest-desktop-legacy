@@ -10,7 +10,7 @@ kernelController.init = function() {
         var model = modelDefaults[midx];
         app.slider.create_dataSlider('#kernel .content', model.id, model)
             .on('slideStop', function(d) {
-                var value = model.ticks_labels[d.value] || d.value;
+                var value = d.target.id.startsWith('resolution') ? model.ticks_labels[d.value] : d.value;
                 app.data.kernel[$(this).parents('.dataSlider').attr('id')] = value;
                 app.simulation.simulate()
             })

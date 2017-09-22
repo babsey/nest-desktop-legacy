@@ -41,13 +41,15 @@ body {
 .thumbnail {
     cursor: pointer;
     position: relative;
+    /*height: 180px;*/
+}
+
+#simulations .thumbnail {
+    height: 180px;
+    overflow: hidden;
 }
 
 .thumbnail img {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
     margin: auto;
     padding: 10px;
 }

@@ -53,7 +53,7 @@ nodeController.update = function(node) {
     }
     if (node.element_type == 'stimulator') {
         var options = nodeDefaults.stim_time;
-        options.max = app.data.sim_time
+        options.max = app.data.sim_time;
         options.value = [(node.params.start || 0), (node.params.stop || app.data.sim_time)]
         app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
             .on('slideStop', function(d) {

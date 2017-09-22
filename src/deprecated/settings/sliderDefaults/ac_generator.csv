@@ -1,5 +1,0 @@
-id,level,value,min,max,step,label,scale
-amplitude,1,1.0,1.0,10000.0,100,Amplitude of sine current (pA),logarithmic
-offset,3,0.0,0.0,1000.0,10,Constant amplitude offset (pA),logarithmic
-phase,3,0.0,0.0,360.0,1.0,Phase of sine current (0-360 deg)
-frequency,1,1.0,1.0,1000.0,10,Frequency (Hz),logarithmic

@@ -3,7 +3,6 @@
 const jsonfile = require('jsonfile');
 const NeDB = require('nedb');
 const PouchDB = require('pouchdb');
-PouchDB.plugin(require('pouchdb-adapter-idb'));
 PouchDB.plugin(require('pouchdb-upsert'));
 const uuidV4 = require('uuid/v4');
 const path = require('path');
@@ -16,46 +15,79 @@ db.all = function() {
     })
 }
 
+db.filter = function() {
+    return db.localDB.find({
+        user: app.config.app().user.id
+    }).sort({
+        updatedAt: -1
+    })
+}
+
+db.labels = function() {
+    db.all().exec(function(err, docs) {
+        docs.map(function(doc) {
+            console.log(doc._id)
+        })
+    })
+};
+
 db.get = function(id) {
     return db.localDB.findOne({
         _id: id
     })
 }
 
+db.clone = function(data) {
+    return $.extend(true, {}, app.data);
+}
+
+db.clean = function(data) {
+    delete data._rev
+    delete data.kernel.local_num_threads
+    delete data.kernel.time
+    data.nodes.map(function(node) {
+        delete node.ids
+        delete node.index
+        delete node.vx
+        delete node.vy
+        delete node.fx
+        delete node.fy
+        var pkeys = Object.keys(node.params);
+        pkeys.map(function(pkey) {
+            if (typeof(node.params[pkey]) == 'object') {
+                delete node.params[pkey]
+            }
+        })
+    })
+}
+
 db.update = function(data) {
+    db.clean(data);
+    var date = new Date;
+    data.updatedAt = date;
+    data.user = app.config.app().user.id;
+    data.group = 'public';
+    data.version = process.env.npm_package_version;
     db.localDB.update({
         _id: data._id
     }, data, {}, function() {});
+    data.hash = app.hash(data);
 }
 
 db.add = function(data) {
+    db.clean(data);
     data.parentId = data._id;
     data._id = uuidV4();
-    data._rev = null;
-    data.nodes.forEach(function(node) {
-        if ('events' in node) {
-            node.events = {};
-        }
-    })
-    data.version = process.env.npm_package_version
-    db.indexDB.put(data)
-    app.sync.all()
+    var date = new Date;
+    data.createdAt = date;
+    data.updatedAt = date;
+    data.user = app.config.app().user.id;
+    data.group = 'public';
+    data.version = process.env.npm_package_version;
+    db.localDB.insert(data)
     setTimeout(function() {
         app.screen.capture(data._id)
     }, 1000)
-}
-
-db.filter_by_network = function(network) {
-    return db.indexDB.changes({
-        filter: 'app/by_network',
-        query_params: {
-            network: network
-        }
-    }).then(function(response) {
-        return response.results.map(function(r) {
-            return r.id
-        })
-    })
 }
 
 db.export = function(data) {
@@ -74,28 +106,11 @@ db.init = function() {
     var db_name = configApp.db.name
     var filename = path.join(process.cwd(), configApp.datapath, db_name + '.db')
 
-    // Create a indexDB for synchroning with remoteDB if set
-    db.indexDB = new PouchDB(db_name, {
-        adapter: 'idb'
-    });
-    // db.indexDB.putIfNotExists({
-    //     _id: '_design/app',
-    //     filters: {
-    //         by_network: function(doc, req) {
-    //             return doc.network === req.query.network;
-    //         }.toString(),
-    //         by_simulation: function(doc, req) {
-    //             return doc.simulation === req.query.simulation;
-    //         }.toString(),
-    //     }
-    // })
     db.localDB = new NeDB({
         filename: filename,
         timestampData: true,
         autoload: true,
     })
-
-    app.sync.all()
 }
 
 module.exports = db;

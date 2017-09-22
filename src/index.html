@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <div id='content' style='display:none'>
+    <div id='content'>
         <div class='container-fluid'>
             <div class='pull-right'>
 
@@ -113,6 +113,8 @@
 
     window.app = require('./app');
     app.db.init()
+    app.sync.init()
+    app.sync.remoteDB()
     app.request.server_check()
     var configApp = app.config.app();
     $('title').html(configApp.title)
@@ -128,23 +130,21 @@
     setTimeout(function() {
 
         var groups = configApp.simulation.groups;
-        groups.map(function(grp) {
-            $('#simulations').append('<div id="sim-' + grp.id + '"></div>')
-            $('#sim-' + grp.id).append('<h4>' + grp.name + ' simulations</h4>')
-            $('#sim-' + grp.id).append('<div class="row simulation-list"></div>')
-            app.simulation.list({
-                group: grp.id
-            }).exec(function(err, docs) {
-                if (docs.length == 0) return
-                docs.map(function(doc) {
-                    $('#sim-' + grp.id).find('.simulation-list').append(app.renderer.simulationThumbnails(doc))
-                })
-
-            });
+        var groupIds = groups.map(function(group) {
+            $('#simulations').append('<div id="sim-' + group.id + '"></div>')
+            $('#sim-' + group.id).append('<h4>' + group.name + ' simulations</h4>')
+            $('#sim-' + group.id).append('<div class="row simulation-list"></div>')
+            return group.id
         })
+        app.db.all().sort({name: 1.}).exec(function(err, docs) {
+            // console.log(docs)
+            if (docs.length == 0) return
+            docs.map(function(doc) {
+                if (groupIds.indexOf(doc.group) == -1) return
+                // console.log(doc.group)
+                $('#sim-' + doc.group).find('.simulation-list').append(app.renderer.simulationThumbnails(doc))
+            })
 
-        setTimeout(function() {
-            $('#content').fadeIn('fast');
             // $('[data-toggle='tooltip']').tooltip();
             $('.simulation').on('click', function() {
                 $('#simulation-detail').find('.modal-title').html($(this).find('a').attr('title'));
@@ -158,18 +158,8 @@
                 $('#simulation-detail').find('.go').attr('href', $(this).find('a').attr('href'));
                 $('#simulation-detail').modal('show');
             })
+        })
 
-            var tallest = 0;
-            $('img').each(function() {
-                var thisHeight = $(this).height();
-                if (thisHeight > tallest) {
-                    tallest = thisHeight;
-                }
-            });
-            $('.thumbnail').each(function() {
-                $(this).height(tallest);
-            });
-        }, 200)
     }, fs.existsSync(path.join(process.cwd(), configApp.datapath, configApp.db.name + '.db')) ? 1 : 1000)
 </script>
 

@@ -22,6 +22,7 @@ networkLayout.resetMouseVars = function() {
 };
 
 networkLayout.addNode = function() {
+    app.controller.update()
     return {
         id: networkLayout.lastNodeId++,
         model: undefined,

@@ -1,14 +1,10 @@
 {
-    "_id": "spike-activity",
+    "_id": "686c4c2f222f2597df1571015a0018ab",
     "name": "Spike activity",
-    "group": "example",
-    "user": "architect",
+    "group": "nest-desktop",
+    "user": "nest-desktop",
     "network": "simple",
-    "sim_time": 1000.0,
-    "res_time": 10.0,
-    "kernel": {
-        "grng_seed": 0
-    },
+    "version": "0.9.3",
     "nodes": [{
         "id": 0,
         "element_type": "stimulator",

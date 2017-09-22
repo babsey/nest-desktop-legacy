@@ -9,6 +9,29 @@ navigation.update_randomSeed = function() {
     $('#random-seed').find('.glyphicon-ok').toggle(app.simulation.randomSeed)
 }
 
+navigation.editNetwork = function(drawing) {
+    if (drawing) {
+        app.chart.networkLayout.drawing = drawing;
+        var networkLayout = app.config.app().chart.networkLayout
+        app.chart.networkLayout.toggle(drawing || networkLayout)
+        app.chart.networkLayout.update()
+        $('.nav-tabs a[href="#nodes"]').tab('show');
+        $('.hideOnDrawing').toggle(!drawing)
+        $('.disableOnDrawing').toggleClass('disabled', drawing)
+        $('#edit-network-button').show()
+    } else {
+        app.chart.networkLayout.drawing = drawing;
+        var networkLayout = app.config.app().chart.networkLayout
+        app.chart.networkLayout.toggle(drawing || networkLayout)
+        app.chart.networkLayout.update()
+        $('.nav-tabs a[href="#nodes"]').tab('show');
+        $('.hideOnDrawing').toggle(!drawing)
+        $('.disableOnDrawing').toggleClass('disabled', drawing)
+        $('#edit-network-button').hide()
+        $('#autoscale').prop('checked', 'checked')
+    }
+}
+
 navigation.events = function() {
 
     // Load protocol events
@@ -46,17 +69,9 @@ navigation.events = function() {
         app.chart.update()
     })
     $('#edit-network').on('click', function() {
-        var drawing = true;
-        app.chart.networkLayout.drawing = drawing;
-        var networkLayout = app.config.app().chart.networkLayout
-        app.chart.networkLayout.toggle(drawing || networkLayout)
-        app.chart.networkLayout.update()
-        $('.nav-tabs a[href="#nodes"]').tab('show');
-        $('.hideOnDrawing').toggle(!drawing)
-        $('.disableOnDrawing').toggleClass('disabled', drawing)
-        $('#edit-button').show()
+        navigation.editNetwork(true)
     })
-    $('#edit-cancel').on('click', function() {
+    $('#edit-network-cancel').on('click', function() {
         if (app.simulation.id == app.data._id) {
             var location = './simulation.html?simulation=' + app.simulation.id
         } else {
@@ -64,17 +79,8 @@ navigation.events = function() {
         }
         window.location = location
     })
-    $('#edit-save').on('click', function() {
-        var drawing = false;
-        app.chart.networkLayout.drawing = drawing;
-        var networkLayout = app.config.app().chart.networkLayout
-        app.chart.networkLayout.toggle(drawing || networkLayout)
-        app.chart.networkLayout.update()
-        $('.nav-tabs a[href="#nodes"]').tab('show');
-        $('.hideOnDrawing').toggle(!drawing)
-        $('.disableOnDrawing').toggleClass('disabled', drawing)
-        $('#edit-button').hide()
-        $('#autoscale').prop('checked', 'checked')
+    $('#edit-network-save').on('click', function() {
+        navigation.editNetwork(false)
         app.simulation.update()
     })
     $('#clear-network').on('click', function() {
@@ -85,14 +91,7 @@ navigation.events = function() {
         app.data.links = []
         app.simulation.recorders = [];
         app.simulation.update()
-        var drawing = true;
-        app.chart.networkLayout.drawing = drawing;
-        app.chart.networkLayout.toggle(drawing)
-        app.chart.networkLayout.update()
-        $('.nav-tabs a[href="#nodes"]').tab('show');
-        $('.hideOnDrawing').toggle(!drawing)
-        $('.disableOnDrawing').toggleClass('disabled', drawing)
-        $('#edit-button').show()
+        navigation.editNetwork(true)
     })
     $('#run-after-change').on('click', function() {
         var runAfterChange = app.config.app().simulation.runAfterChange || false
@@ -172,23 +171,18 @@ navigation.events = function() {
     })
     $('#simulation-add').on('click', function(e) {
         $('#simulation-add-submit').show()
+        setTimeout(function() {
+            $('#simulation-form #simulation-name').focus()
+        }, 1000)
     })
     $('#simulation-add-submit').on('click', function(e) {
         $(this).hide()
-        app.data.name = $('#simulation-form #simulation-name').val()
-        app.data.description = $('#simulation-form #simulation-description').val()
-        var date = new Date;
-        app.data.createdAt = date;
-        app.data.updatedAt = date;
-        app.data.user = app.config.app().user.name || process.env.USER;
-        app.data.group = 'user';
-        $('#title').html(app.data.name)
-        $('#subtitle').empty()
-        var date = app.format.date(app.data.createdAt)
-        $('#subtitle').append(date ? '<span style="margin-left:20px">' + date + '</span>' : '')
-        $('#subtitle').append(app.data.user ? '<span style="margin-left:20px">' + app.data.user + '</span>' : '')
-        app.db.add(app.data)
-        app.simulation.id = app.data._id
+        var data = app.db.clone(app.data);
+        data.name = $('#simulation-form #simulation-name').val();
+        data.description = $('#simulation-form #simulation-description').val();
+        app.db.add(data)
+        app.simulation.id = data._id
+        $('#title').html(data.name)
         app.navigation.update()
     })
     $('#simulation-edit').on('click', function(e) {
@@ -200,14 +194,12 @@ navigation.events = function() {
     })
     $('#simulation-edit-submit').on('click', function(e) {
         $(this).hide()
-        app.data.name = $('#simulation-form #simulation-name').val()
-        app.data.description = $('#simulation-form #simulation-description').val()
-        var date = new Date;
-        app.data.updatedAt = date;
-        app.data.user = app.config.app().user.name || process.env.USER;
-        app.data.group = 'user';
-        $('#title').html(app.data.name)
-        app.db.update(app.data)
+        var data = app.db.clone(app.data);
+        data.name = $('#simulation-form #simulation-name').val()
+        data.description = $('#simulation-form #simulation-description').val()
+        app.db.update(data)
+        $('#title').html(data.name)
+        app.navigation.update()
     })
     $('.simulation').on('click', function(d) {
         app.simulation.stop()

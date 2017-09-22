@@ -20,6 +20,12 @@ message.show = function(mode, content, duration) {
     return messageId
 }
 
+message.log = function(text) {
+    if (app.DEBUG) {
+        console.log(text)
+    }
+}
+
 message.hide = function(messageId) {
     return $('#' + messageId).hide()
 }

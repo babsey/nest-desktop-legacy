@@ -1,9 +1,0 @@
-id,level,value,min,max,step,label,scale
-V_m,2,-65.0,-100.0,0.0,1.0,Initial membrane potential (mV)
-U_m,2,0.0,0.0,100.0,1.0,Initial membrane potential recovery variable (mV)
-I_e,2,0.0,-100.0,100.0,1.0,Constant external input current (pA)
-a,2,0.01,0.02,0.1,0.01,Time scale of recovery variable
-b,2,0.2,0.1,1.0,0.01,Sensitivity of recovery variable
-V_th,3,30.0,0.0,100.0,1.0,Spike threshold (mV)
-c,3,-65.0,-100.0,-10.0,1.0,After-spike reset value of V_m
-d,3,8.0,1.0,20.0,1.0,After-spike reset value of U_m

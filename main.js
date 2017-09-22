@@ -28,7 +28,7 @@ app.on('window-all-closed', function() {
 })
 
 function createWindow() {
-    console.log('Creating the window')
+    // console.log('Creating the window')
     var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
 
     let {

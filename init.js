@@ -26,7 +26,6 @@ module.exports = new Promise((resolve, reject) => {
             }
         });
     }
-    var cmd = 'rsync -avz ' + path.join(__dirname, 'src', 'configDefaults', 'simulation') + ' ' + path.join(appPath, 'config');
     var exec = require('child_process').exec;
     exec(cmd, function(error, stdout, stderr) {
         if (error) {
