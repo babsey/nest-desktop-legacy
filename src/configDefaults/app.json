@@ -25,13 +25,11 @@
         "runAfterChange": true,
         "autoReset": true,
         "randomSeed": false,
+        "autoProtocol": false,
         "level": 1,
         "groups": [{
             "id": "nest-desktop",
             "name": "NEST desktop"
-        }, {
-            "id": "nest-initiative",
-            "name": "NEST initiative"
         }, {
             "id": "public",
             "name": "Public"
@@ -41,5 +39,6 @@
         "color": false,
         "networkLayout": true
     },
-    "datapath": "./data"
+    "datapath": "./data",
+    "log": false
 }

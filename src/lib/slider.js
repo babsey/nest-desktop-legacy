@@ -4,7 +4,7 @@ const Slider = require("bootstrap-slider");
 
 var slider = {};
 
-function _slider(ref, id, options) {
+var _slider = (ref, id, options) => {
     var options_default = {
         min: 0,
         max: 10,
@@ -26,27 +26,27 @@ function _slider(ref, id, options) {
     formGroup.append('<div class="help-block" style="padding-left:15px"></div>')
 
     var slider = $(ref).find('#' + id).find("#" + id + 'Input').slider(options);
-    slider.on("change", function() {
+    slider.on("change", () => {
         options.value = $(ref).find('#' + id).find("#" + id + 'Input').val();
         if (!(Object.prototype.toString.call(options.value) === '[object Array]') && (options.show_value)) {
             $(ref).find('#' + id).find("#" + id + "Val").val(options.value);
         }
         // app.lastSliderChanged = $(ref).find('#' + id)
     });
-    // $(ref).find('#' + id).find(".slider-handle").on("mouseover", function() {
+    // $(ref).find('#' + id).find(".slider-handle").on("mouseover", () => {
     //     $(this).focus();
     // });
     return slider
 }
 
-function _update_dataSlider(id, value) {
+var _update_dataSlider = (id, value) => {
     var level = app.config.app().simulation.level;
     $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
     $('#' + id + 'Input').slider('setValue', value)
     $('#' + id + 'Val').val(value)
 }
 
-slider.update_dataSlider = function() {
+slider.update_dataSlider = () => {
     var ds = $('.dataSlider');
     var level = app.config.app().simulation.level;
     ds.each(function() {
@@ -54,7 +54,7 @@ slider.update_dataSlider = function() {
     })
 }
 
-slider.update_simulationSlider = function() {
+slider.update_simulationSlider = () => {
     var ref = $("#simulation .content");
     var level = app.config.app().simulation.level;
     ref.find('.dataSlider').each(function() {
@@ -67,15 +67,13 @@ slider.update_simulationSlider = function() {
     })
 }
 
-slider.update_kernelSlider = function() {
+slider.update_kernelSlider = () => {
     var ref = $("#kernel .content");
     var level = app.config.app().simulation.level;
     var modelDefaults = app.config.nest('kernel');
-    ref.find('.dataSlider').each(function() {
+    ref.find('.dataSlider').each(() => {
         var kid = this.id;
-        var options = modelDefaults.find(function(d) {
-            return d.id == kid
-        });
+        var options = modelDefaults.find((d) => d.id == kid);
         if (app.data.kernel[kid] == undefined) {
             var value = modelDefaults.value;
         } else {
@@ -91,7 +89,8 @@ slider.update_kernelSlider = function() {
     })
 }
 
-slider.update_nodeSlider = function(node) {
+slider.update_nodeSlider = (node) => {
+
     var modelSlider = $('#nodes .node[data-id=' + node.id + '] .modelSlider');
     var level = app.config.app().simulation.level;
     modelSlider.find('.paramSlider').each(function() {
@@ -104,12 +103,13 @@ slider.update_nodeSlider = function(node) {
         }
         modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
+
     var colors = app.chart.colors();
     modelSlider.find('.slider-selection').css('background', colors[node.id % colors.length])
     modelSlider.find('.slider-handle').css('border', '2px solid ' + colors[node.id % colors.length])
 }
 
-slider.update_connSlider = function(link) {
+slider.update_connSlider = (link) => {
     if (link.conn_spec == undefined) return
     var connRule = (link.conn_spec ? (link.conn_spec.rule || 'all_to_all') : 'all_to_all')
     var modelSlider = $('#connections .link[data-id=' + link.id + ']');
@@ -130,7 +130,7 @@ slider.update_connSlider = function(link) {
 
 }
 
-slider.update_synSlider = function(link) {
+slider.update_synSlider = (link) => {
     var synModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
     var modelSlider = $('#synapses .link[data-id=' + link.id + ']');
     var level = app.config.app().simulation.level;
@@ -150,29 +150,29 @@ slider.update_synSlider = function(link) {
 
 }
 
-slider.update_slider = function() {
-    app.data.nodes.map(function(node) {
+slider.update_slider = () => {
+    app.data.nodes.map((node) => {
         slider.update_nodeSlider(node)
     })
-    app.data.links.map(function(link) {
+    app.data.links.map((link) => {
         slider.update_connSlider(link)
         slider.update_synSlider(link)
     })
 }
 
-slider.create_dataSlider = function(ref, id, options) {
+slider.create_dataSlider = (ref, id, options) => {
     $(ref).append('<div id="' + id + '" class="dataSlider" level="' + options.level + '"></div>')
     var level = app.config.app().simulation.level;
     $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
     return _slider(ref, id, options);
 }
 
-var create_modelSlider = function(ref, id, options) {
+var create_modelSlider = (ref, id, options) => {
     $(ref).append('<div id="' + id + '" class="paramSlider ' + ((id.indexOf('__') != -1) ? 'nested' : '') + '" level="' + options.level + '"></div>')
     return _slider(ref, id, options);
 }
 
-slider.init_modelSlider = function(ref, model) {
+slider.init_modelSlider = (ref, model) => {
     $(ref).empty()
     $(ref).append('<div class="model ' + model.id + '"></div>')
     for (var idx in model.sliderDefaults) {

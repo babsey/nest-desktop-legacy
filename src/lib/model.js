@@ -1,6 +1,7 @@
 "use strict"
 
 var model = {};
+
 model.record_labels = {
     'g_ex': 'Excitatory conductance (nS)',
     'g_in': 'Inhibitory conductance (nS)',
@@ -47,7 +48,7 @@ model.record_legends = {
     'g_in.s': 'Soma',
 }
 
-model.node_selected = function(node) {
+model.node_selected = (node) => {
     $('#node_' + node.id).find('option#' + node.model).prop('selected', true);
     if (node.stim_time) {
         node.params.start = node.stim_time[0]
@@ -57,26 +58,26 @@ model.node_selected = function(node) {
     }
 }
 
-model.conn_selected = function(link) {
+model.conn_selected = (link) => {
     $('#link_' + link.id).find('option#' + (link.conn_spec.rule || 'all_to_all')).prop('selected', true);
 }
 
-model.syn_selected = function(link) {
+model.syn_selected = (link) => {
     $('#link_' + link.id).find('option#' + (link.syn_spec.model || 'static_synapse')).prop('selected', true);
 }
 
-model.get_recordables_list = function(recorder) {
+model.get_recordables_list = (recorder) => {
     var recObj = $('#node_' + recorder.id).find('.record')
     recObj.empty()
 
-    var sources = app.data.links.filter(function(link) {
-        return link.target == recorder.id
-    }).map(function(link) {
-        return app.data.nodes[link.source].model
-    })
+    var sources = app.data.links.filter(
+        (link) => link.target == recorder.id
+    ).map(
+        (link) => app.data.nodes[link.source].model
+    );
 
     if (sources.indexOf('iaf_cond_alpha_mc') != -1) {
-        ['V_m', 'g_ex', 'g_in'].map(function(rec) {
+        ['V_m', 'g_ex', 'g_in'].map((rec) => {
             recObj.append('<option value="' + rec + '" ' + (rec == recorder.record_from ? 'selected' : '') + '>' + (model.record_labels[rec] || rec) + '</option>')
         })
     }

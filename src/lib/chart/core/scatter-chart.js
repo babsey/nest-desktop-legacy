@@ -9,7 +9,7 @@ var chart = {
     data: {}
 };
 
-chart.update = function(recorder) {
+chart.update = (recorder) => {
     chart.g.style('display', 'none')
 
     if (!chart.data.x) return
@@ -27,28 +27,17 @@ chart.update = function(recorder) {
         .data(chart.data.x);
 
     var color = app.config.app().chart.color;
-    dots.attr("fill", function(d, i) {
-            return color ? chart.data.c[i] : ''
-        })
-        .attr("cx", function(d) {
-            return chart.xScale(d);
-        })
-        .attr("cy", function(d, i) {
-            return chart.yScale(chart.data.y[i]);
-        })
+    dots.attr("fill", (d, i) => color ? chart.data.c[i] : '')
+        .attr("cx", (d) => chart.xScale(d))
+        .attr("cy", (d, i) => chart.yScale(chart.data.y[i]))
 
     dots.enter().append("circle")
         .attr("class", "dot")
         .attr("r", 2)
-        .attr("fill", function(d, i) {
-            return color ? chart.data.c[i] : ''
-        })
-        .attr("cx", function(d) {
-            return chart.xScale(d);
-        })
-        .attr("cy", function(d, i) {
-            return chart.yScale(chart.data.y[i]);
-        }).merge(dots);
+        .attr("fill", (d, i) => color ? chart.data.c[i] : '')
+        .attr("cx", (d) => chart.xScale(d))
+        .attr("cy", (d, i) => chart.yScale(chart.data.y[i]))
+        .merge(dots);
 
     dots.exit()
         .remove();
@@ -57,7 +46,7 @@ chart.update = function(recorder) {
 }
 
 
-chart.init = function(reference, id, size) {
+chart.init = (reference, id, size) => {
     var margin = {
         top: 10,
         right: 40,

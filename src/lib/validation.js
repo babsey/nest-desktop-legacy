@@ -12,8 +12,6 @@ validation.schemas = {
     'array': joi.array().items(joi.number().integer())
 }
 
-validation.validate = function(key, value, schema) {
-    return joi.validate(value, validation.schemas[schema])
-}
+validation.validate = (key, value, schema) => joi.validate(value, validation.schemas[schema]);
 
 module.exports = validation

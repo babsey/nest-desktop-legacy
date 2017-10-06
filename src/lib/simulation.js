@@ -1,30 +1,26 @@
 "use strict"
 
-const math = require('mathjs');
 const jsonfile = require('jsonfile');
-const flat = require('flat');
 
 var simulation = {
     running: false,
+    resume: require('./simulation/resume').resume,
+    simulate: require('./simulation/simulate').simulate,
 }
 
-simulation.list = function(q, ref) {
-    return app.db.localDB.find(q)
-}
-
-simulation.export = function() {
+simulation.export = () => {
     const config = app.config.app()
     var filepath = __dirname + '/../../' + config.get('db.local.path') + '/exports/' + app.data.name + '.json'
     jsonfile.writeFileSync(filepath, app.data)
 }
 
-simulation.run = function(running) {
+simulation.run = (running) => {
     simulation.running = (running == true)
     if (simulation.running) {
         $('#simulation-resume').find('.resume').hide()
         $('#simulation-resume').find('#simulation-stop').show()
         $('.dataSlider').find('.sliderInput').slider('disable')
-        app.simulation.resume()
+        simulation.resume()
     } else {
         $('#simulation-resume').find('.resume').hide()
         $('#simulation-resume').find('#simulation-start').show()
@@ -32,269 +28,45 @@ simulation.run = function(running) {
     }
 }
 
-simulation.resumeToggle = function() {
+simulation.resumeToggle = () => {
     simulation.run(!simulation.running)
 }
 
-simulation.stop = function() {
-    simulation.running = false
-}
+simulation.stop = () => new Promise((resolve, reject) => {
+    simulation.running = false;
+    resolve()
+});
 
-simulation.simulate = function(run) {
-    if (app.chart.networkLayout.drawing) return
-    if (!(simulation.runAfterChange || run)) return
-    if (simulation.running) return
-    if (simulation.recorders.length == 0) return
-    if (simulation.recorders.filter(function(recorder) {
-            return recorder.node.model != undefined
-        }).length == 0) return
-    if (simulation.recorders.filter(function(recorder) {
-            return !(recorder.node.disabled == true)
-        }).length == 0) return
-    if (app.simulation.autoReset) {
-        app.data.kernel.time = 0.0;
-    }
-    if (app.simulation.randomSeed) {
-        app.data.random_seed = parseInt(Math.random() * 1000);
-        app.slider.update_simulationSlider()
-    }
 
-    $('#message .content').empty()
-    var mId = app.message.show('Info', 'The simulation is running. Please wait.');
-    var data = app.db.clone(app.data);
-    setTimeout(function() {
-        if (app.DEBUG) {
-            console.log('Simulation is starting.')
-        }
-        app.request.request({
-                id: app.data._id,
-                network: app.data.network,
-                kernel: app.data.kernel,
-                random_seed: app.data.random_seed || 0,
-                sim_time: app.data.sim_time || 1000.,
-                nodes: flat.unflatten(app.data.nodes.map(function(node) {
-                    node.params = flat.unflatten(node.params, {
-                        delimiter: '__'
-                    })
-                    return node
-                })),
-                links: app.data.links,
-            })
-            .done(function(response) {
-                if (app.DEBUG) {
-                    console.log('Simulation is finished.')
-                }
-                if (response.error) {
-                    app.message.hide(mId).remove();
-                    app.message.show('NEST Error:', response.error);
-                    return
-                }
-                app.message.log('Update nodes from NEST.')
-                for (var idx in response.data.nodes) {
-                    var node = app.data.nodes[idx]
-                    node.ids = response.data.nodes[idx].ids;
-                    var title = app.format.nodeTitle(node)
-                    $('#nodeScrollspy .nav').find('.node_' + node.id).attr('title', title)
-                }
-                app.message.log('Get data from recorders.')
-                simulation.recorders.map(function(recorder) {
-                    recorder.node.params = response.data.nodes[recorder.node.id].params
-                    if (recorder.node.model == 'multimeter') {
-                        if (recorder.node.record_from) {
-                            var record_from = recorder.node.record_from.filter(function(record_from) {
-                                return recorder.node.params.record_from.indexOf(record_from) != -1
-                            })
-                            recorder.node.record_from = record_from;
-                        } else {
-                            recorder.node.record_from = recorder.node.params.record_from.filter(function(record_from) {
-                                return record_from.indexOf('V_m') != -1
-                            })
-                        }
-                    } else if (recorder.node.model == 'voltmeter') {
-                        recorder.node.record_from = ['V_m']
-                    }
-                    if (app.data.kernel.time == 0.0) {
-                        recorder.events = response.data.nodes[recorder.node.id].events;
-                    } else {
-                        for (var key in response.data.nodes[recorder.node.id].events) {
-                            recorder.events[key] = recorder.events[key].concat(response.data.nodes[recorder.node.id].events[key])
-                        }
-                    }
-                    recorder.senders = math.sort(recorder.events.senders.filter((v, i, a) => a.indexOf(v) === i));
-                    recorder.sources = app.data.links.filter(function(link) {
-                        return link.target == recorder.node.id
-                    }).map(function(link) {
-                        return app.data.nodes[link.source].id
-                    })
-                    if (['voltmeter', 'multimeter'].indexOf(recorder.node.model) != -1) {
-                        app.chart.data.times = recorder.events.times.filter(function(d, i) {
-                            return ((recorder.events.senders[i] == recorder.senders[0]))
-                        })
-                    } else if (!app.chart.data.times) {
-                        app.chart.data.times = d3.extent(recorder.events.times)
-                    }
-                    app.controller.node.update(recorder.node)
-                });
-                var nodeDefaults = app.config.nest('node');
-                simulation.stimulators.map(function(stimulator) {
-                    stimulator.events = {}
-                    if (stimulator.node.model == 'step_current_generator') {
-                        if (stimulator.node.params.amplitude_times.length == app.chart.data.times.length) {
-                            stimulator.events.currents = stimulator.node.params.amplitude_values
-                        } else {
-                            var amplitudes = [].concat.apply([0], stimulator.node.params.amplitude_values).filter(function(d, i) {
-                                var time = stimulator.node.params.amplitude_times[i - 1];
-                                return time <= (stimulator.node.params.stop || app.data.sim_time || 1000.)
-                            });
-                            var times = [].concat.apply([0], stimulator.node.params.amplitude_times).filter(function(d, i) {
-                                return d <= (stimulator.node.params.stop || app.data.sim_time || 1000.)
-                            });
-                            var times_rounded = numeric.round(numeric.div(times, (app.data.kernel.resolution || 1.0)))
-                            var dtimes = times_rounded.map(function(time, i) {
-                                if (i == 0) return (stimulator.node.amplitude_dtime || nodeDefaults.amplitude_dtime.value) / (app.data.kernel.resolution || 1.0);
-                                return time - times_rounded[i - 1]
-                            })
-                            var amplitude_series = dtimes.map(function(dt, i) {
-                                return numeric.rep([dt], amplitudes[i] * (stimulator.node.n || 1))
-                            })
-                            stimulator.events.currents = [].concat.apply([], amplitude_series).slice(0, app.chart.data.times.length);
-                        }
-                    }
-                    app.controller.node.update(stimulator.node)
-                })
-                app.data.kernel.time = response.data.kernel.time;
-                app.controller.update()
-                app.chart.update();
-                app.protocol.update()
-                app.message.hide(mId).remove();
-                if (app.simulation.protocol) {
-                    app.protocol.add(data);
-                }
-                if (app.simulation.id == app.data._id) {
-                    $('#view-data').find('a').attr('href', './view_data.html?simulation=' + app.simulation.id)
-                    $('#view-raw-data').find('a').attr('href', './view_raw_data.html?simulation=' + app.simulation.id)
-                } else {
-                    $('#view-data').find('a').attr('href', './view_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
-                    $('#view-raw-data').find('a').attr('href', './view_raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
-                }
-            })
-    }, 10)
-}
-
-simulation.reset = function() {
-    app.data.kernel.time = 0.0
-    $('#autoscale').prop('checked', 'checked')
-    simulation.simulate()
-}
-
-simulation.resume = function() {
-    if (!(simulation.running)) return
-
-    app.request.request({
-            id: app.data._id,
-            network: app.data.network,
-            kernel: app.data.kernel,
-            sim_time: app.data.res_time || 10.,
-            nodes: app.data.nodes,
-            links: app.data.links,
-        })
-        .done(function(response) {
-            if (response.error) {
-                app.message.show('Warning', response.error, 2000)
-                return
-            }
-            if (!simulation.running) return
-            app.data.kernel.time = response.data.kernel.time;
-            if ($('#autoscale').prop('checked')) {
-                app.chart.xScale.domain([app.data.kernel.time - (app.data.sim_time), app.data.kernel.time])
-            }
-            simulation.recorders.map(function(recorder) {
-                for (var key in response.data.nodes[recorder.node.id].events) {
-                    recorder.events[key] = recorder.events[key].concat(response.data.nodes[recorder.node.id].events[key])
-                }
-                recorder.senders = d3.merge(app.data.links.filter(function(link) {
-                    return link.target == recorder.node.id
-                }).map(function(link) {
-                    return app.data.nodes[link.source].ids
-                }))
-                app.chart.data.times = recorder.events.times.filter(function(d, i) {
-                    return ((recorder.events.senders[i] == recorder.senders[0]))
-                })
-            })
-            app.controller.update()
-            app.chart.update()
-            app.simulation.resume()
-        })
-}
-
-simulation.update = function() {
-
+simulation.update = () => {
+    app.message.log('Update simulation')
     simulation.running = false;
     app.selected_node = null;
     app.selected_link = null;
 
-    $('#title').html(app.data.name)
-    simulation.recorders = app.data.nodes.filter(function(node) {
-        return node.element_type == 'recorder' && !node.disabled
-    }).map(function(node) {
-        return {
-            node: node,
-            sources: app.data.links.filter(function(link) {
-                return link.target == node.id
-            }).map(function(link) {
-                return app.data.nodes[link.source].id
-            })
-        }
-    })
-    simulation.stimulators = app.data.nodes.filter(function(node) {
-        return node.element_type == 'stimulator' && !node.disabled
-    }).map(function(node) {
-        return {
-            node: node,
-            targets: app.data.links.filter(function(link) {
-                return link.source == node.id
-            }).map(function(link) {
-                return app.data.nodes[link.target].id
-            })
-        }
-    })
-
-    app.data.links.map(function(link) {
-        link.conn_spec = link.conn_spec ? link.conn_spec : {}
-        link.syn_spec = link.syn_spec ? link.syn_spec : {}
-    })
-    app.chart.init()
-    app.controller.init()
-    app.simulation.simulate()
-    app.navigation.editNetwork((app.data.nodes.length == 0))
+    app.network.update()
+    simulation.simulate()
 }
 
-simulation.init = function() {
+simulation.reset = () => {
+    app.data.kernel.time = 0.0
+    $('#autoscale').prop('checked', 'checked')
+    simulation.update()
+}
+
+simulation.init = () => {
+    app.message.log('Initialize simulation')
     app.db.init()
-    app.navigation.init()
     app.protocol.init()
-    setTimeout(function() {
-        if (app.protocol.id) {
-            app.protocol.get(app.protocol.id)
-                .exec(function(err, docs) {
-                    app.data = docs;
-                    app.data.kernel.time = 0.0;
-                    app.data.sim_time = app.data.sim_time ? app.data.sim_time : 1000.0;
-                    app.simulation.update()
-                })
-        } else {
-            app.db.get(app.simulation.id)
-                .exec(function(err, docs) {
-                    app.data = docs;
-                    if (app.data.kernel == undefined) {
-                        app.data.kernel = {}
-                    }
-                    app.data.kernel.time = 0.0;
-                    app.data.sim_time = app.data.sim_time ? app.data.sim_time : 1000.0;
-                    app.simulation.update()
-                })
-        }
-    }, 200)
+    app.network.init().then(() => {
+        app.chart.init()
+        app.controller.init()
+        app.navigation.init()
+
+        app.protocol.update()
+        app.navigation.update()
+        simulation.update()
+    })
 }
 
 module.exports = simulation;

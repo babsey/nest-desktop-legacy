@@ -9,43 +9,36 @@ const path = require('path');
 
 var db = {};
 
-db.all = function() {
-    return db.localDB.find({}).sort({
-        updatedAt: -1
-    })
-}
+db.all = () => db.localDB.find({}).sort({
+    updatedAt: -1
+});
 
-db.filter = function() {
-    return db.localDB.find({
-        user: app.config.app().user.id
-    }).sort({
-        updatedAt: -1
-    })
-}
+db.filter = (q) => db.localDB.find(q).sort({
+    updatedAt: -1
+});
 
-db.labels = function() {
-    db.all().exec(function(err, docs) {
-        docs.map(function(doc) {
+db.labels = () => {
+    db.all().exec((err, docs) => {
+        docs.map((doc) => {
             console.log(doc._id)
         })
     })
 };
 
-db.get = function(id) {
-    return db.localDB.findOne({
-        _id: id
-    })
-}
+db.get = (id) => db.localDB.findOne({
+    _id: id
+});
 
-db.clone = function(data) {
-    return $.extend(true, {}, app.data);
-}
+db.clone = (data) => new Promise((resolve, reject) => {
+    var clonedData = $.extend(true, {}, data);
+    resolve(clonedData)
+})
 
-db.clean = function(data) {
+db.clean = (data) => {
     delete data._rev
     delete data.kernel.local_num_threads
     delete data.kernel.time
-    data.nodes.map(function(node) {
+    data.nodes.map((node) => {
         delete node.ids
         delete node.index
         delete node.vx
@@ -53,15 +46,17 @@ db.clean = function(data) {
         delete node.fx
         delete node.fy
         var pkeys = Object.keys(node.params);
-        pkeys.map(function(pkey) {
+        pkeys.map((pkey) => {
             if (typeof(node.params[pkey]) == 'object') {
                 delete node.params[pkey]
             }
         })
     })
+    data.hash = app.hash(data);
 }
 
-db.update = function(data) {
+db.update = (data) => {
+    app.message.log('Update database')
     db.clean(data);
     var date = new Date;
     data.updatedAt = date;
@@ -70,11 +65,11 @@ db.update = function(data) {
     data.version = process.env.npm_package_version;
     db.localDB.update({
         _id: data._id
-    }, data, {}, function() {});
+    }, data, {}, () => {});
     data.hash = app.hash(data);
 }
 
-db.add = function(data) {
+db.add = (data) => {
     db.clean(data);
     data.parentId = data._id;
     data._id = uuidV4();
@@ -84,15 +79,14 @@ db.add = function(data) {
     data.user = app.config.app().user.id;
     data.group = 'public';
     data.version = process.env.npm_package_version;
-    db.localDB.insert(data)
-    setTimeout(function() {
-        app.screen.capture(data._id)
-    }, 1000)
+    db.localDB.insert(data, (err, newDocs) => {
+        app.screen.capture(newDocs, true)
+    })
 }
 
-db.export = function(data) {
+db.export = (data) => {
     var configApp = app.config.app()
-    db.get(id).exec(function(err, doc) {
+    db.get(id).exec((err, doc) => {
         if (err) return
         var filepath = path.join(process.cwd(), configApp.datapath, 'exports', id + '.json')
         jsonfile.writeFileSync(filepath, doc, {
@@ -101,7 +95,8 @@ db.export = function(data) {
     })
 }
 
-db.init = function() {
+db.init = () => {
+    app.message.log('Initialize database')
     var configApp = app.config.app()
     var db_name = configApp.db.name
     var filename = path.join(process.cwd(), configApp.datapath, db_name + '.db')

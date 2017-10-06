@@ -1,6 +1,18 @@
 CHANGELOG
 ---------
 
+0.10.0:
+    Server check
+    Simulation synchronizing from remote DB
+    Message logs option
+    App configuration view
+    Redesign filter of simulations
+    List simulation from same group
+    Network lib
+    Outsource simulation code
+    Auto protocolling
+    ES6: Arrow functions
+
 0.9.3:
     Better organization for navigation
     View of documented and raw data

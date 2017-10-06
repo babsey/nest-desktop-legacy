@@ -5,7 +5,7 @@ var renderer = {};
 const path = require('path');
 const fs = require('fs');
 
-renderer.simulationThumbnails = function(doc) {
+renderer.simulationThumbnails = (doc) => {
     var configApp = app.config.app();
     if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', doc._id + '.png'))) {
         var src = path.join(process.cwd(), configApp.datapath, 'images', doc._id + '.png');
@@ -25,7 +25,7 @@ renderer.simulationThumbnails = function(doc) {
     return div.join('')
 }
 
-renderer.simulationDropdown = function(doc) {
+renderer.simulationDropdown = (doc) => {
     var configApp = app.config.app();
     if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', doc._id + '.png'))) {
         var src = path.join(process.cwd(), configApp.datapath, 'images', doc._id + '.png');
@@ -42,12 +42,12 @@ renderer.simulationDropdown = function(doc) {
     return div.join('')
 }
 
-renderer.simulationProtocol = function(data) {
+renderer.simulationProtocol = (data) => {
     var div = [];
     // div.push(app.format.truncate(data.hash))
     div.push('<img style="width:250px" src="' + $('#' + data._id).data('img') + '" />')
     div.push('<small>')
-    data.nodes.map(function(node) {
+    data.nodes.map((node) => {
         div.push('<h4>' + app.format.nodeTitle(node) + '</h4>')
         if (node.n) {
             div.push('<dl>')
@@ -66,12 +66,12 @@ renderer.simulationProtocol = function(data) {
     return div.join('')
 }
 
-renderer.simulationNodes = function(data) {
+renderer.simulationNodes = (data) => {
     var div = [];
     // div.push(app.format.truncate(data.hash))
     div.push('<h4>Nodes</h4>')
     div.push('<table>')
-    data.nodes.map(function(node, idx) {
+    data.nodes.map((node, idx) => {
         div.push('<tr class="hline">')
         div.push('<td style="min-width:100px">ID</td>')
         div.push('<td>' + node.id + '</td>')
@@ -97,11 +97,11 @@ renderer.simulationNodes = function(data) {
     return div.join('')
 }
 
-renderer.simulationLinks = function(data) {
+renderer.simulationLinks = (data) => {
     var div = [];
     div.push('<h4>Links</h4>')
     div.push('<table>')
-    data.links.map(function(link) {
+    data.links.map((link) => {
         if (link.disabled) return
         div.push('<tr class="hline">')
         div.push('<td style="min-width:100px">source</td>')
@@ -116,7 +116,7 @@ renderer.simulationLinks = function(data) {
         div.push('<td>' + (link.conn_spec ? link.conn_spec.rule || 'all_to_all' : 'all_to_all') + '</td>')
         div.push('</tr>')
         if (link.conn_spec) {
-            Object.keys(link.conn_spec).map(function(ckey) {
+            Object.keys(link.conn_spec).map((ckey) => {
                 if (ckey == 'rule') return
                 div.push('<tr>')
                 div.push('<td>' + ckey + '</td>')
@@ -129,7 +129,7 @@ renderer.simulationLinks = function(data) {
         div.push('<td>' + (link.syn_spec ? link.syn_spec.model || 'static_synapse' : 'static_synapse') + '</td>')
         div.push('</tr>')
         if (link.syn_spec) {
-            Object.keys(link.syn_spec).map(function(skey) {
+            Object.keys(link.syn_spec).map((skey) => {
                 if (skey == 'model') return
                 div.push('<tr>')
                 div.push('<td>' + skey + '</td>')
@@ -143,14 +143,14 @@ renderer.simulationLinks = function(data) {
 }
 
 
-renderer.simulationPopover = function(d) {
+renderer.simulationPopover = (d) => {
     var div = [];
     div.push('<div>Created at ' + $(d).data('date') + '</div>')
     div.push('<img style="width:250px" src="' + $(d).data('img') + '" />')
     return div.join('')
 }
 
-renderer.scrollspy = function(node) {
+renderer.scrollspy = (node) => {
     var div = [];
     div.push('<li class="node ' + node.element_type + '" data-id="' + node.id + '">')
     var colors = app.chart.colors()
@@ -162,7 +162,7 @@ renderer.scrollspy = function(node) {
     return div.join('')
 }
 
-renderer.node = function(node) {
+renderer.node = (node) => {
     var div = [];
     div.push('<div id="node_' + node.id + '" data-id="' + node.id + '" class="panel-body node ' + node.element_type + ' node_' + node.id + '">')
     div.push('<div class="content"')
@@ -188,7 +188,7 @@ renderer.node = function(node) {
     return div.join('')
 }
 
-renderer.connection = function(link) {
+renderer.connection = (link) => {
     var div = []
     div.push('<div data-id="' + link.id + '" class="panel-body link">')
     div.push('<div class="content"')
@@ -213,7 +213,7 @@ renderer.connection = function(link) {
     return div.join('')
 }
 
-renderer.synapse = function(link) {
+renderer.synapse = (link) => {
     var div = []
     div.push('<div data-id="' + link.id + '" class="panel-body link">')
     div.push('<div class="content"')

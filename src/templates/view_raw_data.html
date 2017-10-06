@@ -41,7 +41,21 @@
         app.db.init()
         app.protocol.init()
 
-        var render = function() {
+        new Promise((resolve, reject) => {
+            if (app.protocol.id) {
+                app.protocol.get(app.protocol.id)
+                    .exec(function(err, docs) {
+                        app.data = docs;
+                        resolve()
+                    })
+            } else {
+                app.db.get(app.simulation.id)
+                    .exec(function(err, docs) {
+                        app.data = docs;
+                        resolve()
+                    })
+            }
+        }).then(() => {
             var configApp = app.config.app();
             if (app.simulation.id == app.data._id) {
                 $('a').attr('href', './simulation.html?simulation=' + app.simulation.id)
@@ -50,23 +64,7 @@
             }
             $('#raw_data').html(JSON.stringify(app.data, undefined, 4))
             var clipboard = new Clipboard('#copy');
-        }
-
-        setTimeout(function() {
-            if (app.protocol.id) {
-                app.protocol.get(app.protocol.id)
-                    .exec(function(err, docs) {
-                        app.data = docs;
-                        render()
-                    })
-            } else {
-                app.db.get(app.simulation.id)
-                    .exec(function(err, docs) {
-                        app.data = docs;
-                        render()
-                    })
-            }
-        }, 200)
+        })
     </script>
 </body>
 

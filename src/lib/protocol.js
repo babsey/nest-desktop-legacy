@@ -7,11 +7,12 @@ const jsonfile = require('jsonfile')
 
 var protocol = {};
 
-protocol.all = function() {
-    return protocol.db.find({})
-}
+protocol.all = () => protocol.db.find({});
+protocol.get = (id) => protocol.db.findOne({
+    _id: id
+});
 
-protocol.addDropdown = function(data) {
+protocol.addDropdown = (data) => {
     var configApp = app.config.app();
     if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png'))) {
         var src = path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png');
@@ -26,111 +27,90 @@ protocol.addDropdown = function(data) {
         trigger: 'hover',
         content: app.renderer.simulationProtocol(data)
     });
-    $('#' + data._id).on('click', function(e) {
+    $('#' + data._id).on('click', (e) => {
         e.preventDefault()
         app.data = data;
         $('#protocol-label').html(datetime)
         app.navigation.editNetwork(false)
+        app.chart.init()
         app.simulation.update()
     })
 }
 
-protocol.removeDropdown = function(data) {
+protocol.removeDropdown = (data) => {
     $('#' + data._id).remove()
     // protocol.addDropdown(data)
 }
 
-protocol.add = function(data) {
+protocol.add = () => {
     var configApp = app.config.app()
-    var data = app.db.clone(app.data);
-    data.user = configApp.user.id;
-    data.version = process.env.npm_package_version;
-    app.db.clean(data);
-    delete data._id;
-    delete data.updatedAt;
-    protocol.db.findOne({
-        hash: data.hash
-    }).exec(function(err, doc) {
-        if (doc) {
-            protocol.db.update({
-                hash: data.hash,
-            }, data, {}, function() {
-                new Promise((resolve, reject) => {
-                    app.screen.capture(doc, true)
-                    resolve('captured')
-                }).then((onResolved) => {
-                    protocol.update()
-                })
-            })
-        } else {
-            protocol.db.insert(data, (err, newDocs) => {
-                app.data._id = newDocs._id
-                if (app.simulation.id == app.data._id) {
-                    $('#raw-data').find('a').attr('href', './raw_data.html?simulation=' + app.simulation.id)
+    return app.db.clone(app.data).then((data) => {
+        data.user = configApp.user.id;
+        data.version = process.env.npm_package_version;
+        app.db.clean(data);
+        delete data.updatedAt;
+
+        return new Promise((resolve, reject) => {
+            protocol.db.findOne({
+                hash: data.hash
+            }).exec((err, doc) => {
+                // console.log(doc)
+                if (doc) {
+                    protocol.db.update({
+                        hash: data.hash,
+                    }, data, {}, () => {
+                        protocol.db.findOne({
+                            hash: data.hash
+                        }).exec((err, doc) => {
+                            app.data.updatedAt = doc.updatedAt
+                            resolve(false)
+                        })
+                    })
                 } else {
-                    $('#raw-data').find('a').attr('href', './raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
+                    delete data._id;
+                    protocol.db.insert(data, (err, newDocs) => {
+                        app.data._id = newDocs._id
+                        app.data.updatedAt = newDocs.updatedAt
+                        resolve(true)
+                    })
                 }
-                new Promise((resolve, reject) => {
-                    app.screen.capture(newDocs, true)
-                    resolve('captured')
-                }).then((onResolved) => {
-                    protocol.update()
-                })
             })
-        }
-    })
+        }).then((capture) => {
+            if (capture) {
+                app.screen.capture(app.data, true)
+            }
+            protocol.update()
+        })
+    });
 }
 
-protocol.get = function(id) {
-    return protocol.db.findOne({
-        _id: id
-    })
-}
-
-protocol.update = function() {
+protocol.update = () => {
+    app.message.log('Update protocol')
     $('#protocol').toggleClass('btn-primary', app.simulation.protocol || false)
     app.protocol.all().sort({
         updatedAt: -1
-    }).exec(function(err, docs) {
+    }).exec((err, docs) => {
         if (docs.length == 0) return
         $('#protocol-list').empty()
-        docs.map(function(doc, idx) {
+        docs.map((doc, idx) => {
             protocol.addDropdown(doc)
         })
-        $('#protocol-label').html(app.format.datetime(docs[0].updatedAt))
+        $('#protocol-label').html(app.format.datetime(app.data.updatedAt))
     })
 }
 
-protocol.events = function() {
-    var DELAY = 700,
-        clicks = 0,
-        timer = null;
-    $('#protocol').on('click', function() {
+protocol.events = () => {
+    $('#protocol').on('click', () => {
         if (app.chart.networkLayout.drawing) return
-        if (app.simulation.protocol) {
-            app.simulation.protocol = !(app.simulation.protocol || false)
-            protocol.update()
-            return
-        }
-        clicks++; //count clicks
-        if (clicks === 1) {
-            timer = setTimeout(function() {
-                protocol.add(app.data)
-                clicks = 0; //after action performed, reset counter
-            }, DELAY);
-        } else {
-            clearTimeout(timer); //prevent single-click action
-            app.simulation.protocol = !(app.simulation.protocol || false)
-            clicks = 0; //after action performed, reset counter
-        }
-        protocol.update()
+        protocol.add()
     })
-    $('#view-protocol').on('click', function() {
+    $('#view-protocol').on('click', () => {
         protocol.update()
     })
 }
 
-protocol.init = function() {
+protocol.init = () => {
+    app.message.log('Initialize protocol')
     var configApp = app.config.app()
     var filename = path.join(process.cwd(), configApp.datapath, 'protocols', app.simulation.id + '.db')
     protocol.db = new NeDB({
@@ -138,7 +118,6 @@ protocol.init = function() {
         timestampData: true,
         autoload: true,
     })
-    protocol.update()
 }
 
 module.exports = protocol

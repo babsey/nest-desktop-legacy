@@ -41,10 +41,6 @@ module.exports = new Promise((resolve, reject) => {
             configApp.user.id = uuidV4();
             changed = true
         }
-        if (!configApp.user.name) {
-            configApp.user.name = process.env.USER;
-            changed = true
-        }
         if (!configApp.version) {
             configApp.version = process.env.npm_package_version;
             changed = true

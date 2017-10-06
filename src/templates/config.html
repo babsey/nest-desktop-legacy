@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href='../assets/css/styles.css'></link>
+    <style>
+        .container .content {
+            max-width: 640px;
+            margin: auto;
+            padding: 20px
+        }
+
+        .form-group {
+            padding: 5px;
+        }
+
+        fieldset {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='message'>
+        <div class='content'></div>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <h2>Configuration</h2>
+
+            <form id="config-form">
+                <fieldset id="app">
+                    <legend>Application</legend>
+                </fieldset>
+
+                <fieldset id="user">
+                    <legend>User</legend>
+                </fieldset>
+
+                <fieldset id="db">
+                    <legend>Database</legend>
+                </fieldset>
+
+                <fieldset id="nest">
+                    <legend>NEST</legend>
+                </fieldset>
+
+                <fieldset id="simulation">
+                    <legend>Simulation</legend>
+                </fieldset>
+
+                <fieldset id="chart">
+                    <legend>Chart</legend>
+                </fieldset>
+
+                <button class="btn btn-default" id="app-config-save" style="display:none">save</button>
+            </form>
+            <button class="btn btn-default" onclick="history.go(-1)">back</button>
+        </div>
+    </div>
+
+    <script>
+        window.jQuery = $ = require('jquery')
+        require('bootstrap');
+        var flat = require('flat');
+
+        window.app = require('../app');
+        var configApp = app.config.app();
+        var configAppFlat = flat.flatten(configApp);
+
+        var configViews = [
+            ['app', 'title', 'Title', 'text'],
+            ['app', 'subtitle', 'Subtitle', 'text'],
+            ['app', 'version', 'Version', 'text', 'disabled'],
+            ['app', 'datapath', 'Datapath', 'text'],
+            ['app', 'log', 'Show logs', 'checkbox'],
+            ['user', 'user.id', 'ID', 'text', 'disabled'],
+            ['db', 'db.name', 'Name', 'text', 'disabled'],
+            ['db', 'db.remote.host', 'Remote host', 'text'],
+            ['db', 'db.remote.port', 'Remote port', 'text'],
+            ['nest', 'nest.server.host', 'Server host', 'text'],
+            ['nest', 'nest.server.port', 'Server port', 'text'],
+            ['simulation', 'simulation.runAfterChange', 'Run after change', 'checkbox'],
+            ['simulation', 'simulation.autoReset', 'Auto reset simulation', 'checkbox'],
+            ['simulation', 'simulation.randomSeed', 'Randomize seed', 'checkbox'],
+            ['chart', 'chart.color', 'Colorify chart', 'checkbox'],
+            ['chart', 'chart.networkLayout', 'Show network layout', 'checkbox'],
+        ]
+
+        configViews.map(function(item) {
+            var group = item[0];
+            var key = item[1];
+            var label = item[2];
+            var divId = app.format.replaceAll(key, /\./, '-')
+            $('#' + group).append(
+                '<div class="form-group row"> \
+                <label for="' + divId + '-input" class="col-sm-4 col-form-label">' + label +
+                '</label> \
+                <div class="col-sm-8"> \
+                    <input type="' + item[3] + '" class="form-control" id="' +
+                divId + '-input" ' + (item[4] ? item[4] : '') + '> \
+                </div> \
+            </div>')
+            var value = configAppFlat[key];
+            if ((item[3] == 'checkbox') && (value)) {
+                $('#' + divId + '-input').prop('checked', 'checked')
+            } else {
+                $('#' + divId + '-input').val(value)
+            }
+        })
+        $('#config-form input:checkbox').on('change', function() {
+            $('#config-form').trigger('submit')
+        })
+        $('#config-form').on('submit', function(e) {
+            e.preventDefault()
+            configViews.map(function(item) {
+                var key = item[1];
+                var divId = app.format.replaceAll(key, /\./, '-')
+                var divInput = $('#' + divId + '-input');
+                if (divInput.attr('type') == 'checkbox') {
+                    configAppFlat[key] = divInput.prop('checked');
+                } else {
+                    configAppFlat[key] = divInput.val()
+                }
+            })
+            app.config.save('app', flat.unflatten(configAppFlat))
+            app.message.clear()
+            app.message.show('Info', 'Configuration updated.', 2000)
+        })
+    </script>
+</body>
+
+</html>

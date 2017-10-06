@@ -9,7 +9,7 @@ const colorbrewer = require('colorbrewer');
 
 var chart = {};
 
-chart.legend = function(scale) {
+chart.legend = (scale) => {
     var l = chart.g.select('#heatmap')
         .selectAll(".legend")
         .data(d3.range(
@@ -18,26 +18,20 @@ chart.legend = function(scale) {
             scale.domain()[1] / 5.))
         .enter().append("g")
         .attr("class", "legend")
-        .attr("transform", function(d, i) {
-            return "translate(0," + i * 20 + ")";
-        })
+        .attr("transform", (d, i) => "translate(0," + i * 20 + ")")
         .style("font", "10px sans-serif");
 
     l.append("rect")
         .attr("x", chart.width + 26)
         .attr("width", 18)
         .attr("height", 18)
-        .attr("fill", function(d) {
-            return scale(d)
-        })
-        .on('mouseover', function(d) {
+        .attr("fill", (d) => scale(d))
+        .on('mouseover', (d) => {
             chart.g.selectAll('.card')
-                .filter(function(o) {
-                    return o < d || o >= (d + scale.quantiles()[0])
-                })
+                .filter((o) => o < d || o >= (d + scale.quantiles()[0]))
                 .style('opacity', .1);
         })
-        .on('mouseout', function() {
+        .on('mouseout', () => {
             chart.g.selectAll('.card')
                 .transition(app.chart.transition)
                 .style('opacity', 1.0);
@@ -48,13 +42,11 @@ chart.legend = function(scale) {
         .attr("y", 0)
         .attr("dy", ".35em")
         .attr("text-anchor", "end")
-        .text(function(d) {
-            return app.chart.format(d)
-        });
+        .text((d) => app.chart.format(d));
     return chart
 }
 
-chart.update = function(data) {
+chart.update = (data) => {
     chart.yScale.range([chart.height, chart.height - (+chart.g.attr('height'))])
     chart.xScale.range([0, +chart.g.attr('width')])
     app.chart.axesUpdate(chart, false)
@@ -67,15 +59,11 @@ chart.update = function(data) {
     cards.selectAll('.card-fill').remove();
 
     cards.enter().append("rect")
-        .attr("transform", function(d, i) {
-            return "translate(" +
-                chart.xScale(data.x[parseInt(i / (data.x.length))]) + "," +
-                chart.yScale(data.y[parseInt(i % (data.y.length))] + 1) + ")"
-        })
+        .attr("transform", (d, i) => "translate(" +
+            chart.xScale(data.x[parseInt(i / (data.x.length))]) + "," +
+            chart.yScale(data.y[parseInt(i % (data.y.length))] + 1) + ")")
         .attr('class', "card-fill")
-        .attr('title', function(d, i) {
-            return app.chart.format(data.c[i])
-        })
+        .attr('title', (d, i) => app.chart.format(data.c[i]))
         .attr("width", chart.width / parseFloat(data.x.length))
         .attr("height", chart.height / parseFloat(data.y.length))
         .style("stroke", 'white')
@@ -87,31 +75,21 @@ chart.update = function(data) {
             d3.select(this)
                 .style('opacity', 1.)
         })
-        .style("fill", function(d, i) {
-            return chart.colorScale(data.c[i]);
-        });
+        .style("fill", (d, i) => chart.colorScale(data.c[i]));
 
     if ((chart.width / parseFloat(data.x.length)) > 50) {
 
         cards.selectAll('text')
-            .text(function(d) {
-                return app.chart.format(d)
-            })
+            .text((d) => app.chart.format(d))
 
         cards.enter().append("text")
-            .attr("transform", function(d, i) {
-                return "translate(" +
-                    chart.xScale(data.x[parseInt(i / (data.x.length))]) + ",-" +
-                    chart.yScale(data.y.length - data.y[parseInt(i % (data.y.length))]) + ")"
-            })
+            .attr("transform", (d, i) => "translate(" +
+                chart.xScale(data.x[parseInt(i / (data.x.length))]) + ",-" +
+                chart.yScale(data.y.length - data.y[parseInt(i % (data.y.length))]) + ")")
             .attr("x", chart.xScale(.5))
             .attr("y", chart.yScale(.5))
-            .text(function(d) {
-                return app.chart.format(d)
-            })
-            .attr("fill", function(d) {
-                return d <= .5 ? "#000" : "#fff"
-            })
+            .text((d) => app.chart.format(d))
+            .attr("fill", (d) => d <= .5 ? "#000" : "#fff")
             .style("stroke-width", 1)
             .style("z-index", "10")
             .style("text-anchor", "middle")
@@ -119,7 +97,7 @@ chart.update = function(data) {
 
 }
 
-chart.init = function(reference, id, size) {
+chart.init = (reference, id, size) => {
     var margin = {
         top: 10,
         right: 40,

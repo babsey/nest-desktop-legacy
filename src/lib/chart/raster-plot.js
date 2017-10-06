@@ -2,7 +2,7 @@
 
 var rasterPlot = {}
 
-rasterPlot.update = function(recorder) {
+rasterPlot.update = (recorder) => {
     var scatterChart = rasterPlot.scatterChart;
     var barChart = rasterPlot.barChart;
     var lineChart = rasterPlot.lineChart;
@@ -31,22 +31,22 @@ rasterPlot.update = function(recorder) {
         .thresholds(app.chart.xScale.ticks(nbins));
 
     var gids = {};
-    app.data.nodes.map(function(node) {
+    app.data.nodes.map((node) => {
         if (!node.ids) return
-        return node.ids.map(function(id) {
+        return node.ids.map((id) => {
             gids[id] = node.id
         })
     })
 
     var times = recorder.events.times;
 
-    scatterChart.data.y = recorder.events.senders.filter(function(d, i) {
-        return times[i] > app.chart.xScale.domain()[0] && times[i] < app.chart.xScale.domain()[1]
-    })
-    scatterChart.data.x = times.filter(function(d) {
-        return d > app.chart.xScale.domain()[0] && d < app.chart.xScale.domain()[1]
-    })
-    scatterChart.data.c = scatterChart.data.y.map(function(d) {
+    scatterChart.data.y = recorder.events.senders.filter(
+        (d, i) => times[i] > app.chart.xScale.domain()[0] && times[i] < app.chart.xScale.domain()[1]
+    )
+    scatterChart.data.x = times.filter(
+        (d) => d > app.chart.xScale.domain()[0] && d < app.chart.xScale.domain()[1]
+    )
+    scatterChart.data.c = scatterChart.data.y.map((d) => {
         var colors = app.chart.colors();
         return colors[gids[d] % colors.length]
     })
@@ -54,21 +54,17 @@ rasterPlot.update = function(recorder) {
         scatterChart.g.select('#clip').call(d3.zoom().transform, d3.zoomIdentity);
     }
 
-    var hist = recorder.senders.map(function(s) {
-        return histogram(recorder.events.times.filter(function(d, i) {
-            return recorder.events.senders[i] == s
-        }))
-    })
-    var psth = hist[0].map(function(col, i) {
-        var h = hist.map(function(row) {
-            return row[i].length
-        })
+    var hist = recorder.senders.map(
+        (s) => histogram(recorder.events.times.filter(
+            (d, i) => recorder.events.senders[i] == s
+        ))
+    )
+    var psth = hist[0].map((col, i) => {
+        var h = hist.map((row) => row[i].length)
         h.x0 = col.x0
         h.x1 = col.x1
         h.x = (h.x1 + h.x0) / 2.0
-        h.total = h.reduce(function(acc, val) {
-            return acc + val
-        })
+        h.total = h.reduce((acc, val) => acc + val)
         var dx = h.x1 - h.x0;
         h.y = h.total * (recorder.node.record_from == 'rate' ? 1000. / dx / h.length : 1)
         return h
@@ -76,12 +72,8 @@ rasterPlot.update = function(recorder) {
 
     if (recorder.node.psth == 'line') {
         lineChart.data = {
-            x: psth.map(function(d) {
-                return d.x
-            }),
-            y: [psth.map(function(d) {
-                return d.y
-            })],
+            x: psth.map((d) => d.x),
+            y: [psth.map((d) => d.y)],
             n: 1,
             c: ['steelblue']
         }
@@ -98,7 +90,7 @@ rasterPlot.update = function(recorder) {
     barChart.update(recorder)
 }
 
-rasterPlot.init = function(idx) {
+rasterPlot.init = (idx) => {
 
     // $('#chart').empty()
     var height = parseInt($('#dataChart').attr('height')) / app.simulation.recorders.length

@@ -73,7 +73,21 @@
         app.db.init()
         app.protocol.init()
 
-        var render = function() {
+        new Promise((resolve, reject) => {
+            if (app.protocol.id) {
+                app.protocol.get(app.protocol.id)
+                    .exec((err, docs) => {
+                        app.data = docs;
+                        resolve()
+                    })
+            } else {
+                app.db.get(app.simulation.id)
+                    .exec((err, docs) => {
+                        app.data = docs;
+                        resolve()
+                    })
+            }
+        }).then(() => {
             var configApp = app.config.app();
             if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', app.data._id + '.png'))) {
                 var src = path.join(process.cwd(), configApp.datapath, 'images', app.data._id + '.png');
@@ -91,23 +105,7 @@
             // var clipboard = new Clipboard('#copy');
             $('#nodes').html(app.renderer.simulationNodes(app.data))
             $('#links').html(app.renderer.simulationLinks(app.data))
-        }
-
-        setTimeout(function() {
-            if (app.protocol.id) {
-                app.protocol.get(app.protocol.id)
-                    .exec(function(err, docs) {
-                        app.data = docs;
-                        render()
-                    })
-            } else {
-                app.db.get(app.simulation.id)
-                    .exec(function(err, docs) {
-                        app.data = docs;
-                        render()
-                    })
-            }
-        }, 200)
+        })
     </script>
 </body>
 

@@ -18,7 +18,7 @@ chart.format = d3.format(".2f");
 chart.transition = d3.transition()
     .ease(d3.easeLinear);
 
-chart.xAxis = function(c) {
+chart.xAxis = (c) => {
     c.xAxis = d3.axisBottom(c.xScale);
     c.g.append("g")
         .attr("id", "xaxis")
@@ -28,7 +28,7 @@ chart.xAxis = function(c) {
         .call(c.xAxis);
 }
 
-chart.yAxis = function(c) {
+chart.yAxis = (c) => {
     c.yAxis = d3.axisLeft(c.yScale).ticks(3);
     c.g.append("g")
         .attr("id", "yaxis")
@@ -38,7 +38,7 @@ chart.yAxis = function(c) {
         .call(c.yAxis);
 }
 
-chart.xLabel = function(c, id, label) {
+chart.xLabel = (c, id, label) => {
     if (!document.getElementById(id)) {
         c.g.append("text")
             .attr("id", id)
@@ -52,7 +52,7 @@ chart.xLabel = function(c, id, label) {
         .text(label);
 }
 
-chart.yLabel = function(c, id, label) {
+chart.yLabel = (c, id, label) => {
     if (!document.getElementById(id)) {
         c.g.append("text")
             .attr("id", id)
@@ -68,13 +68,11 @@ chart.yLabel = function(c, id, label) {
         .text(label);
 }
 
-chart.legend = function(c, data, color) {
+chart.legend = (c, data, color) => {
     c.g.selectAll('.legends').remove()
     if (!data) return
 
-    var width = d3.max(data.map(function(d) {
-        return d.length
-    })) * 9
+    var width = d3.max(data.map((d) => d.length)) * 9;
     var legend = c.g.append('g')
         .attr('class', 'legends')
         .selectAll('.legend')
@@ -85,39 +83,29 @@ chart.legend = function(c, data, color) {
 
     legend.append('rect')
         .attr('x', c.width - width)
-        .attr('y', function(d, i) {
-            return i * 20 - 5;
-        })
+        .attr('y', (d, i) => i * 20 - 5)
         .attr('width', width)
         .attr('height', 20)
         .style('fill', 'white');
 
     legend.append('rect')
         .attr('x', c.width - width)
-        .attr('y', function(d, i) {
-            return i * 20;
-        })
+        .attr('y', (d, i) => i * 20)
         .attr('width', 10)
         .attr('height', 10)
-        .style('fill', function(d, i) {
-            return color[i];
-        });
+        .style('fill', (d, i) => color[i]);
 
     legend.append('text')
         .attr('x', c.width - width + 12)
-        .attr('y', function(d, i) {
-            return (i * 20) + 9;
-        })
-        .text(function(d) {
-            return d;
-        });
+        .attr('y', (d, i) => (i * 20) + 9)
+        .text((d) => d);
 }
 
-chart.dragstarted = function() {
+chart.dragstarted = () => {
     chart.dragging = true
 }
 
-chart.dragged = function() {
+chart.dragged = () => {
     $('#autoscale').prop('checked', false)
     var xlim0 = app.chart.xScale.domain();
     var xx = xlim0[1] - xlim0[0];
@@ -127,11 +115,11 @@ chart.dragged = function() {
     app.chart.update()
 }
 
-chart.dragended = function() {
+chart.dragended = () => {
     chart.dragging = false
 }
 
-chart.onDrag = function(d) {
+chart.onDrag = (d) => {
     var drag = d3.drag()
         .on("start", chart.dragstarted)
         .on("drag", chart.dragged)
@@ -140,11 +128,11 @@ chart.onDrag = function(d) {
         .call(drag);
 }
 
-chart.zoomstarted = function() {
+chart.zoomstarted = () => {
     chart.zooming = true
 }
 
-chart.zoomed = function() {
+chart.zoomed = () => {
     $('#autoscale').prop('checked', false)
     var xlim0 = app.chart.xScale.domain();
     // var xlim0 = [data.kernel.time - data.sim_time, data.kernel.time];
@@ -154,11 +142,11 @@ chart.zoomed = function() {
     app.chart.update()
 }
 
-chart.zoomended = function() {
+chart.zoomended = () => {
     chart.zooming = false
 }
 
-chart.onZoom = function(d) {
+chart.onZoom = (d) => {
     var zoom = d3.zoom()
         .scaleExtent([.1, 10])
         .on("start", chart.zoomstarted)
@@ -168,7 +156,7 @@ chart.onZoom = function(d) {
         .call(zoom);
 }
 
-chart.axesUpdate = function(c, transition) {
+chart.axesUpdate = (c, transition) => {
     if (transition) {
         c.g.select('#xaxis')
             .transition(c.transition)
@@ -184,7 +172,7 @@ chart.axesUpdate = function(c, transition) {
     }
 }
 
-chart.scaling = function() {
+chart.scaling = () => {
     if ($('#autoscale').prop('checked')) {
         if (app.simulation.running || (app.chart.abscissa == 'times')) {
             app.chart.xScale.domain([app.data.kernel.time - (app.data.sim_time || 1000.), app.data.kernel.time])
@@ -195,21 +183,22 @@ chart.scaling = function() {
     }
 }
 
-chart.update = function() {
+chart.update = () => {
+    app.message.log('Update chart')
     if (chart.networkLayout.drawing) return
     chart.scaling()
-    app.simulation.recorders.map(function(recorder) {
+    app.simulation.recorders.map((recorder) => {
         if (!recorder.node.model) return
-        recorder.data = recorder.senders.map(function(sender, sidx) {
+        recorder.data = recorder.senders.map((sender, sidx) => {
             var data = {};
-            Object.keys(recorder.events).map(function(d) {
-                data[d] = recorder.events[d].filter(function(d, i) {
-                    return recorder.events.senders[i] == sender
-                })
+            Object.keys(recorder.events).map((d) => {
+                data[d] = recorder.events[d].filter(
+                    (d, i) => recorder.events.senders[i] == sender
+                )
             })
-            var links = app.data.links.filter(function(link) {
-                return link.target == recorder.node.id && app.data.nodes[link.source].ids.indexOf(sender) != -1
-            })
+            var links = app.data.links.filter(
+                (link) => link.target == recorder.node.id && app.data.nodes[link.source].ids.indexOf(sender) != -1
+            )
             if (links.length == 1) {
                 var link = links[0]
                 data.color = app.chart.colors()[app.data.nodes[link.source].id]
@@ -218,9 +207,9 @@ chart.update = function() {
             }
             return data
         })
-        recorder.senders.map(function(sender, sidx) {
-            app.simulation.stimulators.map(function(stimulator) {
-                Object.keys(stimulator.events).map(function(ekey) {
+        recorder.senders.map((sender, sidx) => {
+            app.simulation.stimulators.map((stimulator) => {
+                Object.keys(stimulator.events).map((ekey) => {
                     recorder.data[sidx][ekey] = stimulator.events[ekey]
                 })
             })
@@ -229,13 +218,10 @@ chart.update = function() {
     })
     $('#simulation-add').attr('disabled', false)
     $('#simulation-resume').attr('disabled', false)
-    setTimeout(function() {
-        app.screen.capture(app.data, false)
-    }, 500)
 }
 
-chart.init = function() {
-
+chart.init = () => {
+    app.message.log('Initialize chart')
     chart.zooming = false;
     chart.dragging = false;
 
@@ -256,10 +242,7 @@ chart.init = function() {
     $('#chart').attr('width', window.innerWidth).attr('height', chart.height)
     $('#dataChart').attr('width', chart.width)
         .attr('height', chart.height)
-    $('#networkLayout').attr('width', chart.width)
-        .attr('height', chart.height)
     $('#dataChart').empty()
-    $('#networkLayout').empty()
 
     if (chart.xScale) {
         var xScaleDomain = chart.xScale.domain()
@@ -270,29 +253,12 @@ chart.init = function() {
         chart.xScale.domain(xScaleDomain)
     }
 
-    var colors = d3.schemeCategory10;
-    chart.colors = function(id) {
-        if (id != undefined) {
-            return colors[id % colors.length]
-        }
-        return app.data.nodes.map(function(d) {
-            return d.color ? d.color : colors[d.id % colors.length]
-        })
-    }
-
-    chart.abscissa = app.data.abscissa || 'times';
-    app.simulation.recorders.map(function(recorder, idx) {
-        if (!recorder.node.model) return
-        var recorderChart = recorder.node.chart || chart.fromOutputNode[recorder.node.model]
-        recorder.chart = require(__dirname + '/chart/' + recorderChart)
-        recorder.chart.init(idx)
-        delete require.cache[require.resolve(__dirname + '/chart/' + recorderChart)]
-    })
-
+    $('#networkLayout').attr('width', chart.width)
+        .attr('height', chart.height)
+    $('#networkLayout').empty()
     app.chart.networkLayout.init()
-    app.chart.networkLayout.toggle(app.config.app().chart.networkLayout)
 
-    $('#autoscale').on('click', app.chart.update)
+    $('#autoscale').off('click').on('click', app.chart.update)
     window.addEventListener('resize', function() {
         app.resizing = true
         app.chart.init()

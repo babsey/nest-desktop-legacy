@@ -2,13 +2,13 @@
 
 var simulationController = {};
 
-simulationController.update = function() {
+simulationController.update = () => {
     var simElem = $('#simulation .content')
     simElem.find('#abscissaSelect').empty()
     simElem.find('#abscissaSelect').append('<option value="times">' + app.model.record_labels.times + '</option>')
-    app.simulation.stimulators.map(function(stimulator) {
+    app.simulation.stimulators.map((stimulator) => {
         if (!stimulator.events) return
-        Object.keys(stimulator.events).map(function(key) {
+        Object.keys(stimulator.events).map((key) => {
             simElem.find('#abscissaSelect').append('<option value="' + key + '">' + app.model.record_labels[key] + '</option>')
             app.chart.data[key] = stimulator.events[key];
         })
@@ -25,10 +25,10 @@ simulationController.update = function() {
     $("#simulation-resume").toggleClass('disabled', app.chart.abscissa != 'times')
 }
 
-simulationController.init = function() {
-    var simElem = $('#simulation .content')
-    simElem.empty()
-    var modelDefaults = app.config.nest('simulation')
+simulationController.init = () => {
+    var simElem = $('#simulation .content');
+    simElem.empty();
+    var modelDefaults = app.config.nest('simulation');
     for (var midx in modelDefaults) {
         var model = modelDefaults[midx];
         model.value = app.data[model.id];

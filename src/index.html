@@ -4,32 +4,15 @@
 <head>
     <meta charset='utf-8'>
     <link rel='stylesheet' href='../node_modules/bootstrap/dist/css/bootstrap.min.css' />
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
     <link rel='stylesheet' href='./assets/css/styles.css'></link>
     <title></title>
 </head>
 
 <body>
-    <div id='message'></div>
-
-    <!-- <div id='login' class='modal fade' role='dialog'>
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <form id='login-form'>
-                    <div class='modal-body'>
-                        <div class='form-group'>
-                            <label for='password'>Name:</label>
-                            <input type='text' class='form-control' id='name'>
-                        </div>
-                        <div class='form-group'>
-                            <label for='password'>Password:</label>
-                            <input type='password' class='form-control' id='password'>
-                        </div>
-                        <button type='submit' class='btn btn-primary' data-dismiss='modal' id='login-submit'>Login</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> -->
+    <div id='message'>
+        <div class='content'></div>
+    </div>
 
     <div id='simulation-detail' class='modal fade' role='dialog'>
         <div class='modal-dialog'>
@@ -62,26 +45,12 @@
     <div id='content'>
         <div class='container-fluid'>
             <div class='pull-right'>
-
-                <div class='btn-group hide'>
-                    <button class='btn btn-default navbar-bin dropdown-toggle' type='button' data-toggle='dropdown'>
-                        <span class='glyphicon glyphicon-eye-open'></span>
-                    </button>
-                    <ul class='dropdown-menu dropdown-menu-right'>
-                        <li><a href='./tests/lineChart.html'>Line chart</a></li>
-                        <li><a href='./tests/scatterChart.html'>Scatter chart</a></li>
-                        <li><a href='./tests/heatmapChart.html'>Heatmap chart</a></li>
-                    </ul>
-                </div>
-                <span id='user'></span>
-                <!-- <button type='button' class='btn btn-default navbar-btn' data-toggle='modal' data-target='#login'>
-                <span class='glyphicon glyphicon-user'></span>
+                <button type='button' class='btn btn-default navbar-btn' title='Synchronize simulations' id='sim-sync'>
+                <i class='fa fa-refresh'></i>
             </button>
-            <button type='button' class='btn btn-default' id='logout' style='display:none'>
-                <span class='glyphicon glyphicon-log-out'></span>
-            </button> -->
-
-
+                <a type='button' class='btn btn-default navbar-btn' title='Configuation' href="./templates/config.html">
+                <i class='fa fa-cog'></i>
+            </a>
                 <button type='button' class='btn btn-default navbar-btn' onclick='window.close()'>
                     <span class='glyphicon glyphicon-remove'></span>
                 </button>
@@ -89,8 +58,6 @@
         </div>
 
         <div class='container'>
-            <div id='message' class='alert alert-dismissible fade in' role='alert' style='display:none; position:absolute; width:auto; top:10px'></div>
-
             <div class='jumbotron'>
                 <h1 id="title"></h1>
                 <p id="subtitle"></p>
@@ -100,7 +67,7 @@
             </div>
         </div>
 
-        <div id='jumbotron-bg'></div>
+        <div id='jumbotron-bg' class='background'></div>
         <div id='simulations' class='container'></div>
 </body>
 
@@ -120,15 +87,13 @@
     $('title').html(configApp.title)
     $('#title').html(configApp.title)
     $('#subtitle').html(configApp.subtitle)
-
-    $('#user').html('Hi ' + (configApp.user.name || 'guest'))
     $('.external').on('click', function(event) {
         event.preventDefault();
         shell.openExternal(this.href);
     });
 
-    setTimeout(function() {
-
+    var loadSimulations = function() {
+        $('#simulations').empty()
         var groups = configApp.simulation.groups;
         var groupIds = groups.map(function(group) {
             $('#simulations').append('<div id="sim-' + group.id + '"></div>')
@@ -136,7 +101,9 @@
             $('#sim-' + group.id).append('<div class="row simulation-list"></div>')
             return group.id
         })
-        app.db.all().sort({name: 1.}).exec(function(err, docs) {
+        app.db.all().sort({
+            name: 1.
+        }).exec(function(err, docs) {
             // console.log(docs)
             if (docs.length == 0) return
             docs.map(function(doc) {
@@ -159,8 +126,14 @@
                 $('#simulation-detail').modal('show');
             })
         })
+    }
 
-    }, fs.existsSync(path.join(process.cwd(), configApp.datapath, configApp.db.name + '.db')) ? 1 : 1000)
+    $('#sim-sync').on('click', () => {
+        app.sync.remoteDB()
+        setTimeout(loadSimulations, 1000)
+    })
+
+    setTimeout(loadSimulations, fs.existsSync(path.join(process.cwd(), configApp.datapath, configApp.db.name + '.db')) ? 1 : 1000)
 </script>
 
 </html>

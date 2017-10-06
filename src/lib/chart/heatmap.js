@@ -2,34 +2,23 @@
 
 var heatmap = {};
 
-heatmap.update = function(recorder) {
+heatmap.update = (recorder) => {
     if (recorder.events.senders.length == 0) return
 
-    var source = d3.merge(app.data.links.filter(function(link) {
-        return link.target == recorder.node.id
-    }).map(function(link) {
-        return app.data.nodes[link.source].ids
-    }))
+    var source = d3.merge(app.data.links.filter((link) => link.target == recorder.node.id)
+        .map((link) => app.data.nodes[link.source].ids))
 
     var times = recorder.events['times'];
-    var senders = recorder.events['senders'].filter(function(d, i) {
-        return times[i] > (app.data.kernel.time - 100)
-    })
+    var senders = recorder.events['senders'].filter((d, i) => times[i] > (app.data.kernel.time - 100))
     recorder.events['senders'] = senders
-    recorder.events['times'] = times.filter(function(d, i) {
-        return times[i] > (app.data.kernel.time - 100)
-    })
+    recorder.events['times'] = times.filter((d, i) => times[i] > (app.data.kernel.time - 100))
 
     var h1 = d3.histogram()
         .domain(d3.extent(source))
         .thresholds(source)(senders);
-    var h1 = h1.map(function(d) {
-        return d.length * 1
-    })
+    var h1 = h1.map((d) => d.length * 1)
     $('#clip').empty()
-    var sourceId = app.data.links.find(function(x) {
-        return x.target == recorder.node.id
-    }).source
+    var sourceId = app.data.links.find((x) => x.target == recorder.node.id).source
 
     heatmap.chart.xScale.domain([0, app.data.nodes[sourceId].nrow])
     heatmap.chart.yScale.domain([0, app.data.nodes[sourceId].ncol])
@@ -45,7 +34,7 @@ heatmap.update = function(recorder) {
     $('#simulation-resume').attr('disabled', false)
 }
 
-heatmap.init = function(idx) {
+heatmap.init = (idx) => {
 
     // $('#chart').empty()
     var height = parseInt($('#dataChart').data('height')) / app.simulation.recorders.length

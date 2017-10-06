@@ -2,7 +2,7 @@
 
 var synController = {};
 
-synController.update = function(link) {
+synController.update = (link) => {
     var synElem = $('#synapses').find('.link[data-id=' + link.id + '] .content');
     // delete link.syn_spec.receptor_type
 
@@ -25,7 +25,7 @@ synController.update = function(link) {
     var synapseModels = app.config.nest('synapse');
     var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
     if (app.data.nodes[link.target].element_type != 'recorder') {
-        app.slider.init_modelSlider('#synapses .link[data-id=' + link.id + '] .modelSlider', synapseModels.filter(function(d) {
+        app.slider.init_modelSlider('#synapses .link[data-id=' + link.id + '] .modelSlider', synapseModels.filter((d) => {
             return d.id == synapseModel;
         })[0])
         app.slider.update_synSlider(link)
@@ -62,7 +62,7 @@ synController.update = function(link) {
     })
 }
 
-synController.init = function(link) {
+synController.init = (link) => {
     $('#synapses .controller').append(app.renderer.synapse(link))
     var synElem = $('#synapses').find('.link[data-id=' + link.id + ']');
 
@@ -87,6 +87,7 @@ synController.init = function(link) {
         };
         app.model.syn_selected(link)
         synController.update(link)
+        app.chart.init()
         app.simulation.reset()
     })
     synController.update(link)

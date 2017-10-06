@@ -2,7 +2,7 @@
 
 var kernelController = {};
 
-kernelController.init = function() {
+kernelController.init = () => {
     var kernelElem = $('#kernel .content')
     kernelElem.empty()
     var modelDefaults = app.config.nest('kernel');

@@ -8,21 +8,17 @@ const d3 = require("d3");
 
 var chart = {};
 
-chart.yVal = function(d, idx) {
+chart.yVal = (d, idx) => {
     idx = idx || 'y';
     if (typeof idx == 'number' || idx == 'y') {
         var y = d[idx]
     } else {
-        var y = idx.map(function(i) {
-            return d[i]
-        }).reduce(function(acc, val) {
-            return acc + val
-        })
+        var y = idx.map((i) => d[i]).reduce((acc, val) => acc + val)
     }
     return y || 0
 }
 
-chart.update = function(recorder) {
+chart.update = (recorder) => {
     chart.g.style('display', 'none')
     if (!chart.data) return
 
@@ -31,18 +27,14 @@ chart.update = function(recorder) {
 
     if (app.selected_node && app.selected_node.element_type == 'neuron' && recorder.sources.indexOf(app.selected_node.id) != -1) {
         var nidx = app.selected_node.id;
-        var idx = app.selected_node.ids.map(function(d) {
-            return recorder.senders.indexOf(d);
-        })
+        var idx = app.selected_node.ids.map((d) => recorder.senders.indexOf(d))
     } else {
         var nidx = null;
         var idx = 'y';
     }
 
     chart.xScale.domain(app.chart.xScale.domain())
-    chart.yScale.domain([0, d3.max(chart.data, function(d) {
-        return chart.yVal(d, idx.length == 1 ? idx[0] : idx)
-    })])
+    chart.yScale.domain([0, d3.max(chart.data, (d) => chart.yVal(d, idx.length == 1 ? idx[0] : idx))])
 
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     app.chart.axesUpdate(chart, transition)
@@ -58,71 +50,39 @@ chart.update = function(recorder) {
     var color = app.config.app().chart.color ? colors[cidx || (recorder.node.id % colors.length)] : ''
     if (transition) {
         bars
-            .attr("x", function(d) {
-                return chart.xScale(d.x0)
-            })
-            .attr("width", function(d) {
-                return chart.xScale(d.x1) - chart.xScale(d.x0)
-            })
+            .attr("x", (d) => chart.xScale(d.x0))
+            .attr("width", (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
             .transition(app.chart.transition)
-            .attr("y", function(d) {
-                return chart.yScale(chart.yVal(d, idx))
-            })
-            .attr("height", function(d) {
-                return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
-            })
+            .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
+            .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
             .style("fill", color);
 
         bars.enter()
             .append("rect")
             .attr("class", "bar")
-            .attr("x", function(d) {
-                return chart.xScale(d.x0)
-            })
-            .attr("width", function(d) {
-                return chart.xScale(d.x1) - chart.xScale(d.x0)
-            })
+            .attr("x", (d) => chart.xScale(d.x0))
+            .attr("width", (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
             .attr('y', chart.g.attr('height'))
             .transition(app.chart.transition)
-            .attr("y", function(d) {
-                return chart.yScale(chart.yVal(d, idx))
-            })
-            .attr("height", function(d) {
-                return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
-            })
+            .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
+            .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
             .style("fill", color);
     } else {
         bars
-            .attr("x", function(d) {
-                return chart.xScale(d.x0)
-            })
-            .attr("width", function(d) {
-                return chart.xScale(d.x1) - chart.xScale(d.x0)
-            })
-            .attr("y", function(d) {
-                return chart.yScale(chart.yVal(d, idx))
-            })
-            .attr("height", function(d) {
-                return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
-            })
+            .attr("x", (d) => chart.xScale(d.x0))
+            .attr("width", (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
+            .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
+            .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
             .style("fill", color);
 
         bars.enter()
             .append("rect")
             .attr("class", "bar")
-            .attr("x", function(d) {
-                return chart.xScale(d.x0)
-            })
-            .attr("width", function(d) {
-                return chart.xScale(d.x1) - chart.xScale(d.x0)
-            })
+            .attr("x", (d) => chart.xScale(d.x0))
+            .attr("width", (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
             .attr('y', chart.g.attr('height'))
-            .attr("y", function(d) {
-                return chart.yScale(chart.yVal(d, idx))
-            })
-            .attr("height", function(d) {
-                return Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx)));
-            })
+            .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
+            .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
             .style("fill", color);
     }
 
@@ -132,7 +92,7 @@ chart.update = function(recorder) {
     chart.g.style('display', null)
 }
 
-chart.init = function(reference, id, size) {
+chart.init = (reference, id, size) => {
 
     var margin = {
         top: 10,

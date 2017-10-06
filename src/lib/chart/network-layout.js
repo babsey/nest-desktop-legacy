@@ -15,13 +15,13 @@ networkLayout.pathColor = {
     exc: '#467ab3'
 };
 
-networkLayout.resetMouseVars = function() {
+networkLayout.resetMouseVars = () => {
     networkLayout.mousedown_node = null;
     networkLayout.mouseup_node = null;
     networkLayout.mousedown_link = null;
 };
 
-networkLayout.addNode = function() {
+networkLayout.addNode = () => {
     app.controller.update()
     return {
         id: networkLayout.lastNodeId++,
@@ -32,7 +32,7 @@ networkLayout.addNode = function() {
     }
 }
 
-networkLayout.addLink = function(source, target) {
+networkLayout.addLink = (source, target) => {
     return {
         id: networkLayout.lastLinkId++,
         source: source.id,
@@ -40,7 +40,7 @@ networkLayout.addLink = function(source, target) {
     }
 }
 
-networkLayout.dragstarted = function(d) {
+networkLayout.dragstarted = (d) => {
     if (networkLayout.drawing) return
     app.chart.dragging = true;
     if (!d3.event.active) networkLayout.force.alpha(1).restart();
@@ -48,14 +48,14 @@ networkLayout.dragstarted = function(d) {
     d.fy = d.y;
 }
 
-networkLayout.dragged = function(d) {
+networkLayout.dragged = (d) => {
     if (networkLayout.drawing) return
     if (!d3.event.active) networkLayout.force.alpha(1);
     d.fx = d3.event.x;
     d.fy = d3.event.y;
 }
 
-networkLayout.dragended = function(d) {
+networkLayout.dragended = (d) => {
     if (networkLayout.drawing) return
     if (!d3.event.active) networkLayout.force.alpha(0);
     d.fx = null;
@@ -63,7 +63,7 @@ networkLayout.dragended = function(d) {
     app.chart.dragging = false;
 }
 
-networkLayout.draw_path = function(d) {
+networkLayout.draw_path = (d) => {
     // `http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
 
     var source = app.data.nodes[d.source],
@@ -117,45 +117,38 @@ networkLayout.draw_path = function(d) {
     return 'M' + x1 + ',' + y1 + 'A' + drx + ',' + dry + ' ' + xRotation + ',' + largeArc + ',' + sweep + ' ' + x2 + ',' + y2;
 };
 
-networkLayout.ticked = function() {
+networkLayout.ticked = () => {
     networkLayout.path.selectAll('path')
         .attr('d', networkLayout.draw_path)
-        .style('stroke', function(d) {
-            return d.syn_spec ? (d.syn_spec.weight < 0 ? networkLayout.pathColor.inh : networkLayout.pathColor.exc) : networkLayout.pathColor.exc
-        })
-        .style('stroke-width', function(d) {
-            return Math.min(10, Math.max(5, (d.syn_spec ? Math.abs(d.syn_spec.weight / 5) : 5)))
-        })
-        .style('stroke-dasharray', function(d) {
-            return d === app.selected_link ? '10, 5' : '';
-        })
-        .style('marker-end', function(d) {
-            return d.syn_spec ? (d.syn_spec.weight < 0 ? 'url(#end-circle)' : 'url(#end-arrow)') : 'url(#end-arrow)'
-        })
-    networkLayout.circle.attr('transform', function(d) {
-        return 'translate(' + d.x + ',' + d.y + ')';
-    })
+        .style('stroke',
+            (d) => d.syn_spec ? (d.syn_spec.weight < 0 ? networkLayout.pathColor.inh : networkLayout.pathColor.exc) : networkLayout.pathColor.exc
+        )
+        .style('stroke-width',
+            (d) => Math.min(10, Math.max(5, (d.syn_spec ? Math.abs(d.syn_spec.weight / 5) : 5)))
+        )
+        .style('stroke-dasharray', (d) => d === app.selected_link ? '10, 5' : '')
+        .style('marker-end',
+            (d) => d.syn_spec ? (d.syn_spec.weight < 0 ? 'url(#end-circle)' : 'url(#end-arrow)') : 'url(#end-arrow)'
+        )
+    networkLayout.circle.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
     networkLayout.circle.selectAll('circle')
-        .style('stroke-dasharray', function(d) {
-            return d === app.selected_node ? '10, 5' : '';
-        });
+        .style('stroke-dasharray', (d) => d === app.selected_node ? '10, 5' : '');
 }
 
-networkLayout.update = function() {
+networkLayout.update = () => {
     // console.log(mousedown_node,mouseup_node,selected_node,mousedown_link,selected_link)
     networkLayout.circle.exit().remove();
     networkLayout.path.exit().remove();
     if (app.data.nodes.length == 0) return
 
     // Apply the general update pattern to the links.
-    networkLayout.path = networkLayout.path.data(app.data.links.filter(function(d) {
-        return !(d.disabled || app.data.nodes[d.source].hidden || app.data.nodes[d.target].hidden || app.data.nodes[d.source].disabled || app.data.nodes[d.target].disabled)
-    }));
+    networkLayout.path = networkLayout.path.data(app.data.links.filter(
+        (d) => !(d.disabled || app.data.nodes[d.source].hidden || app.data.nodes[d.target].hidden || app.data.nodes[d.source].disabled || app.data.nodes[d.target].disabled)));
 
     networkLayout.path.exit().remove();
     networkLayout.path = networkLayout.path.enter().append('g')
         .attr('class', 'link')
-        .on('mousedown', function(d) {
+        .on('mousedown', (d) => {
             // select link
             networkLayout.mousedown_link = d;
             if (networkLayout.mousedown_link === app.selected_link) app.selected_link = null;
@@ -169,11 +162,9 @@ networkLayout.update = function() {
     networkLayout.path.append('path');
 
     // Apply the general update pattern to the nodes.
-    networkLayout.circle = networkLayout.circle.data(app.data.nodes.filter(function(d) {
-        return !(d.hidden || d.disabled)
-    }), function(d) {
-        return d.index;
-    });
+    networkLayout.circle = networkLayout.circle.data(
+        app.data.nodes.filter((d) => !(d.hidden || d.disabled)),
+        (d) => d.index);
 
     networkLayout.circle.exit().remove();
     networkLayout.circle = networkLayout.circle.enter()
@@ -182,20 +173,16 @@ networkLayout.update = function() {
         .on('mouseover', function(d) {
             // console.log('node mouseover')
             // enlarge target node
-            d3.select(this).select('circle').attr('transform', function(d) {
-                return 'scale(1.1)';
-            });
+            d3.select(this).select('circle').attr('transform', (d) => 'scale(1.1)');
             networkLayout.ticked()
         })
         .on('mouseout', function(d) {
             // console.log('node mouseout')
             // unenlarge target node
-            d3.select(this).select('circle').attr('transform', function(d) {
-                return '';
-            });
+            d3.select(this).select('circle').attr('transform', (d) => '');
             networkLayout.ticked()
         })
-        .on('mousedown', function(d) {
+        .on('mousedown', (d) => {
             // console.log('node mousedown')
             // select node
             networkLayout.mousedown_node = d;
@@ -220,7 +207,7 @@ networkLayout.update = function() {
             app.chart.update()
             // networkLayout.ticked()
         })
-        .on('mouseup', function(d) {
+        .on('mouseup', (d) => {
             // console.log('node mouseup')
             if (!networkLayout.mousedown_node) return;
 
@@ -253,7 +240,7 @@ networkLayout.update = function() {
                 return
             }
 
-            var link = app.data.links.filter(function(l) {
+            var link = app.data.links.filter((l) => {
                 return (app.data.nodes[l.source] === source && app.data.nodes[l.target] === target);
             })[0];
 
@@ -275,26 +262,22 @@ networkLayout.update = function() {
     networkLayout.circle.selectAll('circle').remove()
     networkLayout.circle.append('circle')
         .attr('r', 23)
-        .style('stroke', function(d) {
-            return colors[d.id % colors.length];
-        })
+        .style('stroke', (d) => colors[d.id % colors.length])
         .style('stroke-width', 4);
 
     networkLayout.circle.selectAll('text').remove()
     networkLayout.circle.append('text')
         .attr('dx', 0)
         .attr('dy', '.35em')
-        // .style('font-weight', function(d) {
+        // .style('font-weight', (d) => {
         //     console.log(d.model == undefined)
         //     return d.model == undefined ? 'normal' : 'bold'
         // })
-        .text(function(d) {
-            return app.format.nodeLabel(d)
-        });
+        .text((d) => app.format.nodeLabel(d));
     //
     // networkLayout.circle.selectAll('title').remove()
     // networkLayout.circle.append('title')
-    //     .text(function(d) {
+    //     .text((d) => {
     //         return d.element_type;
     //     })
 
@@ -326,7 +309,7 @@ networkLayout.mousedown = function() {
     var colors = app.chart.colors();
 
     var element_types = ['recorder', 'neuron', 'stimulator']
-    element_types.map(function(d, i) {
+    element_types.map((d, i) => {
         var select = networkLayout.g.append('g')
             .attr('class', 'select')
             .attr('transform', 'translate(' + point[0] + ',' + point[1] + ')')
@@ -337,20 +320,18 @@ networkLayout.mousedown = function() {
                 endAngle: Math.PI * (i + 1) * 2 / 3
             })
             .style('fill', 'white')
-            .style('stroke', function() {
-                return app.chart.colors(app.data.nodes.length);
-            })
+            .style('stroke', () => app.chart.colors(app.data.nodes.length))
             .style('stroke-width', 4)
             .attr('d', networkLayout.arc)
             .on('mouseover', function() {
-                d3.select(this).style('fill', function() {
-                    return app.chart.colors(app.data.nodes.length);
-                })
+                d3.select(this).style('fill',
+                    () => app.chart.colors(app.data.nodes.length)
+                )
             })
             .on('mouseout', function() {
                 d3.select(this).style('fill', 'white')
             })
-            .on('mouseup', function() {
+            .on('mouseup', () => {
                 app.selected_node = networkLayout.addNode()
                 app.selected_node.element_type = d;
                 app.selected_node.x = point[0];
@@ -385,7 +366,7 @@ networkLayout.mousemove = function() {
     networkLayout.ticked()
 }
 
-networkLayout.mouseup = function() {
+networkLayout.mouseup = () => {
     // console.log('mouseup')
     if (networkLayout.mousedown_node) {
         // hide drag line
@@ -406,7 +387,7 @@ networkLayout.mouseup = function() {
     networkLayout.ticked()
 }
 
-networkLayout.init = function(reference) {
+networkLayout.init = (reference) => {
     $(reference).empty()
     networkLayout.lastNodeId = app.data.nodes.length;
     networkLayout.lastLinkId = app.data.links.length;
@@ -451,7 +432,7 @@ networkLayout.init = function(reference) {
         .attr('transform', 'translate(1.5,1.5)');
 
     networkLayout.force = d3.forceSimulation()
-        // .force('link', d3.forceLink().id(function(d) {
+        // .force('link', d3.forceLink().id((d) => {
         //     return d.id;
         // }))
         // .force('charge', d3.forceManyBody())
@@ -476,9 +457,10 @@ networkLayout.init = function(reference) {
         .on('mouseup', networkLayout.mouseup);
 
     networkLayout.update()
+    app.chart.networkLayout.toggle(app.config.app().chart.networkLayout)
 }
 
-networkLayout.toggle = function(visible) {
+networkLayout.toggle = (visible) => {
     $('#networkLayout').toggle(visible)
     $('#view-networkLayout').find('.glyphicon-ok').toggle(visible)
 }

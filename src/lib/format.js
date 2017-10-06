@@ -2,29 +2,27 @@
 
 var format = {};
 
-format.number = function(value, l) {
+format.number = (value, l) => {
     var fmt = d3.format('.' + (l || 2) + 'f')
     return fmt(value)
 }
 
-format.truncate = function(ids) {
+format.truncate = (ids) => {
     if (!ids) return ''
     if (ids.length > 2) return [ids[0], ids[ids.length - 1]].join('-')
     return ids.join(',')
 }
 
-format.replaceAll = function(str, find, replace) {
-    return str.replace(new RegExp(find, 'g'), replace);
-}
+format.replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace);
 
-format.nodeLabel = function(node) {
+format.nodeLabel = (node) => {
     if (node.label) {
         return node.label
     }
     return (node.model == 'parrot_neuron' ? 'P' : node.element_type.charAt(0).toUpperCase())
 }
 
-format.nodeTitle = function(node) {
+format.nodeTitle = (node) => {
     if (node.title) {
         return node.title
     }
@@ -32,13 +30,15 @@ format.nodeTitle = function(node) {
     return app.format.replaceAll(title, '_', ' ').charAt(0).toUpperCase() + title.slice(1)
 }
 
-format.truncate = function(str, n) {
+format.capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+format.truncate = (str, n) => {
     var n = n || 25
     if (str.length < n) return str
     return str.slice(0, n) + '...';
 }
 
-format.date = function(date) {
+format.date = (date) => {
     var monthNames = [
         "January", "February", "March",
         "April", "May", "June", "July",
@@ -54,15 +54,10 @@ format.date = function(date) {
     return day + ' ' + monthNames[monthIndex].slice(0, 3) + ' ' + year;
 }
 
-format.datetime = function(date) {
-    return new Date(date).toLocaleString()
-}
+format.datetime = (date) => new Date(date).toLocaleString();
+format.time = (date) => new Date(date).toLocaleTimeString();
 
-format.time = function(date) {
-    return new Date(date).toLocaleTimeString()
-}
-
-format.fillArray = function(value, len) {
+format.fillArray = (value, len) => {
     var arr = [];
     for (var i = 0; i < len; i++) {
         arr.push(value);
@@ -70,14 +65,14 @@ format.fillArray = function(value, len) {
     return arr;
 }
 
-format.changes = function(changes) {
+format.changes = (changes) => {
     var arr = [];
-    changes.nodes.map(function(node) {
+    changes.nodes.map((node) => {
         for (var pkey in node) {
             arr.push(pkey + ':' + node[pkey])
         }
     })
-    changes.links.map(function(link) {
+    changes.links.map((link) => {
         for (var pkey in link) {
             arr.push(pkey + ':' + link[pkey])
         }
@@ -85,12 +80,12 @@ format.changes = function(changes) {
     return arr.join(',')
 }
 
-format.syntaxHighlight = function(json) {
+format.syntaxHighlight = (json) => {
     if (typeof json != 'string') {
         json = JSON.stringify(json, undefined, 2);
     }
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
         var cls = 'number';
         if (/^"/.test(match)) {
             if (/:$/.test(match)) {

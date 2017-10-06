@@ -8,20 +8,20 @@ var controller = {
     synapse: require('./controller/synapse'),
 };
 
-controller.initNodes = function() {
+controller.initNodes = () => {
     $('#nodes .controller').empty()
     $('#nodeScrollspy .nav').empty()
-    app.data.nodes.map(function(node) {
+    app.data.nodes.map((node) => {
         controller.node.init(node)
     })
 }
 
-controller.initLinks = function() {
+controller.initLinks = () => {
     var drawing = app.chart.networkLayout.drawing;
     if (!drawing) {
         $('#connections .controller').empty();
         $('#synapses .controller').empty();
-        app.data.links.map(function(link) {
+        app.data.links.map((link) => {
             if (app.data.nodes[link.source].hidden || app.data.nodes[link.target].hidden) return
             if (app.data.nodes[link.source].disabled || app.data.nodes[link.target].disabled) return
             // if (app.data.nodes[link.target].element_type == 'recorder') return
@@ -32,14 +32,15 @@ controller.initLinks = function() {
     $('.hideOnDrawing').toggle(!drawing)
 }
 
-controller.update = function() {
+controller.update = () => {
+    app.message.log('Update controller')
     controller.simulation.update()
     controller.height = window.innerHeight - $('.tab-content')[0].offsetTop - 10
     $('.tab-content').css('max-height', controller.height + 'px')
 }
 
-controller.init = function() {
-    controller.colors = app.chart.colors();
+controller.init = () => {
+    app.message.log('Initialize controller')
     controller.borderWidth = '4px';
 
     controller.simulation.init()
@@ -47,6 +48,8 @@ controller.init = function() {
 
     controller.initNodes()
     controller.initLinks()
+
+    controller.update()
 }
 
 module.exports = controller;

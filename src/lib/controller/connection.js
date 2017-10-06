@@ -2,13 +2,12 @@
 
 var connController = {};
 
-connController.update = function(link) {
+connController.update = (link) => {
     var connRule = (link.conn_spec ? (link.conn_spec.rule || 'all_to_all') : 'all_to_all')
     var modelDefaults = app.config.nest('connection');
     var connElem = $('#connections').find('.link[data-id=' + link.id + '] .content')
-    app.slider.init_modelSlider('#connections .link[data-id=' + link.id + '] .modelSlider', modelDefaults.filter(function(d) {
-        return d.id == connRule;
-    })[0])
+    app.slider.init_modelSlider('#connections .link[data-id=' + link.id + '] .modelSlider',
+        modelDefaults.filter((d) => d.id == connRule)[0])
     app.slider.update_connSlider(link)
     connElem.find('.modelSlider .sliderInput').on('slideStop', function() {
         app.selected_node = null;
@@ -35,7 +34,7 @@ connController.update = function(link) {
     })
 }
 
-connController.init = function(link) {
+connController.init = (link) => {
     // Connection
     $('#connections .controller').append(app.renderer.connection(link))
     var connElem = $('#connections').find('.link[data-id=' + link.id + ']')
@@ -55,19 +54,22 @@ connController.init = function(link) {
         };
         app.model.conn_selected(link)
         connController.update(link)
+        app.chart.init()
         app.simulation.reset()
     })
 
     connElem.find('.connSelect').toggleClass('disabled', link.disabled || false)
     connElem.find('.glyphicon-remove').toggle(link.disabled || false)
     connElem.find('.glyphicon-ok').toggle(!link.disabled && true)
-    connElem.find('.disableLink').on('click', function() {
+    connElem.find('.disableLink').on('click', () => {
         app.data.kernel.time = 0.0 // Reset simulation
         app.simulation.run(false)
         app.selected_node = null;
         app.selected_link = link;
         link.disabled = !link.disabled;
         var disabled = link.disabled || false
+        app.chart.init()
+        app.controller.init()
         app.simulation.update()
     })
     if (link.disabled) return

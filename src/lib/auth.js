@@ -4,7 +4,7 @@ const PouchDB = require('pouchdb');
 const auth = require('../store/auth');
 const q = require('../store/query');
 
-function login(name, password, reset_db) {
+var login = (name, password, reset_db) => {
     config.set('user', {
         name: name,
         password: password
@@ -20,7 +20,7 @@ function login(name, password, reset_db) {
     }
 }
 
-function logout(reset_db) {
+var logout = (reset_db) => {
     config.set('user', {
         name: '',
         password: ''

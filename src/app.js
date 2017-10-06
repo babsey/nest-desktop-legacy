@@ -16,6 +16,7 @@ var app = {
     message: require(__dirname + '/lib/message'),
     model: require(__dirname + '/lib/model'),
     navigation: require(__dirname + '/lib/navigation'),
+    network: require(__dirname + '/lib/network'),
     protocol: require(__dirname + '/lib/protocol'),
     renderer: require(__dirname + '/lib/renderer'),
     request: require(__dirname + '/lib/request'),
@@ -25,8 +26,6 @@ var app = {
     sync: require(__dirname + '/lib/sync'),
     validation: require(__dirname + '/lib/validation')
 };
-
-app.DEBUG = false;
 
 app.query = function getQueryParams(qs) {
     qs = qs.split('+').join(' ');

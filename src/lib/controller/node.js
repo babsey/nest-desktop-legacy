@@ -7,7 +7,7 @@ const numeric = require('numeric');
 
 var nodeController = {}
 
-nodeController.amplitude = function(dtime, dvalue) {
+nodeController.amplitude = (dtime, dvalue) => {
     var times = math.range(dtime, app.data.sim_time, dtime)._data;
     var amplitudes = math.range(dvalue, dvalue * (times.length + 10), dvalue)._data;
     return {
@@ -16,7 +16,7 @@ nodeController.amplitude = function(dtime, dvalue) {
     }
 }
 
-nodeController.update = function(node) {
+nodeController.update = (node) => {
     var nodeDefaults = app.config.nest('node');
     var nodeElem = $('#nodes').find('.node[data-id=' + node.id + '] .content');
 
@@ -25,7 +25,7 @@ nodeController.update = function(node) {
         var options = nodeDefaults.npop;
         options.value = node.n || 1
         app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-            .on('slideStop', function(d) {
+            .on('slideStop', (d) => {
                 app.data.nodes[node.id].n = d.value
                 if (node.element_type == 'neuron') {
                     app.chart.init()
@@ -56,7 +56,7 @@ nodeController.update = function(node) {
         options.max = app.data.sim_time;
         options.value = [(node.params.start || 0), (node.params.stop || app.data.sim_time)]
         app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-            .on('slideStop', function(d) {
+            .on('slideStop', (d) => {
                 node.params.start = d.value[0]
                 delete node.params.stop
                 if (d.value[1] < app.data.sim_time) {
@@ -72,7 +72,7 @@ nodeController.update = function(node) {
             var options = nodeDefaults.spike_dtime;
             options.value = node.spike_dtime;
             app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-                .on('slideStop', function(d) {
+                .on('slideStop', (d) => {
                     node.spike_dtime = d.value
                     node.params.spike_times = math.range(node.spike_dtime, app.data.sim_time, node.spike_dtime)._data
                     node.params.spike_weights = numeric.rep([node.params.spike_times.length], node.spike_weight || nodeDefaults.spike_weight.value)
@@ -108,7 +108,7 @@ nodeController.update = function(node) {
             node.params.amplitude_times = amplitude.times;
             node.params.amplitude_values = amplitude.values;
             app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-                .on('slideStop', function(d) {
+                .on('slideStop', (d) => {
                     node.amplitude_dtime = d.value;
                     var amplitude_dvalue = (node.amplitude_dvalue || nodeDefaults.amplitude_dvalue.value);
                     var amplitude = nodeController.amplitude(node.amplitude_dtime, amplitude_dvalue);
@@ -138,7 +138,7 @@ nodeController.update = function(node) {
             var options = nodeDefaults.amplitude_dvalue;
             options.value = amplitude_dvalue;
             app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-                .on('slideStop', function(d) {
+                .on('slideStop', (d) => {
                     node.amplitude_dvalue = d.value;
                     var amplitude_dtime = node.amplitude_dtime || nodeDefaults.amplitude_dtime.value;
                     var amplitude = nodeController.amplitude(amplitude_dtime, node.amplitude_dvalue)
@@ -168,7 +168,7 @@ nodeController.update = function(node) {
             // var options = nodeDefaults.amplitude_value_max;
             // options.value = amplitude_value_max;
             // app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-            //     .on('slideStop', function(d) {
+            //     .on('slideStop', (d) => {
             //         node.amplitude_value_max = d.value;
             //         var amplitude_dtime = node.amplitude_dtime || nodeDefaults.amplitude_dtime.value;
             //         node.params.amplitude_times = math.range(amplitude_dtime, app.data.sim_time, amplitude_dtime)._data
@@ -201,7 +201,7 @@ nodeController.update = function(node) {
         options.max = app.data.sim_time
         options.value = [(node.params.start || 0), (node.params.stop || app.data.sim_time)]
         app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-            .on('slideStop', function(d) {
+            .on('slideStop', (d) => {
                 node.params.start = d.value[0]
                 delete node.params.stop
                 if (d.value[1] < app.data.sim_time) {
@@ -213,9 +213,9 @@ nodeController.update = function(node) {
             var options = nodeDefaults.nbins
             options.value = nodeDefaults.nbins.ticks_labels.indexOf(node.nbins) || 1
             app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
-                .on('slideStop', function(d) {
+                .on('slideStop', (d) => {
                     app.data.nodes[node.id].nbins = options.ticks_labels[d.value]
-                    var recorder = app.simulation.recorders.find(function(recorder) {
+                    var recorder = app.simulation.recorders.find((recorder) => {
                         return recorder.node.id == node.id;
                     })
                     // if (recorder.chart.barChart) {
@@ -225,14 +225,13 @@ nodeController.update = function(node) {
         }
     }
     var colors = app.chart.colors();
-    nodeElem.find('.slider-selection').css('background', app.controller.colors[node.id % colors.length])
-    nodeElem.find('.slider-handle').css('border', '2px solid ' + app.controller.colors[node.id % colors.length])
+    nodeElem.find('.slider-selection').css('background', colors[node.id % colors.length])
+    nodeElem.find('.slider-handle').css('border', '2px solid ' + colors[node.id % colors.length])
 
     nodeElem.find('.modelSlider').empty()
     var modelDefaults = app.config.nest(node.element_type);
-    app.slider.init_modelSlider('#nodes .node[data-id=' + node.id + '] .modelSlider', modelDefaults.filter(function(d) {
-        return d.id == node.model;
-    })[0])
+    app.slider.init_modelSlider('#nodes .node[data-id=' + node.id + '] .modelSlider',
+        modelDefaults.filter((d) => d.id == node.model)[0])
     nodeElem.find('.modelSlider .sliderInput').on('slideStop', function() {
         app.selected_node = app.data.nodes[$(this).parents('.node').data('id')];
         var pkey = $(this).parents('.paramSlider').attr('id');
@@ -240,7 +239,7 @@ nodeController.update = function(node) {
         app.simulation.simulate()
     })
     if (modelDefaults.params) {
-        modelDefaults.params.map(function(param) {
+        modelDefaults.params.map((param) => {
             nodeElem.find('.modelSlider').append('<div id="' + param.id + '" class="form-group"></div>')
             nodeElem.find('#' + param.id).append('<label for="' + param.id + 'Input"/>' + param.label + '</label>')
             nodeElem.find('#' + param.id).append('<input type="text" class="form-control" name="' + param.id + '" id="' + param.id + 'Input"/>')
@@ -270,24 +269,23 @@ nodeController.update = function(node) {
             app.model.get_recordables_list(node)
         }
         $('#record_' + node.id).on('change', function() {
-            var recorder = app.simulation.recorders.filter(function(recorder) {
-                return recorder.node.id == node.id
-            })[0];
+            var recorder = app.simulation.recorders.filter(
+                (recorder) => recorder.node.id == node.id)[0];
             var rec = this.value;
-            recorder.node.record_from = recorder.node.params.record_from.filter(function(record_from) {
-                return record_from.indexOf(rec) != -1
-            })
+            recorder.node.record_from = recorder.node.params.record_from.filter(
+                (record_from) => record_from.indexOf(rec) != -1)
             recorder.data.senders = []
             recorder.data.recs = []
-            var y = recorder.node.record_from.map(function(record_from, ridx) {
-                return recorder.senders.map(function(s, i) {
-                    recorder.data.recs.push(ridx)
-                    recorder.data.senders.push(i)
-                    return recorder.events[record_from].filter(function(r, i) {
-                        return recorder.events.senders[i] == s
+            var y = recorder.node.record_from.map(
+                (record_from, ridx) => recorder.senders.map(
+                    (s, i) => {
+                        recorder.data.recs.push(ridx)
+                        recorder.data.senders.push(i)
+                        return recorder.events[record_from].filter(
+                            (r, i) => recorder.events.senders[i] == s
+                        )
                     })
-                })
-            })
+            )
             recorder.data.y = [].concat.apply([], y);
 
             if ($('#autoscale').prop('checked')) {
@@ -297,16 +295,16 @@ nodeController.update = function(node) {
         })
 
         if (['voltmeter', 'multimeter'].indexOf(node.model) != -1) {
+            node.series == 'stack';
             nodeElem.find('.selection').append('<div class="seriesSelect form-group hideOnDrawing"></div>')
             nodeElem.find('.seriesSelect').append('<label for="series_' + node.id + '">Data series</label>')
             nodeElem.find('.seriesSelect').append('<select data-id="' + node.id + '" id="series_' + node.id + '" class="series form-control"></select>')
             nodeElem.find('#series_' + node.id).append('<option value="overlap">Overlap</option>')
             nodeElem.find('#series_' + node.id).append('<option value="stack">Stack</option>')
-            nodeElem.find('#series_' + node.id).val((node.series || 'stack'))
+            nodeElem.find('#series_' + node.id).val(node.series)
             $('#series_' + node.id).on('change', function() {
-                var recorder = app.simulation.recorders.find(function(recorder) {
-                    return recorder.node.id == node.id;
-                })
+                var recorder = app.simulation.recorders.find(
+                    (recorder) => recorder.node.id == node.id)
                 recorder.node.series = this.value;
                 recorder.chart.update(recorder)
             })
@@ -321,9 +319,9 @@ nodeController.update = function(node) {
             nodeElem.find('#psthChart_' + node.id).append('<option value="bar" class="form-control">Bar chart</option>')
             nodeElem.find('#psthChart_' + node.id).append('<option value="line" class="form-control">Line chart</option>')
             $('#psthChart_' + node.id).on('change', function() {
-                var recorder = app.simulation.recorders.find(function(recorder) {
-                    return recorder.node.id == node.id;
-                })
+                var recorder = app.simulation.recorders.find(
+                    (recorder) => recorder.node.id == node.id
+                )
                 recorder.node.psth = this.value;
                 recorder.chart.update(recorder)
             })
@@ -334,9 +332,8 @@ nodeController.update = function(node) {
             nodeElem.find('#psthOrdinate_' + node.id).append('<option value="count" class="count form-control">Spike counts</option>')
             nodeElem.find('#psthOrdinate_' + node.id).append('<option value="rate" class="rate form-control">Firing rate [spikes/sec]</option>')
             $('#psthOrdinate_' + node.id).on('change', function() {
-                var recorder = app.simulation.recorders.find(function(recorder) {
-                    return recorder.node.id == node.id;
-                })
+                var recorder = app.simulation.recorders.find(
+                    (recorder) => recorder.node.id == node.id)
                 recorder.node.record_from = [this.value];
                 recorder.chart.update(recorder)
             })
@@ -346,7 +343,7 @@ nodeController.update = function(node) {
     app.slider.update_nodeSlider(node);
 }
 
-nodeController.init = function(node) {
+nodeController.init = (node) => {
     $('#nodes .controller').append(app.renderer.node(node))
     var nodeElem = $('#nodes .node[data-id=' + node.id + ']');
     var modelDefaults = app.config.nest(node.element_type);
@@ -374,15 +371,15 @@ nodeController.init = function(node) {
             return
         }
 
-        app.data.links.filter(function(link) {
-            return link.target == node.id
-        }).map(function(link) {
+        app.data.links.filter(
+            (link) => link.target == node.id
+        ).map((link) => {
             connController.update(link)
             synController.update(link)
         })
 
-
         app.data.kernel.time = 0.0
+        app.chart.init()
         if (app.selected_node.element_type == 'recorder') {
             app.simulation.update()
         } else {
@@ -390,11 +387,13 @@ nodeController.init = function(node) {
         }
     })
 
-    nodeElem.find('.disableNode').on('click', function() {
+    nodeElem.find('.disableNode').on('click', () => {
         app.data.kernel.time = 0.0 // Reset simulation
         app.simulation.run(false)
         node.disabled = !node.disabled;
         var disabled = node.disabled || false
+        app.chart.init()
+        app.controller.init()
         app.simulation.update()
     })
     if (node.disabled) return

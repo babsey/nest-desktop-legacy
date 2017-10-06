@@ -14,6 +14,9 @@
 <!-- <body> -->
 
 <body data-spy="scroll" data-target="#nodeScrollspy" data-offset="50" style="overflow: hidden;">
+    <div id="message">
+        <div class="content"></div>
+    </div>
 
     <!-- Modal -->
     <div id="simulation-add-dialog" class="modal fade" role="dialog">
@@ -43,10 +46,6 @@
             <div class="navbar-header">
                 <span><h4 id="title"></h4></span>
                 <!-- <span id="subtitle"></span> -->
-            </div>
-
-            <div id="message" class="pull-left">
-                <div class="content"></div>
             </div>
 
             <div class="navbar-right">
@@ -136,6 +135,12 @@
                                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
                             </a>
                         </li>
+                        <li id="auto-protocol" title="Protocol simulation automatically">
+                            <a href="#">
+                                <i class="fa fa-history" aria-hidden="true"></i> Automatic protocol
+                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                            </a>
+                        </li>
                         <li class="divider"></li>
                         <li class="simulation-run spinOnHover" title="Run simulation">
                             <a href="#">
@@ -167,12 +172,12 @@
                             </a>
                         </li>
                         <li id="view-data" title="View documented data of the simulation">
-                            <a href="">
+                            <a href="#">
                                 <i class="fa fa-eye"></i> View simulation data
                             </a>
                         </li>
                         <li id="view-raw-data" title="View raw data of the simulation">
-                            <a href="">
+                            <a href="#">
                                 <i class="fa fa-code"></i> View raw data
                             </a>
                         </li>
@@ -314,7 +319,10 @@
         var query = app.query(location.search);
         app.simulation.id = query.simulation;
         app.protocol.id = query.protocol;
-        app.simulation.init()
+
+        app.request.server_check().on('response', () => {
+            app.simulation.init()
+        })
     </script>
 </body>
 

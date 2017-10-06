@@ -1,50 +1,55 @@
 "use strict"
 
+const request = require('request');
 require('bootstrap-slider');
-var request = {};
+var req = {};
 
-request.serverURL = function() {
+req.url = () => {
     let {
         host,
         port
     } = app.config.app().nest.server;
-    var serverURL = host + ':' + port;
-    return serverURL
+    return 'http://' + host + ':' + port;
 }
 
-request.server_check = function() {
-    var serverURL = request.serverURL()
-    var url = 'http://' + serverURL
-    return $.ajax({
-        method: 'GET',
-        url: url,
-    }).fail(function(d) {
-        app.message.show('Warning', 'The connection to the NEST server (' + serverURL + ') failed.', 2000)
-    }).done(function() {
-        app.serverRunning = true
-        app.message.show('Success', 'The connection to the NEST server (' + serverURL + ')  established.', 2000)
-    })
+req.server_check = () => {
+    var url = req.url()
+    return request.get(url)
+        .on('error', (err) => {
+            app.message.show('Warning', 'The connection to the NEST server failed.')
+        })
+        .on('response', () => {
+            app.serverRunning = true
+            app.message.log('NEST server checked')
+        })
 }
 
-request.request = function(data) {
+req.request = (data) => {
+    var url = req.url()
     var running = (!(app.data.kernel.time == 0.0) || app.simulation.running) ? 'resume' : 'simulate'
-    var url = 'http://' + request.serverURL() + '/network/' + app.data.network + '/' + running
+    app.message.log('Start simulation')
     return $.ajax({
         method: 'POST',
-        url: url,
+        url: url + '/network/' + app.data.network + '/' + running,
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
-    }).fail(function(d) {
+    }).fail((d) => {
         app.message.show('Warning', d.responseText, 2000)
+    }).done((d) => {
+        app.message.log('Simulation finished')
+        if (d.error) {
+            console.log(d.error)
+            app.message.show('NEST Error:', d.error);
+        }
     })
 }
 
-$(document).bind('ajaxStart', function() {
+$(document).bind('ajaxStart', () => {
     if (!(app.simulation.running)) {
         $('select').attr('disabled', 'disabled');
         $('.sliderInput').slider('disable')
     }
-}).bind('ajaxStop', function() {
+}).bind('ajaxStop', () => {
     $('select:not(.disabled)').attr('disabled', false);
     $('.sliderInput').slider('enable')
     // if (app.lastSliderChanged) {
@@ -52,4 +57,4 @@ $(document).bind('ajaxStart', function() {
     // }
 })
 
-module.exports = request;
+module.exports = req;

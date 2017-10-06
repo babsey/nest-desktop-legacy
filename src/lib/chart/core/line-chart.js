@@ -10,12 +10,9 @@ var chart = {
     data: {}
 };
 
-chart.subplot = function(i) {
-    return -1 * (chart.data.n - (i % chart.data.n) - 1) * chart.height / chart.data.n
-};
+chart.subplot = (i) => -1 * (chart.data.n - (i % chart.data.n) - 1) * chart.height / chart.data.n;
 
-
-chart.draw_line = function(series) {
+chart.draw_line = (series) => {
 
     var lines = chart.g.select('#clip')
         .selectAll('.line')
@@ -25,127 +22,101 @@ chart.draw_line = function(series) {
         .append('g')
         .attr('class', 'subplot')
 
-    lines.attr("style", function(d, i) {
-        return 'stroke:' + (app.selected_node ? chart.data.c[i] : '')
-    })
+    lines.attr("style", (d, i) => 'stroke:' + (app.selected_node ? chart.data.c[i] : ''))
 
-    var subplot = function(i) {
-        return -1 * (chart.data.n - (i % chart.data.n) - 1) * chart.height / chart.data.n
-    };
-    var color = function(i) {
-        return app.config.app().chart.color ? chart.data.c[i % chart.data.c.length] : ''
-    };
+    var subplot = (i) => -1 * (chart.data.n - (i % chart.data.n) - 1) * chart.height / chart.data.n;
+    var color = (i) => app.config.app().chart.color ? chart.data.c[i % chart.data.c.length] : '';
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     if (transition) {
-        lines.transition(app.chart.transition)
+        lines
+            // .transition(app.chart.transition)
             .attr('height', chart.height / chart.data.n)
-            .attr("transform", function(d, i) {
-                if (series == 'overlap') return
-                return "translate(0," + chart.subplot(i) + ")"
-            })
-            .attr("style", function(d, i) {
-                return 'stroke:' + color(i)
-            })
+            .attr("transform",
+                (d, i) => series == 'stack' ? "translate(0," + chart.subplot(i) + ")" : ''
+            )
+            .attr("style", (d, i) => 'stroke:' + color(i))
             .attr("d", chart.line);
 
         g.append("path")
             .attr('height', chart.height / chart.data.n)
-            .attr("class", function(d, i) {
-                return 'line line_' + i
-            })
-            .attr("transform", function(d, i) {
-                if (series == 'overlap') return
-                return "translate(0," + chart.subplot(i) + ")"
-            })
-            .on('mouseover', function(d, i) {
+            .attr("class", (d, i) => 'line line_' + i)
+            .attr("transform",
+                (d, i) => series == 'stack' ? "translate(0," + chart.subplot(i) + ")" : ''
+            )
+            .on('mouseover', (d, i) => {
                 chart.g.selectAll('#clip')
                     .classed('active', true);
                 chart.g.selectAll('.aline.line_' + i)
                     .classed('active', true);
             })
-            .on('mouseout', function(d, i) {
+            .on('mouseout', (d, i) => {
                 chart.g.selectAll('#clip')
                     .classed('active', false)
                 chart.g.selectAll('#clip path')
                     .classed('active', false);
             })
             .attr("style", 'zscore: 1')
-            .attr("style", function(d, i) {
-                return 'stroke:' + color(i)
-            })
-            .transition(app.chart.transition)
-            .attr("d", function(d) {
-                return chart.line(d)
-            });
+            .attr("style", (d, i) => 'stroke:' + color(i))
+            // .transition(app.chart.transition)
+            .attr("d", (d) => chart.line(d));
 
     } else {
         lines.attr('height', chart.height / chart.data.n)
-            .attr("transform", function(d, i) {
-                if (series == 'overlap') return
-                return "translate(0," + chart.subplot(i) + ")"
-            })
-            .attr("style", function(d, i) {
-                return 'stroke:' + color(i)
-            })
+            .attr("transform",
+                (d, i) => series == 'stack' ? "translate(0," + chart.subplot(i) + ")" : ''
+            )
+            .attr("style", (d, i) => 'stroke:' + color(i))
             .attr("d", chart.line)
 
         lines.selectAll('.overlay')
             .attr("width", chart.width)
             .attr("height", chart.height / chart.data.n)
-            .attr("transform", function(d, i) {
-                if (series == 'overlap') return
-                return "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")"
-            })
+            .attr("transform",
+                (d, i) => series == 'stack' ? "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")" : ''
+            )
 
         g.append("path")
             .attr('height', chart.height / chart.data.n)
-            .attr("transform", function(d, i) {
-                if (series == 'overlap') return
-                return "translate(0," + chart.subplot(i) + ")"
-            })
-            .attr("class", function(d, i) {
-                return 'line line_' + i
-            })
-            .on('mouseover', function(d, i) {
+            .attr("transform",
+                (d, i) => series == 'stack' ? "translate(0," + chart.subplot(i) + ")" : ''
+            )
+            .attr("class", (d, i) => 'line line_' + i)
+            .on('mouseover', (d, i) => {
                 chart.g.selectAll('#clip')
                     .classed('active', true);
                 chart.g.selectAll('.aline.line_' + i)
                     .classed('active', true);
             })
-            .on('mouseout', function(d, i) {
+            .on('mouseout', (d, i) => {
                 chart.g.selectAll('#clip')
                     .classed('active', false)
                 chart.g.selectAll('#clip path')
                     .classed('active', false);
             })
             .attr("style", 'zscore: 1')
-            .attr("style", function(d, i) {
-                return 'stroke:' + color(i)
-            })
+            .attr("style", (d, i) => 'stroke:' + color(i))
             .attr("d", chart.line);
     }
 
     lines.selectAll('.overlay')
         .attr("width", chart.width)
         .attr("height", chart.height / chart.data.n)
-        .attr("transform", function(d, i) {
-            if (series == 'overlap') return
-            return "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")"
-        })
+        .attr("transform",
+            (d, i) => series == 'stack' ? "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")" : ''
+        );
 
     var overlay = g.append('rect')
         .attr('class', 'overlay')
         .attr("width", chart.width)
         .attr("height", chart.height / chart.data.n)
-        .attr("transform", function(d, i) {
-            if (series == 'overlap') return
-            return "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")"
-        })
+        .attr("transform",
+            (d, i) => series == 'stack' ? "translate(0," + -1 * +chart.subplot(chart.data.n - i - 1) + ")" : ''
+        );
 
-    overlay.on("mouseover", function() {
+    overlay.on("mouseover", () => {
             chart.focus.style("display", null);
         })
-        .on("mouseout", function() {
+        .on("mouseout", () => {
             $('#point').empty()
             chart.focus.style("display", "none");
         })
@@ -155,7 +126,7 @@ chart.draw_line = function(series) {
         .remove();
 }
 
-chart.update = function(recorder) {
+chart.update = (recorder) => {
     chart.g.style('display', 'none')
 
     if (!chart.data.x) return
@@ -174,15 +145,11 @@ chart.update = function(recorder) {
     var ylabel = app.model.record_labels[$('#record_' + recorder.node.id).val() || recorder.node.record_from[0]]
     app.chart.yLabel(chart, 'yLabel_' + app.simulation.recorders.indexOf(recorder), ylabel)
 
-    chart.line.x(function(d, i) {
-        return chart.xScale(chart.data.x[i]);
-    }).y(function(d) {
-        return chart.yScale(d);
-    });
+    chart.line
+        .x((d, i) => chart.xScale(chart.data.x[i]))
+        .y((d) => chart.yScale(d));
 
-    var bisect = d3.bisector(function(d) {
-        return d;
-    }).left;
+    var bisect = d3.bisector((d) => d).left;
 
     chart.tooltip = function(d, i) {
         var x = chart.data.x;
@@ -194,37 +161,27 @@ chart.update = function(recorder) {
             d0 = x[idx - 1],
             d1 = x[idx],
             idx = x0 - y[idx - 1] > y[idx] - x0 ? idx : idx - 1;
-        chart.focus.attr("transform", function() {
-            return "translate(" + chart.xScale(x[idx]) + "," + (+chart.yScale(y[idx]) + offset) + ")"
-        });
-        // chart.focus.select("text").text(function() {
+        chart.focus.attr("transform",
+            () => "translate(" + chart.xScale(x[idx]) + "," + (+chart.yScale(y[idx]) + offset) + ")"
+        );
+        // chart.focus.select("text").text(() => {
         //     return app.format.number(x[idx], 1) + ', ' + app.format.number(y[idx]);
         // });
-        $('#point').html(function() {
-            return app.format.number(x[idx], 1) + ', ' + app.format.number(y[idx]);
-        })
-        chart.focus.select(".y-hover-line").attr("x1", function() {
-            return chart.width - chart.xScale(x[idx])
-        });
-        chart.focus.select(".y-hover-line").attr("x2", function() {
-            return -chart.xScale(x[idx])
-        });
-        chart.focus.select(".x-hover-line").attr("y1", function() {
-            return -chart.yScale(y[idx]) - offset
-        });
-        chart.focus.select(".x-hover-line").attr("y2", function() {
-            return chart.height - chart.yScale(y[idx]) - offset
-        });
+        $('#point').html(() => app.format.number(x[idx], 1) + ', ' + app.format.number(y[idx]))
+        chart.focus.select(".y-hover-line").attr("x1", () => chart.width - chart.xScale(x[idx]));
+        chart.focus.select(".y-hover-line").attr("x2", () => -chart.xScale(x[idx]));
+        chart.focus.select(".x-hover-line").attr("y1", () => -chart.yScale(y[idx]) - offset);
+        chart.focus.select(".x-hover-line").attr("y2", () => chart.height - chart.yScale(y[idx]) - offset);
 
     }
 
-    chart.draw_line(recorder.node.series)
+    chart.draw_line(recorder.node.series || 'stack')
     app.chart.legend(chart, chart.data.legend, chart.data.c)
 
     chart.g.style('display', null)
 }
 
-chart.init = function(reference, id, size) {
+chart.init = (reference, id, size) => {
 
     var margin = {
         top: 20,
