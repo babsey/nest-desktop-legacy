@@ -12,7 +12,7 @@ var sync = {};
 sync.remoteDB = () => {
     var configApp = app.config.app();
     if (configApp.db.remote.host === "") {
-        app.message.show('Warning', 'Host of remote DB is empty.')
+        app.message.log('Host of remote DB is empty.')
         return false
     }
 
