@@ -8,16 +8,14 @@ network.update = () => {
     app.simulation.recorders = app.data.nodes.filter(
         (node) => node.element_type == 'recorder' && !node.disabled
     ).map(
-        (node) => {
-            return {
-                node: node,
-                sources: app.data.links.filter(
-                    (link) => link.target == node.id
-                ).map(
-                    (link) => app.data.nodes[link.source].id
-                )
-            }
-        }
+        (node) => ({
+            node: node,
+            sources: app.data.links.filter(
+                (link) => link.target == node.id
+            ).map(
+                (link) => app.data.nodes[link.source].id
+            )
+        })
     );
 
     app.simulation.recorders.map((recorder, idx) => {
@@ -31,16 +29,14 @@ network.update = () => {
     app.simulation.stimulators = app.data.nodes.filter(
         (node) => node.element_type == 'stimulator' && !node.disabled
     ).map(
-        (node) => {
-            return {
-                node: node,
-                targets: app.data.links.filter(
-                    (link) => link.source == node.id
-                ).map(
-                    (link) => app.data.nodes[link.target].id
-                )
-            }
-        }
+        (node) => ({
+            node: node,
+            targets: app.data.links.filter(
+                (link) => link.source == node.id
+            ).map(
+                (link) => app.data.nodes[link.target].id
+            )
+        })
     );
 
 }
@@ -80,9 +76,9 @@ network.init = () => {
             if (id != undefined) {
                 return colors[id % colors.length]
             }
-            return app.data.nodes.map((d) => {
-                return d.color ? d.color : colors[d.id % colors.length]
-            })
+            return app.data.nodes.map(
+                (d) => d.color ? d.color : colors[d.id % colors.length]
+            )
         }
 
         network.update()

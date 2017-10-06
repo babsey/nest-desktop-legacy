@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "description": "A NEST desktop application",
   "main": "main.js",
   "scripts": {
@@ -25,17 +25,17 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "bootstrap-slider": "^9.8.1",
+    "bootstrap-slider": "^9.9.0",
     "clipboard": "^1.7.1",
     "colorbrewer": "^1.0.0",
-    "d3": "^4.10.2",
-    "electron": "^1.7.6",
+    "d3": "^4.11.0",
+    "electron": "1.7.8",
     "flat": "^2.0.1",
     "font-awesome": "^4.7.0",
     "joi": "^10.6.0",
     "jquery": "^3.2.1",
     "jsonfile": "^2.4.0",
-    "mathjs": "^3.16.3",
+    "mathjs": "^3.16.4",
     "nedb": "^1.8.0",
     "numeric": "^1.2.6",
     "object-hash": "^1.1.8",
@@ -44,7 +44,7 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "debug": "^2.6.8",
+    "debug": "^2.6.9",
     "electron-packager": "^9.1.0"
   }
 }

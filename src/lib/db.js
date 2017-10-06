@@ -9,13 +9,19 @@ const path = require('path');
 
 var db = {};
 
-db.all = () => db.localDB.find({}).sort({
+db.all = () => (db.localDB.find({}).sort({
     updatedAt: -1
-});
+}));
 
-db.filter = (q) => db.localDB.find(q).sort({
+db.get = (id) => (
+    db.localDB.findOne({
+        _id: id
+    })
+);
+
+db.filter = ((q) => db.localDB.find(q).sort({
     updatedAt: -1
-});
+}));
 
 db.labels = () => {
     db.all().exec((err, docs) => {
@@ -24,10 +30,6 @@ db.labels = () => {
         })
     })
 };
-
-db.get = (id) => db.localDB.findOne({
-    _id: id
-});
 
 db.clone = (data) => new Promise((resolve, reject) => {
     var clonedData = $.extend(true, {}, data);

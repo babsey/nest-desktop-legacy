@@ -7,10 +7,13 @@ const jsonfile = require('jsonfile')
 
 var protocol = {};
 
-protocol.all = () => protocol.db.find({});
-protocol.get = (id) => protocol.db.findOne({
-    _id: id
-});
+protocol.all = () => (protocol.db.find({}));
+
+protocol.get = (id) => (
+    protocol.db.findOne({
+        _id: id
+    })
+);
 
 protocol.addDropdown = (data) => {
     var configApp = app.config.app();
@@ -48,6 +51,8 @@ protocol.add = () => {
         data.user = configApp.user.id;
         data.version = process.env.npm_package_version;
         app.db.clean(data);
+
+        delete data._id;
         delete data.updatedAt;
 
         return new Promise((resolve, reject) => {
@@ -62,12 +67,12 @@ protocol.add = () => {
                         protocol.db.findOne({
                             hash: data.hash
                         }).exec((err, doc) => {
+                            app.data._id = doc._id
                             app.data.updatedAt = doc.updatedAt
                             resolve(false)
                         })
                     })
                 } else {
-                    delete data._id;
                     protocol.db.insert(data, (err, newDocs) => {
                         app.data._id = newDocs._id
                         app.data.updatedAt = newDocs.updatedAt
