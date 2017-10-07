@@ -24,11 +24,20 @@
 </head>
 
 <body>
-    <div id='message'>
-        <div class='content'></div>
+
+    <div class="container-fluid" style="position: fixed; top:10px">
+        <div class="content">
+            <button class="btn btn-default" onclick="history.go(-1)">
+                <i class="fa fa-arrow-left"></i>
+            </button>
+        </div>
     </div>
 
     <div class="container">
+        <div id='message'>
+            <div class='content'></div>
+        </div>
+
         <div class="content">
             <h2>Configuration</h2>
 
@@ -59,7 +68,6 @@
 
                 <button class="btn btn-default" id="app-config-save" style="display:none">save</button>
             </form>
-            <button class="btn btn-default" onclick="history.go(-1)">back</button>
         </div>
     </div>
 

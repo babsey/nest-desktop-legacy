@@ -120,6 +120,7 @@ simulate.simulate = (run) => {
             app.protocol.all().exec((err, docs) => {
                 if ((docs.length == 0) || (app.simulation.autoProtocol) || app.protocol.id == undefined) {
                     app.protocol.add()
+                    app.screen.capture(app.data, false)
                 }
             })
         })
