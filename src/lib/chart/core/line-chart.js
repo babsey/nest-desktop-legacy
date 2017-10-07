@@ -57,7 +57,7 @@ chart.draw_line = (series) => {
             })
             .attr("style", 'zscore: 1')
             .attr("style", (d, i) => 'stroke:' + color(i))
-            // .transition(app.chart.transition)
+            .transition(app.chart.transition)
             .attr("d", (d) => chart.line(d));
 
     } else {
