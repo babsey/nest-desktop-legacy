@@ -295,7 +295,7 @@ nodeController.update = (node) => {
         })
 
         if (['voltmeter', 'multimeter'].indexOf(node.model) != -1) {
-            node.series == 'stack';
+            node.series = 'stack';
             nodeElem.find('.selection').append('<div class="seriesSelect form-group hideOnDrawing"></div>')
             nodeElem.find('.seriesSelect').append('<label for="series_' + node.id + '">Data series</label>')
             nodeElem.find('.seriesSelect').append('<select data-id="' + node.id + '" id="series_' + node.id + '" class="series form-control"></select>')
