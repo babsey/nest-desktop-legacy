@@ -29,7 +29,7 @@ chart.draw_line = (series) => {
     var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
     if (transition) {
         lines
-            // .transition(app.chart.transition)
+            .transition(app.chart.transition)
             .attr('height', chart.height / chart.data.n)
             .attr("transform",
                 (d, i) => series == 'stack' ? "translate(0," + chart.subplot(i) + ")" : ''
