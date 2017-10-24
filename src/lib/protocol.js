@@ -15,6 +15,12 @@ protocol.get = (id) => (
     })
 );
 
+protocol.clear = () => (
+    protocol.db.remove({}, { multi: true }, function(err, numDeleted) {
+        console.log('Deleted', numDeleted, 'protocol(s)')
+        protocol.update()
+    }))
+
 protocol.addDropdown = (data) => {
     var configApp = app.config.app();
     if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png'))) {
@@ -95,8 +101,9 @@ protocol.update = () => {
     app.protocol.all().sort({
         updatedAt: -1
     }).exec((err, docs) => {
-        if (docs.length == 0) return
         $('#protocol-list').empty()
+        $('#protocol-label').html('No protocol')
+        if (docs.length == 0) return
         docs.map((doc, idx) => {
             protocol.addDropdown(doc)
         })

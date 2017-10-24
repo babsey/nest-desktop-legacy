@@ -118,7 +118,7 @@ simulate.simulate = (run) => {
             app.chart.update()
             app.controller.update()
             app.protocol.all().exec((err, docs) => {
-                if (docs.length == 0 || app.protocol.id == undefined && app.simulation.autoProtocol) {
+                if ((docs.length == 0 || app.protocol.id == undefined) && app.simulation.autoProtocol) {
                     app.screen.capture(app.data, false)
                     app.protocol.add()
                 }

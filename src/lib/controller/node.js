@@ -27,9 +27,7 @@ nodeController.update = (node) => {
         app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
             .on('slideStop', (d) => {
                 app.data.nodes[node.id].n = d.value
-                if (node.element_type == 'neuron') {
-                    app.chart.init()
-                }
+                app.chart.init()
                 app.simulation.reset()
             })
         nodeElem.find('.nodeSlider #n input.paramVal').on('change', function() {
@@ -45,9 +43,7 @@ nodeController.update = (node) => {
             if (valid.error != null) return
             node[pkey] = valid.value
             app.slider.update_dataSlider()
-            if (node.element_type == 'neuron') {
-                app.chart.init()
-            }
+            app.chart.init()
             app.simulation.reset()
         })
     }

@@ -137,6 +137,10 @@ navigation.events = () => {
         app.config.save('app', configApp)
         $('#auto-protocol').find('.glyphicon-ok').toggle(!autoProtocol)
     })
+    $('#clear-protocol').on('click', () => {
+        app.protocol.clear()
+    })
+
     $('.simulation-run').on('click', app.simulation.simulate)
     $('#simulation-reset').on('click', app.simulation.reset)
     $('#simulation-resume').on('click', app.simulation.resumeToggle)
