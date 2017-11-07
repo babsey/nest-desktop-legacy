@@ -59,25 +59,25 @@ network.init = () => {
         }
     }).then(() => {
         $('#title').html(app.data.name)
-        if (app.data.kernel == undefined) {
-            app.data.kernel = {}
-        }
+        app.data.kernel = app.data.kernel || {}
         app.data.kernel.time = 0.0;
-        app.data.sim_time = app.data.sim_time ? app.data.sim_time : 1000.0;
+        app.data.sim_time = app.data.sim_time || 1000.0;
+        app.data.nodes.map((node) => {
+            node.params = node.params || {}
+        })
         app.data.links.map((link) => {
-            link.conn_spec = link.conn_spec ? link.conn_spec : {}
-            link.syn_spec = link.syn_spec ? link.syn_spec : {}
+            link.conn_spec = link.conn_spec || {}
+            link.syn_spec = link.syn_spec || {}
         })
 
         app.chart.abscissa = app.data.abscissa || 'times';
-
         var colors = d3.schemeCategory10;
         app.chart.colors = (id) => {
             if (id != undefined) {
                 return colors[id % colors.length]
             }
             return app.data.nodes.map(
-                (d) => d.color ? d.color : colors[d.id % colors.length]
+                (d) => (d.color || colors[d.id % colors.length])
             )
         }
 
