@@ -31,8 +31,8 @@ nodeController.update = (node) => {
                 app.simulation.reset()
             })
         nodeElem.find('.nodeSlider #n input.paramVal').on('change', function() {
-            app.selected_link = null;
-            app.selected_node = node;
+            // app.selected_link = null;
+            // app.selected_node = node;
             var pkey = $(this).parents('.dataSlider').attr('id');
             var pvalue = $(this).val()
             var schema = $(this).data('schema')
@@ -75,8 +75,8 @@ nodeController.update = (node) => {
                     app.simulation.simulate()
                 })
             nodeElem.find('#spike_dtimeVal').on('change', function() {
-                app.selected_link = null;
-                app.selected_node = node;
+                // app.selected_link = null;
+                // app.selected_node = node;
                 var pkey = $(this).parents('.paramSlider').attr('id');
                 var pvalue = $(this).val()
                 var schema = $(this).data('schema')
@@ -113,8 +113,8 @@ nodeController.update = (node) => {
                     app.simulation.simulate()
                 })
             nodeElem.find('#amplitude_dtimeVal').on('change', function() {
-                app.selected_link = null;
-                app.selected_node = node;
+                // app.selected_link = null;
+                // app.selected_node = node;
                 var pkey = $(this).parents('.paramSlider').attr('id');
                 var pvalue = $(this).val()
                 var schema = $(this).data('schema')
@@ -143,8 +143,8 @@ nodeController.update = (node) => {
                     app.simulation.simulate()
                 })
             nodeElem.find('#amplitude_dvalueVal').on('change', function() {
-                app.selected_link = null;
-                app.selected_node = node;
+                // app.selected_link = null;
+                // app.selected_node = node;
                 var pkey = $(this).parents('.paramSlider').attr('id');
                 var pvalue = $(this).val()
                 var schema = $(this).data('schema')
@@ -229,9 +229,9 @@ nodeController.update = (node) => {
     app.slider.init_modelSlider('#nodes .node[data-id=' + node.id + '] .modelSlider',
         modelDefaults.filter((d) => d.id == node.model)[0])
     nodeElem.find('.modelSlider .sliderInput').on('slideStop', function() {
-        app.selected_node = app.data.nodes[$(this).parents('.node').data('id')];
+        var node = app.data.nodes[$(this).parents('.node').data('id')];
         var pkey = $(this).parents('.paramSlider').attr('id');
-        app.selected_node.params[pkey] = parseFloat(this.value)
+        node.params[pkey] = parseFloat(this.value)
         app.simulation.simulate()
     })
     if (modelDefaults.params) {
@@ -242,8 +242,8 @@ nodeController.update = (node) => {
         })
     }
     nodeElem.find('.modelSlider input.paramVal').on('change', function() {
-        app.selected_link = null;
-        app.selected_node = node;
+        // app.selected_link = null;
+        // app.selected_node = node;
         var pkey = $(this).parents('.paramSlider').attr('id');
         var pvalue = $(this).val()
         var schema = $(this).data('schema')
@@ -252,7 +252,7 @@ nodeController.update = (node) => {
         $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
         $(this).parents('.form-group').find('.help-block').html(valid.error)
         if (valid.error != null) return
-        app.selected_node.params[pkey] = valid.value
+        node.params[pkey] = valid.value
         app.slider.update_nodeSlider(node)
         app.simulation.simulate()
     })
@@ -353,8 +353,8 @@ nodeController.init = (node) => {
     nodeElem.find('.glyphicon-ok').toggle(!node.disabled && true)
     nodeElem.find('.modelSelect').on('change', function(d, i) {
         app.simulation.run(false)
-        app.selected_link = null
-        app.selected_node = node
+        // app.selected_link = null
+        // app.selected_node = node
         node.model = this.value;
         node.params = {};
 
@@ -396,15 +396,14 @@ nodeController.init = (node) => {
 
     $('#nodeScrollspy .nav').append(app.renderer.scrollspy(node))
     $('#nodeScrollspy').find('.node[data-id=' + node.id + ']').on('click', function(e) {
-        e.preventDefault()
-        $($(this).find('a').attr('href'))[0].scrollIntoView();
-        scrollBy(0, -50);
-        $('.node').removeClass('active');
-        $(this).addClass('active');
-        app.selected_node = node
+        // e.preventDefault()
+    //     $($(this).find('a').attr('href'))[0].scrollIntoView();
+        // scrollBy(0, -50);
+        app.selected_node = app.selected_node == node ? null : node;
         app.selected_link = null;
         app.chart.networkLayout.update()
         app.chart.update()
+        app.controller.update()
     })
     if (!node.model) return
     nodeController.update(node)

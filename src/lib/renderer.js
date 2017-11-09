@@ -154,7 +154,7 @@ renderer.scrollspy = (node) => {
     var div = [];
     div.push('<li class="node ' + node.element_type + '" data-id="' + node.id + '">')
     var colors = app.chart.colors()
-    div.push('<a href="#node_' + node.id + '" ' + 'style="border: 3px solid' + colors[node.id % colors.length] + '; padding: 10px 0px"')
+    div.push('<a href="#node_' + node.id + '" ' + 'style="border-color: ' + colors[node.id % colors.length] + '; padding: 10px 0px"')
     div.push(' title="' + app.format.nodeTitle(node) + '">')
     // div.push(app.format.nodeLabel(node))
     div.push(node.id)
@@ -190,7 +190,7 @@ renderer.node = (node) => {
 
 renderer.connection = (link) => {
     var div = []
-    div.push('<div data-id="' + link.id + '" class="panel-body link">')
+    div.push('<div data-id="' + link.id + '" data-source="' + link.source + '" data-target="' + link.target + '" class="panel-body link">')
     div.push('<div class="content"')
     div.push('style="')
     var colors = app.chart.colors()
@@ -215,7 +215,7 @@ renderer.connection = (link) => {
 
 renderer.synapse = (link) => {
     var div = []
-    div.push('<div data-id="' + link.id + '" class="panel-body link">')
+    div.push('<div data-id="' + link.id + '" data-source="' + link.source + '" data-target="' + link.target + '" class="panel-body link">')
     div.push('<div class="content"')
     div.push('style="')
     var colors = app.chart.colors()

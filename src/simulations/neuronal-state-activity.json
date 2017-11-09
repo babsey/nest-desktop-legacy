@@ -4,15 +4,13 @@
     "group": "nest-desktop",
     "user": "nest-desktop",
     "network": "simple",
-    "version": "0.9.3",
+    "version": "0.10.0",
     "nodes": [{
         "id": 0,
         "element_type": "stimulator",
         "model": "poisson_generator",
-        "x": 400,
-        "y": 550,
-        "color": "#ff7f0e",
-        "stim_time": [0.0, 2000.0],
+        "x": 0,
+        "y": 50,
         "params": {
             "rate": 10.0
         }
@@ -20,18 +18,15 @@
         "id": 1,
         "element_type": "neuron",
         "model": "iaf_cond_alpha",
-        "x": 550,
-        "y": 500,
-        "n": 10,
-        "color": "#1f77b4",
-        "params": {}
+        "x": 150,
+        "y": 0,
+        "n": 10
     }, {
         "id": 2,
         "element_type": "recorder",
         "model": "multimeter",
-        "x": 700,
-        "y": 550,
-        "params": {},
+        "x": 300,
+        "y": 50,
         "record_from": ["V_m"]
     }],
     "links": [{

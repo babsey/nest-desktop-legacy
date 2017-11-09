@@ -11,9 +11,9 @@
     <title></title>
 </head>
 
-<!-- <body> -->
-
-<body data-spy="scroll" data-target="#nodeScrollspy" data-offset="50" style="overflow: hidden;">
+<body>
+<!-- <body style="overflow: hidden;"> -->
+<!-- <body data-spy="scroll" data-target="#nodeScrollspy" data-offset="50" style="overflow: hidden;"> -->
 
     <div id="message">
         <div class="content"></div>
@@ -233,7 +233,7 @@
                         <ul class="nav nav-pills nav-stacked"></ul>
                     </nav>
 
-                    <div id="controller-panel" class="panel" style="margin-top: 50px">
+                    <div id="controller-panel" class="panel">
                         <small>
 
                         <!-- <div class="panel-body"> -->
@@ -327,7 +327,6 @@
         var query = app.query(location.search);
         app.simulation.id = query.simulation;
         app.protocol.id = query.protocol;
-
         app.request.server_check().on('response', () => {
             app.simulation.init()
         })

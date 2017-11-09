@@ -239,6 +239,20 @@ chart.init = () => {
     chart.width = window.innerWidth - chart.margin.left - chart.margin.right
     chart.height = window.innerHeight - chart.margin.top - chart.margin.bottom
 
+    var colors = d3.schemeCategory10;
+    // var colors = colorbrewer.RdYlGn;
+    // var keys = Object.keys(colors);
+    // var colors = colors[keys[keys.length - 1]]
+
+    chart.colors = (id) => {
+        if (id != undefined) {
+            return colors[id % colors.length]
+        }
+        return app.data.nodes.map(
+            (d) => (d.color || colors[d.id % colors.length])
+        )
+    }
+
     $('#chart').attr('width', window.innerWidth).attr('height', chart.height)
     $('#dataChart').attr('width', chart.width)
         .attr('height', chart.height)

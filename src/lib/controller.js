@@ -37,6 +37,24 @@ controller.update = () => {
     controller.simulation.update()
     controller.height = window.innerHeight - $('.tab-content')[0].offsetTop - 10
     $('.tab-content').css('max-height', controller.height + 'px')
+
+    $('.node').removeClass('active');
+    $('.controller').find('.node').show()
+    $('.controller').find('.link').show()
+    if (app.chart.networkLayout.drawing) return
+
+    if (app.selected_node) {
+        $('.controller').find('.node').hide()
+        $('.controller').find('.link').hide()
+        $('.node[data-id="' + app.selected_node.id +'"]').addClass('active');
+        $('.controller').find('.node[data-id="' + app.selected_node.id + '"]').show()
+        $('.controller').find('.link[data-source="' + app.selected_node.id + '"]').show()
+        $('.controller').find('.link[data-target="' + app.selected_node.id + '"]').show()
+    }
+    if (app.selected_link) {
+        $('.controller').find('.link').hide()
+        $('.controller').find('.link[data-id="' + app.selected_link.id + '"]').show()
+    }
 }
 
 controller.init = () => {

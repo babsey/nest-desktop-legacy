@@ -148,6 +148,8 @@ body {
 }
 
 .nav-pills>li>a {
+    border-width: 3px;
+    border-style: solid;
     border-radius: 23px;
     color: black;
     font-weight: bold;
@@ -157,13 +159,13 @@ body {
 }
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-    border-radius: 20px;
     color: black;
+    border-style: dashed;
 }
 
 #controller-panel {
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 0px;
+    margin: 50px 0px 0px 0px;
     box-shadow: none;
 }
 

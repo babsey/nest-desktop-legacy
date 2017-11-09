@@ -71,16 +71,6 @@ network.init = () => {
         })
 
         app.chart.abscissa = app.data.abscissa || 'times';
-        var colors = d3.schemeCategory10;
-        app.chart.colors = (id) => {
-            if (id != undefined) {
-                return colors[id % colors.length]
-            }
-            return app.data.nodes.map(
-                (d) => (d.color || colors[d.id % colors.length])
-            )
-        }
-
         network.update()
     })
 }

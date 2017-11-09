@@ -32,22 +32,22 @@ synController.update = (link) => {
     }
     synElem.find('.recSelect').on('change', function() {
         app.simulation.run(false)
-        app.selected_node = null;
-        app.selected_link = link;
+        // app.selected_node = null;
+        // app.selected_link = link;
         link.syn_spec.receptor_type = parseInt(this.value)
         app.simulation.simulate()
     })
     synElem.find('.modelSlider .sliderInput').on('slideStop', function() {
-        app.selected_node = null;
-        app.selected_link = link;
+        // app.selected_node = null;
+        // app.selected_link = link;
         var param = $(this).parents('.paramSlider').attr('id');
         link.syn_spec[param] = parseFloat(this.value)
         app.chart.networkLayout.update()
         app.simulation.simulate()
     })
     synElem.find('input.paramVal').on('change', function() {
-        app.selected_node = null;
-        app.selected_link = link;
+        // app.selected_node = null;
+        // app.selected_link = link;
         var pkey = $(this).parents('.paramSlider').attr('id');
         var pvalue = $(this).val()
         var schema = $(this).data('schema')
@@ -58,6 +58,7 @@ synController.update = (link) => {
         if (valid.error != null) return
         link.syn_spec[pkey] = valid.value
         app.slider.update_synSlider(link)
+        app.chart.networkLayout.update()
         app.simulation.simulate()
     })
 }
@@ -80,8 +81,8 @@ synController.init = (link) => {
     }
     synElem.find('.synSelect').on('change', function() {
         app.simulation.run(false)
-        app.selected_node = null;
-        app.selected_link = link;
+        // app.selected_node = null;
+        // app.selected_link = link;
         link.syn_spec = {
             model: this.value
         };

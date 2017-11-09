@@ -42,6 +42,7 @@ protocol.addDropdown = (data) => {
         $('#protocol-label').html(datetime)
         app.navigation.editNetwork(false)
         app.chart.init()
+        app.controller.init()
         app.simulation.update()
     })
 }

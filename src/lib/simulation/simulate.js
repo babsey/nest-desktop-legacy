@@ -45,7 +45,7 @@ simulate.simulate = (run) => {
                 var node = app.data.nodes[idx]
                 node.ids = response.data.nodes[idx].ids;
                 var title = app.format.nodeTitle(node)
-                $('#nodeScrollspy .nav').find('.node_' + node.id).attr('title', title)
+                // $('#nodeScrollspy .nav').find('.node_' + node.id).attr('title', title)
             }
             app.simulation.recorders.map((recorder) => {
                 recorder.node.params = response.data.nodes[recorder.node.id].params

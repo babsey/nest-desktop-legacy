@@ -154,7 +154,8 @@ networkLayout.update = () => {
             if (networkLayout.mousedown_link === app.selected_link) app.selected_link = null;
             else app.selected_link = networkLayout.mousedown_link;
             app.selected_node = null;
-            networkLayout.update()
+            app.chart.update()
+            app.controller.update()
         })
         .merge(networkLayout.path)
 
@@ -191,12 +192,12 @@ networkLayout.update = () => {
             else app.selected_node = networkLayout.mousedown_node;
             app.selected_link = null;
 
-            if (!networkLayout.drawing && app.selected_node) {
-                var node = $('#nodeScrollspy .node[data-id="' + app.selected_node.id + '"]');
-                if (node.length == 0) return
-                $((node).find('a').attr('href'))[0].scrollIntoView();
-                scrollBy(0, -50);
-            }
+            // if (!networkLayout.drawing && app.selected_node) {
+            //     var node = $('#nodeScrollspy .node[data-id="' + app.selected_node.id + '"]');
+            //     if (node.length == 0) return
+            //     $((node).find('a').attr('href'))[0].scrollIntoView();
+            //     scrollBy(0, -50);
+            // }
 
             // reposition drag line
             networkLayout.drag_line
@@ -205,6 +206,7 @@ networkLayout.update = () => {
                 .attr('d', 'M' + networkLayout.mousedown_node.x + ',' + networkLayout.mousedown_node.y + 'L' + networkLayout.mousedown_node.x + ',' + networkLayout.mousedown_node.y);
 
             app.chart.update()
+            app.controller.update()
             // networkLayout.ticked()
         })
         .on('mouseup', (d) => {
