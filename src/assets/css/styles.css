@@ -2,11 +2,27 @@ body {
     position: relative;
 }
 
-#message {
-    background: white;
-    position: fixed;
-    padding: 5px;
-    z-index: 2000;
+li a, li a:hover, button a, button a:hover {
+    color: black;
+}
+
+[data-notify="container"] {
+    border-radius: 0px;
+}
+[data-notify="container"] > [data-notify="title"] {
+	font-weight: bold;
+}
+
+.alert-minimalist {
+    width: auto;
+	padding: 0;
+	font-size: 12px;
+    background-color: white;
+}
+.alert-minimalist > [data-notify="icon"] {
+	height: 10px;
+	margin-left: 6px;
+    margin-right: 6px;
 }
 
 .jumbotron {
@@ -90,29 +106,49 @@ body {
     width: 180px;
 }
 
-#protocol-list .popover {
-    width: 300px;
+#protocol-list li a {
+    padding: 3px 10px;
 }
 
-#protocol-list .popover dl {
+.popover {
+    width: 500px;
+}
+
+.popover h4 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 2px ;
+    padding-top: 10px;
+}
+
+.popover dl, #simulation-details dl {
     width: 100%;
     overflow: hidden;
     padding: 0;
     margin: 0
 }
 
-#protocol-list .popover dt {
+.popover dt, #simulation-details dt {
     float: left;
     width: 50%;
     padding: 0;
     margin: 0
 }
 
-#protocol-list .popover dd {
+.popover dd, #simulation-details dd {
     float: left;
     width: 50%;
     padding: 0;
     margin: 0
+}
+
+tr.node.hline, tr.link.hline {
+    border-top: 1px solid black;
+}
+
+tr.node td:first-child, tr.link td:first-child {
+    min-width: 120px;
+    font-weight: bold;
 }
 
 .config {
@@ -128,7 +164,7 @@ body {
     width: 325px;
 }
 
-#nodeScrollspy {
+#nodeSpy {
     position: fixed;
     right: 366px;
 }

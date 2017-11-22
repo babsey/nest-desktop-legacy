@@ -10,38 +10,6 @@
 </head>
 
 <body>
-    <div id='message'>
-        <div class='content'></div>
-    </div>
-
-    <div id='simulation-detail' class='modal fade' role='dialog'>
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                    <h4 class='modal-title'></h4>
-                </div>
-                <div class='modal-body'>
-                    <div class='row'>
-                        <div class='col-sm-6 col-md-4'>
-                            <a class='thumbnail go'>
-                                <img class='image'>
-                            </a>
-                        </div>
-                        <div class='col-sm-6 col-md-8'>
-                            <div class='description'></div>
-                        </div>
-                    </div>
-                </div>
-                <div class='modal-footer'>
-                    <a id='paper' type='button' class='btn btn-default external' style='display:none'>Paper</a>
-                    <a type='button' class='btn btn-default go'>Go</a>
-                    <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id='content'>
         <div class='container-fluid'>
             <div class='pull-right'>
@@ -68,7 +36,10 @@
         </div>
 
         <div id='jumbotron-bg' class='background'></div>
-        <div id='simulations' class='container'></div>
+        <div id='simulations' class='container'>
+            <div id="simulation-list" class="col-md-5"></div>
+            <div id="simulation-details" class="col-md-7"></div>
+        </div>
 </body>
 
 <script>
@@ -93,12 +64,13 @@
     });
 
     var loadSimulations = function() {
-        $('#simulations').empty()
+        $('#simulation-list').empty()
         var groups = configApp.simulation.groups;
         var groupIds = groups.map(function(group) {
-            $('#simulations').append('<div id="sim-' + group.id + '"></div>')
+            if (group.visible == false) return
+            $('#simulation-list').append('<div id="sim-' + group.id + '"></div>')
             $('#sim-' + group.id).append('<h4>' + group.name + ' simulations</h4>')
-            $('#sim-' + group.id).append('<div class="row simulation-list"></div>')
+            $('#sim-' + group.id).append('<div class="row simulation-list list-group"></div>')
             return group.id
         })
         app.db.all().sort({
@@ -109,21 +81,14 @@
             docs.map(function(doc) {
                 if (groupIds.indexOf(doc.group) == -1) return
                 // console.log(doc.group)
-                $('#sim-' + doc.group).find('.simulation-list').append(app.renderer.simulationThumbnails(doc))
-            })
-
-            // $('[data-toggle='tooltip']').tooltip();
-            $('.simulation').on('click', function() {
-                $('#simulation-detail').find('.modal-title').html($(this).find('a').attr('title'));
-                $('#simulation-detail').find('.description').html($(this).find('.description').html());
-                $('#simulation-detail').find('.image').attr('src', $(this).find('img').attr('src'));
-                if ($(this).attr('data-doi') == 'undefined') {
-                    $('#simulation-detail').find('#paper').hide();
-                } else {
-                    $('#simulation-detail').find('#paper').attr('href', 'http://dx.doi.org/' + $(this).data('doi')).show();
-                }
-                $('#simulation-detail').find('.go').attr('href', $(this).find('a').attr('href'));
-                $('#simulation-detail').modal('show');
+                $('#sim-' + doc.group).find('.simulation-list').append(app.renderer.simulation.list(doc))
+                $('#' + doc._id).mouseover(() => {
+                    $('#simulation-details').html(app.renderer.simulation.details(doc))
+                })
+                app.protocol.count(doc._id).exec((err, count) => {
+                    if (count == 0) return
+                    $('#' + doc._id).find('.badge').append(count)
+                })
             })
         })
     }

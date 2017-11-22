@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href='../assets/css/styles.css'></link>
     <style>
         .content {
             margin-top: 10px
@@ -94,8 +95,8 @@
                 // $('textarea').html(JSON.stringify(app.data, undefined, 4))
                 // $('pre').append(app.format.syntaxHighlight(JSON.stringify(app.data, undefined, 4)))
                 // var clipboard = new Clipboard('#copy');
-                $('#nodes').html(app.renderer.simulationNodes(app.data))
-                $('#links').html(app.renderer.simulationLinks(app.data))
+                $('#nodes').html(app.renderer.simulation.nodes(app.data))
+                $('#links').html(app.renderer.simulation.links(app.data))
             })
     </script>
 </body>

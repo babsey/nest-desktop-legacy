@@ -154,7 +154,7 @@ networkLayout.update = () => {
             if (networkLayout.mousedown_link === app.selected_link) app.selected_link = null;
             else app.selected_link = networkLayout.mousedown_link;
             app.selected_node = null;
-            app.chart.update()
+            networkLayout.update()
             app.controller.update()
         })
         .merge(networkLayout.path)
@@ -192,22 +192,14 @@ networkLayout.update = () => {
             else app.selected_node = networkLayout.mousedown_node;
             app.selected_link = null;
 
-            // if (!networkLayout.drawing && app.selected_node) {
-            //     var node = $('#nodeScrollspy .node[data-id="' + app.selected_node.id + '"]');
-            //     if (node.length == 0) return
-            //     $((node).find('a').attr('href'))[0].scrollIntoView();
-            //     scrollBy(0, -50);
-            // }
-
             // reposition drag line
             networkLayout.drag_line
                 .style('marker-end', 'url(#end-arrow)')
                 .classed('hidden', !networkLayout.drawing)
                 .attr('d', 'M' + networkLayout.mousedown_node.x + ',' + networkLayout.mousedown_node.y + 'L' + networkLayout.mousedown_node.x + ',' + networkLayout.mousedown_node.y);
 
-            app.chart.update()
+            networkLayout.update()
             app.controller.update()
-            // networkLayout.ticked()
         })
         .on('mouseup', (d) => {
             // console.log('node mouseup')
@@ -230,15 +222,15 @@ networkLayout.update = () => {
             var target = networkLayout.mouseup_node;
 
             if (target.element_type == 'stimulator' && target.model != 'spike_dilutor') {
-                app.message.show('Error!', 'Stimulators can not be targets.', 2000)
+                app.message.show('Error!', 'Stimulators can not be targets.')
                 return
             }
             if (source.element_type == 'recorder') {
-                app.message.show('Error!', 'Recorders can not be sources.', 2000)
+                app.message.show('Error!', 'Recorders can not be sources.')
                 return
             }
             if (source.element_type == 'stimulator' && target.element_type == 'recorder') {
-                app.message.show('Error!', 'Stimulators can not connect to recorders directly.', 2000)
+                app.message.show('Error!', 'Stimulators can not connect to recorders directly.')
                 return
             }
 

@@ -38,42 +38,70 @@ network.update = () => {
             )
         })
     );
-
 }
 
-network.init = () => {
-    app.message.log('Initialize network')
-    return new Promise((resolve, reject) => {
-        if (app.protocol.id) {
-            app.protocol.get(app.protocol.id)
-                .exec((err, docs) => {
-                    app.data = docs;
-                    resolve()
-                })
-        } else {
-            app.db.get(app.simulation.id)
-                .exec((err, docs) => {
-                    app.data = docs;
-                    resolve()
-                })
-        }
-    }).then(() => {
-        $('#title').html(app.data.name)
-        app.data.kernel = app.data.kernel || {}
-        app.data.kernel.time = 0.0;
-        app.data.sim_time = app.data.sim_time || 1000.0;
-        app.data.nodes.map((node) => {
-            node.params = node.params || {}
-        })
-        app.data.links.map((link) => {
-            link.conn_spec = link.conn_spec || {}
-            link.syn_spec = link.syn_spec || {}
-        })
+network.clear = () => {
+    delete app.data.createdAt;
+    delete app.data.parentId;
+    app.data.kernel = {}
+    app.data.sim_time = 1000.
+    app.data.nodes = [];
+    app.data.links = [];
+}
 
-        app.chart.abscissa = app.data.abscissa || 'times';
-        network.update()
+network.clean = () => {
+    app.data.kernel = app.data.kernel || {}
+    app.data.kernel.time = 0.0;
+    app.data.sim_time = app.data.sim_time || 1000.0;
+    app.data.nodes.map((node) => {
+        node.params = node.params || {}
     })
+    app.data.links.map((link) => {
+        link.conn_spec = link.conn_spec || {}
+        link.syn_spec = link.syn_spec || {}
+    })
+    app.chart.abscissa = app.data.abscissa || 'times';
 }
+
+network.edit = (drawing) => {
+    app.selected_node = null;
+    app.selected_link = null;
+    app.chart.networkLayout.drawing = drawing;
+    var networkLayout = app.config.app().chart.networkLayout
+    app.chart.networkLayout.toggle(drawing || networkLayout)
+    app.chart.networkLayout.update()
+    if (drawing) {
+        app.db.clone(app.data).then((data) => {
+            app.data_original = data;
+        })
+        $('.nav-tabs a[href="#nodes"]').tab('show');
+    }
+    $('.hideOnDrawing').toggle(!drawing)
+    $('.disableOnDrawing').toggleClass('disabled', drawing)
+    $('#autoscale').prop('checked', 'checked')
+    $('#edit-network-button').toggle(drawing)
+}
+
+network.init = () => new Promise((resolve, reject) => {
+    app.message.log('Initialize network')
+    if (app.protocol.id) {
+        app.protocol.get(app.protocol.id)
+            .exec((err, docs) => {
+                app.data = docs;
+                resolve()
+            })
+    } else {
+        app.db.get(app.simulation.id)
+            .exec((err, docs) => {
+                app.data = docs;
+                resolve()
+            })
+    }
+}).then(() => {
+    $('#title').html(app.data.name)
+    network.clean()
+    network.update()
+})
 
 
 module.exports = network;

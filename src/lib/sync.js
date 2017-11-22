@@ -35,6 +35,7 @@ sync.remoteDB = () => {
             }
             configApp.simulation.groups.map((group) => {
                 // console.log(group)
+                if (group.sync == false) return
                 var remoteDB = new PouchDB('http://' + host + ':' + port + '/' + group.id);
                 remoteDB.allDocs({
                     include_docs: true
@@ -44,15 +45,23 @@ sync.remoteDB = () => {
                     remoteDocs.rows.map((remoteRow) => {
                         var remoteDoc = remoteRow.doc;
                         if (remoteDoc._id.startsWith('_design')) return
-                        if ((group == 'public') && (remoteDoc.user != configApp.user.id)) return
                         // console.log(remoteDoc)
                         app.db.localDB.findOne({
-                            _id: remoteDoc._id,
-                        }).exec((err, localDoc) => {
-                            if (localDoc != null) return
-                            // console.log(remoteDoc)
-                            remoteDoc.updatedAt = new Date;
-                            app.db.localDB.insert(remoteDoc)
+                            _id: remoteDoc._id
+                        }).exec((err, doc) => {
+                            if (doc) {
+                                if (!doc.updatedAt) return
+                                if (Date(remoteDoc.updatedAt) <= Date(doc.updatedAt)) return
+                            }
+                            app.db.localDB.update({
+                                _id: remoteDoc._id,
+                            }, remoteDoc, {
+                                upsert: true
+                            }, () => {
+                                app.db.localDB.findOne({
+                                    _id: remoteDoc._id
+                                })
+                            })
                         })
                     })
                 })
@@ -67,7 +76,13 @@ sync.remoteDB = () => {
                 localDocs.map((localDoc) => {
                     if (localDoc.user != configApp.user.id) return
                     // console.log(localDoc)
-                    remoteDB.putIfNotExists(localDoc._id, localDoc)
+                    remoteDB.upsert(localDoc._id, (doc) => {
+                        doc = localDoc
+                        return doc
+                    }).catch(function(err) {
+                        // error
+                        remoteDB.putIfNotExists(localDoc._id, localDoc)
+                    });
                 })
             });
             app.message.log('Remote DB synchronized.')

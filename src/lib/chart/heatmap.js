@@ -29,9 +29,6 @@ heatmap.update = (recorder) => {
         y: d3.range(0, app.data.nodes[sourceId].nrow),
         c: h1,
     });
-
-    $('#simulation-add').attr('disabled', false)
-    $('#simulation-resume').attr('disabled', false)
 }
 
 heatmap.init = (idx) => {

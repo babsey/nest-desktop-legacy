@@ -216,8 +216,6 @@ chart.update = () => {
         })
         recorder.chart.update(recorder)
     })
-    $('#simulation-add').attr('disabled', false)
-    $('#simulation-resume').attr('disabled', false)
 }
 
 chart.init = () => {

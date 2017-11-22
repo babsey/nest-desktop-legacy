@@ -1,7 +1,7 @@
 [{
     "id": "random_seed",
     "label": "Random number generated seed",
-    "level": 3,
+    "level": 4,
     "min": 0,
     "max": 1000,
     "value": 0,
@@ -15,12 +15,4 @@
     "step": 10.0,
     "value": 1000.0,
     "scale": "logarithmic"
-}, {
-    "id": "res_time",
-    "label": "Time step for running simulation (ms)",
-    "level": 4,
-    "min": 1.0,
-    "max": 20.0,
-    "step": 1.0,
-    "value": 10.0
 }]

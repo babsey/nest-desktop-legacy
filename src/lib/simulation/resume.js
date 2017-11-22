@@ -2,7 +2,7 @@
 
 var resume = {};
 
-resume.resume = () => {
+resume.run = () => {
     if (!(app.simulation.running)) return
 
     app.request.request({
@@ -15,7 +15,7 @@ resume.resume = () => {
         })
         .done((response) => {
             if (response.error) {
-                app.message.show('Warning', response.error, 2000)
+                app.message.show('Warning', response.error)
                 return
             }
             if (!app.simulation.running) return
@@ -38,8 +38,57 @@ resume.resume = () => {
             })
             app.chart.update()
             app.controller.update()
-            app.simulation.resume()
+            resume.run()
         })
 }
+
+resume.update = () => {
+    $('.disableOnRunning').attr('disabled', app.simulation.running)
+    $('.dataSlider').find('.sliderInput').slider(app.simulation.running ? 'disable' : 'enable')
+    $('#connections').find('.sliderInput').slider(app.simulation.running ? 'disable' : 'enable')
+    if (app.simulation.running) {
+        app.message.log('The simulation is running continuously.')
+        resume.message = app.message.resume()
+    }
+}
+
+resume.pause = () => {
+    if (resume.message) {
+        resume.message.close()
+    }
+    app.simulation.running = false;
+    resume.update()
+}
+
+resume.start = () => {
+    app.simulation.running = true;
+    resume.update()
+    resume.run()
+}
+
+resume.slider = () => {
+    var model = {
+        "id": "res_time",
+        "label": "Simulation time step (ms)",
+        "level": 4,
+        "min": 1.0,
+        "max": 20.0,
+        "step": 1.0,
+        "value": 10.0
+    };
+    app.slider.create_dataSlider('#message-resume .content', model.id, model)
+        .on('slideStop', function(d) {
+            app.data.res_time = d.value
+        })
+    $('#message-resume').find('input.paramVal').on('change', function() {
+        var value = $(this).val();
+        var schema = $(this).data('schema');
+        var valid = app.validation.validate(value, schema)
+        if (valid.error != null) return
+        app.data.res_time = valid.value;
+        $('.res_timeInput').slider('setValue', parseFloat(valid.value));
+    })
+}
+
 
 module.exports = resume;

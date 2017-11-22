@@ -4,7 +4,7 @@
     "group": "nest-desktop",
     "user": "nest-desktop",
     "network": "simple",
-    "version": "0.10.0",
+    "version": "0.11.0",
     "nodes": [{
         "id": 0,
         "element_type": "stimulator",

@@ -2,7 +2,16 @@
 
 var simulationController = {};
 
-simulationController.update = () => {
+simulationController.update = (options) => {
+    if (!(options.id in app.data)) return
+    var simElem = $('#simulation .content');
+    var simulationSlider = simElem.find('#' + options.id);
+    var value = app.data[options.id];
+    simulationSlider.find('.' + options.id + 'Input').slider('setValue', parseFloat(value));
+    simulationSlider.find('.' + options.id + 'Val').val(value);
+}
+
+simulationController.updateAll = () => {
     var simElem = $('#simulation .content')
     simElem.find('#abscissaSelect').empty()
     simElem.find('#abscissaSelect').append('<option value="times">' + app.model.record_labels.times + '</option>')
@@ -15,14 +24,15 @@ simulationController.update = () => {
 
         simElem.find('#abscissaSelect').on('change', function() {
             $('#autoscale').prop('checked', 'checked')
-            $("#simulation-resume").toggleClass('disabled', app.chart.abscissa == 'times')
             app.chart.abscissa = this.value;
             app.chart.update()
         })
     })
     simElem.find('#abscissaSelect').val(app.chart.abscissa)
     simElem.find('#abscissa').toggle(simElem.find('#abscissaSelect option').length > 1)
-    $("#simulation-resume").toggleClass('disabled', app.chart.abscissa != 'times')
+    simElem.find('.dataSlider').each(function() {
+        simulationController.update({'id': this.id})
+    })
 }
 
 simulationController.init = () => {
@@ -34,30 +44,33 @@ simulationController.init = () => {
         model.value = app.data[model.id];
         app.slider.create_dataSlider('#simulation .content', model.id, model)
             .on('slideStop', function(d) {
-                if ($(this).parents('.dataSlider').attr('id') == 'random_seed') {
+                var simulationSlider = $(this).parents('.dataSlider');
+                var id = simulationSlider.attr('id');
+                if (id == 'random_seed') {
                     app.simulation.randomSeed = false;
                     app.navigation.update_randomSeed()
                 }
-                app.data[$(this).parents('.dataSlider').attr('id')] = d.value
-                app.simulation.simulate()
+                app.data[id] = d.value;
+                app.simulation.simulate.init()
             })
     }
     simElem.find('input.paramVal').on('change', function() {
-        var pkey = $(this).parents('.dataSlider').attr('id');
-        if (pkey == 'random_seed') {
-            app.simulation.randomSeed = false;
-            app.navigation.update_randomSeed()
-        }
-        var pvalue = $(this).val()
-        var schema = $(this).data('schema')
-        var valid = app.validation.validate(pkey, pvalue, schema)
+        var simulationSlider = $(this).parents('.dataSlider');
+        var value = $(this).val();
+        var schema = $(this).data('schema');
+        var valid = app.validation.validate(value, schema);
         $(this).parents('.form-group').toggleClass('has-success', valid.error == null)
         $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
         $(this).parents('.form-group').find('.help-block').html(valid.error)
         if (valid.error != null) return
-        app.data[pkey] = valid.value
-        app.slider.update_simulationSlider()
-        app.simulation.simulate()
+        var id = simulationSlider.attr('id');
+        if (id == 'random_seed') {
+            app.simulation.randomSeed = false;
+            app.navigation.update_randomSeed()
+        }
+        app.data[id] = valid.value;
+        simulationSlider.find('.' + id + 'Input').slider('setValue', valid.value)
+        app.simulation.simulate.init()
     })
 
     simElem.append('<div id="abscissa" class="form-group" style="display:none"></div>')

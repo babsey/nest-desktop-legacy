@@ -10,10 +10,8 @@ var controller = {
 
 controller.initNodes = () => {
     $('#nodes .controller').empty()
-    $('#nodeScrollspy .nav').empty()
-    app.data.nodes.map((node) => {
-        controller.node.init(node)
-    })
+    $('#nodeSpy .nav').empty()
+    app.data.nodes.map((node) => controller.node.init(node))
 }
 
 controller.initLinks = () => {
@@ -34,7 +32,7 @@ controller.initLinks = () => {
 
 controller.update = () => {
     app.message.log('Update controller')
-    controller.simulation.update()
+    controller.simulation.updateAll()
     controller.height = window.innerHeight - $('.tab-content')[0].offsetTop - 10
     $('.tab-content').css('max-height', controller.height + 'px')
 
@@ -46,7 +44,7 @@ controller.update = () => {
     if (app.selected_node) {
         $('.controller').find('.node').hide()
         $('.controller').find('.link').hide()
-        $('.node[data-id="' + app.selected_node.id +'"]').addClass('active');
+        $('.node[data-id="' + app.selected_node.id + '"]').addClass('active');
         $('.controller').find('.node[data-id="' + app.selected_node.id + '"]').show()
         $('.controller').find('.link[data-source="' + app.selected_node.id + '"]').show()
         $('.controller').find('.link[data-target="' + app.selected_node.id + '"]').show()
@@ -59,6 +57,7 @@ controller.update = () => {
 
 controller.init = () => {
     app.message.log('Initialize controller')
+    controller.level = app.config.app().simulation.level;
     controller.borderWidth = '4px';
 
     controller.simulation.init()

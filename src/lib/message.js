@@ -1,36 +1,81 @@
 "use strict"
 
-const uuidV4 = require('uuid/v4');
+require('bootstrap-notify');
 
 var message = {};
 
-message.show = (mode, content, duration) => {
-    var messageId = uuidV4();
-    $('#message .content').append('<div id="' + messageId + '" class="' + mode + '"><strong>' + mode + '</strong> ' + content + '</div>')
+message.notify = $.notify
 
-    if (duration) {
-        var timeoutId = setTimeout(() => {
-            $('#' + messageId).fadeOut('slow')
-        }, duration)
-        $('#' + messageId).data('timeoutId', timeoutId)
-    }
-    $('#' + messageId).on('mouseover', () => {
-        message.hide(messageId)
-    })
-    return messageId
-}
+message.show = (title, content, delay) => $.notify({
+    // options
+    icon: 'fa fa-ellipsis-v',
+    title: title,
+    message: content
+}, {
+    // settings
+    type: 'minimalist',
+    allow_dismiss: false,
+    placement: {
+        from: "top",
+        align: "left"
+    },
+    delay: (delay != undefined ? delay : 5000),
+    offset: {
+        y: 50,
+        x: 5,
+    },
+    spacing: 0
+})
 
 message.log = (text) => {
     if (!(app.config.app().log)) return
-    if ($('#message .content').find('div').length > 30) {
-        $('#message .content').find('div:first-child').remove()
-    }
-
-    var date = new Date;
-    message.show(date.toLocaleTimeString(), text)
+    var date = new Date().toLocaleTimeString();
+    message.show(date, text, 2000)
 }
 
-message.hide = (messageId) => $('#' + messageId).hide();
-message.clear = (messageId) => $('#message .content div').hide();
+message.simulate = () => $.notify({
+    // options
+    icon: 'fa fa-hourglass-start',
+    title: 'Please wait.',
+    message: 'Simulation is running.'
+}, {
+    // settings
+    type: 'info',
+    placement: {
+        from: "top",
+        align: "center"
+    },
+    delay: 0,
+    template: '<div data-notify="container" class="col-xs-11 col-sm-2 alert alert-{0}" role="alert">' +
+        '<span data-notify="icon"></span> ' +
+        '<span data-notify="title">{1}</span> ' +
+        '<span data-notify="message">{2}</span>' +
+        '</div>'
+})
+
+message.resume = () => $.notify({
+    // options
+    icon: 'fa fa-pause',
+    title: '  ',
+    message: 'Click me to pause simulation.'
+}, {
+    // settings
+    type: 'default',
+    placement: {
+        from: "top",
+        align: "center"
+    },
+    offset: 0,
+    delay: 0,
+    template: '<div data-notify="container" class="col-xs-11 col-sm-2 alert alert-{0}" role="alert" id="message-resume" style="background-color:white">' +
+        '<button aria-hidden="true" class="btn btn-danger" type="button" onclick="app.simulation.resume.pause()">' +
+        '<span data-notify="icon"></span>' +
+        '<span data-notify="title">{1}</span>' +
+        '<span data-notify="message">{2}</span>' +
+        '</button>' +
+        '<div class="content" style="margin-top:10px"></div>' +
+        '</div>',
+    onShow: () => app.simulation.resume.slider()
+})
 
 module.exports = message

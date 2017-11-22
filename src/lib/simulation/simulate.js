@@ -5,11 +5,8 @@ const math = require('mathjs');
 
 var simulate = {};
 
-simulate.simulate = (run) => {
+simulate.run = () => {
     if (!app.serverRunning) return
-    if (app.chart.networkLayout.drawing) return
-    if (!(app.simulation.runAfterChange || run)) return
-    if (app.simulation.running) return
     if (app.simulation.recorders.length == 0) return
     if (app.simulation.recorders.filter((recorder) => {
             return recorder.node.model != undefined
@@ -22,8 +19,22 @@ simulate.simulate = (run) => {
     }
     if (app.simulation.randomSeed) {
         app.data.random_seed = parseInt(Math.random() * 1000);
-        app.slider.update_simulationSlider()
+        app.controller.simulation.update({
+            id: 'random_seed'
+        })
     }
+    app.simulation.recorders.map((recorder) => {
+        if (recorder.node.params.interval == undefined) return
+        var interval = recorder.node.params.interval;
+        var resolution = app.data.kernel.resolution || 1.0;
+        if (interval < resolution) {
+            app.data.kernel.resolution = interval;
+            app.controller.kernel.update({
+                id: 'resolution'
+            })
+            app.message.show('Info', 'Time resolution of the simulation was changed. See time interval of the recording devices.')
+        }
+    })
 
     app.request.request({
             id: app.data._id,
@@ -40,12 +51,11 @@ simulate.simulate = (run) => {
             links: app.data.links,
         })
         .done((response) => {
-            // if (response.error) return
+            if (response.error) return
             for (var idx in response.data.nodes) {
                 var node = app.data.nodes[idx]
                 node.ids = response.data.nodes[idx].ids;
                 var title = app.format.nodeTitle(node)
-                // $('#nodeScrollspy .nav').find('.node_' + node.id).attr('title', title)
             }
             app.simulation.recorders.map((recorder) => {
                 recorder.node.params = response.data.nodes[recorder.node.id].params
@@ -118,12 +128,41 @@ simulate.simulate = (run) => {
             app.chart.update()
             app.controller.update()
             app.protocol.all().exec((err, docs) => {
+                app.screen.capture(app.data, false)
                 if ((docs.length == 0 || app.protocol.id == undefined) && app.simulation.autoProtocol) {
-                    app.screen.capture(app.data, false)
                     app.protocol.add()
                 }
             })
         })
+}
+
+simulate.init = () => {
+    if (!app.simulation.runAfterChange) return
+    if (app.chart.networkLayout.drawing) return
+    if (app.simulation.running) return
+    simulate.run()
+}
+
+simulate.start = () => {
+    if (app.simulation.running) return
+    app.simulation.simulate.message = app.message.simulate();
+    $('.disableOnSimulate').attr('disabled', true);
+    $('select').prop('disabled', true);
+    $('.disableNode').prop('disabled', true);
+    $('.disableLink').prop('disabled', true);
+    $('.paramVal').attr('disabled', true);
+    $('.sliderInput').slider('disable');
+}
+
+simulate.end = () => {
+    if (app.simulation.running) return
+    app.simulation.simulate.message.close();
+    $('.disableOnSimulate').attr('disabled', false);
+    $('select:not(.disabled)').prop('disabled', false);
+    $('.disableNode').prop('disabled', false);
+    $('.disableLink').prop('disabled', false);
+    $('.paramVal').attr('disabled', false);
+    $('.sliderInput').slider('enable');
 }
 
 module.exports = simulate;

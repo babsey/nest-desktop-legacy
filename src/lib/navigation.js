@@ -9,32 +9,9 @@ navigation.update_randomSeed = () => {
     $('#random-seed').find('.glyphicon-ok').toggle(app.simulation.randomSeed)
 }
 
-navigation.editNetwork = (drawing) => {
-    // app.message.clear()
-    if (drawing) {
-        app.chart.networkLayout.drawing = drawing;
-        var networkLayout = app.config.app().chart.networkLayout
-        app.chart.networkLayout.toggle(drawing || networkLayout)
-        app.chart.networkLayout.update()
-        $('.nav-tabs a[href="#nodes"]').tab('show');
-        $('.hideOnDrawing').toggle(!drawing)
-        $('.disableOnDrawing').toggleClass('disabled', drawing)
-        $('#edit-network-button').show()
-    } else {
-        app.chart.networkLayout.drawing = drawing;
-        var networkLayout = app.config.app().chart.networkLayout
-        app.chart.networkLayout.toggle(drawing || networkLayout)
-        app.chart.networkLayout.update()
-        $('.nav-tabs a[href="#nodes"]').tab('show');
-        $('.hideOnDrawing').toggle(!drawing)
-        $('.disableOnDrawing').toggleClass('disabled', drawing)
-        $('#edit-network-button').hide()
-        $('#autoscale').prop('checked', 'checked')
-    }
-}
-
 navigation.events = () => {
-
+    // this should be called only one time
+    app.message.log('Event handler for navigation')
     // Load protocol events
     app.protocol.events()
 
@@ -43,22 +20,6 @@ navigation.events = () => {
     }, function() {
         $(this).find(' .fa').removeClass('fa-spin');
     });
-
-    $('#index').on('click', () => {
-        app.simulation.stop().then(() => {
-            window.location = "../index.html"
-        })
-    })
-    $('#app-refresh').on('click', () => {
-        app.simulation.stop().then(() => {
-            if (app.simulation.id == app.data._id) {
-                var location = './simulation.html?simulation=' + app.simulation.id
-            } else {
-                var location = './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id
-            }
-            window.location = location
-        })
-    })
     $('#chart-color').on('click', () => {
         var color = app.config.app().chart.color || false
         var configApp = app.config.app();
@@ -75,38 +36,42 @@ navigation.events = () => {
         app.chart.networkLayout.toggle(networkLayout)
     })
     $('#edit-network').on('click', () => {
-        navigation.editNetwork(true)
-    })
-    $('#edit-network-cancel').on('click', () => {
-        if (app.simulation.id == app.data._id) {
-            var location = './simulation.html?simulation=' + app.simulation.id
-        } else {
-            var location = './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id
-        }
-        window.location = location
-    })
-    $('#edit-network-save').on('click', () => {
-        navigation.editNetwork(false)
-        app.chart.init()
-        setTimeout(app.simulation.update, 100)
+        app.protocol.add().then(() => {
+            setTimeout(() => {
+                app.network.edit(true)
+                app.chart.update()
+                app.controller.update()
+            }, 200)
+        })
     })
     $('#clear-network').on('click', () => {
-        app.simulation.stop()
-        app.selected_node = null;
-        app.selected_node = null;
-        app.data.nodes = []
-        app.data.links = []
-        app.simulation.recorders = [];
+        app.protocol.add().then(() => {
+            setTimeout(() => {
+                app.network.edit(true)
+                app.network.clear()
+                app.network.update()
+                app.chart.init()
+                app.controller.init()
+            }, 200)
+        })
+    })
+    $('#edit-network-clear').on('click', () => {
+        app.network.clear()
+        app.network.update()
         app.chart.init()
         app.controller.init()
-        app.network.update()
-        app.simulation.update()
-        navigation.editNetwork(true)
     })
-    $('#simulation-config-button').on('click', () => {
-        if (app.data.user === app.config.app().user.id) {
-            $('#simulation-edit').show()
-        }
+    $('#edit-network-cancel').on('click', () => {
+        app.data = app.data_original;
+        app.network.clean()
+        app.network.update()
+        app.simulation.reload()
+    })
+    $('#edit-network-save').on('click', () => {
+        app.network.edit(false)
+        app.network.clean()
+        app.network.update()
+        app.simulation.reload()
     })
     $('#run-after-change').on('click', () => {
         var configApp = app.config.app();
@@ -137,20 +102,21 @@ navigation.events = () => {
         app.config.save('app', configApp)
         $('#auto-protocol').find('.glyphicon-ok').toggle(!autoProtocol)
     })
-    $('#clear-protocol').on('click', () => {
-        app.protocol.clear()
+    $('#delete-protocol').on('click', app.protocol.delete)
+    $('#delete-all-protocols-dialog').on('shown.bs.modal', function() {
+        $('#delete-all-protocols-cancel').trigger('focus')
     })
-
-    $('.simulation-run').on('click', app.simulation.simulate)
-    $('#simulation-reset').on('click', app.simulation.reset)
-    $('#simulation-resume').on('click', app.simulation.resumeToggle)
+    $('.simulation-run').on('click', app.simulation.simulate.run)
+    $('#simulation-resume').on('click', app.simulation.resume.start)
     $('#capture-screen').on('click', () => {
         app.screen.capture(app.data, true)
         app.protocol.update()
     })
     $('#view-data').on('click', () => {
         app.protocol.add().then(() => {
-            location.href = 'view_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id;
+            setTimeout(() => {
+                location.href = 'view_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id;
+            }, 200.)
         });
     })
     $('#view-raw-data').on('click', () => {
@@ -162,43 +128,38 @@ navigation.events = () => {
         $('#simulation-add-submit').show()
         $('#simulation-form #simulation-name').focus()
     })
-    $('#simulation-add-submit').on('click', function(e) {
-        $(this).hide()
-        app.db.clone(app.data).then((data) => {
-            data.name = $('#simulation-form #simulation-name').val();
-            data.description = $('#simulation-form #simulation-description').val();
-            app.db.add(data)
-            app.simulation.id = data._id
-            $('#title').html(data.name)
-            app.navigation.update()
-        });
-    })
     $('#simulation-edit').on('click', (e) => {
-        $('#simulation-form #simulation-name').val(app.data.name)
+        $('#simulation-edit-submit').show()
+        $('#simulation-form #simulation-name').val(app.data.name).focus()
         $('#simulation-form #simulation-description').val(app.data.description)
-        if (app.data.group = 'user') {
-            $('#simulation-edit-submit').show()
-        }
+    })
+    $('#simulation-form-dialog').on('hidden.bs.modal', (e) => {
+        $('button[type="submit"]').hide()
+    })
+    $('#simulation-add-submit').on('click', function(e) {
+        $(this).hide(() => {
+            app.db.clone(app.data).then((data) => {
+                data.name = $('#simulation-form #simulation-name').val();
+                data.description = $('#simulation-form #simulation-description').val();
+                app.db.add(data)
+                $('#title').html(data.name)
+                app.navigation.update()
+            });
+        })
     })
     $('#simulation-edit-submit').on('click', function(e) {
-        $(this).hide()
-        app.db.clone(app.data).then((data) => {
-            data.name = $('#simulation-form #simulation-name').val()
-            data.description = $('#simulation-form #simulation-description').val()
-            app.db.update(data)
-            $('#title').html(data.name)
-            app.navigation.update()
-        });
-    })
-    $('.simulation').on('click', function(d) {
-        app.simulation.stop()
-        // app.simulation.id = this.id
-        // app.simulation.init()
-        location.href = location.origin + location.pathname + '?simulation=' + this.id
-    })
-    $('#close').on('click', () => {
-        app.simulation.stop()
-        setTimeout(window.close, 100)
+        $(this).hide(() => {
+            app.db.clone(app.data).then((data) => {
+                data.name = $('#simulation-form #simulation-name').val()
+                data.description = $('#simulation-form #simulation-description').val()
+                $('#title').html(data.name)
+                app.db.update(data)
+                app.data._id = data._id
+                app.data.name = data.name
+                app.data.description = data.description
+                app.navigation.update()
+            });
+        })
     })
     $('.level').on('click', function() {
         $('.level').find('.glyphicon-ok').hide()
@@ -206,7 +167,6 @@ navigation.events = () => {
         var configApp = app.config.app()
         configApp.simulation.level = parseInt($(this).attr('level'))
         app.config.save('app', configApp)
-        if (app.chart.networkLayout.drawing) return
         for (var nid in app.data.nodes) {
             var node = app.data.nodes[nid];
             if (node.model) {
@@ -229,12 +189,13 @@ navigation.events = () => {
 
 navigation.update = () => {
     app.message.log('Update navigation')
+
     // Load simulation list
-    $('#get-simulation-list').attr('disabled', 'disabled')
+    $('#get-simulation-list').prop('disabled', true)
     $('#simulation-list').empty()
     app.db.filter({
         _id: {
-            $ne: app.data._id
+            $ne: app.simulation.id
         },
         group: app.data.group,
     }).sort({
@@ -242,32 +203,31 @@ navigation.update = () => {
     }).exec((err, docs) => {
         if (docs.length == 0) return
         docs.map((doc) => {
-            $('#simulation-list').append(app.renderer.simulationDropdown(doc))
+            $('#simulation-list').append(app.renderer.simulation.dropdown(doc))
+            $('#simulation-list #' + doc._id).popover({
+                container: 'body',
+                html: true,
+                animation: false,
+                trigger: 'hover',
+                placement: 'left',
+                content: function() {
+                    return app.renderer.simulation.popover(doc)
+                }
+            });
         });
+        $('#get-simulation-list').prop('disabled', false)
+        $('.simulation').on('click', function(d) {
+            location.href = location.origin + location.pathname + '?simulation=' + this.id
+        })
     })
-    $('#get-simulation-list').attr('disabled', false)
-
-    setTimeout(() => {
-        $('#simulation-list a[rel=popover]').popover({
-            html: true,
-            animation: false,
-            trigger: 'hover',
-            placement: 'left',
-            content: function() {
-                return app.renderer.simulationPopover(this)
-            }
-        });
-        app.navigation.events()
-    }, 1000)
-
-    navigation.editNetwork((app.data.nodes.length == 0))
+    app.network.edit((app.data.nodes.length == 0))
 }
 
 navigation.init = () => {
     app.message.log('Initialize navigation')
     app.simulation.runAfterChange = app.config.app().simulation.runAfterChange || false;
     app.simulation.autoReset = app.config.app().simulation.autoReset || false;
-    app.simulation.randomSeed = app.config.app().simulation.randomSeed|| false;
+    app.simulation.randomSeed = app.config.app().simulation.randomSeed || false;
     app.simulation.autoProtocol = app.config.app().simulation.autoProtocol || false;
     $(".config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
     $(".config").find('#run-after-change').find('.glyphicon-ok').toggle(app.simulation.runAfterChange)
@@ -276,7 +236,7 @@ navigation.init = () => {
     $(".config").find('#auto-protocol').find('.glyphicon-ok').toggle(app.simulation.autoProtocol)
     $(".config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
     $("#slider-config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
-    // navigation.update()
+    app.navigation.events()
 }
 
 module.exports = navigation;

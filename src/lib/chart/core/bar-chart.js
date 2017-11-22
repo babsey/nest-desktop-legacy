@@ -25,13 +25,13 @@ chart.update = (recorder) => {
     chart.xScale.range([0, +chart.g.attr('width')])
     chart.yScale.range([+chart.g.attr('height'), 0])
 
-    if (app.selected_node && app.selected_node.element_type == 'neuron' && recorder.sources.indexOf(app.selected_node.id) != -1) {
-        var nidx = app.selected_node.id;
-        var idx = app.selected_node.ids.map((d) => recorder.senders.indexOf(d))
-    } else {
+    // if (app.selected_node && app.selected_node.element_type == 'neuron' && recorder.sources.indexOf(app.selected_node.id) != -1) {
+    //     var nidx = app.selected_node.id;
+    //     var idx = app.selected_node.ids.map((d) => recorder.senders.indexOf(d))
+    // } else {
         var nidx = null;
         var idx = 'y';
-    }
+    // }
 
     chart.xScale.domain(app.chart.xScale.domain())
     chart.yScale.domain([0, d3.max(chart.data, (d) => chart.yVal(d, idx.length == 1 ? idx[0] : idx))])

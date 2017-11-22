@@ -7,19 +7,47 @@ const jsonfile = require('jsonfile')
 
 var protocol = {};
 
-protocol.all = () => (protocol.db.find({}));
+protocol.all = () => protocol.db.find({});
 
-protocol.get = (id) => (
-    protocol.db.findOne({
-        _id: id
+protocol.get = (id) => protocol.db.findOne({
+    _id: id
+});
+
+protocol.backup = () => new Promise((resolve, reject) => {
+    protocol.all().exec((err, docs) => {
+        if (err) reject()
+        var d = new Date();
+        var date = d.toISOString();
+        var filename = path.join(process.cwd(), configApp.datapath, 'protocols', '.' + date + '_' + app.simulation.id + '.backup')
+        var backupDB = new NeDB({
+            filename: filename,
+            timestampData: true,
+            autoload: true,
+        })
+        backupDB.insert(docs, (err, docs) => {
+            console.log('Backup successful: ' + docs.length + ' protocol docs')
+            resolve()
+        })
     })
-);
+})
 
-protocol.clear = () => (
-    protocol.db.remove({}, { multi: true }, function(err, numDeleted) {
+protocol.delete = () => protocol.db.remove({
+    '_id': app.data._id
+}, {
+    multi: true
+}, function(err, numDeleted) {
+    console.log('Deleted', numDeleted, 'protocol(s)')
+    window.location = './simulation.html?simulation=' + app.simulation.id
+})
+
+protocol.deleteAll = () => protocol.backup().then(() => {
+    protocol.db.remove({}, {
+        multi: true
+    }, function(err, numDeleted) {
         console.log('Deleted', numDeleted, 'protocol(s)')
-        protocol.update()
-    }))
+        window.location = './simulation.html?simulation=' + app.simulation.id
+    })
+})
 
 protocol.addDropdown = (data) => {
     var configApp = app.config.app();
@@ -34,23 +62,21 @@ protocol.addDropdown = (data) => {
         html: true,
         animation: false,
         trigger: 'hover',
-        content: app.renderer.simulationProtocol(data)
+        content: app.renderer.protocol.popover(data)
     });
     $('#' + data._id).on('click', (e) => {
         e.preventDefault()
-        app.data = data;
-        $('#protocol-label').html(datetime)
-        app.navigation.editNetwork(false)
-        app.chart.init()
-        app.controller.init()
-        app.simulation.update()
+        app.network.edit(false)
+        app.protocol.id = data._id;
+        app.network.init().then(() => {
+            app.chart.init()
+            app.controller.init()
+            app.simulation.update()
+        })
     })
 }
 
-protocol.removeDropdown = (data) => {
-    $('#' + data._id).remove()
-    // protocol.addDropdown(data)
-}
+protocol.removeDropdown = (data) => $('#' + data._id).remove();
 
 protocol.add = () => {
     var configApp = app.config.app()
@@ -77,6 +103,7 @@ protocol.add = () => {
                             app.data._id = doc._id
                             app.data.updatedAt = doc.updatedAt
                             resolve(false)
+                            // setTimeout(() => resolve(false), 100.)
                         })
                     })
                 } else {
@@ -84,12 +111,13 @@ protocol.add = () => {
                         app.data._id = newDocs._id
                         app.data.updatedAt = newDocs.updatedAt
                         resolve(true)
+                        // setTimeout(() => resolve(true), 100.)
                     })
                 }
             })
         }).then((capture) => {
             if (capture) {
-                app.screen.capture(app.data, true)
+                app.screen.capture(app.data, false)
             }
             protocol.update()
         })
@@ -131,6 +159,16 @@ protocol.init = () => {
         timestampData: true,
         autoload: true,
     })
+}
+
+protocol.count = (id) => {
+    var configApp = app.config.app()
+    var filename = path.join(process.cwd(), configApp.datapath, 'protocols', id + '.db')
+    var db = new NeDB({
+        filename: filename,
+        autoload: true,
+    })
+    return db.count({})
 }
 
 module.exports = protocol

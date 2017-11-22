@@ -2,16 +2,16 @@
     "id": "local_num_threads",
     "label": "Local number of threads",
     "level": 4,
-    "min": 1,
-    "max": 16,
-    "value": 1,
-    "step": 1
+    "value": 0,
+    "ticks": [0, 1, 2, 3],
+    "ticks_labels": [1, 2, 4, 8],
+    "show_value": false
 }, {
     "id": "resolution",
     "label": "Time resolution [ms]",
-    "level": 4,
-    "value": 3,
+    "level": 3,
+    "value": 2,
     "ticks": [0, 1, 2, 3],
-    "ticks_labels": [0.1, 0.2, 0.5, 1.0],
+    "ticks_labels": [0.1, 0.5, 1.0, 2.0],
     "show_value": false
 }]

@@ -7,10 +7,10 @@
         "id": "interval",
         "label": "Time interval of recording (ms)",
         "level": 4,
-        "value": 1.0,
-        "min": 0.1,
-        "max": 1.0,
-        "step": 0.1
+        "value": 2,
+        "ticks": [0, 1, 2, 3],
+        "ticks_labels": [0.1, 0.5, 1.0, 2.0],
+        "show_value": false
     }]
 }, {
     "element_type": "recorder",
@@ -27,9 +27,9 @@
         "id": "interval",
         "label": "Time interval of recording (ms)",
         "level": 4,
-        "value": 1.0,
-        "min": 0.1,
-        "max": 1.0,
-        "step": 0.1
+        "value": 2,
+        "ticks": [0, 1, 2, 3],
+        "ticks_labels": [0.1, 0.5, 1.0, 2.0],
+        "show_value": false
     }]
 }]

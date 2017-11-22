@@ -34,27 +34,21 @@ req.request = (data) => {
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
     }).fail((d) => {
-        app.message.show('Warning', d.responseText, 2000)
+        app.message.show('Warning', d.responseText)
+        app.simulation.simulate.end()
     }).done((d) => {
-        app.message.log('Simulation finished')
+        app.message.log('Simulation finished.')
         if (d.error) {
             console.log(d.error)
-            app.message.show('NEST Error:', d.error);
+            app.simulation.simulate.message.update({icon: 'fa fa-error', title: 'NEST Error:', message: d.error, type: 'danger'});
+            setTimeout(() => app.simulation.simulate.end(), 5000);
+        } else {
+            app.simulation.simulate.end()
         }
     })
 }
 
-$(document).bind('ajaxStart', () => {
-    if (!(app.simulation.running)) {
-        $('select').attr('disabled', 'disabled');
-        $('.sliderInput').slider('disable')
-    }
-}).bind('ajaxStop', () => {
-    $('select:not(.disabled)').attr('disabled', false);
-    $('.sliderInput').slider('enable')
-    // if (app.lastSliderChanged) {
-    //     app.lastSliderChanged.find('.min-slider-handle').focus()
-    // }
-})
+$(document).bind('ajaxStart', () => app.simulation.simulate.start())
+    .bind('ajaxStop', () => app.simulation.simulate.end())
 
 module.exports = req;

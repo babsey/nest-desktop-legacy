@@ -4,8 +4,8 @@ const jsonfile = require('jsonfile');
 
 var simulation = {
     running: false,
-    resume: require('./simulation/resume').resume,
-    simulate: require('./simulation/simulate').simulate,
+    resume: require('./simulation/resume'),
+    simulate: require('./simulation/simulate'),
 }
 
 simulation.export = () => {
@@ -14,43 +14,18 @@ simulation.export = () => {
     jsonfile.writeFileSync(filepath, app.data)
 }
 
-simulation.run = (running) => {
-    simulation.running = (running == true)
-    if (simulation.running) {
-        $('#simulation-resume').find('.resume').hide()
-        $('#simulation-resume').find('#simulation-stop').show()
-        $('.dataSlider').find('.sliderInput').slider('disable')
-        simulation.resume()
-    } else {
-        $('#simulation-resume').find('.resume').hide()
-        $('#simulation-resume').find('#simulation-start').show()
-        $('.dataSlider').find('.sliderInput').slider('enable')
-    }
-}
-
-simulation.resumeToggle = () => {
-    simulation.run(!simulation.running)
-}
-
-simulation.stop = () => new Promise((resolve, reject) => {
-    simulation.running = false;
-    resolve()
-});
-
-
 simulation.update = () => {
     app.message.log('Update simulation')
-    simulation.running = false;
-    app.selected_node = null;
-    app.selected_link = null;
-
+    app.navigation.update()
     app.network.update()
-    simulation.simulate()
+    app.controller.update()
+    app.protocol.update()
+    simulation.simulate.run()
 }
 
-simulation.reset = () => {
-    app.data.kernel.time = 0.0
-    $('#autoscale').prop('checked', 'checked')
+simulation.reload = () => {
+    app.chart.init()
+    app.controller.init()
     simulation.update()
 }
 
@@ -59,13 +34,8 @@ simulation.init = () => {
     app.db.init()
     app.protocol.init()
     app.network.init().then(() => {
-        app.chart.init()
-        app.controller.init()
         app.navigation.init()
-
-        app.protocol.update()
-        app.navigation.update()
-        simulation.update()
+        simulation.reload()
     })
 }
 

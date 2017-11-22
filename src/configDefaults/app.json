@@ -29,10 +29,14 @@
         "level": 1,
         "groups": [{
             "id": "nest-desktop",
-            "name": "NEST desktop"
+            "name": "NEST desktop",
+            "visible": true,
+            "sync": true
         }, {
             "id": "public",
-            "name": "Public"
+            "name": "Public",
+            "visible": true,
+            "sync": true
         }]
     },
     "chart": {

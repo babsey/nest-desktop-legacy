@@ -31,9 +31,9 @@
         "id": "nbins",
         "label": "Number of histogram bins",
         "level": 1,
-        "value": 1,
-        "ticks": [0, 1, 2, 3, 4, 5, 6],
-        "ticks_labels": [10, 20, 50, 100, 200, 500, 1000],
+        "value": 3,
+        "ticks": [0, 1, 2, 3, 4, 5],
+        "ticks_labels": [10, 20, 50, 100, 200, 500],
         "show_value": false
     },
     "spike_dtime": {

@@ -22,7 +22,7 @@ chart.draw_line = (series) => {
         .append('g')
         .attr('class', 'subplot')
 
-    lines.attr("style", (d, i) => 'stroke:' + (app.selected_node ? chart.data.c[i] : ''))
+    // lines.attr("style", (d, i) => 'stroke:' + (app.selected_node ? chart.data.c[i] : ''))
 
     var subplot = (i) => -1 * (chart.data.n - (i % chart.data.n) - 1) * chart.height / chart.data.n;
     var color = (i) => app.config.app().chart.color ? chart.data.c[i % chart.data.c.length] : '';

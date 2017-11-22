@@ -1,0 +1,10 @@
+{
+    "_id": "d306ce46fb848be9417c82b92200d13d",
+    "name": "Bare networks",
+    "group": "nest-desktop",
+    "user": "nest-desktop",
+    "network": "simple",
+    "version": "0.11.0",
+    "nodes": [],
+    "links": []
+}

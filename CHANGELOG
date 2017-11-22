@@ -1,6 +1,19 @@
 CHANGELOG
 ---------
 
+0.11.0:
+    Optimize view in index
+    Better message using bootstrap notify
+    Pause simulation button
+    Clear and clean network
+    Add and edit simulation for remoteDB
+    Fix bug of sync of remoteDB
+    Selective view of nodes and links when selected
+    Delete protocol option
+    Dialog for delete all protocols
+    Backup all protocols before deleting
+    Remove scrollSpy
+
 0.10.0:
     Server check
     Simulation synchronizing from remote DB
@@ -10,7 +23,7 @@ CHANGELOG
     List simulation from same group
     Network lib
     Outsource simulation code
-    Auto protocolling
+    Auto protocoling
     ES6: Arrow functions
 
 0.9.3:
