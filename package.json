@@ -42,6 +42,7 @@
     "object-hash": "^1.1.8",
     "pouchdb": "^6.3.4",
     "pouchdb-upsert": "^2.2.0",
+    "request": "^2.83.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
