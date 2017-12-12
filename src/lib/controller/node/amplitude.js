@@ -1,5 +1,6 @@
 "use strict"
 
+const math = require('mathjs');
 var nodeController = {};
 
 nodeController._amplitude = (dtime, dvalue) => {

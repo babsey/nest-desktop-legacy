@@ -45,6 +45,7 @@ sync.remoteDB = () => {
                     remoteDocs.rows.map((remoteRow) => {
                         var remoteDoc = remoteRow.doc;
                         if (remoteDoc._id.startsWith('_design')) return
+                        if (remoteDoc.deleted) return
                         // console.log(remoteDoc)
                         app.db.localDB.findOne({
                             _id: remoteDoc._id
@@ -75,6 +76,7 @@ sync.remoteDB = () => {
                 // console.log(localDocs)
                 localDocs.map((localDoc) => {
                     if (localDoc.user != configApp.user.id) return
+                    if (localDoc.deleted) return
                     // console.log(localDoc)
                     remoteDB.upsert(localDoc._id, (doc) => {
                         doc = localDoc

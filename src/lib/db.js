@@ -10,7 +10,11 @@ const flat = require('flat');
 
 var db = {};
 
-db.all = () => db.localDB.find({}).sort({
+db.all = () => db.localDB.find({
+    $not: {
+        deleted: true
+    }
+}).sort({
     updatedAt: -1
 });
 
