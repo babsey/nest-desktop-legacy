@@ -11,7 +11,16 @@ var chart = {
         'spike_detector': 'raster-plot',
     },
     data: {},
+    margin: {
+        top: 50,
+        right: 450,
+        bottom: 0,
+        left: 0
+    }
 };
+
+chart.width = window.innerWidth - chart.margin.left - chart.margin.right
+chart.height = window.innerHeight - chart.margin.top - chart.margin.bottom
 
 chart.format = d3.format(".2f");
 
@@ -227,15 +236,6 @@ chart.init = () => {
     chart.mousedown_link = null;
     chart.mousedown_node = null;
     chart.mouseup_node = null;
-
-    chart.margin = {
-        top: 50,
-        right: 350,
-        bottom: 0,
-        left: 0
-    }
-    chart.width = window.innerWidth - chart.margin.left - chart.margin.right
-    chart.height = window.innerHeight - chart.margin.top - chart.margin.bottom
 
     var colors = d3.schemeCategory10;
     // var colors = colorbrewer.RdYlGn;

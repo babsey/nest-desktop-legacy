@@ -47,6 +47,8 @@ chart.update = (recorder) => {
 
 
 chart.init = (reference, id, size) => {
+    // console.log('Init scatter chart')
+
     var margin = {
         top: 10,
         right: 40,
@@ -55,7 +57,7 @@ chart.init = (reference, id, size) => {
     };
 
     var svg = d3.select(reference),
-        width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
+        width = app.chart.width,
         height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
     chart.width = width;
     chart.height = height;
@@ -64,6 +66,7 @@ chart.init = (reference, id, size) => {
     chart.xScale.range([0, width])
     chart.yScale = d3.scaleLinear();
     chart.yScale.range([height, 0])
+
 
     chart.g = svg.append("g")
         .attr('height', height)

@@ -93,12 +93,12 @@ rasterPlot.update = (recorder) => {
 rasterPlot.init = (idx) => {
 
     // $('#chart').empty()
-    var height = parseInt($('#dataChart').attr('height')) / app.simulation.recorders.length
+    var height = ( parseInt($('#dataChart').attr('height')) || app.chart.height ) / app.simulation.recorders.length;
 
     rasterPlot.scatterChart = require(__dirname + '/core/scatter-chart');
     rasterPlot.scatterChart.init('#dataChart', idx, {
         y: height * idx,
-        height: height * 7. / 10.,
+        height: height * 7. / 10.
     });
     delete require.cache[require.resolve(__dirname + '/core/scatter-chart')]
 

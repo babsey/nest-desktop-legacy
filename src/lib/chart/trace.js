@@ -55,7 +55,7 @@ trace.update = (recorder) => {
 trace.init = (idx) => {
 
     // $('#chart').empty()
-    var height = parseInt($('#dataChart').attr('height')) / app.simulation.recorders.length;
+    var height = ( parseInt($('#dataChart').attr('height')) || app.chart.height ) / app.simulation.recorders.length;
     trace.lineChart = require(__dirname + '/core/line-chart');
     delete require.cache[require.resolve(__dirname + '/core/line-chart')]
     trace.lineChart.init('#dataChart', idx, {

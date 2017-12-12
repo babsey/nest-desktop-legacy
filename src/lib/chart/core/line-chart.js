@@ -182,6 +182,7 @@ chart.update = (recorder) => {
 }
 
 chart.init = (reference, id, size) => {
+    // console.log('Init line chart')
 
     var margin = {
         top: 20,
@@ -191,7 +192,7 @@ chart.init = (reference, id, size) => {
     };
 
     var svg = d3.select(reference),
-        width = (size.width ? size.width : +svg.attr("width")) - margin.left - margin.right,
+        width = app.chart.width,
         height = (size.height ? size.height : +svg.attr("height")) - margin.top - margin.bottom;
     chart.width = width;
     chart.height = height;

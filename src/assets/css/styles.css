@@ -161,12 +161,7 @@ tr.node td:first-child, tr.link td:first-child {
 }
 
 #controller-body {
-    width: 325px;
-}
-
-#nodeSpy {
-    position: fixed;
-    right: 366px;
+    width: 386px;
 }
 
 .nav-stacked>li {
@@ -174,16 +169,16 @@ tr.node td:first-child, tr.link td:first-child {
     padding-top: 2px;
 }
 
-.nav-pills {
+#nodeSpy .nav-pills {
     top: 51px;
     position: fixed;
 }
 
-.nav-pills>li {
+#nodeSpy .nav-pills>li {
     width: 46px;
 }
 
-.nav-pills>li>a {
+#nodeSpy .nav-pills>li>a {
     border-width: 3px;
     border-style: solid;
     border-radius: 23px;
@@ -194,14 +189,14 @@ tr.node td:first-child, tr.link td:first-child {
     background-color: white !important;
 }
 
-.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+#nodeSpy .nav-pills>li.active>a, #nodeSpy .nav-pills>li.active>a:focus, #nodeSpy .nav-pills>li.active>a:hover {
     color: black;
     border-style: dashed;
 }
 
 #controller-panel {
     padding: 0px;
-    margin: 50px 0px 0px 0px;
+    margin: 50px 0px 0px 44px;
     box-shadow: none;
 }
 
@@ -210,13 +205,13 @@ tr.node td:first-child, tr.link td:first-child {
     margin: 0px;
 }
 
-
-/*.controller {
-    margin-top: -50px;
-}*/
-
 #tabs {
-    padding: 5px
+    padding: 5px;
+}
+
+#tabs>ul>li>a {
+    font-weight: bold;
+    padding: 10px;
 }
 
 .tab-content {
@@ -226,7 +221,6 @@ tr.node td:first-child, tr.link td:first-child {
 
 #tabs .panel-body {
     padding: 10px 0px;
-    /*margin: 50px 0 -50px 0*/
 }
 
 .panel-body .content>div {
@@ -237,14 +231,6 @@ hr {
     margin-top: 0;
     margin-bottom: 0;
 }
-
-
-/*#controller-panel {
-    background-color: transparent;
-}
-#controller-panel:hover {
-    background-color: white;
-}*/
 
 #nodes .modelSelect {
     width: 220px;

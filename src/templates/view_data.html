@@ -34,31 +34,10 @@
     <div class="container-fluid">
         <div class="content">
             <a class="btn btn-default">
-                <i class="fa fa-arrow-left"></i>
-            </a>
+              <i class="fa fa-arrow-left"></i>
+          </a>
+            <div class="data"></div>
         </div>
-        <div class="col-md-6">
-            <div class="content">
-                <img>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div id="nodes"></div>
-        </div>
-        <div class="col-md-3">
-            <div id="links"></div>
-        </div>
-        <!-- <div class="col-md-7">
-            <div class="content" style="position:relative">
-                <div style="position:absolute; right:15px; top:10px; display: none">
-                    <button id="copy" class="btn btn-default" data-clipboard-target="#raw_data">
-                        <i class="fa fa-clipboard"></i>
-                    </button>
-                </div>
-                <pre></pre>
-                <textarea id="raw_data" style="display:none; opacity:0.0; width: 100%; height: 0px"></textarea>
-            </div>
-        </div> -->
     </div>
     <script>
         const fs = require('fs');
@@ -91,12 +70,10 @@
                 } else {
                     $('a').attr('href', './simulation.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id)
                 }
-                $('img').attr('src', src)
                 // $('textarea').html(JSON.stringify(app.data, undefined, 4))
                 // $('pre').append(app.format.syntaxHighlight(JSON.stringify(app.data, undefined, 4)))
                 // var clipboard = new Clipboard('#copy');
-                $('#nodes').html(app.renderer.simulation.nodes(app.data))
-                $('#links').html(app.renderer.simulation.links(app.data))
+                $('.data').html(app.renderer.simulation.data(app.data))
             })
     </script>
 </body>

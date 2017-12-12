@@ -93,16 +93,17 @@ chart.update = (recorder) => {
 }
 
 chart.init = (reference, id, size) => {
+    // console.log('Init bar chart')
 
     var margin = {
         top: 10,
         right: 40,
         bottom: 40,
-        left: 50
-    }
+        left: 50,
+    };
 
     var g = d3.select(reference),
-        width = (size.width ? size.width : +g.attr("width")) - margin.left - margin.right,
+        width = app.chart.width,
         height = (size.height ? size.height : +g.attr("height")) - margin.top - margin.bottom;
     chart.width = width;
     chart.height = height;
