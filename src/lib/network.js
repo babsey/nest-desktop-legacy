@@ -74,7 +74,7 @@ network.edit = (drawing) => {
         app.db.clone(app.data).then((data) => {
             app.data_original = data;
         })
-        $('.nav-tabs a[href="#nodes"]').tab('show');
+        $('.nav a[href="#nodes"]').tab('show');
     }
     $('.hideOnDrawing').toggle(!drawing)
     $('.disableOnDrawing').toggleClass('disabled', drawing)

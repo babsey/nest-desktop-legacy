@@ -1,5 +1,10 @@
 body {
+    font-size: 13px;
     position: relative;
+}
+
+body.large {
+    font-size: 16px;
 }
 
 li a, li a:hover, button a, button a:hover {
