@@ -34,7 +34,6 @@
     "electron": "1.7.8",
     "flat": "^2.0.1",
     "font-awesome": "^4.7.0",
-    "html-pdf": "^2.2.0",
     "joi": "^10.6.0",
     "jquery": "^3.2.1",
     "jsonfile": "^2.4.0",
