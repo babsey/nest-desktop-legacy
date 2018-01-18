@@ -1,5 +1,9 @@
 "use strict"
 
+const fs = require('fs');
+const path = require('path');
+const Clipboard = require('clipboard');
+
 var navigation = {};
 
 navigation.update_randomSeed = () => {
@@ -112,60 +116,86 @@ navigation.events = () => {
         app.screen.capture(app.data, true)
         app.protocol.update()
     })
-    $('#view-data').on('click', () => {
-        app.protocol.add().then(() => {
-            setTimeout(() => {
-                location.href = 'view_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id;
-            }, 200.)
-        });
-    })
-    $('#view-raw-data').on('click', () => {
-        app.protocol.add().then(() => {
-            window.location = 'view_raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id;
-        });
-    })
+    // $('#view-data').on('click', () => {
+    //     app.protocol.add().then(() => {
+    //         setTimeout(() => {
+    //             location.href = 'view_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id;
+    //         }, 200.)
+    //     });
+    // })
+    // $('#view-raw-data').on('click', () => {
+    //     app.protocol.add().then(() => {
+    //         window.location = 'view_raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id;
+    //     });
+    // })
     $('#simulation-add').on('click', (e) => {
         $('#simulation-add-submit').show()
         $('#simulation-form #simulation-name').focus()
     })
-    $('#simulation-edit').on('click', (e) => {
+    $('.simulation-edit').on('click', (e) => {
         $('#simulation-edit-submit').show()
         $('#simulation-form #simulation-name').val(app.data.name).focus()
         $('#simulation-form #simulation-description').val(app.data.description)
+    })
+    $('#printToPDF').on('click', function(e) {
+        var cssPagedMedia = (function () {
+            var style = document.createElement('style');
+            document.head.appendChild(style);
+            return function (rule) {
+                style.innerHTML = rule;
+            };
+        }());
+
+        cssPagedMedia.size = function (size) {
+            cssPagedMedia('@page {size: ' + size + '}');
+        };
+
+        var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
+
+        let {
+            width,
+            height,
+        } = configElectron.windowBounds;
+
+        cssPagedMedia.size((width-319+480+20) +'px '+ (height) + 'px');
+        var configApp = app.config.app();
+        var filepath = path.join(process.cwd(), configApp.datapath, app.data._id + '.pdf')
+        require('electron').remote.require('./main').printToPDF(filepath)
+        setTimeout(app.simulation.update, 200)
     })
     $('#simulation-form-dialog').on('hidden.bs.modal', (e) => {
         $('button[type="submit"]').hide()
     })
     $('#simulation-add-submit').on('click', function(e) {
         $(this).hide(() => {
+            if (app.data.name == $('#simulation-form #simulation-name').val()) return
             app.db.clone(app.data).then((data) => {
                 data.name = $('#simulation-form #simulation-name').val();
                 data.description = $('#simulation-form #simulation-description').val();
                 app.db.add(data)
-                $('#title').html(data.name)
+                $('.title').html(data.name)
+                $('.description').html(data.description)
                 app.navigation.update()
             });
         })
     })
     $('#simulation-edit-submit').on('click', function(e) {
         $(this).hide(() => {
-            app.db.clone(app.data).then((data) => {
-                data.name = $('#simulation-form #simulation-name').val()
-                data.description = $('#simulation-form #simulation-description').val()
-                $('#title').html(data.name)
-                app.db.update(data)
-                app.data._id = data._id
-                app.data.name = data.name
-                app.data.description = data.description
-                app.navigation.update()
-            });
+            app.data.name = $('#simulation-form #simulation-name').val();
+            app.data.description = $('#simulation-form #simulation-description').val();
+            $('.title').html(app.data.name)
+            $('.description').html(app.data.description)
+            var id = app.data._id;
+            app.db.update(app.data)
+            app.data._id = id;
+            app.navigation.update();
         })
     })
     $('.level').on('click', function() {
         $('.level').find('.glyphicon-ok').hide()
         $(this).find('.glyphicon-ok').show()
-        var configApp = app.config.app()
-        configApp.simulation.level = parseInt($(this).attr('level'))
+        var configApp = app.config.app();
+        configApp.simulation.level = parseInt($(this).attr('level'));
         app.config.save('app', configApp)
         for (var nid in app.data.nodes) {
             var node = app.data.nodes[nid];
@@ -185,6 +215,8 @@ navigation.events = () => {
         app.slider.update_dataSlider()
         app.controller.update()
     })
+
+    new Clipboard('#copy');
 }
 
 navigation.update = () => {

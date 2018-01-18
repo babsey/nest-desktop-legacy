@@ -53,6 +53,14 @@ controller.update = () => {
         $('.controller').find('.link').hide()
         $('.controller').find('.link[data-id="' + app.selected_link.id + '"]').show()
     }
+
+    $('.data .nodes').empty();
+    $('.data .links').empty();
+    app.data.nodes.map((node) => {$('.data .nodes').append(app.renderer.node.table(node))});
+    app.data.links.map((link) => {$('.data .links').append(app.renderer.link.table(link))});
+    $('.data .comments').html(app.data.comments)
+
+    $('#raw-data').html(JSON.stringify(app.data, undefined, 4))
 }
 
 controller.init = () => {

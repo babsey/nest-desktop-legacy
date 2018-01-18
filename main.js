@@ -142,4 +142,21 @@ main.capturePage = function(filepath) {
     });
 }
 
+main.printToPDF = function(filepath) {
+
+    var options = {
+        marginsType: 2,
+        landscape: true,
+        fitToPageEnabled: true,
+    }
+
+    mainWindow.webContents.printToPDF(options, (error, data) => {
+            if (error) throw error
+            fs.writeFile(filepath, data, (error) => {
+                if (error) throw error
+                console.log('Write PDF successfully.')
+            })
+        })
+}
+
 module.exports = main;

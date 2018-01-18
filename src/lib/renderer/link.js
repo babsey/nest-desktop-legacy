@@ -5,6 +5,9 @@ var linkRenderer = {
 };
 
 linkRenderer.table = (link) => {
+    var configApp = app.config.app();
+    var level = configApp.simulation.level;
+
     var div = [];
     if (link.disabled) return
     div.push('<tr class="hline link">')
@@ -15,10 +18,12 @@ linkRenderer.table = (link) => {
     div.push('<td>target</td>')
     div.push('<td>' + link.target + '</td>')
     div.push('</tr>')
-    div.push('<tr class="link">')
-    div.push('<td>connection rule</td>')
-    div.push('<td>' + (link.conn_spec ? link.conn_spec.rule || 'all_to_all' : 'all_to_all') + '</td>')
-    div.push('</tr>')
+    if (level >= 3) {
+        div.push('<tr class="link">')
+        div.push('<td>connection rule</td>')
+        div.push('<td>' + (link.conn_spec ? link.conn_spec.rule || 'all_to_all' : 'all_to_all') + '</td>')
+        div.push('</tr>')
+    }
     if (link.conn_spec) {
         Object.keys(link.conn_spec).map((ckey) => {
             if (ckey == 'rule') return
@@ -28,18 +33,20 @@ linkRenderer.table = (link) => {
             div.push('</tr>')
         })
     }
-    div.push('<tr class="link">')
-    div.push('<td>synapse model</td>')
-    div.push('<td>' + (link.syn_spec ? link.syn_spec.model || 'static_synapse' : 'static_synapse') + '</td>')
-    div.push('</tr>')
-    if (link.syn_spec) {
-        Object.keys(link.syn_spec).map((skey) => {
-            if (skey == 'model') return
-            div.push('<tr class="link">')
-            div.push('<td>' + skey + '</td>')
-            div.push('<td>' + link.syn_spec[skey] + '</td>')
-            div.push('</tr>')
-        })
+    if (level >= 4) {
+        div.push('<tr class="link">')
+        div.push('<td>synapse model</td>')
+        div.push('<td>' + (link.syn_spec ? link.syn_spec.model || 'static_synapse' : 'static_synapse') + '</td>')
+        div.push('</tr>')
+        if (link.syn_spec) {
+            Object.keys(link.syn_spec).map((skey) => {
+                if (skey == 'model') return
+                div.push('<tr class="link">')
+                div.push('<td>' + skey + '</td>')
+                div.push('<td>' + link.syn_spec[skey] + '</td>')
+                div.push('</tr>')
+            })
+        }
     }
     return div.join('')
 }

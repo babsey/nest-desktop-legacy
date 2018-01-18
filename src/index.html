@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    
+
     <div id='content'>
         <div class='container-fluid'>
             <div class='pull-right'>
@@ -58,7 +58,6 @@
     var configApp = app.config.app();
     $('title').html(configApp.title)
     $('#title').html(configApp.title)
-    $('#subtitle').html(configApp.subtitle)
     $('.external').on('click', function(event) {
         event.preventDefault();
         shell.openExternal(this.href);

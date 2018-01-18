@@ -27,12 +27,10 @@ simulationRenderer.details = (data) => {
 
     var div = [];
     div.push('<h3>' + data.name + '</h3>')
-    if (data.description) {
-        div.push('<div>' + data.description + '</div>')
-    }
     if (src) {
         div.push('<img style="width:100%" src="' + src + '" />')
     }
+    div.push('<div class="row">')
     div.push('<div class="col-xs-6">')
     if (data.nodes.length > 0) {
         div.push('<h4>Nodes</h4>')
@@ -49,44 +47,11 @@ simulationRenderer.details = (data) => {
         div.push('</table>')
     }
     div.push('</div>')
-    return div.join('')
-}
-
-simulationRenderer.data = (data) => {
-    var configApp = app.config.app();
-    if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png'))) {
-        var src = path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png');
-    } else {
-        // var src = path.join(__dirname, '..', '..', 'assets', 'img', 'simulation_default.png');
-        var src = null;
-    }
-
-    var div = [];
-    div.push('<h3>' + data.name + '</h3>')
-    div.push('<div class="col-xs-6">')
+    div.push('</div>')
     if (data.description) {
+        div.push('<h4>Description</h4>')
         div.push('<div>' + data.description + '</div>')
     }
-    if (src) {
-        div.push('<img style="width:100%" src="' + src + '" />')
-    }
-    div.push('</div>')
-    div.push('<div class="col-xs-3">')
-    if (data.nodes.length > 0) {
-        div.push('<h4>Nodes</h4>')
-        div.push('<table>')
-        data.nodes.map((node) => div.push(app.renderer.node.table(node)));
-        div.push('</table>')
-    }
-    div.push('</div>')
-    div.push('<div class="col-xs-3">')
-    if (data.links.length > 0) {
-        div.push('<h4>Links</h4>')
-        div.push('<table>')
-        data.links.map((link) => div.push(app.renderer.link.table(link)));
-        div.push('</table>')
-    }
-    div.push('</div>')
     return div.join('')
 }
 

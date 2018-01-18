@@ -3,13 +3,20 @@
 var nodeRenderer = {};
 
 nodeRenderer.table = (node) => {
+    var configApp = app.config.app();
+    var level = configApp.simulation.level;
+    var nodes = app.config.nest(node.element_type);
+    var models = nodes.map((d) => d.id);
+    var nidx = models.indexOf(node.model);
+    var params = nodes[nidx].sliderDefaults.map((d) => d.id);
+
     var div = [];
     div.push('<tr class="hline node">')
     div.push('<td>ID</td>')
     div.push('<td>' + node.id + '</td>')
     div.push('</tr>')
     div.push('<tr class="node">')
-    div.push('<td>node model</td>')
+    div.push('<td>model</td>')
     div.push('<td>' + node.model + '</td>')
     div.push('</tr>')
     if (node.n) {
@@ -19,7 +26,12 @@ nodeRenderer.table = (node) => {
         div.push('</tr>')
     }
     for (var pkey in node.params) {
-        div.push('<tr class="node">')
+        if (pkey == 'record_from') continue
+        var pidx = params.indexOf(pkey);
+        if (pidx != -1) {
+            if (level < nodes[nidx].sliderDefaults[pidx].level) continue;
+        }
+        div.push('<tr class="node" level="' + level + '">')
         div.push('<td>' + pkey + '</td>')
         div.push('<td>' + node.params[pkey] + '</td>')
         div.push('</tr>')
