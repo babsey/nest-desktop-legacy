@@ -111,7 +111,7 @@
                 <form id="simulation-form">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="simulation-name" class="control-label">Simulation:</label>
+                            <label for="simulation-name" class="control-label">Simulation</label>
                             <input type="text" class="form-control" id="simulation-name" placeholder="name">
                         </div>
                         <textarea type="text" class="form-control" id="simulation-description" placeholder="description"></textarea>
@@ -120,6 +120,29 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-add-submit" style="display:none">Add</button>
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-edit-submit" style="display:none">Edit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="pdf-form-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form id="pdf-form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="pdf-filename" class="control-label">Filename</label>
+                            <input type="text" class="form-control" id="pdf-filename">
+                            <label for="pdf-filepath" class="control-label">Path</label>
+                            <input type="text" class="form-control" id="pdf-filepath">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="pdf-submit">Generate PDF</button>
                     </div>
                 </form>
             </div>
@@ -251,8 +274,8 @@
                                 <i class="fa fa-trash-o" aria-hidden="true"></i> Delete this protocol
                             </a>
                         </li>
-                        <li id="delete-all-protocols" data-toggle="modal" data-target="#delete-all-protocols-dialog" title="Delete all simulation protocols">
-                            <a href="#">
+                        <li id="delete-all-protocols" title="Delete all simulation protocols">
+                            <a data-toggle="modal" href="#delete-all-protocols-dialog">
                                 <i class="fa fa-trash" aria-hidden="true"></i> Delete all protocols
                             </a>
                         </li>
@@ -285,8 +308,8 @@
                             </a>
                         </li>
                         <li class="divider"></li>
-                        <li id="simulation-add" data-toggle="modal" data-target="#simulation-form-dialog" title="Add a new simulation">
-                            <a href="#">
+                        <li id="simulation-add" title="Add a new simulation">
+                            <a data-toggle="modal" href="#simulation-form-dialog">
                                 <span class="glyphicon glyphicon-menu-glyphicon glyphicon-save"></span> Add simulation
                             </a>
                         </li>
@@ -296,7 +319,7 @@
                             </a>
                         </li>
                         <li id="printToPDF" title="Print to PDF">
-                            <a href="#">
+                            <a data-toggle="modal" href="#pdf-form-dialog" >
                                 <i class="fa fa-print"></i> Print to PDF
                             </a>
                         </li>

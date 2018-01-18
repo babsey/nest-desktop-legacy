@@ -137,7 +137,20 @@ navigation.events = () => {
         $('#simulation-form #simulation-name').val(app.data.name).focus()
         $('#simulation-form #simulation-description').val(app.data.description)
     })
-    $('#printToPDF').on('click', function(e) {
+    $('#printToPDF').on('click', (e) => {
+        var configApp = app.config.app();
+        var filename = app.data._id + '.pdf'
+        var filepath = path.join(process.cwd(), configApp.datapath)
+        $('#pdf-form #pdf-filename').val(filename).focus()
+        $('#pdf-form #pdf-filepath').val(filepath)
+    })
+    $('#pdf-submit').on('click', function(e) {
+        var filename = $('#pdf-form #pdf-filename').val();
+        var filepath = $('#pdf-form #pdf-filepath').val();
+        if (!filename.endsWith('.pdf')) {
+            filename = filename + '.pdf'
+        }
+
         var cssPagedMedia = (function () {
             var style = document.createElement('style');
             document.head.appendChild(style);
@@ -157,14 +170,13 @@ navigation.events = () => {
             height,
         } = configElectron.windowBounds;
 
-        cssPagedMedia.size((width-319+480+20) +'px '+ (height) + 'px');
-        var configApp = app.config.app();
-        var filepath = path.join(process.cwd(), configApp.datapath, app.data._id + '.pdf')
-        require('electron').remote.require('./main').printToPDF(filepath)
+        cssPagedMedia.size((width-319+480) +'px '+ (height) + 'px');
+        require('electron').remote.require('./main').printToPDF(path.join(filepath, filename))
+        setTimeout(() => {app.message.show('Info', 'PDF successfully saved.')}, 200)
         setTimeout(app.simulation.update, 200)
     })
     $('#simulation-form-dialog').on('hidden.bs.modal', (e) => {
-        $('button[type="submit"]').hide()
+        $('#simulation-form button[type="submit"]').hide()
     })
     $('#simulation-add-submit').on('click', function(e) {
         $(this).hide(() => {
