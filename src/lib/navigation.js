@@ -204,10 +204,10 @@ navigation.events = () => {
         })
     })
     $('.level').on('click', function() {
-        $('.level').find('.glyphicon-ok').hide()
-        $(this).find('.glyphicon-ok').show()
         var configApp = app.config.app();
         configApp.simulation.level = parseInt($(this).attr('level'));
+        $('.level').find('.glyphicon-ok').hide()
+        $('.level[level='+ configApp.simulation.level +']').find('.glyphicon-ok').show()
         app.config.save('app', configApp)
         for (var nid in app.data.nodes) {
             var node = app.data.nodes[nid];
@@ -279,7 +279,7 @@ navigation.init = () => {
     $(".config").find('#random-seed').find('.glyphicon-ok').toggle(app.simulation.randomSeed)
     $(".config").find('#auto-protocol').find('.glyphicon-ok').toggle(app.simulation.autoProtocol)
     $(".config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
-    $("#slider-config").find('#level_' + app.config.app().simulation.level).find('.glyphicon-ok').show()
+    $('.level[level=' + app.config.app().simulation.level + ']').find('.glyphicon-ok').show()
     app.navigation.events()
 }
 

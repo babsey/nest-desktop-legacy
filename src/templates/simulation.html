@@ -14,12 +14,15 @@
 <body>
 
     <!-- Modal -->
-    <div id="data-dialog" class="modal fade">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade"v id="data-dialog">
+        <div class="modal-dialog modal-lg" role="document">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title title"></h4>
                 </div>
                 <div class="modal-body">
                     <div class="data">
@@ -46,7 +49,7 @@
                             <b class="caret"></b>
                         </button>
 
-                        <ul id="slider-config" class="dropdown-menu" role="menu" aria-labelledby="get-slider-config">
+                        <ul class="dropdown-menu" role="menu">
                             <li id="level_1" class="level" level="1">
                                 <a href="#">
                                   <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
@@ -83,12 +86,15 @@
     </div>
 
     <!-- Modal -->
-    <div id="raw-data-dialog" class="modal fade">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="raw-data-dialog">
+        <div class="modal-dialog modal-lg" role="document">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title title"></h4>
                 </div>
                 <div class="modal-body">
                     <pre id="raw-data"></pre>
@@ -127,10 +133,16 @@
     </div>
 
     <!-- Modal -->
-    <div id="pdf-form-dialog" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+    <div id="pdf-form-dialog" class="modal fade">
+        <div class="modal-dialog" role="document">
             <!-- Modal content-->
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Print to PDF</h4>
+                </div>
                 <form id="pdf-form">
                     <div class="modal-body">
                         <div class="form-group">
@@ -150,11 +162,15 @@
     </div>
 
     <!-- Modal -->
-    <div id="delete-all-protocols-dialog" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-sm">
+    <div id="delete-all-protocols-dialog" class="modal fade">
+        <div class="modal-dialog modal-sm" role="document">
             <!-- Modal content-->
             <div class="modal-content">
-                <div class="modal-header"></div>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
                     Are you sure to delete all protocols?
                 </div>
@@ -377,37 +393,37 @@
                                     <a href="#synapses" aria-controls="synapses" role="tab" data-toggle="tab">Synapses</a>
                                 </li>
                                 <li role="presentation">
-                                    <a role="tab" class="dropdown-toggle disableOnDrawing" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Edit slider settings">
+                                    <a role="tab" class="dropdown-toggle disableOnDrawing" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Edit level of slider views">
                                         <div style="white-space: nowrap;">
                                             <i class="fa fa-sliders" aria-hidden="true"></i>
                                             <b class="caret"></b>
                                         </div>
                                     </a>
-                                    <ul id="slider-config" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="get-slider-config">
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
                                         <li id="level_1" class="level" level="1">
                                             <a href="#">
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                                </a>
+                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
+                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                            </a>
                                         </li>
                                         <li id="level_2" class="level" level="2">
                                             <a href="#">
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                                </a>
+                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
+                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                            </a>
                                         </li>
                                         <li id="level_3" class="level" level="3">
                                             <a href="#">
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                                </a>
+                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
+                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                            </a>
                                         </li>
                                         <li id="level_4" class="level" level="4">
                                             <a href="#">
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                                </a>
-                                        </li>
+                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
+                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                            </a>
+                                    </li>
                                     </ul>
                                 </li>
                             </ul>
