@@ -53,8 +53,8 @@ nodeController.init = (node) => {
         app.model.node_selected(node)
         nodeController.update(node)
 
-        if (app.chart.networkLayout.drawing) {
-            app.chart.networkLayout.update()
+        if (app.graph.networkLayout.drawing) {
+            app.graph.networkLayout.update()
             return
         }
 
@@ -78,10 +78,10 @@ nodeController.init = (node) => {
 
     $('#nodeSpy .nav').append(app.renderer.node.spy(node))
     $('#nodeSpy').find('.node[data-id=' + node.id + ']').on('click', function(e) {
-        if (app.chart.networkLayout.drawing) return
+        if (app.graph.networkLayout.drawing) return
         app.selected_node = app.selected_node == node ? null : node;
         app.selected_link = null;
-        app.chart.networkLayout.update()
+        app.graph.networkLayout.update()
         app.controller.update()
     })
     if (!node.model) return

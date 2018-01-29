@@ -7,11 +7,11 @@ const path = require('path');
 
 var app = {
     __dirname: __dirname,
-    chart: require(__dirname + '/lib/chart'),
     config: require(__dirname + '/lib/config'),
     controller: require(__dirname + '/lib/controller'),
     db: require(__dirname + '/lib/db'),
     format: require(__dirname + '/lib/format'),
+    graph: require(__dirname + '/lib/graph'),
     hash: require(__dirname + '/lib/hash'),
     message: require(__dirname + '/lib/message'),
     model: require(__dirname + '/lib/model'),
@@ -24,7 +24,8 @@ var app = {
     simulation: require(__dirname + '/lib/simulation'),
     slider: require(__dirname + '/lib/slider'),
     sync: require(__dirname + '/lib/sync'),
-    validation: require(__dirname + '/lib/validation')
+    validation: require(__dirname + '/lib/validation'),
+    resizing: false,
 };
 
 app.query = function getQueryParams(qs) {

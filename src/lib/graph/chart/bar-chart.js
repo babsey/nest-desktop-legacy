@@ -33,26 +33,30 @@ chart.update = (recorder) => {
         var idx = 'y';
     // }
 
-    chart.xScale.domain(app.chart.xScale.domain())
+    chart.xScale.domain(app.graph.chart.xScale.domain())
     chart.yScale.domain([0, d3.max(chart.data, (d) => chart.yVal(d, idx.length == 1 ? idx[0] : idx))])
 
-    var transition = !(app.simulation.running || app.chart.dragging || app.chart.zooming || app.chart.resizing || app.mouseover)
-    app.chart.axesUpdate(chart, transition)
-    app.chart.xLabel(chart, 'xLabel_' + app.simulation.recorders.indexOf(recorder), (app.model.record_labels[app.chart.abscissa] || app.chart.abscissa))
+    var transition = !(app.simulation.running || app.graph.dragging || app.graph.chart.zooming || app.resizing || app.mouseover)
+    app.graph.chart.axesUpdate(chart, transition)
+
+    var xData = app.graph.chart.dataModel[app.graph.chart.abscissa];
+    var xLabel = xData.label;
+    var xUnit = (xData.unit ? ' (' + xData.unit + ')' : '');
+    app.graph.chart.xLabel(chart, 'xLabel_' + app.simulation.recorders.indexOf(recorder), xLabel + xUnit)
 
     var bars = chart.g.select('#clip')
         .selectAll(".bar")
         .data(chart.data);
     chart.bars = bars;
 
-    var colors = app.chart.colors()
+    var colors = app.graph.colors()
     var cidx = (recorder.sources.length == 1 ? recorder.sources[0] : nidx)
-    var color = app.config.app().chart.color ? colors[cidx || (recorder.node.id % colors.length)] : ''
+    var color = app.config.app().graph.color ? colors[cidx || (recorder.node.id % colors.length)] : ''
     if (transition) {
         bars
             .attr("x", (d) => chart.xScale(d.x0))
             .attr("width", (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
-            .transition(app.chart.transition)
+            .transition(app.graph.chart.transition)
             .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
             .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
             .style("fill", color);
@@ -63,7 +67,7 @@ chart.update = (recorder) => {
             .attr("x", (d) => chart.xScale(d.x0))
             .attr("width", (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
             .attr('y', chart.g.attr('height'))
-            .transition(app.chart.transition)
+            .transition(app.graph.chart.transition)
             .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
             .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
             .style("fill", color);
@@ -97,14 +101,14 @@ chart.init = (reference, id, size) => {
 
     var margin = {
         top: 10,
-        right: 40,
-        bottom: 40,
-        left: 50,
+        right: 0,
+        bottom: 25,
+        left: 0,
     };
 
     var g = d3.select(reference),
-        width = app.chart.width,
-        height = (size.height ? size.height : +g.attr("height")) - margin.top - margin.bottom;
+        width = app.graph.chart.width,
+        height = (size.height ? size.height : app.graph.chart.height) - margin.top - margin.bottom;
     chart.width = width;
     chart.height = height;
 
@@ -128,12 +132,12 @@ chart.init = (reference, id, size) => {
         .attr('height', height)
         .attr('fill', 'white');
 
-    app.chart.xAxis(chart);
-    app.chart.yAxis(chart);
-    app.chart.xLabel(chart, 'xLabel_' + id, 'Time [ms]');
-    app.chart.yLabel(chart, 'yLabel_' + id, 'Spike count');
-    app.chart.onDrag(chart);
-    app.chart.onZoom(chart);
+    app.graph.chart.xAxis(chart);
+    app.graph.chart.yAxis(chart);
+    app.graph.chart.xLabel(chart, 'xLabel_' + id, 'Time [ms]');
+    app.graph.chart.yLabel(chart, 'yLabel_' + id, 'Spike count');
+    app.graph.chart.onDrag(chart);
+    app.graph.chart.onZoom(chart);
 }
 
 module.exports = chart;

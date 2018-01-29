@@ -158,6 +158,7 @@ tr.node.hline, tr.link.hline {
 tr.node td:first-child, tr.link td:first-child {
     min-width: 120px;
     font-weight: bold;
+    padding-left: 5px;
 }
 
 .config {
@@ -165,6 +166,7 @@ tr.node td:first-child, tr.link td:first-child {
 }
 
 #controller {
+    margin-top: 50px;
     z-index: 1000;
     position: relative
 }
@@ -173,8 +175,15 @@ tr.node td:first-child, tr.link td:first-child {
     width: 319px;
 }
 
-#controller .data {
-    width: 480px;
+.visible-print .data {
+    margin: 10px;
+    width: 240px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+#description {
     margin: 10px;
 }
 
@@ -184,7 +193,6 @@ tr.node td:first-child, tr.link td:first-child {
 }
 
 #nodeSpy .nav-pills {
-    top: 51px;
     position: fixed;
 }
 
@@ -210,7 +218,7 @@ tr.node td:first-child, tr.link td:first-child {
 
 #controller-panel {
     padding: 0px;
-    margin: 50px 0px 0px 44px;
+    margin: 0 0 0 44px;
     box-shadow: none;
 }
 
@@ -220,7 +228,7 @@ tr.node td:first-child, tr.link td:first-child {
 }
 
 #tabs {
-    padding: 5px;
+    margin-left: 5px;
 }
 
 #tabs>ul>li>a {
@@ -311,8 +319,4 @@ input.form-control {
 #simulation-description {
     min-height: 300px;
     margin: 10px 0;
-}
-
-.data .col {
-    min-width: 240px;
 }

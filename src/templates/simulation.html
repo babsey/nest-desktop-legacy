@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css" />
     <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href='../assets/css/chart.css'></link>
+    <link rel="stylesheet" href='../assets/css/graph.css'></link>
     <link rel="stylesheet" href='../assets/css/styles.css'></link>
     <title></title>
 </head>
@@ -14,7 +14,7 @@
 <body>
 
     <!-- Modal -->
-    <div class="modal fade"v id="data-dialog">
+    <div class="modal fade" v id="data-dialog">
         <div class="modal-dialog modal-lg" role="document">
             <!-- Modal content-->
             <div class="modal-content">
@@ -125,7 +125,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-add-submit" style="display:none">Add</button>
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-edit-submit" style="display:none">Edit</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="simulation-edit-submit" style="display:none">Save</button>
                     </div>
                 </form>
             </div>
@@ -209,7 +209,7 @@
                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-home"></span>
                 </a>
 
-                <button type="button" class="btn btn-default navbar-btn spinOnHover disableOnRunning disableOnSimulate" title="Reload app" onclick="app.simulation.reload()">
+                <button type="button" class="btn btn-default navbar-btn spinOnHover disableOnRunning disableOnSimulate" title="Reload the simulation" onclick="app.simulation.reload()">
                     <i class="fa fa-refresh"></i>
                 </button>
 
@@ -335,7 +335,7 @@
                             </a>
                         </li>
                         <li id="printToPDF" title="Print to PDF">
-                            <a data-toggle="modal" href="#pdf-form-dialog" >
+                            <a data-toggle="modal" href="#pdf-form-dialog">
                                 <i class="fa fa-print"></i> Print to PDF
                             </a>
                         </li>
@@ -360,118 +360,126 @@
 
     <div id="content">
 
-        <div id="controller" class="pull-right">
+        <div class="hidden-print">
 
-            <div id="controller-body">
+            <div id="controller" class="pull-right">
 
-                <nav id="nodeSpy">
-                    <ul class="nav nav-pills nav-stacked"></ul>
-                </nav>
+                <div id="controller-body">
 
-                <div id="controller-panel" class="panel">
-                    <div class="hidden-print" id="slider">
+                    <nav id="nodeSpy">
+                        <ul class="nav nav-pills nav-stacked"></ul>
+                    </nav>
 
-                        <div id="simulation" class="panel-body hideOnDrawing">
-                            <div class="content"></div>
-                        </div>
+                    <div id="controller-panel" class="panel">
+                        <div id="slider">
 
-                        <div id="kernel" class="panel-body hideOnDrawing">
-                            <div class="content"></div>
-                        </div>
+                            <div id="simulation" class="panel-body hideOnDrawing">
+                                <div class="content"></div>
+                            </div>
 
-                        <div id="tabs">
+                            <div id="kernel" class="panel-body hideOnDrawing">
+                                <div class="content"></div>
+                            </div>
 
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs nav-justified hideOnDrawing" role="tablist">
-                                <li role="presentation" class="active">
-                                    <a href="#nodes" aria-controls="nodes" role="tab" data-toggle="tab">Nodes</a>
-                                </li>
-                                <li role="presentation">
-                                    <a href="#connections" aria-controls="connections" role="tab" data-toggle="tab">Connections</a>
-                                </li>
-                                <li role="presentation">
-                                    <a href="#synapses" aria-controls="synapses" role="tab" data-toggle="tab">Synapses</a>
-                                </li>
-                                <li role="presentation">
-                                    <a role="tab" class="dropdown-toggle disableOnDrawing" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Edit level of slider views">
-                                        <div style="white-space: nowrap;">
-                                            <i class="fa fa-sliders" aria-hidden="true"></i>
-                                            <b class="caret"></b>
-                                        </div>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li id="level_1" class="level" level="1">
-                                            <a href="#">
-                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
-                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                            </a>
-                                        </li>
-                                        <li id="level_2" class="level" level="2">
-                                            <a href="#">
-                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
-                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                            </a>
-                                        </li>
-                                        <li id="level_3" class="level" level="3">
-                                            <a href="#">
-                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
-                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                            </a>
-                                        </li>
-                                        <li id="level_4" class="level" level="4">
-                                            <a href="#">
-                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
-                                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                            </a>
+                            <div id="tabs">
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs nav-justified hideOnDrawing" role="tablist">
+                                    <li role="presentation" class="active">
+                                        <a href="#nodes" aria-controls="nodes" role="tab" data-toggle="tab">Nodes</a>
                                     </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                                    <li role="presentation">
+                                        <a href="#connections" aria-controls="connections" role="tab" data-toggle="tab">Connections</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#synapses" aria-controls="synapses" role="tab" data-toggle="tab">Synapses</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a role="tab" class="dropdown-toggle disableOnDrawing" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="Edit level of slider views">
+                                            <div style="white-space: nowrap;">
+                                                <i class="fa fa-sliders" aria-hidden="true"></i>
+                                                <b class="caret"></b>
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                            <li id="level_1" class="level" level="1">
+                                                <a href="#">
+                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
+                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                                </a>
+                                            </li>
+                                            <li id="level_2" class="level" level="2">
+                                                <a href="#">
+                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
+                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                                </a>
+                                            </li>
+                                            <li id="level_3" class="level" level="3">
+                                                <a href="#">
+                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
+                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                                </a>
+                                            </li>
+                                            <li id="level_4" class="level" level="4">
+                                                <a href="#">
+                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
+                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
 
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane active" id="nodes">
-                                    <div class="controller"></div>
-                                </div>
-                                <div role="tabpanel" class="tab-pane" id="connections">
-                                    <div class="controller"></div>
-                                </div>
-                                <div role="tabpanel" class="tab-pane" id="synapses">
-                                    <div class="controller"></div>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="nodes">
+                                        <div class="controller"></div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="connections">
+                                        <div class="controller"></div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="synapses">
+                                        <div class="controller"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="data visible-print">
-                        <div class="row">
-                            <div class="col col-xs-6">
-                                <h4>Nodes</h4>
-                                <table class="nodes"></table>
-                            </div>
-                            <div class="col col-xs-6">
-                                <h4>Links</h4>
-                                <table class="links"></table>
-                            </div>
-                        </div>
-                        <h4>Description</h4>
-                        <div class="description"></div>
+
+                    <div id="edit-network-button" style="float:right; margin-right:25px; display:none" class="hidden-print">
+                        Editor mode is on.
+                        <button id="edit-network-clear" class="btn btn-default">Clear</button>
+                        <button id="edit-network-cancel" class="btn btn-default">Cancel</button>
+                        <button id="edit-network-save" class="btn btn-primary">Save</button>
                     </div>
+
                 </div>
 
-                <div id="edit-network-button" style="float:right; margin-right:25px; display:none" class="hidden-print">
-                    Editor mode is on.
-                    <button id="edit-network-clear" class="btn btn-default">Clear</button>
-                    <button id="edit-network-cancel" class="btn btn-default">Cancel</button>
-                    <button id="edit-network-save" class="btn btn-primary">Save</button>
-                </div>
             </div>
+
         </div>
 
         <div id="point"></div>
-        <svg id="chart">
-            <g id="dataChart" class="hideOnDrawing"></g>
-            <g id="networkLayout" style="display: none"></g>
-        </svg>
+        <div id="graph">
+            <svg>
+                <g id="chart" class="hideOnDrawing"></g>
+                <g id="networkLayout"></g>
+            </svg>
+        </div>
+
+        <div class="visible-print">
+            <div class="data">
+                <h4>Nodes</h4>
+                <table class="nodes"></table>
+                <h4>Links</h4>
+                <table class="links"></table>
+            </div>
+
+            <div id="description">
+                <h4>Description</h4>
+                <div class="description"></div>
+            </div>
+        </div>
     </div>
 
     <script>

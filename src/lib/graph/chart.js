@@ -1,26 +1,10 @@
 "use strict"
 
 const d3 = require("d3");
-const colorbrewer = require('colorbrewer');
 
 var chart = {
-    networkLayout: require(__dirname + '/chart/network-layout'),
-    fromOutputNode: {
-        'voltmeter': 'trace',
-        'multimeter': 'trace',
-        'spike_detector': 'raster-plot',
-    },
     data: {},
-    margin: {
-        top: 50,
-        right: 450,
-        bottom: 0,
-        left: 0
-    }
 };
-
-chart.width = window.innerWidth - chart.margin.left - chart.margin.right
-chart.height = window.innerHeight - chart.margin.top - chart.margin.bottom
 
 chart.format = d3.format(".2f");
 
@@ -55,8 +39,9 @@ chart.xLabel = (c, id, label) => {
             .attr("text-anchor", "middle")
             .attr("x", +c.width / 2)
             .attr("y", +c.height + 30)
-            .text("Time (ms)");
+            .text(label);
     }
+
     c.g.select("#" + id)
         .text(label);
 }
@@ -67,11 +52,12 @@ chart.yLabel = (c, id, label) => {
             .attr("id", id)
             .attr("class", "ylabel label")
             .attr("transform", "rotate(-90)")
-            .attr("x", -1. * +c.yScale.range()[1])
             .attr("y", 6)
             .attr("dy", ".71em")
-            .attr("text-anchor", "end");
+            .attr("text-anchor", "end")
+            .text(label);
     }
+
     c.g.select("#" + id)
         .attr("x", -1. * +c.yScale.range()[1])
         .text(label);
@@ -81,7 +67,7 @@ chart.legend = (c, data, color) => {
     c.g.selectAll('.legends').remove()
     if (!data) return
 
-    var width = d3.max(data.map((d) => d.length)) * 9;
+    var width = d3.max(data.map((d) => d.length)) * 7;
     var legend = c.g.append('g')
         .attr('class', 'legends')
         .selectAll('.legend')
@@ -111,21 +97,21 @@ chart.legend = (c, data, color) => {
 }
 
 chart.dragstarted = () => {
-    chart.dragging = true
+    app.graph.dragging = true
 }
 
 chart.dragged = () => {
     $('#autoscale').prop('checked', false)
-    var xlim0 = app.chart.xScale.domain();
+    var xlim0 = chart.xScale.domain();
     var xx = xlim0[1] - xlim0[0];
-    var xs = app.chart.xScale.range();
+    var xs = chart.xScale.range();
     var dx = d3.event.dx * xx / (xs[1] - xs[0]);
-    app.chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
-    app.chart.update()
+    chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
+    chart.update()
 }
 
 chart.dragended = () => {
-    chart.dragging = false
+    app.graph.dragging = false
 }
 
 chart.onDrag = (d) => {
@@ -143,12 +129,12 @@ chart.zoomstarted = () => {
 
 chart.zoomed = () => {
     $('#autoscale').prop('checked', false)
-    var xlim0 = app.chart.xScale.domain();
+    var xlim0 = chart.xScale.domain();
     // var xlim0 = [data.kernel.time - data.sim_time, data.kernel.time];
     var xx = (xlim0[0] + xlim0[1]) / 2;
     var k = d3.event.transform.k;
-    app.chart.xScale.domain([xx - xx / k, xx + xx / k])
-    app.chart.update()
+    chart.xScale.domain([xx - xx / k, xx + xx / k])
+    chart.update()
 }
 
 chart.zoomended = () => {
@@ -183,18 +169,17 @@ chart.axesUpdate = (c, transition) => {
 
 chart.scaling = () => {
     if ($('#autoscale').prop('checked')) {
-        if (app.simulation.running || (app.chart.abscissa == 'times')) {
-            app.chart.xScale.domain([app.data.kernel.time - (app.data.sim_time || 1000.), app.data.kernel.time])
+        if (app.simulation.running || (chart.abscissa == 'times')) {
+            chart.xScale.domain([app.data.kernel.time - (app.data.sim_time || 1000.), app.data.kernel.time])
         } else {
-            app.chart.xScale.domain(d3.extent(app.chart.data[app.chart.abscissa])).nice()
-            // app.chart.xScale.domain([d3.min(app.chart.data[app.chart.abscissa]) - 0.01, d3.max(app.chart.data[app.chart.abscissa]) + 0.01]).nice()
+            chart.xScale.domain(d3.extent(chart.data[chart.abscissa])).nice()
+            // chart.xScale.domain([d3.min(chart.data[chart.abscissa]) - 0.01, d3.max(chart.data[chart.abscissa]) + 0.01]).nice()
         }
     }
 }
 
 chart.update = () => {
     app.message.log('Update chart')
-    if (chart.networkLayout.drawing) return
     chart.scaling()
     app.simulation.recorders.map((recorder) => {
         if (!recorder.node.model) return
@@ -210,9 +195,9 @@ chart.update = () => {
             )
             if (links.length == 1) {
                 var link = links[0]
-                data.color = app.chart.colors()[app.data.nodes[link.source].id]
+                data.color = app.graph.colors()[app.data.nodes[link.source].id]
             } else {
-                data.color = app.chart.colors()[sidx]
+                data.color = app.graph.colors()[sidx]
             }
             return data
         })
@@ -227,57 +212,53 @@ chart.update = () => {
     })
 }
 
+chart.load = () => {
+    var fromOutputNode = {
+        'voltmeter': 'trace',
+        'multimeter': 'trace',
+        'spike_detector': 'raster-plot',
+    };
+
+    $('#chart').empty()
+    app.simulation.recorders.map((recorder, idx) => {
+        if (!recorder.node.model) return
+
+        var recorderChart = recorder.node.chart || fromOutputNode[recorder.node.model]
+        recorder.chart = require(__dirname + '/' + recorderChart)
+        recorder.chart.init(idx)
+        delete require.cache[require.resolve(__dirname + '/' + recorderChart)]
+    })
+}
+
 chart.init = () => {
     app.message.log('Initialize chart')
     chart.zooming = false;
-    chart.dragging = false;
+    chart.drawing = false;
 
-    // mouse event vars
-    chart.mousedown_link = null;
-    chart.mousedown_node = null;
-    chart.mouseup_node = null;
+    var margin = {
+        top: 40,
+        right: 0,
+        bottom: 10,
+        left: 60
+    };
 
-    var colors = d3.schemeCategory10;
-    // var colors = colorbrewer.RdYlGn;
-    // var keys = Object.keys(colors);
-    // var colors = colors[keys[keys.length - 1]]
+    chart.width = app.graph.width - margin.left - margin.right
+    chart.height = app.graph.height - margin.top - margin.bottom
+    chart.dataModel = app.config.nest('data');
 
-    chart.colors = (id) => {
-        if (id != undefined) {
-            return colors[id % colors.length]
-        }
-        return app.data.nodes.map(
-            (d) => (d.color || colors[d.id % colors.length])
-        )
-    }
-
-    $('#chart').attr('width', window.innerWidth).attr('height', chart.height)
-    $('#dataChart').attr('width', chart.width)
-        .attr('height', chart.height)
-    $('#dataChart').empty()
+    d3.select('#chart')
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     if (chart.xScale) {
         var xScaleDomain = chart.xScale.domain()
     }
     chart.xScale = d3.scaleLinear();
-    chart.xScale.range([chart.margin.left, (+window.innerWidth - chart.margin.right)])
+    chart.xScale.range([0, chart.width])
     if (xScaleDomain) {
         chart.xScale.domain(xScaleDomain)
     }
 
-    $('#networkLayout').attr('width', chart.width)
-        .attr('height', chart.height)
-    $('#networkLayout').empty()
-    app.chart.networkLayout.init()
-
-    $('#autoscale').off('click').on('click', app.chart.update)
-    window.addEventListener('resize', function() {
-        app.resizing = true
-        app.chart.init()
-        app.chart.update()
-        app.controller.update()
-        app.resizing = false
-    });
+    $('#autoscale').off('click').on('click', chart.update)
 
 }
 

@@ -18,14 +18,6 @@ network.update = () => {
         })
     );
 
-    app.simulation.recorders.map((recorder, idx) => {
-        if (!recorder.node.model) return
-        var recorderChart = recorder.node.chart || app.chart.fromOutputNode[recorder.node.model]
-        recorder.chart = require(__dirname + '/chart/' + recorderChart)
-        recorder.chart.init(idx)
-        delete require.cache[require.resolve(__dirname + '/chart/' + recorderChart)]
-    })
-
     app.simulation.stimulators = app.data.nodes.filter(
         (node) => node.element_type == 'stimulator' && !node.disabled
     ).map(
@@ -60,16 +52,16 @@ network.clean = () => {
         link.conn_spec = link.conn_spec || {}
         link.syn_spec = link.syn_spec || {}
     })
-    app.chart.abscissa = app.data.abscissa || 'times';
+    app.graph.chart.abscissa = app.data.abscissa || 'times';
 }
 
 network.edit = (drawing) => {
     app.selected_node = null;
     app.selected_link = null;
-    app.chart.networkLayout.drawing = drawing;
-    var networkLayout = app.config.app().chart.networkLayout
-    app.chart.networkLayout.toggle(drawing || networkLayout)
-    app.chart.networkLayout.update()
+    app.graph.networkLayout.drawing = drawing;
+    var networkLayout = app.config.app().graph.networkLayout
+    app.graph.networkLayout.toggle(drawing || networkLayout)
+    app.graph.networkLayout.update()
     if (drawing) {
         app.db.clone(app.data).then((data) => {
             app.data_original = data;

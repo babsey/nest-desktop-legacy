@@ -39,7 +39,7 @@
             "sync": true
         }]
     },
-    "chart": {
+    "graph": {
         "color": false,
         "networkLayout": true
     },

@@ -15,7 +15,7 @@ module.exports = (data) => hash({
             params: node.params,
         };
         // if (node.model == 'multimeter') {
-        //     saved_node.record_from = node.record_from;
+        //     saved_node.data_from = node.data_from;
         // }
         // if (node.model == 'spike_detector') {
         //     saved_node.nbins = node.nbins;

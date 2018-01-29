@@ -4,9 +4,16 @@
     "group": "nest-desktop",
     "user": "nest-desktop",
     "network": "simple",
-    "version": "0.11.0",
+    "version": "0.12.0",
     "nodes": [{
         "id": 0,
+        "element_type": "neuron",
+        "model": "iaf_psc_alpha",
+        "x": 150,
+        "y": 0,
+        "n": 10
+    }, {
+        "id": 1,
         "element_type": "stimulator",
         "model": "poisson_generator",
         "x": 0,
@@ -15,44 +22,19 @@
             "rate": 10.0
         }
     }, {
-        "id": 1,
-        "element_type": "neuron",
-        "model": "iaf_cond_alpha",
-        "x": 150,
-        "y": 0,
-        "n": 10
-    }, {
         "id": 2,
         "element_type": "recorder",
-        "model": "multimeter",
+        "model": "voltmeter",
         "x": 300,
-        "y": 50,
-        "record_from": ["V_m"]
+        "y": 50
     }],
     "links": [{
         "id": 0,
-        "source": 0,
-        "target": 1,
-        "syn_spec": {
-            "model": "static_synapse",
-            "weight": 1.0
-        }
+        "source": 1,
+        "target": 0
     }, {
         "id": 1,
-        "source": 1,
-        "target": 1,
-        "disabled": true,
-        "conn_spec": {
-            "rule": "fixed_outdegree",
-            "outdegree": 0
-        },
-        "syn_spec": {
-            "model": "static_synapse",
-            "weight": -1.0
-        }
-    }, {
-        "id": 2,
-        "source": 1,
+        "source": 0,
         "target": 2
     }]
 }

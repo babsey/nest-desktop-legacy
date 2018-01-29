@@ -34,16 +34,16 @@ heatmap.update = (recorder) => {
 heatmap.init = (idx) => {
 
     // $('#chart').empty()
-    var height = parseInt($('#dataChart').data('height')) / app.simulation.recorders.length
-    heatmap.chart = require(__dirname + '/core/heatmap-chart');
-    heatmap.chart.init('#dataChart', idx, {
+    var height = app.graph.height / app.simulation.recorders.length
+    heatmap.chart = require(__dirname + '/chart/heatmap-chart');
+    heatmap.chart.init('#chart', idx, {
         y: height * idx,
         height: height,
     });
-    app.chart.xAxis(heatmap.chart);
-    app.chart.yAxis(heatmap.chart);
-    app.chart.xLabel(heatmap.chart, 'xLabel_' + idx, 'Neuron Row ID');
-    app.chart.yLabel(heatmap.chart, 'yLabel_' + idx, 'Neuron Col ID');
+    app.graph.chart.xAxis(heatmap.chart);
+    app.graph.chart.yAxis(heatmap.chart);
+    app.graph.chart.xLabel(heatmap.chart, 'xLabel_' + idx, 'Neuron Row ID');
+    app.graph.chart.yLabel(heatmap.chart, 'yLabel_' + idx, 'Neuron Col ID');
 }
 
 module.exports = heatmap;

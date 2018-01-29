@@ -18,13 +18,14 @@ simulation.update = () => {
     app.message.log('Update simulation')
     app.navigation.update()
     app.network.update()
+    app.graph.chart.load()
     app.controller.update()
     app.protocol.update()
     simulation.simulate.run()
 }
 
 simulation.reload = () => {
-    app.chart.init()
+    app.graph.init()
     app.controller.init()
     simulation.update()
 }

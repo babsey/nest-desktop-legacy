@@ -34,7 +34,7 @@ synController.update = (link) => {
     synElem.find('.modelSlider .sliderInput').on('slideStop', function() {
         var param = $(this).parents('.paramSlider').attr('id');
         link.syn_spec[param] = parseFloat(this.value)
-        app.chart.networkLayout.update()
+        app.graph.networkLayout.update()
         app.simulation.simulate.init()
     })
     synElem.find('input.paramVal').on('change', function() {
@@ -48,7 +48,7 @@ synController.update = (link) => {
         var key = $(this).parents('.paramSlider').attr('id');
         link.syn_spec[key] = valid.value
         app.slider.update_synSlider(link)
-        app.chart.networkLayout.update()
+        app.graph.networkLayout.update()
         app.simulation.simulate.init()
     })
 }

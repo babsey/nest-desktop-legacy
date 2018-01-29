@@ -69,7 +69,7 @@ protocol.addDropdown = (data) => {
         app.network.edit(false)
         app.protocol.id = data._id;
         app.network.init().then(() => {
-            app.chart.init()
+            app.graph.init()
             app.controller.init()
             app.simulation.update()
         })
@@ -142,7 +142,7 @@ protocol.update = () => {
 
 protocol.events = () => {
     $('#protocol').on('click', () => {
-        if (app.chart.networkLayout.drawing) return
+        if (app.graph.networkLayout.drawing) return
         protocol.add()
     })
     $('#view-protocol').on('click', () => {

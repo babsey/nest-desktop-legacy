@@ -16,16 +16,16 @@ nodeController.record_from = (node) => {
         var recorder = app.simulation.recorders.filter(
             (recorder) => recorder.node.id == node.id)[0];
         var rec = this.value;
-        recorder.node.record_from = recorder.node.params.record_from.filter(
+        recorder.node.data_from = recorder.node.params.record_from.filter(
             (record_from) => record_from.indexOf(rec) != -1)
         recorder.data.senders = []
         recorder.data.recs = []
-        var y = recorder.node.record_from.map(
-            (record_from, ridx) => recorder.senders.map(
+        var y = recorder.node.data_from.map(
+            (d, ridx) => recorder.senders.map(
                 (s, i) => {
                     recorder.data.recs.push(ridx)
                     recorder.data.senders.push(i)
-                    return recorder.events[record_from].filter(
+                    return recorder.events[d].filter(
                         (r, i) => recorder.events.senders[i] == s
                     )
                 })
@@ -35,7 +35,7 @@ nodeController.record_from = (node) => {
         if ($('#autoscale').prop('checked')) {
             recorder.chart.lineChart.yScale.domain(d3.extent([].concat.apply([], recorder.data.y)))
         }
-        app.chart.update();
+        app.graph.update();
     })
 }
 

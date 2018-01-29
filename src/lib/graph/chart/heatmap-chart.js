@@ -33,7 +33,7 @@ chart.legend = (scale) => {
         })
         .on('mouseout', () => {
             chart.g.selectAll('.card')
-                .transition(app.chart.transition)
+                .transition(app.graph.chart.transition)
                 .style('opacity', 1.0);
         });
 
@@ -42,14 +42,15 @@ chart.legend = (scale) => {
         .attr("y", 0)
         .attr("dy", ".35em")
         .attr("text-anchor", "end")
-        .text((d) => app.chart.format(d));
+        .text((d) => app.graph.chart.format(d));
     return chart
 }
 
 chart.update = (data) => {
     chart.yScale.range([chart.height, chart.height - (+chart.g.attr('height'))])
     chart.xScale.range([0, +chart.g.attr('width')])
-    app.chart.axesUpdate(chart, false)
+    app.graph.chart.axesUpdate(chart, false)
+    var format = app.graph.format;
 
     var cards = chart.g
         .select('#clip')
@@ -63,7 +64,7 @@ chart.update = (data) => {
             chart.xScale(data.x[parseInt(i / (data.x.length))]) + "," +
             chart.yScale(data.y[parseInt(i % (data.y.length))] + 1) + ")")
         .attr('class', "card-fill")
-        .attr('title', (d, i) => app.chart.format(data.c[i]))
+        .attr('title', (d, i) => format(data.c[i]))
         .attr("width", chart.width / parseFloat(data.x.length))
         .attr("height", chart.height / parseFloat(data.y.length))
         .style("stroke", 'white')
@@ -80,7 +81,7 @@ chart.update = (data) => {
     if ((chart.width / parseFloat(data.x.length)) > 50) {
 
         cards.selectAll('text')
-            .text((d) => app.chart.format(d))
+            .text((d) => format(d))
 
         cards.enter().append("text")
             .attr("transform", (d, i) => "translate(" +
@@ -88,7 +89,7 @@ chart.update = (data) => {
                 chart.yScale(data.y.length - data.y[parseInt(i % (data.y.length))]) + ")")
             .attr("x", chart.xScale(.5))
             .attr("y", chart.yScale(.5))
-            .text((d) => app.chart.format(d))
+            .text((d) => format(d))
             .attr("fill", (d) => d <= .5 ? "#000" : "#fff")
             .style("stroke-width", 1)
             .style("z-index", "10")

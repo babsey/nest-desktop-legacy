@@ -9,18 +9,22 @@ nodeRenderer.table = (node) => {
     var models = nodes.map((d) => d.id);
     var nidx = models.indexOf(node.model);
     var params = nodes[nidx].sliderDefaults.map((d) => d.id);
+    var colors = app.graph.colors();
 
     var div = [];
-    div.push('<tr class="hline node">')
+    div.push('<tr class="hline node" ')
+    div.push('style="border-left: 4px solid ' + colors[node.id % colors.length] + '">')
     div.push('<td>ID</td>')
     div.push('<td>' + node.id + '</td>')
     div.push('</tr>')
-    div.push('<tr class="node">')
+    div.push('<tr class="node" ')
+    div.push('style="border-left: 4px solid ' + colors[node.id % colors.length] + '">')
     div.push('<td>model</td>')
     div.push('<td>' + node.model + '</td>')
     div.push('</tr>')
     if (node.n) {
-        div.push('<tr class="node">')
+        div.push('<tr class="node" ')
+        div.push('style="border-left: 4px solid ' + colors[node.id % colors.length] + '">')
         div.push('<td>n</td>')
         div.push('<td>' + node.n + '</td>')
         div.push('</tr>')
@@ -31,7 +35,9 @@ nodeRenderer.table = (node) => {
         if (pidx != -1) {
             if (level < nodes[nidx].sliderDefaults[pidx].level) continue;
         }
-        div.push('<tr class="node" level="' + level + '">')
+        div.push('<tr class="node" ')
+        div.push('style="border-left: 4px solid ' + colors[node.id % colors.length] + '" ')
+        div.push('level="' + level + '">')
         div.push('<td>' + pkey + '</td>')
         div.push('<td>' + node.params[pkey] + '</td>')
         div.push('</tr>')
@@ -60,7 +66,7 @@ nodeRenderer.list = (node) => {
 nodeRenderer.spy = (node) => {
     var div = [];
     div.push('<li class="node ' + node.element_type + '" data-id="' + node.id + '">')
-    var colors = app.chart.colors()
+    var colors = app.graph.colors()
     div.push('<a href="#node_' + node.id + '" ' + 'style="border-color: ' + colors[node.id % colors.length] + '; padding: 10px 0px"')
     div.push(' title="' + app.format.nodeTitle(node) + '">')
     // div.push(app.format.nodeLabel(node))
@@ -71,12 +77,10 @@ nodeRenderer.spy = (node) => {
 
 nodeRenderer.controller = (node) => {
     var div = [];
+    var colors = app.graph.colors();
     div.push('<div id="node_' + node.id + '" data-id="' + node.id + '" class="panel-body node ' + node.element_type + ' node_' + node.id + '">')
-    div.push('<div class="content"')
-    div.push(' style="')
-    var colors = app.chart.colors()
-    div.push('border-left: 4px solid ' + colors[node.id % colors.length])
-    div.push('" >')
+    div.push('<div class="content" ')
+    div.push('style="border-left: 4px solid ' + colors[node.id % colors.length] + '">')
     div.push('<label style="padding-left:15px;min-width: 200px;">Model</label>')
     div.push('<div class="btn-group">')
     div.push('<select data-id="' + node.id + '" class="' + node.element_type + 'Select modelSelect form-control btn btn-default disableOnRunning">')

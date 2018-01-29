@@ -1,7 +1,6 @@
 "use strict"
 
 const request = require('request');
-require('bootstrap-slider');
 var req = {};
 
 req.url = () => {
@@ -40,7 +39,12 @@ req.request = (data) => {
         app.message.log('Simulation finished.')
         if (d.error) {
             console.log(d.error)
-            app.simulation.simulate.message.update({icon: 'fa fa-error', title: 'NEST Error:', message: d.error, type: 'danger'});
+            app.simulation.simulate.message.update({
+                icon: 'fa fa-error',
+                title: 'NEST Error:',
+                message: d.error,
+                type: 'danger'
+            });
             setTimeout(() => app.simulation.simulate.end(), 5000);
         } else {
             app.simulation.simulate.end()

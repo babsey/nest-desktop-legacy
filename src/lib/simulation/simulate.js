@@ -7,13 +7,16 @@ var simulate = {};
 
 simulate.run = () => {
     if (!app.serverRunning) return
-    if (app.simulation.recorders.length == 0) return
+    if (app.simulation.recorders.length == 0) {
+        app.message.show('Info', 'Build a network with at least a recorder.')
+        return
+    }
     if (app.simulation.recorders.filter((recorder) => {
             return recorder.node.model != undefined
-        }).length == 0) return
-    if (app.simulation.recorders.filter((recorder) => {
-            return !(recorder.node.disabled == true)
-        }).length == 0) return
+        }).length == 0) {
+            app.message.show('Info', 'Select a model for recorder')
+            return
+        }
     if (app.simulation.autoReset) {
         app.data.kernel.time = 0.0;
     }
@@ -23,19 +26,26 @@ simulate.run = () => {
             id: 'random_seed'
         })
     }
-    app.simulation.recorders.map((recorder) => {
-        if (recorder.node.params.interval == undefined) return
-        var interval = recorder.node.params.interval;
-        var resolution = app.data.kernel.resolution || 1.0;
-        if (interval < resolution) {
-            app.data.kernel.resolution = interval;
-            app.controller.kernel.update({
-                id: 'resolution'
-            })
-            app.message.show('Info', 'Time resolution of the simulation was changed. See time interval of the recording devices.')
-        }
-    })
+    if (app.data.kernel.resolution != undefined) {
+        app.simulation.recorders.map((recorder) => {
+            // console.log(recorder.node.params.interval, app.data.kernel.resolution)
+            // if (recorder.node.params.interval == undefined) {
+                recorder.node.params.interval = app.data.kernel.resolution;
+            // } else {
+            //     var interval = recorder.node.params.interval;
+            //     var resolution = app.data.kernel.resolution || 1.0;
+            //     if (interval < resolution) {
+            //         app.data.kernel.resolution = interval;
+            //         app.controller.kernel.update({
+            //             id: 'resolution'
+            //         })
+            //         app.message.show('Info', 'Time resolution of the simulation was changed. See time interval of the recording devices.')
+            //     }
+            // }
+        })
+    }
 
+    var chart = app.graph.chart;
     app.request.request({
             id: app.data._id,
             network: app.data.network,
@@ -60,18 +70,18 @@ simulate.run = () => {
             app.simulation.recorders.map((recorder) => {
                 recorder.node.params = response.data.nodes[recorder.node.id].params
                 if (recorder.node.model == 'multimeter') {
-                    if (recorder.node.record_from) {
-                        var record_from = recorder.node.record_from.filter((record_from) => {
-                            return recorder.node.params.record_from.indexOf(record_from) != -1
+                    if (recorder.node.data_from) {
+                        var data_from = recorder.node.data_from.filter((data) => {
+                            return recorder.node.params.record_from.indexOf(data) != -1
                         })
-                        recorder.node.record_from = record_from;
+                        recorder.node.data_from = data_from;
                     } else {
-                        recorder.node.record_from = recorder.node.params.record_from.filter((record_from) => {
+                        recorder.node.data_from = recorder.node.params.record_from.filter((record_from) => {
                             return record_from.indexOf('V_m') != -1
                         })
                     }
                 } else if (recorder.node.model == 'voltmeter') {
-                    recorder.node.record_from = ['V_m']
+                    recorder.node.data_from = ['V_m']
                 }
                 if (app.data.kernel.time == 0.0) {
                     recorder.events = response.data.nodes[recorder.node.id].events;
@@ -89,11 +99,11 @@ simulate.run = () => {
                     (link) => app.data.nodes[link.source].id
                 );
                 if (['voltmeter', 'multimeter'].indexOf(recorder.node.model) != -1) {
-                    app.chart.data.times = recorder.events.times.filter(
+                    chart.data.times = recorder.events.times.filter(
                         (d, i) => ((recorder.events.senders[i] == recorder.senders[0]))
                     )
-                } else if (!app.chart.data.times) {
-                    app.chart.data.times = d3.extent(recorder.events.times)
+                } else if (!chart.data.times) {
+                    chart.data.times = d3.extent(recorder.events.times)
                 }
                 app.controller.node.update(recorder.node)
             });
@@ -101,7 +111,7 @@ simulate.run = () => {
             app.simulation.stimulators.map((stimulator) => {
                 stimulator.events = {}
                 if (stimulator.node.model == 'step_current_generator') {
-                    if (stimulator.node.params.amplitude_times.length == app.chart.data.times.length) {
+                    if (stimulator.node.params.amplitude_times.length == chart.data.times.length) {
                         stimulator.events.currents = stimulator.node.params.amplitude_values
                     } else {
                         var amplitudes = [].concat.apply([0], stimulator.node.params.amplitude_values).filter((d, i) => {
@@ -119,13 +129,13 @@ simulate.run = () => {
                         var amplitude_series = dtimes.map(
                             (dt, i) => numeric.rep([dt], amplitudes[i] * (stimulator.node.n || 1))
                         );
-                        stimulator.events.currents = [].concat.apply([], amplitude_series).slice(0, app.chart.data.times.length);
+                        stimulator.events.currents = [].concat.apply([], amplitude_series).slice(0, chart.data.times.length);
                     }
                 }
                 app.controller.node.update(stimulator.node)
             })
             app.data.kernel.time = response.data.kernel.time;
-            app.chart.update()
+            app.graph.update()
             app.controller.update()
             app.protocol.all().exec((err, docs) => {
                 app.screen.capture(app.data, false)
@@ -138,7 +148,7 @@ simulate.run = () => {
 
 simulate.init = () => {
     if (!app.simulation.runAfterChange) return
-    if (app.chart.networkLayout.drawing) return
+    if (app.graph.networkLayout.drawing) return
     if (app.simulation.running) return
     simulate.run()
 }

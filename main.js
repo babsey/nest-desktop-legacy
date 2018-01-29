@@ -49,6 +49,7 @@ function createWindow() {
     mainWindow.setFullScreen(configElectron.window.fullscreen);
 
     mainWindow.on('resize', () => {
+
         // The event doesn't pass us the window size, so we call the `getBounds` method which returns an object with
         // the height, width, and x and y coordinates.
         let {
@@ -103,7 +104,6 @@ app.on('activate', function() {
     }
 })
 
-
 var main = {};
 main.capturePage = function(filepath) {
     var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
@@ -145,9 +145,7 @@ main.capturePage = function(filepath) {
 main.printToPDF = function(filepath) {
 
     var options = {
-        marginsType: 2,
-        landscape: true,
-        fitToPageEnabled: true,
+        marginsType: 0,
     }
 
     mainWindow.webContents.printToPDF(options, (error, data) => {

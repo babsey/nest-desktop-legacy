@@ -78,7 +78,7 @@ slider.update_nodeSlider = (node) => {
         modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
 
-    var colors = app.chart.colors();
+    var colors = app.graph.colors();
     modelSlider.find('.slider-selection').css('background', colors[node.id % colors.length]);
     modelSlider.find('.slider-handle').css('border', '2px solid ' + colors[node.id % colors.length]);
 }
@@ -98,7 +98,7 @@ slider.update_connSlider = (link) => {
         }
         modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
-    var colors = app.chart.colors();
+    var colors = app.graph.colors();
     modelSlider.find('.slider-selection').css('background', colors[link.source % colors.length])
     modelSlider.find('.slider-handle').css('border', '2px solid ' + colors[link.source % colors.length])
 
@@ -118,7 +118,7 @@ slider.update_synSlider = (link) => {
         }
         modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
     })
-    var colors = app.chart.colors();
+    var colors = app.graph.colors();
     modelSlider.find('.slider-selection').css('background', colors[link.source % colors.length])
     modelSlider.find('.slider-handle').css('border', '2px solid ' + colors[link.source % colors.length])
 

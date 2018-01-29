@@ -4,6 +4,7 @@ var resume = {};
 
 resume.run = () => {
     if (!(app.simulation.running)) return
+    var chart = app.graph.chart;
 
     app.request.request({
             id: app.data._id,
@@ -21,7 +22,7 @@ resume.run = () => {
             if (!app.simulation.running) return
             app.data.kernel.time = response.data.kernel.time;
             if ($('#autoscale').prop('checked')) {
-                app.chart.xScale.domain([app.data.kernel.time - (app.data.sim_time), app.data.kernel.time])
+                chart.xScale.domain([app.data.kernel.time - (app.data.sim_time), app.data.kernel.time])
             }
             app.simulation.recorders.map((recorder) => {
                 for (var key in response.data.nodes[recorder.node.id].events) {
@@ -32,11 +33,11 @@ resume.run = () => {
                 }).map((link) => {
                     return app.data.nodes[link.source].ids
                 }))
-                app.chart.data.times = recorder.events.times.filter((d, i) => {
+                chart.data.times = recorder.events.times.filter((d, i) => {
                     return ((recorder.events.senders[i] == recorder.senders[0]))
                 })
             })
-            app.chart.update()
+            app.graph.update()
             app.controller.update()
             resume.run()
         })

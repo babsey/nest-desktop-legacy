@@ -15,7 +15,7 @@ controller.initNodes = () => {
 }
 
 controller.initLinks = () => {
-    var drawing = app.chart.networkLayout.drawing;
+    var drawing = app.graph.networkLayout.drawing;
     if (!drawing) {
         $('#connections .controller').empty();
         $('#synapses .controller').empty();
@@ -33,13 +33,13 @@ controller.initLinks = () => {
 controller.update = () => {
     app.message.log('Update controller')
     controller.simulation.updateAll()
-    controller.height = window.innerHeight - $('.tab-content')[0].offsetTop - 10
-    $('.tab-content').css('max-height', controller.height + 'px')
+    var height = window.innerHeight - $('.tab-content')[0].offsetTop - 51;
+    $('.tab-content').css('max-height', height + 'px')
 
     $('.node').removeClass('active');
     $('.controller').find('.node').show()
     $('.controller').find('.link').show()
-    if (app.chart.networkLayout.drawing) return
+    if (app.graph.networkLayout.drawing) return
 
     if (app.selected_node) {
         $('.controller').find('.node').hide()

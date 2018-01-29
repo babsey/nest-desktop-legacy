@@ -7,7 +7,7 @@ nodeController.params = (node) => {
     var nodeDefaults = app.config.nest('node');
     var nodeElem = $('#nodes').find('.node[data-id=' + node.id + '] .content');
 
-    var colors = app.chart.colors();
+    var colors = app.graph.colors();
     nodeElem.find('.slider-selection').css('background', colors[node.id % colors.length])
     nodeElem.find('.slider-handle').css('border', '2px solid ' + colors[node.id % colors.length])
     nodeElem.find('input.stim_timeVal').addClass('disableOnRunning')

@@ -42,25 +42,25 @@ networkLayout.addLink = (source, target) => {
 
 networkLayout.dragstarted = (d) => {
     if (networkLayout.drawing) return
-    app.chart.dragging = true;
-    if (!d3.event.active) networkLayout.force.alpha(1).restart();
+    app.graph.dragging = true;
+    if (!d3.event.active) networkLayout.forceSimulation.alpha(1).restart();
     d.fx = d.x;
     d.fy = d.y;
 }
 
 networkLayout.dragged = (d) => {
     if (networkLayout.drawing) return
-    if (!d3.event.active) networkLayout.force.alpha(1);
+    if (!d3.event.active) networkLayout.force.Simulationalpha(1);
     d.fx = d3.event.x;
     d.fy = d3.event.y;
 }
 
 networkLayout.dragended = (d) => {
     if (networkLayout.drawing) return
-    if (!d3.event.active) networkLayout.force.alpha(0);
+    if (!d3.event.active) networkLayout.forceSimulation.alpha(0);
     d.fx = null;
     d.fy = null;
-    app.chart.dragging = false;
+    app.graph.dragging = false;
 }
 
 networkLayout.draw_path = (d) => {
@@ -140,6 +140,9 @@ networkLayout.update = () => {
     networkLayout.circle.exit().remove();
     networkLayout.path.exit().remove();
     if (app.data.nodes.length == 0) return
+
+    networkLayout.forceSimulation
+        .force('center', d3.forceCenter(networkLayout.center.x, networkLayout.center.y))
 
     // Apply the general update pattern to the links.
     networkLayout.path = networkLayout.path.data(app.data.links.filter(
@@ -252,7 +255,7 @@ networkLayout.update = () => {
         .call(networkLayout.drag)
         .merge(networkLayout.circle)
 
-    var colors = app.chart.colors();
+    var colors = app.graph.colors();
     networkLayout.circle.selectAll('circle').remove()
     networkLayout.circle.append('circle')
         .attr('r', 23)
@@ -280,7 +283,7 @@ networkLayout.update = () => {
         networkLayout.ticked()
     } else {
         // Update and restart the simulation.
-        networkLayout.force
+        networkLayout.forceSimulation
             .nodes(app.data.nodes)
             .alpha(0.01)
             .restart();
@@ -296,11 +299,11 @@ networkLayout.mousedown = function() {
     // console.log('mousedown')
     if (!networkLayout.drawing) return
     // because :active only works in WebKit?
-    d3.select('#chart').classed('active', true);
+    d3.select('#graph svg').classed('active', true);
     if (networkLayout.mousedown_node || networkLayout.mousedown_link) return
 
     var point = d3.mouse(this);
-    var colors = app.chart.colors();
+    var colors = app.graph.colors;
 
     var element_types = ['recorder', 'neuron', 'stimulator']
     element_types.map((d, i) => {
@@ -314,12 +317,12 @@ networkLayout.mousedown = function() {
                 endAngle: Math.PI * (i + 1) * 2 / 3
             })
             .style('fill', 'white')
-            .style('stroke', () => app.chart.colors(app.data.nodes.length))
+            .style('stroke', () => colors(app.data.nodes.length))
             .style('stroke-width', 4)
             .attr('d', networkLayout.arc)
             .on('mouseover', function() {
                 d3.select(this).style('fill',
-                    () => app.chart.colors(app.data.nodes.length)
+                    () => colors(app.data.nodes.length)
                 )
             })
             .on('mouseout', function() {
@@ -370,7 +373,7 @@ networkLayout.mouseup = () => {
     }
 
     // because :active only works in WebKit?
-    d3.select('#chart').classed('active', false);
+    d3.select('#graph svg').classed('active', false);
 
     networkLayout.g.selectAll('.select').remove()
 
@@ -381,8 +384,8 @@ networkLayout.mouseup = () => {
     networkLayout.ticked()
 }
 
-networkLayout.init = (reference) => {
-    $(reference).empty()
+networkLayout.init = () => {
+    $('#networkLayout').empty()
     networkLayout.lastNodeId = app.data.nodes.length;
     networkLayout.lastLinkId = app.data.links.length;
     networkLayout.drag = d3.drag()
@@ -393,8 +396,11 @@ networkLayout.init = (reference) => {
         .append('g')
         .attr('id', 'clip')
         .attr('clip-path', 'url(#clip)');
-    networkLayout.width = +d3.select('#networkLayout').attr('width');
-    networkLayout.height = +d3.select('#networkLayout').attr('height');
+
+    networkLayout.center = {
+        x: app.graph.width / 2,
+        y: app.graph.height / 2,
+    }
 
     // build the arrow.
     networkLayout.g.append('svg:defs').selectAll('marker')
@@ -425,12 +431,8 @@ networkLayout.init = (reference) => {
         .attr('r', 1.5)
         .attr('transform', 'translate(1.5,1.5)');
 
-    networkLayout.force = d3.forceSimulation()
-        // .force('link', d3.forceLink().id((d) => {
-        //     return d.id;
-        // }))
-        // .force('charge', d3.forceManyBody())
-        .force('center', d3.forceCenter(networkLayout.width / 2, networkLayout.height / 2))
+    networkLayout.forceSimulation = d3.forceSimulation()
+        .force('center', d3.forceCenter(networkLayout.center.x, networkLayout.center.y))
         .on('tick', networkLayout.ticked)
 
     // line displayed when dragging new nodes
@@ -445,13 +447,13 @@ networkLayout.init = (reference) => {
     networkLayout.path = networkLayout.links.selectAll('.link');
 
     // app starts here
-    d3.select('#chart')
+    d3.select('#graph svg')
         .on('mousedown', networkLayout.mousedown)
         .on('mousemove', networkLayout.mousemove)
         .on('mouseup', networkLayout.mouseup);
 
     networkLayout.update()
-    app.chart.networkLayout.toggle(app.config.app().chart.networkLayout)
+    app.graph.networkLayout.toggle(app.config.app().graph.networkLayout)
 }
 
 networkLayout.toggle = (visible) => {

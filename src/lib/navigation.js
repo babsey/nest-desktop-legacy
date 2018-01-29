@@ -25,25 +25,25 @@ navigation.events = () => {
         $(this).find(' .fa').removeClass('fa-spin');
     });
     $('#chart-color').on('click', () => {
-        var color = app.config.app().chart.color || false
+        var color = app.config.app().graph.color || false
         var configApp = app.config.app();
-        configApp.chart.color = !color;
+        configApp.graph.color = !color;
         app.config.save('app', configApp)
         $('#chart-color').find('.glyphicon-ok').toggle(!color)
-        app.chart.update()
+        app.graph.update()
     })
     $('#view-networkLayout').on('click', () => {
-        var networkLayout = !app.config.app().chart.networkLayout || false
+        var networkLayout = !app.config.app().graph.networkLayout || false
         var configApp = app.config.app();
-        configApp.chart.networkLayout = networkLayout;
+        configApp.graph.networkLayout = networkLayout;
         app.config.save('app', configApp)
-        app.chart.networkLayout.toggle(networkLayout)
+        app.graph.networkLayout.toggle(networkLayout)
     })
     $('#edit-network').on('click', () => {
         app.protocol.add().then(() => {
             setTimeout(() => {
                 app.network.edit(true)
-                app.chart.update()
+                app.graph.update()
                 app.controller.update()
             }, 200)
         })
@@ -54,7 +54,7 @@ navigation.events = () => {
                 app.network.edit(true)
                 app.network.clear()
                 app.network.update()
-                app.chart.init()
+                app.graph.init()
                 app.controller.init()
             }, 200)
         })
@@ -62,7 +62,7 @@ navigation.events = () => {
     $('#edit-network-clear').on('click', () => {
         app.network.clear()
         app.network.update()
-        app.chart.init()
+        app.graph.init()
         app.controller.init()
     })
     $('#edit-network-cancel').on('click', () => {
@@ -170,10 +170,16 @@ navigation.events = () => {
             height,
         } = configElectron.windowBounds;
 
-        cssPagedMedia.size((width-319+480) +'px '+ (height) + 'px');
+        var pageWidth = width - 319 + 240 + 50;
+        var pageHeight = pageWidth * Math.sqrt(2);
+
+        $('#description').css('margin-top', (height - 30) + 'px')
+        $('#description h4').css('font-size', '1.7vw')
+        $('.description').css('font-size', '1.3vw')
+
+        cssPagedMedia.size(pageWidth +'px '+ pageHeight + 'px');
         require('electron').remote.require('./main').printToPDF(path.join(filepath, filename))
         setTimeout(() => {app.message.show('Info', 'PDF successfully saved.')}, 200)
-        setTimeout(app.simulation.update, 200)
     })
     $('#simulation-form-dialog').on('hidden.bs.modal', (e) => {
         $('#simulation-form button[type="submit"]').hide()
@@ -273,12 +279,12 @@ navigation.init = () => {
     app.simulation.autoReset = app.config.app().simulation.autoReset || false;
     app.simulation.randomSeed = app.config.app().simulation.randomSeed || false;
     app.simulation.autoProtocol = app.config.app().simulation.autoProtocol || false;
-    $(".config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().chart.color || false)
+    $(".config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().graph.color || false)
     $(".config").find('#run-after-change').find('.glyphicon-ok').toggle(app.simulation.runAfterChange)
     $(".config").find('#auto-reset').find('.glyphicon-ok').toggle(app.simulation.autoReset)
     $(".config").find('#random-seed').find('.glyphicon-ok').toggle(app.simulation.randomSeed)
     $(".config").find('#auto-protocol').find('.glyphicon-ok').toggle(app.simulation.autoProtocol)
-    $(".config").find('.color[data-group=' + app.config.app().chart.color.group + ']').find('.glyphicon-ok').show()
+    $(".config").find('.color[data-group=' + app.config.app().graph.color.group + ']').find('.glyphicon-ok').show()
     $('.level[level=' + app.config.app().simulation.level + ']').find('.glyphicon-ok').show()
     app.navigation.events()
 }
