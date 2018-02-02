@@ -30,7 +30,7 @@ print.toPDF = (filename, filepath) => {
     } = configElectron.windowBounds;
 
     var pageWidth = width - 319 + 240 + 50;
-    var pageHeight = viewDescription ? pageWidth * Math.sqrt(2) : height + 50;
+    var pageHeight = viewDescription ? pageWidth * Math.sqrt(2) : height + 80;
 
     var dataDialog = $('#data-dialog').hasClass('in');
     if (dataDialog) {
