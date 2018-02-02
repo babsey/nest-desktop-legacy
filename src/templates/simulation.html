@@ -14,12 +14,12 @@
 <body>
 
     <!-- Modal -->
-    <div class="modal fade" v id="data-dialog">
+    <div class="modal fade" id="data-dialog">
         <div class="modal-dialog modal-lg" role="document">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" >
+                    <button type="button" class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                     <h4 class="modal-title title"></h4>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="dropdown" style="display:inline-block">
+                    <div class="dropup" style="display:inline-block">
                         <button role="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Edit view level">
                             <i class="fa fa-eye"></i>
                             <b class="caret"></b>
@@ -76,8 +76,11 @@
                             </li>
                         </ul>
                     </div>
-                    <button type="button" class="simulation-edit btn btn-default" data-toggle="modal" data-target="#simulation-form-dialog">
+                    <button type="button" class="simulation-edit btn btn-primary" data-toggle="modal" data-target="#simulation-form-dialog">
                         <span class="glyphicon glyphicon-menu-glyphicon glyphicon-edit"></span> Edit
+                    </button>
+                    <button type="button" class="printToPDF btn btn-primary" data-toggle="modal" data-target="#pdf-form-dialog" title="Print to PDF">
+                        <i class="fa fa-print"></i> Print to PDF
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
@@ -100,7 +103,7 @@
                     <pre id="raw-data"></pre>
                 </div>
                 <div class="modal-footer">
-                    <button id="copy" class="btn btn-default" data-clipboard-target="#raw-data">
+                    <button id="copy" class="btn btn-primary" data-clipboard-target="#raw-data">
                         <i class="fa fa-clipboard"></i> Copy code
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -138,7 +141,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" >
+                    <button type="button" class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                     <h4 class="modal-title">Print to PDF</h4>
@@ -147,9 +150,14 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="pdf-filename" class="control-label">Filename</label>
-                            <input type="text" class="form-control" id="pdf-filename">
+                            <input type="text" id="pdf-filename" class="form-control">
                             <label for="pdf-filepath" class="control-label">Path</label>
-                            <input type="text" class="form-control" id="pdf-filepath">
+                            <input type="text" id="pdf-filepath" class="form-control">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="pdf-description"> Description
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -167,7 +175,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" >
+                    <button type="button" class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
@@ -175,7 +183,7 @@
                     Are you sure to delete all protocols?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" onclick="app.protocol.deleteAll()">Yes</button>
+                    <button type="button" class="btn btn-danger" onclick="app.protocol.deleteAll()">Yes</button>
                     <button id="delete-all-protocols-cancel" type="button" class="btn btn-default" data-dismiss="modal">No</button>
                 </div>
             </div>
@@ -193,7 +201,7 @@
 
             <div class="navbar-right">
                 <span class="checkbox btn-group" style="margin-right:10px; margin-top:15px">
-                    <label for="autoscale">
+                    <label>
                         <input type="checkbox" name="autoscale" value="autoscale" id="autoscale" checked> Autoscale
                     </label>
                 </span>
@@ -272,7 +280,7 @@
                 </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnSimulate disableOnRunning" data-toggle="dropdown" title="Simulation menu">
+                    <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnSimulate disableOnRunning" data-toggle="dropdown" title="Menu">
                         <i class="fa fa-bars"></i>
                     </button>
                     <ul id="simulation-config" class="dropdown-menu" role="menu">
@@ -339,7 +347,7 @@
                                 <i class="fa fa-code"></i> View raw data
                             </a>
                         </li>
-                        <li id="printToPDF" title="Print to PDF">
+                        <li class="printToPDF" title="Print to PDF">
                             <a data-toggle="modal" href="#pdf-form-dialog">
                                 <i class="fa fa-print"></i> Print to PDF
                             </a>
@@ -402,7 +410,7 @@
                                     <li role="presentation">
                                         <a role="tab" class="dropdown-toggle disableOnDrawing" data-toggle="dropdown" title="Edit level of slider views">
                                             <div style="white-space: nowrap;">
-                                                <i class="fa fa-sliders" ></i>
+                                                <i class="fa fa-sliders"></i>
                                                 <b class="caret"></b>
                                             </div>
                                         </a>

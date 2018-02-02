@@ -61,6 +61,7 @@ protocol.addDropdown = (data) => {
     $('#' + data._id).popover({
         html: true,
         animation: false,
+        placement: 'left',
         trigger: 'hover',
         content: app.renderer.protocol.popover(data)
     });
@@ -83,8 +84,8 @@ protocol.add = () => {
     return app.db.clone(app.data).then((data) => {
         data.user = configApp.user.id;
         data.version = process.env.npm_package_version;
+        var description = data.description;
         app.db.clean(data);
-
         delete data._id;
         delete data.updatedAt;
 
@@ -94,7 +95,11 @@ protocol.add = () => {
             }).exec((err, doc) => {
                 // console.log(doc)
                 if (doc) {
-                    data.description = doc.description;
+                    if (description == undefined) {
+                        description = doc.description
+                    }
+                    // console.log('Update protocol')
+                    data.description = description
                     protocol.db.update({
                         hash: data.hash,
                     }, data, {}, () => {
@@ -104,17 +109,17 @@ protocol.add = () => {
                             app.data._id = doc._id;
                             app.protocol.id = app.data._id;
                             app.data.updatedAt = doc.updatedAt;
+                            app.data.description = doc.description;
                             resolve(false)
-                            // setTimeout(() => resolve(false), 100.)
                         })
                     })
                 } else {
+                    // console.log('Insert protocol')
                     protocol.db.insert(data, (err, newDocs) => {
                         app.data._id = newDocs._id;
                         app.protocol.id = newDocs._id;
                         app.data.updatedAt = newDocs.updatedAt;
                         resolve(true)
-                        // setTimeout(() => resolve(true), 100.)
                     })
                 }
             })

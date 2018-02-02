@@ -47,7 +47,10 @@ nodeRenderer.table = (node) => {
 
 nodeRenderer.list = (node) => {
     var div = []
-    div.push('<h4>' + node.id + ' ' + app.format.nodeTitle(node) + '</h4>')
+    var colors = app.graph.colors();
+    div.push('<div style="border-left: 2px solid ' + colors[node.id % colors.length] + '; margin: 5px; padding: 3px">')
+    div.push('<dl><dt>model</dt><dd>' + app.format.nodeTitle(node) + '</dd></dl>')
+
     if (node.n) {
         div.push('<dl>')
         div.push('<dt>npop</dt>')
@@ -60,13 +63,14 @@ nodeRenderer.list = (node) => {
         div.push('<dd>' + node.params[pkey] + '</dd>')
     }
     div.push('</dl>')
+    div.push('</div>')
     return div.join('')
 }
 
 nodeRenderer.spy = (node) => {
     var div = [];
     div.push('<li class="node ' + node.element_type + '" data-id="' + node.id + '">')
-    var colors = app.graph.colors()
+    var colors = app.graph.colors();
     div.push('<a href="#node_' + node.id + '" ' + 'style="border-color: ' + colors[node.id % colors.length] + '; padding: 10px 0px"')
     div.push(' title="' + app.format.nodeTitle(node) + '">')
     // div.push(app.format.nodeLabel(node))

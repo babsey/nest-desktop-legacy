@@ -106,16 +106,8 @@ navigation.events = () => {
         app.network.update()
         app.simulation.reload()
     })
-    $('#delete-protocol').on('click', app.protocol.delete)
-    $('#delete-all-protocols-dialog').on('shown.bs.modal', function() {
-        $('#delete-all-protocols-cancel').trigger('focus')
-    })
     $('.simulation-run').on('click', app.simulation.simulate.run)
     $('#simulation-resume').on('click', app.simulation.resume.start)
-    $('#capture-screen').on('click', () => {
-        app.screen.capture(app.data, true)
-        app.protocol.update()
-    })
     $('#simulation-clone').on('click', (e) => {
         $('#simulation-clone-submit').show()
         var simulationForm = $('#simulation-form');
@@ -128,18 +120,6 @@ navigation.events = () => {
         simulationForm.find('#simulation-name').val(app.data.name).attr('disabled', 'disabled')
         simulationForm.find('#simulation-description').show().val(app.data.description).focus()
     })
-    $('#printToPDF').on('click', (e) => {
-        var configApp = app.config.app();
-        var filename = app.data._id + '.pdf';
-        var filepath = path.join(process.cwd(), configApp.datapath);
-        $('#pdf-form #pdf-filename').val(filename).focus();
-        $('#pdf-form #pdf-filepath').val(filepath);
-    })
-    $('#pdf-submit').on('click', function(e) {
-        var filename = $('#pdf-form #pdf-filename').val();
-        var filepath = $('#pdf-form #pdf-filepath').val();
-        app.print.toPDF(filename, filepath);
-    })
     $('#simulation-form-dialog').on('hidden.bs.modal', (e) => {
         $('#simulation-form button[type="submit"]').hide()
     })
@@ -150,7 +130,6 @@ navigation.events = () => {
         $(this).hide(() => {
             app.db.clone(app.data).then((data) => {
                 data.name = simulationName;
-                data.description = simulationForm.find('#simulation-description').val();
                 app.db.add(data).then(() => {
                     location.href = 'simulation.html?simulation=' + data._id;
                 });
@@ -159,15 +138,32 @@ navigation.events = () => {
     })
     $('#simulation-edit-submit').on('click', function(e) {
         $(this).hide(() => {
-            app.data.name = $('#simulation-form #simulation-name').val();
             app.data.description = $('#simulation-form #simulation-description').val();
-            $('.title').html(app.data.name)
             $('.description').html(app.data.description)
-            var id = app.data._id;
-            app.db.update(app.data)
-            app.data._id = id;
-            app.navigation.update();
+            app.protocol.add(app.data)
         })
+    })
+    $('#delete-protocol').on('click', app.protocol.delete)
+    $('#delete-all-protocols-dialog').on('shown.bs.modal', function() {
+        $('#delete-all-protocols-cancel').trigger('focus')
+    })
+    $('#capture-screen').on('click', () => {
+        app.screen.capture(app.data, true)
+        app.protocol.update()
+    })
+    $('.printToPDF').on('click', (e) => {
+        var configApp = app.config.app();
+        var filename = app.data._id + '.pdf';
+        var filepath = path.join(process.cwd(), configApp.datapath);
+        $('#pdf-form #pdf-filename').val(filename).focus();
+        $('#pdf-form #pdf-filepath').val(filepath);
+        $('#pdf-description').prop('checked', app.data.description != undefined)
+        $('#pdf-description').prop('disabled', app.data.description == undefined)
+    })
+    $('#pdf-submit').on('click', function(e) {
+        var filename = $('#pdf-form #pdf-filename').val();
+        var filepath = $('#pdf-form #pdf-filepath').val();
+        app.print.toPDF(filename, filepath);
     })
     $('.level').on('click', function() {
         var configApp = app.config.app();
@@ -199,6 +195,9 @@ navigation.events = () => {
 
 navigation.update = () => {
     app.message.log('Update navigation')
+    $('.title').html(app.data.name)
+    $('.description').html(app.data.description)
+    $('.description').attr('style', 'font-size: 1em')
 
     // Load simulation list
     $('#get-simulation-list').prop('disabled', true)

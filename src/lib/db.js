@@ -39,6 +39,7 @@ db.clone = (data) => new Promise((resolve, reject) => {
 
 db.clean = (data) => {
     delete data._rev
+    delete data.description
     if ('res_time' in data) {
         delete data.res_time
     }
@@ -125,7 +126,7 @@ db.update = (data) => {
     db.localDB.update({
         _id: app.simulation.id
     }, data, {}, () => {
-        db.localdb.findOne({
+        db.localDB.findOne({
             _id: app.simulation.id
         })
     });

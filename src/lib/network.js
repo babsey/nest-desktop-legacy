@@ -90,8 +90,6 @@ network.init = () => new Promise((resolve, reject) => {
             })
     }
 }).then(() => {
-    $('.title').html(app.data.name)
-    $('.description').html(app.data.description)
     network.clean()
     network.update()
 })

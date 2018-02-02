@@ -140,7 +140,7 @@ simulate.run = () => {
             app.controller.update()
             app.protocol.all().exec((err, docs) => {
                 app.screen.capture(app.data, false)
-                if ((docs.length == 0 || app.protocol.id == undefined) && app.simulation.autoProtocol) {
+                if (docs.length == 0 || app.protocol.id == undefined || app.simulation.autoProtocol) {
                     app.protocol.add()
                 }
             })
