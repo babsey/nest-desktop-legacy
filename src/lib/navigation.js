@@ -197,7 +197,6 @@ navigation.update = () => {
     app.message.log('Update navigation')
     $('.title').html(app.data.name)
     $('.description').html(app.data.description)
-    $('.description').attr('style', 'font-size: 1em')
 
     // Load simulation list
     $('#get-simulation-list').prop('disabled', true)

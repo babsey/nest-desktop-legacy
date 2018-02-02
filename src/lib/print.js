@@ -29,8 +29,12 @@ print.toPDF = (filename, filepath) => {
         height,
     } = configElectron.windowBounds;
 
+    $('#description').parents('.visible-print').attr('style', 'display:block!important')
+    var offsetHeight = $('#description')[0].offsetHeight;
+    $('#description').parents('.visible-print').attr('style', '')
+
     var pageWidth = width - 319 + 240 + 50;
-    var pageHeight = viewDescription ? pageWidth * Math.sqrt(2) : height + 80;
+    var pageHeight = 80 + (viewDescription ? height + offsetHeight : height);
 
     var dataDialog = $('#data-dialog').hasClass('in');
     if (dataDialog) {
@@ -40,13 +44,12 @@ print.toPDF = (filename, filepath) => {
 
     $('#description').toggle(viewDescription)
     $('#description').css('margin-top', (height - 30) + 'px')
-    $('#description h4').css('font-size', '1.7vw')
-    $('#description .description').css('font-size', '1.3vw')
 
     cssPagedMedia.size(pageWidth + 'px ' + pageHeight + 'px');
     require('electron').remote.require('./main').printToPDF(path.join(filepath, filename))
     setTimeout(() => {
         app.message.show('Info', 'PDF successfully saved.')
+        $('#description').attr('style', '')
         if (dataDialog) {
             $('#data-dialog').modal('show')
             $('#data-dialog').addClass('fade')
