@@ -11,7 +11,7 @@ simulationRenderer.list = (data) => {
     div.push('<span>')
     div.push(data.name)
     div.push('</span>')
-    div.push('<span class="badge" title="number of protocols" style="margin-left: 20px"></span>')
+    div.push('<span class="badge" title="Number of protocols" style="margin-left: 20px"></span>')
     div.push('</a>')
     return div.join('')
 }

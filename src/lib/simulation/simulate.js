@@ -7,6 +7,7 @@ var simulate = {};
 
 simulate.run = () => {
     if (!app.serverRunning) return
+    if (app.graph.networkLayout.drawing) return
     if (app.simulation.recorders.length == 0) {
         app.message.show('Info', 'Build a network with at least a recorder.')
         return

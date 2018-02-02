@@ -1,6 +1,5 @@
 "use strict"
 
-const fs = require('fs');
 const path = require('path');
 const Clipboard = require('clipboard');
 
@@ -38,6 +37,36 @@ navigation.events = () => {
         configApp.graph.networkLayout = networkLayout;
         app.config.save('app', configApp)
         app.graph.networkLayout.toggle(networkLayout)
+    })
+
+    $('#run-after-change').on('click', () => {
+        var configApp = app.config.app();
+        var runAfterChange = configApp.simulation.runAfterChange || false
+        configApp.simulation.runAfterChange = !runAfterChange;
+        app.simulation.runAfterChange = !runAfterChange;
+        app.config.save('app', configApp)
+        $('#run-after-change').find('.glyphicon-ok').toggle(!runAfterChange)
+    })
+    $('#auto-reset').on('click', () => {
+        var configApp = app.config.app();
+        var autoReset = configApp.simulation.autoReset || false
+        configApp.simulation.autoReset = !autoReset;
+        app.simulation.autoReset = !autoReset;
+        app.config.save('app', configApp)
+        $('#auto-reset').find('.glyphicon-ok').toggle(!autoReset)
+    })
+    $('#random-seed').on('click', () => {
+        var randomSeed = app.config.app().simulation.randomSeed || false
+        app.simulation.randomSeed = !randomSeed;
+        navigation.update_randomSeed()
+    })
+    $('#auto-protocol').on('click', () => {
+        var configApp = app.config.app();
+        var autoProtocol = configApp.simulation.autoProtocol || false
+        configApp.simulation.autoProtocol = !autoProtocol;
+        app.simulation.autoProtocol = !autoProtocol;
+        app.config.save('app', configApp)
+        $('#auto-protocol').find('.glyphicon-ok').toggle(!autoProtocol)
     })
     $('#edit-network').on('click', () => {
         app.protocol.add().then(() => {
@@ -77,35 +106,6 @@ navigation.events = () => {
         app.network.update()
         app.simulation.reload()
     })
-    $('#run-after-change').on('click', () => {
-        var configApp = app.config.app();
-        var runAfterChange = configApp.simulation.runAfterChange || false
-        configApp.simulation.runAfterChange = !runAfterChange;
-        app.simulation.runAfterChange = !runAfterChange;
-        app.config.save('app', configApp)
-        $('#run-after-change').find('.glyphicon-ok').toggle(!runAfterChange)
-    })
-    $('#auto-reset').on('click', () => {
-        var configApp = app.config.app();
-        var autoReset = configApp.simulation.autoReset || false
-        configApp.simulation.autoReset = !autoReset;
-        app.simulation.autoReset = !autoReset;
-        app.config.save('app', configApp)
-        $('#auto-reset').find('.glyphicon-ok').toggle(!autoReset)
-    })
-    $('#random-seed').on('click', () => {
-        var randomSeed = app.config.app().simulation.randomSeed || false
-        app.simulation.randomSeed = !randomSeed;
-        navigation.update_randomSeed()
-    })
-    $('#auto-protocol').on('click', () => {
-        var configApp = app.config.app();
-        var autoProtocol = configApp.simulation.autoProtocol || false
-        configApp.simulation.autoProtocol = !autoProtocol;
-        app.simulation.autoProtocol = !autoProtocol;
-        app.config.save('app', configApp)
-        $('#auto-protocol').find('.glyphicon-ok').toggle(!autoProtocol)
-    })
     $('#delete-protocol').on('click', app.protocol.delete)
     $('#delete-all-protocols-dialog').on('shown.bs.modal', function() {
         $('#delete-all-protocols-cancel').trigger('focus')
@@ -116,84 +116,44 @@ navigation.events = () => {
         app.screen.capture(app.data, true)
         app.protocol.update()
     })
-    // $('#view-data').on('click', () => {
-    //     app.protocol.add().then(() => {
-    //         setTimeout(() => {
-    //             location.href = 'view_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id;
-    //         }, 200.)
-    //     });
-    // })
-    // $('#view-raw-data').on('click', () => {
-    //     app.protocol.add().then(() => {
-    //         window.location = 'view_raw_data.html?simulation=' + app.simulation.id + '&protocol=' + app.data._id;
-    //     });
-    // })
-    $('#simulation-add').on('click', (e) => {
-        $('#simulation-add-submit').show()
-        $('#simulation-form #simulation-name').focus()
+    $('#simulation-clone').on('click', (e) => {
+        $('#simulation-clone-submit').show()
+        var simulationForm = $('#simulation-form');
+        simulationForm.find('#simulation-name').attr('disabled', false).focus()
+        simulationForm.find('#simulation-description').hide()
     })
     $('.simulation-edit').on('click', (e) => {
         $('#simulation-edit-submit').show()
-        $('#simulation-form #simulation-name').val(app.data.name).focus()
-        $('#simulation-form #simulation-description').val(app.data.description)
+        var simulationForm = $('#simulation-form');
+        simulationForm.find('#simulation-name').val(app.data.name).attr('disabled', 'disabled')
+        simulationForm.find('#simulation-description').show().val(app.data.description).focus()
     })
     $('#printToPDF').on('click', (e) => {
         var configApp = app.config.app();
-        var filename = app.data._id + '.pdf'
-        var filepath = path.join(process.cwd(), configApp.datapath)
-        $('#pdf-form #pdf-filename').val(filename).focus()
-        $('#pdf-form #pdf-filepath').val(filepath)
+        var filename = app.data._id + '.pdf';
+        var filepath = path.join(process.cwd(), configApp.datapath);
+        $('#pdf-form #pdf-filename').val(filename).focus();
+        $('#pdf-form #pdf-filepath').val(filepath);
     })
     $('#pdf-submit').on('click', function(e) {
         var filename = $('#pdf-form #pdf-filename').val();
         var filepath = $('#pdf-form #pdf-filepath').val();
-        if (!filename.endsWith('.pdf')) {
-            filename = filename + '.pdf'
-        }
-
-        var cssPagedMedia = (function () {
-            var style = document.createElement('style');
-            document.head.appendChild(style);
-            return function (rule) {
-                style.innerHTML = rule;
-            };
-        }());
-
-        cssPagedMedia.size = function (size) {
-            cssPagedMedia('@page {size: ' + size + '}');
-        };
-
-        var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
-
-        let {
-            width,
-            height,
-        } = configElectron.windowBounds;
-
-        var pageWidth = width - 319 + 240 + 50;
-        var pageHeight = pageWidth * Math.sqrt(2);
-
-        $('#description').css('margin-top', (height - 30) + 'px')
-        $('#description h4').css('font-size', '1.7vw')
-        $('.description').css('font-size', '1.3vw')
-
-        cssPagedMedia.size(pageWidth +'px '+ pageHeight + 'px');
-        require('electron').remote.require('./main').printToPDF(path.join(filepath, filename))
-        setTimeout(() => {app.message.show('Info', 'PDF successfully saved.')}, 200)
+        app.print.toPDF(filename, filepath);
     })
     $('#simulation-form-dialog').on('hidden.bs.modal', (e) => {
         $('#simulation-form button[type="submit"]').hide()
     })
-    $('#simulation-add-submit').on('click', function(e) {
+    $('#simulation-clone-submit').on('click', function(e) {
+        var simulationForm = $('#simulation-form');
+        var simulationName = simulationForm.find('#simulation-name').val();
+        if (simulationName.length == 0) return
         $(this).hide(() => {
-            if (app.data.name == $('#simulation-form #simulation-name').val()) return
             app.db.clone(app.data).then((data) => {
-                data.name = $('#simulation-form #simulation-name').val();
-                data.description = $('#simulation-form #simulation-description').val();
-                app.db.add(data)
-                $('.title').html(data.name)
-                $('.description').html(data.description)
-                app.navigation.update()
+                data.name = simulationName;
+                data.description = simulationForm.find('#simulation-description').val();
+                app.db.add(data).then(() => {
+                    location.href = 'simulation.html?simulation=' + data._id;
+                });
             });
         })
     })
@@ -243,6 +203,9 @@ navigation.update = () => {
     // Load simulation list
     $('#get-simulation-list').prop('disabled', true)
     $('#simulation-list').empty()
+    $('#simulation-list').append('<li><a href="../index.html"><i class="fa fa-home"></i> Go to overview page</a></li>')
+    $('#simulation-list').append('<li class="divider"></li>')
+    $('#simulation-list').append('<li class="dropdown-header">List of simulations</li>')
     app.db.filter({
         _id: {
             $ne: app.simulation.id
@@ -271,6 +234,7 @@ navigation.update = () => {
         })
     })
     app.network.edit((app.data.nodes.length == 0))
+    $('.simulation-edit').toggle(app.protocol.id != undefined)
 }
 
 navigation.init = () => {

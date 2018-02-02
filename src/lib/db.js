@@ -131,7 +131,7 @@ db.update = (data) => {
     });
 }
 
-db.add = (data) => {
+db.add = (data) => new Promise((resolve, reject) => {
     db.clean(data);
     data.parentId = app.simulation.id;
     data._id = uuidV4();
@@ -143,8 +143,9 @@ db.add = (data) => {
     data.version = process.env.npm_package_version;
     db.localDB.insert(data, (err, newDocs) => {
         app.screen.capture(newDocs, false)
+        resolve(true)
     })
-}
+})
 
 db.export = (data) => {
     var configApp = app.config.app()

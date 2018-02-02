@@ -17,6 +17,7 @@ var app = {
     model: require(__dirname + '/lib/model'),
     navigation: require(__dirname + '/lib/navigation'),
     network: require(__dirname + '/lib/network'),
+    print: require(__dirname + '/lib/print'),
     protocol: require(__dirname + '/lib/protocol'),
     renderer: require(__dirname + '/lib/renderer'),
     request: require(__dirname + '/lib/request'),

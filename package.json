@@ -31,7 +31,7 @@
     "clipboard": "^1.7.1",
     "colorbrewer": "^1.0.0",
     "d3": "^4.11.0",
-    "electron": "^1.8.1",
+    "electron": "^1.7.12",
     "flat": "^4.0.0",
     "font-awesome": "^4.7.0",
     "joi": "^13.1.1",

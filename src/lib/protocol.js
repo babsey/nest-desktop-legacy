@@ -94,22 +94,25 @@ protocol.add = () => {
             }).exec((err, doc) => {
                 // console.log(doc)
                 if (doc) {
+                    data.description = doc.description;
                     protocol.db.update({
                         hash: data.hash,
                     }, data, {}, () => {
                         protocol.db.findOne({
                             hash: data.hash
                         }).exec((err, doc) => {
-                            app.data._id = doc._id
-                            app.data.updatedAt = doc.updatedAt
+                            app.data._id = doc._id;
+                            app.protocol.id = app.data._id;
+                            app.data.updatedAt = doc.updatedAt;
                             resolve(false)
                             // setTimeout(() => resolve(false), 100.)
                         })
                     })
                 } else {
                     protocol.db.insert(data, (err, newDocs) => {
-                        app.data._id = newDocs._id
-                        app.data.updatedAt = newDocs.updatedAt
+                        app.data._id = newDocs._id;
+                        app.protocol.id = newDocs._id;
+                        app.data.updatedAt = newDocs.updatedAt;
                         resolve(true)
                         // setTimeout(() => resolve(true), 100.)
                     })
@@ -120,6 +123,7 @@ protocol.add = () => {
                 app.screen.capture(app.data, false)
             }
             protocol.update()
+            app.navigation.update()
         })
     });
 }
