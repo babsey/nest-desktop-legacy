@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css" />
     <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href='../assets/css/graph.css'></link>
-    <link rel="stylesheet" href='../assets/css/styles.css'></link>
+    <link rel="stylesheet" href='../assets/css/graph.css' />
+    <link rel="stylesheet" href='../assets/css/styles.css' />
     <title></title>
 </head>
 
@@ -200,19 +200,18 @@
             </div>
 
             <div class="navbar-right">
-                <span class="checkbox btn-group" style="margin-right:10px; margin-top:15px">
+                <span class="checkbox btn-group">
                     <label>
                         <input type="checkbox" name="autoscale" value="autoscale" id="autoscale" checked> Autoscale
                     </label>
                 </span>
 
-                <div id="view-protocol" class="btn-group">
+                <div id="view-protocol" class="btn-group navbar-btn">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" id="get-protocol-list" data-toggle="dropdown">
+                        <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" id="get-protocol-list" data-toggle="dropdown" title="Load a protocol">
                             <span id="protocol-label">No protocol</span>
                         </button>
                         <ul id="protocol-list" class="dropdown-menu dropdown-menu-left"></ul>
-
                     </div>
                     <button type="button" class="btn btn-default disableOnDrawing disableOnRunning disableOnSimulate" id="protocol" title="Click to protocol simulation">
                         <i class="fa fa-history"></i>
@@ -223,18 +222,18 @@
                     <i class="fa fa-cog"></i>
                 </button>
 
-                <div class="btn-group">
+                <div class="btn-group navbar-btn">
                     <button type="button" class="btn btn-default dropdown-toggle disableOnRunning disableOnSimulate" id="get-simulation-list" data-toggle="dropdown" title="Load a simulation">
                         <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
                     </button>
                     <ul id="simulation-list" class="dropdown-menu dropdown-menu-right"></ul>
                 </div>
 
-                <div class="btn-group">
+                <div class="btn-group navbar-btn">
                     <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" data-toggle="dropdown" title="Configuration">
                         <i class="fa fa-wrench" ></i>
                     </button>
-                    <ul id="chart-config" class="dropdown-menu config" role="menu">
+                    <ul class="dropdown-menu config" role="menu">
                         <li class="dropdown-header">Graph configuration</li>
                         <li id="chart-color">
                             <a href="#">
@@ -279,11 +278,11 @@
                     </ul>
                 </div>
 
-                <div class="btn-group">
+                <div class="btn-group navbar-btn">
                     <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnSimulate disableOnRunning" data-toggle="dropdown" title="Menu">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <ul id="simulation-config" class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-header">Network menu</li>
                         <li id="edit-network" title="Edit network" class="disableOnDrawing">
                             <a href="#">
@@ -356,12 +355,12 @@
                         <li class="dropdown-header">General menu</li>
                         <li>
                             <a href="#" onclick="window.location.reload()">
-                                <i class="fa fa-refresh"></i> Reload the app
+                                <i class="fa fa-refresh"></i> Reload app
                             </a>
                         </li>
                         <li>
                             <a href="#" onclick="window.close()">
-                                <i class="fa fa-times"></i> Close the app
+                                <i class="fa fa-times"></i> Close app
                             </a>
                         </li>
                     </ul>
@@ -408,7 +407,7 @@
                                         <a href="#synapses" role="tab" data-toggle="tab">Synapses</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="tab" class="dropdown-toggle disableOnDrawing" data-toggle="dropdown" title="Edit level of slider views">
+                                        <a role="tab" class="dropdown-toggle disableOnDrawing" data-toggle="dropdown" title="Set level of slider views">
                                             <div style="white-space: nowrap;">
                                                 <i class="fa fa-sliders"></i>
                                                 <b class="caret"></b>
@@ -496,7 +495,6 @@
     </div>
 
     <script>
-        window.$ = window.jQuery = require('jquery');
         window.app = require('../app');
         var configApp = app.config.app();
         $('title').html(configApp.title)
