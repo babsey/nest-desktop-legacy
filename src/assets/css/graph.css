@@ -1,7 +1,19 @@
-#point {
+#graph {
+    position: relative;
+}
+
+#graph #point {
     position: fixed;
-    left: 15px;
-    top: 30px;
+    left: 80px;
+    top: 50px;
+    background-color: white;
+}
+
+#graph .checkbox {
+    color: black;
+    position: absolute;
+    top: 45px;
+    right: 380px;
 }
 
 #graph svg {

@@ -15,6 +15,7 @@ navigation.update_randomSeed = () => {
 navigation.events = () => {
     // this should be called only one time
     app.message.log('Event handler for navigation')
+
     // Load protocol events
     app.protocol.events()
 
@@ -46,6 +47,7 @@ navigation.events = () => {
         app.simulation.runAfterChange = !runAfterChange;
         app.config.save('app', configApp)
         $('#run-after-change').find('.glyphicon-ok').toggle(!runAfterChange)
+        $('button.simulation-run').toggleClass('active', !runAfterChange)
     })
     $('#auto-reset').on('click', () => {
         var configApp = app.config.app();
@@ -67,8 +69,10 @@ navigation.events = () => {
         app.simulation.autoProtocol = !autoProtocol;
         app.config.save('app', configApp)
         $('#auto-protocol').find('.glyphicon-ok').toggle(!autoProtocol)
+        $('button.protocol').toggleClass('active', !autoProtocol)
     })
-    $('#edit-network').on('click', () => {
+    $('.edit-network').on('click', () => {
+        if (app.graph.networkLayout.drawing) return
         app.protocol.add().then(() => {
             setTimeout(() => {
                 app.network.edit(true)
@@ -196,13 +200,12 @@ navigation.events = () => {
 navigation.update = () => {
     app.message.log('Update navigation')
     $('.title').html(app.data.name)
+    $('#title').attr('data-content', app.data.description)
     $('.description').html(app.data.description)
 
     // Load simulation list
     $('#get-simulation-list').prop('disabled', true)
     $('#simulation-list').empty()
-    $('#simulation-list').append('<li><a href="../index.html"><i class="fa fa-home"></i> Go to overview page</a></li>')
-    $('#simulation-list').append('<li class="divider"></li>')
     $('#simulation-list').append('<li class="dropdown-header">List of simulations</li>')
     app.db.filter({
         _id: {
@@ -220,7 +223,7 @@ navigation.update = () => {
                 html: true,
                 animation: false,
                 trigger: 'hover',
-                placement: 'left',
+                placement: 'right',
                 content: function() {
                     return app.renderer.simulation.popover(doc)
                 }
@@ -243,9 +246,11 @@ navigation.init = () => {
     app.simulation.autoProtocol = app.config.app().simulation.autoProtocol || false;
     $(".config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().graph.color || false)
     $(".config").find('#run-after-change').find('.glyphicon-ok').toggle(app.simulation.runAfterChange)
+    $('button.simulation-run').toggleClass('active', app.simulation.runAfterChange)
     $(".config").find('#auto-reset').find('.glyphicon-ok').toggle(app.simulation.autoReset)
     $(".config").find('#random-seed').find('.glyphicon-ok').toggle(app.simulation.randomSeed)
     $(".config").find('#auto-protocol').find('.glyphicon-ok').toggle(app.simulation.autoProtocol)
+    $('button.protocol').toggleClass('active', app.simulation.autoProtocol)
     $(".config").find('.color[data-group=' + app.config.app().graph.color.group + ']').find('.glyphicon-ok').show()
     $('.level[level=' + app.config.app().simulation.level + ']').find('.glyphicon-ok').show()
     app.navigation.events()

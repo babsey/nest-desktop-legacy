@@ -195,178 +195,182 @@
     </div>
     <nav class="navbar navbar-fixed-top">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <span><h4 class="title"></h4></span>
-            </div>
+            <ul class="nav navbar-nav">
+                <li style="margin-left:-15px">
+                    <a class="" href="../index.html"><i class="fa fa-home"></i></a>
+                </li>
+                    <li class="dropdown">
+                        <a id="get-simulation-list" class="dropdown-toggle disableOnRunning disableOnSimulate navbar-brand" href="#" data-toggle="dropdown" title="Load a simulation">
+                            <div class="title"></div>
+                        </a>
+                        <ul id="simulation-list" class="dropdown-menu dropdown-menu-left"></ul>
+                    </li>
+                <li class="dropdown">
+                    <a id="get-protocol-list" class="dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" data-toggle="dropdown" href="#" title="Load a protocol">
+                        <span id="protocol-label">No protocol</span>
+                    </a>
+                    <ul id="protocol-list" class="dropdown-menu dropdown-menu-left"></ul>
+                </li>
+            </ul>
 
             <div class="navbar-right">
-                <span class="checkbox btn-group">
-                    <label>
-                        <input type="checkbox" name="autoscale" value="autoscale" id="autoscale" checked> Autoscale
-                    </label>
-                </span>
-
-                <div id="view-protocol" class="btn-group navbar-btn">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" id="get-protocol-list" data-toggle="dropdown" title="Load a protocol">
-                            <span id="protocol-label">No protocol</span>
+                <div class="pull-left">
+                    <div class="btn-group" style="margin: 0 10px">
+                        <button class="edit-network btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate" title="Edit network">
+                            <i class="fa fa-pencil"></i>
                         </button>
-                        <ul id="protocol-list" class="dropdown-menu dropdown-menu-left"></ul>
+                        <button class="simulation-run btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate spinOnHover" title="Run simulation">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button class="protocol btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate" title="Protocol simulation">
+                            <i class="fa fa-history"></i>
+                        </button>
                     </div>
-                    <button type="button" class="btn btn-default disableOnDrawing disableOnRunning disableOnSimulate" id="protocol" title="Click to protocol simulation">
-                        <i class="fa fa-history"></i>
-                    </button>
                 </div>
 
-                <button type="button" class="simulation-run btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate spinOnHover" title="Run simulation">
-                    <i class="fa fa-cog"></i>
-                </button>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" href="#" data-toggle="dropdown" title="Configuration">
+                                <i class="fa fa-wrench" ></i>
+                            </a>
+                        <ul class="dropdown-menu config" role="menu">
+                            <li class="dropdown-header">Graph</li>
+                            <li id="chart-color">
+                                <a href="#">
+                                        <i class="fa fa-paint-brush"></i> Colorify charts
+                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                    </a>
+                            </li>
+                            <li id="view-networkLayout">
+                                <a href="#">
+                                        <i class="fa fa-eye"></i> View network layout
+                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                    </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Simulation</li>
+                            <li id="run-after-change" title="Run simulation after change">
+                                <a href="#">
+                                        <i class="fa fa-magic"></i> Run after change
+                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                    </a>
+                            </li>
+                            <li id="auto-reset" title="Reset simulation automatically">
+                                <a href="#">
+                                        <i class="fa fa-eraser"></i> Automatic reset
+                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                    </a>
+                            </li>
+                            <li id="random-seed" title="Randomize seed for simulations">
+                                <a href="#">
+                                        <i class="fa fa-random"></i> Randomize seed
+                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                    </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Protocol</li>
+                            <li id="auto-protocol" title="Protocol simulation automatically">
+                                <a href="#">
+                                        <i class="fa fa-history"></i> Automatic protocol
+                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                    </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle disableOnDrawing disableOnSimulate disableOnRunning" href="#" data-toggle="dropdown" title="Menu">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">Network</li>
+                            <li class="edit-network disableOnDrawing" title="Edit network">
+                                <a href="#">
+                                    <i class="fa fa-pencil"></i> Edit network
+                                </a>
+                            </li>
+                            <li id="clear-network" title="Clear the network">
+                                <a href="#">
+                                    <i class="fa fa-trash"></i> Clear network
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Simulation</li>
+                            <li class="simulation-run spinOnHover" title="Run simulation">
+                                <a href="#">
+                                        <i class="fa fa-cog"></i> Run simulation
+                                    </a>
+                            </li>
+                            <li id="simulation-resume" title="Run simulation continuously">
+                                <a href="#">
+                                        <i class="fa fa-play"></i> Simulate continuously
+                                    </a>
+                            </li>
+                            <li id="simulation-clone">
+                                <a data-toggle="modal" href="#simulation-form-dialog">
+                                        <i class="fa fa-clone"></i> Clone simulation
+                                    </a>
+                            </li>
+                            <li class="simulation-edit">
+                                <a data-toggle="modal" href="#simulation-form-dialog">
+                                        <i class="glyphicon glyphicon-menu-glyphicon glyphicon-edit"></i> Edit simulation
+                                    </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Protocol</li>
+                            <li>
+                                <a class="protocol" href="#" title="Protocol this simulation protocol">
+                                    <i class="fa fa-history"></i> Protocol simulation
+                                </a>
+                            </li>
+                            <li id="delete-protocol" title="Delete this simulation protocol">
+                                <a href="#">
+                                        <i class="fa fa-trash-o"></i> Delete this protocol
+                                    </a>
+                            </li>
+                            <li id="delete-all-protocols" title="Delete all simulation protocols">
+                                <a data-toggle="modal" href="#delete-all-protocols-dialog">
+                                        <i class="fa fa-trash"></i> Delete all protocols
+                                    </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Data</li>
+                            <li id="capture-screen" title="Capture screen for thumbnail">
+                                <a href="#">
+                                        <span class="glyphicon glyphicon-camera"></span> Capture screen
+                                    </a>
+                            </li>
+                            <li id="view-data" title="View documented data of the simulation">
+                                <a data-toggle="modal" href="#data-dialog">
+                                        <i class="fa fa-eye"></i> View simulation data
+                                    </a>
+                            </li>
 
-                <div class="btn-group navbar-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle disableOnRunning disableOnSimulate" id="get-simulation-list" data-toggle="dropdown" title="Load a simulation">
-                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-open"></span>
-                    </button>
-                    <ul id="simulation-list" class="dropdown-menu dropdown-menu-right"></ul>
-                </div>
-
-                <div class="btn-group navbar-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" data-toggle="dropdown" title="Configuration">
-                        <i class="fa fa-wrench" ></i>
-                    </button>
-                    <ul class="dropdown-menu config" role="menu">
-                        <li class="dropdown-header">Graph configuration</li>
-                        <li id="chart-color">
-                            <a href="#">
-                                <i class="fa fa-paint-brush"></i> Colorify charts
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                        <li id="view-networkLayout">
-                            <a href="#">
-                                <i class="fa fa-eye"></i> View network layout
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Simulation configuration</li>
-                        <li id="run-after-change" title="Run simulation after change">
-                            <a href="#">
-                                <i class="fa fa-magic"></i> Run after change
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                        <li id="auto-reset" title="Reset simulation automatically">
-                            <a href="#">
-                                <i class="fa fa-eraser"></i> Automatic reset
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                        <li id="random-seed" title="Randomize seed for simulations">
-                            <a href="#">
-                                <i class="fa fa-random"></i> Randomize seed
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Protocol configuration</li>
-                        <li id="auto-protocol" title="Protocol simulation automatically">
-                            <a href="#">
-                                <i class="fa fa-history"></i> Automatic protocol
-                                <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="btn-group navbar-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnSimulate disableOnRunning" data-toggle="dropdown" title="Menu">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-header">Network menu</li>
-                        <li id="edit-network" title="Edit network" class="disableOnDrawing">
-                            <a href="#">
-                                <i class="fa fa-pencil"></i> Edit network
-                            </a>
-                        </li>
-                        <li id="clear-network" title="Clear the network">
-                            <a href="#">
-                                <i class="fa fa-trash"></i> Clear network
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Simulation menu</li>
-                        <li class="simulation-run spinOnHover" title="Run simulation">
-                            <a href="#">
-                                <i class="fa fa-cog"></i> Run simulation
-                            </a>
-                        </li>
-                        <li id="simulation-resume" title="Run simulation continuously">
-                            <a href="#">
-                                <i class="fa fa-play"></i> Simulate continuously
-                            </a>
-                        </li>
-                        <li id="simulation-clone">
-                            <a data-toggle="modal" href="#simulation-form-dialog">
-                                <i class="fa fa-clone"></i> Clone simulation
-                            </a>
-                        </li>
-                        <li class="simulation-edit">
-                            <a data-toggle="modal" href="#simulation-form-dialog">
-                                <i class="glyphicon glyphicon-menu-glyphicon glyphicon-edit"></i> Edit simulation
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Protocol menu</li>
-                        <li id="delete-protocol" title="Delete this simulation protocol">
-                            <a href="#">
-                                <i class="fa fa-trash-o"></i> Delete this protocol
-                            </a>
-                        </li>
-                        <li id="delete-all-protocols" title="Delete all simulation protocols">
-                            <a data-toggle="modal" href="#delete-all-protocols-dialog">
-                                <i class="fa fa-trash"></i> Delete all protocols
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Data menu</li>
-                        <li id="capture-screen" title="Capture screen for thumbnail">
-                            <a href="#">
-                                <span class="glyphicon glyphicon-camera"></span> Capture screen
-                            </a>
-                        </li>
-                        <li id="view-data" title="View documented data of the simulation">
-                            <a data-toggle="modal" href="#data-dialog">
-                                <i class="fa fa-eye"></i> View simulation data
-                            </a>
-                        </li>
-
-                        <li id="view-raw-data" title="View raw data of the simulation">
-                            <a data-toggle="modal" href="#raw-data-dialog">
-                                <i class="fa fa-code"></i> View raw data
-                            </a>
-                        </li>
-                        <li class="printToPDF" title="Print to PDF">
-                            <a data-toggle="modal" href="#pdf-form-dialog">
-                                <i class="fa fa-print"></i> Print to PDF
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">General menu</li>
-                        <li>
-                            <a href="#" onclick="window.location.reload()">
-                                <i class="fa fa-refresh"></i> Reload app
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" onclick="window.close()">
-                                <i class="fa fa-times"></i> Close app
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                            <li id="view-raw-data" title="View raw data of the simulation">
+                                <a data-toggle="modal" href="#raw-data-dialog">
+                                        <i class="fa fa-code"></i> View raw data
+                                    </a>
+                            </li>
+                            <li class="printToPDF" title="Print to PDF">
+                                <a data-toggle="modal" href="#pdf-form-dialog">
+                                        <i class="fa fa-print"></i> Print to PDF
+                                    </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">General</li>
+                            <li>
+                                <a href="#" onclick="window.location.reload()">
+                                        <i class="fa fa-refresh"></i> Reload app
+                                    </a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="window.close()">
+                                        <i class="fa fa-times"></i> Close app
+                                    </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-
         </div>
     </nav>
 
@@ -471,8 +475,13 @@
 
         </div>
 
-        <div id="point"></div>
         <div id="graph">
+            <div id="point"></div>
+            <div class="checkbox hidden-print">
+                <label>
+                    <input type="checkbox" name="autoscale" value="autoscale" id="autoscale" checked> Autoscale
+                </label>
+            </div>
             <svg>
                 <g id="chart" class="hideOnDrawing"></g>
                 <g id="networkLayout"></g>

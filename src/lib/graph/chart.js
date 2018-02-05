@@ -236,7 +236,7 @@ chart.init = () => {
     chart.drawing = false;
 
     var margin = {
-        top: 40,
+        top: 50,
         right: 0,
         bottom: 10,
         left: 60

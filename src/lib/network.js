@@ -69,6 +69,7 @@ network.edit = (drawing) => {
         $('.nav a[href="#nodes"]').tab('show');
     }
     $('.hideOnDrawing').toggle(!drawing)
+    $('button.edit-network').toggleClass('active', drawing)
     $('.disableOnDrawing').toggleClass('disabled', drawing)
     $('#autoscale').prop('checked', 'checked')
     $('#edit-network-button').toggle(drawing)

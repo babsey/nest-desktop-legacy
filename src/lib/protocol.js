@@ -61,7 +61,7 @@ protocol.addDropdown = (data) => {
     $('#' + data._id).popover({
         html: true,
         animation: false,
-        placement: 'left',
+        placement: 'right',
         trigger: 'hover',
         content: app.renderer.protocol.popover(data)
     });
@@ -135,7 +135,6 @@ protocol.add = () => {
 
 protocol.update = () => {
     app.message.log('Update protocol')
-    $('#protocol').toggleClass('btn-primary', app.simulation.protocol || false)
     app.protocol.all().sort({
         updatedAt: -1
     }).exec((err, docs) => {
@@ -150,7 +149,7 @@ protocol.update = () => {
 }
 
 protocol.events = () => {
-    $('#protocol').on('click', () => {
+    $('.protocol').on('click', () => {
         if (app.graph.networkLayout.drawing) return
         protocol.add()
     })

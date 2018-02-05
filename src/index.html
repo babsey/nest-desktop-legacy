@@ -10,32 +10,33 @@
 </head>
 
 <body>
-
     <nav class="navbar navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-right">
-                <div class="btn-group navbar-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle disableOnDrawing disableOnSimulate disableOnRunning" data-toggle="dropdown" title="Menu">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li id="sim-sync">
-                            <a href="#">
-                                <i class="fa fa-refresh"></i> Synchronize simulations
-                            </a>
-                        </li>
-                        <li>
-                            <a href="./templates/config.html">
-                                <i class="fa fa-wrench"></i> Configurations
-                            </a>
-                        </li>
-                        <li>
-                            <a onclick="window.close()">
-                                <i class="fa fa-times"></i> Close app
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" title="Menu">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li id="sim-sync">
+                                <a href="#">
+                                    <i class="fa fa-refresh"></i> Synchronize simulations
+                                </a>
+                            </li>
+                            <li>
+                                <a href="./templates/config.html">
+                                    <i class="fa fa-wrench"></i> Configurations
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="window.close()">
+                                    <i class="fa fa-times"></i> Close app
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

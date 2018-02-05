@@ -34,10 +34,6 @@ li a, li a:hover, button a, button a:hover {
     margin-right: 6px;
 }
 
-.navbar {
-    margin-right: 10px;
-}
-
 .jumbotron {
     background-color: transparent;
     height: 120px;
@@ -69,11 +65,6 @@ li a, li a:hover, button a, button a:hover {
     opacity: 0.2;
 }
 
-#header {
-    position: fixed;
-    left: 70px;
-}
-
 #simulation-details {
     margin-bottom: 30px;
 }
@@ -98,6 +89,14 @@ li a, li a:hover, button a, button a:hover {
 .thumbnail img {
     margin: auto;
     padding: 10px;
+}
+
+.navbar a {
+    color: black;
+}
+
+.navbar-brand {
+    margin-left: 0px !important;
 }
 
 .description {
@@ -168,7 +167,7 @@ tr.node td:first-child, tr.link td:first-child {
 }
 
 #controller {
-    margin-top: 50px;
+    margin-top: 55px;
     z-index: 1000;
     position: relative
 }
