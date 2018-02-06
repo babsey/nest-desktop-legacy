@@ -13,10 +13,6 @@ var cssPagedMedia = (function() {
     };
 }());
 
-cssPagedMedia.size = function(size) {
-    cssPagedMedia('@page {size: ' + size + '}');
-};
-
 print.toPDF = (filename, filepath) => {
     if (!filename.endsWith('.pdf')) {
         filename = filename + '.pdf'
@@ -34,7 +30,7 @@ print.toPDF = (filename, filepath) => {
     $('#description').parents('.visible-print').attr('style', '')
 
     var pageWidth = width - 319 + 240 + 50;
-    var pageHeight = 80 + (viewDescription ? height + offsetHeight : height);
+    var pageHeight = 90 + (viewDescription ? height + offsetHeight : height);
 
     var dataDialog = $('#data-dialog').hasClass('in');
     if (dataDialog) {
@@ -45,7 +41,7 @@ print.toPDF = (filename, filepath) => {
     $('#description').toggle(viewDescription)
     $('#description').css('margin-top', (height - 30) + 'px')
 
-    cssPagedMedia.size(pageWidth + 'px ' + pageHeight + 'px');
+    cssPagedMedia('@page {size: ' + pageWidth + 'px ' + pageHeight + 'px' + '}');
     require('electron').remote.require('./main').printToPDF(path.join(filepath, filename))
     setTimeout(() => {
         app.message.show('Info', 'PDF successfully saved.')
@@ -56,6 +52,23 @@ print.toPDF = (filename, filepath) => {
         }
     }, 200)
 
+}
+
+print.events = () => {
+    $('.printToPDF').on('click', (e) => {
+        var configApp = app.config.app();
+        var filename = app.data._id + '.pdf';
+        var filepath = path.join(process.cwd(), configApp.datapath);
+        $('#pdf-form #pdf-filename').val(filename).focus();
+        $('#pdf-form #pdf-filepath').val(filepath);
+        $('#pdf-description').prop('checked', app.data.description != undefined)
+        $('#pdf-description').prop('disabled', app.data.description == undefined)
+    })
+    $('#pdf-submit').on('click', function(e) {
+        var filename = $('#pdf-form #pdf-filename').val();
+        var filepath = $('#pdf-form #pdf-filepath').val();
+        print.toPDF(filename, filepath);
+    })
 }
 
 module.exports = print;

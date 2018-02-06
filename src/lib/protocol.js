@@ -148,16 +148,6 @@ protocol.update = () => {
     })
 }
 
-protocol.events = () => {
-    $('.protocol').on('click', () => {
-        if (app.graph.networkLayout.drawing) return
-        protocol.add()
-    })
-    $('#view-protocol').on('click', () => {
-        protocol.update()
-    })
-}
-
 protocol.init = () => {
     app.message.log('Initialize protocol')
     var configApp = app.config.app()
@@ -177,6 +167,24 @@ protocol.count = (id) => {
         autoload: true,
     })
     return db.count({})
+}
+
+protocol.events = () => {
+    $('.protocol').on('click', () => {
+        if (app.graph.networkLayout.drawing) return
+        protocol.add()
+    })
+    $('#view-protocol').on('click', () => {
+        protocol.update()
+    })
+    $('#delete-protocol').on('click', protocol.delete)
+    $('#delete-all-protocols-dialog').on('shown.bs.modal', function() {
+        $('#delete-all-protocols-cancel').trigger('focus')
+    })
+    $('#capture-screen').on('click', () => {
+        app.screen.capture(app.data, true)
+        protocol.update()
+    })
 }
 
 module.exports = protocol

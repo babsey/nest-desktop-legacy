@@ -75,7 +75,9 @@ function createWindow() {
     mainWindow.loadURL(path.join('file://', __dirname, 'src', 'index.html'));
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
+    if (configElectron.debug) {
+        mainWindow.webContents.openDevTools();
+    }
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {

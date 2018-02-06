@@ -77,4 +77,31 @@ controller.init = () => {
     controller.update()
 }
 
+controller.events = () => {
+    $('.level').on('click', function() {
+        var configApp = app.config.app();
+        configApp.simulation.level = parseInt($(this).attr('level'));
+        $('.level').find('.glyphicon-ok').hide()
+        $('.level[level='+ configApp.simulation.level +']').find('.glyphicon-ok').show()
+        app.config.save('app', configApp)
+        for (var nid in app.data.nodes) {
+            var node = app.data.nodes[nid];
+            if (node.model) {
+                app.slider.update_nodeSlider(node)
+            }
+        }
+        for (var lid in app.data.links) {
+            var link = app.data.links[lid];
+            if (link.conn_spec || 1) {
+                app.slider.update_connSlider(link)
+            }
+            if (link.syn_spec || 1) {
+                app.slider.update_synSlider(link)
+            }
+        }
+        app.slider.update_dataSlider()
+        controller.update()
+    })
+}
+
 module.exports = controller;

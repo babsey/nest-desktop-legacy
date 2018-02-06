@@ -48,8 +48,7 @@ simulationController.init = () => {
                 var simulationSlider = $(this).parents('.dataSlider');
                 var id = simulationSlider.attr('id');
                 if (id == 'random_seed') {
-                    app.simulation.randomSeed = false;
-                    app.navigation.update_randomSeed()
+                    app.config.randomSeed(false)
                 }
                 app.data[id] = d.value;
                 app.simulation.simulate.init()
@@ -66,8 +65,7 @@ simulationController.init = () => {
         if (valid.error != null) return
         var id = simulationSlider.attr('id');
         if (id == 'random_seed') {
-            app.simulation.randomSeed = false;
-            app.navigation.update_randomSeed()
+            app.config.randomSeed(false)
         }
         app.data[id] = valid.value;
         simulationSlider.find('.' + id + 'Input').slider('setValue', valid.value)

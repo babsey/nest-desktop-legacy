@@ -95,5 +95,46 @@ network.init = () => new Promise((resolve, reject) => {
     network.update()
 })
 
+network.events = () => {
+    $('.edit-network').on('click', () => {
+        if (app.graph.networkLayout.drawing) return
+        app.protocol.add().then(() => {
+            setTimeout(() => {
+                network.edit(true)
+                app.graph.update()
+                app.controller.update()
+            }, 200)
+        })
+    })
+    $('#clear-network').on('click', () => {
+        app.protocol.add().then(() => {
+            setTimeout(() => {
+                network.edit(true)
+                network.clear()
+                network.update()
+                app.graph.init()
+                app.controller.init()
+            }, 200)
+        })
+    })
+    $('#edit-network-clear').on('click', () => {
+        network.clear()
+        network.update()
+        app.graph.init()
+        app.controller.init()
+    })
+    $('#edit-network-cancel').on('click', () => {
+        app.data = app.data_original;
+        network.clean()
+        network.update()
+        app.simulation.reload()
+    })
+    $('#edit-network-save').on('click', () => {
+        network.edit(false)
+        network.clean()
+        network.update()
+        app.simulation.reload()
+    })
+}
 
 module.exports = network;
