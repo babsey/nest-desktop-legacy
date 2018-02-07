@@ -1,6 +1,12 @@
 CHANGELOG
 ---------
 
+0.13.0:
+    Reorganize navigation
+    Option to center network layout
+    Data and config can store in $NESTDESKTOP_DATA
+    Automatic height for PDF print
+
 0.12.0:
     Rename chart to graph
     Rename record_from to data_from

@@ -5,6 +5,7 @@
 //
 
 const d3 = require("d3");
+
 var chart = {
     data: {}
 };

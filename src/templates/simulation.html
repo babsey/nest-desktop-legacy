@@ -11,7 +11,7 @@
     <title></title>
 </head>
 
-<body>
+<body style="overflow-y: hidden;">
 
     <!-- Modal -->
     <div class="modal fade" id="data-dialog">
@@ -193,18 +193,18 @@
     <div class="container-fluid visible-print">
         <h4 class="title"></h4>
     </div>
-    <nav class="navbar navbar-fixed-top">
+    <nav class="navbar navbar-static-top" style="background-color: white">
         <div class="container-fluid">
             <ul class="nav navbar-nav">
                 <li style="margin-left:-15px">
                     <a class="" href="../index.html"><i class="fa fa-home"></i></a>
                 </li>
-                    <li class="dropdown">
-                        <a id="get-simulation-list" class="dropdown-toggle disableOnRunning disableOnSimulate navbar-brand" href="#" data-toggle="dropdown" title="Load a simulation">
-                            <div class="title"></div>
-                        </a>
-                        <ul id="simulation-list" class="dropdown-menu dropdown-menu-left"></ul>
-                    </li>
+                <li class="dropdown">
+                    <a id="get-simulation-list" class="dropdown-toggle disableOnRunning disableOnSimulate navbar-brand" href="#" data-toggle="dropdown" title="Load a simulation">
+                        <div class="title"></div>
+                    </a>
+                    <ul id="simulation-list" class="dropdown-menu dropdown-menu-left"></ul>
+                </li>
                 <li class="dropdown">
                     <a id="get-protocol-list" class="dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" data-toggle="dropdown" href="#" title="Load a protocol">
                         <span id="protocol-label">No protocol</span>
@@ -231,49 +231,55 @@
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a class="dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" href="#" data-toggle="dropdown" title="Configuration">
-                                <i class="fa fa-wrench" ></i>
-                            </a>
+                            <i class="fa fa-wrench" ></i>
+                        </a>
                         <ul class="dropdown-menu config" role="menu">
                             <li class="dropdown-header">Graph</li>
                             <li id="chart-color">
                                 <a href="#">
-                                        <i class="fa fa-paint-brush"></i> Colorify charts
-                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                    </a>
+                                    <i class="fa fa-paint-brush"></i> Colorify charts
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                </a>
                             </li>
                             <li id="view-networkLayout">
                                 <a href="#">
-                                        <i class="fa fa-eye"></i> View network layout
-                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                    </a>
+                                    <i class="fa fa-eye"></i> View network layout
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                </a>
+                            </li>
+                            <li id="center-networkLayout">
+                                <a href="#">
+                                    <i class="fa fa-magnet"></i> Center network layout
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                </a>
                             </li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Simulation</li>
                             <li id="run-after-change" title="Run simulation after change">
                                 <a href="#">
-                                        <i class="fa fa-magic"></i> Run after change
-                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                    </a>
+                                    <i class="fa fa-magic"></i> Run after change
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                </a>
                             </li>
                             <li id="auto-reset" title="Reset simulation automatically">
                                 <a href="#">
-                                        <i class="fa fa-eraser"></i> Automatic reset
-                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                    </a>
+                                    <i class="fa fa-eraser"></i> Automatic reset
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                </a>
                             </li>
                             <li id="random-seed" title="Randomize seed for simulations">
                                 <a href="#">
-                                        <i class="fa fa-random"></i> Randomize seed
-                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                    </a>
+                                    <i class="fa fa-random"></i> Randomize seed
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                </a>
                             </li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Protocol</li>
                             <li id="auto-protocol" title="Protocol simulation automatically">
                                 <a href="#">
-                                        <i class="fa fa-history"></i> Automatic protocol
-                                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                    </a>
+                                    <i class="fa fa-history"></i> Automatic protocol
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -358,7 +364,7 @@
                             <li class="divider"></li>
                             <li class="dropdown-header">General</li>
                             <li>
-                                <a href="#" onclick="window.location.reload()">
+                                <a id="reload" href="#">
                                         <i class="fa fa-refresh"></i> Reload app
                                     </a>
                             </li>

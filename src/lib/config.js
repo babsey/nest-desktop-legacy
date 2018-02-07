@@ -6,10 +6,10 @@ const uuidV4 = require('uuid/v4');
 
 var config = {};
 
-config.app = () => require(path.join(process.cwd(), 'config', 'app.json'));
+config.app = () => require(path.join(app.dataPath, 'config/app.json'));
 
 config.save = (filename, config) => {
-    jsonfile.writeFile(path.join(process.cwd(), 'config', filename + '.json'), config, {
+    jsonfile.writeFile(path.join(app.dataPath, 'config', filename + '.json'), config, {
         spaces: 4
     }, (err) => {
         if (err) {
@@ -18,7 +18,7 @@ config.save = (filename, config) => {
     })
 }
 
-config.nest = (name) => jsonfile.readFileSync(path.join(process.cwd(), 'config', 'nest', name + '.json'));
+config.nest = (name) => jsonfile.readFileSync(path.join(app.dataPath, 'config/nest', name + '.json'));
 
 config.randomSeed = (randomSeed) => {
     var configApp = app.config.app();
@@ -39,12 +39,18 @@ config.events = () => {
     })
     $('#view-networkLayout').on('click', () => {
         var configApp = config.app();
-        var networkLayout = !configApp.graph.networkLayout || false
-        configApp.graph.networkLayout = networkLayout;
+        var networkLayoutView = !configApp.graph.networkLayout.view || false
+        configApp.graph.networkLayout.view = networkLayoutView;
         config.save('app', configApp)
-        app.graph.networkLayout.toggle(networkLayout)
+        app.graph.networkLayout.toggleView(networkLayoutView)
     })
-
+    $('#center-networkLayout').on('click', () => {
+        var configApp = config.app();
+        var networkLayoutCenter = !configApp.graph.networkLayout.center || false
+        configApp.graph.networkLayout.center = networkLayoutCenter;
+        config.save('app', configApp)
+        app.graph.networkLayout.toggleCenter(networkLayoutCenter)
+    })
     $('#run-after-change').on('click', () => {
         var configApp = app.config.app();
         var runAfterChange = configApp.simulation.runAfterChange || false

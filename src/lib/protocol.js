@@ -3,7 +3,7 @@
 const NeDB = require('nedb');
 const fs = require('fs');
 const path = require('path');
-const jsonfile = require('jsonfile')
+const jsonfile = require('jsonfile');
 
 var protocol = {};
 
@@ -18,7 +18,7 @@ protocol.backup = () => new Promise((resolve, reject) => {
         if (err) reject()
         var d = new Date();
         var date = d.toISOString();
-        var filename = path.join(process.cwd(), configApp.datapath, 'protocols', '.' + date + '_' + app.simulation.id + '.backup')
+        var filename = path.join(app.dataPath, 'protocols', '.' + date + '_' + app.simulation.id + '.backup.db')
         var backupDB = new NeDB({
             filename: filename,
             timestampData: true,
@@ -50,11 +50,10 @@ protocol.deleteAll = () => protocol.backup().then(() => {
 })
 
 protocol.addDropdown = (data) => {
-    var configApp = app.config.app();
-    if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png'))) {
-        var src = path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png');
+    if (fs.existsSync(path.join(app.dataPath, 'images', data._id + '.png'))) {
+        var src = path.join(app.dataPath, 'images', data._id + '.png');
     } else {
-        var src = path.join(__dirname, '..', 'assets', 'img', 'simulation_default.png');
+        var src = path.join(app.appPath, 'assets/img/simulation_default.png');
     }
     var datetime = app.format.datetime(data.updatedAt)
     $('#protocol-list').append('<li><a href="#" data-id="' + data._id + '" id="' + data._id + '" data-img="' + src + '" rel="popover" class="protocol">' + datetime + '</a></li>')
@@ -80,12 +79,13 @@ protocol.addDropdown = (data) => {
 protocol.removeDropdown = (data) => $('#' + data._id).remove();
 
 protocol.add = () => {
-    var configApp = app.config.app()
+    var configApp = app.config.app();
     return app.db.clone(app.data).then((data) => {
         data.user = configApp.user.id;
         data.version = process.env.npm_package_version;
         var description = data.description;
         app.db.clean(data);
+        data.hash = app.hash(data);
         delete data._id;
         delete data.updatedAt;
 
@@ -99,7 +99,7 @@ protocol.add = () => {
                         description = doc.description
                     }
                     // console.log('Update protocol')
-                    data.description = description
+                    data.description = description;
                     protocol.db.update({
                         hash: data.hash,
                     }, data, {}, () => {
@@ -150,8 +150,7 @@ protocol.update = () => {
 
 protocol.init = () => {
     app.message.log('Initialize protocol')
-    var configApp = app.config.app()
-    var filename = path.join(process.cwd(), configApp.datapath, 'protocols', app.simulation.id + '.db')
+    var filename = path.join(app.dataPath, 'protocols', app.simulation.id + '.db');
     protocol.db = new NeDB({
         filename: filename,
         timestampData: true,
@@ -160,8 +159,7 @@ protocol.init = () => {
 }
 
 protocol.count = (id) => {
-    var configApp = app.config.app()
-    var filename = path.join(process.cwd(), configApp.datapath, 'protocols', id + '.db')
+    var filename = path.join(app.dataPath, 'protocols', id + '.db');
     var db = new NeDB({
         filename: filename,
         autoload: true,
@@ -169,12 +167,23 @@ protocol.count = (id) => {
     return db.count({})
 }
 
+protocol.latest = (id) => {
+    var filename = path.join(app.dataPath, 'protocols', id + '.db');
+    var db = new NeDB({
+        filename: filename,
+        autoload: true,
+    })
+    return db.find({}).sort({
+        updatedAt: -1
+    }).limit(1)
+}
+
 protocol.events = () => {
     $('.protocol').on('click', () => {
         if (app.graph.networkLayout.drawing) return
         protocol.add()
     })
-    $('#view-protocol').on('click', () => {
+    $('#get-protocol-list').on('click', () => {
         protocol.update()
     })
     $('#delete-protocol').on('click', protocol.delete)
@@ -183,7 +192,6 @@ protocol.events = () => {
     })
     $('#capture-screen').on('click', () => {
         app.screen.capture(app.data, true)
-        protocol.update()
     })
 }
 

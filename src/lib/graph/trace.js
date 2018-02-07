@@ -57,8 +57,8 @@ trace.update = (recorder) => {
 trace.init = (idx) => {
 
     var height = app.graph.chart.height / app.simulation.recorders.length;
-    trace.lineChart = require(__dirname + '/chart/line-chart');
-    delete require.cache[require.resolve(__dirname + '/chart/line-chart')]
+    trace.lineChart = require('./chart/line-chart');
+    delete require.cache[require.resolve('./chart/line-chart')]
     trace.lineChart.init('#chart', idx, {
         y: height * idx,
         height: height,

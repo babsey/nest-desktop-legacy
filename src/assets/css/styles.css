@@ -1,5 +1,5 @@
 @page {
-  size: 1920px 1080px;
+    size: 1920px 1080px;
 }
 
 body {
@@ -18,19 +18,21 @@ li a, li a:hover, button a, button a:hover {
 [data-notify="container"] {
     border-radius: 0px;
 }
-[data-notify="container"] > [data-notify="title"] {
-	font-weight: bold;
+
+[data-notify="container"]>[data-notify="title"] {
+    font-weight: bold;
 }
 
 .alert-minimalist {
     width: auto;
-	padding: 0;
-	font-size: 12px;
+    padding: 0;
+    font-size: 12px;
     background-color: white;
 }
-.alert-minimalist > [data-notify="icon"] {
-	height: 10px;
-	margin-left: 6px;
+
+.alert-minimalist>[data-notify="icon"] {
+    height: 10px;
+    margin-left: 6px;
     margin-right: 6px;
 }
 
@@ -127,7 +129,7 @@ li a, li a:hover, button a, button a:hover {
 .popover h4 {
     font-size: 1.2em;
     font-weight: bold;
-    margin: 2px ;
+    margin: 2px;
     padding-top: 10px;
 }
 
@@ -163,12 +165,12 @@ tr.node td:first-child, tr.link td:first-child {
 }
 
 .config {
-    width: 200px;
+    width: 220px;
 }
 
 #controller {
-    margin-top: 55px;
-    z-index: 1000;
+    margin-top: -20px;
+    /*z-index: 1000;*/
     position: relative
 }
 

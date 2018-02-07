@@ -22,6 +22,8 @@ navigation.events = () => {
     app.controller.events()
     app.print.events()
 
+
+
     new Clipboard('#copy');
 }
 
@@ -46,6 +48,14 @@ navigation.update = () => {
         if (docs.length == 0) return
         docs.map((doc) => {
             $('#simulation-list').append(app.renderer.simulation.dropdown(doc))
+            app.protocol.count(doc._id).exec((err, count) => {
+                if (count > 0) {
+                    app.protocol.latest(doc._id).exec((err, protocols) => {
+                        var href = $('#simulation-list #' + doc._id).attr('href');
+                        $('#simulation-list #' + doc._id).attr('href', (href + '&protocol=' + protocols[0]._id))
+                    })
+                }
+            })
             $('#simulation-list #' + doc._id).popover({
                 container: 'body',
                 html: true,
@@ -58,28 +68,35 @@ navigation.update = () => {
             });
         });
         $('#get-simulation-list').prop('disabled', false)
-        $('.simulation').on('click', function(d) {
-            location.href = location.origin + location.pathname + '?simulation=' + this.id
-        })
+        // $('.simulation').on('click', function(d) {
+        //     location.href = location.origin + location.pathname + '?simulation=' + this.id
+        // })
     })
     app.network.edit((app.data.nodes.length == 0))
     $('.simulation-edit').toggle(app.protocol.id != undefined)
+
+    var href = './simulation.html?simulation=' + app.simulation.id;
+    if (app.protocol.id) {
+        href += '&protocol=' + app.protocol.id;
+    }
+    $("#reload").attr('href', href)
 }
 
 navigation.init = () => {
     app.message.log('Initialize navigation')
-    app.simulation.runAfterChange = app.config.app().simulation.runAfterChange || false;
-    app.simulation.autoReset = app.config.app().simulation.autoReset || false;
-    app.simulation.randomSeed = app.config.app().simulation.randomSeed || false;
-    app.simulation.autoProtocol = app.config.app().simulation.autoProtocol || false;
-    $(".config").find('#chart-color').find('.glyphicon-ok').toggle(app.config.app().graph.color || false)
+    var configApp =  app.config.app();
+    app.simulation.runAfterChange = configApp.simulation.runAfterChange || false;
+    app.simulation.autoReset = configApp.simulation.autoReset || false;
+    app.simulation.randomSeed = configApp.simulation.randomSeed || false;
+    app.simulation.autoProtocol = configApp.simulation.autoProtocol || false;
+    $(".config").find('#chart-color').find('.glyphicon-ok').toggle(configApp.graph.color || false)
     $(".config").find('#run-after-change').find('.glyphicon-ok').toggle(app.simulation.runAfterChange)
     $('button.simulation-run').toggleClass('active', app.simulation.runAfterChange)
     $(".config").find('#auto-reset').find('.glyphicon-ok').toggle(app.simulation.autoReset)
     $(".config").find('#random-seed').find('.glyphicon-ok').toggle(app.simulation.randomSeed)
     $(".config").find('#auto-protocol').find('.glyphicon-ok').toggle(app.simulation.autoProtocol)
     $('button.protocol').toggleClass('active', app.simulation.autoProtocol)
-    $(".config").find('.color[data-group=' + app.config.app().graph.color.group + ']').find('.glyphicon-ok').show()
+    $(".config").find('.color[data-group=' + configApp.graph.color.group + ']').find('.glyphicon-ok').show()
     $('.level[level=' + app.config.app().simulation.level + ']').find('.glyphicon-ok').show()
     app.navigation.events()
 }

@@ -4,20 +4,20 @@
     "group": "nest-desktop",
     "user": "nest-desktop",
     "network": "simple",
-    "version": "0.12.0",
+    "version": "0.13.0",
     "nodes": [{
         "id": 0,
         "element_type": "neuron",
         "model": "iaf_psc_alpha",
-        "x": 150,
-        "y": 50,
+        "x": 450,
+        "y": 380,
         "n": 20
     }, {
         "id": 1,
         "element_type": "stimulator",
         "model": "poisson_generator",
-        "x": 0,
-        "y": 0,
+        "x": 300,
+        "y": 330,
         "params": {
             "rate": 6500.0
         }
@@ -25,8 +25,8 @@
         "id": 2,
         "element_type": "recorder",
         "model": "spike_detector",
-        "x": 300,
-        "y": 0,
+        "x": 600,
+        "y": 330,
         "nbins": 100
     }],
     "links": [{

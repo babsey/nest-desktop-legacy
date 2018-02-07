@@ -35,7 +35,7 @@ heatmap.init = (idx) => {
 
     // $('#chart').empty()
     var height = app.graph.height / app.simulation.recorders.length
-    heatmap.chart = require(__dirname + '/chart/heatmap-chart');
+    heatmap.chart = require('./chart/heatmap-chart');
     heatmap.chart.init('#chart', idx, {
         y: height * idx,
         height: height,

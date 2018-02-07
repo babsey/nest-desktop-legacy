@@ -1,6 +1,7 @@
 "use strict"
 
 const jsonfile = require('jsonfile');
+const path = require('path');
 
 var simulation = {
     running: false,
@@ -9,8 +10,7 @@ var simulation = {
 }
 
 simulation.export = () => {
-    const config = app.config.app()
-    var filepath = __dirname + '/../../' + config.get('db.local.path') + '/exports/' + app.data.name + '.json'
+    var filepath = path.join(app.dataPath, 'exports', app.data.name + '.json');
     jsonfile.writeFileSync(filepath, app.data)
 }
 

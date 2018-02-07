@@ -5,20 +5,21 @@ const path = require('path');
 const jsonfile = require('jsonfile');
 const uuidV4 = require('uuid/v4');
 
-var appPath = process.cwd();
-console.log('Initializing configuration and data in ' + appPath)
+var appPath = __dirname;
+var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.cwd(), 'data');
+console.log('Initializing configuration and data in ' + dataPath)
 
 module.exports = new Promise((resolve, reject) => {
     // Copy config file from defaults
-    if (!fs.existsSync(path.join(appPath, 'config'))) {
-        var cmd = 'rsync -avz ' + path.join(__dirname, 'src', 'configDefaults', '*.json') + ' ' + path.join(appPath, 'config');
+    if (!fs.existsSync(path.join(dataPath, 'config'))) {
+        var cmd = 'rsync -avz ' + path.join(appPath, 'src/configDefaults/*.json') + ' ' + path.join(dataPath, 'config');
         var exec = require('child_process').exec;
         exec(cmd, function(error, stdout, stderr) {
             if (error) {
                 console.error(error)
             }
         });
-        var cmd = 'rsync -avz ' + path.join(__dirname, 'src', 'configDefaults', 'nest') + ' ' + path.join(appPath, 'config');
+        var cmd = 'rsync -avz ' + path.join(appPath, 'src/configDefaults/nest') + ' ' + path.join(dataPath, 'config');
         var exec = require('child_process').exec;
         exec(cmd, function(error, stdout, stderr) {
             if (error) {
@@ -34,8 +35,8 @@ module.exports = new Promise((resolve, reject) => {
     });
     resolve('Done')
 }).then((onResolved, onRejected) => {
-    if (fs.existsSync(path.join(appPath, 'config'))) {
-        var configApp = require(path.join(appPath, 'config', 'app.json'));
+    if (fs.existsSync(path.join(dataPath, 'config'))) {
+        var configApp = require(path.join(dataPath, 'config/app.json'));
         var changed = false
         if (!configApp.user.id) {
             configApp.user.id = uuidV4();
@@ -51,7 +52,7 @@ module.exports = new Promise((resolve, reject) => {
         }
 
         if (changed) {
-            jsonfile.writeFile(path.join(appPath, 'config', 'app.json'), configApp, {
+            jsonfile.writeFile(path.join(dataPath, 'config/app.json'), configApp, {
                 spaces: 4
             }, function(err) {
                 if (err) {
@@ -62,10 +63,9 @@ module.exports = new Promise((resolve, reject) => {
     }
 }).then((onResolved, onRejected) => {
     // Create directories in data
-    var configApp = require(path.join(appPath, 'config', 'app.json'));
-    var dirnames = ['.', 'images', 'protocols'];
+    var dirnames = ['images', 'protocols', 'exports'];
     dirnames.map(function(dirname) {
-        var dirpath = path.join(appPath, configApp.datapath, dirname);
+        var dirpath = path.join(dataPath, dirname);
         if (fs.existsSync(dirpath)) return
         fs.mkdirSync(dirpath)
     })

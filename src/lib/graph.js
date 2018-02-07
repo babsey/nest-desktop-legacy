@@ -4,8 +4,8 @@ const d3 = require("d3");
 const colorbrewer = require('colorbrewer');
 
 var graph = {
-    chart: require(__dirname + '/graph/chart'),
-    networkLayout: require(__dirname + '/graph/network-layout'),
+    chart: require('./graph/chart'),
+    networkLayout: require('./graph/network-layout'),
 };
 
 var colors = d3.schemeCategory10;
@@ -27,6 +27,7 @@ graph.update = () => {
     app.message.log('Update graph')
     if (networkLayout.drawing || chart.drawing) return
     graph.chart.update()
+    graph.networkLayout.update()
 }
 
 graph.init = () => {

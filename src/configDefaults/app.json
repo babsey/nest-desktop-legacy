@@ -1,6 +1,5 @@
 {
     "title": "NEST Desktop",
-    "subtitle": "A desktop application for the NEural Simulation Tool.",
     "version": "",
     "user": {
         "id": "",
@@ -41,8 +40,10 @@
     },
     "graph": {
         "color": false,
-        "networkLayout": true
+        "networkLayout": {
+            "view": true,
+            "center": true
+        }
     },
-    "datapath": "./data",
     "log": false
 }

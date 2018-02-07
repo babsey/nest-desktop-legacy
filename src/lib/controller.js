@@ -33,7 +33,7 @@ controller.initLinks = () => {
 controller.update = () => {
     app.message.log('Update controller')
     controller.simulation.updateAll()
-    var height = window.innerHeight - $('.tab-content')[0].offsetTop - 51;
+    var height = window.innerHeight - $('.tab-content')[0].offsetTop - 55;
     $('.tab-content').css('max-height', height + 'px')
 
     $('.node').removeClass('active');

@@ -101,6 +101,10 @@
                 app.protocol.count(doc._id).exec((err, count) => {
                     if (count == 0) return
                     $('#' + doc._id).find('.badge').append(count)
+                    app.protocol.latest(doc._id).exec((err, protocols) => {
+                        var href = $('#' + doc._id).attr('href');
+                        $('#' + doc._id).attr('href', (href + '&protocol=' + protocols[0]._id))
+                    })
                 })
             })
         })
@@ -111,7 +115,7 @@
         setTimeout(loadSimulations, 1000)
     })
 
-    setTimeout(loadSimulations, fs.existsSync(path.join(process.cwd(), configApp.datapath, configApp.db.name + '.db')) ? 1 : 1000)
+    setTimeout(loadSimulations, fs.existsSync(path.join(app.dataPath, configApp.db.name + '.db')) ? 1 : 1000)
 </script>
 
 </html>

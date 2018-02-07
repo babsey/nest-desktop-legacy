@@ -79,9 +79,7 @@
 
         var configViews = [
             ['app', 'title', 'Title', 'text'],
-            ['app', 'subtitle', 'Subtitle', 'text'],
             ['app', 'version', 'Version', 'text', 'disabled'],
-            ['app', 'datapath', 'Datapath', 'text'],
             ['app', 'log', 'Show logs', 'checkbox'],
             ['user', 'user.id', 'ID', 'text', 'disabled'],
             ['db', 'db.name', 'Name', 'text', 'disabled'],
@@ -92,8 +90,10 @@
             ['simulation', 'simulation.runAfterChange', 'Run after change', 'checkbox'],
             ['simulation', 'simulation.autoReset', 'Auto reset simulation', 'checkbox'],
             ['simulation', 'simulation.randomSeed', 'Randomize seed', 'checkbox'],
+            ['simulation', 'simulation.autoProtocol', 'Automatic protocol', 'checkbox'],
             ['graph', 'graph.color', 'Colorify chart', 'checkbox'],
-            ['graph', 'graph.networkLayout', 'Show network layout', 'checkbox'],
+            ['graph', 'graph.networkLayout.view', 'Show network layout', 'checkbox'],
+            ['graph', 'graph.networkLayout.center', 'Center network layout', 'checkbox'],
         ]
 
         configViews.map((item) => {
@@ -117,10 +117,10 @@
                 $('#' + divId + '-input').val(value)
             }
         })
-        $('#simulation').append('<div class="list-group"></div>')
-        configApp.simulation.groups.map((group) => {
-            var item = $('#simulation .list-group').append('<a class="list-group-item" id="' + group.id + '">' + group.name + '</a>')
-        })
+        // $('#simulation').append('<div class="list-group"></div>')
+        // configApp.simulation.groups.map((group) => {
+        //     var item = $('#simulation .list-group').append('<a class="list-group-item" id="' + group.id + '">' + group.name + '</a>')
+        // })
         $('#config-form input:checkbox').on('change', function() {
             $('#config-form').trigger('submit')
         })

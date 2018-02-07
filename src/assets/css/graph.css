@@ -3,16 +3,17 @@
 }
 
 #graph #point {
-    position: fixed;
-    left: 80px;
-    top: 50px;
     background-color: white;
+    position: absolute;
+    left: 80px;
+    top: -20px;
 }
 
 #graph .checkbox {
     color: black;
+    background-color: white;
     position: absolute;
-    top: 45px;
+    top: -20px;
     right: 380px;
 }
 
@@ -22,7 +23,7 @@
     -ms-user-select: none;
     user-select: none;
     position: fixed;
-    top: 0px;
+    top: 0;
     z-index: -1000;
 }
 

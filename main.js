@@ -8,6 +8,8 @@ const fs = require('fs');
 const path = require('path');
 const jsonfile = require('jsonfile');
 
+var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.cwd(), 'data');
+
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
 //
@@ -29,7 +31,7 @@ app.on('window-all-closed', function() {
 
 function createWindow() {
     // console.log('Creating the window')
-    var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
+    var configElectron = require(path.join(dataPath, 'config/electron.json'));
 
     let {
         width,
@@ -42,7 +44,7 @@ function createWindow() {
         height: height,
         frame: configElectron.window.frame,
         title: 'A NEST desktop application',
-        icon: path.join(__dirname, 'src', 'assets', 'img', 'icon.png'),
+        icon: path.join(__dirname, 'src/assets/img/icon.png'),
         // "node-integration": true,
     });
 
@@ -62,7 +64,7 @@ function createWindow() {
             height: height
         };
 
-        jsonfile.writeFile(path.join(process.cwd(), 'config', 'electron.json'), configElectron, {
+        jsonfile.writeFile(path.join(dataPath, 'config/electron.json'), configElectron, {
             spaces: 4
         }, function(err) {
             if (err) {
@@ -72,7 +74,7 @@ function createWindow() {
     });
 
     // and load the index.html of the app.
-    mainWindow.loadURL(path.join('file://', __dirname, 'src', 'index.html'));
+    mainWindow.loadURL(path.join('file://', __dirname, 'src/index.html'));
 
     // Open the DevTools.
     if (configElectron.debug) {
@@ -108,7 +110,7 @@ app.on('activate', function() {
 
 var main = {};
 main.capturePage = function(filepath) {
-    var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
+    var configElectron = require(path.join(dataPath, 'config/electron.json'));
 
     let {
         width,

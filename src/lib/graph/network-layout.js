@@ -4,6 +4,7 @@
 const d3 = require('d3');
 
 var networkLayout = {
+    forceCenter: null,
     mousedown_link: null,
     mousedown_node: null,
     mouseup_node: null,
@@ -141,8 +142,13 @@ networkLayout.update = () => {
     networkLayout.path.exit().remove();
     if (app.data.nodes.length == 0) return
 
+    networkLayout.center = {
+        x: app.graph.width / 2,
+        y: app.graph.height / 2,
+    }
+
     networkLayout.forceSimulation
-        .force('center', d3.forceCenter(networkLayout.center.x, networkLayout.center.y))
+        .force('center', (networkLayout.forceCenter ? d3.forceCenter(networkLayout.center.x, networkLayout.center.y) : null))
 
     // Apply the general update pattern to the links.
     networkLayout.path = networkLayout.path.data(app.data.links.filter(
@@ -370,6 +376,8 @@ networkLayout.mouseup = () => {
         networkLayout.drag_line
             .classed('hidden', true)
             .style('marker-end', '');
+    } else {
+        app.selected_node = null;
     }
 
     // because :active only works in WebKit?
@@ -379,7 +387,6 @@ networkLayout.mouseup = () => {
 
     // clear mouse event vars
     networkLayout.resetMouseVars()
-    app.selected_node = null;
 
     networkLayout.ticked()
 }
@@ -432,7 +439,7 @@ networkLayout.init = () => {
         .attr('transform', 'translate(1.5,1.5)');
 
     networkLayout.forceSimulation = d3.forceSimulation()
-        .force('center', d3.forceCenter(networkLayout.center.x, networkLayout.center.y))
+        .force('center', (networkLayout.forceCenter ? d3.forceCenter(networkLayout.center.x, networkLayout.center.y) : null))
         .on('tick', networkLayout.ticked)
 
     // line displayed when dragging new nodes
@@ -453,12 +460,20 @@ networkLayout.init = () => {
         .on('mouseup', networkLayout.mouseup);
 
     networkLayout.update()
-    app.graph.networkLayout.toggle(app.config.app().graph.networkLayout)
+    var configApp = app.config.app();
+    app.graph.networkLayout.toggleView(configApp.graph.networkLayout.view)
+    app.graph.networkLayout.toggleCenter(configApp.graph.networkLayout.center)
 }
 
-networkLayout.toggle = (visible) => {
-    $('#networkLayout').toggle(visible)
-    $('#view-networkLayout').find('.glyphicon-ok').toggle(visible)
+networkLayout.toggleView = (display) => {
+    $('#networkLayout').toggle(display)
+    $('#view-networkLayout').find('.glyphicon-ok').toggle(display)
+}
+
+networkLayout.toggleCenter = (center) => {
+    networkLayout.forceCenter = center
+    networkLayout.update()
+    $('#center-networkLayout').find('.glyphicon-ok').toggle(center)
 }
 
 module.exports = networkLayout

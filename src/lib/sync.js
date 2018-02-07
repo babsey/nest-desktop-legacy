@@ -93,13 +93,13 @@ sync.remoteDB = () => {
 }
 
 sync.init = () => {
-    var simulation_list = fs.readdirSync(path.join(app.__dirname, 'simulations'))
+    var simulation_list = fs.readdirSync(path.join(app.appPath, 'simulations'))
 
     simulation_list.filter((filename) => {
         return filename.endsWith('.json')
     }).map((file) => {
         var name = file.split('.')[0]
-        var sim = jsonfile.readFileSync(path.join(app.__dirname, 'simulations', name + '.json'))
+        var sim = jsonfile.readFileSync(path.join(app.appPath, 'simulations', name + '.json'))
         app.db.localDB.findOne({
             _id: sim._id
         }).exec((err, docs) => {

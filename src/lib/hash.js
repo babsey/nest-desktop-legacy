@@ -9,7 +9,7 @@ module.exports = (data) => hash({
     kernel: data.kernel,
     random_seed: data.random_seed,
     nodes: data.nodes.map((node) => {
-        var saved_node = {
+        return {
             model: node.model,
             n: node.n,
             params: node.params,
@@ -28,7 +28,6 @@ module.exports = (data) => hash({
         //     saved_node.amplitude_dtime = node.amplitude_dtime;
         //     saved_node.amplitude_dvalue = node.amplitude_dvalue;
         // }
-        return saved_node
     }),
     links: data.links
 })

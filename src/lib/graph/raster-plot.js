@@ -96,26 +96,26 @@ rasterPlot.init = (idx) => {
 
     var height = app.graph.chart.height / app.simulation.recorders.length;
 
-    rasterPlot.scatterChart = require(__dirname + '/chart/scatter-chart');
+    rasterPlot.scatterChart = require('./chart/scatter-chart');
     rasterPlot.scatterChart.init('#chart', idx, {
         y: height * idx,
         height: height * 7. / 10.
     });
-    delete require.cache[require.resolve(__dirname + '/chart/scatter-chart')]
+    delete require.cache[require.resolve('./chart/scatter-chart')]
 
-    rasterPlot.barChart = require(__dirname + '/chart/bar-chart');
+    rasterPlot.barChart = require('./chart/bar-chart');
     rasterPlot.barChart.init('#chart', idx, {
         y: height * (7. / 10. + idx),
         height: height * 3. / 10.,
     });
-    delete require.cache[require.resolve(__dirname + '/chart/bar-chart')]
+    delete require.cache[require.resolve('./chart/bar-chart')]
 
-    rasterPlot.lineChart = require(__dirname + '/chart/line-chart');
+    rasterPlot.lineChart = require('./chart/line-chart');
     rasterPlot.lineChart.init('#chart', idx, {
         y: height * (7. / 10. + idx),
         height: height * 3. / 10.,
     });
-    delete require.cache[require.resolve(__dirname + '/chart/line-chart')]
+    delete require.cache[require.resolve('./chart/line-chart')]
 
 }
 

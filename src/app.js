@@ -2,31 +2,34 @@
 
 window.$ = window.jQuery = require('jquery');
 window.d3 = require('d3');
+const path = require('path');
 require('bootstrap');
 
-const path = require('path');
+var appPath = __dirname;
+var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.cwd(), 'data');
 
 var app = {
-    __dirname: __dirname,
-    config: require(__dirname + '/lib/config'),
-    controller: require(__dirname + '/lib/controller'),
-    db: require(__dirname + '/lib/db'),
-    format: require(__dirname + '/lib/format'),
-    graph: require(__dirname + '/lib/graph'),
-    hash: require(__dirname + '/lib/hash'),
-    message: require(__dirname + '/lib/message'),
-    model: require(__dirname + '/lib/model'),
-    navigation: require(__dirname + '/lib/navigation'),
-    network: require(__dirname + '/lib/network'),
-    print: require(__dirname + '/lib/print'),
-    protocol: require(__dirname + '/lib/protocol'),
-    renderer: require(__dirname + '/lib/renderer'),
-    request: require(__dirname + '/lib/request'),
-    screen: require(__dirname + '/lib/screen'),
-    simulation: require(__dirname + '/lib/simulation'),
-    slider: require(__dirname + '/lib/slider'),
-    sync: require(__dirname + '/lib/sync'),
-    validation: require(__dirname + '/lib/validation'),
+    appPath: appPath,
+    dataPath: dataPath,
+    config: require(appPath + '/lib/config'),
+    controller: require(appPath + '/lib/controller'),
+    db: require(appPath + '/lib/db'),
+    format: require(appPath + '/lib/format'),
+    graph: require(appPath + '/lib/graph'),
+    hash: require(appPath + '/lib/hash'),
+    message: require(appPath + '/lib/message'),
+    model: require(appPath + '/lib/model'),
+    navigation: require(appPath + '/lib/navigation'),
+    network: require(appPath + '/lib/network'),
+    print: require(appPath + '/lib/print'),
+    protocol: require(appPath + '/lib/protocol'),
+    renderer: require(appPath + '/lib/renderer'),
+    request: require(appPath + '/lib/request'),
+    screen: require(appPath + '/lib/screen'),
+    simulation: require(appPath + '/lib/simulation'),
+    slider: require(appPath + '/lib/slider'),
+    sync: require(appPath + '/lib/sync'),
+    validation: require(appPath + '/lib/validation'),
     resizing: false,
 };
 

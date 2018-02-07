@@ -59,8 +59,8 @@ network.edit = (drawing) => {
     app.selected_node = null;
     app.selected_link = null;
     app.graph.networkLayout.drawing = drawing;
-    var networkLayout = app.config.app().graph.networkLayout
-    app.graph.networkLayout.toggle(drawing || networkLayout)
+    var networkLayoutView = app.config.app().graph.networkLayout.view
+    app.graph.networkLayout.toggleView(drawing || networkLayoutView)
     app.graph.networkLayout.update()
     if (drawing) {
         app.db.clone(app.data).then((data) => {

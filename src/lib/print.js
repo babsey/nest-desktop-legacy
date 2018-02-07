@@ -18,7 +18,7 @@ print.toPDF = (filename, filepath) => {
         filename = filename + '.pdf'
     }
     var viewDescription = $('#pdf-description').prop('checked');
-    var configElectron = require(path.join(process.cwd(), 'config', 'electron.json'));
+    var configElectron = require(path.join(app.dataPath, 'config', 'electron.json'));
 
     let {
         width,
@@ -29,7 +29,8 @@ print.toPDF = (filename, filepath) => {
     var offsetHeight = $('#description')[0].offsetHeight;
     $('#description').parents('.visible-print').attr('style', '')
 
-    var pageWidth = width - 319 + 240 + 50;
+    // var pageWidth = width - 319 + 240 + 50;
+    var pageWidth = width + 50;
     var pageHeight = 90 + (viewDescription ? height + offsetHeight : height);
 
     var dataDialog = $('#data-dialog').hasClass('in');
@@ -58,7 +59,7 @@ print.events = () => {
     $('.printToPDF').on('click', (e) => {
         var configApp = app.config.app();
         var filename = app.data._id + '.pdf';
-        var filepath = path.join(process.cwd(), configApp.datapath);
+        var filepath = path.join(app.dataPath, 'exports');
         $('#pdf-form #pdf-filename').val(filename).focus();
         $('#pdf-form #pdf-filepath').val(filepath);
         $('#pdf-description').prop('checked', app.data.description != undefined)

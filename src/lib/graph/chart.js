@@ -224,9 +224,9 @@ chart.load = () => {
         if (!recorder.node.model) return
 
         var recorderChart = recorder.node.chart || fromOutputNode[recorder.node.model]
-        recorder.chart = require(__dirname + '/' + recorderChart)
+        recorder.chart = require('./' + recorderChart)
         recorder.chart.init(idx)
-        delete require.cache[require.resolve(__dirname + '/' + recorderChart)]
+        delete require.cache[require.resolve('./' + recorderChart)]
     })
 }
 

@@ -7,7 +7,8 @@ const fs = require('fs');
 
 simulationRenderer.list = (data) => {
     var div = [];
-    div.push('<a id="' + data._id + '"class="simulation list-group-item" href="./templates/simulation.html?simulation=' + data._id + '">')
+    var href = './templates/simulation.html?simulation=' + data._id;
+    div.push('<a id="' + data._id + '"class="simulation list-group-item" href="' + href + '">')
     div.push('<span>')
     div.push(data.name)
     div.push('</span>')
@@ -18,10 +19,10 @@ simulationRenderer.list = (data) => {
 
 simulationRenderer.details = (data) => {
     var configApp = app.config.app();
-    if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png'))) {
-        var src = path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png');
+    if (fs.existsSync(path.join(app.dataPath, 'images', data._id + '.png'))) {
+        var src = path.join(app.dataPath, 'images', data._id + '.png');
     } else {
-        // var src = path.join(__dirname, '..', '..', 'assets', 'img', 'simulation_default.png');
+        // var src = path.join(app.appPath, 'assets/img/simulation_default.png');
         var src = null;
     }
 
@@ -58,7 +59,8 @@ simulationRenderer.details = (data) => {
 simulationRenderer.dropdown = (data) => {
     var div = [];
     div.push('<li>')
-    div.push('<a href="#" ' + 'id="' + data._id + '" ' + 'class="simulation" rel="popover" title="' + data.name + '">')
+    var href = './simulation.html?simulation=' + data._id;
+    div.push('<a ' + 'id="' + data._id + '" ' + 'class="simulation" href="' + href + '" rel="popover" title="' + data.name + '">')
     div.push(app.format.truncate(data.name))
     div.push('</a></li>')
     return div.join('')
@@ -66,10 +68,10 @@ simulationRenderer.dropdown = (data) => {
 
 simulationRenderer.thumbnails = (data) => {
     var configApp = app.config.app();
-    if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png'))) {
-        var src = path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png');
+    if (fs.existsSync(path.join(app.dataPath, 'images', data._id + '.png'))) {
+        var src = path.join(app.dataPath, 'images', data._id + '.png');
     } else {
-        var src = path.join(__dirname, '..', '..', 'assets', 'img', 'simulation_default.png');
+        var src = path.join(app.appPath, 'assets/img/simulation_default.png');
     }
     var div = [];
     div.push('<div id="' + data._id + '"class="simulation col-xs-12 col-sm-4 col-md-3" data-img="' + src + '" data-doi="' + (data.doi || '') + '">')
@@ -90,10 +92,10 @@ simulationRenderer.thumbnails = (data) => {
 
 simulationRenderer.popover = (data) => {
     var configApp = app.config.app();
-    if (fs.existsSync(path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png'))) {
-        var src = path.join(process.cwd(), configApp.datapath, 'images', data._id + '.png');
+    if (fs.existsSync(path.join(app.dataPath, 'images', data._id + '.png'))) {
+        var src = path.join(app.dataPath, 'images', data._id + '.png');
     } else {
-        // var src = path.join(__dirname, '..', '..', 'assets', 'img', 'simulation_default.png');
+        // var src = path.join(app.appPath, 'assets/img/simulation_default.png');
         var src = null;
     }
     var div = [];

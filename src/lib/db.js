@@ -110,7 +110,6 @@ db.clean = (data) => {
             }
         }
     })
-    data.hash = app.hash(data);
 }
 
 db.update = (data) => {
@@ -149,11 +148,10 @@ db.add = (data) => new Promise((resolve, reject) => {
 })
 
 db.export = (data) => {
-    var configApp = app.config.app()
     var id = data._id;
     db.get(id).exec((err, doc) => {
         if (err) return
-        var filepath = path.join(process.cwd(), configApp.datapath, 'exports', id + '.json')
+        var filepath = path.join(app.dataPath, 'exports', id + '.json')
         jsonfile.writeFileSync(filepath, doc, {
             spaces: 4
         })
@@ -165,7 +163,7 @@ db.backup = () => {
         db.all().exec((err, docs) => {
             if (err) return
             var date = new Date;
-            var filename = path.join(process.cwd(), configApp.datapath, app.simulation.id + '_' + date.toJSON() + '.backup')
+            var filename = path.join(app.dataPath, app.simulation.id + '_' + date.toJSON() + '.backup');
             var backupDB = new NeDB({
                 filename: filename,
                 timestampData: true,
@@ -181,9 +179,7 @@ db.backup = () => {
 
 db.init = () => {
     app.message.log('Initialize database')
-    var configApp = app.config.app()
-    var db_name = configApp.db.name
-    var filename = path.join(process.cwd(), configApp.datapath, db_name + '.db')
+    var filename = path.join(app.dataPath, app.config.app().db.name + '.db');
 
     db.localDB = new NeDB({
         filename: filename,
