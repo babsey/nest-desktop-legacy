@@ -17,13 +17,15 @@ If you simulate nest locally, you need [nest-server-simulation](https://github.c
 Install git with sudo
 
 ```
-sudo apt-get install git
+sudo apt-get -y install git
 ```
 
-Install node with sudo
+Install nodejs with sudo
 
 ```
-sudo apt-get install nodejs
+sudo apt-get -y install curl
+sudo curl -sL https://deb.nodesource.com/setup_8.x | bash -
+sudo apt-get -y install nodejs
 ```
 
 or compile from [source code](https://nodejs.org/en/download/) Note that nodejs should be removed if you want to install node from source code.
@@ -33,7 +35,7 @@ or compile from [source code](https://nodejs.org/en/download/) Note that nodejs 
 Clone nest-desktop from github.
 
 ```
-git clone http://github.com/babsey/nest-desktop
+git clone https://github.com/babsey/nest-desktop
 ```
 
 Install required dependencies for nest-desktop.
@@ -67,13 +69,27 @@ Start the app in nest-desktop folder.
 npm start
 ```
 
+Optional: Before you start the app, you can define the enviroment variable for the nest-desktop data
+
+```
+export NESTDESKTOP_DATA=$HOME/.local/share/nest-desktop
+```
+
+## To build a package for linux (x64)
+
+```
+npm run build
+```
+
+
 ## To configure
 
 A simple configuration handling for your the nest-desktop application.
+All configuration files are stored in `./data/config/` or `$NESTDESKTOP_DATA/data/config/` if `$NESTDESKTOP_DATA` exists.
 
 ### For the app
 
-The configuration for the app is saved as `app.json` file in `./data/config` folder
+The configuration for the app is saved as `app.json` file.
 
 #### Database
 
@@ -88,45 +104,43 @@ If you want to contribute your networks to the server, edit username, password a
 #### Nest simulation server
 
 To edit the host and port if the nest simulation server operates on other computer.
+
 ### For the window interface with electron
 
-The configuration for the electron is saved as `electron.json` file in `./data/config` folder.
+The configuration for the electron is saved as `electron.json` file.
 
 #### Window configuration
 
-The application create a window with these window properties - width, height, frame, fullscreen.
+The application create a window with these window properties - width, height, frame, fullscreen or debug mode.
+
 
 ## FAQ
 
 ### Why is the app not working?
 
-First, be assure that you installed all required npm packages (`npm install`).
+First, make sure that you (re)installed all required npm packages (`npm install`).
 
-If still not working, the configuation may be deprecated. In this case, delete the config folder or just empty `db_name` in the `app.json`, then restart the app. It will generate new config file and new database.
-
-If still not working, the database may be deprecated. In this case, delete the all files in `./data`, then restart the app.
-
-However, I am working on a better solution.
+If it is still not working, the configuation or database may be deprecated. In this case, delete the all files in `$NESTDESKTOP_DATA/data/`, then restart the app.
 
 ### Where are the data of simulation stored?
 
-Saved data of the simulation are stored as NeDB database in `./data/\*.db`.
+Data of the simulations are stored as NeDB database in `$NESTDESKTOP_DATA/data/\*.db`.
 
 ### Where are the protocols of simulation stored?
 
-Protocols of the simulation are stored as NeDB database in `./data/protocols/\*.db`.
+Protocols of the simulations are stored as NeDB database in `$NESTDESKTOP_DATA/data/protocols/\*.db`.
 
 ### Where are the thumbnails of simulation stored?
 
-Thumbnails of the simulation are stored in `./data/images/`.
+Thumbnails of the simulations are stored in `$NESTDESKTOP_DATA/data/images/`.
 
 ### Why is the protocol not working?
 
-Just remove db files in `./data/protocols/`.
+Just remove files in `$NESTDESKTOP_DATA/data/protocols/`.
 
 ### How can I update the thumbnails?
 
-Just click the button 'capture screen'. For the hard case, remove image files in `./data/images/` and then resimulate.
+Just click the button 'capture screen'. For the hard case, remove image files in `$NESTDESKTOP_DATA/data/images/` and then resimulate.
 
 ### How can I reload the window?
 
