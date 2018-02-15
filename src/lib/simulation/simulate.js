@@ -157,7 +157,7 @@ simulate.init = () => {
 simulate.start = () => {
     if (app.simulation.running) return
     app.simulation.simulate.message = app.message.simulate();
-    $('.disableOnSimulate').attr('disabled', true);
+    $('.disableOnRunning').toggleClass('disabled', app.simulation.running)
     $('select').prop('disabled', true);
     $('.disableNode').prop('disabled', true);
     $('.disableLink').prop('disabled', true);
@@ -168,7 +168,7 @@ simulate.start = () => {
 simulate.end = () => {
     if (app.simulation.running) return
     app.simulation.simulate.message.close();
-    $('.disableOnSimulate').attr('disabled', false);
+    $('.disableOnRunning').toggleClass('disabled', app.simulation.running)
     $('select:not(.disabled)').prop('disabled', false);
     $('.disableNode').prop('disabled', false);
     $('.disableLink').prop('disabled', false);

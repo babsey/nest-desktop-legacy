@@ -1,10 +1,20 @@
 CHANGELOG
 ---------
 
+0.14.0:
+    Latest electron version
+    Spike count in bins
+    Detailed point info
+    Spike threshold line
+    Margined y-scale in line chart
+    Default temporal resolution: 0.1 ms
+    Default dataPath if $NESTDESKTOP_DATA not exists
+    Configurations and simulations in data folder
+
 0.13.0:
     Reorganize navigation
     Option to center network layout
-    Data and config can store in $NESTDESKTOP_DATA
+    Data and config can be stored in $NESTDESKTOP_DATA
     Automatic height for PDF print
 
 0.12.0:

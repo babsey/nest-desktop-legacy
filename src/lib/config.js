@@ -83,4 +83,24 @@ config.events = () => {
     })
 }
 
+config.init = () => {
+    var configApp = config.app()
+    var changed = false
+    if (!configApp.user.id) {
+        configApp.user.id = uuidV4();
+        changed = true
+    }
+    if (!configApp.version) {
+        configApp.version = process.env.npm_package_version;
+        changed = true
+    }
+    if (!configApp.db.name) {
+        configApp.db.name = uuidV4();
+        changed = true
+    }
+    if (changed) {
+        config.save('app', configApp)
+    }
+}
+
 module.exports = config

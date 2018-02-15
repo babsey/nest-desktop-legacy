@@ -24,7 +24,7 @@ Install nodejs with sudo
 
 ```
 sudo apt-get -y install curl
-sudo curl -sL https://deb.nodesource.com/setup_8.x | bash -
+sudo curl -sL https://deb.nodesource.com/setup_9.x | bash -
 sudo apt-get -y install nodejs
 ```
 
@@ -69,6 +69,7 @@ Start the app in nest-desktop folder.
 npm start
 ```
 
+By default data and configurations are stored in $HOME/.local/share/nest-desktop.
 Optional: Before you start the app, you can define the enviroment variable for the nest-desktop data
 
 ```
@@ -85,7 +86,7 @@ npm run build
 ## To configure
 
 A simple configuration handling for your the nest-desktop application.
-All configuration files are stored in `./data/config/` or `$NESTDESKTOP_DATA/data/config/` if `$NESTDESKTOP_DATA` exists.
+All configuration files are stored in `$NESTDESKTOP_DATA/config/`.
 
 ### For the app
 
@@ -120,27 +121,27 @@ The application create a window with these window properties - width, height, fr
 
 First, make sure that you (re)installed all required npm packages (`npm install`).
 
-If it is still not working, the configuation or database may be deprecated. In this case, delete the all files in `$NESTDESKTOP_DATA/data/`, then restart the app.
+If it is still not working, the configuation or database may be deprecated. In this case, delete the all files in `$NESTDESKTOP_DATA`, then restart the app.
 
 ### Where are the data of simulation stored?
 
-Data of the simulations are stored as NeDB database in `$NESTDESKTOP_DATA/data/\*.db`.
+Data of the simulations are stored as NeDB database in `$NESTDESKTOP_DATA/\*.db`.
 
 ### Where are the protocols of simulation stored?
 
-Protocols of the simulations are stored as NeDB database in `$NESTDESKTOP_DATA/data/protocols/\*.db`.
+Protocols of the simulations are stored as NeDB database in `$NESTDESKTOP_DATA/protocols/\*.db`.
 
 ### Where are the thumbnails of simulation stored?
 
-Thumbnails of the simulations are stored in `$NESTDESKTOP_DATA/data/images/`.
+Thumbnails of the simulations are stored in `$NESTDESKTOP_DATA/images/`.
 
 ### Why is the protocol not working?
 
-Just remove files in `$NESTDESKTOP_DATA/data/protocols/`.
+Just remove files in `$NESTDESKTOP_DATA/protocols/`.
 
 ### How can I update the thumbnails?
 
-Just click the button 'capture screen'. For the hard case, remove image files in `$NESTDESKTOP_DATA/data/images/` and then resimulate.
+Just click the button 'capture screen'. For the hard case, remove image files in `$NESTDESKTOP_DATA/images/` and then resimulate.
 
 ### How can I reload the window?
 

@@ -1,5 +1,6 @@
 "use strict"
 
+require('./init')
 const electron = require('electron');
 const app = electron.app; // Module to control application life.
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window.
@@ -8,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const jsonfile = require('jsonfile');
 
-var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.cwd(), 'data');
+var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.local/share/nest-desktop');
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
@@ -44,7 +45,7 @@ function createWindow() {
         height: height,
         frame: configElectron.window.frame,
         title: 'A NEST desktop application',
-        icon: path.join(__dirname, 'src/assets/img/icon.png'),
+        icon: path.join(__dirname, 'src/assets/img/nest-icon.png'),
         // "node-integration": true,
     });
 
@@ -94,11 +95,7 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 
-require('./init').then((onFulfilled, onRejected) => {
-    if (!onRejected) {
-        app.on('ready', createWindow)
-    }
-});
+app.on('ready', createWindow)
 
 app.on('activate', function() {
     // On OS X it's common to re-create a window in the app when the

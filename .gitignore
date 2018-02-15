@@ -1,6 +1,4 @@
 node_modules
 npm-debug.log
 data
-config
 release-builds
-package-lock.json

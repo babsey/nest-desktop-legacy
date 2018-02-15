@@ -61,6 +61,14 @@
     z-index: 1;
 }
 
+#chart .Vth_line {
+    fill: none;
+    stroke: red;
+    stroke-width: 1.5px;
+    pointer-events: all;
+    z-index: 1;
+}
+
 #chart .focus {
     z-index: 10;
 }

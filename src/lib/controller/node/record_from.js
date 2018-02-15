@@ -18,8 +18,8 @@ nodeController.record_from = (node) => {
         var rec = this.value;
         recorder.node.data_from = recorder.node.params.record_from.filter(
             (record_from) => record_from.indexOf(rec) != -1)
-        recorder.data.senders = []
-        recorder.data.recs = []
+        recorder.data.senders = [];
+        recorder.data.recs = [];
         var y = recorder.node.data_from.map(
             (d, ridx) => recorder.senders.map(
                 (s, i) => {
@@ -30,6 +30,7 @@ nodeController.record_from = (node) => {
                     )
                 })
         )
+
         recorder.data.y = [].concat.apply([], y);
 
         if ($('#autoscale').prop('checked')) {

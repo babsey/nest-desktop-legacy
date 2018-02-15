@@ -30,8 +30,26 @@ chart.tooltip = function(d, i) {
     // chart.focus.select("text").text(() => {
     //     return app.format.number(x[idx], 1) + ', ' + app.format.number(y[idx]);
     // });
-    $('#point').html(() => app.format.number(x[idx], 1) + (chart.xData.unit ? '&thinsp;' + chart.xData.unit : '') +
-        ', ' + app.format.number(y[idx]) + (chart.yData.unit ? '&thinsp;' + chart.yData.unit : ''))
+    $('#point').html(() => {
+        var point = '';
+        point += app.format.number(x[idx], (chart.data.xFormat == undefined ? 1 : chart.data.xFormat));
+        point += (chart.xData.unit ? '&thinsp;' + chart.xData.unit : '');
+        point += ', ';
+        point += app.format.number(y[idx], (chart.data.yFormat == undefined ? 2 : chart.data.yFormat));
+        point += (chart.yData.unit ? '&thinsp;' + chart.yData.unit : '');
+        point += ' (';
+        point += '&micro;: ';
+        point += app.format.number(d3.mean(y), 2)
+        point += ' &plusmn; ';
+        point += app.format.number(d3.deviation(y), 2)
+        point += (chart.yData.unit ? '&thinsp;' + chart.yData.unit : '');
+        point += ', ';
+        point += '&sigma;&sup2;: ';
+        point += app.format.number(d3.variance(y), 2)
+        point += (chart.yData.unit ? '&thinsp;' + chart.yData.unit : '');
+        point += ')';
+        return point
+    })
     chart.focus.select(".y-hover-line").attr("x1", () => chart.width - chart.xScale(x[idx]));
     chart.focus.select(".y-hover-line").attr("x2", () => -chart.xScale(x[idx]));
     chart.focus.select(".x-hover-line").attr("y1", () => -chart.yScale(y[idx]) - offset);
@@ -121,6 +139,24 @@ chart.draw_line = (series) => {
             .attr("d", chart.line);
     }
 
+    // Select the path.
+    var Vth_line = chart.g.select('#clip').selectAll('.Vth_line')
+        .data(chart.data.V_th);
+
+    // Change the path.
+    Vth_line.attr("d", chart.line);
+
+    // Add the path.
+    Vth_line.enter().append("path")
+        .attr("class", "Vth_line")
+        .attr("transform",
+                (d, i) => series == 'stack' ? "translate(0," + chart.subplot(i) + ")" : ''
+            )
+        .attr("d", chart.line);
+
+    // Delete the path.
+    Vth_line.exit().remove();
+
     lines.selectAll('.overlay')
         .attr("width", chart.width)
         .attr("height", chart.height / chart.data.n)
@@ -157,10 +193,14 @@ chart.update = (recorder) => {
     if (!chart.data.x) return
     chart.xScale.domain(app.graph.chart.xScale.domain())
     chart.xScale.range([0, chart.width])
-    var height = recorder.node.series == "overlap" ? chart.height : chart.height / chart.data.n
+    var height = (recorder.node.series == "overlap" ? chart.height : chart.height) / chart.data.n;
     chart.yScale.range([chart.height, chart.height - height])
+
     chart.xScale.domain(app.graph.chart.xScale.domain())
-    chart.yScale.domain(d3.extent([].concat.apply([], chart.data.y)))
+    var yDomain = d3.extent([].concat.apply([], chart.data.y));
+    var dy = (yDomain[1] - yDomain[0]) * .05;
+    yDomain = [yDomain[0] - dy, yDomain[1] + dy]
+    chart.yScale.domain(yDomain)
 
     var transition = !(app.simulation.running || app.graph.dragging || app.graph.chart.zooming || app.resizing || app.mouseover)
     app.graph.chart.axesUpdate(chart, transition)
@@ -186,6 +226,11 @@ chart.update = (recorder) => {
         .x((d, i) => chart.xScale(chart.data.x[i]))
         .y((d) => chart.yScale(d));
 
+    chart.data.V_th = recorder.senders.map(
+        (sender) => {
+            var V_th = app.data.nodes.filter((node) => node.ids.indexOf(sender) != -1)[0].params.V_th;
+            return (yDomain[1] > V_th) ? chart.data.x.map( (d) => V_th ) : [] }
+    )
     chart.draw_line(recorder.node.series || 'stack')
     app.graph.chart.legend(chart, chart.data.legend, chart.data.c)
 

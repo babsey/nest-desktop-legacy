@@ -73,11 +73,13 @@ rasterPlot.update = (recorder) => {
     });
 
     if (recorder.node.psth.chart == 'line') {
+        psth = psth.slice(0, psth.length - 1 )
         lineChart.data = {
             x: psth.map((d) => d.x),
             y: [psth.map((d) => d.y)],
             n: 1,
-            c: ['steelblue']
+            c: ['steelblue'],
+            yFormat: recorder.node.psth.ordinate == 'count' ? 0 : 2
         }
     } else {
         barChart.recId = recorder.node.id;

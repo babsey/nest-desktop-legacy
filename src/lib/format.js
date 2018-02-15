@@ -3,7 +3,8 @@
 var format = {};
 
 format.number = (value, l) => {
-    var fmt = d3.format('.' + (l || 2) + 'f')
+    l = (l == undefined) ? 2 : l;
+    var fmt = d3.format('.' + l + 'f')
     return fmt(value)
 }
 

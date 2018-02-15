@@ -7,6 +7,7 @@ nodeController.nbins = (node) => {
     var nodeDefaults = app.config.nest('node');
 
     var options = nodeDefaults.nbins;
+    options.value = options.ticks_labels.indexOf(node.nbins);
     app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
         .on('slideStop', function(d) {
             var ticks_labels = JSON.parse($(this).data('ticks_labels'));

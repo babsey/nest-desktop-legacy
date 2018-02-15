@@ -62,6 +62,7 @@
     const fs = require('fs');
 
     window.app = require('./app');
+    app.config.init()
     app.db.init()
     app.sync.init()
     app.sync.remoteDB()

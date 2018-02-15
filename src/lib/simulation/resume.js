@@ -44,7 +44,7 @@ resume.run = () => {
 }
 
 resume.update = () => {
-    $('.disableOnRunning').attr('disabled', app.simulation.running)
+    $('.disableOnRunning').toggleClass('disabled', app.simulation.running)
     $('.dataSlider').find('.sliderInput').slider(app.simulation.running ? 'disable' : 'enable')
     $('#connections').find('.sliderInput').slider(app.simulation.running ? 'disable' : 'enable')
     if (app.simulation.running) {

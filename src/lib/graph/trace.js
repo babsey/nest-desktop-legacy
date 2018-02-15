@@ -37,10 +37,12 @@ trace.update = (recorder) => {
             )
         )
     ))
+
     lineChart.data.x = recorder.data.map(
         (d) => d[chart.abscissa].filter(
             (dd) => dd > chart.xScale.domain()[0] && dd <= chart.xScale.domain()[1])
     )[0]
+
     if (recorder.node.data_from.length == 1) {
         lineChart.data.c = recorder.data.map((d) => d.color)
         lineChart.data.legend = null

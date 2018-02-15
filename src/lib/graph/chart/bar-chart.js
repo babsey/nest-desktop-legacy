@@ -47,6 +47,10 @@ chart.update = (recorder) => {
     var bars = chart.g.select('#clip')
         .selectAll(".bar")
         .data(chart.data);
+
+    var labels = chart.g.select('#clip')
+        .selectAll(".label")
+        .data(chart.data);
     chart.bars = bars;
 
     var colors = app.graph.colors()
@@ -71,13 +75,14 @@ chart.update = (recorder) => {
             .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
             .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
             .style("fill", color);
+
     } else {
         bars
             .attr("x", (d) => chart.xScale(d.x0))
             .attr("width", (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
             .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
             .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
-            .style("fill", color);
+            .style("fill", color);ordinate
 
         bars.enter()
             .append("rect")
@@ -87,11 +92,33 @@ chart.update = (recorder) => {
             .attr('y', chart.g.attr('height'))
             .attr("y", (d) => chart.yScale(chart.yVal(d, idx)))
             .attr("height", (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
-            .style("fill", color);
+            .style("fill", color);ordinate
     }
 
     bars.exit()
         .remove()
+
+
+    var ordinate = recorder.node.psth.ordinate;
+    var numberFormat = (ordinate == 'count' ? 0 : 1);
+
+    labels
+        .classed("hide", (d) => { return (d.x1 - d.x0) < (numberFormat ? 50 : 20) } )
+        .text((d) => { return app.format.number(d.y, numberFormat) } )
+        .attr("x", (d) => chart.xScale(d.x))
+        .attr("y", (d) => chart.yScale(d.y) + 17)
+
+    labels.enter().append("text")
+        .attr("class", "label")
+        .classed("hide", (d) => { return (d.x1 - d.x0) < (numberFormat ? 50 : 20) } )
+        .text((d) =>  { return app.format.number(d.y, numberFormat) } )
+        .attr("x", (d) => chart.xScale(d.x))
+        .attr("y", (d) => chart.yScale(d.y) + 17)
+        .attr("text-anchor", "middle")
+        .style("font-size", "14px")
+        .attr("fill", "white")
+
+    labels.exit().remove()
 
     chart.g.style('display', null)
 }

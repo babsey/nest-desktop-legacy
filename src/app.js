@@ -6,7 +6,7 @@ const path = require('path');
 require('bootstrap');
 
 var appPath = __dirname;
-var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.cwd(), 'data');
+var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.local/share/nest-desktop');
 
 var app = {
     appPath: appPath,
