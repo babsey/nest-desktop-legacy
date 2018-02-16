@@ -4,9 +4,10 @@ require('bootstrap-notify');
 
 var message = {};
 
-message.notify = $.notify
+message.notify = $.notify;
+message.notifyClose = $.notifyClose;
 
-message.show = (title, content, delay) => $.notify({
+message.show = (title, content, delay) => message.notify({
     // options
     icon: 'fa fa-ellipsis-v',
     title: title,
@@ -33,7 +34,7 @@ message.log = (text) => {
     message.show(date, text, 2000)
 }
 
-message.simulate = () => $.notify({
+message.simulate = () => message.notify({
     // options
     icon: 'fa fa-hourglass-start',
     title: 'Please wait.',
@@ -53,7 +54,7 @@ message.simulate = () => $.notify({
         '</div>'
 })
 
-message.resume = () => $.notify({
+message.resume = () => message.notify({
     // options
     icon: 'fa fa-pause',
     title: '  ',

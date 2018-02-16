@@ -10,6 +10,8 @@ const path = require('path');
 const jsonfile = require('jsonfile');
 
 var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.local/share/nest-desktop');
+console.log('App path: ' + __dirname)
+console.log('Data path: ' + dataPath)
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());

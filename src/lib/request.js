@@ -24,28 +24,24 @@ req.server_check = () => {
 }
 
 req.request = (data) => {
-    var url = req.url()
-    var running = (!(app.data.kernel.time == 0.0) || app.simulation.running) ? 'resume' : 'simulate'
+    var url = req.url();
+    var running = (!(app.data.kernel.time == 0.0) || app.simulation.running) ? 'resume' : 'simulate';
     app.message.log('Start simulation')
+    var delay = 5000
     return $.ajax({
         method: 'POST',
         url: url + '/network/' + app.data.network + '/' + running,
         data: JSON.stringify(data),
         contentType: 'application/json;charset=UTF-8',
     }).fail((d) => {
-        app.message.show('Warning', d.responseText)
+        app.message.show('Warning', d.responseText, delay)
         app.simulation.simulate.end()
     }).done((d) => {
         app.message.log('Simulation finished.')
         if (d.error) {
             console.log(d.error)
-            app.simulation.simulate.message.update({
-                icon: 'fa fa-error',
-                title: 'NEST Error:',
-                message: d.error,
-                type: 'danger'
-            });
-            setTimeout(() => app.simulation.simulate.end(), 5000);
+            app.message.show('NEST Error', d.error, delay);
+            setTimeout(() => app.simulation.simulate.end(), delay);
         } else {
             app.simulation.simulate.end()
         }
