@@ -1,17 +1,19 @@
 "use strict"
 
-require('./init')
+const fs = require('fs');
+const path = require('path');
+
+var appPath = __dirname;
+var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.local/share/nest-desktop');
+console.log('App path: ' + appPath)
+console.log('Data path: ' + dataPath)
+
+const jsonfile = require('jsonfile');
+require(path.join(appPath, 'init'));
+
 const electron = require('electron');
 const app = electron.app; // Module to control application life.
 const BrowserWindow = electron.BrowserWindow; // Module to create native browser window.
-
-const fs = require('fs');
-const path = require('path');
-const jsonfile = require('jsonfile');
-
-var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.local/share/nest-desktop');
-console.log('App path: ' + __dirname)
-console.log('Data path: ' + dataPath)
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
@@ -47,7 +49,7 @@ function createWindow() {
         height: height,
         frame: configElectron.window.frame,
         title: 'A NEST desktop application',
-        icon: path.join(__dirname, 'src/assets/img/nest-icon.png'),
+        icon: path.join(appPath, 'src/assets/img/nest-icon.png'),
         // "node-integration": true,
     });
 
@@ -77,7 +79,7 @@ function createWindow() {
     });
 
     // and load the index.html of the app.
-    mainWindow.loadURL(path.join('file://', __dirname, 'src/index.html'));
+    mainWindow.loadURL(path.join('file://', appPath, 'src/index.html'));
 
     // Open the DevTools.
     if (configElectron.debug) {
