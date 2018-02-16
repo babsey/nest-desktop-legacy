@@ -1,0 +1,35 @@
+[{
+    "element_type": "recorder",
+    "id": "multimeter",
+    "label": "Multimeter",
+    "chart": "trace",
+    "sliderDefaults": [{
+        "id": "interval",
+        "label": "Time interval of recording (ms)",
+        "level": 4,
+        "value": 2,
+        "ticks": [0, 1, 2, 3],
+        "ticks_labels": [0.1, 0.5, 1.0, 2.0],
+        "show_value": false
+    }]
+}, {
+    "element_type": "recorder",
+    "id": "spike_detector",
+    "label": "Spike detector",
+    "chart": "raster-plot",
+    "sliderDefaults": []
+}, {
+    "element_type": "recorder",
+    "id": "voltmeter",
+    "label": "Voltmeter",
+    "chart": "trace",
+    "sliderDefaults": [{
+        "id": "interval",
+        "label": "Time interval of recording (ms)",
+        "level": 4,
+        "value": 2,
+        "ticks": [0, 1, 2, 3],
+        "ticks_labels": [0.1, 0.5, 1.0, 2.0],
+        "show_value": false
+    }]
+}]

@@ -1,0 +1,195 @@
+[{
+    "element_type": "stimulator",
+    "id": "ac_generator",
+    "label": "AC generator",
+    "sliderDefaults": [{
+        "id": "amplitude",
+        "level": 1,
+        "value": 1.0,
+        "min": 0.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Amplitude of sine current (pA)"
+    }, {
+        "id": "offset",
+        "level": 3,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 1000.0,
+        "step": 10.0,
+        "label": "Constant amplitude offset (pA)"
+    }, {
+        "id": "phase",
+        "level": 3,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 360.0,
+        "step": 1.0,
+        "label": "Phase of sine current (0-360 deg)"
+    }, {
+        "id": "frequency",
+        "level": 1,
+        "value": 1.0,
+        "min": 1.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Frequency (Hz)"
+    }]
+}, {
+    "element_type": "stimulator",
+    "id": "dc_generator",
+    "label": "DC generator",
+    "sliderDefaults": [{
+        "id": "amplitude",
+        "level": 1,
+        "value": 1.0,
+        "min": 0.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Amplitude of current (pA)"
+    }]
+}, {
+    "element_type": "stimulator",
+    "id": "mip_generator",
+    "label": "MIP generator",
+    "sliderDefaults": [{
+        "id": "rate",
+        "level": 1,
+        "value": 1.0,
+        "min": 1.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Mean firing rate (Hz)"
+    }, {
+        "id": "mother_seed",
+        "level": 2,
+        "value": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "Seed of RNG of mother process"
+    }, {
+        "id": "p_copy",
+        "level": 2,
+        "value": 1.0,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "label": "Copy probability"
+    }]
+}, {
+    "element_type": "stimulator",
+    "id": "noise_generator",
+    "label": "Noise generator",
+    "sliderDefaults": [{
+        "id": "mean",
+        "level": 1,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 1000.0,
+        "step": 1,
+        "scale": "logarithmic",
+        "label": "Mean value of the noise current (pA)"
+    }, {
+        "id": "std",
+        "level": 1,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Standard deviation of noise current (pA)"
+    }]
+}, {
+    "element_type": "stimulator",
+    "id": "poisson_generator",
+    "label": "Poisson generator",
+    "sliderDefaults": [{
+        "id": "rate",
+        "level": 1,
+        "value": 1.0,
+        "min": 1.0,
+        "max": 1000.0,
+        "step": 1.0,
+        "scale": "logarithmic",
+        "label": "Mean firing rate (Hz)"
+    }]
+}, {
+    "element_type": "stimulator",
+    "id": "pulsepacket_generator",
+    "label": "Gaussian pulse packet generator",
+    "sliderDefaults": [{
+        "id": "pulse_times",
+        "level": 5,
+        "value": 1.0,
+        "min": 1.0,
+        "max": 10.0,
+        "step": 1.0,
+        "label": "Times of the center of the pulse (ms)"
+    }, {
+        "id": "activity",
+        "level": 2,
+        "value": 1,
+        "min": 1,
+        "max": 1000,
+        "step": 1,
+        "label": "Number of spikes per pulse"
+    }, {
+        "id": "sdev",
+        "level": 3,
+        "value": 0.0,
+        "min": 0.0,
+        "max": 10.0,
+        "step": 1.0,
+        "label": "Standard deviation of spike times in each pulse (ms)"
+    }]
+}, {
+    "element_type": "stimulator",
+    "id": "spike_dilutor",
+    "label": "Spike dilutor",
+    "sliderDefaults": [{
+        "id": "p_copy",
+        "level": 2,
+        "value": 1.0,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "label": "Copy probability"
+    }]
+}, {
+    "element_type": "stimulator",
+    "id": "spike_generator",
+    "label": "Spike generator",
+    "params": [{
+        "id": "spike_times",
+        "level": 1,
+        "element_type": "Array",
+        "label": "Times of spike (ms)"
+    }, {
+        "id": "spike_weights",
+        "level": 1,
+        "element_type": "Array",
+        "label": "Weights of spike (pA)"
+    }],
+    "sliderDefaults": []
+}, {
+    "element_type": "stimulator",
+    "id": "step_current_generator",
+    "label": "Step current generator",
+    "params": [{
+        "id": "amplitude_times",
+        "level": 1,
+        "element_type": "Array",
+        "label": "Times at which current changes (ms)"
+    }, {
+        "id": "amplitude_values",
+        "level": 1,
+        "element_type": "Array",
+        "label": "Amplitudes of step current current (pA)"
+    }],
+    "sliderDefaults": []
+}]

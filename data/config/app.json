@@ -1,0 +1,49 @@
+{
+    "title": "NEST Desktop",
+    "version": "",
+    "user": {
+        "id": "",
+        "name": "",
+        "password": "",
+        "group": "public"
+    },
+    "db": {
+        "name": "",
+        "remote": {
+            "host": "",
+            "port": ""
+        }
+    },
+    "nest": {
+        "server": {
+            "host": "localhost",
+            "port": "5000"
+        }
+    },
+    "simulation": {
+        "runAfterChange": true,
+        "autoReset": true,
+        "randomSeed": false,
+        "autoProtocol": false,
+        "level": 1,
+        "groups": [{
+            "id": "nest-desktop",
+            "name": "NEST desktop",
+            "visible": true,
+            "sync": true
+        }, {
+            "id": "public",
+            "name": "Public",
+            "visible": true,
+            "sync": true
+        }]
+    },
+    "graph": {
+        "color": false,
+        "networkLayout": {
+            "view": true,
+            "center": true
+        }
+    },
+    "log": false
+}

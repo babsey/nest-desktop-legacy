@@ -1,0 +1,18 @@
+[{
+    "id": "random_seed",
+    "label": "Random number generated seed",
+    "level": 4,
+    "min": 0,
+    "max": 1000,
+    "value": 0,
+    "step": 1
+}, {
+    "id": "sim_time",
+    "label": "Simulation time (ms)",
+    "level": 2,
+    "min": 10.0,
+    "max": 5000.0,
+    "step": 10.0,
+    "value": 1000.0,
+    "scale": "logarithmic"
+}]
