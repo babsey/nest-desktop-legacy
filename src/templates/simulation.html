@@ -510,6 +510,8 @@
     </div>
 
     <script>
+        window.$ = window.jQuery = require('jquery');
+        window.d3 = require('d3');
         window.app = require('../app');
         var configApp = app.config.app();
         $('title').html(configApp.title)

@@ -119,7 +119,7 @@ db.update = (data) => {
     data.updatedAt = date;
     data.user = app.config.app().user.id;
     data.group = 'public';
-    data.version = process.env.npm_package_version;
+    data.version = app.config.app().version;
     data.hash = app.hash(data);
     delete data._id;
     db.localDB.update({
@@ -140,7 +140,7 @@ db.add = (data) => new Promise((resolve, reject) => {
     data.updatedAt = date;
     data.user = app.config.app().user.id;
     data.group = 'public';
-    data.version = process.env.npm_package_version;
+    data.version = app.config.app().version;
     db.localDB.insert(data, (err, newDocs) => {
         app.screen.capture(newDocs, false)
         resolve(true)

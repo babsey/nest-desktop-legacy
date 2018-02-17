@@ -1,12 +1,10 @@
 "use strict"
 
-window.$ = window.jQuery = require('jquery');
-window.d3 = require('d3');
 const path = require('path');
 require('bootstrap');
 
 var appPath = __dirname;
-var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.local/share/nest-desktop');
+var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.nest-desktop');
 
 var app = {
     appPath: appPath,

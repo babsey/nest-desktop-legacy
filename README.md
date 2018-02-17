@@ -69,11 +69,11 @@ Start the app in nest-desktop folder.
 npm start
 ```
 
-By default data and configurations are stored in $HOME/.local/share/nest-desktop.
+By default data and configurations are stored in $HOME/.nest-desktop.
 Optional: Before you start the app, you can define the enviroment variable for the nest-desktop data
 
 ```
-export NESTDESKTOP_DATA=$HOME/.local/share/nest-desktop
+export NESTDESKTOP_DATA=$HOME/.nest-desktop
 ```
 
 ## To build a package for linux (x64)

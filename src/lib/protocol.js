@@ -82,7 +82,7 @@ protocol.add = () => {
     var configApp = app.config.app();
     return app.db.clone(app.data).then((data) => {
         data.user = configApp.user.id;
-        data.version = process.env.npm_package_version;
+        data.version = configApp.version;
         var description = data.description;
         app.db.clean(data);
         data.hash = app.hash(data);

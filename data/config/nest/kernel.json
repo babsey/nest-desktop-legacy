@@ -10,7 +10,7 @@
     "id": "resolution",
     "label": "Time resolution [ms]",
     "level": 3,
-    "value": 0,
+    "value": 2,
     "ticks": [0, 1, 2, 3],
     "ticks_labels": [0.1, 0.5, 1.0, 2.0],
     "show_value": false

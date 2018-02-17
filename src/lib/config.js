@@ -84,19 +84,20 @@ config.events = () => {
 }
 
 config.init = () => {
-    var configApp = config.app()
-    var changed = false
+    var configApp = config.app();
+    var changed = false;
     if (!configApp.user.id) {
         configApp.user.id = uuidV4();
-        changed = true
-    }
-    if (!configApp.version) {
-        configApp.version = process.env.npm_package_version;
-        changed = true
+        changed = true;
     }
     if (!configApp.db.name) {
         configApp.db.name = uuidV4();
-        changed = true
+        changed = true;
+    }
+    var currentVersion = require('electron').remote.app.getVersion();
+    if (configApp.version != currentVersion) {
+        configApp.version = currentVersion
+        changed = true;
     }
     if (changed) {
         config.save('app', configApp)

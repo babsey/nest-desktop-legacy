@@ -103,7 +103,7 @@ sync.init = () => {
         app.db.localDB.findOne({
             _id: sim._id
         }).exec((err, docs) => {
-            sim.version = process.env.npm_package_version
+            sim.version = app.config.app().version;
             if (docs == null) {
                 app.db.localDB.insert(sim)
             } else if (app.hash(docs) != app.hash(sim)) {

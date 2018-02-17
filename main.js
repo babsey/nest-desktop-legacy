@@ -2,18 +2,14 @@
 
 const fs = require('fs');
 const path = require('path');
+const jsonfile = require('jsonfile');
+const { app, BrowserWindow } = require('electron');
 
 var appPath = __dirname;
-var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.local/share/nest-desktop');
+var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.nest-desktop');
 console.log('App path: ' + appPath)
 console.log('Data path: ' + dataPath)
-
-const jsonfile = require('jsonfile');
-require(path.join(appPath, 'init'));
-
-const electron = require('electron');
-const app = electron.app; // Module to control application life.
-const BrowserWindow = electron.BrowserWindow; // Module to create native browser window.
+require(path.join(appPath, 'init')).sync(dataPath);
 
 // var autoUpdater = require('auto-updater');
 // autoUpdater.setFeedURL('http://mycompany.com/myapp/latest?version=' + app.getVersion());
@@ -110,7 +106,7 @@ app.on('activate', function() {
 })
 
 var main = {};
-main.capturePage = function(filepath) {
+main.capturePage = function(filePath) {
     var configElectron = require(path.join(dataPath, 'config/electron.json'));
 
     let {
@@ -136,18 +132,18 @@ main.capturePage = function(filepath) {
                 })
             }
         }
-        fs.writeFile(filepath, imageBuffer.toPng(),
+        fs.writeFile(filePath, imageBuffer.toPng(),
             function(err) {
                 if (err) {
                     console.error("ERROR Failed to save file", err);
                 } else {
-                    console.log('Screen captured in ' + filepath)
+                    console.log('Screen captured in ' + filePath)
                 }
             });
     });
 }
 
-main.printToPDF = function(filepath) {
+main.printToPDF = function(filePath) {
 
     var options = {
         marginsType: 0,
@@ -155,7 +151,7 @@ main.printToPDF = function(filepath) {
 
     mainWindow.webContents.printToPDF(options, (error, data) => {
             if (error) throw error
-            fs.writeFile(filepath, data, (error) => {
+            fs.writeFile(filePath, data, (error) => {
                 if (error) throw error
                 console.log('Write PDF successfully.')
             })
