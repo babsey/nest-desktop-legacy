@@ -20,7 +20,8 @@ nodeController.rec_time = (node) => {
             app.simulation.simulate.init()
         })
     nodeElem.find('#rec_timeVal').on('change', function() {
-        var values = $(this).val().split(',')
+        var valuesInput = $(this).val();
+        var values = valuesInput.slice(1,vvaluesInput.length-1).split(',');
         for (var idx in values) {
             var value = values[idx];
             var valid = app.validation.validate(value, 'number')

@@ -79,7 +79,7 @@
 
     var loadSimulations = function() {
         $('#simulation-list').empty()
-        var groups = configApp.simulation.groups;
+        var groups = configApp.groups;
         var groupIds = groups.map(function(group) {
             if (group.visible == false) return
             $('#simulation-list').append('<div id="sim-' + group.id + '"></div>')

@@ -15,6 +15,7 @@ var app = {
     format: require(appPath + '/lib/format'),
     graph: require(appPath + '/lib/graph'),
     hash: require(appPath + '/lib/hash'),
+    math: require(appPath + '/lib/math'),
     message: require(appPath + '/lib/message'),
     model: require(appPath + '/lib/model'),
     navigation: require(appPath + '/lib/navigation'),

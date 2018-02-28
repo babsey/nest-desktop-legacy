@@ -32,10 +32,6 @@ nodeController.record_from = (node) => {
         )
 
         recorder.data.y = [].concat.apply([], y);
-
-        if ($('#autoscale').prop('checked')) {
-            recorder.chart.lineChart.yScale.domain(d3.extent([].concat.apply([], recorder.data.y)))
-        }
         app.graph.update();
     })
 }

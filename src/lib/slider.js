@@ -20,10 +20,20 @@ var _slider = (ref, id, options) => {
     formGroup.append('<label title="' + id + '" style="padding-left:15px;min-width: 200px;">' + options.label + '</label>')
     formGroup.append('<div class="col-md-9"><input class="sliderInput ' + id + 'Input"></div>')
     if (options.show_value) {
-        formGroup.append('<div class="col-md-3" style="padding-left:5px">' +
-            '<input data-schema="number" type="text" id="' + id + 'Val" ' +
-            'class="' + id + 'Val paramVal form-control" value="' + options.value + '"/>' +
+        if (options.value instanceof Array) {
+            formGroup.append('<div class="col-md-3" style="padding-left:5px">' +
+            '<input autofocus data-schema="number" type="text" id="' + id + 'Val" ' +
+            'class="' + id + 'Val paramVal form-control" value="[' + options.value + ']"/>' +
             '</div>')
+        } else {
+            formGroup.append('<div class="col-md-3" style="padding-left:5px">' +
+            '<input autofocus data-schema="number" id="' + id + 'Val" ' +
+            'type="number" value="' + options.value + '" '+
+            // 'min="'+ options.min +'" max="' + options.max + '" ' +
+            'step="'+ options.step +'" data-stepper-debounce="400" ' +
+            'class=" ' + id + 'Val paramVal form-control"/>' +
+            '</div>')
+        }
     }
     formGroup.append('<div class="help-block" style="padding-left:15px"></div>')
     if (options.ticks_labels) {
@@ -33,32 +43,34 @@ var _slider = (ref, id, options) => {
     var slider = $(ref).find('#' + id).find("." + id + 'Input').slider(options);
     slider.on("change", () => {
         if (!options.show_value) return
-        if (Object.prototype.toString.call(value) === '[object Array]') return
+        formGroup.toggleClass('has-success', false)
+        formGroup.toggleClass('has-error', false)
+        formGroup.find('.help-block').empty()
         var value = $(ref).find('#' + id).find("." + id + 'Input').val();
-        $(ref).find('#' + id).find("#" + id + "Val").val(value);
+        $(ref).find('#' + id).find("#" + id + "Val").val(value.indexOf(',') != -1 ? '[' + value + ']' : value);
     });
     return slider
 }
 
 var _update_dataSlider = (id, value) => {
-    var level = app.config.app().simulation.level;
-    $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
+    var level = app.config.app().controller.level;
+    $('#' + id).toggle($('.' + id).attr('level') <= level)
     $('.' + id + 'Input').slider('setValue', value)
     $('.' + id + 'Val').val(value)
 }
 
 slider.update_dataSlider = () => {
     var ds = $('.dataSlider');
-    var level = app.config.app().simulation.level;
+    var level = app.config.app().controller.level;
     ds.each(function() {
-        var dataSlider = $('#' + this.id);
+        var dataSlider = $('.' + this.id);
         dataSlider.toggle(dataSlider.attr('level') <= level)
     })
 }
 
 slider.update_nodeSlider = (node) => {
     var modelSlider = $('#nodes .node[data-id=' + node.id + '] .modelSlider');
-    var level = app.config.app().simulation.level;
+    var level = app.config.app().controller.level;
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
         var modelSliderInput = modelSlider.find('.' + pid + 'Input');
@@ -75,7 +87,7 @@ slider.update_nodeSlider = (node) => {
                 modelSlider.find('.' + pid + 'Val').val(value);
             }
         }
-        modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
+        modelSlider.find('.' + pid).toggle(modelSlider.find('.' + pid).attr('level') <= level)
     })
 
     var colors = app.graph.colors();
@@ -87,7 +99,7 @@ slider.update_connSlider = (link) => {
     if (link.conn_spec == undefined) return
     var connRule = (link.conn_spec ? (link.conn_spec.rule || 'all_to_all') : 'all_to_all');
     var modelSlider = $('#connections .link[data-id=' + link.id + ']');
-    var level = app.config.app().simulation.level;
+    var level = app.config.app().controller.level;
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
         if (link.conn_spec[pid] != undefined) {
@@ -96,7 +108,7 @@ slider.update_connSlider = (link) => {
         } else {
             link.conn_spec[pid] = modelSlider.find('.' + pid + 'Input').slider('getValue')
         }
-        modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
+        modelSlider.find('#' + pid).toggle(modelSlider.find('#' + pid).attr('level') <= level)
     })
     var colors = app.graph.colors();
     modelSlider.find('.slider-selection').css('background', colors[link.source % colors.length])
@@ -105,19 +117,21 @@ slider.update_connSlider = (link) => {
 }
 
 slider.update_synSlider = (link) => {
-    var synModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
+    var syn_spec = link.syn_spec || {'model': 'static_synapse'};
+    var synModel = syn_spec.model;
     var modelSlider = $('#synapses .link[data-id=' + link.id + ']');
-    var level = app.config.app().simulation.level;
+    var level = app.config.app().controller.level;
     modelSlider.find('.paramSlider').each(function() {
         var pid = this.id;
-        if (link.syn_spec[pid] != undefined) {
-            modelSlider.find('.' + pid + 'Input').slider('setValue', parseFloat(link.syn_spec[pid]));
-            modelSlider.find('.' + pid + 'Val').val(link.syn_spec[pid]);
+        if (syn_spec[pid] != undefined) {
+            modelSlider.find('.' + pid + 'Input').slider('setValue', parseFloat(syn_spec[pid]));
+            modelSlider.find('.' + pid + 'Val').val(syn_spec[pid]);
         } else {
-            link.syn_spec[pid] = modelSlider.find('.' + pid + 'Input').slider('getValue')
+            syn_spec[pid] = modelSlider.find('.' + pid + 'Input').slider('getValue')
         }
-        modelSlider.find('#' + pid).attr('level') > level ? modelSlider.find('#' + pid).hide() : modelSlider.find('#' + pid).show()
+        modelSlider.find('#' + pid).toggle(modelSlider.find('#' + pid).attr('level') <= level)
     })
+    link.syn_spec = syn_spec;
     var colors = app.graph.colors();
     modelSlider.find('.slider-selection').css('background', colors[link.source % colors.length])
     modelSlider.find('.slider-handle').css('border', '2px solid ' + colors[link.source % colors.length])
@@ -135,14 +149,14 @@ slider.update_slider = () => {
 }
 
 slider.create_dataSlider = (ref, id, options) => {
-    $(ref).append('<div id="' + id + '" class="dataSlider" level="' + options.level + '"></div>')
-    var level = app.config.app().simulation.level;
+    $(ref).append('<div id="' + id + '" class="' + id + ' dataSlider" level="' + options.level + '"></div>')
+    var level = app.config.app().controller.level;
     $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
     return _slider(ref, id, options);
 }
 
 var create_modelSlider = (ref, id, options) => {
-    $(ref).append('<div id="' + id + '" class="paramSlider ' + ((id.indexOf('__') != -1) ? 'nested' : '') + '" level="' + options.level + '"></div>')
+    $(ref).append('<div id="' + id + '" class="' + id + ' paramSlider' + ((id.indexOf('__') != -1) ? ' nested' : '') + '" level="' + options.level + '"></div>')
     return _slider(ref, id, options);
 }
 

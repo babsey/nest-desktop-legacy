@@ -87,10 +87,10 @@
             ['db', 'db.remote.port', 'Remote port', 'text'],
             ['nest', 'nest.server.host', 'Server host', 'text'],
             ['nest', 'nest.server.port', 'Server port', 'text'],
-            ['simulation', 'simulation.runAfterChange', 'Run after change', 'checkbox'],
-            ['simulation', 'simulation.autoReset', 'Auto reset simulation', 'checkbox'],
-            ['simulation', 'simulation.randomSeed', 'Randomize seed', 'checkbox'],
             ['simulation', 'simulation.autoProtocol', 'Automatic protocol', 'checkbox'],
+            ['simulation', 'simulation.autoReset', 'Automatic reset', 'checkbox'],
+            ['simulation', 'simulation.autoSimulation', 'Automatic simulation', 'checkbox'],
+            ['simulation', 'simulation.randomSeed', 'Randomize seed', 'checkbox'],
             ['graph', 'graph.color', 'Colorify chart', 'checkbox'],
             ['graph', 'graph.networkLayout.view', 'Show network layout', 'checkbox'],
             ['graph', 'graph.networkLayout.center', 'Center network layout', 'checkbox'],
@@ -118,7 +118,7 @@
             }
         })
         // $('#simulation').append('<div class="list-group"></div>')
-        // configApp.simulation.groups.map((group) => {
+        // configApp.groups.map((group) => {
         //     var item = $('#simulation .list-group').append('<a class="list-group-item" id="' + group.id + '">' + group.name + '</a>')
         // })
         $('#config-form input:checkbox').on('change', function() {

@@ -5,7 +5,7 @@
     "sliderDefaults": [{
         "id": "amplitude",
         "level": 1,
-        "value": 1.0,
+        "value": 0.0,
         "min": 0.0,
         "max": 1000.0,
         "step": 1.0,
@@ -44,7 +44,7 @@
     "sliderDefaults": [{
         "id": "amplitude",
         "level": 1,
-        "value": 1.0,
+        "value": 0.0,
         "min": 0.0,
         "max": 1000.0,
         "step": 1.0,
@@ -58,8 +58,8 @@
     "sliderDefaults": [{
         "id": "rate",
         "level": 1,
-        "value": 1.0,
-        "min": 1.0,
+        "value": 0.0,
+        "min": 0.0,
         "max": 1000.0,
         "step": 1.0,
         "scale": "logarithmic",

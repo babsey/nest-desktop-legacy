@@ -33,7 +33,7 @@ sync.remoteDB = () => {
                 app.message.show('Warning', 'No CouchDB on server found.')
                 return false
             }
-            configApp.simulation.groups.map((group) => {
+            configApp.groups.map((group) => {
                 // console.log(group)
                 if (group.sync == false) return
                 var remoteDB = new PouchDB('http://' + host + ':' + port + '/' + group.id);

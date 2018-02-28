@@ -5,15 +5,15 @@
 #graph #point {
     background-color: white;
     position: absolute;
+    top: -24px;
     left: 80px;
-    top: -20px;
 }
 
 #graph .checkbox {
     color: black;
     background-color: white;
     position: absolute;
-    top: -20px;
+    top: -32px;
     right: 380px;
 }
 
@@ -69,15 +69,10 @@
     z-index: 1;
 }
 
-#chart .focus {
-    z-index: 10;
-}
-
 #chart .focus circle {
     fill: black;
     stroke: none;
     cursor: crosshair;
-    z-index: 10;
 }
 
 #chart .hover-line {

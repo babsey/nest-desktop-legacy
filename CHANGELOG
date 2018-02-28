@@ -1,6 +1,17 @@
 CHANGELOG
 ---------
 
+0.15.0:
+    Remove currents as abscissa
+    Bar or line subchart for spike activity
+    Bar subchart for trace
+    Histogram of ISI and voltage
+    Multimeter can record current-based stimulator
+    Point view for scatter and bar charts
+    Move data to src folder
+    Number input field with +- buttons and keyboard control
+    Better input for stimulus and recording times
+
 0.14.0:
     Latest electron version
     Spike count in bins

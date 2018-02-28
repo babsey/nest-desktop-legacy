@@ -4,11 +4,11 @@ var nodeRenderer = {};
 
 nodeRenderer.table = (node) => {
     var configApp = app.config.app();
-    var level = configApp.simulation.level;
+    var level = configApp.controller.level;
     var nodes = app.config.nest(node.element_type);
     var models = nodes.map((d) => d.id);
-    var nidx = models.indexOf(node.model);
-    var params = nodes[nidx].sliderDefaults.map((d) => d.id);
+    var nodeIdx = models.indexOf(node.model);
+    var params = nodes[nodeIdx].sliderDefaults.map((d) => d.id);
     var colors = app.graph.colors();
 
     var div = [];
@@ -31,9 +31,9 @@ nodeRenderer.table = (node) => {
     }
     for (var pkey in node.params) {
         if (pkey == 'record_from') continue
-        var pidx = params.indexOf(pkey);
-        if (pidx != -1) {
-            if (level < nodes[nidx].sliderDefaults[pidx].level) continue;
+        var paramIdx = params.indexOf(pkey);
+        if (paramIdx != -1) {
+            if (level < nodes[nodeIdx].sliderDefaults[paramIdx].level) continue;
         }
         div.push('<tr class="node" ')
         div.push('style="border-left: 4px solid ' + colors[node.id % colors.length] + '" ')
@@ -98,6 +98,7 @@ nodeRenderer.controller = (node) => {
     div.push('<div class="nodeSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
     div.push('<div class="selection hideOnDrawing" style="display:hidden"></div>')
+    div.push('<div class="subChart hideOnDrawing" style="display:hidden"></div>')
     div.push('</div></div>')
     // div.push('<hr>')
     return div.join('')

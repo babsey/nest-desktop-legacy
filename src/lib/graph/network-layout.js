@@ -239,8 +239,7 @@ networkLayout.update = () => {
                 return
             }
             if (source.element_type == 'stimulator' && target.element_type == 'recorder') {
-                app.message.show('Error!', 'Stimulators can not connect to recorders directly.')
-                return
+                app.message.show('Warning!', 'Multimeter is able to record only current-based generator.')
             }
 
             var link = app.data.links.filter((l) => {
@@ -312,6 +311,11 @@ networkLayout.mousedown = function() {
     var colors = app.graph.colors;
 
     var element_types = ['recorder', 'neuron', 'stimulator']
+    var modelDefaults = {
+        stimulator: 'dc_generator',
+        neuron: 'iaf_psc_alpha',
+        recorder: 'voltmeter',
+    };
     element_types.map((d, i) => {
         var select = networkLayout.g.append('g')
             .attr('class', 'select')
@@ -337,6 +341,8 @@ networkLayout.mousedown = function() {
             .on('mouseup', () => {
                 app.selected_node = networkLayout.addNode()
                 app.selected_node.element_type = d;
+                app.selected_node.model = modelDefaults[d];
+                app.selected_node.params = {};
                 app.selected_node.x = point[0];
                 app.selected_node.y = point[1];
                 app.data.nodes.push(app.selected_node)

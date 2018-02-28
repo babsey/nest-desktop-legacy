@@ -12,15 +12,19 @@ nodeController.stim_time = (node) => {
     options.value = [(node.params.start || 0), (node.params.stop || app.data.sim_time)]
     app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
         .on('slideStop', (d) => {
-            node.params.start = d.value[0]
+            node.params.start = d.value[0];
             delete node.params.stop
             if (d.value[1] < app.data.sim_time) {
-                node.params.stop = d.value[1]
+                node.params.stop = d.value[1];
+            }
+            if (node.model == 'step_current_generator') {
+                app.controller.node.amplitude.update(node)
             }
             app.simulation.simulate.init()
         })
     nodeElem.find('#stim_timeVal').on('change', function() {
-        var values = $(this).val().split(',')
+        var valuesInput = $(this).val();
+        var values = valuesInput.slice(1,valuesInput.length-1).split(',');
         for (var idx in values) {
             var value = values[idx];
             var valid = app.validation.validate(value, 'number')
@@ -38,6 +42,9 @@ nodeController.stim_time = (node) => {
         node.params.start = parseFloat(start);
         node.params.stop = parseFloat(stop);
         app.slider.update_nodeSlider(node)
+        if (node.model == 'step_current_generator') {
+            app.controller.node.amplitude.update(node)
+        }
         app.simulation.simulate.init()
     })
 }

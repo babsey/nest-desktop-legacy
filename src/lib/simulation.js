@@ -21,7 +21,7 @@ simulation.update = () => {
     app.graph.chart.load()
     app.controller.update()
     app.protocol.update()
-    if (app.config.app().simulation.runAfterChange) {
+    if (app.config.app().simulation.autoSimulation) {
         simulation.simulate.run()
     }
 }

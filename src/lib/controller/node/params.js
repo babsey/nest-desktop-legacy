@@ -22,6 +22,7 @@ nodeController.params = (node) => {
         var value = ticks_labels ? ticks_labels[d.value] : d.value;
         var node = app.data.nodes[$(this).parents('.node').data('id')];
         var pkey = $(this).parents('.paramSlider').attr('id');
+        node.params = node.params || {};
         node.params[pkey] = value;
         app.simulation.simulate.init()
     })

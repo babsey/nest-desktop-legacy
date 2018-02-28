@@ -14,23 +14,6 @@ simulationController.update = (options) => {
 simulationController.updateAll = () => {
     var dataModel = app.config.nest('data');
     var simElem = $('#simulation .content')
-    simElem.find('#abscissaSelect').empty()
-    simElem.find('#abscissaSelect').append('<option value="times">' + dataModel.times.label + '</option>')
-    app.simulation.stimulators.map((stimulator) => {
-        if (!stimulator.events) return
-        Object.keys(stimulator.events).map((key) => {
-            simElem.find('#abscissaSelect').append('<option value="' + key + '">' + dataModel[key].label + '</option>')
-            app.graph.chart.data[key] = stimulator.events[key];
-        })
-
-        simElem.find('#abscissaSelect').on('change', function() {
-            $('#autoscale').prop('checked', 'checked')
-            app.graph.chart.abscissa = this.value;
-            app.graph.chart.update()
-        })
-    })
-    simElem.find('#abscissaSelect').val(app.graph.chart.abscissa)
-    simElem.find('#abscissa').toggle(simElem.find('#abscissaSelect option').length > 1)
     simElem.find('.dataSlider').each(function() {
         simulationController.update({'id': this.id})
     })
@@ -72,8 +55,6 @@ simulationController.init = () => {
         app.simulation.simulate.init()
     })
 
-    simElem.append('<div id="abscissa" class="form-group" style="display:none"></div>')
-    simElem.find('#abscissa').append('<label for="abscissaSelect">Abscissa</label>')
-    simElem.find('#abscissa').append('<select id="abscissaSelect" class="form-control"></select>')
 }
+
 module.exports = simulationController;

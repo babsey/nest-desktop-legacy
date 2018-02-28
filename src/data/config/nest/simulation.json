@@ -1,7 +1,7 @@
 [{
     "id": "random_seed",
     "label": "Random number generated seed",
-    "level": 4,
+    "level": 3,
     "min": 0,
     "max": 1000,
     "value": 0,

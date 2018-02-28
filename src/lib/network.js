@@ -35,38 +35,37 @@ network.update = () => {
 network.clear = () => {
     delete app.data.createdAt;
     delete app.data.parentId;
-    app.data.kernel = {}
-    app.data.sim_time = 1000.
+    app.data.kernel = {};
+    app.data.sim_time = 1000.;
     app.data.nodes = [];
     app.data.links = [];
 }
 
 network.clean = () => {
-    app.data.kernel = app.data.kernel || {}
+    app.data.kernel = app.data.kernel || {};
     app.data.kernel.time = 0.0;
     app.data.sim_time = app.data.sim_time || 1000.0;
     app.data.nodes.map((node) => {
-        node.params = node.params || {}
+        node.params = node.params || {};
     })
     app.data.links.map((link) => {
-        link.conn_spec = link.conn_spec || {}
-        link.syn_spec = link.syn_spec || {}
+        link.conn_spec = link.conn_spec || {};
+        link.syn_spec = link.syn_spec || {};
     })
-    app.graph.chart.abscissa = app.data.abscissa || 'times';
 }
 
 network.edit = (drawing) => {
     app.selected_node = null;
     app.selected_link = null;
     app.graph.networkLayout.drawing = drawing;
-    var networkLayoutView = app.config.app().graph.networkLayout.view
+    var networkLayoutView = app.config.app().graph.networkLayout.view;
     app.graph.networkLayout.toggleView(drawing || networkLayoutView)
     app.graph.networkLayout.update()
     if (drawing) {
         app.db.clone(app.data).then((data) => {
             app.data_original = data;
         })
-        $('.nav a[href="#nodes"]').tab('show');
+        $('.nav a[href="#nodes"]').tab('show')
     }
     $('.hideOnDrawing').toggle(!drawing)
     $('button.edit-network').toggleClass('active', drawing)

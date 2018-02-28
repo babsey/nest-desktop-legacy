@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "A NEST desktop application",
   "main": "main.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "joi": "^13.1.1",
     "jquery": "^3.2.1",
     "jsonfile": "^4.0.0",
-    "mathjs": "^3.16.4",
+    "mathjs": "^4.0.0",
     "nedb": "^1.8.0",
     "numeric": "^1.2.6",
     "object-hash": "^1.1.8",

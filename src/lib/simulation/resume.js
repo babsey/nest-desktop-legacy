@@ -71,7 +71,7 @@ resume.slider = () => {
     var model = {
         "id": "res_time",
         "label": "Simulation time step (ms)",
-        "level": 4,
+        "level": 2,
         "min": 1.0,
         "max": 20.0,
         "step": 1.0,

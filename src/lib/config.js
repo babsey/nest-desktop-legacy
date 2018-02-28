@@ -30,7 +30,7 @@ config.randomSeed = (randomSeed) => {
 
 config.events = () => {
     $('#chart-color').on('click', () => {
-        var color = config.app().graph.color || false
+        var color = config.app().graph.color || false;
         var configApp = config.app();
         configApp.graph.color = !color;
         config.save('app', configApp)
@@ -39,47 +39,47 @@ config.events = () => {
     })
     $('#view-networkLayout').on('click', () => {
         var configApp = config.app();
-        var networkLayoutView = !configApp.graph.networkLayout.view || false
+        var networkLayoutView = !configApp.graph.networkLayout.view || false;
         configApp.graph.networkLayout.view = networkLayoutView;
         config.save('app', configApp)
         app.graph.networkLayout.toggleView(networkLayoutView)
     })
     $('#center-networkLayout').on('click', () => {
         var configApp = config.app();
-        var networkLayoutCenter = !configApp.graph.networkLayout.center || false
+        var networkLayoutCenter = !configApp.graph.networkLayout.center || false;
         configApp.graph.networkLayout.center = networkLayoutCenter;
         config.save('app', configApp)
         app.graph.networkLayout.toggleCenter(networkLayoutCenter)
     })
-    $('#run-after-change').on('click', () => {
-        var configApp = app.config.app();
-        var runAfterChange = configApp.simulation.runAfterChange || false
-        configApp.simulation.runAfterChange = !runAfterChange;
-        app.simulation.runAfterChange = !runAfterChange;
-        config.save('app', configApp)
-        $('#run-after-change').find('.glyphicon-ok').toggle(!runAfterChange)
-        $('button.simulation-run').toggleClass('active', !runAfterChange)
-    })
-    $('#auto-reset').on('click', () => {
-        var configApp = app.config.app();
-        var autoReset = configApp.simulation.autoReset || false
-        configApp.simulation.autoReset = !autoReset;
-        app.simulation.autoReset = !autoReset;
-        config.save('app', configApp)
-        $('#auto-reset').find('.glyphicon-ok').toggle(!autoReset)
-    })
-    $('#random-seed').on('click', () => {
-        var randomSeed = app.config.app().simulation.randomSeed || false
-        config.randomSeed(!randomSeed)
-    })
     $('#auto-protocol').on('click', () => {
         var configApp = app.config.app();
-        var autoProtocol = configApp.simulation.autoProtocol || false
+        var autoProtocol = configApp.simulation.autoProtocol || false;
         configApp.simulation.autoProtocol = !autoProtocol;
         app.simulation.autoProtocol = !autoProtocol;
         config.save('app', configApp)
         $('#auto-protocol').find('.glyphicon-ok').toggle(!autoProtocol)
         $('button.protocol').toggleClass('active', !autoProtocol)
+    })
+    $('#auto-reset').on('click', () => {
+        var configApp = app.config.app();
+        var autoReset = configApp.simulation.autoReset || false;
+        configApp.simulation.autoReset = !autoReset;
+        app.simulation.autoReset = !autoReset;
+        config.save('app', configApp)
+        $('#auto-reset').find('.glyphicon-ok').toggle(!autoReset)
+    })
+    $('#auto-simulation').on('click', () => {
+        var configApp = app.config.app();
+        var autoSimulation = configApp.simulation.autoSimulation || false;
+        configApp.simulation.autoSimulation = !autoSimulation;
+        app.simulation.autoSimulation = !autoSimulation;
+        config.save('app', configApp)
+        $('#auto-simulation').find('.glyphicon-ok').toggle(!autoSimulation)
+        $('button.simulation-run').toggleClass('active', !autoSimulation)
+    })
+    $('#random-seed').on('click', () => {
+        var randomSeed = app.config.app().simulation.randomSeed || false;
+        config.randomSeed(!randomSeed)
     })
 }
 
@@ -96,7 +96,7 @@ config.init = () => {
     }
     var currentVersion = require('electron').remote.app.getVersion();
     if (configApp.version != currentVersion) {
-        configApp.version = currentVersion
+        configApp.version = currentVersion;
         changed = true;
     }
     if (changed) {

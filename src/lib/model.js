@@ -2,6 +2,7 @@
 
 var model = {};
 
+
 model.node_selected = (node) => {
     $('#node_' + node.id).find('option#' + node.model).prop('selected', true);
     if (node.stim_time) {

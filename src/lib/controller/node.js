@@ -4,16 +4,16 @@ const connController = require('./connection');
 const synController = require('./synapse');
 
 var nodeController = {
-    amplitude: require('./node/amplitude').amplitude,
+    amplitude: require('./node/amplitude'),
     nbins: require('./node/nbins').nbins,
     npop: require('./node/npop').npop,
     params: require('./node/params').params,
     rec_time: require('./node/rec_time').rec_time,
     record_from: require('./node/record_from').record_from,
     series: require('./node/series').series,
-    spike_detector: require('./node/spike_detector').spike_detector,
     spike_dtime: require('./node/spike_dtime').spike_dtime,
     stim_time: require('./node/stim_time').stim_time,
+    subchart: require('./node/subchart').subchart,
 }
 
 nodeController.update = (node) => {
@@ -22,14 +22,15 @@ nodeController.update = (node) => {
     nodeController.npop(node)
     nodeController.stim_time(node)
     nodeController.spike_dtime(node)
-    nodeController.amplitude(node)
+    nodeController.amplitude.init(node)
     nodeController.rec_time(node)
-    nodeController.nbins(node)
     nodeController.params(node)
     nodeElem.find('.selection').empty()
     nodeController.record_from(node)
     nodeController.series(node)
-    nodeController.spike_detector(node)
+    nodeElem.find('.subChart').empty()
+    nodeController.nbins(node)
+    nodeController.subchart(node)
     app.slider.update_nodeSlider(node);
 }
 

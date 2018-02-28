@@ -4,7 +4,7 @@
     "label": "Gap junction",
     "sliderDefaults": [{
         "id": "weight",
-        "level": 1,
+        "level": 2,
         "value": 1.0,
         "min": -100.0,
         "max": 100.0,
@@ -17,7 +17,7 @@
     "label": "Static synapse",
     "sliderDefaults": [{
         "id": "weight",
-        "level": 1,
+        "level": 2,
         "value": 1.0,
         "min": -100.0,
         "max": 100.0,
@@ -38,7 +38,7 @@
     "label": "Short term plasticity (Tsodyks synapse)",
     "sliderDefaults": [{
         "id": "weight",
-        "level": 1,
+        "level": 2,
         "value": 1.0,
         "min": -100.0,
         "max": 100.0,

@@ -33,6 +33,14 @@ format.nodeTitle = (node) => {
 
 format.capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
+format.axisLabel = (label, unit) => {
+    var label = label || '';
+    var unit = unit ? ' (' + unit + ')' : '';
+    var text = label + unit;
+    return text
+}
+
+
 format.truncate = (str, n) => {
     var n = n || 25
     if (str.length < n) return str

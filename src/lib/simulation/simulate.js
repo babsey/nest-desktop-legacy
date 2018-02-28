@@ -39,7 +39,7 @@ simulate.run = () => {
             //         app.data.kernel.resolution = interval;
             //         app.controller.kernel.update({
             //             id: 'resolution'
-            //         })
+            //         })τ
             //         app.message.show('Info', 'Time resolution of the simulation was changed. See time interval of the recording devices.')
             //     }
             // }
@@ -62,7 +62,10 @@ simulate.run = () => {
             links: app.data.links,
         })
         .done((response) => {
-            if (response.error) return
+            if (response.error) {
+                console.log(response.error)
+                return
+            }
             for (var idx in response.data.nodes) {
                 var node = app.data.nodes[idx]
                 node.ids = response.data.nodes[idx].ids;
@@ -71,7 +74,9 @@ simulate.run = () => {
             app.simulation.recorders.map((recorder) => {
                 recorder.node.params = response.data.nodes[recorder.node.id].params
                 if (recorder.node.model == 'multimeter') {
-                    if (recorder.node.data_from) {
+                    if (recorder.node.params.record_from.length == 1) {
+                        recorder.node.data_from = recorder.node.params.record_from
+                    } else if (recorder.node.data_from) {
                         var data_from = recorder.node.data_from.filter((data) => {
                             return recorder.node.params.record_from.indexOf(data) != -1
                         })
@@ -106,35 +111,36 @@ simulate.run = () => {
                 } else if (!chart.data.times) {
                     chart.data.times = d3.extent(recorder.events.times)
                 }
+                chart.data.times.unit = 'ms';
                 app.controller.node.update(recorder.node)
             });
             var nodeDefaults = app.config.nest('node');
-            app.simulation.stimulators.map((stimulator) => {
-                stimulator.events = {}
-                if (stimulator.node.model == 'step_current_generator') {
-                    if (stimulator.node.params.amplitude_times.length == chart.data.times.length) {
-                        stimulator.events.currents = stimulator.node.params.amplitude_values
-                    } else {
-                        var amplitudes = [].concat.apply([0], stimulator.node.params.amplitude_values).filter((d, i) => {
-                            var time = stimulator.node.params.amplitude_times[i - 1];
-                            return time <= (stimulator.node.params.stop || app.data.sim_time || 1000.)
-                        });
-                        var times = [].concat.apply([0], stimulator.node.params.amplitude_times).filter(
-                            (d, i) => d <= (stimulator.node.params.stop || app.data.sim_time || 1000.)
-                        );
-                        var times_rounded = numeric.round(numeric.div(times, (app.data.kernel.resolution || 1.0)));
-                        var dtimes = times_rounded.map((time, i) => {
-                            if (i == 0) return (stimulator.node.amplitude_dtime || nodeDefaults.amplitude_dtime.value) / (app.data.kernel.resolution || 1.0);
-                            return time - times_rounded[i - 1]
-                        });
-                        var amplitude_series = dtimes.map(
-                            (dt, i) => numeric.rep([dt], amplitudes[i] * (stimulator.node.n || 1))
-                        );
-                        stimulator.events.currents = [].concat.apply([], amplitude_series).slice(0, chart.data.times.length);
-                    }
-                }
-                app.controller.node.update(stimulator.node)
-            })
+            // app.simulation.stimulators.map((stimulator) => {
+            //     stimulator.events = {}
+            //     if (stimulator.node.model == 'step_current_generator') {
+            //         if (stimulator.node.params.amplitude_times.length == chart.data.times.length) {
+            //             stimulator.events.currents = stimulator.node.params.amplitude_values
+            //         } else {
+            //             var amplitudes = [].concat.apply([0], stimulator.node.params.amplitude_values).filter((d, i) => {
+            //                 var time = stimulator.node.params.amplitude_times[i - 1];
+            //                 return time <= (stimulator.node.params.stop || app.data.sim_time || 1000.)
+            //             });
+            //             var times = [].concat.apply([0], stimulator.node.params.amplitude_times).filter(
+            //                 (d, i) => d <= (stimulator.node.params.stop || app.data.sim_time || 1000.)
+            //             );
+            //             var times_rounded = numeric.round(numeric.div(times, (app.data.kernel.resolution || 1.0)));
+            //             var dtimes = times_rounded.map((time, i) => {
+            //                 if (i == 0) return (stimulator.node.amplitude_dtime || nodeDefaults.amplitude_dtime.value) / (app.data.kernel.resolution || 1.0);
+            //                 return time - times_rounded[i - 1]
+            //             });
+            //             var amplitude_series = dtimes.map(
+            //                 (dt, i) => numeric.rep([dt], amplitudes[i] * (stimulator.node.n || 1))
+            //             );
+            //             stimulator.events.currents = [].concat.apply([], amplitude_series).slice(0, chart.data.times.length);
+            //         }
+            //     }
+            //     app.controller.node.update(stimulator.node)
+            // })
             app.data.kernel.time = response.data.kernel.time;
             app.graph.update()
             app.controller.update()
@@ -148,7 +154,7 @@ simulate.run = () => {
 }
 
 simulate.init = () => {
-    if (!app.simulation.runAfterChange) return
+    if (!app.simulation.autoSimulation) return
     if (app.graph.networkLayout.drawing) return
     if (app.simulation.running) return
     simulate.run()
@@ -156,12 +162,14 @@ simulate.init = () => {
 
 simulate.start = () => {
     if (app.simulation.running) return
+    app.controller.activeNode = $(document.activeElement).parents('.node').attr('id');
+    app.controller.activeElement = $(document.activeElement).attr('id');
     app.simulation.simulate.message = app.message.simulate();
     $('.disableOnRunning').toggleClass('disabled', app.simulation.running)
     $('select').prop('disabled', true);
     $('.disableNode').prop('disabled', true);
     $('.disableLink').prop('disabled', true);
-    $('.paramVal').attr('disabled', true);
+    $('.paramVal').attr('readonly', true);
     $('.sliderInput').slider('disable');
 }
 
@@ -172,7 +180,7 @@ simulate.end = () => {
     $('select:not(.disabled)').prop('disabled', false);
     $('.disableNode').prop('disabled', false);
     $('.disableLink').prop('disabled', false);
-    $('.paramVal').attr('disabled', false);
+    $('.paramVal').attr('readonly', false);
     $('.sliderInput').slider('enable');
 }
 

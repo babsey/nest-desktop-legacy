@@ -26,6 +26,7 @@ graph.colors = (id) => {
 graph.update = () => {
     app.message.log('Update graph')
     if (networkLayout.drawing || chart.drawing) return
+    graph.chart.dataUpdate()
     graph.chart.update()
     graph.networkLayout.update()
 }

@@ -59,13 +59,13 @@ controller.update = () => {
     app.data.nodes.map((node) => {$('.data .nodes').append(app.renderer.node.table(node))});
     app.data.links.map((link) => {$('.data .links').append(app.renderer.link.table(link))});
     $('.data .comments').html(app.data.comments)
-
     $('#raw-data').html(JSON.stringify(app.data, undefined, 4))
+    $('#' + app.controller.activeElement).find('.' + app.controller.activeElement).focus()
 }
 
 controller.init = () => {
     app.message.log('Initialize controller')
-    controller.level = app.config.app().simulation.level;
+    controller.level = app.config.app().controller.level;
     controller.borderWidth = '4px';
 
     controller.simulation.init()
@@ -80,9 +80,9 @@ controller.init = () => {
 controller.events = () => {
     $('.level').on('click', function() {
         var configApp = app.config.app();
-        configApp.simulation.level = parseInt($(this).attr('level'));
+        configApp.controller.level = parseInt($(this).attr('level'));
         $('.level').find('.glyphicon-ok').hide()
-        $('.level[level='+ configApp.simulation.level +']').find('.glyphicon-ok').show()
+        $('.level[level='+ configApp.controller.level +']').find('.glyphicon-ok').show()
         app.config.save('app', configApp)
         for (var nid in app.data.nodes) {
             var node = app.data.nodes[nid];

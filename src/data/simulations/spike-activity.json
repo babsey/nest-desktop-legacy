@@ -1,10 +1,10 @@
 {
-    "_id": "686c4c2f222f2597df1571015a001540",
-    "name": "Neuronal state activity",
+    "_id": "686c4c2f222f2597df1571015a0018ab",
+    "name": "Spike activity",
     "group": "nest-desktop",
     "user": "nest-desktop",
     "network": "simple",
-    "version": "0.14.0",
+    "version": "0.15.0",
     "kernel": {
         "resolution": 0.1
     },
@@ -12,33 +12,37 @@
         "id": 0,
         "element_type": "neuron",
         "model": "iaf_psc_alpha",
-        "x": 460,
-        "y": 314,
-        "n": 10
+        "x": 450,
+        "y": 380,
+        "n": 20
     }, {
         "id": 1,
         "element_type": "stimulator",
         "model": "poisson_generator",
         "x": 300,
-        "y": 364,
+        "y": 330,
         "params": {
-            "rate": 10.0
+            "rate": 6500.0
         }
     }, {
         "id": 2,
         "element_type": "recorder",
-        "model": "voltmeter",
+        "model": "spike_detector",
         "x": 600,
-        "y": 364
+        "y": 330
     }],
     "links": [{
         "id": 0,
         "source": 1,
-        "target": 0
+        "target": 0,
+        "syn_spec": {
+            "weight": 10.0
+        }
     }, {
         "id": 1,
         "source": 0,
-        "target": 0
+        "target": 0,
+        "disabled": true
     }, {
         "id": 2,
         "source": 0,

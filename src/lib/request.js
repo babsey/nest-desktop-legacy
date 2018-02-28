@@ -35,16 +35,8 @@ req.request = (data) => {
         contentType: 'application/json;charset=UTF-8',
     }).fail((d) => {
         app.message.show('Warning', d.responseText, delay)
-        app.simulation.simulate.end()
     }).done((d) => {
         app.message.log('Simulation finished.')
-        if (d.error) {
-            console.log(d.error)
-            app.message.show('NEST Error', d.error, delay);
-            setTimeout(() => app.simulation.simulate.end(), delay);
-        } else {
-            app.simulation.simulate.end()
-        }
     })
 }
 

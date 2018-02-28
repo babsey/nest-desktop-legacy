@@ -4,10 +4,7 @@
     "group": "nest-desktop",
     "user": "nest-desktop",
     "network": "simple",
-    "version": "0.14.0",
-    "kernel": {
-        "resolution": 0.1
-    },
+    "version": "0.15.0",
     "nodes": [],
     "links": []
 }

@@ -6,7 +6,7 @@ var linkRenderer = {
 
 linkRenderer.table = (link) => {
     var configApp = app.config.app();
-    var level = configApp.simulation.level;
+    var level = configApp.controller.level;
 
     var div = [];
     if (link.disabled) return
@@ -23,21 +23,21 @@ linkRenderer.table = (link) => {
         div.push('<td>connection rule</td>')
         div.push('<td>' + (link.conn_spec ? link.conn_spec.rule || 'all_to_all' : 'all_to_all') + '</td>')
         div.push('</tr>')
-    }
-    if (link.conn_spec) {
-        Object.keys(link.conn_spec).map((ckey) => {
-            if (ckey == 'rule') return
-            div.push('<tr class="link">')
-            div.push('<td>' + ckey + '</td>')
-            div.push('<td>' + link.conn_spec[ckey] + '</td>')
-            div.push('</tr>')
-        })
-    }
-    if (level >= 4) {
+        if (link.conn_spec) {
+            Object.keys(link.conn_spec).map((ckey) => {
+                if (ckey == 'rule') return
+                div.push('<tr class="link">')
+                div.push('<td>' + ckey + '</td>')
+                div.push('<td>' + link.conn_spec[ckey] + '</td>')
+                div.push('</tr>')
+            })
+        }
         div.push('<tr class="link">')
         div.push('<td>synapse model</td>')
         div.push('<td>' + (link.syn_spec ? link.syn_spec.model || 'static_synapse' : 'static_synapse') + '</td>')
         div.push('</tr>')
+    }
+    if (level >= 2) {
         if (link.syn_spec) {
             Object.keys(link.syn_spec).map((skey) => {
                 if (skey == 'model') return

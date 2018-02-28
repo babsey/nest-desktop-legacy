@@ -11,64 +11,84 @@ chart.format = d3.format(".2f");
 chart.transition = d3.transition()
     .ease(d3.easeLinear);
 
-chart.xAxis = (c) => {
-    c.xAxis = d3.axisBottom(c.xScale);
-    c.g.append("g")
+chart.doTransition = () => !(
+    app.simulation.running ||
+    app.graph.dragging ||
+    app.graph.chart.zooming ||
+    app.resizing ||
+    app.mouseover)
+
+chart.xAxis = (subchart) => {
+    subchart.xAxis = d3.axisBottom(subchart.xScale);
+    subchart.g.append("g")
         .attr("id", "xaxis")
         .attr("class", "axis yaxis")
-        .attr("transform", "translate(0," + c.height + ")")
+        .attr("transform", "translate(0," + subchart.height + ")")
         .style('font-size', '14px')
-        .call(c.xAxis);
+        .call(subchart.xAxis);
 }
 
-chart.yAxis = (c) => {
-    c.yAxis = d3.axisLeft(c.yScale).ticks(3);
-    c.g.append("g")
+chart.yAxis = (subchart) => {
+    subchart.yAxis = d3.axisLeft(subchart.yScale).ticks(3);
+    subchart.g.append("g")
         .attr("id", "yaxis")
         .attr("class", "axis yaxis")
         .style('font-size', '14px')
         .attr("transform", "translate(0,0)")
-        .call(c.yAxis);
+        .call(subchart.yAxis);
 }
 
-chart.xLabel = (c, id, label) => {
+chart.xLabel = (subchart) => {
+    if (!('label' in subchart.axis.x)) return
+    var id = 'xLabel_recorder' + subchart.recorder.idx + '_chart' + subchart.idx;
+    var label = subchart.axis.x.label;
+    var unit = subchart.axis.x.unit;
     if (!document.getElementById(id)) {
-        c.g.append("text")
+        subchart.g.append("text")
             .attr("id", id)
             .attr("class", "xlabel label")
             .attr("text-anchor", "middle")
-            .attr("x", +c.width / 2)
-            .attr("y", +c.height + 30)
-            .text(label);
+            .attr("x", +subchart.width / 2)
+            .attr("y", +subchart.height + 30)
+            .text(app.format.axisLabel(label, unit));
     }
 
-    c.g.select("#" + id)
-        .text(label);
+    subchart.g.select("#" + id)
+        .text(app.format.axisLabel(label, unit));
 }
 
-chart.yLabel = (c, id, label) => {
+chart.yLabel = (subchart) => {
+    if (!('label' in subchart.axis.y)) return
+    var id = 'yLabel_recorder' + subchart.recorder.idx + '_chart' + subchart.idx;
+    var n = subchart.data.n || 1;
+    if (subchart.axis.y.abbr) {
+        var label = (subchart.height / n / subchart.axis.y.label.length) > 7 ? subchart.axis.y.label : subchart.axis.y.abbr;
+    } else {
+        var label = subchart.axis.y.label;
+    }
+    var unit = subchart.axis.y.unit;
     if (!document.getElementById(id)) {
-        c.g.append("text")
+        subchart.g.append("text")
             .attr("id", id)
             .attr("class", "ylabel label")
             .attr("transform", "rotate(-90)")
             .attr("y", 6)
             .attr("dy", ".71em")
             .attr("text-anchor", "end")
-            .text(label);
+            .text(app.format.axisLabel(label, unit));
     }
 
-    c.g.select("#" + id)
-        .attr("x", -1. * +c.yScale.range()[1])
-        .text(label);
+    subchart.g.select("#" + id)
+        .attr("x", -1. * +subchart.yScale.range()[1])
+        .text(app.format.axisLabel(label, unit));
 }
 
-chart.legend = (c, data, color) => {
-    c.g.selectAll('.legends').remove()
+chart.legend = (subchart, data, color) => {
+    subchart.g.selectAll('.legends').remove()
     if (!data) return
 
     var width = d3.max(data.map((d) => d.length)) * 7;
-    var legend = c.g.append('g')
+    var legend = subchart.g.append('g')
         .attr('class', 'legends')
         .selectAll('.legend')
         .data(data)
@@ -77,110 +97,107 @@ chart.legend = (c, data, color) => {
         .attr('class', 'legend');
 
     legend.append('rect')
-        .attr('x', c.width - width)
+        .attr('x', subchart.width - width)
         .attr('y', (d, i) => i * 20 - 5)
         .attr('width', width)
         .attr('height', 20)
         .style('fill', 'white');
 
     legend.append('rect')
-        .attr('x', c.width - width)
+        .attr('x', subchart.width - width)
         .attr('y', (d, i) => i * 20)
         .attr('width', 10)
         .attr('height', 10)
         .style('fill', (d, i) => color[i]);
 
     legend.append('text')
-        .attr('x', c.width - width + 12)
+        .attr('x', subchart.width - width + 12)
         .attr('y', (d, i) => (i * 20) + 9)
         .text((d) => d);
 }
 
-chart.dragstarted = () => {
-    app.graph.dragging = true
-}
-
-chart.dragged = () => {
-    $('#autoscale').prop('checked', false)
-    var xlim0 = chart.xScale.domain();
-    var xx = xlim0[1] - xlim0[0];
-    var xs = chart.xScale.range();
-    var dx = d3.event.dx * xx / (xs[1] - xs[0]);
-    chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
-    chart.update()
-}
-
-chart.dragended = () => {
-    app.graph.dragging = false
-}
-
-chart.onDrag = (d) => {
+chart.onDrag = (subchart) => {
     var drag = d3.drag()
-        .on("start", chart.dragstarted)
-        .on("drag", chart.dragged)
-        .on("end", chart.dragended)
-    d.g.select('#clip')
+        .on("start", () => {
+            app.graph.dragging = true;
+            $('#point').empty();
+            if (subchart.focus) {
+                subchart.focus.attr('transform', 'translate(-1000,-1000)');
+            }
+        })
+        .on("drag", () => {
+            $('#autoscale').prop('checked', false)
+            var xlim0 = chart.xScale.domain();
+            var xx = xlim0[1] - xlim0[0];
+            var xs = chart.xScale.range();
+            var dx = d3.event.dx * xx / (xs[1] - xs[0]);
+            chart.xScale.domain([xlim0[0] - dx, xlim0[1] - dx])
+            chart.update()
+        })
+        .on("end", () => {
+            app.graph.dragging = false;
+        })
+    subchart.g.select('#clip')
         .call(drag);
 }
 
-chart.zoomstarted = () => {
-    chart.zooming = true
-}
-
-chart.zoomed = () => {
-    $('#autoscale').prop('checked', false)
-    var xlim0 = chart.xScale.domain();
-    // var xlim0 = [data.kernel.time - data.sim_time, data.kernel.time];
-    var xx = (xlim0[0] + xlim0[1]) / 2;
-    var k = d3.event.transform.k;
-    chart.xScale.domain([xx - xx / k, xx + xx / k])
-    chart.update()
-}
-
-chart.zoomended = () => {
-    chart.zooming = false
-}
-
-chart.onZoom = (d) => {
+chart.onZoom = (subchart) => {
     var zoom = d3.zoom()
         .scaleExtent([.1, 10])
-        .on("start", chart.zoomstarted)
-        .on("zoom", chart.zoomed)
-        .on("end", chart.zoomended)
-    d.g.select('#clip')
+        .on("start", () => {
+            chart.zooming = true;
+            $('#point').empty();
+            if (subchart.focus) {
+                subchart.focus.attr('transform', 'translate(-1000,-1000)');
+            }
+        })
+        .on("zoom", () => {
+            $('#autoscale').prop('checked', false)
+            var xlim0 = chart.xScale.domain();
+            // var xlim0 = [data.kernel.time - data.sim_time, data.kernel.time];
+            var xx = (xlim0[0] + xlim0[1]) / 2;
+            var k = d3.event.transform.k;
+            chart.xScale.domain([xx - xx / k, xx + xx / k])
+            chart.update()
+        })
+        .on("end", () => {
+            chart.zooming = false;
+        })
+    subchart.g.select('#clip')
         .call(zoom);
 }
 
-chart.axesUpdate = (c, transition) => {
-    if (transition) {
-        c.g.select('#xaxis')
-            .transition(c.transition)
-            .call(c.xAxis);
-        c.g.select('#yaxis')
-            .transition(c.transition)
-            .call(c.yAxis);
+chart.axesUpdate = (subchart) => {
+    app.graph.chart.xLabel(subchart)
+    app.graph.chart.yLabel(subchart)
+    if (chart.doTransition()) {
+        subchart.g.select('#xaxis')
+            .transition(subchart.transition)
+            .call(subchart.xAxis);
+        subchart.g.select('#yaxis')
+            .transition(subchart.transition)
+            .call(subchart.yAxis);
     } else {
-        c.g.select('#xaxis')
-            .call(c.xAxis);
-        c.g.select('#yaxis')
-            .call(c.yAxis);
+        subchart.g.select('#xaxis')
+            .call(subchart.xAxis);
+        subchart.g.select('#yaxis')
+            .call(subchart.yAxis);
     }
 }
 
 chart.scaling = () => {
     if ($('#autoscale').prop('checked')) {
-        if (app.simulation.running || (chart.abscissa == 'times')) {
-            chart.xScale.domain([app.data.kernel.time - (app.data.sim_time || 1000.), app.data.kernel.time])
+        if (app.simulation.running) {
+            chart.xScale.domain([d3.max([0, app.data.kernel.time - 1000.]), app.data.kernel.time])
         } else {
-            chart.xScale.domain(d3.extent(chart.data[chart.abscissa])).nice()
-            // chart.xScale.domain([d3.min(chart.data[chart.abscissa]) - 0.01, d3.max(chart.data[chart.abscissa]) + 0.01]).nice()
+            chart.xScale.domain(d3.extent(chart.data.times)).nice()
         }
     }
 }
 
-chart.update = () => {
-    app.message.log('Update chart')
-    chart.scaling()
+
+chart.dataUpdate = () => {
+    app.message.log('Update chart data')
     app.simulation.recorders.map((recorder) => {
         if (!recorder.node.model) return
         recorder.data = recorder.senders.map((sender, sidx) => {
@@ -189,6 +206,7 @@ chart.update = () => {
                 data[d] = recorder.events[d].filter(
                     (d, i) => recorder.events.senders[i] == sender
                 )
+                data[d].idx = sidx;
             })
             var links = app.data.links.filter(
                 (link) => link.target == recorder.node.id && app.data.nodes[link.source].ids.indexOf(sender) != -1
@@ -201,13 +219,20 @@ chart.update = () => {
             }
             return data
         })
-        recorder.senders.map((sender, sidx) => {
-            app.simulation.stimulators.map((stimulator) => {
-                Object.keys(stimulator.events).map((ekey) => {
-                    recorder.data[sidx][ekey] = stimulator.events[ekey]
-                })
-            })
-        })
+        // recorder.senders.map((sender, sidx) => {
+        //     app.simulation.stimulators.map((stimulator) => {
+        //         Object.keys(stimulator.events).map((ekey) => {
+        //             recorder.data[sidx][ekey] = stimulator.events[ekey]
+        //         })
+        //     })
+        // })
+    })
+}
+
+chart.update = () => {
+    app.message.log('Update chart')
+    chart.scaling()
+    app.simulation.recorders.map((recorder) => {
         recorder.chart.update(recorder)
     })
 }
@@ -222,10 +247,10 @@ chart.load = () => {
     $('#chart').empty()
     app.simulation.recorders.map((recorder, idx) => {
         if (!recorder.node.model) return
-
+        recorder.idx = idx;
         var recorderChart = recorder.node.chart || fromOutputNode[recorder.node.model]
         recorder.chart = require('./' + recorderChart)
-        recorder.chart.init(idx)
+        recorder.chart.init(recorder)
         delete require.cache[require.resolve('./' + recorderChart)]
     })
 }
