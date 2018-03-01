@@ -6,7 +6,7 @@ CHANGELOG
     Bar or line subchart for spike activity
     Bar subchart for trace
     Histogram of ISI and voltage
-    Multimeter can record current-based stimulator
+    Multimeter can record current-based stimulator (NEST v2.14 or higher)
     Point view for scatter and bar charts
     Move data to src folder
     Number input field with +- buttons and keyboard control
