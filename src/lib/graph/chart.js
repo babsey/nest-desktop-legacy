@@ -98,21 +98,21 @@ chart.legend = (subchart, data, color) => {
 
     legend.append('rect')
         .attr('x', subchart.width - width)
-        .attr('y', (d, i) => i * 20 - 5)
+        .attr('y', (d, i) => i * 20 - 5 + 20)
         .attr('width', width)
         .attr('height', 20)
         .style('fill', 'white');
 
     legend.append('rect')
         .attr('x', subchart.width - width)
-        .attr('y', (d, i) => i * 20)
+        .attr('y', (d, i) => i * 20 + 20)
         .attr('width', 10)
         .attr('height', 10)
         .style('fill', (d, i) => color[i]);
 
     legend.append('text')
         .attr('x', subchart.width - width + 12)
-        .attr('y', (d, i) => (i * 20) + 9)
+        .attr('y', (d, i) => (i * 20) + 9 + 20)
         .text((d) => d);
 }
 

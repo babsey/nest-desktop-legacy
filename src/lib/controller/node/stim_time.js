@@ -33,15 +33,16 @@ nodeController.stim_time = (node) => {
             $(this).parents('.form-group').find('.help-block').html(valid.error)
             if (valid.error != null) return
         }
-        var start = values[0];
-        var stop = values[1];
+        var start = parseFloat(values[0]);
+        var stop = parseFloat(values[1]);
         if (stop <= start) {
             $(this).parents('.form-group').find('.help-block').html('Start value should be smaller that stop value.')
             return
         }
-        node.params.start = parseFloat(start);
-        node.params.stop = parseFloat(stop);
+        node.params.start = start;
+        node.params.stop = stop;
         app.slider.update_nodeSlider(node)
+        app.slider.update_dataSlider(node, 'stim_time', [start, stop], valuesInput)
         if (node.model == 'step_current_generator') {
             app.controller.node.amplitude.update(node)
         }

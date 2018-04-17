@@ -140,7 +140,7 @@ chart.draw_line = (recorder) => {
             .attr('d', chart.line);
     }
 
-    var yTranslate = (i) => +chart.subchart(chart.height, n, i);
+    var yTranslate = (i) => +chart.subchart(chart.height, n, n - i - 1);
 
     if (chart.data.V_th) {
 

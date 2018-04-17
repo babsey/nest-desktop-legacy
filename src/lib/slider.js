@@ -52,14 +52,13 @@ var _slider = (ref, id, options) => {
     return slider
 }
 
-var _update_dataSlider = (id, value) => {
-    var level = app.config.app().controller.level;
-    $('#' + id).toggle($('.' + id).attr('level') <= level)
-    $('.' + id + 'Input').slider('setValue', value)
-    $('.' + id + 'Val').val(value)
+slider.update_dataSlider = (node, key, input, val) => {
+    var nodeElem = $('#node_' + node.id);
+    nodeElem.find('.' + key + 'Input').slider('setValue', input)
+    nodeElem.find('.' + key + 'Val').val(val)
 }
 
-slider.update_dataSlider = () => {
+slider.view_dataSlider = () => {
     var ds = $('.dataSlider');
     var level = app.config.app().controller.level;
     ds.each(function() {

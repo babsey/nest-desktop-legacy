@@ -8,7 +8,7 @@ An interactive desktop application for the [NEural Simulation Tool](http://www.n
 
 To install this application you'll need [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [Electron](http://electron.atom.io/) installed on your computer. Required version for node at least v6.10.xx and npm v3.10.xx.
 
-If you simulate nest locally, you need [nest-server-simulation](https://github.com/babsey/nest-server-simulation) installed on your computer. The application running with NEST v2.10 has been tested.
+If you simulate nest locally, you need [nest-server-simulation](https://github.com/babsey/nest-server-simulation) installed on your computer. The application running with NEST v2.10 has been tested. For recording input device directly, use NEST v2.14 or higher.
 
 ## To install requirements
 
@@ -115,7 +115,7 @@ The configuration for the electron is saved as `electron.json` file.
 The application create a window with these window properties - width, height, frame, fullscreen or debug mode.
 
 
-## FAQ
+## FAQ (Linux)
 
 ### Why is the app not working?
 
@@ -141,15 +141,15 @@ Just remove files in `$NESTDESKTOP_DATA/protocols/`.
 
 ### How can I update the thumbnails?
 
-Just click the button 'capture screen'. For the hard case, remove image files in `$NESTDESKTOP_DATA/images/` and then resimulate.
+Just click the button 'capture screen' or remove image files in `$NESTDESKTOP_DATA/images/` and then resimulate.
 
 ### How can I reload the window?
 
-Keybinding to reload the app is 'CTRL + R' (Linux) or 'CMD + R' (Mac OSX)
+Keybinding to reload the app is 'CTRL + R'.
 
 ### How can I close the window?
 
-Keybinding to close the window is 'CTRL + W' (Linux) or 'CMD + W' (Mac OSX). In Linux the app will be closed when the window is closed.
+Keybinding to close the window is 'CTRL + W'.
 
 ### What are S, R and N in colored nodes stand for?
 

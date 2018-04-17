@@ -47,7 +47,7 @@
         "unit": "mV"
     },
     "count": {
-        "label": "Counts"
+        "label": "Count"
     },
     "ct_": {
         "abbr": "Act_g",
@@ -126,7 +126,7 @@
         "unit": "spikes/sec"
     },
     "spike_count": {
-        "label": "Counts",
+        "label": "Spike count",
         "unit": "spikes"
     },
     "t_ref_remaining": {

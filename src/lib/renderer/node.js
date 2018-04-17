@@ -39,7 +39,9 @@ nodeRenderer.table = (node) => {
         div.push('style="border-left: 4px solid ' + colors[node.id % colors.length] + '" ')
         div.push('level="' + level + '">')
         div.push('<td>' + pkey + '</td>')
-        div.push('<td>' + node.params[pkey] + '</td>')
+        var val = node.params[pkey];
+        val = Array.isArray(val) ? app.format.truncateList(node.params[pkey],6) : val
+        div.push('<td>' + val + '</td>')
         div.push('</tr>')
     }
     return div.join('')

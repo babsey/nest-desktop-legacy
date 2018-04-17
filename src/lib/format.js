@@ -8,12 +8,6 @@ format.number = (value, l) => {
     return fmt(value)
 }
 
-format.truncate = (ids) => {
-    if (!ids) return ''
-    if (ids.length > 2) return [ids[0], ids[ids.length - 1]].join('-')
-    return ids.join(',')
-}
-
 format.replaceAll = (str, find, replace) => str.replace(new RegExp(find, 'g'), replace);
 
 format.nodeLabel = (node) => {
@@ -40,8 +34,13 @@ format.axisLabel = (label, unit) => {
     return text
 }
 
+format.truncateList = (lst, n) => {
+    var n = n || 25
+    if (lst.length < n) return lst
+    return lst.slice(0, n/2).join(',') + '...' + lst.slice(lst.length-n/2, lst.length).join(',');
+}
 
-format.truncate = (str, n) => {
+format.truncateStr = (str, n) => {
     var n = n || 25
     if (str.length < n) return str
     return str.slice(0, n) + '...';

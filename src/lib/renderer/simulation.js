@@ -61,7 +61,7 @@ simulationRenderer.dropdown = (data) => {
     div.push('<li>')
     var href = './simulation.html?simulation=' + data._id;
     div.push('<a ' + 'id="' + data._id + '" ' + 'class="simulation" href="' + href + '" rel="popover" title="' + data.name + '">')
-    div.push(app.format.truncate(data.name))
+    div.push(app.format.truncateStr(data.name))
     div.push('</a></li>')
     return div.join('')
 }
@@ -79,7 +79,7 @@ simulationRenderer.thumbnails = (data) => {
     div.push('<div style="position:absolute; z-index:10">')
     div.push('<a href="./templates/simulation.html?simulation=' + data._id + '" ' + 'class="btn btn-default" type="button" title="' + data.name + '">')
     div.push('<span>')
-    div.push(app.format.truncate(data.name))
+    div.push(app.format.truncateStr(data.name))
     div.push('</span>')
     div.push('<span class="badge" title="number of protocols" style="margin-left: 20px"></span>')
     div.push('</a>')

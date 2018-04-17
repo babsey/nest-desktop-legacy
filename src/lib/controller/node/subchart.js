@@ -5,7 +5,7 @@ var nodeController = {};
 nodeController.subchart = (node) => {
     if (node.element_type != 'recorder') return
     var nodeElem = $('#nodes').find('.node[data-id=' + node.id + '] .content');
-    var subchart = node.subchart || {};
+    var subchart = node.subchart || {view:'none', nbins:100};
     node.subchart = subchart;
 
     nodeElem.find('.subChart').append('<div class="subchart form-group hideOnDrawing"></div>')
@@ -27,7 +27,7 @@ nodeController.subchart = (node) => {
     if (node.model == 'spike_detector') {
         nodeElem.find('.subchart').append('<label for="subchart_' + node.id + '">Subchart data</label>')
         nodeElem.find('.subchart').append('<select data-id="' + node.id + '" id="subchart_' + node.id + '" class="subchartData form-control"></select>')
-        nodeElem.find('.subchartData').append('<option value="psth" class="form-control">Peri-stimulus time histogram (PSTH)</option>')
+        nodeElem.find('.subchartData').append('<option value="psth" class="form-control" selected>Peri-stimulus time histogram (PSTH)</option>')
         nodeElem.find('.subchartData').append('<option value="isi" class="form-control">Inter-spike interval (ISI)</option>')
         nodeElem.find('.subchartData').val(subchart.data || 'psth')
         nodeElem.find('.subchartData').on('change', function() {

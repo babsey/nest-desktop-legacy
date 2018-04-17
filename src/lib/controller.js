@@ -99,7 +99,7 @@ controller.events = () => {
                 app.slider.update_synSlider(link)
             }
         }
-        app.slider.update_dataSlider()
+        app.slider.view_dataSlider()
         controller.update()
     })
 }

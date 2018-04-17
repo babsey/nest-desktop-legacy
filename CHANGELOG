@@ -1,6 +1,14 @@
 CHANGELOG
 ---------
 
+0.15.1:
+    Fixed inverted mouse pointer in line chart
+    Fixed default subchart data in raster plot -> PSTH
+    Shorten simulation data for spike generator
+    MC only accepts spike inputs.
+    No Vth line for current input
+    Update range slider for input event
+
 0.15.0:
     Remove currents as abscissa
     Bar or line subchart for spike activity

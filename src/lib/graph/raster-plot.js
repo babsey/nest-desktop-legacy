@@ -8,7 +8,8 @@ rasterPlot.update = (recorder) => {
 
     var chart = app.graph.chart;
     var colors = app.graph.colors();
-    var subchart = recorder.node.subchart || {};
+    var subchart = recorder.node.subchart || {view: 'bar', nbins:100};
+    subchart.data = subchart.data || 'psth';
 
     var gids = {};
     app.data.nodes.map((node) => {
@@ -40,7 +41,6 @@ rasterPlot.update = (recorder) => {
         x: app.graph.chart.dataModel['times'] || {},
         y: app.graph.chart.dataModel['neuron_id'] || {},
     };
-
 
     if (subchart.data == 'psth') {
         var abscissa = 'times';

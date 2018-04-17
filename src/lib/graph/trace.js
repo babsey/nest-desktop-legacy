@@ -9,7 +9,7 @@ trace.update = (recorder) => {
     if (!recorder.events) return
     var chart = app.graph.chart;
     var dataModel = app.config.nest('data');
-    var subchart = recorder.node.subchart || {};
+    var subchart = recorder.node.subchart || {view: 'bar', nbins: 100};
 
     if (recorder.events.senders.length == 0) {
         trace.update(recorder)
@@ -48,7 +48,7 @@ trace.update = (recorder) => {
     };
     lineChart.data.V_th = {
         x: xDomain,
-        y: recorder.senders.map((sender) => {
+        y: recorder.senders.filter((sender) => app.data.nodes[nodeIndices[sender - 1]].element_type == 'neuron').map((sender) => {
             var v = app.data.nodes[nodeIndices[sender - 1]].params.V_th;
             return [v, v]
         })

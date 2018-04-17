@@ -27,7 +27,7 @@ nodeController.npop = (node) => {
             if (valid.error != null) return
             var key = $(this).parents('.dataSlider').attr('id');
             node[key] = valid.value;
-            app.slider.update_dataSlider()
+            app.slider.view_dataSlider()
             app.simulation.reload()
         })
 }

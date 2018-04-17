@@ -14,7 +14,7 @@ navigation.events = () => {
         $(this).find(' .fa').removeClass('fa-spin');
     });
 
-    // Load protocol events
+    // Load events
     app.config.events()
     app.network.events()
     app.simulation.events()
