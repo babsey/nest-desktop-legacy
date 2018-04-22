@@ -1,7 +1,11 @@
 "use strict"
 
+const math = require('mathjs');
+const numeric = require('numeric');
+
 const connController = require('./connection');
 const synController = require('./synapse');
+const amplitude = require('./node/amplitude');
 
 var nodeController = {
     amplitude: require('./node/amplitude'),
@@ -65,6 +69,17 @@ nodeController.init = (node) => {
             connController.update(link)
             synController.update(link)
         })
+
+
+        if (node.model == 'spike_generator') {
+            var nodeDefaults = app.config.nest('node');
+            node.spike_dtime = node.spike_dtime || nodeDefaults.spike_dtime.value;
+            node.spike_weight = node.spike_weight || nodeDefaults.spike_weight.value;
+            node.params.spike_times = math.range(node.spike_dtime, app.data.sim_time, node.spike_dtime)._data;
+            node.params.spike_weights = numeric.rep([node.params.spike_times.length], node.spike_weight);
+        } else if ( model == 'step_current_generator') {
+            amplitude.update(node)
+        }
 
         app.simulation.reload()
     })

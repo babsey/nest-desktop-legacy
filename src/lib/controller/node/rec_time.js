@@ -38,8 +38,13 @@ nodeController.rec_time = (node) => {
         }
         node.params.start = start;
         node.params.stop = stop;
-        app.slider.update_nodeSlider(node)
         app.slider.update_dataSlider(node, 'rec_time', [start, stop], valuesInput)
+        app.simulation.simulate.init()
+    })
+
+    nodeElem.find('.rec_time .eraser').on('click', function() {
+        delete node.params.start
+        delete node.params.stop
         app.simulation.simulate.init()
     })
 }

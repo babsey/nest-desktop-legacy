@@ -82,44 +82,26 @@ chart.update = (recorder) => {
     var colors = app.graph.colors();
     var cidx = (recorder.sources.length == 1 ? recorder.sources[0] : nidx)
     var color = app.config.app().graph.color ? colors[cidx || (recorder.node.id % colors.length)] : ''
-    if (app.graph.chart.doTransition()) {
-        bars
-            .attr('x', (d) => chart.xScale(d.x0))
-            .attr('width', (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
-            .transition(app.graph.chart.transition)
-            .attr('y', (d) => chart.yScale(chart.yVal(d, idx)))
-            .attr('height', (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
-            .style('fill', color);
 
-        bars.enter()
-            .append('rect')
-            .attr('class', 'bar')
-            .attr('x', (d) => chart.xScale(d.x0))
-            .attr('width', (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
-            .attr('y', chart.g.attr('height'))
-            .transition(app.graph.chart.transition)
-            .attr('y', (d) => chart.yScale(chart.yVal(d, idx)))
-            .attr('height', (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
-            .style('fill', color);
+    bars.attr('x', (d) => chart.xScale(d.x0))
+        .attr('width', (d) => chart.xScale(d.x1) - chart.xScale(d.x0));
 
-    } else {
-        bars
-            .attr('x', (d) => chart.xScale(d.x0))
-            .attr('width', (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
-            .attr('y', (d) => chart.yScale(chart.yVal(d, idx)))
-            .attr('height', (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
-            .style('fill', color);
+    bars.enter()
+        .append('rect')
+        .attr('class', 'bar')
+        .attr('x', (d) => chart.xScale(d.x0))
+        .attr('width', (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
+        .attr('y', chart.g.attr('height'))
 
-        bars.enter()
-            .append('rect')
-            .attr('class', 'bar')
-            .attr('x', (d) => chart.xScale(d.x0))
-            .attr('width', (d) => chart.xScale(d.x1) - chart.xScale(d.x0))
-            .attr('y', chart.g.attr('height'))
-            .attr('y', (d) => chart.yScale(chart.yVal(d, idx)))
+    var barsDraw = app.graph.chart.doTransition() ? bars.transition(app.graph.chart.transition) : bars;
+    barsDraw.attr('y', (d) => chart.yScale(chart.yVal(d, idx)))
+        .attr('height', (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
+        .style('fill', color);
+
+    var barsNewDraw = app.graph.chart.doTransition() ? bars.enter().selectAll('.bar').transition(app.graph.chart.transition) : bars.enter().selectAll('.bar');
+    barsNewDraw.attr('y', (d) => chart.yScale(chart.yVal(d, idx)))
             .attr('height', (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
             .style('fill', color);
-    }
 
     bars.exit()
         .remove()

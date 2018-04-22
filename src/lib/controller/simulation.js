@@ -55,6 +55,17 @@ simulationController.init = () => {
         app.simulation.simulate.init()
     })
 
+    simElem.find('.dataSlider .eraser').on('click', function() {
+        var simulationSlider = $(this).parents('.dataSlider');
+        var id = simulationSlider.attr('id');
+        if (id == 'random_seed') {
+            app.config.randomSeed(false)
+        }
+        var value = $(this).data('defaultValue');
+        app.data[id] = value;
+        app.simulation.simulate.init()
+    })
+
 }
 
 module.exports = simulationController;

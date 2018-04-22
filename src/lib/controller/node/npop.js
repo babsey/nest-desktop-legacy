@@ -12,7 +12,9 @@ nodeController.npop = (node) => {
     app.slider.create_dataSlider('#nodes .node[data-id=' + node.id + '] .nodeSlider', options.id, options)
         .on('slideStop', (d) => {
             app.data.nodes[node.id].n = d.value
-            app.simulation.reload()
+            // app.graph.init()
+            app.simulation.simulate.init()
+            // app.simulation.reload()
         })
 
     nodeElem.find('input.nVal')
@@ -25,10 +27,21 @@ nodeController.npop = (node) => {
             $(this).parents('.form-group').toggleClass('has-error', valid.error != null)
             $(this).parents('.form-group').find('.help-block').html(valid.error)
             if (valid.error != null) return
-            var key = $(this).parents('.dataSlider').attr('id');
-            node[key] = valid.value;
+            node.n = valid.value;
             app.slider.view_dataSlider()
-            app.simulation.reload()
+            app.slider.update_dataSlider(node, 'n', node.n, node.n)
+            $('#chart svg').empty()
+            // app.graph.init()
+            app.simulation.simulate.init()
+            // app.simulation.reload()
+        })
+
+    nodeElem.find('.eraser').on('click', function() {
+            node.n = 1;
+            app.slider.update_dataSlider(node, 'n', node.n, node.n)
+            // app.graph.init()
+            app.simulation.simulate.init()
+            // app.simulation.reload()
         })
 }
 

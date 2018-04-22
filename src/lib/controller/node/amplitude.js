@@ -60,6 +60,22 @@ amplitude.init = (node) => {
         amplitude.update(node)
         app.simulation.simulate.init()
     })
+
+    nodeElem.find('.amplitude_dtime .eraser').on('click', function() {
+        var value = $(this).data('defaultValue');
+        var key = $(this).parents('.paramSlider').attr('id');
+        node.amplitude_dtime = value;
+        amplitude.update(node)
+        app.simulation.simulate.init()
+    })
+
+    nodeElem.find('.amplitude_dvalue .eraser').on('click', function() {
+        var value = $(this).data('defaultValue');
+        var key = $(this).parents('.paramSlider').attr('id');
+        node.amplitude_dvalue = value;
+        amplitude.update(node)
+        app.simulation.simulate.init()
+    })
 }
 
 module.exports = amplitude;

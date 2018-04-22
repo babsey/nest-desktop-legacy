@@ -31,7 +31,7 @@ chart.tooltip = function(d, i) {
         point += app.format.number(x[idx], chart.axis.x.format != undefined ? chart.axis.x.format : 2);
         point += (chart.axis.x.unit ? '&thinsp;' + chart.axis.x.unit : '');
         point += ', ';
-        point += app.format.number(y[idx], chart.axis.y.format != undefined ? chart.axis.y.format : 2 );
+        point += app.format.number(y[idx], chart.axis.y.format != undefined ? chart.axis.y.format : 2);
         point += (chart.axis.y.unit ? '&thinsp;' + chart.axis.y.unit : '');
         point += ' (';
         point += '&micro;:&thinsp;';
@@ -52,8 +52,8 @@ chart.tooltip = function(d, i) {
     chart.focus.select('.y-hover-line').attr('x2', () => -chart.xScale(x[idx]));
     // chart.focus.select('.x-hover-line').attr('y1', () => -chart.yScale(y[idx]) - offset);
     // chart.focus.select('.x-hover-line').attr('y2', () => chart.height - chart.yScale(y[idx]) - offset);
-    chart.focus.select('.x-hover-line').attr('y1', () => -5*chart.height);
-    chart.focus.select('.x-hover-line').attr('y2', () => 5*chart.height);
+    chart.focus.select('.x-hover-line').attr('y1', () => -5 * chart.height);
+    chart.focus.select('.x-hover-line').attr('y2', () => 5 * chart.height);
 
 }
 
@@ -62,85 +62,53 @@ chart.draw_line = (recorder) => {
     var series = recorder.node.series || 'stack';
     app.graph.chart.drawing = true;
     var n = chart.data.n || 1;
+    var yTranslate = (i) => +chart.subchart(chart.height, n, i);
+
+    var subchart = chart.g.select('#clip')
+        .selectAll('.subchart')
+        .data(chart.data.y)
 
     var lines = chart.g.select('#clip')
         .selectAll('.line')
         .data(chart.data.y);
 
-    var g = lines.enter()
+    subchart.exit().remove();
+
+    subchart.attr('transform',
+        (d, i) => series == 'stack' ? 'translate(0,' + yTranslate(i) + ')' : ''
+    )
+
+    var g = subchart.enter()
         .append('g')
         .attr('class', 'subchart')
+        .attr('transform',
+            (d, i) => series == 'stack' ? 'translate(0,' + yTranslate(i) + ')' : ''
+        );
 
-    // lines.attr('style', (d, i) => 'stroke:' + (app.selected_node ? chart.data.c[i] : ''))
+    var path = g.append('path')
+        .attr('class', (d, i) => 'line line_' + i)
+        .on('mouseover', (d, i) => {
+            chart.g.selectAll('#clip')
+                .classed('active', true);
+            chart.g.selectAll('.aline.line_' + i)
+                .classed('active', true);
+        })
+        .on('mouseout', (d, i) => {
+            chart.g.selectAll('#clip')
+                .classed('active', false)
+            chart.g.selectAll('#clip path')
+                .classed('active', false);
+        })
+        .attr('style', 'zscore: 1')
 
     var color = (i) => app.config.app().graph.color ? chart.data.colors[i % chart.data.colors.length] : '';
-    var yTranslate = (i) => +chart.subchart(chart.height, n, i);
-    if (app.graph.chart.doTransition()) {
-        lines
-            .transition(app.graph.chart.transition)
-            .attr('transform',
-                (d, i) => series == 'stack' ? 'translate(0,' + yTranslate(i) + ')' : ''
-            )
-            .attr('style', (d, i) => 'stroke:' + color(i))
-            .attr('d', chart.line);
+    var linesDraw = app.graph.chart.doTransition() ? lines.transition(chart.transition) : lines
+    // lines.attr('style', (d, i) => 'stroke:' + (app.selected_node ? chart.data.c[i] : ''))
+    linesDraw.attr('style', (d, i) => 'stroke:' + color(i))
+        .attr('d', chart.line);
 
-        g.append('path')
-            .attr('class', (d, i) => 'line line_' + i)
-            .attr('transform',
-                (d, i) => series == 'stack' ? 'translate(0,' + yTranslate(i) + ')' : ''
-            )
-            .on('mouseover', (d, i) => {
-                chart.g.selectAll('#clip')
-                    .classed('active', true);
-                chart.g.selectAll('.aline.line_' + i)
-                    .classed('active', true);
-            })
-            .on('mouseout', (d, i) => {
-                chart.g.selectAll('#clip')
-                    .classed('active', false)
-                chart.g.selectAll('#clip path')
-                    .classed('active', false);
-            })
-            .attr('style', 'zscore: 1')
-            .attr('style', (d, i) => 'stroke:' + color(i))
-            .transition(app.graph.chart.transition)
-            .attr('d', chart.line);
-
-    } else {
-        lines.attr('transform',
-                (d, i) => series == 'stack' ? 'translate(0,' + yTranslate(i) + ')' : ''
-            )
-            .attr('style', (d, i) => 'stroke:' + color(i))
-            .attr('d', chart.line)
-
-        lines.selectAll('.overlay')
-            .attr('transform',
-                (d, i) => series == 'stack' ? 'translate(0,' + -1 * yTranslate(i) + ')' : ''
-            )
-
-        g.append('path')
-            .attr('transform',
-                (d, i) => series == 'stack' ? 'translate(0,' + yTranslate(i) + ')' : ''
-            )
-            .attr('class', (d, i) => 'line line_' + i)
-            .on('mouseover', (d, i) => {
-                chart.g.selectAll('#clip')
-                    .classed('active', true);
-                chart.g.selectAll('.aline.line_' + i)
-                    .classed('active', true);
-            })
-            .on('mouseout', (d, i) => {
-                chart.g.selectAll('#clip')
-                    .classed('active', false)
-                chart.g.selectAll('#clip path')
-                    .classed('active', false);
-            })
-            .attr('style', 'zscore: 1')
-            .attr('style', (d, i) => 'stroke:' + color(i))
-            .attr('d', chart.line);
-    }
-
-    var yTranslate = (i) => +chart.subchart(chart.height, n, n - i - 1);
+    path.attr('style', (d, i) => 'stroke:' + color(i))
+        .attr('d', chart.line);
 
     if (chart.data.V_th) {
 
@@ -149,7 +117,7 @@ chart.draw_line = (recorder) => {
             .y((d) => chart.yScale(d));
 
         // Select the path.
-        var Vth_line = chart.g.selectAll('.Vth_line')
+        var Vth_line = subchart.selectAll('.Vth_line')
             .data(chart.data.V_th.y);
 
         var yDomain = chart.yScale.domain();
@@ -163,29 +131,22 @@ chart.draw_line = (recorder) => {
         Vth_line.enter().append('path')
             .attr('class', 'Vth_line')
             .style('display', (d) => (d[0] > yDomain[0] && d[0] <= yDomain[1] ? '' : 'none'))
-            .attr('transform',
-                (d, i) => series == 'stack' ? 'translate(0,' + yTranslate(i) + ')' : ''
-            )
             .attr('d', line);
 
         // Delete the path.
         Vth_line.exit().remove();
     }
 
-    lines.selectAll('.overlay')
+    subchart.selectAll('.overlay')
         .attr('width', chart.width)
-        .attr('height', chart.height / n)
-        .attr('transform',
-            (d, i) => series == 'stack' ? 'translate(0,' + -1 * yTranslate(i) + ')' : ''
-        );
+        .attr('height', (d) => chart.height / n)
+        .attr('transform', 'translate(0,' + chart.height * (n - 1) / n + ')');
 
     var overlay = g.append('rect')
         .attr('class', 'overlay')
         .attr('width', chart.width)
-        .attr('height', chart.height / n)
-        .attr('transform',
-            (d, i) => series == 'stack' ? 'translate(0,' + -1 * yTranslate(i) + ')' : ''
-        );
+        .attr('height', (d) => chart.height / n)
+        .attr('transform', 'translate(0,' + chart.height * (n - 1) / n + ')');
 
     overlay.on('mouseout', () => {
             chart.focus.attr('transform', 'translate(-1000,-1000)');
@@ -222,7 +183,7 @@ chart.update = (recorder) => {
 
     var xVal = (idx) => (x.length == y.length) ? x[idx] : x;
     chart.line
-        .x((d,i,j) => chart.xScale(xVal(j.idx)[i]))
+        .x((d, i, j) => chart.xScale(xVal(j.idx)[i]))
         .y((d) => chart.yScale(d));
 
     // if ('V_m' in recorder.events) {

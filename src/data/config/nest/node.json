@@ -40,7 +40,7 @@
         "id": "spike_dtime",
         "label": "Inter-spike interval [ms]",
         "level": 1,
-        "value": 1000,
+        "value": 100,
         "min": 1,
         "max": 1000,
         "step": 1

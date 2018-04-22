@@ -18,7 +18,7 @@ var _slider = (ref, id, options) => {
     $(ref).find('#' + id).append('<div class="form-group row"></div>')
     var formGroup = $(ref).find('#' + id).find('.form-group')
     formGroup.append('<label title="' + id + '" style="padding-left:15px;min-width: 200px;">' + options.label + '</label>')
-    formGroup.append('<div class="col-md-9"><input class="sliderInput ' + id + 'Input"></div>')
+    formGroup.append('<div class="col-md-8"><input class="sliderInput ' + id + 'Input"></div>')
     if (options.show_value) {
         if (options.value instanceof Array) {
             formGroup.append('<div class="col-md-3" style="padding-left:5px">' +
@@ -26,7 +26,7 @@ var _slider = (ref, id, options) => {
             'class="' + id + 'Val paramVal form-control" value="[' + options.value + ']"/>' +
             '</div>')
         } else {
-            formGroup.append('<div class="col-md-3" style="padding-left:5px">' +
+            formGroup.append('<div class="col-md-3" style="padding:0 5px">' +
             '<input autofocus data-schema="number" id="' + id + 'Val" ' +
             'type="number" value="' + options.value + '" '+
             // 'min="'+ options.min +'" max="' + options.max + '" ' +
@@ -34,7 +34,21 @@ var _slider = (ref, id, options) => {
             'class=" ' + id + 'Val paramVal form-control"/>' +
             '</div>')
         }
+        formGroup.append('<div class="col-md-1" style="padding:0"><div class="eraser" style="display:none"><i class="fa fa-eraser" aria-hidden="true"></i></div></div>')
+        formGroup.find('.eraser').data('defaultValue', options_default.value)
+        formGroup.find('.eraser').attr('title', 'Reset to default value: ' + options_default.value)
     }
+    formGroup.on('mouseover', () => {
+        formGroup.find('.eraser').show()
+    })
+    formGroup.on('mouseout', () => {
+        formGroup.find('.eraser').hide()
+    })
+    formGroup.find('.eraser').on('click', (d) => {
+        var value = options_default.value;
+        formGroup.find("." + id + 'Input').slider('setValue', value)
+        formGroup.find("#" + id + "Val").val(options.value instanceof Array ? JSON.stringify(value) : value)
+    })
     formGroup.append('<div class="help-block" style="padding-left:15px"></div>')
     if (options.ticks_labels) {
         formGroup.find('.' + id + 'Input').data('ticks_labels', JSON.stringify(options.ticks_labels))

@@ -4,19 +4,20 @@ const d3 = require("d3");
 
 var chart = {
     data: {},
+    duration: 0,
 };
 
 chart.format = d3.format(".2f");
-
-chart.transition = d3.transition()
-    .ease(d3.easeLinear);
 
 chart.doTransition = () => !(
     app.simulation.running ||
     app.graph.dragging ||
     app.graph.chart.zooming ||
     app.resizing ||
-    app.mouseover)
+    app.mouseover
+)
+
+chart.transition = d3.transition()
 
 chart.xAxis = (subchart) => {
     subchart.xAxis = d3.axisBottom(subchart.xScale);
@@ -187,11 +188,12 @@ chart.axesUpdate = (subchart) => {
 
 chart.scaling = () => {
     if ($('#autoscale').prop('checked')) {
-        if (app.simulation.running) {
-            chart.xScale.domain([d3.max([0, app.data.kernel.time - 1000.]), app.data.kernel.time])
-        } else {
-            chart.xScale.domain(d3.extent(chart.data.times)).nice()
-        }
+        chart.xScale.domain([d3.max([0, app.data.kernel.time - 1000.]), app.data.kernel.time])
+        // if (app.simulation.running) {
+        //     chart.xScale.domain([d3.max([0, app.data.kernel.time - 1000.]), app.data.kernel.time])
+        // } else {
+        //     chart.xScale.domain(d3.extent(chart.data.times)).nice()
+        // }
     }
 }
 

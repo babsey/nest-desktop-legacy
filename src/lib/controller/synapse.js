@@ -52,6 +52,14 @@ synController.update = (link) => {
         app.graph.networkLayout.update()
         app.simulation.simulate.init()
     })
+
+    synElem.find('.paramSlider .eraser').on('click', function() {
+        var key = $(this).parents('.paramSlider').attr('id');
+        var value = $(this).data('defaultValue');
+        link.syn_spec[key] = value;
+        app.graph.networkLayout.update()
+        app.simulation.simulate.init()
+    })
 }
 
 synController.init = (link) => {

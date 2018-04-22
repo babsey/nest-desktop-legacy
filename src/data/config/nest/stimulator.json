@@ -120,48 +120,6 @@
     }]
 }, {
     "element_type": "stimulator",
-    "id": "pulsepacket_generator",
-    "label": "Gaussian pulse packet generator",
-    "sliderDefaults": [{
-        "id": "pulse_times",
-        "level": 5,
-        "value": 1.0,
-        "min": 1.0,
-        "max": 10.0,
-        "step": 1.0,
-        "label": "Times of the center of the pulse (ms)"
-    }, {
-        "id": "activity",
-        "level": 2,
-        "value": 1,
-        "min": 1,
-        "max": 1000,
-        "step": 1,
-        "label": "Number of spikes per pulse"
-    }, {
-        "id": "sdev",
-        "level": 3,
-        "value": 0.0,
-        "min": 0.0,
-        "max": 10.0,
-        "step": 1.0,
-        "label": "Standard deviation of spike times in each pulse (ms)"
-    }]
-}, {
-    "element_type": "stimulator",
-    "id": "spike_dilutor",
-    "label": "Spike dilutor",
-    "sliderDefaults": [{
-        "id": "p_copy",
-        "level": 2,
-        "value": 1.0,
-        "min": 0.0,
-        "max": 1.0,
-        "step": 0.01,
-        "label": "Copy probability"
-    }]
-}, {
-    "element_type": "stimulator",
     "id": "spike_generator",
     "label": "Spike generator",
     "params": [{

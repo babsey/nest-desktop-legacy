@@ -41,8 +41,17 @@ nodeController.stim_time = (node) => {
         }
         node.params.start = start;
         node.params.stop = stop;
-        app.slider.update_nodeSlider(node)
         app.slider.update_dataSlider(node, 'stim_time', [start, stop], valuesInput)
+        if (node.model == 'step_current_generator') {
+            app.controller.node.amplitude.update(node)
+        }
+        app.simulation.simulate.init()
+    })
+
+    nodeElem.find('.stim_time .eraser').on('click', function() {
+        var values = $(this).data('defaultValue');
+        node.params.start = parseFloat(values[0]);
+        node.params.stop = parseFloat(values[1]);
         if (node.model == 'step_current_generator') {
             app.controller.node.amplitude.update(node)
         }

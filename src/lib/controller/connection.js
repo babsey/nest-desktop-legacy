@@ -28,6 +28,13 @@ connController.update = (link) => {
         app.slider.update_connSlider(link)
         app.simulation.simulate.init()
     })
+
+    connElem.find('.paramSlider .eraser').on('click', function() {
+        var key = $(this).parents('.paramSlider').attr('id');
+        var value = $(this).data('defaultValue');
+        link.conn_spec[key] = value;
+        app.simulation.simulate.init()
+    })
 }
 
 connController.init = (link) => {

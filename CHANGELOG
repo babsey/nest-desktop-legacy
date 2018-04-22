@@ -1,6 +1,14 @@
 CHANGELOG
 ---------
 
+0.15.3:
+    Fix stacked line charts for changing pop size
+    Optimize code for chart transitions
+
+0.15.2:
+    Add eraser to set default value
+    Only redraw graph after changing size
+
 0.15.1:
     Fixed inverted mouse pointer in line chart
     Fixed default subchart data in raster plot -> PSTH

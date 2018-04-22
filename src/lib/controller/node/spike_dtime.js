@@ -35,7 +35,14 @@ nodeController.spike_dtime = (node) => {
         node.spike_dtime = valid.value;
         node.params.spike_times = math.range(node.spike_dtime, app.data.sim_time, node.spike_dtime)._data;
         node.params.spike_weights = numeric.rep([node.params.spike_times.length], node.spike_weight || nodeDefaults.spike_weight.value);
-        app.slider.update_nodeSlider(node)
+        app.simulation.simulate.init()
+    })
+
+    nodeElem.find('.spike_dtime .eraser').on('click', function() {
+        var value = $(this).data('defaultValue');
+        node.spike_dtime = value;
+        node.params.spike_times = math.range(node.spike_dtime, app.data.sim_time, node.spike_dtime)._data;
+        node.params.spike_weights = numeric.rep([node.params.spike_times.length], node.spike_weight || nodeDefaults.spike_weight.value);
         app.simulation.simulate.init()
     })
 }

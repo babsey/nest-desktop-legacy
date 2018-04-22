@@ -43,7 +43,15 @@ nodeController.params = (node) => {
         if (valid.error != null) return
         var key = $(this).parents('.paramSlider').attr('id');
         node.params[key] = valid.value
-        app.slider.update_nodeSlider(node)
+        app.slider.update_dataSlider(node, key, valid.value, value)
+        app.simulation.simulate.init()
+    })
+
+    nodeElem.find('.modelSlider .eraser').on('click', function() {
+        var value = $(this).data('defaultValue');
+        var key = $(this).parents('.paramSlider').attr('id');
+        node.params[key] = value
+        app.slider.update_dataSlider(node, key, value, value)
         app.simulation.simulate.init()
     })
 }
