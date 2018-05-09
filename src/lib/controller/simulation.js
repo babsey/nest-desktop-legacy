@@ -7,6 +7,7 @@ simulationController.update = (options) => {
     var simElem = $('#simulation .content');
     var simulationSlider = simElem.find('#' + options.id);
     var value = app.data[options.id];
+    $('#' + options.id + 'Button').find('.value').html(value)
     simulationSlider.find('.' + options.id + 'Input').slider('setValue', parseFloat(value));
     simulationSlider.find('.' + options.id + 'Val').val(value);
 }
@@ -34,9 +35,12 @@ simulationController.init = () => {
                     app.config.randomSeed(false)
                 }
                 app.data[id] = d.value;
+                $('#' + id + 'Button').find('.value').html(d.value)
                 app.simulation.simulate.init()
             })
+        $('#' + model.id).addClass('collapse')
     }
+
     simElem.find('input.paramVal').on('change', function() {
         var simulationSlider = $(this).parents('.dataSlider');
         var value = $(this).val();
@@ -51,6 +55,7 @@ simulationController.init = () => {
             app.config.randomSeed(false)
         }
         app.data[id] = valid.value;
+        $('#' + id + 'Button').find('.value').html(valid.value)
         simulationSlider.find('.' + id + 'Input').slider('setValue', valid.value)
         app.simulation.simulate.init()
     })

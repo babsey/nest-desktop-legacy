@@ -49,6 +49,9 @@
     "count": {
         "label": "Count"
     },
+    "count_normed": {
+        "label": "Count normed"
+    },
     "ct_": {
         "abbr": "Act_g",
         "label": "Activation of conductances"

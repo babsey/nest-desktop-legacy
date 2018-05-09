@@ -6,15 +6,25 @@ const path = require('path');
 const fs = require('fs');
 
 simulationRenderer.list = (data) => {
-    var div = [];
     var href = './templates/simulation.html?simulation=' + data._id;
-    div.push('<a id="' + data._id + '"class="simulation list-group-item" href="' + href + '">')
-    div.push('<span>')
-    div.push(data.name)
-    div.push('</span>')
-    div.push('<span class="badge" title="Number of protocols" style="margin-left: 20px"></span>')
-    div.push('</a>')
-    return div.join('')
+    return '<div class="btn-group" data-id="' + data._id + '" style="width:100%; padding: 1px;">' +
+        '<button type="button" class="simulation-details btn btn-default col-xs-9">' +
+        '<span class="pull-left">' + app.format.truncateStr(data.name, 40) + '</span>' +
+        '<span class="badge pull-right" title="Number of protocols"></span>' +
+        '</button>' +
+        '<div class="btn-group dropdown">' +
+        '<button type="button" class="btn btn-default dropdown-toggle simulation-config" data-toggle="dropdown">' +
+        '<i class="fa fa-bars"></i>' +
+        '</button>' +
+        '<ul class="dropdown-menu dropdown-menu-right">' +
+        '<li><a href="' + href + '"><i class="fa fa-chevron-right"></i> Go to this simulation</a></li>' +
+        '<li><a data-toggle="modal" href="#delete-all-protocols-dialog" class="empty-protocols"><i class="fa fa-trash"></i> Empty protocols</a></li>' +
+        (data.group == 'user' ? '<li><a data-toggle="modal" href="#delete-simulation-dialog" class="delete-simulation"><i class="fa fa-trash-o"></i> Delete this simulation</a></li>' : '') +
+        '</ul>' +
+        '</div>' +
+        '<a type="button" class="start btn btn-link" title="Go to this simulation" href="' + href + '" style="display:none">' +
+        '<i class="fa fa-chevron-circle-right"></i></a>' +
+        '</div>'
 }
 
 simulationRenderer.details = (data) => {

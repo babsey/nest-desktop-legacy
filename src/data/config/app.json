@@ -5,13 +5,18 @@
         "id": "",
         "name": "",
         "password": "",
-        "group": "public"
+        "group": "user"
     },
     "groups": [{
         "id": "nest-desktop",
-        "name": "NEST desktop",
+        "name": "Sample",
         "visible": true,
         "sync": true
+    }, {
+        "id": "user",
+        "name": "My",
+        "visible": true,
+        "sync": false
     }, {
         "id": "public",
         "name": "Public",

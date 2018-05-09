@@ -37,15 +37,13 @@ protocol.delete = () => protocol.db.remove({
     multi: true
 }, function(err, numDeleted) {
     console.log('Deleted', numDeleted, 'protocol(s)')
-    window.location = './simulation.html?simulation=' + app.simulation.id
 })
 
-protocol.deleteAll = () => protocol.backup().then(() => {
+protocol.deleteAll = (location) => protocol.backup().then(() => {
     protocol.db.remove({}, {
         multi: true
     }, function(err, numDeleted) {
         console.log('Deleted', numDeleted, 'protocol(s)')
-        window.location = './simulation.html?simulation=' + app.simulation.id
     })
 })
 
@@ -75,6 +73,8 @@ protocol.addDropdown = (data) => {
         })
     })
 }
+
+protocol.emptyDropdown = () => $('#protocol-list').empty()
 
 protocol.removeDropdown = (data) => $('#' + data._id).remove();
 
@@ -148,9 +148,9 @@ protocol.update = () => {
     })
 }
 
-protocol.init = () => {
+protocol.init = (id) => {
     app.message.log('Initialize protocol')
-    var filename = path.join(app.dataPath, 'protocols', app.simulation.id + '.db');
+    var filename = path.join(app.dataPath, 'protocols', id + '.db');
     protocol.db = new NeDB({
         filename: filename,
         timestampData: true,
@@ -186,7 +186,11 @@ protocol.events = () => {
     $('#get-protocol-list').on('click', () => {
         protocol.update()
     })
-    $('#delete-protocol').on('click', protocol.delete)
+    $('#delete-protocol').on('click', () => {
+        protocol.delete()
+        $('#protocol-list').find('a[data-id="' + app.data._id + '"]').remove()
+        $('#protocol-label').append(' (deleted)')
+    })
     $('#delete-all-protocols-dialog').on('shown.bs.modal', function() {
         $('#delete-all-protocols-cancel').trigger('focus')
     })

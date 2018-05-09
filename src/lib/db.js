@@ -118,7 +118,7 @@ db.update = (data) => {
     var date = new Date;
     data.updatedAt = date;
     data.user = app.config.app().user.id;
-    data.group = 'public';
+    data.group = 'user';
     data.version = app.config.app().version;
     data.hash = app.hash(data);
     delete data._id;
@@ -139,13 +139,20 @@ db.add = (data) => new Promise((resolve, reject) => {
     data.createdAt = date;
     data.updatedAt = date;
     data.user = app.config.app().user.id;
-    data.group = 'public';
+    data.group = 'user';
     data.version = app.config.app().version;
     db.localDB.insert(data, (err, newDocs) => {
         app.screen.capture(newDocs, false)
         resolve(true)
     })
 })
+
+db.delete = (data) => {
+    data.deleted = true;
+    app.db.localDB.update({
+        _id: data._id
+    }, data);
+}
 
 db.export = (data) => {
     var id = data._id;

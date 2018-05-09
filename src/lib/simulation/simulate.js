@@ -15,9 +15,9 @@ simulate.run = () => {
     if (app.simulation.recorders.filter((recorder) => {
             return recorder.node.model != undefined
         }).length == 0) {
-            app.message.show('Info', 'Select a model for recorder')
-            return
-        }
+        app.message.show('Info', 'Select a model for recorder')
+        return
+    }
     if (app.simulation.autoReset) {
         app.data.kernel.time = 0.0;
     }
@@ -31,7 +31,7 @@ simulate.run = () => {
         app.simulation.recorders.map((recorder) => {
             // console.log(recorder.node.params.interval, app.data.kernel.resolution)
             // if (recorder.node.params.interval == undefined) {
-                recorder.node.params.interval = app.data.kernel.resolution;
+            recorder.node.params.interval = app.data.kernel.resolution;
             // } else {
             //     var interval = recorder.node.params.interval;
             //     var resolution = app.data.kernel.resolution || 1.0;
@@ -63,7 +63,8 @@ simulate.run = () => {
         })
         .done((response) => {
             if (response.error) {
-                console.log(response.error)
+                app.message.show('NEST Error', response.error)
+                simulate.end()
                 return
             }
             for (var idx in response.data.nodes) {
@@ -165,8 +166,8 @@ simulate.start = () => {
     app.controller.activeNode = $(document.activeElement).parents('.node').attr('id');
     app.controller.activeElement = $(document.activeElement).attr('id');
     app.simulation.simulate.message = app.message.simulate();
-    $('.disableOnRunning').toggleClass('disabled', app.simulation.running)
-    $('select').prop('disabled', true);
+    $('.disableOnRunning').toggleClass('disabled', true)
+    // $('select').prop('disabled', true);
     $('.disableNode').prop('disabled', true);
     $('.disableLink').prop('disabled', true);
     $('.paramVal').attr('readonly', true);
@@ -176,8 +177,8 @@ simulate.start = () => {
 simulate.end = () => {
     if (app.simulation.running) return
     app.simulation.simulate.message.close();
-    $('.disableOnRunning').toggleClass('disabled', app.simulation.running)
-    $('select:not(.disabled)').prop('disabled', false);
+    $('.disableOnRunning').toggleClass('disabled', false)
+    // $('select:not(.disabled)').prop('disabled', false);
     $('.disableNode').prop('disabled', false);
     $('.disableLink').prop('disabled', false);
     $('.paramVal').attr('readonly', false);

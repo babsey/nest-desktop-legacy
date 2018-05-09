@@ -9,7 +9,10 @@ trace.update = (recorder) => {
     if (!recorder.events) return
     var chart = app.graph.chart;
     var dataModel = app.config.nest('data');
-    var subchart = recorder.node.subchart || {view: 'bar', nbins: 100};
+    var subchart = recorder.node.subchart || {
+        view: 'bar',
+        nbins: 100
+    };
 
     if (recorder.events.senders.length == 0) {
         trace.update(recorder)
@@ -17,11 +20,7 @@ trace.update = (recorder) => {
     }
 
     // Get default record_from (e.g. V_m) if it is empty
-    if (recorder.node.data_from.length == 0) {
-        recorder.node.data_from = recorder.node.params.record_from.filter(
-            (record_from) => record_from.indexOf('V_m') != -1
-        )
-    }
+    recorder.node.data_from = recorder.node.data_from || ['V_m']
 
     var nodeIndices = d3.merge(app.data.nodes.map((d, i) => Array(d.ids.length).fill(i)));
 
@@ -48,7 +47,7 @@ trace.update = (recorder) => {
     };
     lineChart.data.V_th = {
         x: xDomain,
-        y: recorder.senders.filter((sender) => app.data.nodes[nodeIndices[sender - 1]].element_type == 'neuron').map((sender) => {
+        y: recorder.senders.filter((sender) => 'V_th' in app.data.nodes[nodeIndices[sender - 1]].params).map((sender) => {
             var v = app.data.nodes[nodeIndices[sender - 1]].params.V_th;
             return [v, v]
         })
@@ -63,18 +62,26 @@ trace.update = (recorder) => {
         lineChart.data.legend = recorder.node.data_from.map((r, i) => (dataModel[r].legends || dataModel[r].label));
     }
 
-    var data_from = $('#record_' + recorder.node.id).val() || 'V_m';
+    var data_from = $('#nodes .node[data-id="' + recorder.node.id + '"]').find('.recSelect button').data('id') || 'V_m';
 
     lineChart.axis = {
-        x: app.graph.chart.dataModel.times,
-        y: app.graph.chart.dataModel[data_from],
+        x: app.graph.chart.dataModel.times || {},
+        y: app.graph.chart.dataModel[data_from] || {},
     };
 
+    var colors = app.graph.colors();
     if (subchart.view == 'bar') {
-        var yPooled = d3.merge(lineChart.data.y);
+        if (app.selected_node && recorder.sources.indexOf(app.selected_node.id) != -1) {
+            var y = lineChart.data.y.filter((d, i) => app.selected_node.id == recorder.sources[i]);
+        } else {
+            var y = lineChart.data.y;
+        }
+
+        var yPooled = d3.merge(y);
         var xDomain = d3.scaleLinear()
             .rangeRound([0, chart.width])
-            .domain(data_from == 'V_m' ? [-70.5, -54.5] : d3.extent(yPooled));
+            .domain(d3.extent(yPooled)).nice();
+        // .domain(data_from == 'V_m' ? [d3.min([-70.5, d3.min(yPooled)]), d3.max([-54.5, d3.max(yPooled)])] : d3.extent(yPooled));
 
         var nbins = 100;
         var histogram = d3.histogram()
@@ -93,8 +100,8 @@ trace.update = (recorder) => {
         barChart.recId = recorder.node.id;
         barChart.data = hdata;
         barChart.axis = {
-            x: app.graph.chart.dataModel[data_from],
-            y: app.graph.chart.dataModel['count'],
+            x: app.graph.chart.dataModel[data_from] || {},
+            y: app.graph.chart.dataModel.count || {},
             data: {
                 mean: d3.mean(yPooled),
                 deviation: nbins > 1 ? d3.deviation(yPooled) : 0,
@@ -102,6 +109,31 @@ trace.update = (recorder) => {
             }
         };
         barChart.axis.x.domain = xDomain.domain();
+        barChart.data.color = colors[(recorder.sources.length == 1 ? recorder.sources[0] : recorder.node.id) % colors.length];
+        if (recorder.sources.length > 1 && app.selected_node) {
+            if (app.selected_node.element_type == 'neuron') {
+                barChart.data.color = colors[(recorder.sources.indexOf(app.selected_node.id) != -1 ? app.selected_node.id : recorder.node.id) % colors.length]
+            }
+        }
+    } else if (subchart.view == 'line') {
+        var mean = rows => rows[0].map((_, c) => d3.mean(rows.map(row => row[c])));
+        var yMean = recorder.sources.map((d) => {
+            var V_m = app.data.nodes[d].ids.map((dd) => y[recorder.senders.indexOf(dd)]);
+            return mean(V_m)
+        });
+
+        var lineChart = trace.subcharts[1];
+        lineChart.recId = recorder.node.id;
+        lineChart.data = {
+            x: x,
+            y: yMean,
+            n: 1,
+            colors: recorder.sources.map((r) => colors[r % colors.length]),
+        };
+        lineChart.axis = {
+            x: app.graph.chart.dataModel.times || {},
+            y: app.graph.chart.dataModel[data_from] || {},
+        };
     }
 
     for (var idx in trace.subcharts) {
@@ -140,6 +172,17 @@ trace.init = (recorder) => {
         barChart.init(recorder, options);
         trace.subcharts.push(barChart)
         delete require.cache[require.resolve('./chart/bar-chart')]
+    }
+    if (subchart.view == 'line') {
+        var lineChart = require('./chart/line-chart');
+        lineChart.idx = 1;
+        var options = {
+            y: height * (chartRatio + recorder.idx),
+            height: height * (1. - chartRatio),
+        }
+        lineChart.init(recorder, options);
+        trace.subcharts.push(lineChart)
+        delete require.cache[require.resolve('./chart/line-chart')]
     }
 }
 

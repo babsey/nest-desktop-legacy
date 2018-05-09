@@ -8,7 +8,10 @@ rasterPlot.update = (recorder) => {
 
     var chart = app.graph.chart;
     var colors = app.graph.colors();
-    var subchart = recorder.node.subchart || {view: 'bar', nbins:100};
+    var subchart = recorder.node.subchart || {
+        view: 'bar',
+        nbins: 100
+    };
     subchart.data = subchart.data || 'psth';
 
     var gids = {};
@@ -27,7 +30,6 @@ rasterPlot.update = (recorder) => {
         recorder.events.times[i] < chart.xScale.domain()[1]
     )
     var c = y.map((d) => {
-        var colors = app.graph.colors();
         return colors[gids[d] % colors.length]
     })
 
@@ -38,8 +40,8 @@ rasterPlot.update = (recorder) => {
         c: c,
     }
     scatterChart.axis = {
-        x: app.graph.chart.dataModel['times'] || {},
-        y: app.graph.chart.dataModel['neuron_id'] || {},
+        x: app.graph.chart.dataModel.times || {},
+        y: app.graph.chart.dataModel.neuron_id || {},
     };
 
     if (subchart.data == 'psth') {
@@ -47,31 +49,49 @@ rasterPlot.update = (recorder) => {
         var ordinate = subchart.ordinate || 'spike_count';
 
         var nbins = recorder.node.subchart.nbins || 100;
+        var xTicks = chart.xScale.ticks(nbins);
         var histogram = d3.histogram()
             .domain(chart.xScale.domain())
-            .thresholds(chart.xScale.ticks(nbins));
+            .thresholds(xTicks);
 
-        var hist = histogram(x);
-        var data = hist.map((h) => {
-            h.x = (h.x1 + h.x0) / 2.0;
-            var dx = h.x1 - h.x0;
-            h.y = ordinate == 'rate' ? h.length * 1000. / dx / recorder.senders.length : h.length;
-            return h
-        });
+        if (subchart.view == 'bar') {
+            var xData = x;
+            if (app.selected_node) {
+                xData = recorder.sources.indexOf(app.selected_node.id) != -1 ? x.filter((d, i) => app.selected_node.ids.indexOf(y[i]) != -1) : x;
+            }
+            var hist = histogram(xData)
+            var data = hist.slice(0, hist.length - 1).map((h) => {
+                h.x = (h.x1 + h.x0) / 2.0;
+                var dx = h.x1 - h.x0;
+                h.y = ordinate == 'rate' ? h.length * 1000. / dx / recorder.senders.length : h.length;
+                return h
+            });
 
-        var counts_total = data.map((d) => d.y);
-        var axis = {
-            mean: d3.mean(counts_total),
-            deviation: nbins > 1 ? d3.deviation(counts_total) : 0,
-            unit: app.graph.chart.dataModel[ordinate].unit,
-        };
-    } else
-    if (subchart.data == 'isi') {
+            var counts_total = data.map((d) => d.y);
+            var axis = {
+                mean: d3.mean(counts_total),
+                deviation: nbins > 1 ? d3.deviation(counts_total) : 0,
+                unit: app.graph.chart.dataModel[ordinate].unit,
+            };
+        } else if (subchart.view == 'line') {
+            var xData = recorder.sources.map((d) => x.filter((dd, ii) => app.data.nodes[d].ids.indexOf(y[ii]) != -1));
+            var hist = xData.map((d) => histogram(d));
+            var data = hist.map((h, i) => h.slice(0, h.length - 1).map((hh) => {
+                var source = app.data.nodes[recorder.sources[i]]
+                var dx = hh.x1 - hh.x0;
+                var y = ordinate == 'rate' ? hh.length * 1000. / dx / source.ids.length : hh.length;
+                return y
+            }));
+        }
+    } else if (subchart.data == 'isi') {
         var abscissa = 'isi';
-        var ordinate = 'count';
+        var ordinate = subchart.ordinate || 'count_normed';
+
+        var senders = app.selected_node ? recorder.senders.filter(
+            (d) => app.selected_node.element_type == 'neuron' ? app.selected_node.ids.indexOf(d) != -1 : true) : recorder.senders;
 
         var ISI = [];
-        recorder.senders.map(
+        senders.map(
             (sender, sidx) => {
                 var times = x;
                 var senders = y;
@@ -84,6 +104,7 @@ rasterPlot.update = (recorder) => {
                 ISI.push(ISISender)
             }
         )
+
         var ISI_pooled = d3.merge(ISI);
 
         var xDomain = d3.scaleLinear()
@@ -91,17 +112,31 @@ rasterPlot.update = (recorder) => {
             .domain([0, d3.max(ISI_pooled) || 1])
             .nice();
 
-        var nbins = recorder.node.subchart.nbins || 100
+        var nbins = recorder.node.subchart.nbins || 100;
+        var xTicks = xDomain.ticks(nbins);
         var histogram = d3.histogram()
             .domain(xDomain.domain())
-            .thresholds(xDomain.ticks(nbins))
+            .thresholds(xTicks)
 
-        var hist = histogram(ISI_pooled);
-        var data = hist.map((h, i) => {
-            h.x = (h.x1 + h.x0) / 2.0;
-            h.y = h.length;
-            return h
-        });
+        if (subchart.view == 'bar') {
+            var hist = histogram(ISI_pooled);
+
+            var data = hist.map((h) => {
+                h.x = (h.x1 + h.x0) / 2.0;
+                h.y = ordinate == 'count_normed' ? parseFloat(h.length) / ISI_pooled.length : h.length;
+                return h
+            });
+        } else {
+            var ISI_nodes = recorder.sources.map((d) => d3.merge(ISI.filter(
+                (dd, ii) => app.data.nodes[d].ids.indexOf(senders[ii]) != -1)));
+            var hist = ISI_nodes.map((ISI_node) => histogram(ISI_node));
+
+            var data = hist.map((h, i) => h.slice(0, h.length - 1).map((hh) => {
+                hh.x = (hh.x1 + hh.x0) / 2.0;
+                var y = ordinate == 'count_normed' ? parseFloat(hh.length) / ISI_nodes[i].length : hh.length;
+                return y
+            }));
+        }
 
         var axis = {
             mean: d3.mean(ISI_pooled),
@@ -111,37 +146,45 @@ rasterPlot.update = (recorder) => {
 
     }
 
-    if (subchart.view == 'bar') {
-        var barChart = rasterPlot.subcharts[1];
-        barChart.recId = recorder.node.id;
-        barChart.data = data;
-        barChart.axis = {
-            x: app.graph.chart.dataModel[abscissa],
-            y: app.graph.chart.dataModel[ordinate],
-            data: axis,
-        };
-        barChart.axis.y.format = ordinate.endsWith('count') ? 0 : 1;
-        if (subchart.data == 'isi') {
-            barChart.axis.x.domain = xDomain.domain();
-        }
+    if (data) {
+        if (subchart.view == 'bar') {
+            var barChart = rasterPlot.subcharts[1];
+            barChart.recId = recorder.node.id;
+            barChart.data = data;
+            barChart.axis = {
+                x: app.graph.chart.dataModel[abscissa] || {},
+                y: app.graph.chart.dataModel[ordinate] || {},
+                data: axis,
+            };
+            barChart.data.color = colors[(recorder.sources.length == 1 ? recorder.sources[0] : recorder.node.id) % colors.length];
+            if (recorder.sources.length > 1 && app.selected_node) {
+                if (app.selected_node.element_type == 'neuron') {
+                    barChart.data.color = colors[(recorder.sources.indexOf(app.selected_node.id) != -1 ? app.selected_node.id : recorder.node.id) % colors.length]
+                }
+            }
 
-    } else
-    if (subchart.view == 'line') {
-        var lineChart = rasterPlot.subcharts[1];
-        lineChart.recId = recorder.node.id;
-        var y = data.map((d) => d.y);
-        lineChart.data = {
-            x: data.map((d) => d.x),
-            y: [y],
-            n: 1,
-        };
-        lineChart.axis = {
-            x: app.graph.chart.dataModel[abscissa],
-            y: app.graph.chart.dataModel[ordinate],
-        };
-        lineChart.axis.y.format = (ordinate.endsWith('count') ? 0 : 1);
-        if (subchart.data == 'isi') {
-            lineChart.axis.x.domain = xDomain.domain();
+            barChart.axis.y.format = ordinate.endsWith('count') ? 0 : 1;
+            if (subchart.data == 'isi') {
+                barChart.axis.x.domain = xDomain.domain();
+            }
+        } else if (subchart.view == 'line') {
+            var dx = xTicks[1] - xTicks[0];
+            var lineChart = rasterPlot.subcharts[1];
+            lineChart.recId = recorder.node.id;
+            lineChart.data = {
+                x: xTicks.slice(0, xTicks.length - 1).map((d) => d + (dx / 2)),
+                y: data,
+                n: 1,
+                colors: recorder.sources.map((r) => colors[r % colors.length]),
+            };
+            lineChart.axis = {
+                x: app.graph.chart.dataModel[abscissa] || {},
+                y: app.graph.chart.dataModel[ordinate] || {},
+            };
+            lineChart.axis.y.format = (ordinate.endsWith('count') ? 0 : 1);
+            if (subchart.data == 'isi') {
+                lineChart.axis.x.domain = xDomain.domain();
+            }
         }
     }
 
@@ -152,6 +195,7 @@ rasterPlot.update = (recorder) => {
         }
         subchart.update(recorder);
     }
+
 }
 
 rasterPlot.init = (recorder) => {

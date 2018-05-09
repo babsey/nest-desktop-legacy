@@ -52,32 +52,32 @@
                         <ul class="dropdown-menu" role="menu">
                             <li id="level_1" class="level" level="1">
                                 <a href="#">
-                                  <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
-                                  <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                              </a>
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
+                                    <i class="fa fa-check check pull-right" style="display:none"></i>
+                                </a>
                             </li>
                             <li id="level_2" class="level" level="2">
                                 <a href="#">
-                                  <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
-                                  <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                              </a>
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
+                                    <i class="fa fa-check check pull-right" style="display:none"></i>
+                                </a>
                             </li>
                             <li id="level_3" class="level" level="3">
                                 <a href="#">
-                                  <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
-                                  <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                              </a>
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
+                                    <i class="fa fa-check check pull-right" style="display:none"></i>
+                                </a>
                             </li>
                             <li id="level_4" class="level" level="4">
                                 <a href="#">
-                                  <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
-                                  <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                              </a>
+                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
+                                    <i class="fa fa-check check pull-right" style="display:none"></i>
+                                </a>
                             </li>
                         </ul>
                     </div>
-                    <button type="button" class="simulation-edit btn btn-primary" data-toggle="modal" data-target="#simulation-form-dialog">
-                        <span class="glyphicon glyphicon-menu-glyphicon glyphicon-edit"></span> Edit
+                    <button type="button" class="description-edit btn btn-primary" data-toggle="modal" data-target="#simulation-form-dialog">
+                        <i class="fa fa-pencil"></i> Edit description
                     </button>
                     <button type="button" class="printToPDF btn btn-primary" data-toggle="modal" data-target="#pdf-form-dialog" title="Print to PDF">
                         <i class="fa fa-file-pdf-o"></i> Print to PDF
@@ -183,7 +183,7 @@
                     Are you sure to delete all protocols?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="app.protocol.deleteAll()">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="app.protocol.deleteAll(); app.protocol.emptyDropdown()">Yes</button>
                     <button id="delete-all-protocols-cancel" type="button" class="btn btn-default" data-dismiss="modal">No</button>
                 </div>
             </div>
@@ -195,191 +195,193 @@
     </div>
     <nav class="navbar navbar-static-top" style="background-color: white">
         <div class="container-fluid">
-            <ul class="nav navbar-nav">
-                <li style="margin-left:-15px">
-                    <a class="" href="../index.html"><i class="fa fa-home"></i></a>
-                </li>
-                <li class="dropdown">
-                    <a id="get-simulation-list" class="dropdown-toggle disableOnRunning disableOnSimulate navbar-brand" href="#" data-toggle="dropdown" title="Load a simulation">
-                        <div class="title"></div>
-                    </a>
-                    <ul id="simulation-list" class="dropdown-menu dropdown-menu-left"></ul>
-                </li>
-                <li class="dropdown">
-                    <a id="get-protocol-list" class="dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" data-toggle="dropdown" href="#" title="Load a protocol">
-                        <span id="protocol-label">No protocol</span>
-                    </a>
-                    <ul id="protocol-list" class="dropdown-menu dropdown-menu-left"></ul>
-                </li>
-            </ul>
-
-            <div class="navbar-right">
-                <div class="pull-left">
-                    <div class="btn-group" style="margin: 0 10px">
-                        <button class="edit-network btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate" title="Edit network">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-                        <button class="simulation-run btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate spinOnHover" title="Run simulation">
-                            <i class="fa fa-cog"></i>
-                        </button>
-                        <button class="protocol btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate" title="Protocol simulation">
-                            <i class="fa fa-history"></i>
-                        </button>
-                    </div>
-                </div>
-
+            <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" href="#" data-toggle="dropdown" title="Configuration">
-                            <i class="fa fa-wrench" ></i>
-                        </a>
-                        <ul class="dropdown-menu config" role="menu">
-                            <li class="dropdown-header">Graph</li>
-                            <li id="chart-color">
-                                <a href="#">
-                                    <i class="fa fa-paint-brush"></i> Colorify charts
-                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                </a>
-                            </li>
-                            <li id="view-networkLayout">
-                                <a href="#">
-                                    <i class="fa fa-eye"></i> View network layout
-                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                </a>
-                            </li>
-                            <li id="center-networkLayout">
-                                <a href="#">
-                                    <i class="fa fa-magnet"></i> Center network layout
-                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Simulation</li>
-                            <li id="auto-protocol" title="Protocol simulation automatically">
-                                <a href="#">
-                                    <i class="fa fa-history"></i> Automatic protocol
-                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                </a>
-                            </li>
-                            <li id="auto-reset" title="Reset simulation automatically">
-                                <a href="#">
-                                    <i class="fa fa-eraser"></i> Automatic reset
-                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                </a>
-                            </li>
-                            <li id="auto-simulation" title="Run simulation after change">
-                                <a href="#">
-                                    <i class="fa fa-magic"></i> Automatic simulation
-                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                </a>
-                            </li>
-                            <li id="random-seed" title="Randomize seed for simulations">
-                                <a href="#">
-                                    <i class="fa fa-random"></i> Randomize seed
-                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li id="random-seed" title="Go to configuration page">
-                                <a href="./config.html">
-                                    <i class="fa fa-wrench"></i> Configuration page
-                                </a>
-                            </li>
-                        </ul>
+                    <li style="margin-left:-15px">
+                        <a class="" href="../index.html"><i class="fa fa-home"></i></a>
                     </li>
                     <li class="dropdown">
-                        <a id="menu" class="dropdown-toggle disableOnDrawing disableOnSimulate disableOnRunning" href="#" data-toggle="dropdown" title="Menu">
-                                <i class="fa fa-bars"></i>
-                            </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li class="dropdown-header">Network</li>
-                            <li class="edit-network disableOnDrawing" title="Edit network">
-                                <a href="#">
-                                    <i class="fa fa-pencil"></i> Edit network
-                                </a>
-                            </li>
-                            <li id="clear-network" title="Clear the network">
-                                <a href="#">
-                                    <i class="fa fa-trash"></i> Clear network
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Simulation</li>
-                            <li class="simulation-run spinOnHover" title="Run simulation">
-                                <a href="#">
-                                        <i class="fa fa-cog"></i> Run simulation
-                                    </a>
-                            </li>
-                            <li id="simulation-resume" title="Run simulation continuously">
-                                <a href="#">
-                                        <i class="fa fa-play"></i> Simulate continuously
-                                    </a>
-                            </li>
-                            <li id="simulation-clone">
-                                <a data-toggle="modal" href="#simulation-form-dialog">
-                                        <i class="fa fa-clone"></i> Clone simulation
-                                    </a>
-                            </li>
-                            <li class="simulation-edit">
-                                <a data-toggle="modal" href="#simulation-form-dialog">
-                                        <i class="glyphicon glyphicon-menu-glyphicon glyphicon-edit"></i> Edit simulation
-                                    </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Protocol</li>
-                            <li>
-                                <a class="protocol" href="#" title="Protocol this simulation protocol">
-                                    <i class="fa fa-history"></i> Protocol simulation
-                                </a>
-                            </li>
-                            <li id="delete-protocol" title="Delete this simulation protocol">
-                                <a href="#">
-                                        <i class="fa fa-trash-o"></i> Delete this protocol
-                                    </a>
-                            </li>
-                            <li id="delete-all-protocols" title="Delete all simulation protocols">
-                                <a data-toggle="modal" href="#delete-all-protocols-dialog">
-                                        <i class="fa fa-trash"></i> Delete all protocols
-                                    </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Data</li>
-                            <li id="capture-screen" title="Capture screen for thumbnail">
-                                <a href="#">
-                                        <span class="glyphicon glyphicon-camera"></span> Capture screen
-                                    </a>
-                            </li>
-                            <li id="view-data" title="View documented data of the simulation">
-                                <a data-toggle="modal" href="#data-dialog">
-                                        <i class="fa fa-eye"></i> View simulation data
-                                    </a>
-                            </li>
-
-                            <li id="view-raw-data" title="View raw data of the simulation">
-                                <a data-toggle="modal" href="#raw-data-dialog">
-                                        <i class="fa fa-code"></i> View raw data
-                                    </a>
-                            </li>
-                            <li class="printToPDF" title="Print to PDF">
-                                <a data-toggle="modal" href="#pdf-form-dialog">
-                                        <i class="fa fa-file-pdf-o"></i> Print to PDF
-                                    </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="dropdown-header">General</li>
-                            <li>
-                                <a id="reload" href="#">
-                                        <i class="fa fa-refresh"></i> Reload app
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="window.close()">
-                                        <i class="fa fa-times"></i> Close app
-                                    </a>
-                            </li>
-                        </ul>
+                        <a id="get-simulation-list" class="dropdown-toggle disableOnRunning disableOnSimulate navbar-brand" href="#" data-toggle="dropdown" title="Load a simulation">
+                            <div class="title"></div>
+                        </a>
+                        <ul id="simulation-list" class="dropdown-menu dropdown-menu-left"></ul>
+                    </li>
+                    <li class="dropdown">
+                        <a id="get-protocol-list" class="dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" data-toggle="dropdown" href="#" title="Load a protocol">
+                            <span id="protocol-label">No protocol</span>
+                        </a>
+                        <ul id="protocol-list" class="dropdown-menu dropdown-menu-left"></ul>
                     </li>
                 </ul>
+
+                <div class="navbar-right">
+                    <div class="pull-left">
+                        <div class="btn-group" style="margin: 0 10px">
+                            <button class="edit-network btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate" title="Edit network">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                            <button class="simulation-run btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate" title="Run simulation">
+                            <i class="fa fa-step-forward"></i>
+                        </button>
+                            <button class="protocol btn btn-default navbar-btn disableOnDrawing disableOnRunning disableOnSimulate" title="Protocol simulation">
+                            <i class="fa fa-history"></i>
+                        </button>
+                        </div>
+                    </div>
+
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle disableOnDrawing disableOnRunning disableOnSimulate" href="#" data-toggle="dropdown" title="Configuration">
+                                <i class="fa fa-wrench" ></i>
+                            </a>
+                            <ul class="dropdown-menu config" role="menu">
+                                <li class="dropdown-header">Graph</li>
+                                <li id="chart-color">
+                                    <a href="#">
+                                        <i class="fa fa-paint-brush"></i> Colorify charts
+                                        <i class="fa fa-check check pull-right" style="display:none"></i>
+                                    </a>
+                                </li>
+                                <li id="view-networkLayout">
+                                    <a href="#">
+                                        <i class="fa fa-eye"></i> View network layout
+                                        <i class="fa fa-check check pull-right" style="display:none"></i>
+                                    </a>
+                                </li>
+                                <li id="center-networkLayout">
+                                    <a href="#">
+                                        <i class="fa fa-magnet"></i> Center network layout
+                                        <i class="fa fa-check check pull-right" style="display:none"></i>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">Simulation</li>
+                                <li id="auto-protocol" title="Protocol simulation automatically">
+                                    <a href="#">
+                                        <i class="fa fa-history"></i> Automatic protocol
+                                        <i class="fa fa-check check pull-right" style="display:none"></i>
+                                    </a>
+                                </li>
+                                <li id="auto-reset" title="Reset simulation automatically">
+                                    <a href="#">
+                                        <i class="fa fa-eraser"></i> Automatic reset
+                                        <i class="fa fa-check check pull-right" style="display:none"></i>
+                                    </a>
+                                </li>
+                                <li id="auto-simulation" title="Run simulation after change">
+                                    <a href="#">
+                                        <i class="fa fa-magic"></i> Automatic simulation
+                                        <i class="fa fa-check check pull-right" style="display:none"></i>
+                                    </a>
+                                </li>
+                                <li id="random-seed" title="Randomize seed for simulations">
+                                    <a href="#">
+                                        <i class="fa fa-random"></i> Randomize seed
+                                        <i class="fa fa-check check pull-right" style="display:none"></i>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li id="random-seed" title="Go to configuration page">
+                                    <a href="./config.html">
+                                        <i class="fa fa-wrench"></i> Configuration page
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a id="menu" class="dropdown-toggle disableOnDrawing disableOnSimulate disableOnRunning" href="#" data-toggle="dropdown" title="Menu">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="dropdown-header">Network</li>
+                                <li class="edit-network disableOnDrawing" title="Edit network">
+                                    <a href="#">
+                                        <i class="fa fa-pencil"></i> Edit network
+                                    </a>
+                                </li>
+                                <li id="clear-network" title="Clear the network">
+                                    <a href="#">
+                                        <i class="fa fa-trash"></i> Clear network
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">Simulation</li>
+                                <li class="simulation-run" title="Run simulation">
+                                    <a href="#">
+                                        <i class="fa fa-step-forward"></i> Run simulation
+                                    </a>
+                                </li>
+                                <li id="simulation-resume" title="Run simulation continuously">
+                                    <a href="#">
+                                        <i class="fa fa-play"></i> Simulate continuously
+                                    </a>
+                                </li>
+                                <li id="simulation-clone">
+                                    <a data-toggle="modal" href="#simulation-form-dialog">
+                                        <i class="fa fa-clone"></i> Clone simulation
+                                    </a>
+                                </li>
+                                <li class="description-edit-edit">
+                                    <a data-toggle="modal" href="#simulation-form-dialog">
+                                        <i class="fa fa-pencil"></i> Edit description
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">Protocol</li>
+                                <li>
+                                    <a class="protocol" href="#" title="Protocol this simulation protocol">
+                                        <i class="fa fa-history"></i> Protocol simulation
+                                    </a>
+                                </li>
+                                <li id="delete-protocol" title="Delete this simulation protocol">
+                                    <a href="#">
+                                        <i class="fa fa-trash-o"></i> Delete this protocol
+                                    </a>
+                                </li>
+                                <li id="delete-all-protocols" title="Delete all simulation protocols">
+                                    <a data-toggle="modal" href="#delete-all-protocols-dialog">
+                                        <i class="fa fa-trash"></i> Delete all protocols
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">Data</li>
+                                <li id="capture-screen" title="Capture screen for thumbnail">
+                                    <a href="#">
+                                        <i class="fa fa-camera"></i> Capture screen
+                                    </a>
+                                </li>
+                                <li id="view-data" title="View documented data of the simulation">
+                                    <a data-toggle="modal" href="#data-dialog">
+                                        <i class="fa fa-eye"></i> View simulation params
+                                    </a>
+                                </li>
+
+                                <li id="view-raw-data" title="View raw data of the simulation">
+                                    <a data-toggle="modal" href="#raw-data-dialog">
+                                        <i class="fa fa-code"></i> View raw params
+                                    </a>
+                                </li>
+                                <li class="printToPDF" title="Print to PDF">
+                                    <a data-toggle="modal" href="#pdf-form-dialog">
+                                        <i class="fa fa-file-pdf-o"></i> Print to PDF
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">General</li>
+                                <li>
+                                    <a id="reload" href="#">
+                                        <i class="fa fa-refresh"></i> Reload app
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="window.close()">
+                                        <i class="fa fa-times"></i> Close app
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -398,14 +400,25 @@
 
                     <div id="controller-panel" class="panel">
                         <div id="slider">
+                            <div id="globalConfig">
+                                <div class="btn-group" style="padding: 5px 10px">
+                                    <button id="sim_timeButton" class="btn btn-default btn-xs disableOnRunning" type="button" data-toggle="collapse" data-target="#sim_time"><b>Simulation time</b><div><span class="value">1000.</span> ms</div></button>
+                                    <button id="random_seedButton" class="btn btn-default btn-xs disableOnRunning" type="button" data-toggle="collapse" data-target="#random_seed"><b>Seed</b><div class="value">0</div></button>
+                                    <button id="local_num_threadsButton" class="btn btn-default btn-xs disableOnRunning" data-toggle="collapse" data-target="#local_num_threads"><b>Threads</b><div class="value">1</div></button>
+                                    <button id="resolutionButton" class="btn btn-default btn-xs disableOnRunning" data-toggle="collapse" data-target="#resolution"><b>Time resolution</b><div><span class="value">0.1 </span> ms</div></button>
+                                </div>
 
-                            <div id="simulation" class="panel-body hideOnDrawing">
-                                <div class="content"></div>
+                                <div id="globalSlider">
+                                    <div id="simulation" class="panel-body hideOnDrawing">
+                                        <div class="content" style="margin: auto; width: 300px"></div>
+                                    </div>
+
+                                    <div id="kernel" class="panel-body hideOnDrawing">
+                                        <div class="content" style="margin: auto; width: 220px"></div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div id="kernel" class="panel-body hideOnDrawing">
-                                <div class="content"></div>
-                            </div>
 
                             <div id="tabs">
 
@@ -431,25 +444,25 @@
                                             <li id="level_1" class="level" level="1">
                                                 <a href="#">
                                                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-leaf"></span> Rookie
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                                    <i class="fa fa-check check pull-right" style="display:none"></i>
                                                 </a>
                                             </li>
                                             <li id="level_2" class="level" level="2">
                                                 <a href="#">
                                                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-grain"></span> Beginner
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                                    <i class="fa fa-check check pull-right" style="display:none"></i>
                                                 </a>
                                             </li>
                                             <li id="level_3" class="level" level="3">
                                                 <a href="#">
                                                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-tree-deciduous"></span> Advanced
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                                    <i class="fa fa-check check pull-right" style="display:none"></i>
                                                 </a>
                                             </li>
                                             <li id="level_4" class="level" level="4">
                                                 <a href="#">
                                                     <span class="glyphicon glyphicon-menu-glyphicon glyphicon-apple"></span> Expert
-                                                    <span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok pull-right" style="display:none"></span>
+                                                    <i class="fa fa-check check pull-right" style="display:none"></i>
                                                 </a>
                                             </li>
                                         </ul>
@@ -460,6 +473,13 @@
                                 <div class="tab-content">
                                     <div role="tabpanel" class="tab-pane active" id="nodes">
                                         <div class="controller"></div>
+
+                                        <div id="edit-network-button" style="padding-top: 20px; display:none" class="hidden-print">
+                                            Editor mode is on.
+                                            <button id="edit-network-clear" class="btn btn-default">Clear</button>
+                                            <button id="edit-network-cancel" class="btn btn-default">Cancel</button>
+                                            <button id="edit-network-save" class="btn btn-primary">Save</button>
+                                        </div>
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="connections">
                                         <div class="controller"></div>
@@ -470,13 +490,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div id="edit-network-button" style="float:right; margin-right:25px; display:none" class="hidden-print">
-                        Editor mode is on.
-                        <button id="edit-network-clear" class="btn btn-default">Clear</button>
-                        <button id="edit-network-cancel" class="btn btn-default">Cancel</button>
-                        <button id="edit-network-save" class="btn btn-primary">Save</button>
                     </div>
 
                 </div>
@@ -518,12 +531,13 @@
         window.d3 = require('d3');
         window.app = require('../app');
         var configApp = app.config.app();
-        $('title').html(configApp.title)
+        $('title').html(configApp.title);
         var query = app.query(location.search);
         app.simulation.id = query.simulation;
         app.protocol.id = query.protocol;
         app.request.server_check().on('response', () => {
             app.simulation.init()
+            $.support.transition = false;
         })
     </script>
 </body>

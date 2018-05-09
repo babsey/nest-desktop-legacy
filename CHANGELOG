@@ -1,6 +1,18 @@
 CHANGELOG
 ---------
 
+0.16.0:
+    Keep disabled nodes visible in spy list but lower opacity
+    No unselecting nodes/links when node/link get disabled
+    Change icon for running simulation (fa-step-forward)
+    Change glpyhicons to font-awesome icons except levels of view
+    Better view for global parameters
+    Dropdown menu instead of select element
+    Implement average values in subchart for trace
+    Empty protocols in index
+    Delete simulation
+    Delete nodes and links
+
 0.15.3:
     Fix stacked line charts for changing pop size
     Optimize code for chart transitions

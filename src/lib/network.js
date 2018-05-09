@@ -55,19 +55,21 @@ network.clean = () => {
 }
 
 network.edit = (drawing) => {
-    app.selected_node = null;
-    app.selected_link = null;
+
     app.graph.networkLayout.drawing = drawing;
     var networkLayoutView = app.config.app().graph.networkLayout.view;
     app.graph.networkLayout.toggleView(drawing || networkLayoutView)
-    app.graph.networkLayout.update()
     if (drawing) {
+        app.selected_node = null;
+        app.selected_link = null;
         app.db.clone(app.data).then((data) => {
             app.data_original = data;
         })
         $('.nav a[href="#nodes"]').tab('show')
     }
+    app.graph.networkLayout.update()
     $('.hideOnDrawing').toggle(!drawing)
+    $('.showOnDrawing').toggle(drawing)
     $('button.edit-network').toggleClass('active', drawing)
     $('.disableOnDrawing').toggleClass('disabled', drawing)
     $('#autoscale').prop('checked', 'checked')
@@ -92,6 +94,17 @@ network.init = () => new Promise((resolve, reject) => {
 }).then(() => {
     network.clean()
     network.update()
+})
+
+network.new = () => ({
+    "_id": "",
+    "name": "",
+    "group": "user",
+    "user": "",
+    "network": "simple",
+    "version": "",
+    "nodes": [],
+    "links": []
 })
 
 network.events = () => {
@@ -124,6 +137,7 @@ network.events = () => {
     })
     $('#edit-network-cancel').on('click', () => {
         app.data = app.data_original;
+        network.edit(false)
         network.clean()
         network.update()
         app.simulation.reload()

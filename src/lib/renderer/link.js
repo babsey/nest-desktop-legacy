@@ -68,52 +68,118 @@ linkRenderer.list = (link) => {
 }
 
 linkRenderer.controller.connection = (link) => {
-    var div = []
-    div.push('<div data-id="' + link.id + '" data-source="' + link.source + '" data-target="' + link.target + '" class="panel-body link">')
-    div.push('<div class="content"')
-    div.push('style="')
-    var colors = app.graph.colors()
-    div.push('border-left: 4px solid ' + colors[link.source % colors.length] + '; ')
-    div.push('border-right: 4px solid ' + colors[link.target % colors.length])
-    div.push('" >')
-    div.push('<label style="padding-left:15px;min-width: 200px;">Rule</label>')
-    div.push('<div class="btn-group">')
-    div.push('<select class="connSelect modelSelect form-control btn btn-default disableOnRunning">')
-    div.push('<option disabled selected hidden>Select a connection rule</option>')
-    div.push('</select>')
-    div.push('<button class="btn btn-default disableLink disableOnRunning">')
-    div.push('<span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok"></span>')
-    div.push('<span class="glyphicon glyphicon-menu-glyphicon glyphicon glyphicon-remove"></span>')
-    div.push('</button>')
-    div.push('</div>')
-    div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
-    div.push('</div></div>')
-    // div.push('<hr>')
-    return div.join('')
+    var ruleSelect = '<div class="dropdown btn-group select connSelect modelSelect">' +
+        '<button class="btn btn-default dropdown-toggle disableOnSimulate disableOnRunning" type="button" data-toggle="dropdown">' +
+        '<span class="name">Select a connection rule</span> ' +
+        '</button>' +
+        '<ul class="dropdown-menu"></ul>' +
+        '</div>';
+
+    var deleteButton = '<div class="btn-group showOnDrawing">' +
+        '<button class="btn btn-default deleteLink">' +
+        '<i class="fa fa-trash-o"></i>' +
+        '</button>' +
+        '</div>';
+
+    var linkConfig = '<div class="linkConfig dropdown btn-group hideOnDrawing">' +
+        '<button type="button" class="btn btn-default dropdown-toggle disableOnRunning" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '<i class="fa fa-check enabled"></i>' +
+        '<i class="fa fa-ban disabled"></i>' +
+        '</button>' +
+        '<ul class="dropdown-menu dropdown-menu-right">' +
+        '<li><a class="resetParameters" href="#"><i class="fa fa-edit"></i> Reset all parameters</a></li>' +
+        '<li><a class="disableLink disabled" href="#"><i class="fa fa-heartbeat"></i> Enable this link</a></li>' +
+        '<li><a class="disableLink enabled" href="#"><i class="fa fa-ban"></i> Disable this link</a></li>' +
+        '<li role="separator" class="divider"></li>' +
+        '<li><a class="deleteLink" href="#"><i class="fa fa-trash-o"></i> Delete this link</a></li>' +
+        '</ul>' +
+        '</div>';
+
+    var connSlider = '<div class="hideOnDrawing">' +
+        '<div class="modelSlider hideOnDrawing" style="display:hidden"></div>' +
+        '</div>';
+
+    var colors = app.graph.colors();
+    var content = '<div class="content" ' + 'style="' +
+        'border-left: 4px solid ' + colors[link.source % colors.length] + '; ' +
+        'border-right: 4px solid ' + colors[link.target % colors.length] + '">' +
+        '<label style="padding-left: 15px;">Rule</label>' +
+        '<div class="btn-group">' +
+        ruleSelect +
+        deleteButton +
+        linkConfig +
+        '</div>' +
+        connSlider +
+        '</div>';
+
+    var html = '<div class="panel-body link" data-id="' + link.id +
+        '" data-source="' + link.source + '" data-target="' + link.target + '">' +
+        content + '</div>';
+
+    return html
 }
 
 linkRenderer.controller.synapse = (link) => {
-    var div = []
-    div.push('<div data-id="' + link.id + '" data-source="' + link.source + '" data-target="' + link.target + '" class="panel-body link">')
-    div.push('<div class="content"')
-    div.push('style="')
-    var colors = app.graph.colors()
-    div.push('border-left: 4px solid ' + colors[link.source % colors.length] + '; ')
-    div.push('border-right: 4px solid ' + colors[link.target % colors.length])
-    div.push('" >')
-    div.push('<label style="padding-left:15px;min-width: 200px;">Model</label>')
-    div.push('<div>')
-    div.push('<select class="synSelect modelSelect form-control disableOnRunning">')
-    div.push('<option disabled selected hidden>Select a synapse model</option>')
-    div.push('</select>')
-    div.push('<select class="recSelect modelSelect form-control" style="display:none">')
-    div.push('<option disabled selected hidden>Select a receptor</option>')
-    div.push('</select>')
-    div.push('</div>')
-    div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
-    div.push('</div></div>')
-    // div.push('<hr>')
-    return div.join('')
+    var modelSelect = '<div class="dropdown btn-group select synSelect modelSelect">' +
+        '<button class="btn btn-default dropdown-toggle disableOnSimulate disableOnRunning" type="button" data-toggle="dropdown">' +
+        '<span class="name">Select a synapse model</span> ' +
+        '</button>' +
+        '<ul class="dropdown-menu"></ul>' +
+        '</div>';
+
+    var recSelect = '<div class="dropdown btn-group select recSelect modelSelect" style="display:none">' +
+        '<button class="btn btn-default dropdown-toggle disableOnSimulate disableOnRunning" type="button" data-toggle="dropdown">' +
+        '<span class="name">Select a receptor model</span> ' +
+        '</button>' +
+        '<ul class="dropdown-menu selectMenu"></ul>' +
+        '</div>';
+
+    var deleteButton = '<div class="btn-group showOnDrawing">' +
+        '<button class="btn btn-default deleteLink">' +
+        '<i class="fa fa-trash-o"></i>' +
+        '</button>' +
+        '</div>';
+
+    var linkConfig = '<div class="linkConfig dropdown btn-group hideOnDrawing">' +
+        '<button type="button" class="btn btn-default dropdown-toggle disableOnRunning" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '<i class="fa fa-check enabled"></i>' +
+        '<i class="fa fa-ban disabled"></i>' +
+        '</button>' +
+        '<ul class="dropdown-menu dropdown-menu-right">' +
+        '<li><a class="resetParameters" href="#"><i class="fa fa-edit"></i> Reset all parameters</a></li>' +
+        '<li><a class="disableLink disabled" href="#"><i class="fa fa-heartbeat"></i> Enable this link</a></li>' +
+        '<li><a class="disableLink enabled" href="#"><i class="fa fa-ban"></i> Disable this link</a></li>' +
+        '<li role="separator" class="divider"></li>' +
+        '<li><a class="deleteLink" href="#"><i class="fa fa-trash-o"></i> Delete this link</a></li>' +
+        '</ul>' +
+        '</div>';
+
+    var synSlider = '<div class="hideOnDrawing">' +
+        '<div class="modelSlider hideOnDrawing" style="display:hidden"></div>' +
+        '</div>';
+
+    var colors = app.graph.colors();
+    var content = '<div class="content" ' + 'style="' +
+        'border-left: 4px solid ' + colors[link.source % colors.length] + '; ' +
+        'border-right: 4px solid ' + colors[link.target % colors.length] + '">' +
+        '<label style="padding-left: 15px;">Model</label>' +
+        '<div class="btn-group">' +
+        modelSelect +
+        deleteButton +
+        linkConfig +
+        '</div>' +
+        '<label class="recLabel" style="padding-left: 15px; display:none">Receptor</label>' +
+        '<div class="btn-group">' +
+        recSelect +
+        '</div>' +
+        synSlider +
+        '</div>';
+
+    var html = '<div class="panel-body link" data-id="' + link.id +
+        '" data-source="' + link.source + '" data-target="' + link.target + '">' +
+        content + '</div>';
+
+    return html
 }
 
 module.exports = linkRenderer;

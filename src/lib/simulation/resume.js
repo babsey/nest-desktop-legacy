@@ -16,7 +16,8 @@ resume.run = () => {
         })
         .done((response) => {
             if (response.error) {
-                app.message.show('Warning', response.error)
+                app.message.show('NEST Error', response.error)
+                app.simulation.simulate.end()
                 return
             }
             if (!app.simulation.running) return

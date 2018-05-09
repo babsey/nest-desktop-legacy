@@ -8,6 +8,40 @@ var controller = {
     synapse: require('./controller/synapse'),
 };
 
+controller.dropdown = () => {
+    $(document).on("shown.bs.dropdown", ".dropdown", function() {
+        // calculate the required sizes, spaces
+        var $ul = $(this).children(".dropdown-menu");
+        var $button = $(this).children(".dropdown-toggle");
+        var ulOffset = $ul.offset();
+        // how much space would be left on the top if the dropdown opened that direction
+        var spaceUp = (ulOffset.top - $button.height() - $ul.height()) - $(window).scrollTop();
+        // how much space is left at the bottom
+        var spaceDown = $(window).scrollTop() + $(window).height() - (ulOffset.top + $ul.height());
+        // switch to dropup only if there is no space at the bottom AND there is space at the top, or there isn't either but it would be still better fit
+        if (spaceDown < 0 && (spaceUp >= 0 || spaceUp > spaceDown))
+            $(this).addClass("dropup");
+    }).on("hidden.bs.dropdown", ".dropdown", function() {
+        // always reset after close
+        $(this).removeClass("dropup");
+    });
+}
+
+controller.collapse = () => {
+    $('#globalConfig').on('show.bs.collapse', () => {
+        $('#simulation .dataSlider').collapse('hide')
+        $('#kernel .dataSlider').collapse('hide')
+    })
+
+    $('#globalConfig').on('shown.bs.collapse', () => {
+        controller.updateHeight()
+    })
+
+    $('#globalConfig').on('hidden.bs.collapse', () => {
+        controller.updateHeight()
+    })
+}
+
 controller.initNodes = () => {
     $('#nodes .controller').empty()
     $('#nodeSpy .nav').empty()
@@ -20,6 +54,7 @@ controller.initLinks = () => {
         $('#connections .controller').empty();
         $('#synapses .controller').empty();
         app.data.links.map((link) => {
+            if (!app.data.nodes[link.source] || !app.data.nodes[link.target]) return
             if (app.data.nodes[link.source].hidden || app.data.nodes[link.target].hidden) return
             if (app.data.nodes[link.source].disabled || app.data.nodes[link.target].disabled) return
             // if (app.data.nodes[link.target].element_type == 'recorder') return
@@ -27,14 +62,20 @@ controller.initLinks = () => {
             controller.synapse.init(link)
         })
     }
-    $('.hideOnDrawing').toggle(!drawing)
+    $('.hideOnDrawing').toggle(!drawing);
+    $('.showOnDrawing').toggle(drawing);
+}
+
+controller.updateHeight = () => {
+    var height = window.innerHeight - $('.tab-content')[0].offsetTop - 55;
+    $('.tab-content').css('height', height + 'px')
+    $('.tab-content').css('max-height', height + 'px')
 }
 
 controller.update = () => {
     app.message.log('Update controller')
     controller.simulation.updateAll()
-    var height = window.innerHeight - $('.tab-content')[0].offsetTop - 55;
-    $('.tab-content').css('max-height', height + 'px')
+    controller.updateHeight()
 
     $('.node').removeClass('active');
     $('.controller').find('.node').show()
@@ -56,8 +97,12 @@ controller.update = () => {
 
     $('.data .nodes').empty();
     $('.data .links').empty();
-    app.data.nodes.map((node) => {$('.data .nodes').append(app.renderer.node.table(node))});
-    app.data.links.map((link) => {$('.data .links').append(app.renderer.link.table(link))});
+    app.data.nodes.map((node) => {
+        $('.data .nodes').append(app.renderer.node.table(node))
+    });
+    app.data.links.map((link) => {
+        $('.data .links').append(app.renderer.link.table(link))
+    });
     $('.data .comments').html(app.data.comments)
     $('#raw-data').html(JSON.stringify(app.data, undefined, 4))
     $('#' + app.controller.activeElement).find('.' + app.controller.activeElement).focus()
@@ -81,8 +126,8 @@ controller.events = () => {
     $('.level').on('click', function() {
         var configApp = app.config.app();
         configApp.controller.level = parseInt($(this).attr('level'));
-        $('.level').find('.glyphicon-ok').hide()
-        $('.level[level='+ configApp.controller.level +']').find('.glyphicon-ok').show()
+        $('.level').find('.check').hide()
+        $('.level[level=' + configApp.controller.level + ']').find('.check').show()
         app.config.save('app', configApp)
         for (var nid in app.data.nodes) {
             var node = app.data.nodes[nid];
@@ -102,6 +147,9 @@ controller.events = () => {
         app.slider.view_dataSlider()
         controller.update()
     })
+
+    controller.dropdown()
+    controller.collapse()
 }
 
 module.exports = controller;

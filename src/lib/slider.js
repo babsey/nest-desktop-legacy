@@ -18,23 +18,23 @@ var _slider = (ref, id, options) => {
     $(ref).find('#' + id).append('<div class="form-group row"></div>')
     var formGroup = $(ref).find('#' + id).find('.form-group')
     formGroup.append('<label title="' + id + '" style="padding-left:15px;min-width: 200px;">' + options.label + '</label>')
-    formGroup.append('<div class="col-md-8"><input class="sliderInput ' + id + 'Input"></div>')
+    formGroup.append('<div class="col-xs-8"><input class="sliderInput ' + id + 'Input"></div>')
     if (options.show_value) {
         if (options.value instanceof Array) {
-            formGroup.append('<div class="col-md-3" style="padding-left:5px">' +
-            '<input autofocus data-schema="number" type="text" id="' + id + 'Val" ' +
-            'class="' + id + 'Val paramVal form-control" value="[' + options.value + ']"/>' +
-            '</div>')
+            formGroup.append('<div class="col-xs-3" style="padding-left:5px">' +
+                '<input autofocus data-schema="number" type="text" id="' + id + 'Val" ' +
+                'class="' + id + 'Val paramVal form-control" value="[' + options.value + ']"/>' +
+                '</div>')
         } else {
-            formGroup.append('<div class="col-md-3" style="padding:0 5px">' +
-            '<input autofocus data-schema="number" id="' + id + 'Val" ' +
-            'type="number" value="' + options.value + '" '+
-            // 'min="'+ options.min +'" max="' + options.max + '" ' +
-            'step="'+ options.step +'" data-stepper-debounce="400" ' +
-            'class=" ' + id + 'Val paramVal form-control"/>' +
-            '</div>')
+            formGroup.append('<div class="col-xs-3" style="padding:0 5px">' +
+                '<input autofocus data-schema="number" id="' + id + 'Val" ' +
+                'type="number" value="' + options.value + '" ' +
+                // 'min="'+ options.min +'" max="' + options.max + '" ' +
+                'step="' + options.step + '" data-stepper-debounce="400" ' +
+                'class=" ' + id + 'Val paramVal form-control"/>' +
+                '</div>')
         }
-        formGroup.append('<div class="col-md-1" style="padding:0"><div class="eraser" style="display:none"><i class="fa fa-eraser" aria-hidden="true"></i></div></div>')
+        formGroup.append('<div class="col-xs-1" style="padding:0"><div class="eraser" style="display:none"><i class="fa fa-eraser" aria-hidden="true"></i></div></div>')
         formGroup.find('.eraser').data('defaultValue', options_default.value)
         formGroup.find('.eraser').attr('title', 'Reset to default value: ' + options_default.value)
     }
@@ -67,7 +67,7 @@ var _slider = (ref, id, options) => {
 }
 
 slider.update_dataSlider = (node, key, input, val) => {
-    var nodeElem = $('#node_' + node.id);
+    var nodeElem = $('#nodes').find('.node[data-id="' + node.id + '"]');
     nodeElem.find('.' + key + 'Input').slider('setValue', input)
     nodeElem.find('.' + key + 'Val').val(val)
 }
@@ -77,7 +77,9 @@ slider.view_dataSlider = () => {
     var level = app.config.app().controller.level;
     ds.each(function() {
         var dataSlider = $('.' + this.id);
-        dataSlider.toggle(dataSlider.attr('level') <= level)
+        if (dataSlider.attr('level')) {
+            dataSlider.toggle(dataSlider.attr('level') <= level)
+        }
     })
 }
 
@@ -130,7 +132,9 @@ slider.update_connSlider = (link) => {
 }
 
 slider.update_synSlider = (link) => {
-    var syn_spec = link.syn_spec || {'model': 'static_synapse'};
+    var syn_spec = link.syn_spec || {
+        'model': 'static_synapse'
+    };
     var synModel = syn_spec.model;
     var modelSlider = $('#synapses .link[data-id=' + link.id + ']');
     var level = app.config.app().controller.level;
@@ -162,9 +166,13 @@ slider.update_slider = () => {
 }
 
 slider.create_dataSlider = (ref, id, options) => {
-    $(ref).append('<div id="' + id + '" class="' + id + ' dataSlider" level="' + options.level + '"></div>')
-    var level = app.config.app().controller.level;
-    $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
+    if (options.level) {
+        $(ref).append('<div id="' + id + '" class="' + id + ' dataSlider" level="' + options.level + '"></div>')
+        var level = app.config.app().controller.level;
+        $('#' + id).attr('level') > level ? $('#' + id).hide() : $('#' + id).show()
+    } else {
+        $(ref).append('<div id="' + id + '" class="' + id + ' dataSlider"></div>')
+    }
     return _slider(ref, id, options);
 }
 

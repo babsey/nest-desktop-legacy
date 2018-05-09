@@ -36,39 +36,42 @@ li a, li a:hover, button a, button a:hover {
     margin-right: 6px;
 }
 
-.jumbotron {
-    background-color: transparent;
-    height: 120px;
-    padding-bottom: 0px;
-}
-
-.jumbotron h1 {
-    margin-top: 0;
-    font-size: 60px;
-}
-
-#jumbotron-bg {
-    height: 200px;
-    border-bottom: 1px solid #000;
-}
-
 .background {
     position: absolute;
     top: 0px;
     left: 0px;
     z-index: -1;
     width: 100%;
-    height: 120%;
+    height: 100%;
     background-image: url(../img/background.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position-x: center;
     background-size: cover;
-    opacity: 0.2;
+    opacity: 0.05;
 }
+
+#simulations {
+    padding-top: 70px;
+}
+
+.simulation-list {
+    width: 100%;
+}
+
+/*.simulation-list .simulation {
+    width: 90% !important;
+    display: inline !important;
+}
+
+.simulation-list .go {
+    width: 10% !important;
+    display: inline !important;
+}*/
 
 #simulation-details {
     margin-bottom: 30px;
+    background-color: white;
 }
 
 .tooltip-inner {
@@ -178,6 +181,20 @@ tr.node td:first-child, tr.link td:first-child {
     width: 319px;
 }
 
+#controller .btn-group {
+    display: flex;
+}
+
+#controller .select,
+#controller .select .btn,
+#controller .select .dropdown-menu {
+    width: 100%;
+}
+
+#nodes .dataSelect .recSelect {
+    display: none;
+}
+
 .visible-print .data {
     margin: 10px;
     width: 240px;
@@ -195,12 +212,18 @@ tr.node td:first-child, tr.link td:first-child {
     padding-top: 2px;
 }
 
+
 #nodeSpy .nav-pills {
     position: fixed;
+    cursor: pointer;
 }
 
 #nodeSpy .nav-pills>li {
     width: 46px;
+}
+
+#nodeSpy .nav-pills .node.disabled {
+    opacity: .4;
 }
 
 #nodeSpy .nav-pills>li>a {
@@ -237,6 +260,7 @@ tr.node td:first-child, tr.link td:first-child {
 #tabs>ul>li>a {
     font-weight: bold;
     padding: 10px;
+    cursor: pointer;
 }
 
 .tab-content {
@@ -245,7 +269,7 @@ tr.node td:first-child, tr.link td:first-child {
 }
 
 #tabs .panel-body {
-    padding: 10px 0px;
+    padding: 3px 1px;
 }
 
 .panel-body .content>div {
@@ -257,12 +281,8 @@ hr {
     margin-bottom: 0;
 }
 
-#nodes .modelSelect {
-    width: 220px;
-}
-
-#connections .modelSelect {
-    width: 220px;
+#globalSlider .dataSlider {
+    height: 70px;
 }
 
 .paramSlider, .dataSlider {

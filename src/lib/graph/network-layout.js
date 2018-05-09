@@ -209,6 +209,7 @@ networkLayout.update = () => {
 
             networkLayout.update()
             app.controller.update()
+            app.graph.chart.update()
         })
         .on('mouseup', (d) => {
             // console.log('node mouseup')
@@ -473,13 +474,13 @@ networkLayout.init = () => {
 
 networkLayout.toggleView = (display) => {
     $('#networkLayout').toggle(display)
-    $('#view-networkLayout').find('.glyphicon-ok').toggle(display)
+    $('#view-networkLayout').find('.check').toggle(display)
 }
 
 networkLayout.toggleCenter = (center) => {
     networkLayout.forceCenter = center
     networkLayout.update()
-    $('#center-networkLayout').find('.glyphicon-ok').toggle(center)
+    $('#center-networkLayout').find('.check').toggle(center)
 }
 
 module.exports = networkLayout

@@ -1,7 +1,6 @@
 [{
     "id": "local_num_threads",
     "label": "Local number of threads",
-    "level": 4,
     "value": 0,
     "ticks": [0, 1, 2, 3],
     "ticks_labels": [1, 2, 4, 8],
@@ -9,9 +8,8 @@
 }, {
     "id": "resolution",
     "label": "Time resolution [ms]",
-    "level": 3,
-    "value": 2,
-    "ticks": [0, 1, 2, 3],
-    "ticks_labels": [0.1, 0.5, 1.0, 2.0],
+    "value": 0,
+    "ticks": [0, 1, 2, 3, 4],
+    "ticks_labels": [0.01, 0.1, 0.5, 1.0, 2.0],
     "show_value": false
 }]

@@ -3,7 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 const jsonfile = require('jsonfile');
-const { app, BrowserWindow } = require('electron');
+const {
+    app,
+    BrowserWindow
+} = require('electron');
 
 var appPath = __dirname;
 var dataPath = process.env['NESTDESKTOP_DATA'] || path.join(process.env['HOME'], '.nest-desktop');
@@ -132,7 +135,7 @@ main.capturePage = function(filePath) {
                 })
             }
         }
-        fs.writeFile(filePath, imageBuffer.toPng(),
+        fs.writeFile(filePath, imageBuffer.toPNG(),
             function(err) {
                 if (err) {
                     console.error("ERROR Failed to save file", err);
@@ -150,12 +153,12 @@ main.printToPDF = function(filePath) {
     }
 
     mainWindow.webContents.printToPDF(options, (error, data) => {
+        if (error) throw error
+        fs.writeFile(filePath, data, (error) => {
             if (error) throw error
-            fs.writeFile(filePath, data, (error) => {
-                if (error) throw error
-                console.log('Write PDF successfully.')
-            })
+            console.log('Write PDF successfully.')
         })
+    })
 }
 
 module.exports = main;

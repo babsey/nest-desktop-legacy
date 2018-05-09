@@ -47,7 +47,7 @@ message.simulate = () => message.notify({
         align: "center"
     },
     delay: 0,
-    template: '<div data-notify="container" class="col-xs-11 col-sm-2 alert alert-{0}" role="alert">' +
+    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
         '<span data-notify="icon"></span> ' +
         '<span data-notify="title">{1}</span> ' +
         '<span data-notify="message">{2}</span>' +
@@ -68,7 +68,7 @@ message.resume = () => message.notify({
     },
     offset: 0,
     delay: 0,
-    template: '<div data-notify="container" class="col-xs-11 col-sm-2 alert alert-{0}" role="alert" id="message-resume" style="background-color:white">' +
+    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" id="message-resume" style="background-color:white">' +
         '<button aria-hidden="true" class="btn btn-danger" type="button" onclick="app.simulation.resume.pause()">' +
         '<span data-notify="icon"></span>' +
         '<span data-notify="title">{1}</span>' +

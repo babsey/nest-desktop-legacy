@@ -40,7 +40,7 @@ nodeRenderer.table = (node) => {
         div.push('level="' + level + '">')
         div.push('<td>' + pkey + '</td>')
         var val = node.params[pkey];
-        val = Array.isArray(val) ? app.format.truncateList(node.params[pkey],6) : val
+        val = Array.isArray(val) ? app.format.truncateList(node.params[pkey], 6) : val
         div.push('<td>' + val + '</td>')
         div.push('</tr>')
     }
@@ -71,9 +71,9 @@ nodeRenderer.list = (node) => {
 
 nodeRenderer.spy = (node) => {
     var div = [];
-    div.push('<li class="node ' + node.element_type + '" data-id="' + node.id + '">')
+    div.push('<li class="node ' + node.element_type + ' ' + (node.disabled ? 'disabled' : '') + '" data-id="' + node.id + '">')
     var colors = app.graph.colors();
-    div.push('<a href="#node_' + node.id + '" ' + 'style="border-color: ' + colors[node.id % colors.length] + '; padding: 10px 0px"')
+    div.push('<a style="border-color: ' + colors[node.id % colors.length] + '; padding: 10px 0px"')
     div.push(' title="' + app.format.nodeTitle(node) + '">')
     // div.push(app.format.nodeLabel(node))
     div.push(node.id)
@@ -82,28 +82,82 @@ nodeRenderer.spy = (node) => {
 }
 
 nodeRenderer.controller = (node) => {
-    var div = [];
+
+    // var selectModel = '<label style="min-width: 200px;">Model</label>' +
+    //     '<select class="nodeSelect modelSelect form-control btn btn-default disableOnRunning">' +
+    //     '</select>';
+
+    var deleteButton = '<div class="btn-group showOnDrawing">' +
+        '<button class="btn btn-default deleteNode">' +
+        '<i class="fa fa-trash-o"></i>' +
+        '</button>' +
+        '</div>';
+
+    var nodeConfig = '<div class="dropdown btn-group hideOnDrawing nodeConfig">' +
+        '<button type="button" class="btn btn-default dropdown-toggle disableOnRunning" data-toggle="dropdown">' +
+        '<i class="fa fa-check enabled"></i>' +
+        '<i class="fa fa-ban disabled"></i>' +
+        '</button>' +
+        '<ul class="dropdown-menu dropdown-menu-right">' +
+        '<li><a class="resetParameters" href="#"><i class="fa fa-edit"></i> Reset all parameters</a></li>' +
+        '<li><a class="disableNode disabled" href="#"><i class="fa fa-heartbeat"></i> Enable this node</a></li>' +
+        '<li><a class="disableNode enabled" href="#"><i class="fa fa-ban"></i> Disable this node</a></li>' +
+        '<li role="separator" class="divider"></li>' +
+        '<li><a class="deleteNode" href="#"><i class="fa fa-trash-o"></i> Delete this node</a></li>' +
+        '</ul>' +
+        '</div>';
+
+    var modelSelect = '<label style="padding-left: 15px;">Model</label>' +
+        '<div class="btn-group">' +
+        '<div class="btn-group dropdown select nodeSelect modelSelect">' +
+        '<button class="btn btn-default dropdown-toggle disableOnSimulate disableOnRunning" type="button" data-toggle="dropdown">' +
+        '<span class="name">Select a node model</span> ' +
+        '</button>' +
+        '<ul class="dropdown-menu"></ul>' +
+        '</div>' +
+        deleteButton +
+        nodeConfig +
+        '</div>';
+
+    var subchartView = '<div class="subchart-view">' +
+        '<div><label>Subchart</label></div>' +
+        '<div class="btn-group dropdown select">' +
+        '<button type="button" class="btn btn-default dropdown-toggle disableOnRunning" data-toggle="dropdown">No subchart</button>' +
+        '<ul class="dropdown-menu"></ul>' +
+        '</div>' +
+        '</div>';
+
+    var subchartOrdinate = '<div class="subchart-ordinate">' +
+        '<div><label>Subchart ordinate</label></div>' +
+        '<div class="btn-group dropdown select">' +
+        '<button type="button" class="btn btn-default dropdown-toggle disableOnRunning" data-toggle="dropdown">No subchart</button>' +
+        '<ul class="dropdown-menu"></ul>' +
+        '</div>' +
+        '</div>';
+
+    var subchart = '<div class="subchart">' +
+        subchartView +
+        (node.model == 'spike_detector' ? subchartOrdinate : '') +
+        '<div class="slider"></div>' +
+        '</div>';
+
+    var nodeParams = '<div class="hideOnDrawing">' +
+        '<div class="nodeSlider"></div>' +
+        '<div class="modelSlider"></div>' +
+        '<div class="dataSelect"></div>' +
+        (node.element_type == 'recorder' ? subchart : '') +
+        '</div';
+
     var colors = app.graph.colors();
-    div.push('<div id="node_' + node.id + '" data-id="' + node.id + '" class="panel-body node ' + node.element_type + ' node_' + node.id + '">')
-    div.push('<div class="content" ')
-    div.push('style="border-left: 4px solid ' + colors[node.id % colors.length] + '">')
-    div.push('<label style="padding-left:15px;min-width: 200px;">Model</label>')
-    div.push('<div class="btn-group">')
-    div.push('<select data-id="' + node.id + '" class="' + node.element_type + 'Select modelSelect form-control btn btn-default disableOnRunning">')
-    div.push('<option disabled selected hidden>Select an ' + node.element_type + ' device</option>')
-    div.push('</select>')
-    div.push('<button class="btn btn-default disableNode hideOnDrawing disableOnRunning">')
-    div.push('<span class="glyphicon glyphicon-menu-glyphicon glyphicon-ok"></span>')
-    div.push('<span class="glyphicon glyphicon-menu-glyphicon glyphicon glyphicon-remove"></span>')
-    div.push('</button>')
-    div.push('</div>')
-    div.push('<div class="nodeSlider hideOnDrawing" style="display:hidden"></div>')
-    div.push('<div class="modelSlider hideOnDrawing" style="display:hidden"></div>')
-    div.push('<div class="selection hideOnDrawing" style="display:hidden"></div>')
-    div.push('<div class="subChart hideOnDrawing" style="display:hidden"></div>')
-    div.push('</div></div>')
-    // div.push('<hr>')
-    return div.join('')
+    var html = '<div data-id="' + node.id + '" class="panel-body node ' +
+        node.element_type + '">' +
+        '<div class="content" ' +
+        'style="border-left: 4px solid ' + colors[node.id % colors.length] + '">' +
+        modelSelect +
+        nodeParams +
+        '</div>' + '</div>';
+
+    return html
 }
 
 

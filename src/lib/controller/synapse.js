@@ -3,9 +3,12 @@
 var synController = {};
 
 synController.update = (link) => {
+    if (link.disabled) return
+    app.model.syn_selected(link)
     var synElem = $('#synapses').find('.link[data-id=' + link.id + '] .content');
 
-    synElem.find('.recSelect').empty().hide()
+    synElem.find('.recSelect .dropdown-menu').empty()
+    synElem.find('.recSelect').hide()
     if (app.data.nodes[link.target].model == 'iaf_cond_alpha_mc') {
         var receptorModels = app.config.nest('receptor')['iaf_cond_alpha_mc']
         if (!('receptor_type' in link.syn_spec) || link.syn_spec.receptor_type == 0) {
@@ -13,22 +16,25 @@ synController.update = (link) => {
         }
         for (var ridx in receptorModels) {
             var model = receptorModels[ridx];
-            synElem.find('.recSelect').append('<option id="rec' + link.id + '_' + model.id + '" value="' + model.id + '"' + (model.id == 1 ? 'selected' : '') + '>' + model.label + '</option>')
+            synElem.find('.recSelect .dropdown-menu').append('<li><a href="#" data-value="' + model.id + '">' + model.label + '</a></li>')
         }
-        $('#synapses').find('.link[data-id=' + link.id + '] .content').find('.recSelect').show()
-        synElem.find('.recSelect').find('option#rec' + link.id + '_' + link.syn_spec.receptor_type || 0).prop('selected', true);
+        synElem.find('.recSelect .name').html(receptorModels[link.syn_spec.receptor_type - 1].label);
+        synElem.find('.recSelect').show()
+        synElem.find('.recLabel').show()
     }
 
     var synapseModels = app.config.nest('synapse');
-    var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
+    var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse');
     if (app.data.nodes[link.target].element_type != 'recorder') {
         app.slider.init_modelSlider('#synapses .link[data-id=' + link.id + '] .modelSlider', synapseModels.filter((d) => {
             return d.id == synapseModel;
         })[0])
         app.slider.update_synSlider(link)
     }
-    synElem.find('.recSelect').on('change', function() {
-        link.syn_spec.receptor_type = parseInt(this.value)
+    synElem.find('.recSelect .dropdown-menu a').on('click', (d) => {
+        var value = parseInt($(d.currentTarget).data('value'));
+        synElem.find('.recSelect .name').html(receptorModels[value - 1].label);
+        link.syn_spec.receptor_type = parseInt(value)
         app.simulation.simulate.init()
     })
     synElem.find('.modelSlider .sliderInput').on('slideStop', function() {
@@ -67,25 +73,55 @@ synController.init = (link) => {
     var synElem = $('#synapses').find('.link[data-id=' + link.id + ']');
 
     var synapseModels = app.config.nest('synapse');
+    var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
     for (var midx in synapseModels) {
         var model = synapseModels[midx];
         if ((model.id == 'tsodyks_synapse') && ((app.data.nodes[link.source].element_type != 'neuron') || (app.data.nodes[link.target].element_type != 'neuron'))) continue
         if ((model.id == 'gap_junction') && ((app.data.nodes[link.source].element_type != 'neuron') || (app.data.nodes[link.target].element_type != 'neuron'))) continue
-        synElem.find('.synSelect').append('<option id="' + model.id + '" value="' + model.id + '">' + model.label + '</option>')
+        synElem.find('.synSelect .dropdown-menu').append('<li><a href="#" data-rule="' + model.id + '" data-label="' + model.label +'">' + model.label + '</a></li>')
+        if (model.id == synapseModel)
+            synElem.find('.synSelect .name').html(model.label);
     }
-    var synapseModel = (link.syn_spec ? (link.syn_spec.model || 'static_synapse') : 'static_synapse')
-    synElem.find('.synSelect').find('option#' + synapseModel).prop('selected', true);
-    if (app.data.nodes[link.target].element_type == 'recorder' || app.data.nodes[link.source].element_type == 'stimulator') {
+    if (app.data.nodes[link.target].element_type == 'recorder' || app.data.nodes[link.source].element_type == 'stimulator' || link.disabled) {
         synElem.find('.synSelect').addClass('disabled')
     }
-    synElem.find('.synSelect').on('change', function() {
+
+    synElem.find('.synSelect').toggleClass('disabled', link.disabled || false)
+    synElem.find('.linkConfig .enabled').toggle(!link.disabled && true)
+    synElem.find('.linkConfig .disabled').toggle(link.disabled || false)
+
+    synElem.find('.synSelect .dropdown-menu a').on('click', (d) => {
+        var modelElem = $(d.currentTarget)
         link.syn_spec = {
-            model: this.value
+            model: modelElem.data('model')
         };
-        app.model.syn_selected(link)
+        synElem.find('.modelSelect .name').html(modelElem.data('label'));
         synController.update(link)
+        app.simulation.simulate.init()
+    })
+
+    synElem.find('.disableLink').on('click', () => {
+        app.data.kernel.time = 0.0 // Reset simulation
+        link.disabled = !link.disabled;
         app.simulation.reload()
     })
+
+    synElem.find('.deleteLink').on('click', (d) => {
+        app.data.kernel.time = 0.0 // Reset simulation
+        var linkId = $(d.currentTarget).parents('.link').data('id');
+
+        if (app.selected_link) {
+            app.selected_link = app.selected_link.id == linkId ? null : app.selected_link;
+        }
+
+        var links = app.data.links.filter((d) => (d.id != linkId));
+        links.map((d, i) => {
+            d.id = i;
+        })
+        app.data.links = links;
+        app.simulation.reload()
+    })
+
     synController.update(link)
 }
 

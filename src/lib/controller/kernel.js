@@ -36,8 +36,10 @@ kernelController.init = () => {
                 var value = ticks_labels ? ticks_labels[d.value] : d.value;
                 app.data.kernel[id] = parseFloat(value);
                 kernelController.update({id: id, value: value})
+                $('#' + id + 'Button').find('.value').html(value)
                 app.simulation.simulate.init()
             })
+        $('#' + options.id).addClass('collapse')
     }
     kernelController.updateAll()
 }

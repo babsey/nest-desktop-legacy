@@ -79,9 +79,10 @@ chart.update = (recorder) => {
         .data(chart.data);
     chart.bars = bars;
 
-    var colors = app.graph.colors();
-    var cidx = (recorder.sources.length == 1 ? recorder.sources[0] : nidx)
-    var color = app.config.app().graph.color ? colors[cidx || (recorder.node.id % colors.length)] : ''
+    // var colors = app.graph.colors();
+    // var cidx = (recorder.sources.length == 1 ? recorder.sources[0] : nidx);
+    // var color = app.config.app().graph.color ? colors[cidx || (recorder.node.id % colors.length)] : '';
+    var color = chart.data.color;
 
     bars.attr('x', (d) => chart.xScale(d.x0))
         .attr('width', (d) => chart.xScale(d.x1) - chart.xScale(d.x0));
@@ -100,8 +101,8 @@ chart.update = (recorder) => {
 
     var barsNewDraw = app.graph.chart.doTransition() ? bars.enter().selectAll('.bar').transition(app.graph.chart.transition) : bars.enter().selectAll('.bar');
     barsNewDraw.attr('y', (d) => chart.yScale(chart.yVal(d, idx)))
-            .attr('height', (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
-            .style('fill', color);
+        .attr('height', (d) => Math.max(0, +chart.g.attr('height') - chart.yScale(chart.yVal(d, idx))))
+        .style('fill', color);
 
     bars.exit()
         .remove()

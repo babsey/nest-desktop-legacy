@@ -17,6 +17,7 @@ var chart = {
 chart.subchart = (height, n, i) => (-1 * (n - (i % n) - 1) * height / n)
 
 chart.tooltip = function(d, i) {
+    if (chart.data.x.length == 0) return
     var x = chart.data.x;
     var y = chart.data.y[i];
     var offset = chart.subchart(chart.height, chart.data.n, i);
@@ -99,11 +100,12 @@ chart.draw_line = (recorder) => {
             chart.g.selectAll('#clip path')
                 .classed('active', false);
         })
-        .attr('style', 'zscore: 1')
+        .attr('style', 'z-score: 1')
 
-    var color = (i) => app.config.app().graph.color ? chart.data.colors[i % chart.data.colors.length] : '';
-    var linesDraw = app.graph.chart.doTransition() ? lines.transition(chart.transition) : lines
+    var color = (i) => (app.config.app().graph.color && chart.data.colors) ? chart.data.colors[i % chart.data.colors.length] : '';
+    var linesDraw = app.graph.chart.doTransition() ? lines.transition(chart.transition) : lines;
     // lines.attr('style', (d, i) => 'stroke:' + (app.selected_node ? chart.data.c[i] : ''))
+
     linesDraw.attr('style', (d, i) => 'stroke:' + color(i))
         .attr('d', chart.line);
 

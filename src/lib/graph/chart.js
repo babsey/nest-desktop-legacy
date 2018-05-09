@@ -144,7 +144,7 @@ chart.onDrag = (subchart) => {
 
 chart.onZoom = (subchart) => {
     var zoom = d3.zoom()
-        .scaleExtent([.1, 10])
+        .scaleExtent([.01, 100])
         .on("start", () => {
             chart.zooming = true;
             $('#point').empty();
@@ -200,8 +200,9 @@ chart.scaling = () => {
 
 chart.dataUpdate = () => {
     app.message.log('Update chart data')
+    if (app.simulation.recorders.length == 0) return
     app.simulation.recorders.map((recorder) => {
-        if (!recorder.node.model) return
+        if (!recorder.node.model || !recorder.senders) return
         recorder.data = recorder.senders.map((sender, sidx) => {
             var data = {};
             Object.keys(recorder.events).map((d) => {

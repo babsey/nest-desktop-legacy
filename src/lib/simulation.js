@@ -7,6 +7,7 @@ var simulation = {
     running: false,
     resume: require('./simulation/resume'),
     simulate: require('./simulation/simulate'),
+    recorders: [],
 }
 
 simulation.export = () => {
@@ -35,7 +36,7 @@ simulation.reload = () => {
 simulation.init = () => {
     app.message.log('Initialize simulation')
     app.db.init()
-    app.protocol.init()
+    app.protocol.init(app.simulation.id)
     app.network.init().then(() => {
         app.navigation.init()
         simulation.reload()
@@ -51,8 +52,8 @@ simulation.events = () => {
         simulationForm.find('#simulation-name').attr('disabled', false).focus()
         simulationForm.find('#simulation-description').hide()
     })
-    $('.simulation-edit').on('click', (e) => {
-        $('#simulation-edit-submit').show()
+    $('.description-edit').on('click', (e) => {
+        $('#description-edit-submit').show()
         var simulationForm = $('#simulation-form');
         simulationForm.find('#simulation-name').val(app.data.name).attr('disabled', 'disabled')
         simulationForm.find('#simulation-description').show().val(app.data.description).focus()

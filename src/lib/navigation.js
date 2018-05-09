@@ -69,8 +69,7 @@ navigation.update = () => {
         //     location.href = location.origin + location.pathname + '?simulation=' + this.id
         // })
     })
-    app.network.edit((app.data.nodes.length == 0))
-    $('.simulation-edit').toggle(app.protocol.id != undefined)
+    $('.description-edit').toggle(app.protocol.id != undefined)
 
     var href = './simulation.html?simulation=' + app.simulation.id;
     if (app.protocol.id) {
@@ -81,20 +80,20 @@ navigation.update = () => {
 
 navigation.init = () => {
     app.message.log('Initialize navigation')
-    var configApp =  app.config.app();
+    var configApp = app.config.app();
     app.simulation.autoSimulation = configApp.simulation.autoSimulation || false;
     app.simulation.autoReset = configApp.simulation.autoReset || false;
     app.simulation.randomSeed = configApp.simulation.randomSeed || false;
     app.simulation.autoProtocol = configApp.simulation.autoProtocol || false;
-    $(".config").find('#chart-color').find('.glyphicon-ok').toggle(configApp.graph.color || false)
-    $(".config").find('#auto-simulation').find('.glyphicon-ok').toggle(app.simulation.autoSimulation)
+    $(".config").find('#chart-color').find('.check').toggle(configApp.graph.color || false)
+    $(".config").find('#auto-simulation').find('.check').toggle(app.simulation.autoSimulation)
     $('button.simulation-run').toggleClass('active', app.simulation.autoSimulation)
-    $(".config").find('#auto-reset').find('.glyphicon-ok').toggle(app.simulation.autoReset)
-    $(".config").find('#random-seed').find('.glyphicon-ok').toggle(app.simulation.randomSeed)
-    $(".config").find('#auto-protocol').find('.glyphicon-ok').toggle(app.simulation.autoProtocol)
+    $(".config").find('#auto-reset').find('.check').toggle(app.simulation.autoReset)
+    $(".config").find('#random-seed').find('.check').toggle(app.simulation.randomSeed)
+    $(".config").find('#auto-protocol').find('.check').toggle(app.simulation.autoProtocol)
     $('button.protocol').toggleClass('active', app.simulation.autoProtocol)
-    $(".config").find('.color[data-group=' + configApp.graph.color.group + ']').find('.glyphicon-ok').show()
-    $('.level[level=' + app.config.app().controller.level + ']').find('.glyphicon-ok').show()
+    $(".config").find('.color[data-group=' + configApp.graph.color.group + ']').find('.check').show()
+    $('.level[level=' + app.config.app().controller.level + ']').find('.check').show()
     app.navigation.events()
 }
 

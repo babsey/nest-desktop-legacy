@@ -35,7 +35,7 @@
 }, {
     "element_type": "synapse",
     "id": "tsodyks_synapse",
-    "label": "Short term plasticity (Tsodyks synapse)",
+    "label": "Short term plasticity (Tsodyks)",
     "sliderDefaults": [{
         "id": "weight",
         "level": 2,

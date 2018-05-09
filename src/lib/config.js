@@ -25,7 +25,7 @@ config.randomSeed = (randomSeed) => {
     configApp.simulation.randomSeed = randomSeed;
     app.config.save('app', configApp)
     app.simulation.randomSeed = randomSeed;
-    $('#random-seed').find('.glyphicon-ok').toggle(randomSeed)
+    $('#random-seed').find('.check').toggle(randomSeed)
 }
 
 config.events = () => {
@@ -34,7 +34,7 @@ config.events = () => {
         var configApp = config.app();
         configApp.graph.color = !color;
         config.save('app', configApp)
-        $('#chart-color').find('.glyphicon-ok').toggle(!color)
+        $('#chart-color').find('.check').toggle(!color)
         app.graph.update()
     })
     $('#view-networkLayout').on('click', () => {
@@ -57,7 +57,7 @@ config.events = () => {
         configApp.simulation.autoProtocol = !autoProtocol;
         app.simulation.autoProtocol = !autoProtocol;
         config.save('app', configApp)
-        $('#auto-protocol').find('.glyphicon-ok').toggle(!autoProtocol)
+        $('#auto-protocol').find('.check').toggle(!autoProtocol)
         $('button.protocol').toggleClass('active', !autoProtocol)
     })
     $('#auto-reset').on('click', () => {
@@ -66,7 +66,7 @@ config.events = () => {
         configApp.simulation.autoReset = !autoReset;
         app.simulation.autoReset = !autoReset;
         config.save('app', configApp)
-        $('#auto-reset').find('.glyphicon-ok').toggle(!autoReset)
+        $('#auto-reset').find('.check').toggle(!autoReset)
     })
     $('#auto-simulation').on('click', () => {
         var configApp = app.config.app();
@@ -74,7 +74,7 @@ config.events = () => {
         configApp.simulation.autoSimulation = !autoSimulation;
         app.simulation.autoSimulation = !autoSimulation;
         config.save('app', configApp)
-        $('#auto-simulation').find('.glyphicon-ok').toggle(!autoSimulation)
+        $('#auto-simulation').find('.check').toggle(!autoSimulation)
         $('button.simulation-run').toggleClass('active', !autoSimulation)
     })
     $('#random-seed').on('click', () => {

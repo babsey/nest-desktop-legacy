@@ -953,7 +953,7 @@
 }, {
     "element_type": "neuron",
     "id": "izhikevich",
-    "label": "izhikevich",
+    "label": "Izhikevich",
     "sliderDefaults": [{
         "id": "V_m",
         "level": 3,
