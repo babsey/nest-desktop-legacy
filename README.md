@@ -1,27 +1,35 @@
-# NestDesktop
+# nest-desktop
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.8.
+**A NEST Desktop application**
 
-## Development server
+![nest-logo](http://www.nest-simulator.org/wp-content/uploads/2015/03/nest_logo.png)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+An interactive desktop application for the [NEural Simulation Tool](http://www.nest-initiative.org/).
 
-## Code scaffolding
+### Download
+```
+git clone https://github.com/babsey/nest-desktop.git
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Build
 
-## Build
+Build a docker image
+```
+docker build -t nest-desktop .
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+(Alternative) If you have dist folder of nest-desktop on host system to copy.
+```
+docker build -t nest-desktop -f Dockerfile-dist .
+```
 
-## Running unit tests
+### Start
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run a docker container
+```
+docker run -d -t nest-desktop -p 80:80 -p 5000:5000
+```
 
-## Running end-to-end tests
+Then open any browser (http://localhost).
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### License [MIT](LICENSE)

@@ -1,0 +1,83 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+
+// Define nest theme.
+$nest-primary: mat-palette($mat-deep-orange, 500);
+$nest-accent: mat-palette($mat-grey, 50);
+$nest-warn: mat-palette($mat-red);
+$nest-light-theme: mat-light-theme($nest-primary, $nest-accent, $nest-warn);
+
+.nest-theme {
+  @include angular-material-theme($nest-light-theme);
+}
+
+
+// define a real custom palette (using http://mcg.mbitson.com)
+$d3-schemeCategory10: (
+  50: #1f77b4, 100: #ff7f0e, 200: #2ca02c, 300: #d62728, 400: #9467bd, 500: #8c564b, 600: #e377c2, 700: #7f7f7f, 800: #bcbd22, 900: #17becf,
+  contrast: (50: white, 100: white, 200: white, 300: white, 400: white, 500: white, 600: white, 700: white, 800: white, 900: white)
+);
+// Define d3 colors.
+$d3-blue: mat-palette($d3-schemeCategory10, 50);
+$d3-orange: mat-palette($d3-schemeCategory10, 100);
+$d3-green: mat-palette($d3-schemeCategory10, 200);
+$d3-red: mat-palette($d3-schemeCategory10, 300);
+$d3-purple: mat-palette($d3-schemeCategory10, 400);
+$d3-brown: mat-palette($d3-schemeCategory10, 500);
+$d3-pink: mat-palette($d3-schemeCategory10, 600);
+$d3-gray: mat-palette($d3-schemeCategory10, 700);
+$d3-yellow: mat-palette($d3-schemeCategory10, 800);
+$d3-cyan: mat-palette($d3-schemeCategory10, 900);
+
+// Define d3 themes
+$blue-theme: mat-light-theme($d3-blue, $d3-blue, $d3-blue);
+$orange-theme: mat-light-theme($d3-orange, $d3-orange, $d3-orange);
+$green-theme: mat-light-theme($d3-green, $d3-green, $d3-green);
+$red-theme: mat-light-theme($d3-red, $d3-red, $d3-red);
+$purple-theme: mat-light-theme($d3-purple, $d3-purple, $d3-purple);
+$brown-theme: mat-light-theme($d3-brown, $d3-brown, $d3-brown);
+$pink-theme: mat-light-theme($d3-pink, $d3-pink, $d3-pink);
+$gray-theme: mat-light-theme($d3-gray, $d3-gray, $d3-gray);
+$yellow-theme: mat-light-theme($d3-yellow, $d3-yellow, $d3-yellow);
+$cyan-theme: mat-light-theme($d3-cyan, $d3-cyan, $d3-cyan);
+
+.theme-blue {
+  @include angular-material-theme($blue-theme);
+}
+
+.theme-orange {
+  @include angular-material-theme($orange-theme);
+}
+
+.theme-green {
+  @include angular-material-theme($green-theme);
+}
+
+.theme-red {
+  @include angular-material-theme($red-theme);
+}
+
+.theme-purple {
+  @include angular-material-theme($purple-theme);
+}
+
+.theme-brown {
+  @include angular-material-theme($brown-theme);
+}
+
+.theme-pink {
+  @include angular-material-theme($pink-theme);
+}
+
+.theme-gray {
+  @include angular-material-theme($gray-theme);
+}
+
+.theme-yellow {
+  @include angular-material-theme($yellow-theme);
+}
+
+.theme-cyan {
+  @include angular-material-theme($cyan-theme);
+}

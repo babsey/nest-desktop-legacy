@@ -1,0 +1,29 @@
+{
+  "options": {
+    "random_seed": {
+      "label": "Random number generated seed",
+      "value": 0,
+      "view": "valueSlider",
+      "viewSpec": {
+        "max": 100,
+        "min": 0,
+        "step": 1
+      }
+    },
+    "time": {
+      "label": "Simulation time",
+      "unit": "ms",
+      "value": 1000,
+      "view": "valueSlider",
+      "viewSpec": {
+        "max": 2000,
+        "min": 0,
+        "step": 10
+      }
+    }
+  },
+  "params": [
+    "random_seed",
+    "time"
+  ]
+}

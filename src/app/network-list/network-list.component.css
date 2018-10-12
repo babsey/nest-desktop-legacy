@@ -1,0 +1,8 @@
+a[mat-list-item], mat-list-item {
+  border-right: 2.5px white solid;
+}
+
+a[mat-list-item].active {
+  border-color: #ff6633;
+  background-color: #f2f2f2;
+}

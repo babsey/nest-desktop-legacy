@@ -1,0 +1,34 @@
+{
+  "options": {
+    "local_num_threads": {
+      "label": "Local number of threads",
+      "value": 1,
+      "view": "tickSlider",
+      "viewSpec": {
+        "ticks": [
+          1,
+          2,
+          4,
+          8
+        ]
+      }
+    },
+    "resolution": {
+      "label": "Time resolution",
+      "unit": "ms",
+      "value": 0.1,
+      "view": "tickSlider",
+      "viewSpec": {
+        "ticks": [
+          0.01,
+          0.1,
+          1
+        ]
+      }
+    }
+  },
+  "params": [
+    "local_num_threads",
+    "resolution"
+  ]
+}

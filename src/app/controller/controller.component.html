@@ -1,0 +1,49 @@
+<div style="position:relative">
+  <div style="position: absolute; top: 5px; right: 5px; z-index:1000">
+    <mat-menu #levelMenu="matMenu" style="width:150px">
+      <button mat-menu-item (click)="setLevel(1)">
+        <fa-icon [icon]="faChessPawn"></fa-icon>
+        Rookie
+        <span class="flex-spacer"></span>
+        <fa-icon [icon]="faCheck" *ngIf="getLevel() == 1"></fa-icon>
+      </button>
+      <button mat-menu-item (click)="setLevel(2)">
+        <fa-icon [icon]="faChessKnight"></fa-icon>
+        Beginner
+        <span class="flex-spacer"></span>
+        <fa-icon [icon]="faCheck" *ngIf="getLevel() == 2"></fa-icon>
+      </button>
+      <button mat-menu-item (click)="setLevel(3)">
+        <fa-icon [icon]="faChessRook"></fa-icon>
+        Advanced
+        <span class="flex-spacer"></span>
+        <fa-icon [icon]="faCheck" *ngIf="getLevel() == 3"></fa-icon>
+      </button>
+      <button mat-menu-item (click)="setLevel(4)">
+        <fa-icon [icon]="faChessQueen"></fa-icon>
+        Expert
+        <span class="flex-spacer"></span>
+        <fa-icon [icon]="faCheck" *ngIf="getLevel() == 4"></fa-icon>
+      </button>
+    </mat-menu>
+
+    <button autofocus="false" mat-icon-button [matMenuTriggerFor]="levelMenu">
+      <fa-icon [icon]="faSlidersH"></fa-icon>
+    </button>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Nodes">
+      <app-node-controller *ngFor="let collection of _dataService.data.collections" class="node" [idx]="collection.idx">
+      </app-node-controller>
+    </mat-tab>
+    <mat-tab label="Links">
+      <app-link-controller *ngFor="let connectome of _dataService.data.connectomes" class="link" [idx]="connectome.idx">
+      </app-link-controller>
+    </mat-tab>
+    <mat-tab label="General">
+      <app-kernel-controller></app-kernel-controller>
+      <app-simulation-controller></app-simulation-controller>
+    </mat-tab>
+  </mat-tab-group>
+</div>

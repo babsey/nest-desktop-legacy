@@ -1,0 +1,13 @@
+.progress-bar,
+.progress-bar mat-progress-bar {
+    height: 2px;
+    background-color: rgb(250, 250, 250);
+}
+
+mat-tab {
+  min-width: 500px
+}
+
+mat-sidenav {
+  min-width: 350px;
+}

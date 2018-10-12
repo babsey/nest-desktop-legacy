@@ -1,0 +1,12 @@
+.description {
+  color: #999;
+  padding: 0 10px;
+}
+
+.mat-list-item-content {
+  display: flex;
+}
+
+.mat-list-item.enabled {
+  background-color: #f2f2f2;
+}

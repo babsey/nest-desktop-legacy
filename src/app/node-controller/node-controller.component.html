@@ -1,0 +1,48 @@
+<mat-card class="controller node-controller theme-{{color[1]}}" [style.display]="_sketchService.isSelectedNode_or_all(node) ? '' : 'none'">
+  <mat-card-subtitle>
+    <button mat-icon-button class="button node" (click)="_sketchService.toggleSelectNode(node)" [style.border-color]="color[0]" [style.border-style]="_sketchService.isSelectedNode(node) ? 'dashed' : 'solid'">
+      {{ node.idx }}
+    </button>
+    <app-select [element_type]="node.element_type" [selected]="node.model" (selectChange)="selectModel($event)"></app-select>
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="button" color="primary">
+    <fa-icon [icon]="faEllipsisV"></fa-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="_sketchService.toggleSelectNode(node)">
+          <fa-icon [icon]="faCrosshairs"></fa-icon>
+          <span *ngIf="!_sketchService.isSelectedNode(node)">Select</span>
+          <span *ngIf="_sketchService.isSelectedNode(node)">Unselect</span>
+        </button>
+      <button mat-menu-item>
+          <fa-icon [icon]="faEraser"></fa-icon>
+           Reset
+        </button>
+      <button mat-menu-item>
+          <fa-icon [icon]="faBan"></fa-icon>
+          Disable
+        </button>
+      <button mat-menu-item>
+          <fa-icon [icon]="faMinusCircle"></fa-icon>
+           Remove
+        </button>
+    </mat-menu>
+  </mat-card-subtitle>
+
+  <mat-card-content *ngIf="!_sketchService.options.drawing">
+    <table style="width:100%" cellspacing="0">
+      <tr>
+        <td>
+          <app-value-slider *ngIf="!isRecorder(node.element_type)" id="n" [data]="node" [options]="_configService.config.nest.node.npop" [style.display]="_controllerService.display(2)"></app-value-slider>
+        </td>
+      </tr>
+      <tr *ngFor="let id of configModel.params">
+        <td>
+          <app-value-input *ngIf="configModel.options[id].view == 'valueInput'" [id]="id" [data]="node.params" [options]="configModel.options[id]" [style.display]="_controllerService.display(configModel.options[id].level)"></app-value-input>
+          <app-array-input *ngIf="configModel.options[id].view == 'arrayInput'" [id]="id" [data]="node.params" [options]="configModel.options[id]" [style.display]="_controllerService.display(configModel.options[id].level)"></app-array-input>
+          <app-value-slider *ngIf="configModel.options[id].view == 'valueSlider'" [id]="id" [data]="node.params" [options]="configModel.options[id]" [style.display]="_controllerService.display(configModel.options[id].level)"></app-value-slider>
+          <app-ticks-slider *ngIf="configModel.options[id].view == 'ticksSlider'" [id]="id" [data]="node.params" [options]="configModel.options[id]" [style.display]="_controllerService.display(configModel.options[id].level)"></app-ticks-slider>
+        </td>
+      </tr>
+    </table>
+  </mat-card-content>
+</mat-card>

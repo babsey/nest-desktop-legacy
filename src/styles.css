@@ -1,1 +1,72 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* @import "~@angular/material/prebuilt-themes/indigo-pink.css"; */
+
+/* @import '~@angular/material/prebuilt-themes/deeppurple-amber.css'; */
+
+/* @import '~@angular/material/prebuilt-themes/pink-bluegrey.css'; */
+
+/* @import '~@angular/material/prebuilt-themes/purple-green.css'; */
+
+body {
+  /*font-family: Roboto;*/
+  margin: 0;
+}
+
+.controller {
+  padding: 0 !important;
+}
+
+.node text, .select text {
+  pointer-events: none;
+  font: 14px sans-serif;
+  text-anchor: middle;
+  font-weight: bold;
+}
+
+.node circle {
+  fill: white;
+  stroke-width: 3px;
+  stroke-dashoffset: 4.5;
+}
+
+.mat-tab-label {
+  min-width: 0 !important;
+}
+
+.flex-spacer {
+  flex-grow: 1;
+}
+
+svg text {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+svg text::selection {
+  background: none;
+}
+
+fa-icon {
+  font-size: 16px;
+}
+
+ngb-popover-window {
+  top: 10px !important;
+  min-width: 20vw;
+}
+
+.right-aligned-header>.mat-content {
+  justify-content: space-between;
+}
+
+.right-aligned-header>.mat-content>mat-panel-title, .right-aligned-header>.mat-content>mat-panel-description {
+  flex: 0 0 auto;
+}
+
+app-select {
+  display: flex;
+  width: 100%;
+}

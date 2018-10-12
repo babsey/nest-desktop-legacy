@@ -1,0 +1,129 @@
+{
+  "amplitude_dtime": {
+    "id": "amplitude_dtime",
+    "label": "Time step resolution at which current changes",
+    "level": 2,
+    "unit": "ms",
+    "value": 1,
+    "view": "valueSlider",
+    "viewSpec": {
+      "max": 100,
+      "min": 1,
+      "step": 1
+    }
+  },
+  "amplitude_dvalue": {
+    "id": "amplitude_dvalue",
+    "label": "Magnitude of step current",
+    "level": 1,
+    "unit": "pA",
+    "value": 1,
+    "view": "valueSlider",
+    "viewSpec": {
+      "max": 100,
+      "min": 0.1,
+      "scale": "logarithmic",
+      "step": 0.1
+    }
+  },
+  "amplitude_value_max": {
+    "id": "amplitude_value_max",
+    "label": "Maximal amplitude of step current",
+    "level": 1,
+    "unit": "pA",
+    "value": 1,
+    "view": "valueSlider",
+    "viewSpec": {
+      "max": 100,
+      "min": 1,
+      "step": 1
+    }
+  },
+  "nbins": {
+    "id": "nbins",
+    "label": "Number of histogram bins",
+    "level": 1,
+    "value": 50,
+    "view": "ticksSlider",
+    "viewSpec": {
+      "ticks": [
+        1,
+        10,
+        20,
+        50,
+        100,
+        200
+      ]
+    }
+  },
+  "npop": {
+    "id": "n",
+    "label": "Population size",
+    "level": 1,
+    "value": 1,
+    "view": "valueSlider",
+    "viewSpec": {
+      "max": 100,
+      "min": 1,
+      "step": 1
+    }
+  },
+  "rec_time": {
+    "id": "rec_time",
+    "label": "Recording time",
+    "level": 2,
+    "unit": "ms",
+    "value": [
+      0,
+      1000
+    ],
+    "view": "rangeSlider",
+    "viewSpec": {
+      "max": 1000,
+      "min": 1,
+      "step": 1
+    }
+  },
+  "spike_dtime": {
+    "id": "spike_dtime",
+    "label": "Inter-spike interval",
+    "level": 1,
+    "unit": "ms",
+    "value": 1000,
+    "view": "valueSlider",
+    "viewSpec": {
+      "max": 1000,
+      "min": 1,
+      "step": 1
+    }
+  },
+  "spike_weight": {
+    "id": "spike_weight",
+    "label": "Spike weight",
+    "level": 2,
+    "unit": "pA",
+    "value": 1,
+    "view": "valueSlider",
+    "viewSpec": {
+      "max": 100,
+      "min": 1,
+      "step": 1
+    }
+  },
+  "stim_time": {
+    "id": "stim_time",
+    "label": "Stimulus time [ms]",
+    "level": 2,
+    "unit": "ms",
+    "value": [
+      0,
+      1000
+    ],
+    "view": "rangeSlider",
+    "viewSpec": {
+      "max": 1000,
+      "min": 1,
+      "step": 1
+    }
+  }
+}

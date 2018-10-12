@@ -1,0 +1,4 @@
+.form-fields {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,17 @@
+g.node circle, g.node text {
+  cursor: pointer;
+}
+
+.node text {
+  pointer-events: none;
+  font: 14px sans-serif;
+  text-anchor: middle;
+  font-weight: bold;
+}
+
+.node circle {
+  fill: white;
+  /*pointer-events: all;*/
+  stroke-width: 3px;
+  stroke-dashoffset: 4.5;
+}

@@ -1,0 +1,32 @@
+<div class="progress-bar">
+  <mat-progress-bar *ngIf="_modelService.progress" mode="query"></mat-progress-bar>
+</div>
+
+<mat-sidenav-container style="height:90vh">
+  <mat-sidenav role="region" mode="side" [opened]="_modelService.selectedModel" position="end">
+    <mat-tab-group>
+      <mat-tab label="Defaults">
+        <app-model-details></app-model-details>
+      </mat-tab>
+      <mat-tab label="Model edit" [disabled]="!isEnabled()">
+        <app-model-edit *ngIf="_configService.selectedModel"></app-model-edit>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-sidenav>
+
+  <mat-sidenav role="region" mode="side" opened=true position="start" style="width:330px">
+    <mat-nav-list>
+      <mat-list-item (click)="_modelService.selectedModel = null">
+        App configuration
+      </mat-list-item>
+    </mat-nav-list>
+    <hr>
+    <app-model-list></app-model-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <app-config-edit *ngIf="!_modelService.selectedModel"></app-config-edit>
+    <app-model-description *ngIf="_modelService.selectedModel"></app-model-description>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -1,0 +1,16 @@
+mat-form-field {
+  padding-left: 20px;
+  width: 290px;
+}
+
+mat-form-field button {
+  display: none;
+}
+
+mat-form-field:hover {
+  width: 311px;
+}
+
+mat-form-field:hover button {
+  display: inline;
+}

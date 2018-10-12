@@ -1,0 +1,16 @@
+<!-- <div class="slider-container" placement="left" container="body" ngbTooltip="{{id}}"> -->
+<div class="slider-container">
+  <span class="slider-header">{{ options.label }} <span *ngIf="options.unit">({{ options.unit }})</span></span>
+  <div class="slider-content">
+    <mat-slider thumbLabel color="primary" class="slider" [(ngModel)]="data[id]" [min]="options.viewSpec.min" [max]="options.viewSpec.max" [step]="options.viewSpec.step" (change)="sliderChanged()">
+    </mat-slider>
+    <mat-form-field class="slider-input" floatLabel="never">
+      <input matInput type="number" [(ngModel)]="data[id]" [defaultValue]="options.value" [placeholder]="options.value" [step]="options.viewSpec.step" (change)="inputChanged($event)">
+      <span matSuffix>
+        <button mat-icon-button title="Default value: {{options.value}}" (click)="setDefaultValue()" color="primary">
+          <fa-icon [icon]="faEraser"></fa-icon>
+        </button>
+      </span>
+    </mat-form-field>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+app-navigation {
+    width: 100%;
+}
+
+router-outlet {
+  height: 100%
+}
+
+#content-center {
+    width: 800px;
+    height: 600px;
+}

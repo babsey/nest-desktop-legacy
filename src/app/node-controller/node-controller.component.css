@@ -1,0 +1,9 @@
+.node-controller mat-card-subtitle {
+  display: flex;
+}
+
+.node-controller .button {
+  height: 46px;
+  width: 46px;
+  margin: 5px;
+}

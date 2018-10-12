@@ -1,0 +1,40 @@
+<mat-card *ngIf="_dataService.ready">
+  <mat-card-title>
+    {{ _dataService.data.name }}
+  </mat-card-title>
+
+  <mat-card-content>
+    <svg id="sketch" width="600" height="200">
+        <g app-node-sketch></g>
+        <g app-link-sketch></g>
+    </svg>
+
+    <mat-tab-group class="maxWidth">
+
+      <mat-tab label="Description">
+        <div style="padding:20px">{{ _dataService.data.description }}</div>
+      </mat-tab>
+
+      <mat-tab label="Tree view">
+        <app-tree-view [data]="_dataService.data"></app-tree-view>
+      </mat-tab>
+
+      <mat-tab label="Raw view">
+        <pre>{{ _dataService.data | json }}</pre>
+      </mat-tab>
+
+      <mat-tab label="Comment">
+        <mat-form-field style="width:100%" floatLabel="never">
+          <textarea matInput cdkTextareaAutosize placeholder='Leave a comment'></textarea>
+        </mat-form-field>
+      </mat-tab>
+
+    </mat-tab-group>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button routerLink="/simulation">
+      Simulate
+    </button>
+  </mat-card-actions>
+</mat-card>

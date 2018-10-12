@@ -1,0 +1,46 @@
+<mat-list>
+  <mat-list-item>
+    <span matLine>Model configuration</span>
+    <button mat-icon-button [matMenuTriggerFor]="configMenu" class="button">
+      <fa-icon [icon]="faEllipsisV"></fa-icon>
+    </button>
+    <mat-menu #configMenu="matMenu">
+      <button mat-menu-item (click)="resetNESTConfig()">
+        <fa-icon [icon]="faEraser"></fa-icon>
+         Reset model configuration
+      </button>
+    </mat-menu>
+  </mat-list-item>
+</mat-list>
+
+<div class="form-fields">
+  <mat-form-field class="select">
+    <mat-select placeholder="Element type" [ngModel]="_modelService.element_type" (selectionChange)="selectElementType($event.value)">
+      <mat-option value="all">All types</mat-option>
+      <mat-option value="neuron">Neuron</mat-option>
+      <mat-option value="recorder">Recorder</mat-option>
+      <mat-option value="stimulator">Stimulator</mat-option>
+      <mat-option value="synapse">Synapse</mat-option>
+      <mat-option value="other">Other</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field floatLabel="never">
+    <fa-icon matPrefix [icon]="faSearch" style="padding-right: 10px"></fa-icon>
+    <input matInput type="text" class="formControl" placeholder="Search for a model" (keyup)="search($event.target.value)" autocomplete="off" [value]="_modelService.searchTerm" />
+  </mat-form-field>
+</div>
+
+<div style="display:flex">
+  <button mat-button (click)="showAvailableModels()" [class.active]="_modelService.view=='available'">Available</button>
+  <button mat-button (click)="showEnabledModels()" [class.active]="_modelService.view=='enabled'">Enabled</button>
+  <div style="flex-grow: 1"></div>
+  <mat-slide-toggle [(ngModel)]="_configService.editMode" color="primary" (click)="filterModels()" style="margin-right: 18px" title="Edit models"></mat-slide-toggle>
+</div>
+
+<mat-nav-list>
+  <mat-list-item *ngFor="let model of filteredModels" [class.active]="isSelected(model)" [class.enabled]="isEnabled(model)">
+    <a matLine (click)="selectModel(model)">{{ model }}</a>
+    <mat-slide-toggle *ngIf="_configService.editMode" [checked]="enabledModels.indexOf(model) != -1" (change)="toggleModelActivation($event, model)" color="primary"></mat-slide-toggle>
+  </mat-list-item>
+</mat-nav-list>
