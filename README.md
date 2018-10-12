@@ -9,6 +9,7 @@ An interactive desktop application for the [NEural Simulation Tool](http://www.n
 ### Download
 ```
 git clone https://github.com/babsey/nest-desktop.git
+cd nest-desktop
 git checkout Angular
 ```
 
