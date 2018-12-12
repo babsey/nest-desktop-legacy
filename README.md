@@ -2,9 +2,10 @@
 
 **NEST Desktop**
 
-![nest-logo](http://www.github.com/babsey/nest-desktop/Angular/src/img/nest-accent.svg)
+![](./src/img/nest-accent.svg)
 
 An interactive desktop application for [NEST simulator](http://www.nest-simulator.org/).
+
 
 ## Download
 ```
