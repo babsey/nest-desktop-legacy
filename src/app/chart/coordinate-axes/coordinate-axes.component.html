@@ -1,0 +1,38 @@
+<div style="position:absolute;top:-1px;left:0;font-size:10px" class="no-print">
+  <span>{{ pos }}</span>
+</div>
+
+<div style="position:absolute;top:0;right:0" class="chart-controller no-print">
+  <a mat-icon-button (click)="autoscale()">
+    <fa-icon [icon]="faArrowsAlt"></fa-icon>
+  </a>
+  <!-- <a mat-icon-button (click)="togglexAutoscale()">
+    <fa-icon [icon]="faArrowsAltH"></fa-icon>
+  </a>
+  <a mat-icon-button (click)="toggleyAutoscale()">
+    <fa-icon [icon]="faArrowsAltV"></fa-icon>
+  </a> -->
+  <!-- <a mat-icon-button (click)="_chartService.drag=!_chartService.drag" [class.mat-primary]="_chartService.drag">
+    <fa-icon [icon]="faArrowsAlt"></fa-icon>
+  </a> -->
+</div>
+
+<svg [attr.width]="_chartService.svg.width" [attr.height]="height">
+  <svg:g [attr.transform]="'translate(' + _chartService.g.left + ',' + _chartService.g.top + ')'">
+    <svg:rect class="overlay"></svg:rect>
+    <svg:g class="focus">
+      <svg:rect class="overlay--y"></svg:rect>
+      <svg:g class="axis axis--y"></svg:g>
+      <svg:text class="label label--y"></svg:text>
+    </svg:g>
+    <svg:rect class="overlay--x"></svg:rect>
+    <svg:g class="axis axis--x"></svg:g>
+    <svg:text class="label label--x"></svg:text>
+  </svg:g>
+</svg>
+
+<!-- <svg [attr.width]="_chartService.svg.width" [attr.height]="40" style="position:absolute">
+  <svg:g [attr.transform]="'translate(' + _chartService.g.left + ',' + _chartService.g.top + ')'">
+    <svg:g class="brush"></svg:g>
+  </svg:g>
+</svg> -->

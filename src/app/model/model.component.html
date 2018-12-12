@@ -1,0 +1,17 @@
+<mat-sidenav-container id="model">
+  <mat-sidenav role="region" mode="side" position="end" [opened]="_modelService.selectedModel">
+    <mat-tab-group>
+      <mat-tab label="Defaults">
+        <app-model-details></app-model-details>
+      </mat-tab>
+      <mat-tab label="Model edit" [disabled]="!isEnabled()">
+        <app-model-edit *ngIf="_configService.selectedModel"></app-model-edit>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <app-model-description *ngIf="_modelService.selectedModel"></app-model-description>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

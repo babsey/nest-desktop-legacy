@@ -1,0 +1,40 @@
+.slider-container {
+  position: relative;
+  margin: 0px;
+  padding: 0px;
+}
+
+.slider-header {
+  width: 100%;
+  position: absolute;
+}
+
+.slider-content {
+  display: inline-flex;
+}
+
+.slider {
+  width: 250px;
+}
+
+.slider-input {
+  width: 50px;
+  margin-left: 2px;
+}
+
+.slider-container button {
+  display: none;
+}
+
+.slider-container:hover button {
+  display: inline;
+}
+
+::ng-deep .value-menu button[mat-menu-item] {
+  height: 32px !important;
+  line-height: 32px;
+}
+
+::ng-deep .value-menu button[mat-menu-item] span {
+  margin-left: 10px;
+}

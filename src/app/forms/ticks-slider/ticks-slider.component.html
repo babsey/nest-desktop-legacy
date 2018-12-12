@@ -1,0 +1,10 @@
+<div class="slider-container" matTooltip="{{ id }}" matTooltipPosition="before">
+  <span class="slider-header">{{ options.label }} <span *ngIf="options.unit">({{options.unit}})</span></span>
+  <div class="slider-content">
+    <mat-slider [thumbLabel]="thumbLabel" color="primary" class="slider" [ngModel]="idx" min="0" [max]="options.viewSpec.ticks.length-1" step="1" tickInterval="1" [displayWith]="displayWith(options.viewSpec.ticks)" (change)="onChange($event)">
+    </mat-slider>
+    <mat-form-field class="slider-input" floatLabel="never">
+      <input matInput [ngModel]="value" readonly [placeholder]="options.value">
+    </mat-form-field>
+  </div>
+</div>

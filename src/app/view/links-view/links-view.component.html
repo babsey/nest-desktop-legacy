@@ -1,0 +1,44 @@
+<mat-list dense style="width:97%">
+  <ng-container *ngFor="let link of links">
+    <div style="margin: 10px 0;" [style.display]="_sketchService.isSelectedLink_or_all(link) || !selectiveView ? '' : 'none'">
+      <mat-list-item class="link theme-{{ color(link.pre)[1] }}">
+        <div style="display:flex;">
+          <button mat-icon-button [style.border-color]="color(link.pre)[0]" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.pre])" class="pre">{{ link.pre }}</button>
+          <button mat-icon-button class="button" (click)="_sketchService.toggleSelectLink(link)">
+          <fa-icon [icon]="faLongArrowAltRight" class="material-icons arrow" [style.color]="weight(link)"></fa-icon>
+        </button>
+          <button mat-icon-button [style.border-color]="color(link.post)[0]" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.post])" class="post">{{ link.post }}</button>
+          <span class="flex-spacer"></span>
+        </div>
+        <mat-list dense class="params theme-{{ color(link.pre)[1] }}">
+          <mat-list-item *ngIf="link.conn_spec" [style.border-left-color]="color(link.pre)[0]" [style.border-right-color]="color(link.post)[0]">
+            <div style="width:100%; display:flex; justify-content: space-between">
+              <span>Rule</span>
+              <span>{{ link.conn_spec.rule | label }}</span>
+            </div>
+          </mat-list-item>
+          <mat-list-item *ngIf="link.syn_spec" [style.border-left-color]="color(link.pre)[0]" [style.border-right-color]="color(link.post)[0]">
+            <div style="width:100%; display:flex; justify-content: space-between">
+              <span>Synapse model</span>
+              <span>{{ link.syn_spec.model | label }}</span>
+            </div>
+          </mat-list-item>
+          <ng-container *ngIf="link.syn_spec" >
+          <mat-list-item [style.border-left-color]="color(link.pre)[0]" [style.border-right-color]="color(link.post)[0]">
+            <div style="width:100%; display:flex; justify-content: space-between">
+              <span>Synapse weight</span>
+              <span>{{ link.syn_spec.weight || 1 }}</span>
+            </div>
+          </mat-list-item>
+          <mat-list-item [style.border-left-color]="color(link.pre)[0]" [style.border-right-color]="color(link.post)[0]">
+            <div style="width:100%; display:flex; justify-content: space-between">
+              <span>Synapse delay</span>
+              <span>{{ link.syn_spec.delay || 1 }}</span>
+            </div>
+          </mat-list-item>
+        </ng-container>
+        </mat-list>
+      </mat-list-item>
+    </div>
+  </ng-container>
+</mat-list>

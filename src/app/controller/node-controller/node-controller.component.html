@@ -1,0 +1,47 @@
+<span class="controller node-controller theme-{{color[1]}}" [style.display]="_sketchService.isSelectedNode_or_all(node) ? '' : 'none'">
+  <mat-list class="controller-subheader">
+    <mat-list-item>
+      <button mat-icon-button class="button node" (click)="_sketchService.toggleSelectNode(node)" [style.border-color]="color[0]" [style.border-style]="_sketchService.isSelectedNode(node) ? 'dashed' : 'solid'">
+        {{ node.idx }}
+      </button>
+      <app-select [element_type]="node.element_type" [selected]="node.model" [color]="color[0]" (selectChange)="selectModel($event)"></app-select>
+
+      <mat-menu #nodeMenu="matMenu" class="node-menu">
+        <!-- <button mat-menu-item (click)="_sketchService.toggleSelectNode(node)">
+          <fa-icon [icon]="faCrosshairs"></fa-icon>
+            <span *ngIf="!_sketchService.isSelectedNode(node)">Select</span>
+            <span *ngIf="_sketchService.isSelectedNode(node)">Unselect</span>
+          </button> -->
+        <button mat-menu-item (click)="resetNode(node.idx)">
+          <fa-icon [icon]="faEraser"></fa-icon>
+          <span>Reset</span>
+        </button>
+        <button mat-menu-item (click)="freezeNode(node.idx)">
+          <fa-icon [icon]="faSnowflake"></fa-icon>
+          <span>Freeze</span>
+        </button>
+        <button mat-menu-item (click)="deleteNode(node.idx)">
+          <fa-icon [icon]="faTrashAlt"></fa-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="nodeMenu" class="button" color="primary">
+        <fa-icon [icon]="faEllipsisV"></fa-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-list class="controller-menu" dense>
+    <mat-list-item *ngIf="!isRecorder(node.element_type)" [style.border-color]="color[0]" [style.display]="_controllerService.display(2)" >
+      <app-value-slider id="n" [value]="node.n" [options]="_configService.config.nest.node.npop" (change)="onChange('n', $event)"></app-value-slider>
+    </mat-list-item>
+    <mat-list-item *ngFor="let id of configModel.params" [ngSwitch]="configModel.options[id].view" [style.border-color]="color[0]" [style.display]="_controllerService.display(configModel.options[id].level)" >
+      <app-value-input *ngSwitchCase="'valueInput'" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChangeParam(id, $event)"></app-value-input>
+      <app-array-input *ngSwitchCase="'arrayInput'" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChangeArray(id, $event)"></app-array-input>
+      <app-value-slider *ngSwitchCase="'valueSlider'" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChangeParam(id, $event)"></app-value-slider>
+      <app-ticks-slider *ngSwitchCase="'tickSlider'" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChangeParam(id, $event)"></app-ticks-slider>
+    </mat-list-item>
+  </mat-list>
+
+</span>

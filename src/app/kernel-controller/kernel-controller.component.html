@@ -1,9 +1,0 @@
-<mat-card class="controller kernel-controller">
-  <mat-card-subtitle>
-    Kernel
-  </mat-card-subtitle>
-
-  <mat-card-content>
-    <app-ticks-slider *ngFor="let id of _configService.config.nest.kernel.params" [id]="id" [data]="_dataService.data.kernel" [options]="_configService.config.nest.kernel.options[id]"></app-ticks-slider>
-  </mat-card-content>
-</mat-card>

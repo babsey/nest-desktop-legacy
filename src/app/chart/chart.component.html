@@ -1,0 +1,5 @@
+<ng-container *ngFor="let record of _dataService.records" [ngSwitch]="record.recorder.model">
+  <app-spike-chart *ngSwitchCase="'spike_detector'" [idx]="record.idx"></app-spike-chart>
+  <app-trace-chart *ngSwitchCase="'multimeter'" [idx]="record.idx"></app-trace-chart>
+  <app-trace-chart *ngSwitchCase="'voltmeter'" [idx]="record.idx"></app-trace-chart>
+</ng-container>

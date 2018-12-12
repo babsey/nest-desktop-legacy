@@ -1,0 +1,22 @@
+<div style="position:relative">
+  <canvas class="plot lines"
+    [style.left]="_chartService.g.left + 'px'"
+    [style.top]="_chartService.g.top + 'px'"
+  ></canvas>
+
+  <app-coordinate-axes
+    (change)="onAxesChange($event)"
+    [autofocus]="autofocus"
+    [height]="height"
+    [n]="n"
+    [xAxis]="xAxis"
+    [xDomain]="xDomain"
+    [xLabel]="xLabel"
+    [xScale]="_chartService.xScale"
+    [yAutoscale]="yAutoscale"
+    [yAxis]="yAxis"
+    [yDomain]="yDomain"
+    [yLabel]="yLabel"
+    [yScale]="yScale"
+  ></app-coordinate-axes>
+</div>

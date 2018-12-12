@@ -1,0 +1,21 @@
+#main {
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  width: calc(100vw = 320px);
+  height: 100vh;
+
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+}
+
+mat-card {
+  margin: 5px;
+}
+
+.cards mat-card {
+  flex-grow: 1;
+}

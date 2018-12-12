@@ -1,0 +1,23 @@
+.slider-container {
+  position: relative;
+  margin: 0px;
+  padding: 0px;
+}
+
+.slider-header {
+  width: 100%;
+  position: absolute;
+}
+
+.slider-content {
+  display: inline-flex;
+}
+
+.slider {
+  width: 250px;
+}
+
+.slider-input {
+  width: 50px;
+  margin-left: 2px;
+}

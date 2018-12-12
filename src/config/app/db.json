@@ -1,0 +1,20 @@
+{
+  "networks": {
+    "host": "",
+    "port": "",
+    "name": "networks",
+    "auth": {
+      "username": "",
+      "password": ""
+    }
+  },
+  "protocols": {
+    "host": "",
+    "port": "",
+    "name": "protocols",
+    "auth": {
+      "username": "",
+      "password": ""
+    }
+  }
+}

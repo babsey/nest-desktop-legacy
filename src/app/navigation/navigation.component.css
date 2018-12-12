@@ -1,4 +1,16 @@
+.navButton {
+  /* margin: 20px; */
+  display: inline-block;
+  /* border: 2.5px grey solid;
+  border-radius: 24px; */
+}
+
 .search {
   height: 20px !important;
   padding: 10px 0 !important;
+}
+
+.nest-desktop {
+  color: #ff6633;
+  font-size: 28px;
 }

@@ -1,0 +1,14 @@
+<mat-list>
+  <mat-list-item *ngFor="let param of objectKeys(_modelService.defaults)" [class.enabled]="isEnabled(param)">
+    <span *ngIf="!_configService.selectedModel || !_configService.options.editing">
+      {{ param }}
+    </span>
+    <span *ngIf="_configService.selectedModel && _configService.options.editing">
+      <mat-slide-toggle [checked]="_configService.selectedModel.params.indexOf(param) != -1" (change)="toggleParam($event, param)" color="primary">{{ param }}</mat-slide-toggle>
+    </span>
+    <span style="flex-grow: 1"></span>
+    <span class="description">
+      {{ _modelService.defaults[param] }}
+    </span>
+  </mat-list-item>
+</mat-list>

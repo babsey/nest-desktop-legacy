@@ -1,96 +1,36 @@
-<ng-template #popContent let-doc="doc">
-  <mat-list dense>
-    <h4 matLine>{{ doc.name }}</h4>
-    <ng-container *ngFor="let node of doc.collections">
-      <mat-list-item>
-        <div style="width: 100%; display:flex; justify-content: space-between">
-          <span style="font-weight: bold">{{ node.idx }} {{ node.model }}</span>
-          <span>({{ node.n }})</span>
-        </div>
-      </mat-list-item>
-      <mat-list style="margin-left:30px" dense>
-        <div *ngFor="let param of node.params | mapToArray">
-          <mat-list-item style="height: 20px !important">
-            <div style="width: 100vw; display:flex; justify-content: space-between">
-              <span>{{ param.key }}</span>
-              <span>{{ param.value }} {{ param.unit }}</span>
-            </div>
-          </mat-list-item>
-        </div>
-      </mat-list>
-    </ng-container>
-  </mat-list>
-</ng-template>
-
-<mat-toolbar-row style="display:flex; justify-content: space-between">
-  <!-- <span class="nest-desktop">
-    <img height="48px" alt="NEST" src="./assets/img/nest.svg" class="nest">
-    <fa-icon [icon]="faDesktop" class="desktop"></fa-icon>
-  </span> -->
-
-  <span>
-    <a mat-icon-button routerLink="/networks" routerLinkActive="active">
-      <fa-icon [icon]="faBars"></fa-icon>
+<mat-toolbar color="accent">
+  <mat-toolbar-row style="display:flex; justify-content: space-between">
+    <a mat-button class="nest-desktop" href="#">
+      <img height="42px" alt="NEST" src="./img/nest-accent.svg" class="nest">
+      <fa-icon [icon]="faDesktop" class="nest-desktop"></fa-icon>
     </a>
-    <a mat-icon-button *ngIf="_dataService.ready" routerLink="/simulation" routerLinkActive="active">
-      <fa-icon [icon]="faChartLine"></fa-icon>
-    </a>
-    <a mat-icon-button routerLink="/configuration" routerLinkActive="active">
-      <fa-icon [icon]="faPencilAlt"></fa-icon>
-    </a>
-    <button mat-button *ngIf="!_sketchService.options.drawing" routerLink="/networks" routerLinkActive="active">
-      {{ _dataService.data.name }}
-    </button>
-    <mat-form-field floatLabel="never" *ngIf="_sketchService.options.drawing" style="width:300px">
-      <input matInput type="text" class="formControl" [(ngModel)]="_dataService.data.name" placeholder="Name of the network model" />
-      <button mat-button *ngIf="_dataService.data.name" matSuffix mat-icon-button aria-label="Clear" (click)="_dataService.data.name=''">
-        <fa-icon [icon]="faTimes"></fa-icon>
-      </button>
-    </mat-form-field>
-  </span>
+    <span class="navButton">
+      <a mat-icon-button [routerLink]="_navigationService.routerLink('view')" [class.mat-primary]="_navigationService.isPage('view')" matTooltip="View network configuration">
+        <fa-icon [icon]="faInfo"></fa-icon>
+      </a>
+      <a mat-icon-button [routerLink]="_navigationService.routerLink('simulate')" [class.mat-primary]="_navigationService.isPage('simulate')" matTooltip="Simulation workspace">
+        <fa-icon [icon]="faSignature"></fa-icon>
+      </a>
+      <a mat-icon-button routerLink="/config/app" [class.mat-primary]="_navigationService.isPage('app') || _navigationService.isPage('model')" matTooltip="Configure app or models">
+        <fa-icon [icon]="faPencilAlt"></fa-icon>
+      </a>
+    </span>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-  <span *ngIf="router.routerState.snapshot.url == '/simulation'">
-    <button mat-icon-button title="Show/hide the sketch" (click)="toggleSketch()" [disabled]="!_dataService.ready || _sketchService.options.drawing">
-      <fa-icon [icon]="faShareAlt"></fa-icon>
-    </button>
-    <button mat-icon-button title="Edit the sketch" (click)="editSketch()" [disabled]="_sketchService.options.drawing">
-      <fa-icon [icon]="faPen"></fa-icon>
-    </button>
-    <button mat-icon-button title="Start the simulation" (click)="runSimulation()" [disabled]="!_dataService.ready || _sketchService.options.drawing">
-      <fa-icon [icon]="faPlayCircle"></fa-icon>
-    </button>
-    <button mat-icon-button title="Save as a protocol" (click)="saveProtocol()" [disabled]="!_dataService.ready || _sketchService.options.drawing">
-      <fa-icon [icon]="faDownload"></fa-icon>
-    </button>
-  </span>
+<app-main-list *ngIf="_navigationService.isMainPage()"></app-main-list>
 
-  <span style="font-size:12px">
-    <mat-form-field style="min-width:280px">
-      <mat-select #singleSelect disableRipple (click)="listProtocols()">
-        <mat-select-trigger>
-          <div style="display:flex; justify-content:space-between">
-            <span>{{ _dataService.data.name }}</span>
-  <span>({{ _dataService.data.updatedAt | timesince }} ago)</span>
-  </div>
-  </mat-select-trigger>
-  <mat-form-field floatLabel="never" style="width:100%">
-    <fa-icon matPrefix [icon]="faSearch" style="padding: 0 10px"></fa-icon>
-    <input matInput class="formControl" placeholder="Search for a protocol name" type="text" (keyup)="search($event.target.value)" autocomplete="off" [value]="_protocolService.searchTerm || ''" />
-    <button mat-button *ngIf="_protocolService.searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="clearProtocols()">
-            <fa-icon [icon]="faTimes"></fa-icon>
-          </button>
-  </mat-form-field>
-  <mat-option *ngFor="let protocol of filteredProtocols" [value]="protocol.doc" container="body" placement="left" [ngbPopover]="popContent" triggers="manual" #p="ngbPopover" (click)="loadProtocol(protocol.doc._id)" (mouseover)="viewProtocol(p, protocol.doc)"
-    (click)="p.close()">
-    <div style="display:flex; justify-content:space-between;" routerLink="/simulation">
-      <span>{{ protocol.doc.name }}</span>
-      <span>({{ protocol.doc.updatedAt | timesince }} ago)</span>
-    </div>
-  </mat-option>
-  </mat-select>
-  </mat-form-field>
-  <button mat-icon-button (click)="toggleController()">
-      <fa-icon [icon]="faEllipsisV"></fa-icon>
-    </button>
-  </span>
-</mat-toolbar-row>
+<mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex" *ngIf="_navigationService.isPage('view') || _navigationService.isPage('simulate')">
+
+  <mat-tab label="Networks">
+    <app-network-list></app-network-list>
+  </mat-tab>
+
+  <mat-tab label="Protocols">
+    <app-protocol-list></app-protocol-list>
+  </mat-tab>
+
+</mat-tab-group>
+
+<app-config-list *ngIf="_navigationService.isPage('app')"></app-config-list>
+<app-model-list *ngIf="_navigationService.isPage('model')"></app-model-list>

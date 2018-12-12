@@ -1,0 +1,30 @@
+<div style="position:relative">
+  <svg class="dataChart"
+    [attr.height]="height"
+    [attr.width]="width"
+    [style.left]="_chartService.g.left + 'px'"
+    [style.top]="_chartService.g.top + 'px'"
+    >
+    <svg:g class="areas">
+      <svg:path class="area" *ngFor="let d of data"
+        [attr.d]="area(d)"
+        [style.fill]="fill(d)"
+        [style.opacity]="opacity(d)"
+        ></svg:path>
+    </svg:g>
+  </svg>
+
+  <app-coordinate-axes
+    (change)="onAxesChange($event)"
+    [height]="height"
+    [xAxis]="xAxis"
+    [xDomain]="xDomain"
+    [xLabel]="xLabel"
+    [xScale]="_chartService.xScale"
+    [yAutoscale]="yAutoscale"
+    [yAxis]="yAxis"
+    [yDomain]="yDomain"
+    [yLabel]="yLabel"
+    [yScale]="yScale"
+    ></app-coordinate-axes>
+</div>

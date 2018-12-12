@@ -1,0 +1,42 @@
+.node {
+  line-height: 2.5;
+}
+
+.node button {
+  line-height: 31.5px;
+  width: 33px;
+  height: 33px;
+  border: 1.5px solid black;
+  font-size: 11px;
+}
+
+.params .view {
+  border-left: 1.5px solid black;
+  height: 1.5em !important;
+}
+
+.params .edit {
+  border-left: 0;
+  height: 1.5em !important;
+}
+
+::ng-deep .params .edit .mat-list-item-content {
+  padding: 0 !important;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+}
+
+.node .line {
+  width: calc(100% - 15px);
+}
+
+.params .view .line {
+  width: 100%;
+}
+
+.params .edit .line {
+  width: calc(100% - 15px);
+}

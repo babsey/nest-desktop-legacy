@@ -1,12 +1,28 @@
 app-navigation {
-    width: 100%;
+    width: 100vw;
 }
 
 router-outlet {
-  height: 100%
+  height: 100%;
 }
 
-#content-center {
-    width: 800px;
-    height: 600px;
+::ng-deep .mat-sidenav {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+::ng-deep .mat-drawer {
+  background-color: #fafafa !important;
+}
+
+::ng-deep a[mat-list-item].active {
+  background-color: #f2f2f2;
+}
+
+#content {
+  height: 100vh;
+}
+
+#content .mat-sidenav {
+  width: 320px;
 }

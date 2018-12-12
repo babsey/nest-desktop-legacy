@@ -1,0 +1,36 @@
+<div style="position:relative">
+  <svg class="dataChart"
+    [attr.height]="height - _chartService.g.top - _chartService.g.bottom"
+    [attr.width]="width"
+    [style.left]="_chartService.g.left + 'px'"
+    [style.top]="_chartService.g.top + 'px'"
+    >
+    <svg:g class="bars">
+      <svg:g class="bar" *ngFor="let d of data" [attr.transform]="transform(d)">
+        <svg:rect
+          [attr.height]="binHeight(d)"
+          [attr.width]="binWidth(d)"
+          [style.fill]="d.c || 'black'"
+          ></svg:rect>
+        <title *ngIf="binWidth(d)<32 || binHeight(d)<18">{{ d.y | format }}</title>
+        <svg:text *ngIf="binWidth(d)>=32 && binHeight(d)>=18" [attr.transform]="'translate(' + binWidth(d)/2 + ',16)'">
+          {{ d.y | format }}
+        </svg:text>
+      </svg:g>
+    </svg:g>
+  </svg>
+
+  <app-coordinate-axes
+    (change)="onAxesChange($event)"
+    [height]="height"
+    [xAxis]="xAxis"
+    [xDomain]="xDomain"
+    [xLabel]="xLabel"
+    [xScale]="_chartService.xScale"
+    [yAutoscale]="yAutoscale"
+    [yAxis]="yAxis"
+    [yDomain]="yDomain"
+    [yLabel]="yLabel"
+    [yScale]="yScale"
+    ></app-coordinate-axes>
+</div>

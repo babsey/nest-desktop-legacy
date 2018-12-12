@@ -50,6 +50,9 @@
     "sketch": {
       "x": 350,
       "y": 100
+    },
+    "params": {
+      "interval": 0.1
     }
   }],
   "connectomes": [{

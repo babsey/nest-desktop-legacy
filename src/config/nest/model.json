@@ -443,7 +443,9 @@
             0.1,
             0.5,
             1,
-            2
+            2,
+            5,
+            10
           ]
         }
       }
@@ -511,10 +513,8 @@
     "chart": "raster-plot",
     "element_type": "recorder",
     "label": "Spike detector",
-    "options": {
-    },
-    "params": [
-    ]
+    "options": {},
+    "params": []
   },
   "spike_generator": {
     "element_type": "stimulator",
@@ -525,16 +525,14 @@
         "level": 1,
         "unit": "ms",
         "view": "arrayInput",
-        "viewSpec": {
-        }
+        "viewSpec": {}
       },
       "spike_weights": {
         "label": "Weights of spike",
         "level": 3,
         "unit": "pA",
         "view": "arrayInput",
-        "viewSpec": {
-        }
+        "viewSpec": {}
       }
     },
     "params": [
@@ -583,16 +581,14 @@
         "level": 1,
         "unit": "ms",
         "view": "arrayInput",
-        "viewSpec": {
-        }
+        "viewSpec": {}
       },
       "amplitude_values": {
         "label": "Amplitudes of step current current",
         "level": 1,
         "unit": "pA",
         "view": "arrayInput",
-        "viewSpec": {
-        }
+        "viewSpec": {}
       }
     },
     "params": [

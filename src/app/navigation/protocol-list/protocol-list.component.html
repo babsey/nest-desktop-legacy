@@ -1,0 +1,59 @@
+<mde-popover #protocolDetails="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverOffsetX="320">
+  <mat-card style="width:400px" >
+    <app-sketch [data]="protocol" width="400" height="200"></app-sketch>
+    <app-nodes-view [nodes]="protocol.collections"></app-nodes-view>
+  </mat-card>
+</mde-popover>
+
+<mat-list dense>
+  <mat-list-item>
+    <span style="width:100%; display:flex">
+      <mat-form-field floatLabel="never" style="flex-grow:1">
+        <fa-icon matPrefix [icon]="faSearch" style="padding-right: 10px"></fa-icon>
+        <input matInput type="text" class="formControl" placeholder="Search for a protocol" (keyup)="search($event.target.value)" autocomplete="off" />
+      </mat-form-field>
+    </span>
+
+    <mat-menu #protocolsMenu="matMenu" class="protocols-menu dense">
+      <button mat-menu-item (click)="clearProtocols()">
+        Remove all protocols
+      </button>
+    </mat-menu>
+
+    <button mat-icon-button *ngIf="options.menuProtocols" [matMenuTriggerFor]="protocolsMenu" class="button">
+      <fa-icon [icon]="faEllipsisV" style="font-size:11px"></fa-icon>
+    </button>
+  </mat-list-item>
+</mat-list>
+
+<mat-nav-list dense *ngIf="options.addProtocol">
+  <mat-list-item (click)="saveProtocol()">
+    <fa-icon [icon]="faPlus" style="padding-right: 10px"></fa-icon>
+    Protocol this simulation
+  </mat-list-item>
+</mat-nav-list>
+
+<mat-nav-list dense [mdePopoverTriggerFor]="protocolDetails" mdePopoverTriggerOn="none" #protocolTarget="mdePopoverTrigger" (mouseleave)="protocolTarget.closePopover()">
+  <mat-list-item *ngFor="let protocol of filteredProtocols" (click)="loadProtocol(protocol.doc._id)" (mouseover)="view(protocol.doc)" [class.active]="isLoaded(protocol)" [routerLink]="_navigationService.routerOptions({source:'protocol', id:protocol.doc._id})">
+    <a matLine style="display:flex">
+      {{ protocol.doc.name }}
+      <div class="flex-spacer"></div>
+      <span *ngIf="protocol.doc.updatedAt">
+        ({{ protocol.doc.updatedAt | timesince }})
+      </span>
+    </a>
+
+    <mat-menu #protocolMenu="matMenu" class="protocol-menu dense">
+      <button mat-menu-item>
+        <fa-icon [icon]="faTrashAlt"></fa-icon><span style="margin-left:10px">Delete protocol</span>
+      </button>
+    </mat-menu>
+
+    <button mat-icon-button *ngIf="options.menuProtocol && _navigationService.isPage('view')" [matMenuTriggerFor]="protocolMenu" class="button" style="height:38px; width:38px;line-height:38px;">
+      <fa-icon [icon]="faEllipsisV" style="font-size:11px"></fa-icon>
+    </button>
+    <button mat-icon-button *ngIf="_navigationService.isPage('simulate')" class="button" (mouseover)="openPopover(protocolTarget)" style="height:38px; width:38px;line-height:38px;">
+      <fa-icon [icon]="faInfoCircle" style="font-size:11px"></fa-icon>
+    </button>
+  </mat-list-item>
+</mat-nav-list>

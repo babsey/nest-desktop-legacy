@@ -1,0 +1,61 @@
+::ng-deep .chart {
+  margin: 5px;
+  padding: 8px !important;
+  background-color: white !important;
+}
+
+::ng-deep .chart .chart-header {
+  display: flex;
+  height: 32px;
+  margin-bottom: 10px;
+}
+
+::ng-deep .chart .chart-header .neuron {
+  border-style: solid;
+  border-width: 2px;
+}
+
+::ng-deep .chart .chart-header .floatRight {
+  position: absolute;
+  right: 8px;
+  top: 4px;
+}
+
+::ng-deep .chart .chart-header .node {
+  border-style: solid;
+  height: 46px;
+  margin-left: 10px;
+  width: 46px;
+}
+
+::ng-deep .chart .chart-header .selected {
+  border-style: dashed;
+}
+
+::ng-deep .chart .chart-sidenav {
+  background-color: white !important;
+  overflow: hidden;
+}
+
+::ng-deep .chart .chart-sidenav .mat-drawer-inner-container {
+  margin-left: 10px !important;
+}
+
+::ng-deep .chart .chart-sidenav .select {
+  width: calc(100% - 20px);
+}
+
+::ng-deep .chart .chart-content {
+  background-color: white !important;
+  overflow: hidden;
+}
+
+::ng-deep .chart .chart-content .dataChart {
+  position: absolute;
+  pointer-events: none;
+}
+
+::ng-deep .chart .chart-content .plot {
+  position: absolute;
+  pointer-events: none;
+}

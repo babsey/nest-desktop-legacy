@@ -1,0 +1,98 @@
+<mat-card class="chart" [style.display]="_chartService.show ? '' : 'none'">
+  <mat-card-subtitle class="chart-header">
+    <span style="margin:5px">Spike chart for:</span>
+    <mat-chip-list style="margin: 0 2px;">
+      <span class="theme-{{colors[neuron.idx % colors.length][1]}}" *ngFor="let neuron of neurons">
+        <mat-chip class="neuron mat-accent" (click)="_chartService.select(neuron)" selected="true" [class.colored]="_chartService.isSelected(neuron)" [class.selected]="_sketchService.isSelectedNode(neuron)">
+          <!-- <span style="margin-right:3px">{{ neuron.model }}</span> -->
+          <span *ngIf="neuron.global_ids.length==1">[{{neuron.global_ids}}]</span>
+          <span *ngIf="neuron.global_ids.length>1">[{{neuron.global_ids[0]}}..{{neuron.global_ids[neuron.global_ids.length-1]}}]</span>
+        </mat-chip>
+      </span>
+      <mat-chip class="mat-accent" selected="true" (click)="selectAll()">all</mat-chip>
+      <mat-chip class="mat-accent" selected="true" (click)="selectNone()">none</mat-chip>
+    </mat-chip-list>
+
+    <span class="theme-{{color[1]}} floatRight" style="display:flex">
+      <div class="no-print">
+        <button mat-icon-button type="button" (click)="sidenavOpened=!sidenavOpened" class="mat-primary">
+          <fa-icon [icon]="faBars"></fa-icon>
+        </button>
+      </div>
+
+      <button mat-icon-button class="node" [style.border-color]="colors[recorder.idx % colors.length][0]" [class.selected]="_sketchService.isSelectedNode(recorder)" (click)="_sketchService.toggleSelectNode(recorder)">
+        {{ recorder.idx }}
+      </button>
+    </span>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <mat-sidenav-container hasBackdrop="false">
+      <mat-sidenav class="chart-sidenav" role="region" mode="over" [opened]="sidenavOpened" position="end" style="width:345px" autoFocus="false">
+        <mat-list class="chart-menu theme-{{color[1]}}" dense>
+          <mat-list-item mat-subheader>Subchart configuration</mat-list-item>
+
+          <mat-list-item>
+            <mat-form-field class="select">
+              <mat-select [(value)]="subchart" placeholder="Subchart" (selectionChange)="rescaleY()">
+                <mat-option value="none" [style.color]="subchart=='none' ? color[0] : 'black'">No subchart</mat-option>
+                <mat-option value="psth line" [style.color]="subchart=='psth line' ? color[0] : 'black'">PSTH line (step)</mat-option>
+                <mat-option value="psth area" [style.color]="subchart=='psth area' ? color[0] : 'black'">PSTH area (overlap)</mat-option>
+                <mat-option value="psth bar overlap" [style.color]="subchart=='psth bar overlap' ? color[0] : 'black'">PSTH bar (group)</mat-option>
+                <mat-option value="psth bar stack" [style.color]="subchart=='psth bar stack' ? color[0] : 'black'">PSTH bar (stack)</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-list-item>
+
+          <ng-container *ngIf="subchart.includes('psth')">
+            <mat-divider></mat-divider>
+            <mat-list-item mat-subheader>PSTH configuration</mat-list-item>
+
+            <mat-list-item>
+              <mat-form-field class="select">
+                <mat-select [(value)]="ordinate" placeholder="Ordinate">
+                  <mat-option value="count" [style.color]="ordinate=='count' ? color[0] : 'black'">Spike count</mat-option>
+                  <mat-option value="rate" [style.color]="ordinate=='rate' ? color[0] : 'black'">Firing rate [Hz]</mat-option>
+                </mat-select>
+            </mat-form-field>
+            </mat-list-item>
+
+            <mat-list-item>
+              <app-ticks-slider
+              (change)="onChange($event)"
+              [options]="_configService.config.app.slider.nbins"
+              [value]="nbins"
+              ></app-ticks-slider>
+            </mat-list-item>
+          </ng-container>
+        </mat-list>
+      </mat-sidenav>
+
+      <mat-sidenav-content class="chart-content">
+        <app-scatter-chart
+          [data]="data"
+          [height]="scatter.height"
+          [options]="scatter.options"
+          [xDomain]="xDomain"
+          [xScale]="_chartService.xScale"
+          [yDomain]="yDomain"
+          [yScale]="scatter.yScale"
+          xLabel="Time [ms]"
+          yLabel="Neuron"
+          ></app-scatter-chart>
+
+        <app-psth-chart *ngIf="subchart.includes('psth')"
+          [chart]="subchart"
+          [height]="psth.height"
+          [data]="data"
+          [nbins]="nbins"
+          [options]="psth.options"
+          [ordinate]="ordinate"
+          [xScale]="_chartService.xScale"
+          [yScale]="psth.yScale"
+          ></app-psth-chart>
+      </mat-sidenav-content>
+
+    </mat-sidenav-container>
+  </mat-card-content>
+</mat-card>

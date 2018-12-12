@@ -1,0 +1,16 @@
+.model mat-list-item.active {
+  background-color: #f2f2f2;
+}
+
+.model mat-list-item.enabled {
+  color: black !important;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  margin: 0 20px;
+}

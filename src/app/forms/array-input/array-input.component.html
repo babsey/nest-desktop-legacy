@@ -1,0 +1,8 @@
+<mat-form-field matTooltip="{{ id }}" matTooltipPosition="before">
+  <input matInput [placeholder]="options.label || id" [ngModel]="value" (change)="onChange($event)" />
+  <span matSuffix>
+    <button mat-icon-button (click)="openDialog()" color="primary">
+      <fa-icon [icon]="faDice"></fa-icon>
+    </button>
+  </span>
+</mat-form-field>

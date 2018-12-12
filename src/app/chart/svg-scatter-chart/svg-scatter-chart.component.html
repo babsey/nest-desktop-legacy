@@ -1,0 +1,33 @@
+<div style="position:relative">
+  <svg class="dataChart"
+    [attr.height]="height-_chartService.g.top-_chartService.g.bottom"
+    [attr.width]="_chartService.svg.width-_chartService.g.left-_chartService.g.right"
+    [style.left]="_chartService.g.left + 'px'"
+    [style.top]="_chartService.g.top + 'px'"
+    [style.pointer-events] = "_chartService.pointerEvents()"
+    >
+    <svg:g class="dots">
+      <svg:circle class="dot" *ngFor="let d of data"
+        matTooltip="{{tooltip(d)}}"
+        [attr.cx]="xScale(d.x)"
+        [attr.cy]="yScale(d.y)"
+        r="2"
+        [style.fill]="color(d)"
+        ></svg:circle>
+    </svg:g>
+  </svg>
+
+  <app-coordinate-axes
+    (change)="onAxesChange($event)"
+    [height]="height"
+    [xAxis]="xAxis"
+    [xDomain]="xDomain"
+    [xLabel]="xLabel"
+    [xScale]="_chartService.xScale"
+    [yAutoscale]="yAutoscale"
+    [yAxis]="yAxis"
+    [yDomain]="yDomain"
+    [yLabel]="yLabel"
+    [yScale]="yScale"
+    ></app-coordinate-axes>
+</div>

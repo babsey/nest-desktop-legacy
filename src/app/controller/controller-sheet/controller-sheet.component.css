@@ -1,0 +1,14 @@
+#controllerSheetButtons {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.flexLine {
+  display: flex;
+  width: 100%;
+  justify-content: space-between
+}
+
+.flexLine span {
+  margin-right: 20px;
+}

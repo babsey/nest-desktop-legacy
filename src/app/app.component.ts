@@ -1,16 +1,11 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ViewChild,
 } from '@angular/core'
 
-import {
-  faBars,
-} from '@fortawesome/free-solid-svg-icons';
-
-import { ConfigService } from './shared/services/config/config.service'
-import { SimulationService } from './shared/services/simulation/simulation.service'
-import { MathService } from './shared/services/math/math.service'
-
+import { ChartService } from './chart/chart.service';
+import { NavigationService } from './navigation/navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -18,18 +13,30 @@ import { MathService } from './shared/services/math/math.service'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public faBars = faBars;
+  @ViewChild('content') content: any;
 
   constructor(
-    public _configService: ConfigService,
-    public _simulationService: SimulationService,
-    public _mathService: MathService,
+    private _chartService: ChartService,
+    private _navigationService: NavigationService,
   ) {
   }
 
   ngOnInit() {
-    this._configService.init()
-    window['math'] = this._mathService;
   }
+
+  isOpened() {
+    return this._navigationService.options.sidenavListOpened;
+  }
+
+  onClose() {
+    this._navigationService.options.sidenavListOpened = false;
+  }
+
+  onChange() {
+    var width = this.content.elementRef.nativeElement.clientWidth - 380;
+    var height = this.content.elementRef.nativeElement.clientHeight;
+    this._chartService.resize(width, height);
+  }
+
 
 }

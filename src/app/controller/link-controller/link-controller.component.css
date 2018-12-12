@@ -1,0 +1,29 @@
+.link-controller .controller-subheader {
+  margin-bottom: 10px;
+}
+
+.link-controller .controller-subheader .button {
+  height: 46px;
+  width: 46px;
+  margin: 5px;
+}
+
+.link-controller .controller-subheader .arrow {
+  font-size: 32px;
+  vertical-align: middle;
+}
+
+.link-controller .controller-menu mat-list-item {
+  border-left: 1.5px solid black;
+  border-right: 1.5px solid black;
+  width: calc(100% - 3px);
+}
+
+::ng-deep .link-menu button[mat-menu-item] {
+  height: 32px !important;
+  line-height: 32px;
+}
+
+::ng-deep .link-menu button[mat-menu-item] span {
+  margin-left: 10px;
+}

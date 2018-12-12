@@ -1,15 +1,15 @@
 {
-    "windowBounds": {
-        "width": 1280,
-        "height": 720
-    },
-    "window": {
-        "frame": true,
-        "fullscreen": false
-    },
-    "screenshot": {
-        "resize": true,
-        "height": 480
-    },
-    "debug": false
+  "windowBounds": {
+    "width": 1280,
+    "height": 720
+  },
+  "window": {
+    "frame": true,
+    "fullscreen": false
+  },
+  "screenshot": {
+    "resize": true,
+    "height": 480
+  },
+  "debug": false
 }

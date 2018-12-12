@@ -1,9 +1,0 @@
-<mat-form-field>
-  <mat-label>{{ options.label || id }}</mat-label>
-  <input matInput type="number" [(ngModel)]="data[id]" [defaultValue]="options.value" [placeholder]="options.value" [step]="options.viewSpec.step" (change)="changed($event)"/>
-    <span matSuffix>
-      <button mat-icon-button title="Default value: {{options.value}}" (click)="setDefaultValue()" color="primary">
-        <fa-icon [icon]="faEraser"></fa-icon>
-      </button>
-    </span>
-</mat-form-field>

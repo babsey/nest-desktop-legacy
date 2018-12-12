@@ -1,9 +1,0 @@
-<mat-card class="controller simulation-controller">
-  <mat-card-subtitle>
-    Simulation
-  </mat-card-subtitle>
-
-  <mat-card-content>
-    <app-value-slider *ngFor="let id of _configService.config.nest.simulation.params" [id]="id" [data]="_dataService.data.simulation" [options]="_configService.config.nest.simulation.options[id]"></app-value-slider>
-  </mat-card-content>
-</mat-card>

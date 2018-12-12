@@ -65,10 +65,10 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
 import 'hammerjs';
-
-if (!('process' in window)) {
-    (window as any).process = {
-        env: { DEBUG: undefined },
-        versions: {},
-    };
-}
+//
+// if (!('process' in window)) {
+//     (window as any).process = {
+//         env: { DEBUG: undefined },
+//         versions: {},
+//     };
+// }

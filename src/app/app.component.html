@@ -1,19 +1,18 @@
-<mat-toolbar color="accent">
-<!-- <mat-toolbar color="accent"> -->
-  <app-navigation></app-navigation>
-</mat-toolbar>
+<mat-sidenav-container id="content" hasBackdrop="false">
 
-<router-outlet></router-outlet>
-
-<!-- <mat-sidenav-container style="height:100vh">
-  <mat-sidenav mode="side" role="region" [(opened)]="_menuService.options.opened" position="start" style="min-width:200px">
-    <app-menu></app-menu>
+  <mat-sidenav class="no-print"
+    role="region"
+    mode="side"
+    position="start"
+    autoFocus="false"
+    [opened]="isOpened()"
+    (closed)="onClose()"
+    (openedChange)="onChange()">
+    <app-navigation></app-navigation>
   </mat-sidenav>
 
-  <mat-sidenav-content>
-    <button mat-icon-button (click)="toggleMenu()" style="position:absolute;top:10px;left:10px;z-index:1000">
-      <fa-icon [icon]="faBars"></fa-icon>
-    </button>
-
+  <mat-sidenav-content #content>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
-</mat-sidenav-container> -->
+
+</mat-sidenav-container>

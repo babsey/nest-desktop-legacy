@@ -1,0 +1,16 @@
+::ng-deep #controller .mat-tab-label {
+  min-width: 0 !important;
+}
+
+::ng-deep #controller .mat-tab-body-content {
+  overflow: hidden !important;
+}
+
+::ng-deep .level-menu button[mat-menu-item] {
+  height: 32px !important;
+  line-height: 32px;
+}
+
+::ng-deep .level-menu button[mat-menu-item] span {
+  margin-left: 10px;
+}

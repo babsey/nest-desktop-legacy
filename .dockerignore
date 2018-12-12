@@ -1,3 +1,5 @@
 /.git
+/archives
+/Dockerfiles
+/Singularity
 /node_modules
-Dockerfile*

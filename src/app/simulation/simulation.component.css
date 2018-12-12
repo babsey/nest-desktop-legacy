@@ -1,0 +1,12 @@
+#simulation {
+  height: 100vh;
+}
+
+#simulation #controller {
+  width: 380px;
+  overflow-x: hidden;
+}
+
+#simulation #chart {
+  overflow: hidden;
+}

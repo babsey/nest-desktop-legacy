@@ -1,0 +1,35 @@
+<mat-sidenav-container id="simulation" (window:resize)="resize()">
+
+  <mat-sidenav id="controller" role="region" mode="side" opened="true" position="end" disableClose="true">
+
+    <span *ngIf="_dataService.data.name">
+      <mat-form-field floatLabel="never" style="width:360px; margin-bottom:-20px">
+        <input matInput type="text" class="formControl" [readonly]="!_controllerService.options.edit" [(ngModel)]="_dataService.data.name" placeholder="Name of the network model" />
+        <button mat-button *ngIf="_controllerService.options.edit && _dataService.data.name" matSuffix mat-icon-button aria-label="Clear" (click)="_dataService.data.name=''">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </button>
+      </mat-form-field>
+    </span>
+
+    <app-controller *ngIf="_configService.config.app.simulation.showSlider"></app-controller>
+
+    <span *ngIf="!_configService.config.app.simulation.showSlider">
+      <app-nodes-view [nodes]="_dataService.data.collections" selectiveView="true"></app-nodes-view>
+      <app-links-view [links]="_dataService.data.connectomes" selectiveView="true"></app-links-view>
+    </span>
+  </mat-sidenav>
+
+  <mat-sidenav-content #content id="chart">
+    <div *ngIf="_dataService.records">
+      <app-chart></app-chart>
+    </div>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+
+<div *ngIf="!_controllerService.options.sheetOpened" class="no-print" style="position:absolute;left:10px;bottom:10px;z-index:1000;">
+  <button mat-mini-fab type="button" (click)="toggleControllerSheet()" color="primary">
+    <fa-icon [icon]="faChevronUp"></fa-icon>
+  </button>
+</div>

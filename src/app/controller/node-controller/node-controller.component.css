@@ -1,0 +1,23 @@
+.node-controller .controller-subheader {
+  margin-bottom: 10px;
+}
+
+.node-controller .controller-subheader .node {
+  height: 46px;
+  width: 46px;
+  margin: 5px;
+}
+
+.node-controller .controller-menu mat-list-item {
+  border-left: 1.5px solid black;
+  width: calc(100% - 1.5px);
+}
+
+::ng-deep .node-menu button[mat-menu-item] {
+  height: 32px !important;
+  line-height: 32px;
+}
+
+::ng-deep .node-menu button[mat-menu-item] span {
+  margin-left: 10px;
+}

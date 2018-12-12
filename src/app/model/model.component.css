@@ -1,0 +1,12 @@
+#model {
+  height: 100vh;
+}
+
+#model mat-sidenav {
+  width: 360px;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+}

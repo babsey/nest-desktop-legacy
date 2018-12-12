@@ -5,12 +5,14 @@ import {
   faChessKnight,
   faChessRook,
   faChessQueen,
-  faSlidersH,
+  faEllipsisV,
   faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { ConfigService } from '../shared/services/config/config.service';
-import { DataService } from '../shared/services/data/data.service';
+
+import { ConfigService } from '../config/config.service';
+import { ControllerService } from './controller.service';
+import { DataService } from '../services/data/data.service';
 
 
 @Component({
@@ -23,11 +25,12 @@ export class ControllerComponent implements OnInit {
   public faChessKnight = faChessKnight;
   public faChessRook = faChessRook;
   public faChessQueen = faChessQueen;
-  public faSlidersH = faSlidersH;
+  public faEllipsisV = faEllipsisV;
   public faCheck = faCheck;
 
   constructor(
     public _configService: ConfigService,
+    public _controllerService: ControllerService,
     public _dataService: DataService,
   ) { }
 
@@ -42,6 +45,10 @@ export class ControllerComponent implements OnInit {
   getLevel() {
     let level = this._configService.config.app.controller.level;
     return level;
+  }
+
+  isLevel(level) {
+    return this._configService.config.app.controller.level == level;
   }
 
 }

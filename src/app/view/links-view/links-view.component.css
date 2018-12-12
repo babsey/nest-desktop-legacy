@@ -1,0 +1,17 @@
+.link {
+  line-height: 3;
+}
+
+.link .pre, .link .post {
+  line-height: 31.5px;
+  width: 33px;
+  height: 33px;
+  border: 1.5px solid black;
+  font-size: 11px;
+}
+
+.params mat-list-item {
+  border-left: 1.5px solid black;
+  border-right: 1.5px solid black;
+  height: 1.5em !important;
+}

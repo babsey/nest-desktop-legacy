@@ -9,53 +9,18 @@
 /* @import '~@angular/material/prebuilt-themes/purple-green.css'; */
 
 body {
-  /*font-family: Roboto;*/
+  font-family: Roboto;
   margin: 0;
 }
 
-.controller {
-  padding: 0 !important;
-}
-
-.node text, .select text {
-  pointer-events: none;
-  font: 14px sans-serif;
-  text-anchor: middle;
-  font-weight: bold;
-}
-
-.node circle {
-  fill: white;
-  stroke-width: 3px;
-  stroke-dashoffset: 4.5;
-}
-
-.mat-tab-label {
-  min-width: 0 !important;
+@media print {
+  .no-print, .no-print * {
+    display: none !important;
+  }
 }
 
 .flex-spacer {
   flex-grow: 1;
-}
-
-svg text {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-svg text::selection {
-  background: none;
-}
-
-fa-icon {
-  font-size: 16px;
-}
-
-ngb-popover-window {
-  top: 10px !important;
-  min-width: 20vw;
 }
 
 .right-aligned-header>.mat-content {
@@ -64,9 +29,4 @@ ngb-popover-window {
 
 .right-aligned-header>.mat-content>mat-panel-title, .right-aligned-header>.mat-content>mat-panel-description {
   flex: 0 0 auto;
-}
-
-app-select {
-  display: flex;
-  width: 100%;
 }

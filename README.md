@@ -1,37 +1,111 @@
 # nest-desktop
 
-**A NEST Desktop application**
+**NEST Desktop**
 
-![nest-logo](http://www.nest-simulator.org/wp-content/uploads/2015/03/nest_logo.png)
+![nest-logo](http://www.github.com/babsey/nest-desktop/Angular/src/img/nest-accent.svg)
 
-An interactive desktop application for the [NEural Simulation Tool](http://www.nest-initiative.org/).
+An interactive desktop application for [NEST simulator](http://www.nest-simulator.org/).
 
-### Download
+## Download
 ```
 git clone https://github.com/babsey/nest-desktop.git
 cd nest-desktop
 git checkout Angular
 ```
 
-### Build
+
+## Usage
+
+### Using host system
+
+#### Prepare for Angular
+
+Install requirements for nest server (See [instructions](https://github.com/babsey/nest-server)).
+
+Install nodejs 8 or higher (See [instructions](https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions))
+
+Install node modules
+```
+npm install
+```
+
+#### Start
+
+Start nest server (See [instructions](https://github.com/babsey/nest-server)).
+
+##### Open a plain file.
+
+Compile nest desktop to dist.
+```
+npm run build
+```
+
+##### Start a plain file.
+
+Open dist/nest-desktop/index.html with any web browser (I prefer Chromium-based).
+
+##### Alternative start with Angular (for developers)
+
+Build and serve nest desktop, rebuild on file changes.
+```
+npm start
+```
+
+##### Alternative start Electron
+
+```
+npm run electron
+```
+
+
+### Using Docker
+
+#### Prepare Docker
+
+Install docker (with sudo)
+```
+sudo apt-get install docker
+```
+
+#### Build Docker image (with sudo)
 
 Build a docker image
 ```
-docker build -t nest-desktop .
+sudo docker build -f Dockerfiles/nest-desktop.Dockerfile -t nest-desktop .
+```
+
+(Better) Build a docker image using build stages. Minimize space of docker image.
+```
+sudo docker build -f Dockerfiles/nest-desktop-stages.Dockerfile -t nest-desktop .
 ```
 
 (Alternative) If you have dist folder of nest-desktop on host system to copy.
 ```
-docker build -t nest-desktop -f Dockerfile-dist .
+sudo docker build -f Dockerfiles/nest-desktop-dist.Dockerfile -t nest-desktop .
 ```
 
-### Start
+#### (Alternative) Load image from a file (nest-desktop.tar)
+
+Load a docker image
+```
+sudo docker load --input nest-desktop.tar
+```
+
+#### Start Docker container (with sudo)
 
 Run a docker container
 ```
-docker run -d -t nest-desktop -p 80:80 -p 5000:5000
+sudo docker run -d -p 8000:80 -p 5000:5000 -t nest-desktop
 ```
 
-Then open any browser (http://localhost).
+Then open any browser (http://localhost:8000).
 
-### License [MIT](LICENSE)
+
+
+### Using Singularity
+
+See [instructions](https://github.com/babsey/nest-server#using-singularity).
+
+Start nest desktop (See above).
+
+## License [MIT](LICENSE)

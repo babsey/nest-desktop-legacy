@@ -1,0 +1,65 @@
+<mat-list dense style="width:97%">
+  <ng-container *ngFor="let node of nodes | nodes">
+    <mat-list-item *ngIf="!_controllerService.options.edit && node.show" class="node theme-{{ color(node.idx)[1] }}" [style.display]="_sketchService.isSelectedNode_or_all(node) || !selectiveView ? '' : 'none'">
+      <div class="line">
+        <span>
+          <button mat-icon-button [style.border-color]="color(node.idx)[0]" (click)="_sketchService.toggleSelectNode(node)">{{ node.idx }}</button>
+          <span style="font-weight: bold; margin-left:5px">{{ node.label }}</span>
+        </span>
+        <span>({{ node.n }})</span>
+      </div>
+      <mat-list dense *ngIf="node.params" class="params theme-{{ color(node.idx)[1] }}">
+        <ng-container *ngFor="let param of node.params">
+          <mat-list-item *ngIf="!_controllerService.options.edit && param.show" class="param view" [style.border-color]="color(node.idx)[0]">
+            <div class="line" matTooltip="{{ param.id }}" matTooltipPosition="before">
+              <span>{{ param.label }}</span>
+              <span>{{ param.value }} {{ param.unit }}</span>
+            </div>
+          </mat-list-item>
+        </ng-container>
+      </mat-list>
+
+    </mat-list-item>
+    <mat-list-item *ngIf="_controllerService.options.edit" class="node theme-{{ color(node.idx)[1] }}">
+      <div class="line">
+        <mat-checkbox [(ngModel)]="node.show" color="primary" *ngIf="_controllerService.options.edit">
+          <span style="font-weight: bold">
+            {{ node.label || param.id }}
+          </span>
+        </mat-checkbox>
+      </div>
+
+      <mat-list dense *ngIf="node.params" class="params theme-{{ color(node.idx)[1] }}">
+        <ng-container *ngFor="let param of node.params">
+          <mat-list-item *ngIf="_controllerService.options.edit" class="param edit">
+            <div class="line" matTooltip="{{ param.id }}" matTooltipPosition="before">
+              <mat-checkbox [(ngModel)]="param.show" color="primary" *ngIf="_controllerService.options.edit">
+                <span>{{ param.label }}</span>
+              </mat-checkbox>
+              <span>{{ param.value }} {{ param.unit }}</span>
+            </div>
+          </mat-list-item>
+        </ng-container>
+      </mat-list>
+    </mat-list-item>
+
+    <!-- <mat-list dense *ngIf="node.params" class="theme-{{ color(node.idx)[1] }}">
+      <ng-container *ngFor="let param of node | params">
+        <mat-list-item *ngIf="!_dataService.options.edit && param.show" class="param" [style.border-color]="color(node.idx)[0]">
+          <div class="line" matTooltip="{{ param.id }}" matTooltipPosition="before">
+            <span>{{ param.label }}</span>
+            <span>{{ param.value }} {{ param.unit }}</span>
+          </div>
+        </mat-list-item>
+        <mat-list-item *ngIf="_dataService.options.edit" style="height:20px !important">
+          <div class="line">
+            <mat-checkbox [(ngModel)]="param.show" color="primary" *ngIf="_dataService.options.edit">
+              <span>{{ param.label }}</span>
+            </mat-checkbox>
+            <span>{{ param.id }}</span>
+          </div>
+        </mat-list-item>
+      </ng-container>
+    </mat-list> -->
+  </ng-container>
+</mat-list>
