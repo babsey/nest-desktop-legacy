@@ -1,0 +1,67 @@
+{
+  "_id": "ff652abe-a86a-4727-a2bd-442240bdfe57",
+  "name": "Neuronal states",
+  "group": "nest-desktop",
+  "user": "nest-desktop",
+  "version": "1.0.0",
+  "description": "It contains a minimal network configuration of the point neuron model. The simulation shows subthreshold activity response of a set of ten neurons to spike inputs in a Poisson distribution.",
+  "simulation": {
+    "time": 1000.0
+  },
+  "kernel": {
+    "resolution": 0.1
+  },
+  "collections": [{
+    "idx": 0,
+    "element_type": "stimulator",
+    "model": "poisson_generator",
+    "sketch": {
+      "x": 50,
+      "y": 100
+    },
+    "params": {
+      "rate": 10.0
+    }
+  }, {
+    "idx": 1,
+    "element_type": "neuron",
+    "model": "iaf_psc_alpha",
+    "sketch": {
+      "x": 200,
+      "y": 50
+    },
+    "n": 10,
+    "params": {
+      "V_m": -70.0,
+      "E_L": -70.0,
+      "I_e": 0.0,
+      "C_m": 250.0,
+      "tau_m": 10.0,
+      "V_th": -55.0,
+      "V_reset": -70.0,
+      "t_ref": 2.0,
+      "tau_syn_ex": 2.0,
+      "tau_syn_in": 2.0
+    }
+  }, {
+    "idx": 2,
+    "element_type": "recorder",
+    "model": "voltmeter",
+    "sketch": {
+      "x": 350,
+      "y": 100
+    },
+    "params": {
+      "interval": 0.1
+    }
+  }],
+  "connectomes": [{
+    "idx": 0,
+    "pre": 0,
+    "post": 1
+  }, {
+    "idx": 1,
+    "pre": 1,
+    "post": 2
+  }]
+}
