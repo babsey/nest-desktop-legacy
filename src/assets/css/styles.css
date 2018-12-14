@@ -1,0 +1,345 @@
+@page {
+    size: 1920px 1080px;
+}
+
+body {
+    font-size: 13px;
+    position: relative;
+}
+
+body.large {
+    font-size: 16px;
+}
+
+li a, li a:hover, button a, button a:hover {
+    color: black;
+}
+
+[data-notify="container"] {
+    border-radius: 0px;
+}
+
+[data-notify="container"]>[data-notify="title"] {
+    font-weight: bold;
+}
+
+.alert-minimalist {
+    width: auto;
+    padding: 0;
+    font-size: 12px;
+    background-color: white;
+}
+
+.alert-minimalist>[data-notify="icon"] {
+    height: 10px;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.background {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-image: url(../img/background.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position-x: center;
+    background-size: cover;
+    opacity: 0.05;
+}
+
+#simulations {
+    padding-top: 70px;
+}
+
+.simulation-list {
+    width: 100%;
+}
+
+/*.simulation-list .simulation {
+    width: 90% !important;
+    display: inline !important;
+}
+
+.simulation-list .go {
+    width: 10% !important;
+    display: inline !important;
+}*/
+
+#simulation-details {
+    margin-bottom: 30px;
+    background-color: white;
+}
+
+.tooltip-inner {
+    white-space: pre-wrap;
+    min-width: 400px;
+    text-align: left;
+}
+
+.thumbnail {
+    cursor: pointer;
+    position: relative;
+    /*height: 180px;*/
+}
+
+#simulations .thumbnail {
+    height: 180px;
+    overflow: hidden;
+}
+
+.thumbnail img {
+    margin: auto;
+    padding: 10px;
+}
+
+.navbar a {
+    color: black;
+}
+
+.navbar-brand {
+    margin-left: 0px !important;
+}
+
+.description {
+    white-space: pre-wrap;
+}
+
+#view-protocol {
+    width: 220px;
+}
+
+#view-protocol #get-protocol-list {
+    text-align: left;
+    width: 180px;
+}
+
+#view-protocol #protocol-list {
+    width: 180px;
+}
+
+#protocol-list li a {
+    padding: 3px 10px;
+}
+
+.popover {
+    width: 500px;
+}
+
+.popover h4 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 2px;
+    padding-top: 10px;
+}
+
+.popover dl, #simulation-details dl {
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    margin: 0
+}
+
+.popover dt, #simulation-details dt {
+    float: left;
+    width: 50%;
+    padding: 0;
+    margin: 0
+}
+
+.popover dd, #simulation-details dd {
+    float: left;
+    width: 50%;
+    padding: 0;
+    margin: 0
+}
+
+tr.node.hline, tr.link.hline {
+    border-top: 1px solid black;
+}
+
+tr.node td:first-child, tr.link td:first-child {
+    min-width: 120px;
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+.config {
+    width: 220px;
+}
+
+#controller {
+    margin-top: -20px;
+    /*z-index: 1000;*/
+    position: relative
+}
+
+#controller #slider {
+    width: 319px;
+}
+
+#controller .btn-group {
+    display: flex;
+}
+
+#controller .select,
+#controller .select .btn,
+#controller .select .dropdown-menu {
+    width: 100%;
+}
+
+#nodes .dataSelect .recSelect {
+    display: none;
+}
+
+.visible-print .data {
+    margin: 10px;
+    width: 240px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+#description {
+    margin: 10px;
+}
+
+.nav-stacked>li {
+    margin-top: 0px !important;
+    padding-top: 2px;
+}
+
+
+#nodeSpy .nav-pills {
+    position: fixed;
+    cursor: pointer;
+}
+
+#nodeSpy .nav-pills>li {
+    width: 46px;
+}
+
+#nodeSpy .nav-pills .node.disabled {
+    opacity: .4;
+}
+
+#nodeSpy .nav-pills>li>a {
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 23px;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    width: 46px;
+    background-color: white !important;
+}
+
+#nodeSpy .nav-pills>li.active>a, #nodeSpy .nav-pills>li.active>a:focus, #nodeSpy .nav-pills>li.active>a:hover {
+    color: black;
+    border-style: dashed;
+}
+
+#controller-panel {
+    padding: 0px;
+    margin: 0 0 0 44px;
+    box-shadow: none;
+}
+
+.panel-body {
+    padding: 0px 0px;
+    margin: 0px;
+}
+
+#tabs {
+    margin-left: 5px;
+}
+
+#tabs>ul>li>a {
+    font-weight: bold;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.tab-content {
+    overflow-y: auto;
+    max-height: 0px;
+}
+
+#tabs .panel-body {
+    padding: 3px 1px;
+}
+
+.panel-body .content>div {
+    margin: 0 15px;
+}
+
+hr {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#globalSlider .dataSlider {
+    height: 70px;
+}
+
+.paramSlider, .dataSlider {
+    margin-bottom: 0px;
+}
+
+.slider-horizontal {
+    width: 175px !important;
+}
+
+.slider-horizontal .slider-track {
+    height: 1px !important;
+    margin-top: 0px !important;
+}
+
+.slider-horizontal .slider-handle {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 2px solid #333;
+}
+
+.slider-horizontal.slider-disabled .slider-track {
+    border: 1px solid #ccc !important;
+}
+
+.slider-horizontal.slider-disabled .slider-handle {
+    background: #fff none repeat scroll 0 0 !important;
+    border: 2px solid #ccc !important;
+}
+
+.slider-horizontal .slider-tick {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #ccc;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+select.form-control {
+    width: 95%;
+}
+
+input.form-control {
+    height: 23px;
+    padding: 0;
+    border: 0px;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+.slider-handle:focus {
+    cursor: pointer;
+}
+
+#simulation-description {
+    min-height: 300px;
+    margin: 10px 0;
+}

@@ -1,0 +1,153 @@
+{
+    "Act_h": {
+        "abbr": "Inact_Na",
+        "label": "Inactivation of Na+ conductance"
+    },
+    "Act_m": {
+        "abbr": "Act_Na",
+        "label": "Activation of Na+ conductance"
+    },
+    "I_syn_ex": {
+        "abbr": "I_ex",
+        "label": "Total excitatory synaptic current",
+        "unit": "pA"
+    },
+    "I_syn_in": {
+        "abbr": "I_in",
+        "label": "Total inhibitory synaptic current",
+        "unit": "pA"
+    },
+    "Inact_n": {
+        "abbr": "Act_K",
+        "label": "Activation of K+ conductance"
+    },
+    "V_m": {
+        "abbr": "V_m",
+        "label": "Membrane pontential",
+        "unit": "mV"
+    },
+    "V_m.d": {
+        "abbr": "V_m dist",
+        "label": "Distal membrane pontential",
+        "unit": "mV"
+    },
+    "V_m.p": {
+        "abbr": "V_m prox",
+        "label": "Proximal membrane pontential",
+        "unit": "mV"
+    },
+    "V_m.s": {
+        "abbr": "V_m soma",
+        "label": "Soma membrane pontential",
+        "unit": "mV"
+    },
+    "V_th": {
+        "abbr": "V_th",
+        "label": "Spike threshold",
+        "unit": "mV"
+    },
+    "count": {
+        "label": "Count"
+    },
+    "count_normed": {
+        "label": "Count normed"
+    },
+    "ct_": {
+        "abbr": "Act_g",
+        "label": "Activation of conductances"
+    },
+    "currents": {
+        "abbr": "I",
+        "label": "Currents",
+        "unit": "pA"
+    },
+    "g_ex": {
+        "abbr": "g_ex",
+        "label": "Excitatory conductance",
+        "unit": "nS"
+    },
+    "g_ex.d": {
+        "abbr": "g_ex dist",
+        "label": "Distal conductance of excitatory input",
+        "unit": "nS"
+    },
+    "g_ex.p": {
+        "abbr": "g_ex prox",
+        "label": "Proximal conductance of excitatory input",
+        "unit": "nS"
+    },
+    "g_ex.s": {
+        "abbr": "g_ex soma",
+        "label": "Soma conductance of excitatory input",
+        "unit": "nS"
+    },
+    "g_in": {
+        "abbr": "g_in",
+        "label": "Inhibitory conductance",
+        "unit": "nS"
+    },
+    "g_in.d": {
+        "abbr": "g_in dist",
+        "label": "Distal conductance of inhibitory input",
+        "unit": "nS"
+    },
+    "g_in.p": {
+        "abbr": "g_in prox",
+        "label": "Proximal conductance of inhibitory input",
+        "unit": "nS"
+    },
+    "g_in.s": {
+        "abbr": "g_in soma",
+        "label": "Soma conductance of inhibitory input",
+        "unit": "nS"
+    },
+    "I": {
+        "abbr": "I",
+        "label": "Input current",
+        "unit": "pA"
+    },
+    "input_currents_ex": {
+        "abbr": "I_exc_in",
+        "label": "Incoming excitatory currents",
+        "unit": "pA"
+    },
+    "input_currents_in": {
+        "abbr": "I_inh_in",
+        "label": "Incoming inhibitory currents",
+        "unit": "pA"
+    },
+    "isi": {
+        "abbr": "ISI",
+        "label": "Inter-spike interval",
+        "unit": "ms"
+    },
+    "neuron_id": {
+        "label": "Neuron id"
+    },
+    "rate": {
+        "label": "Firing rate",
+        "unit": "spikes/sec"
+    },
+    "spike_count": {
+        "label": "Spike count",
+        "unit": "spikes"
+    },
+    "t_ref_remaining": {
+        "abbr": "t_ref remain",
+        "label": "Time remaining till end of refractory state",
+        "unit": "s"
+    },
+    "times": {
+        "abbr": "ts",
+        "label": "Time",
+        "unit": "ms"
+    },
+    "weighted_spikes_ex": {
+        "abbr": "W_spikes_ex",
+        "label": "Weighted incoming excitatory spikes"
+    },
+    "weighted_spikes_in": {
+        "abbr": "W_spikes_in",
+        "label": "Weighted incoming inhibitory spikes"
+    }
+}
