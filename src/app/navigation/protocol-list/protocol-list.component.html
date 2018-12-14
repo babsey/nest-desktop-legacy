@@ -34,25 +34,25 @@
 </mat-nav-list>
 
 <mat-nav-list dense [mdePopoverTriggerFor]="protocolDetails" mdePopoverTriggerOn="none" #protocolTarget="mdePopoverTrigger" (mouseleave)="protocolTarget.closePopover()">
-  <mat-list-item *ngFor="let protocol of filteredProtocols" (click)="loadProtocol(protocol.doc._id)" (mouseover)="view(protocol.doc)" [class.active]="isLoaded(protocol)" [routerLink]="_navigationService.routerOptions({source:'protocol', id:protocol.doc._id})">
+  <mat-list-item *ngFor="let protocol of filteredProtocols" (click)="loadProtocol(protocol._id)" (mouseover)="view(protocol)" [class.active]="isLoaded(protocol)" [routerLink]="_navigationService.routerOptions({source:'protocol', id:protocol._id})" class="protocol">
     <a matLine style="display:flex">
-      {{ protocol.doc.name }}
+      {{ protocol.name }}
       <div class="flex-spacer"></div>
-      <span *ngIf="protocol.doc.updatedAt">
-        ({{ protocol.doc.updatedAt | timesince }})
+      <span *ngIf="protocol.updatedAt">
+        ({{ protocol.updatedAt | timesince }})
       </span>
     </a>
 
     <mat-menu #protocolMenu="matMenu" class="protocol-menu dense">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="deleteProtocol(protocol._id)">
         <fa-icon [icon]="faTrashAlt"></fa-icon><span style="margin-left:10px">Delete protocol</span>
       </button>
     </mat-menu>
 
-    <button mat-icon-button *ngIf="options.menuProtocol && _navigationService.isPage('view')" [matMenuTriggerFor]="protocolMenu" class="button" style="height:38px; width:38px;line-height:38px;">
+    <button mat-icon-button *ngIf="options.menuProtocol && _navigationService.isPage('view')" [matMenuTriggerFor]="protocolMenu" class="button">
       <fa-icon [icon]="faEllipsisV" style="font-size:11px"></fa-icon>
     </button>
-    <button mat-icon-button *ngIf="_navigationService.isPage('simulate')" class="button" (mouseover)="openPopover(protocolTarget)" style="height:38px; width:38px;line-height:38px;">
+    <button mat-icon-button *ngIf="_navigationService.isPage('simulate')" (mouseover)="openPopover(protocolTarget)" class="button">
       <fa-icon [icon]="faInfoCircle" style="font-size:11px"></fa-icon>
     </button>
   </mat-list-item>

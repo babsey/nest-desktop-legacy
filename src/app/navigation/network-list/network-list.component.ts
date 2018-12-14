@@ -65,8 +65,7 @@ export class NetworkListComponent implements OnInit {
   loadNetwork(id) {
     this._sketchService.resetMouseVars()
     this._navigationService.options.source = 'network';
-    this._networkService.load(this._dataService, id).then(() => {
-      this._dataService.options.ready = true;
+    this._networkService.load(id).then(() => {
       this._sketchService.update.emit()
       if (this._navigationService.isPage('simulate')) {
         this._navigationService.routerLink('simulate')
@@ -78,7 +77,7 @@ export class NetworkListComponent implements OnInit {
   }
 
   isLoaded(network) {
-    return network.doc._id == this._dataService.data._id;
+    return network._id == this._dataService.data._id;
   }
 
   view(network) {

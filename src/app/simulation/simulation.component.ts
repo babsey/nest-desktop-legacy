@@ -63,7 +63,7 @@ export class SimulationComponent implements OnInit {
       if (id && source) {
         this._navigationService.options.source = source;
         let service = source == 'protocol' ? this._protocolService : this._networkService;
-        service.load(this._dataService, id).then(() => {
+        service.load(id).then(() => {
           this._simulationService.run()
         })
       }

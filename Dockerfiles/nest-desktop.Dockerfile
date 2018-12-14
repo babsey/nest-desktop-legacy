@@ -44,9 +44,8 @@ RUN npm i && \
     rm -rf /var/www/html/* && \
     cp -rf /opt/nest-desktop/dist/nest-desktop/* /var/www/html/
 
-WORKDIR /root
+WORKDIR /opt/nest-server
 EXPOSE 80 5000
 
-COPY entrypoint.sh .
 RUN chmod 755 entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["bash entrypoint.sh /opt/nest"]

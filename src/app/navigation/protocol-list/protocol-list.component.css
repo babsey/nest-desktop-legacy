@@ -1,0 +1,18 @@
+.protocol .button {
+  display: none;
+  height: 38px;
+  line-height: 38px;
+  width: 38px;
+}
+
+::ng-deep .protocol .mat-list-item-content:hover .button {
+  display: inline;
+}
+
+::ng-deep .protocol.active .button {
+  display: inline;
+}
+
+.protocol .button fa-icon {
+  font-size: 12px;
+}

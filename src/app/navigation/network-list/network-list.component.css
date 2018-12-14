@@ -1,0 +1,18 @@
+.network .button {
+  display: none;
+  height: 38px;
+  line-height: 38px;
+  width: 38px;
+}
+
+::ng-deep .network .mat-list-item-content:hover .button {
+  display: inline;
+}
+
+::ng-deep .network.active .button {
+  display: inline;
+}
+
+.network .button fa-icon {
+  font-size: 12px;
+}

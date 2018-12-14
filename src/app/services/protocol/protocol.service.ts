@@ -21,13 +21,8 @@ export class ProtocolService {
   }
 
   init() {
-    this.db = this._dbService.PouchDB('protocols')
-  }
-
-  viewAll() {
-    this.db.allDocs({ include_docs: true })
-      .then((doc) => console.log(doc))
-      .catch((err) => console.log(err));
+    window['protocols'] = this
+    this.db = this._dbService.init('protocols');
   }
 
   filter(obj) {
@@ -45,56 +40,33 @@ export class ProtocolService {
   }
 
   list(obj) {
-    this.db.allDocs({ include_docs: true })
-      .then(result => {
-        var protocols = result.rows;
-        var sortedProtocols = protocols.sort((a:any, b:any) => {
-          var dateB:any = new Date(b.doc.updatedAt);
-          var dateA:any = new Date(a.doc.updatedAt);
-          return dateB - dateA;
-        } );
-        obj.protocols = sortedProtocols;
-        this.filter(obj);
-      })
-      .catch(err => console.log(err))
-  }
-
-  count() {
-    return this.db.allDocs()
-      .then(result => result.total_rows)
-      .catch(err => err);
-  }
-
-  load(obj, id) {
-    obj['records'] = [];
-    return this.db.get(id).then(doc => {
-      obj['data'] = this._dataService.clean(doc);
-      this._dataService.options.ready = true;
-    })
-  }
-
-  save(data) {
-    var data_cleaned = this._dataService.clean(data);
-    this.db.allDocs(
-      {include_docs: true}
-    ).then(docs => {
-      var hash = docs.rows.map(row => row.doc.hash)
-      if (hash.indexOf(data_cleaned['hash']) != -1) {
-        this.db.get(data_cleaned['_id']).then(doc => {
-          doc['name'] = data['name'];
-          doc['collections'] = data['collections'];
-          doc['updatedAt'] = new Date();
-          this.db.put(doc).then(() => this.change.emit());
-        })
+    this._dbService.countDocs(this.db).then(count => {
+      if (count == 0) {
+        this.init()
+        setTimeout(() => this.list(obj), 1000)
       } else {
-        delete data_cleaned['_id']
-        data_cleaned['createdAt'] = new Date();
-        data_cleaned['updatedAt'] = new Date();
-        this.db.post(data_cleaned).then(() => this.change.emit());
+        this._dbService.listDocs(this.db).then(docs => {
+          obj.protocols = docs.sort(this._dbService.sortByDate('updatedAt'));
+          this.filter(obj);
+        })
       }
     })
   }
 
+  count() {
+    return this._dbService.countDocs(this.db)
+  }
 
+  load(id) {
+    return this._dbService.loadDoc(this.db, id)
+  }
+
+  save(data) {
+    return this._dbService.saveDoc(this.db, data)
+  }
+
+  delete(id) {
+    return this._dbService.deleteDoc(this.db, id)
+  }
 
 }

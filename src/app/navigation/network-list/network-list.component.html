@@ -31,8 +31,8 @@
 </mat-list>
 
 <mat-nav-list dense [mdePopoverTriggerFor]="networkDetails" mdePopoverTriggerOn="none" #networkTarget="mdePopoverTrigger" (mouseleave)="networkTarget.closePopover()">
-  <mat-list-item *ngFor="let network of filteredNetworks" (click)="loadNetwork(network.doc._id)" (mouseover)="view(network.doc)" [class.active]="isLoaded(network)" [routerLink]="_navigationService.routerOptions({source:'network', id:network.doc._id})">
-    <a matLine>{{ network.doc.name }}</a>
+  <mat-list-item *ngFor="let network of filteredNetworks" (click)="loadNetwork(network._id)" (mouseover)="view(network)" [class.active]="isLoaded(network)" [routerLink]="_navigationService.routerOptions({source:'network', id:network._id})" class="network">
+    <a matLine>{{ network.name }}</a>
 
     <mat-menu #networkMenu="matMenu" class="network-menu dense">
       <button mat-menu-item>
@@ -40,11 +40,11 @@
       </button>
     </mat-menu>
 
-    <button mat-icon-button *ngIf="_navigationService.isPage('view')" [matMenuTriggerFor]="networkMenu" class="button" style="height:38px; width:38px;line-height:38px;">
+    <button mat-icon-button *ngIf="_navigationService.isPage('view')" [matMenuTriggerFor]="networkMenu" class="button">
       <fa-icon [icon]="faEllipsisV" style="font-size:12px"></fa-icon>
     </button>
 
-    <button mat-icon-button *ngIf="_navigationService.isPage('simulate')" class="button" (mouseover)="openPopover(networkTarget)" style="height:38px; width:38px;line-height:38px;">
+    <button mat-icon-button *ngIf="_navigationService.isPage('simulate')" (mouseover)="openPopover(networkTarget)" class="button">
       <fa-icon [icon]="faInfoCircle" style="font-size:12px"></fa-icon>
     </button>
   </mat-list-item>

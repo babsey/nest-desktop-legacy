@@ -75,14 +75,23 @@ export class ProtocolListComponent implements OnInit, OnDestroy {
   }
 
   saveProtocol() {
-    this._protocolService.save(this._dataService.data);
+    this._protocolService.save(this._dataService.data)
+      .then(() => {
+        setTimeout(() => this._protocolService.change.emit(), 100)
+      });
+  }
+
+  deleteProtocol(id) {
+    this._protocolService.delete(id)
+      .then(() => {
+        setTimeout(() => this._protocolService.change.emit(), 100)
+      });
   }
 
   loadProtocol(id) {
     this._sketchService.resetMouseVars()
     this._navigationService.options.source = 'protocol';
-    this._protocolService.load(this._dataService, id).then(() => {
-      this._dataService.options.ready = true;
+    this._protocolService.load(id).then(() => {
       this._sketchService.update.emit()
       if (this._navigationService.isPage('simulate')) {
         this._navigationService.routerLink('simulate')
@@ -94,7 +103,7 @@ export class ProtocolListComponent implements OnInit, OnDestroy {
   }
 
   isLoaded(protocol) {
-    return protocol.doc._id == this._dataService.data._id;
+    return protocol._id == this._dataService.data._id;
   }
 
   view(protocol) {

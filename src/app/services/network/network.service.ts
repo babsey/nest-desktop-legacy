@@ -22,19 +22,21 @@ export class NetworkService {
   }
 
   init() {
-    this.db = this._dbService.PouchDB('networks')
+    window['networks'] = this
+    this.db = this._dbService.init('networks')
     this.syncFromFile('neuronal-states');
     this.syncFromFile('spike-trains');
   }
 
   syncFromFile(filename) {
     var data = require('../../../config/networks/' + filename + '.json');
-    this.save(data, true);
-  }
-
-  viewAll() {
-    this.db.allDocs({ include_docs: true })
-      .catch((err) => console.log(err));
+    let data_cleaned = this._dataService.clean(data);
+    this._dbService.hashDocs(this.db)
+      .then(docsHash => {
+        if (docsHash.indexOf(data_cleaned['hash']) == -1) {
+          this.save(data_cleaned);
+        }
+      })
   }
 
   filter(obj) {
@@ -51,49 +53,29 @@ export class NetworkService {
     }
   }
 
-
   list(obj) {
-    this.db.allDocs({ include_docs: true })
-      .then((result) => {
-        if (result.total_rows == 0) {
-          this.init()
-          setTimeout(() => this.list(obj), 1000)
-        } else {
-          obj.networks = result.rows
+    this._dbService.countDocs(this.db).then(count => {
+      if (count == 0) {
+        this.init()
+        setTimeout(() => this.list(obj), 1000)
+      } else {
+        this._dbService.listDocs(this.db).then(docs => {
+          obj.networks = docs.sort(this._dbService.sortByProperty('name'));
           this.filter(obj);
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
-  count() {
-    this.db.allDocs()
-      .then((result) => console.log(result.total_rows))
-      .catch((err) => console.log(err));
-  }
-
-  load(obj, id) {
-    obj['records'] = [];
-    return this.db.get(id).then((doc) => {
-      obj['data'] = this._dataService.clean(doc);
-      this._dataService.options.ready = true;
+        })
+      }
     })
   }
 
-  save(data, addIfNotExist = false) {
-    var data_cleaned = this._dataService.clean(data);
-    this.db.get(data._id).then((doc) => {
-      if (doc['hash'] == data_cleaned['hash']) return
-      data_cleaned['_id'] = doc._id
-      this.db.put(data_cleaned)
-        .catch((err) => console.log(err));
-    }).catch((err) => {
-      console.log(err)
-      if (addIfNotExist) {
-        this.db.post(data_cleaned)
-      }
-    });
+  count() {
+    return this._dbService.countDocs(this.db)
+  }
+
+  load(id) {
+    return this._dbService.loadDoc(this.db, id)
+  }
+
+  save(data) {
+    return this._dbService.saveDoc(this.db, data)
   }
 }
