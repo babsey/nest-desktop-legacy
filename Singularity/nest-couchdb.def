@@ -1,0 +1,13 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%labels
+  AUTHOR <spreizer@web.de>
+  VERSION 1.0.0
+
+%post
+  apt-get update && apt-get install -y curl sudo
+  curl -L https://couchdb.apache.org/repo/bintray-pubkey.asc \ | sudo apt-key add -
+  echo "deb https://apache.bintray.com/couchdb-deb bionic main" \ | sudo tee -a /etc/apt/sources.list.d/apache_couchdb_bionic.list
+  apt-get install -y apache2 couchdb
+  systemctl start couchdb.service
