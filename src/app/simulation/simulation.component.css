@@ -10,3 +10,10 @@
 #simulation #chart {
   overflow: hidden;
 }
+
+.buttonRight {
+  position: absolute;
+  right: -28px;
+  z-index: 1000;
+  padding-right: 20px;
+}

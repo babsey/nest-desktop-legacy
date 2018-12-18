@@ -14,3 +14,7 @@
 ::ng-deep .level-menu button[mat-menu-item] span {
   margin-left: 10px;
 }
+
+::ng-deep .controller .input, ::ng-deep .controller .slider {
+  width: 100%;
+}

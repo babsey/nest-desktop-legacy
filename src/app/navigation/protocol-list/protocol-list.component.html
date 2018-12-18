@@ -1,4 +1,4 @@
-<mde-popover #protocolDetails="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverOffsetX="320">
+<mde-popover #protocolDetails="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverOffsetX="323">
   <mat-card style="width:400px" >
     <app-sketch [data]="protocol" width="400" height="200"></app-sketch>
     <app-nodes-view [nodes]="protocol.collections"></app-nodes-view>
@@ -49,10 +49,10 @@
       </button>
     </mat-menu>
 
-    <button mat-icon-button *ngIf="options.menuProtocol && _navigationService.isPage('view')" [matMenuTriggerFor]="protocolMenu" class="button">
+    <button mat-icon-button *ngIf="options.menuProtocol && _navigationService.url().endsWith('view')" [matMenuTriggerFor]="protocolMenu" class="button">
       <fa-icon [icon]="faEllipsisV" style="font-size:11px"></fa-icon>
     </button>
-    <button mat-icon-button *ngIf="_navigationService.isPage('simulate')" (mouseover)="openPopover(protocolTarget)" class="button">
+    <button mat-icon-button *ngIf="_navigationService.url().endsWith('simulate')" (mouseover)="openPopover(protocolTarget)" class="button">
       <fa-icon [icon]="faInfoCircle" style="font-size:11px"></fa-icon>
     </button>
   </mat-list-item>

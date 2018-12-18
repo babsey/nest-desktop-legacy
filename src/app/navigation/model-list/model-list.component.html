@@ -44,7 +44,7 @@
 </div>
 
 <mat-nav-list dense class="model">
-  <mat-list-item *ngFor="let model of filteredModels" (click)="selectModel(model)" [class.active]="isSelected(model)" [class.enabled]="isEnabled(model)">
+  <mat-list-item *ngFor="let model of filteredModels" (click)="selectModel(model)" routerLink="/config/models/{{model}}" [class.active]="isSelected(model)" [class.enabled]="isEnabled(model)" class="model">
     <a matLine>{{ model }}</a>
     <mat-slide-toggle *ngIf="_configService.options.editing" [checked]="enabledModels.indexOf(model) != -1" (change)="toggleModelActivation($event, model)" color="primary"></mat-slide-toggle>
   </mat-list-item>

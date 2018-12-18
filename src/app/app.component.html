@@ -1,18 +1,39 @@
-<mat-sidenav-container id="content" hasBackdrop="false">
+<mat-sidenav-container id="container" hasBackdrop="false">
 
-  <mat-sidenav class="no-print"
+  <mat-sidenav id="navigation"
+    class="no-print"
     role="region"
     mode="side"
     position="start"
     autoFocus="false"
     [opened]="isOpened()"
     (closed)="onClose()"
-    (openedChange)="onChange()">
-    <app-navigation></app-navigation>
+    (openedChange)="onChange()"
+    (mousemove)="buttonDisplay='1'"
+    (mouseleave)="buttonDisplay='0.2'"
+    >
+
+   <app-navigation></app-navigation>
+
   </mat-sidenav>
 
   <mat-sidenav-content #content>
+    <div style="position:absolute; left:0; width:4px; height:100vh; z-index: 1000;" (mousemove)="buttonDisplay='1'"
+      (mouseleave)="buttonDisplay='0.2'"></div>
+
+    <button mat-fab type="button" class="buttonLeft"
+      [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
+      [style.opacity]="buttonDisplay"
+      (click)="toggleNav()"
+      (mousemove)="buttonDisplay='1'"
+      (mouseleave)="buttonDisplay='0.2'"
+      >
+      <fa-icon *ngIf="!isOpened()" [icon]="faChevronRight"></fa-icon>
+      <fa-icon *ngIf="isOpened()"[icon]="faChevronLeft"></fa-icon>
+    </button>
+
     <router-outlet></router-outlet>
+
   </mat-sidenav-content>
 
 </mat-sidenav-container>

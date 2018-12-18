@@ -126,30 +126,11 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     }
   }
 
-  onChange(id, value) {
+  onChange(ref, id, value, defaultValue) {
     // console.log('Change value')
     if (typeof(value) != 'number') return
-    this.node[id] = value;
-    this._dataService.history(this._dataService.data)
-    this._simulationService.run()
-  }
-
-  onChangeParam(id, value) {
-    // console.log('Change param')
-    if (typeof(value) != 'number') return
-    this.node.params[id] = value;
-    this._dataService.history(this._dataService.data)
-    this._simulationService.run()
-  }
-
-  onChangeArray(id, value) {
-    // console.log('Change array')
-    if (value.length == undefined) return
-    if (value.length == 0) {
-      delete this.node.params[id];
-    } else {
-      this.node.params[id] = value;
-    }
+    console.log(ref, id, value)
+    ref[id] = value;
     this._dataService.history(this._dataService.data)
     this._simulationService.run()
   }

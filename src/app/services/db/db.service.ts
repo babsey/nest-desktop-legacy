@@ -54,12 +54,20 @@ export class DBService {
     return this.countDocs(db).then(count => {
       if (count == 0) {
         return this.db.create(db, data_cleaned)
+          .then(res => {
+            this._dataService.data['_id'] = res.id;
+            this._navigationService.routerOptions({})
+          })
       } else {
         this.hashDocs(db).then(docsHash => {
           if (docsHash.indexOf(data_cleaned['hash']) != -1) {
             return this.db.update(db, data_cleaned)
           } else {
             return this.db.create(db, data_cleaned)
+              .then(res => {
+                this._dataService.data['_id'] = res.id;
+                this._navigationService.routerOptions({})
+              })
           }
         })
       }

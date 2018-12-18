@@ -10,7 +10,8 @@ import { SimulationComponent } from '../simulation/simulation.component';
 const appRoutes: Routes = [
   { path: '', component: MainComponent },
   { path: 'config/app', component: ConfigComponent },
-  { path: 'config/model', component: ModelComponent },
+  { path: 'config/models/:model', component: ModelComponent },
+  { path: 'config/models', component: ModelComponent },
   { path: 'view', component: ViewComponent },
   { path: 'simulate', component: SimulationComponent },
   { path: ':source/:id/view', component: ViewComponent },

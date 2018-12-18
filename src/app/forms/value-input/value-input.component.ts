@@ -1,6 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { faEraser } from '@fortawesome/free-solid-svg-icons';
+import { MatDialog } from '@angular/material';
+
+import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-dialog.component';
+
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -9,27 +13,42 @@ import { faEraser } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./value-input.component.css']
 })
 export class ValueInputComponent implements OnInit {
+  @Input() model: any;
   @Input() id: any;
   @Input() value: any;
   @Input() options: any = {};
   @Output() change = new EventEmitter;
 
-  public faEraser = faEraser;
+  public faEllipsisV = faEllipsisV;
 
-  constructor() {
+  constructor(
+    private dialog: MatDialog,
+  ) {
   }
 
   ngOnInit() {
   }
 
-  onChange(event) {
-    this.value = parseFloat(event.target.value || this.options.value);
+  onChange(value) {
+    let isString = typeof(value) == 'string' && value.length > 0;
+    this.value =  isString  ? parseFloat(value) : this.options.value;
     this.change.emit(this.value)
   }
 
   setDefaultValue() {
     this.value = parseFloat(this.options.value);
     this.change.emit(this.value)
+  }
+
+  openConfigDialog() {
+    if (this.id && this.model) {
+      this.dialog.open(FormsConfigDialogComponent, {
+        data: {
+          id: this.id,
+          model: this.model,
+        }
+      });
+    }
   }
 
 }

@@ -4,7 +4,7 @@
       Kernel
     </mat-list-item>
     <mat-list-item *ngFor="let id of _configService.config.nest.kernel.params">
-      <app-ticks-slider [id]="id" [value]="_dataService.data.kernel[id]" [options]="_configService.config.nest.kernel.options[id]" (change)="onChange(id, $event)"></app-ticks-slider>
+      <app-ticks-slider [id]="id" [value]="_dataService.data.kernel[id]" [options]="_configService.config.nest.kernel.options[id]" (change)="onChange(id, $event)" class="slider"></app-ticks-slider>
     </mat-list-item>
   </mat-list>
 </span>

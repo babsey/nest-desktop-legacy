@@ -1,9 +1,13 @@
 <mat-sidenav-container id="simulation" (window:resize)="resize()">
 
-  <mat-sidenav id="controller" role="region" mode="side" opened="true" position="end" disableClose="true">
+  <mat-sidenav id="controller" role="region" mode="side" [opened]="isOpened()" position="end"
+    (mousemove)="buttonDisplay='1'"
+    (mouseleave)="buttonDisplay='0.2'"
+    >
 
     <span *ngIf="_dataService.data.name">
-      <mat-form-field floatLabel="never" style="width:360px; margin-bottom:-20px">
+      <mat-form-field floatLabel="never" style="width: 100%; margin-bottom:-20px">
+        <div matPrefix style="width:10px"></div>
         <input matInput type="text" class="formControl" [readonly]="!_controllerService.options.edit" [(ngModel)]="_dataService.data.name" placeholder="Name of the network model" />
         <button mat-button *ngIf="_controllerService.options.edit && _dataService.data.name" matSuffix mat-icon-button aria-label="Clear" (click)="_dataService.data.name=''">
           <fa-icon [icon]="faTimes"></fa-icon>
@@ -17,9 +21,24 @@
       <app-nodes-view [nodes]="_dataService.data.collections" selectiveView="true"></app-nodes-view>
       <app-links-view [links]="_dataService.data.connectomes" selectiveView="true"></app-links-view>
     </span>
+
   </mat-sidenav>
 
   <mat-sidenav-content #content id="chart">
+    <div style="position:absolute; right:0; width:4px; height:100vh; z-index: 1000;" (mousemove)="buttonDisplay='1'"
+      (mouseleave)="buttonDisplay='0.2'"></div>
+
+    <button mat-fab type="button" class="buttonRight"
+      [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
+      [style.opacity]="buttonDisplay"
+      (click)="toggleControllerSidenav()"
+      (mousemove)="buttonDisplay='1'"
+      (mouseleave)="buttonDisplay='0.2'"
+      >
+      <fa-icon *ngIf="!isOpened()"[icon]="faChevronLeft"></fa-icon>
+      <fa-icon *ngIf="isOpened()" [icon]="faChevronRight"></fa-icon>
+    </button>
+
     <div *ngIf="_dataService.records">
       <app-chart></app-chart>
     </div>

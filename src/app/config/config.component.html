@@ -1,1 +1,171 @@
-<app-config-edit></app-config-edit>
+<mat-card>
+  <mat-card-subtitle>
+    App configuration
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div class="form-fields">
+      <mat-form-field>
+        <input matInput placeholder="Title" name="title" [(ngModel)]="_configService.config.app.app.title" (change)="save()">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Version" name="version" [ngModel]="_configService.config.app.app.version" readonly>
+      </mat-form-field>
+    </div>
+    <mat-list>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.app.log" color="primary" (click)="save()" style="margin-right: 18px">Log</mat-slide-toggle>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-subtitle>
+    NEST Server
+    <mat-chip selected="true" class="mat-primary" [class.mat-warn]="_configService.options.NEST.running">{{ _configService.options.NEST.version }}</mat-chip>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div class="form-fields">
+      <mat-form-field>
+        <input matInput placeholder="Host" name="host" [(ngModel)]="_configService.config.app.nest.server.host" (change)="saveAndCheck()">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="port" name="port" [(ngModel)]="_configService.config.app.nest.server.port" (change)="saveAndCheck()">
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-subtitle>
+    Remote database
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <mat-tab-group>
+
+      <mat-tab label="Networks">
+        <div class="form-fields">
+          <mat-form-field>
+            <input matInput placeholder="Database name" name="Database name" [(ngModel)]="_configService.config.app.db.networks.name" (change)="saveAndCheck()">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Host" name="host" [(ngModel)]="_configService.config.app.db.networks.host" (change)="saveAndCheck()">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Port" name="Port" [(ngModel)]="_configService.config.app.db.networks.port" (change)="saveAndCheck()">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Username" name="Username" [(ngModel)]="_configService.config.app.db.networks.auth.username" (change)="saveAndCheck()">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Password" name="Password" [(ngModel)]="_configService.config.app.db.networks.auth.password" (change)="saveAndCheck()">
+          </mat-form-field>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Protocols">
+        <div class="form-fields">
+          <mat-form-field>
+            <input matInput placeholder="Database name" name="Database name" [(ngModel)]="_configService.config.app.db.protocols.name" (change)="saveAndCheck()">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Host" name="Host" [(ngModel)]="_configService.config.app.db.protocols.host" (change)="saveAndCheck()">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Port" name="Port" [(ngModel)]="_configService.config.app.db.protocols.port" (change)="saveAndCheck()">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Username" name="Username" [(ngModel)]="_configService.config.app.db.protocols.auth.username" (change)="saveAndCheck()">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Password" name="Password" [(ngModel)]="_configService.config.app.db.protocols.auth.password" (change)="saveAndCheck()">
+          </mat-form-field>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-subtitle>
+    Controller
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div class="form-fields">
+      <mat-form-field>
+        <input matInput type="number" placeholder="View level" name="level" [(ngModel)]="_configService.config.app.controller.level" (change)="save()">
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-subtitle>
+    Simulation
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.simulation.autoSimulation" color="primary" (click)="save()" style="margin-right: 18px">Auto simulation</mat-slide-toggle>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.simulation.autoProtocol" color="primary" (click)="save()" style="margin-right: 18px">Auto protocol</mat-slide-toggle>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.simulation.autoReset" color="primary" (click)="save()" style="margin-right: 18px">Auto reset</mat-slide-toggle>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.simulation.randomSeed" color="primary" (click)="save()" style="margin-right: 18px">Randomize seed</mat-slide-toggle>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-subtitle>
+    Sketch
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.sketch.view" color="primary" (click)="save()" style="margin-right: 18px">View sketch</mat-slide-toggle>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.sketch.center" color="primary" (click)="save()" style="margin-right: 18px">Center sketch</mat-slide-toggle>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-subtitle>
+    Chart
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.chart.color" color="primary" (click)="save()" style="margin-right: 18px">Colorify chart</mat-slide-toggle>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-slide-toggle [(ngModel)]="_configService.config.app.chart.autoscale" color="primary" (click)="save()" style="margin-right: 18px">Autoscale chart</mat-slide-toggle>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

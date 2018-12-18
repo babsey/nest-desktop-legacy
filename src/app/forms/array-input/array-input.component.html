@@ -1,8 +1,26 @@
-<mat-form-field matTooltip="{{ id }}" matTooltipPosition="before">
-  <input matInput [placeholder]="options.label || id" [ngModel]="value" (change)="onChange($event)" />
-  <span matSuffix>
-    <button mat-icon-button (click)="openDialog()" color="primary">
-      <fa-icon [icon]="faDice"></fa-icon>
+<span class="form-container">
+
+  <mat-form-field matTooltip="{{ id }}" matTooltipPosition="before">
+    <mat-label>{{ options.label }}</mat-label>
+    <input matInput [placeholder]="options.label || id" [ngModel]="value" (change)="onChange($event)" />
+  </mat-form-field>
+
+  <span>
+    <mat-menu #valueMenu="matMenu" class="value-menu">
+      <button mat-menu-item (click)="openGeneratorDialog()">
+        <span>Generate numbers</span>
+      </button>
+      <button mat-menu-item *ngIf="options.value" matTooltip="Default value: {{ options.value }}" matTooltipPosition="before" (click)="setDefaultValue()">
+        <span>Set default value</span>
+      </button>
+      <button mat-menu-item *ngIf="model" (click)="openConfigDialog()">
+        <span>Configure</span>
+      </button>
+    </mat-menu>
+
+    <button mat-icon-button [matMenuTriggerFor]="valueMenu" class="button" color="primary">
+      <fa-icon [icon]="faEllipsisV"></fa-icon>
     </button>
   </span>
-</mat-form-field>
+
+</span>

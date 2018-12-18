@@ -1,9 +1,6 @@
 <app-sketch *ngIf="viewSketch" [data]="_dataService.data" width="540" height="300"></app-sketch>
 
 <span class="no-print" id="controllerSheetButtons">
-  <button mat-icon-button (click)="toggleList()"  [class.mat-primary]="_navigationService.options.sidenavListOpened">
-    <fa-icon [icon]="faBars"></fa-icon>
-  </button>
   <button mat-icon-button (click)="onClick('simulation', 'showSlider')" [class.mat-primary]="_configService.config.app.simulation.showSlider" matTooltip="Modify parameters">
     <fa-icon [icon]="faSlidersH"></fa-icon>
   </button>

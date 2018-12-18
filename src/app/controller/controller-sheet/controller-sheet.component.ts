@@ -4,7 +4,6 @@ import { MatBottomSheetRef } from '@angular/material';
 import { ConfigService } from '../../config/config.service';
 import { ControllerService } from '../controller.service';
 import { DataService } from '../../services/data/data.service';
-import { NavigationService } from '../../navigation/navigation.service';
 import { ProtocolService } from '../../services/protocol/protocol.service';
 import { SketchService } from '../../sketch/sketch.service';
 import { SimulationService } from '../../simulation/simulation.service';
@@ -52,18 +51,12 @@ export class ControllerSheetComponent implements OnInit {
     public _configService: ConfigService,
     public _controllerService: ControllerService,
     public _dataService: DataService,
-    public _navigationService: NavigationService,
     public _sketchService: SketchService,
     public bottomSheetRef: MatBottomSheetRef<ControllerSheetComponent>,
   ) { }
 
   ngOnInit() {
     // console.log('Init controller sheet');
-  }
-
-
-  toggleList() {
-    this._navigationService.options.sidenavListOpened = !this._navigationService.options.sidenavListOpened;
   }
 
   run() {

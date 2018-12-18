@@ -4,7 +4,7 @@
       Simulation
     </mat-list-item>
     <mat-list-item *ngFor="let id of _configService.config.nest.simulation.params">
-      <app-value-slider [id]="id" [value]="_dataService.data.simulation[id]" [options]="_configService.config.nest.simulation.options[id]" (change)="onChange(id, $event)"></app-value-slider>
+      <app-value-slider [id]="id" [value]="_dataService.data.simulation[id]" [options]="_configService.config.nest.simulation.options[id]" (change)="onChange(id, $event)" class="slider"></app-value-slider>
     </mat-list-item>
   </mat-list>
 </span>

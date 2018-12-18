@@ -2,6 +2,7 @@
   position: relative;
   margin: 0px;
   padding: 0px;
+  width: 100%;
 }
 
 .slider-header {
@@ -11,13 +12,22 @@
 
 .slider-content {
   display: inline-flex;
+  width: 100%;
 }
 
-.slider {
-  width: 250px;
+.slider-content mat-slider {
+  width: 100%;
 }
 
 .slider-input {
   width: 50px;
   margin-left: 2px;
+}
+
+.slider-container button {
+  display: none;
+}
+
+.slider-container:hover button {
+  display: inline;
 }

@@ -9,6 +9,8 @@ import { MatBottomSheet } from '@angular/material';
 import { ControllerSheetComponent } from '../controller/controller-sheet/controller-sheet.component';
 
 import {
+  faChevronLeft,
+  faChevronRight,
   faChevronUp,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
@@ -31,7 +33,10 @@ import { SketchService } from '../sketch/sketch.service';
 })
 export class SimulationComponent implements OnInit {
   @ViewChild('content') content: any;
+  public buttonDisplay: any = '0.2';
 
+  public faChevronLeft = faChevronLeft;
+  public faChevronRight = faChevronRight;
   public faChevronUp = faChevronUp;
   public faTimes = faTimes;
 
@@ -91,6 +96,16 @@ export class SimulationComponent implements OnInit {
     } else {
       this.bottomSheet.dismiss()
     }
+  }
+
+  toggleControllerSidenav() {
+    this.buttonDisplay = '0.2';
+    this._controllerService.options.sidenavOpened = !this._controllerService.options.sidenavOpened;
+    this.resize()
+  }
+
+  isOpened() {
+    return this._controllerService.options.sidenavOpened;
   }
 
 }

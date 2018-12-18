@@ -11,7 +11,7 @@ import { ConfigService } from '../config/config.service';
 })
 export class ControllerService {
   public options: any = {
-    opened: true,
+    sidenavOpened: true,
     sheetOpened: false,
     edit: false,
   };

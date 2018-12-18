@@ -1,15 +1,16 @@
-mat-form-field {
+.form-container {
+  display: inline-flex;
   width: 100%;
 }
 
-mat-form-field button {
+.form-container mat-form-field {
+  width: 100%;
+}
+
+.form-container .button {
   display: none;
 }
 
-mat-form-field:hover {
-  width: 311px;
-}
-
-mat-form-field:hover button {
+.form-container:hover .button {
   display: inline;
 }

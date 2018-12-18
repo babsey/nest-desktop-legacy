@@ -20,5 +20,15 @@ export class ConfigComponent implements OnInit {
 
   ngOnInit() {
     this._configService.init()
+    this._configService.check()
+  }
+
+  save() {
+    this._configService.save('app', this._configService.config.app)
+  }
+
+  saveAndCheck() {
+    this.save()
+    this._configService.check()
   }
 }

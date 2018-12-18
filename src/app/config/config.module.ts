@@ -5,7 +5,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MaterialModule } from '../modules/material.module';
 
 import { ConfigComponent } from './config.component';
-import { ConfigEditComponent } from './config-edit/config-edit.component';
 
 import { ConfigService } from './config.service';
 
@@ -20,14 +19,12 @@ import { ConfigService } from './config.service';
   ],
   declarations: [
     ConfigComponent,
-    ConfigEditComponent,
   ],
   providers: [
     ConfigService,
   ],
   exports: [
     ConfigComponent,
-    ConfigEditComponent,
   ]
 })
 export class ConfigModule { }

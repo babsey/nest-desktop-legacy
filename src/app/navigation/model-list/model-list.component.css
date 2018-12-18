@@ -1,9 +1,14 @@
-.model mat-list-item.active {
-  background-color: #f2f2f2;
+.model {
+  color: #999999 !important;
 }
 
-.model mat-list-item.enabled {
+.model.enabled {
   color: black !important;
+}
+
+.model.active, .model.active:focus, .model.active:hover {
+  background-color: #3366ff;
+  color: white !important;
 }
 
 .form-fields {

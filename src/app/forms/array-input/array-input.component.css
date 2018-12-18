@@ -1,3 +1,16 @@
-mat-form-field {
+.form-container {
+  display: inline-flex;
   width: 100%;
+}
+
+.form-container mat-form-field {
+  width: 100%;
+}
+
+.form-container .button {
+  display: none;
+}
+
+.form-container:hover .button {
+  display: inline;
 }

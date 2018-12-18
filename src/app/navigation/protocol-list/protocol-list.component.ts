@@ -77,6 +77,7 @@ export class ProtocolListComponent implements OnInit, OnDestroy {
   saveProtocol() {
     this._protocolService.save(this._dataService.data)
       .then(() => {
+        console.log(this._dataService.data._id)
         setTimeout(() => this._protocolService.change.emit(), 100)
       });
   }
@@ -93,7 +94,7 @@ export class ProtocolListComponent implements OnInit, OnDestroy {
     this._navigationService.options.source = 'protocol';
     this._protocolService.load(id).then(() => {
       this._sketchService.update.emit()
-      if (this._navigationService.isPage('simulate')) {
+      if (this._navigationService.url().endsWith('simulate')) {
         this._navigationService.routerLink('simulate')
         this._simulationService.run()
       } else {
@@ -111,7 +112,7 @@ export class ProtocolListComponent implements OnInit, OnDestroy {
   }
 
   openPopover(ref: MdePopoverTrigger) {
-    if (this._navigationService.isPage('view')) return
+    if (this._navigationService.url().endsWith('view')) return
     ref.openPopover();
   }
 }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModelConfigurationComponent } from './model-configuration.component';
+import { FormsConfigDialogComponent } from './forms-config-dialog.component';
 
-describe('ModelConfigurationComponent', () => {
-  let component: ModelConfigurationComponent;
-  let fixture: ComponentFixture<ModelConfigurationComponent>;
+describe('FormsConfigDialogComponent', () => {
+  let component: FormsConfigDialogComponent;
+  let fixture: ComponentFixture<FormsConfigDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModelConfigurationComponent ]
+      declarations: [ FormsConfigDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModelConfigurationComponent);
+    fixture = TestBed.createComponent(FormsConfigDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

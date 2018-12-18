@@ -2,6 +2,7 @@
   position: relative;
   margin: 0px;
   padding: 0px;
+  width: 100%;
 }
 
 .slider-header {
@@ -11,10 +12,11 @@
 
 .slider-content {
   display: inline-flex;
+  width: 100%;
 }
 
-.slider {
-  width: 250px;
+.slider-content mat-slider {
+  width: 100%;
 }
 
 .slider-input {
@@ -22,19 +24,15 @@
   margin-left: 2px;
 }
 
-.slider-container button {
+.slider-container .button {
   display: none;
 }
 
-.slider-container:hover button {
+.slider-container:hover .button {
   display: inline;
 }
 
-::ng-deep .value-menu button[mat-menu-item] {
+::ng-deep .value-menu .button[mat-menu-item] {
   height: 32px !important;
   line-height: 32px;
-}
-
-::ng-deep .value-menu button[mat-menu-item] span {
-  margin-left: 10px;
 }

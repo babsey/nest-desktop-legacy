@@ -136,8 +136,8 @@ export class ConfigService {
   }
 
   selectModel(model) {
-    var models = this.config.nest.model
-    this.selectedModel = models[model]
+    var models = this.config.nest.model;
+    this.selectedModel = models[model];
   }
 
   addModel(element_type, id) {

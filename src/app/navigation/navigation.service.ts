@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { DataService } from '../services/data/data.service';
 
@@ -9,22 +9,17 @@ import { DataService } from '../services/data/data.service';
 export class NavigationService {
   public options: any = {
     source: 'network',
-    sidenavListOpened: true,
+    sidenavOpened: true,
   };
 
   constructor(
     private _dataService: DataService,
+    public route: ActivatedRoute,
     public router: Router,
   ) { }
 
-  isPage(name) {
-    let url = this.router.routerState.snapshot.url;
-    return url.endsWith(name);
-  }
-
-  isMainPage() {
-    let url = this.router.routerState.snapshot.url;
-    return url == '/';
+  url() {
+    return this.router.routerState.snapshot.url;
   }
 
   routerLink(name, options={}) {
@@ -44,5 +39,4 @@ export class NavigationService {
     let id = options['id'] || this._dataService.data._id;
     return '/' + source + '/' + id + '/' + name;
   }
-
 }

@@ -5,7 +5,7 @@ import { MatBottomSheet } from '@angular/material';
 
 import {
   faBars,
-  faDesktop,
+  faHome,
   faDownload,
   faInfo,
   faPencilAlt,
@@ -26,10 +26,10 @@ import { ProtocolService } from '../services/protocol/protocol.service';
 })
 export class NavigationComponent implements OnInit {
   public options: any;
-  public selectedIndex: any;
+  public selectedIndex: any = '1';
 
   public faBars = faBars;
-  public faDesktop = faDesktop;
+  public faHome = faHome;
   public faInfo = faInfo;
   public faPencilAlt = faPencilAlt;
   public faSignature = faSignature;

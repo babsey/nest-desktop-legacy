@@ -1,12 +1,14 @@
-.description {
+.param.description {
   color: #999;
   padding: 0 10px;
 }
 
-.mat-list-item-content {
-  display: flex;
+.param.enabled {
+  background-color: #3366ff;
+  color: white !important;
 }
 
-.mat-list-item.enabled {
-  background-color: #f2f2f2;
+.param.enabled .description {
+  background-color: #3366ff;
+  color: white !important;
 }

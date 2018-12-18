@@ -46,7 +46,7 @@ RUN pip3 install flask==0.12.4 flask-cors && \
     rm -rf /var/www/html/*
 
 COPY --from=nest-builder /opt/nest /opt/nest
-COPY ./dist/nest-desktop/* /var/www/html/
+COPY ./html/* /var/www/html/
 
 WORKDIR /opt/nest-server
 EXPOSE 80 5000

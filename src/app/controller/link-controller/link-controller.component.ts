@@ -92,33 +92,11 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this.update()
   }
 
-  onChangeConnSpec(id, value) {
-    if (typeof(value) != 'number') return
-    this.link.conn_spec[id] = value;
-    this.update()
-    this._dataService.history(this._dataService.data)
-    this._simulationService.run()
-  }
-
-  onChangeSynSpec(id, value) {
-    if (typeof(value) != 'number') return
-    this.link.syn_spec[id] = value;
+  onChange(ref, id, value, defaultValue) {
+    ref[id] = value;
     this.update()
     this._sketchService.update.emit()
     this._dataService.history(this._dataService.data)
     this._simulationService.run()
   }
-
-  onChangeArray(id, value) {
-    if (value.length == undefined) return
-    if (value.length == 0) {
-      delete this.link.syn_spec[id];
-    } else {
-      this.link.syn_spec[id] = value;
-    }
-    this.update()
-    this._dataService.history(this._dataService.data)
-    this._simulationService.run()
-  }
-
 }

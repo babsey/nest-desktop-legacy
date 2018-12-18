@@ -5,6 +5,8 @@ import {
   NoopAnimationsModule
 } from '@angular/platform-browser/animations';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 
 // modules
 import { AppRoutingModule } from './modules/app-routing.module';
@@ -24,11 +26,12 @@ import { AppComponent } from './app.component';
     AppComponent,
   ],
   imports: [
+    // NoopAnimationsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    // NoopAnimationsModule,
     BrowserModule,
     ConfigModule,
+    FontAwesomeModule,
     MainModule,
     MaterialModule,
     ModelModule,

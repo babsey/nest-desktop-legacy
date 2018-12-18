@@ -67,7 +67,7 @@ export class NetworkListComponent implements OnInit {
     this._navigationService.options.source = 'network';
     this._networkService.load(id).then(() => {
       this._sketchService.update.emit()
-      if (this._navigationService.isPage('simulate')) {
+      if (this._navigationService.url().endsWith('simulate')) {
         this._navigationService.routerLink('simulate')
         this._simulationService.run()
       } else {
@@ -85,7 +85,7 @@ export class NetworkListComponent implements OnInit {
   }
 
   openPopover(ref: MdePopoverTrigger) {
-    if (this._navigationService.isPage('view')) return
+    if (this._navigationService.url().endsWith('view')) return
     ref.openPopover();
   }
 }

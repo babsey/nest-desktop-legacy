@@ -9,6 +9,11 @@
   display: inline;
 }
 
+::ng-deep .protocol.active, .protocol.active:focus, .protocol.active:hover {
+  background-color: #3366ff;
+  color: white !important;
+}
+
 ::ng-deep .protocol.active .button {
   display: inline;
 }

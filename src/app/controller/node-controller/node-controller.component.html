@@ -34,13 +34,10 @@
 
   <mat-list class="controller-menu" dense>
     <mat-list-item *ngIf="!isRecorder(node.element_type)" [style.border-color]="color[0]" [style.display]="_controllerService.display(2)" >
-      <app-value-slider id="n" [value]="node.n" [options]="_configService.config.nest.node.npop" (change)="onChange('n', $event)"></app-value-slider>
+      <app-value-slider id="n" [value]="node.n" [options]="_configService.config.nest.node.npop" (change)="onChange(node, 'n', $event, _configService.config.nest.node.npop.value)" class="slider"></app-value-slider>
     </mat-list-item>
     <mat-list-item *ngFor="let id of configModel.params" [ngSwitch]="configModel.options[id].view" [style.border-color]="color[0]" [style.display]="_controllerService.display(configModel.options[id].level)" >
-      <app-value-input *ngSwitchCase="'valueInput'" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChangeParam(id, $event)"></app-value-input>
-      <app-array-input *ngSwitchCase="'arrayInput'" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChangeArray(id, $event)"></app-array-input>
-      <app-value-slider *ngSwitchCase="'valueSlider'" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChangeParam(id, $event)"></app-value-slider>
-      <app-ticks-slider *ngSwitchCase="'tickSlider'" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChangeParam(id, $event)"></app-ticks-slider>
+      <app-param-input [view]="configModel.options[id].view" [model]="node.model" [id]="id" [value]="node.params[id]" [options]="configModel.options[id]" (change)="onChange(node.params, id, $event, configModel.options[id].value)" style="width:100%"></app-param-input>
     </mat-list-item>
   </mat-list>
 

@@ -24,6 +24,7 @@ export class ModelService {
 
   selectModel(model) {
     this.selectedModel = model;
+    this._configService.selectModel(model)
   }
 
   getModels() {
@@ -39,6 +40,7 @@ export class ModelService {
       'return_text': 'true',
     };
     this.progress = true;
+    this.helptext = '';
     setTimeout(() => {
       this.http.post(urlRoot + '/api/nest/help', data).subscribe(res => {
         this.progress = false;

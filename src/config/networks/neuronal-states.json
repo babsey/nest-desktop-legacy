@@ -3,7 +3,7 @@
   "name": "Neuronal states",
   "group": "nest-desktop",
   "user": "nest-desktop",
-  "version": "1.0.0",
+  "version": "1.0",
   "description": "It contains a minimal network configuration of the point neuron model. The simulation shows subthreshold activity response of a set of ten neurons to spike inputs in a Poisson distribution.",
   "simulation": {
     "time": 1000.0

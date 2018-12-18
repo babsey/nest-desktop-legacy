@@ -6,3 +6,5 @@ RUN apt-get update && apt-get install -y curl && \
   echo "deb https://apache.bintray.com/couchdb-deb bionic main" \ | sudo tee -a /etc/apt/sources.list.d/apache_couchdb_bionic.list && \
   apt-get install -y apache2 couchdb && \
   systemctl start couchdb.service && \
+
+EXPOSE 5984

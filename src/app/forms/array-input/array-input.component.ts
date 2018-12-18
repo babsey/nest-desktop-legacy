@@ -5,10 +5,11 @@ import { MatDialog } from '@angular/material';
 import { DataService } from '../../services/data/data.service';
 import { GeneratorService } from '../../services/generator/generator.service';
 
-import { ArrayGeneratorDialogComponent } from '../../dialogs/array-generator-dialog/array-generator-dialog.component';
+import { ArrayGeneratorDialogComponent } from '../array-generator-dialog/array-generator-dialog.component';
+import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-dialog.component';
 
 import {
-  faDice,
+  faEllipsisV,
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -18,12 +19,13 @@ import {
   styleUrls: ['./array-input.component.css']
 })
 export class ArrayInputComponent implements OnInit {
+  @Input() model: any;
   @Input() id: any;
   @Input() value: any;
   @Input() options: any = {};
   @Output() change = new EventEmitter;
 
-  public faDice = faDice;
+  public faEllipsisV = faEllipsisV;
 
   constructor(
     private _dataService: DataService,
@@ -45,18 +47,34 @@ export class ArrayInputComponent implements OnInit {
     }
   }
 
-  openDialog(): void {
+  openGeneratorDialog(): void {
     const dialogRef = this.dialog.open(ArrayGeneratorDialogComponent);
 
     dialogRef.afterClosed().subscribe(d => {
       if (d) {
         d.end = d.end != -1 ? d.end : this._dataService.data.simulation.time;
         d.max = d.max != -1 ? d.max : this._dataService.data.simulation.time;
-        d.toFixed = this._dataService.data.kernel.resolution >= 1 ? -1 : String(this._dataService.data.kernel.resolution).split('.')[1].length;
+        let resolution = this._dataService.data.kernel.resolution || 1.0
+        d.toFixed = resolution >= 1 ? -1 : String(resolution).split('.')[1].length;
         this.value = this._generatorService.generate(d);
         this.change.emit(this.value)
       }
     });
+  }
+
+  setDefaultValue() {
+    this.change.emit(this.options.value)
+  }
+
+  openConfigDialog() {
+    if (this.id && this.model) {
+      this.dialog.open(FormsConfigDialogComponent, {
+        data: {
+          id: this.id,
+          model: this.model,
+        }
+      });
+    }
   }
 
 }

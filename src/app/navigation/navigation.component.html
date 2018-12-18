@@ -1,26 +1,30 @@
 <mat-toolbar color="accent">
-  <mat-toolbar-row style="display:flex; justify-content: space-between">
-    <a mat-button class="nest-desktop" href="#">
-      <img height="42px" alt="NEST" src="./img/nest-accent.svg" class="nest">
-      <fa-icon [icon]="faDesktop" class="nest-desktop"></fa-icon>
-    </a>
+  <mat-toolbar-row>
+    <span class="nest-desktop">
+      <a href="http://www.nest-simulator.org" target="_blank">
+        <img height="42px" alt="NEST" src="./img/nest.svg" class="nest">
+      </a>
+    </span>
     <span class="navButton">
-      <a mat-icon-button [routerLink]="_navigationService.routerLink('view')" [class.mat-primary]="_navigationService.isPage('view')" matTooltip="View network configuration">
+        <a mat-icon-button href="#" [class.mat-primary]="_navigationService.url()=='/'" matTooltip="Main page">
+        <fa-icon [icon]="faHome"></fa-icon>
+      </a>
+      <a mat-icon-button [routerLink]="_navigationService.routerLink('view')" [class.mat-primary]="_navigationService.url().endsWith('view')" matTooltip="View network configuration">
         <fa-icon [icon]="faInfo"></fa-icon>
       </a>
-      <a mat-icon-button [routerLink]="_navigationService.routerLink('simulate')" [class.mat-primary]="_navigationService.isPage('simulate')" matTooltip="Simulation workspace">
+      <a mat-icon-button [routerLink]="_navigationService.routerLink('simulate')" [class.mat-primary]="_navigationService.url().endsWith('simulate')" matTooltip="Simulation workspace">
         <fa-icon [icon]="faSignature"></fa-icon>
       </a>
-      <a mat-icon-button routerLink="/config/app" [class.mat-primary]="_navigationService.isPage('app') || _navigationService.isPage('model')" matTooltip="Configure app or models">
+      <a mat-icon-button routerLink="/config/app" [class.mat-primary]="_navigationService.url().startsWith('/config')" matTooltip="Configure app or models">
         <fa-icon [icon]="faPencilAlt"></fa-icon>
       </a>
     </span>
   </mat-toolbar-row>
 </mat-toolbar>
 
-<app-main-list *ngIf="_navigationService.isMainPage()"></app-main-list>
+<app-main-list *ngIf="_navigationService.url()=='/'"></app-main-list>
 
-<mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex" *ngIf="_navigationService.isPage('view') || _navigationService.isPage('simulate')">
+<mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex" *ngIf="_navigationService.url().endsWith('view') || _navigationService.url().endsWith('simulate')">
 
   <mat-tab label="Networks">
     <app-network-list></app-network-list>
@@ -32,5 +36,5 @@
 
 </mat-tab-group>
 
-<app-config-list *ngIf="_navigationService.isPage('app')"></app-config-list>
-<app-model-list *ngIf="_navigationService.isPage('model')"></app-model-list>
+<app-config-list *ngIf="_navigationService.url().startsWith('/config/app')"></app-config-list>
+<app-model-list *ngIf="_navigationService.url().startsWith('/config/models')"></app-model-list>

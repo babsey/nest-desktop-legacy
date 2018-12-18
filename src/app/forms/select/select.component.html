@@ -1,7 +1,7 @@
 <span style="display:flex; position:relative;">
   <mat-form-field class="select">
     <mat-select [placeholder]="placeholder" [(ngModel)]="selected" (selectionChange)="onSelectionChange()">
-      <mat-form-field floatLabel="never" style="width:300px">
+      <mat-form-field floatLabel="never" style="width:288px; padding: 0 5px">
         <fa-icon matPrefix [icon]="faSearch" style="padding-right: 10px"></fa-icon>
         <input class="search" matInput type="text" (keyup)="search($event.target.value)" autocomplete="off" placeholder="search">
       </mat-form-field>

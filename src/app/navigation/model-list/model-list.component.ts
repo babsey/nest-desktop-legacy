@@ -114,7 +114,6 @@ export class ModelListComponent implements OnInit {
 
   selectModel(model) {
     this._modelService.selectModel(model);
-    this._configService.selectModel(model);
     this._modelService.getDoc(model);
     this._modelService.getDefaults(model);
   }

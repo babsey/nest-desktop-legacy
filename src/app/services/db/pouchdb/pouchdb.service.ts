@@ -36,9 +36,13 @@ export class PouchDBService {
   // CRUD - Create, Read, Update, Delete
 
   create(db, data) {
+    if ('_id' in data) {
+      delete data['_id']
+    }
     data['createdAt'] = new Date();
     data['updatedAt'] = new Date();
     return db.post(data)
+      .then(res => res)
       .catch(err => err);
   }
 
