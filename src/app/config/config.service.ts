@@ -15,7 +15,7 @@ export class ConfigService {
     editing: false,
     NEST: {
       running: false,
-      version: 'Failed',
+      data: {},
     }
   };
   public config: any = {};
@@ -196,7 +196,7 @@ export class ConfigService {
   check() {
     // console.log('Check')
     this.options.NEST.running = false;
-    this.options.NEST.version = 'Failed';
+    this.options.NEST.request = 'failed';
     this.http.get(this.urlRoot())
       .pipe(
         timeout(1000), catchError(e => {
@@ -204,9 +204,10 @@ export class ConfigService {
         })
       )
       .subscribe(res => {
-        if ('version' in res) {
+        this.options.NEST.request = 'ok'
+        if ('nest' in res) {
           this.options.NEST.running = true;
-          this.options.NEST.version = res['version'];
+          this.options.NEST.data = res;
         }
       })
   }

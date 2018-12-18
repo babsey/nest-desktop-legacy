@@ -21,12 +21,12 @@
 </mat-card>
 
 <mat-card>
-  <mat-card-subtitle>
-    NEST Server
-    <mat-chip selected="true" class="mat-primary" [class.mat-warn]="_configService.options.NEST.running">{{ _configService.options.NEST.version }}</mat-chip>
+  <mat-card-subtitle style="display:inline-flex">
+    <span>NEST Server</span>
   </mat-card-subtitle>
 
   <mat-card-content>
+
     <div class="form-fields">
       <mat-form-field>
         <input matInput placeholder="Host" name="host" [(ngModel)]="_configService.config.app.nest.server.host" (change)="saveAndCheck()">
@@ -36,6 +36,13 @@
         <input matInput placeholder="port" name="port" [(ngModel)]="_configService.config.app.nest.server.port" (change)="saveAndCheck()">
       </mat-form-field>
     </div>
+
+    <mat-chip-list>
+      <mat-chip selected="true" class="mat-warn">REQUEST {{ _configService.options.NEST.request }}</mat-chip>
+      <mat-chip selected="true" class="mat-warn">RESPONSE server {{ _configService.options.NEST.running ? '' : 'not' }} running</mat-chip>
+      <mat-chip selected="true" class="mat-warn" *ngIf="_configService.options.NEST.running">VERSION {{ _configService.options.NEST.data.version }}</mat-chip>
+      <mat-chip selected="true" class="mat-warn" *ngIf="_configService.options.NEST.running">NEST {{ _configService.options.NEST.data.nest.version }}</mat-chip>
+    </mat-chip-list>
   </mat-card-content>
 </mat-card>
 
