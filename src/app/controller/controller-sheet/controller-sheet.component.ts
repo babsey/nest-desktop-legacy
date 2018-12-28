@@ -4,7 +4,6 @@ import { MatBottomSheetRef } from '@angular/material';
 import { ConfigService } from '../../config/config.service';
 import { ControllerService } from '../controller.service';
 import { DataService } from '../../services/data/data.service';
-import { ProtocolService } from '../../services/protocol/protocol.service';
 import { SketchService } from '../../sketch/sketch.service';
 import { SimulationService } from '../../simulation/simulation.service';
 
@@ -38,7 +37,6 @@ export class ControllerSheetComponent implements OnInit {
   public faPencilAlt = faPencilAlt;
   public faPlayCircle = faPlayCircle;
   public faRedoAlt = faRedoAlt;
-  public faSave = faSave;
   public faShareAlt = faShareAlt;
   public faSlidersH = faSlidersH;
   public faTimes = faTimes;
@@ -46,7 +44,6 @@ export class ControllerSheetComponent implements OnInit {
   public faUndoAlt = faUndoAlt;
 
   constructor(
-    private _protocolService: ProtocolService,
     private _simulationService: SimulationService,
     public _configService: ConfigService,
     public _controllerService: ControllerService,
@@ -61,12 +58,6 @@ export class ControllerSheetComponent implements OnInit {
 
   run() {
     this._simulationService.run(true)
-  }
-
-  save() {
-    // console.log('Save protocol')
-    this._controllerService.options.edit = false;
-    this._protocolService.save(this._dataService.data)
   }
 
   toggleNetworkSketchView() {

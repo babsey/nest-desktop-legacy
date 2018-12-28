@@ -22,7 +22,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
   @Input() width: any;
   @Input() height: any;
   private selector: d3.Selection;
-  private drag_line: any;
+  private dragline: any;
   private subscription: any;
 
   constructor(
@@ -33,13 +33,6 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
   ) {
     this.selector = d3.select(elementRef.nativeElement);
-
-    this.drag_line = this.selector.append('svg:path')
-      .attr('class', 'connection dragline')
-      .style('pointer-events', 'none')
-      .style('stroke', 'black')
-      .style('stroke-width', '3px')
-      .attr('d', 'M0,0L0,0');
   }
 
   addCollection(idx, point) {
@@ -79,7 +72,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
       .attr('height', this.height)
 
     if (!this._sketchService.events.sourceNode) {
-      this.drag_line.attr('d', 'M0,0L0,0')
+      this.dragline.attr('d', 'M0,0L0,0')
         .style('marker-end', '');
     }
 
@@ -108,22 +101,27 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
       .attr('width', this.width)
       .attr('height', this.height)
 
+    this.dragline = this.selector.append('svg:path')
+      .attr('class', 'link dragline')
+      .style('pointer-events', 'none')
+      .style('stroke', 'steelblue')
+      .style('stroke-width', '5px')
+      .attr('d', 'M0,0L0,0');
+
     background
-      // .on('mousemove', function() {
-      //   var source = _this._sketchService.events.sourceNode;
-      //   if (source) {
-      //     var point = d3.mouse(this);
-      //     _this.drag_line
-      //       .attr('d', 'M' + source.x + ',' + source.y + 'L' + point[0] + ',' + point[1])
-      //       .style('marker-end', 'url(#end-arrow)');
-      //   }
-      //   _this._sketchService.update.emit();
-      // })
-      // .on('dblclick', function() {
-      //   _this._sketchService.events.sourceNode = null;
-      //   _this.selector.selectAll('.select').remove();
-      //   _this._sketchService.update.emit();
-      // })
+      .on('mousemove', function() {
+        var source = _this._sketchService.events.sourceNode;
+        if (source) {
+          var point = d3.mouse(this);
+          var target = {
+            x: point[0],
+            y: point[1],
+          };
+          _this.dragline
+            .attr('d', _this._sketchService.drawPath(source.sketch, target))
+            .style('marker-end', 'url(#end-arrow)');
+        }
+      })
       .on('click', function() {
         var data = _this.data;
         if (data == {} || !data) return
@@ -138,10 +136,19 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
           .attr('class', 'select')
           .attr('transform', 'translate(' + point[0] + ',' + point[1] + ')');
 
+        var tooltip = select.append('svg:text')
+          .attr('class', 'tooltip')
+          .attr('transform', 'translate(0, -65)')
+          .style('visibility', 'hidden');
+
         select.append('svg:circle')
           .attr('r', 23)
           .attr('fill', 'white')
-          .on('click', () => _this.selector.selectAll('.select').remove())
+          .on('click', () => {
+            _this._sketchService.events.sourceNode = null;
+            _this.selector.selectAll('.select').remove()
+            _this._sketchService.update.emit();
+          })
 
         var arcFrame = d3.arc()
           .innerRadius(23)
@@ -159,17 +166,18 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
             .style('stroke-width', 4)
             .attr('d', arcFrame)
             .on('mouseover', function() {
+              tooltip.text(d)
+                .style('visibility', 'visible');
+
               if (!sourceNode || d != 'stimulator') {
                 d3.select(this).style('fill',
                   () => colors[data.collections.length % colors.length][0])
               }
             })
             .on('mouseout', function() {
-              d3.select(this).style('fill', 'white')
+              tooltip.style('visibility', 'hidden');
+              d3.select(this).style('fill', 'white');
             })
-            // .on('mousemove', function() {
-            //   _this._sketchService.update.emit();
-            // })
             .on('mouseup', () => {
               _this.selector.selectAll('.select').remove();
               var sourceNode = _this._sketchService.events.sourceNode;
@@ -192,6 +200,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
 
           var f = (i * 2 / 3) + (1 / 3);
           select.append('svg:text')
+            .attr('class', 'label')
             .attr('fill', (sourceNode && d == 'stimulator') ? '#cccccc' : 'black')
             .attr('dx', Math.sin(Math.PI * f) * 40)
             .attr('dy', -Math.cos(Math.PI * f) * 40 + 5)

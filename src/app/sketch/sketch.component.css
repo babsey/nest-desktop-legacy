@@ -1,0 +1,21 @@
+::ng-deep .sketch .link {
+  fill: none;
+}
+
+::ng-deep .sketch text {
+  pointer-events: none;
+  font: 14px sans-serif;
+  text-anchor: middle;
+}
+
+::ng-deep .sketch .label {
+  font-weight: bold;
+}
+
+::ng-deep .sketch :not(.active) .tooltip {
+  visibility: hidden;
+}
+
+::ng-deep .sketch .active .tooltip {
+  visibility: visible;
+}

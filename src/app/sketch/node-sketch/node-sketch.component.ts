@@ -61,8 +61,9 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
     // console.log('Update node sketch')
     if (this.data == undefined) return
     if (Object.keys(this.data).length === 0 && this.data.constructor === Object) return
-    var edit = this._controllerService.options.edit;
-    var colors = this._colorService.nodes;
+    let edit = this._controllerService.options.edit;
+    let colors = this._colorService.nodes;
+    let r = this._sketchService.options.node.radius
 
     var nodes = this.selector.selectAll("g.node").data(this.data.collections); // UPDATE
 
@@ -105,24 +106,31 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
           this._sketchService.toggleSelectNode(d)
         }
       }).call(d3.drag()
-        .on('start', function() {
-          d3.select(this).classed('active', true)
-        })
         .on('drag', d => {
           if (edit) return
           d.sketch.x = d3.event.x;
           d.sketch.y = d3.event.y;
           this._sketchService.update.emit()
         })
-        .on('end', function() {
-          d3.select(this).classed('active', false)
-        })
       )
 
     nodesEnter.append('svg:circle')
-      .attr('r', 23)
+      .attr('r', r)
       .style('stroke', d => colors[d.idx % colors.length][0])
       .style('stroke-dasharray', d => this._sketchService.isSelectedNode(d) ? '9' : '');
+
+    var tooltip = nodesEnter.append('svg:text')
+      .text(d => this._sketchService.label(d.model))
+      .attr('class', 'tooltip')
+      .attr('transform', 'translate(0, -' + (r + 6) + ')');
+
+    nodesEnter
+      .on('mouseover', function() {
+          d3.select(this).classed('active', true)
+        })
+      .on('mouseout', function() {
+          d3.select(this).classed('active', false)
+        })
 
     nodes.merge(nodesEnter) // ENTER + UPDATE
       .attr('transform', d => 'translate(' + d.sketch.x + ',' + d.sketch.y + ')');
@@ -132,6 +140,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
       .style('stroke-dasharray', d => this._sketchService.isSelectedNode(d) ? '9' : '');
 
     nodesEnter.append('svg:text')
+      .attr('class', 'label')
       .attr('dx', 0)
       .attr('dy', '.4em')
       .text(d => d.idx);
@@ -146,8 +155,8 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
         })
         .on('drag', d => {
           if (edit) return
-          if (d3.event.x < 23 || d3.event.x > this.width - 23) return
-          if (d3.event.y < 23 || d3.event.y > this.height - 23) return
+          if (d3.event.x < r || d3.event.x > this.width - r) return
+          if (d3.event.y < r || d3.event.y > this.height - r) return
           d.sketch.x = d3.event.x;
           d.sketch.y = d3.event.y;
           this._sketchService.update.emit()

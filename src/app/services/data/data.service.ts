@@ -56,7 +56,7 @@ export class DataService {
           idx: collection['idx'],
           element_type: collection['element_type'],
           model: collection['model'],
-          n: collection['n'],
+          n: collection['n'] || 1,
           params: Object.assign({}, collection['params']),
         })
       })

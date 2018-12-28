@@ -42,10 +42,10 @@ WORKDIR /opt/nest-desktop
 RUN npm i && \
     npm run build && \
     rm -rf /var/www/html/* && \
-    cp -rf /opt/nest-desktop/dist/nest-desktop/* /var/www/html/
+    cp -rf /opt/nest-desktop/html/* /var/www/html/
 
 WORKDIR /opt/nest-server
 EXPOSE 80 5000
 
 RUN chmod 755 entrypoint.sh
-ENTRYPOINT ["bash entrypoint.sh /opt/nest"]
+ENTRYPOINT ["entrypoint.sh", "/opt/nest"]

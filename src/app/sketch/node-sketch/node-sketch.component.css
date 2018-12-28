@@ -7,10 +7,3 @@
   stroke-width: 3px;
   stroke-dashoffset: 4.5;
 }
-
-::ng-deep .node text {
-  pointer-events: none;
-  font: 14px sans-serif;
-  text-anchor: middle;
-  font-weight: bold;
-}

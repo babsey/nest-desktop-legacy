@@ -104,7 +104,7 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
         }
       })
       .merge(links) // ENTER + UPDATE
-      .attr('d', this.draw_path)
+      .attr('d', this.drawPath)
       .style('stroke', d => this.linkColor(d))
       .style('stroke-width', d => this.linkWidth(d))
       .style('stroke-dasharray', d => this._sketchService.isSelectedLink(d) ? '10, 5' : '')
@@ -141,57 +141,11 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
     return 'url(#end-arrow)'
   }
 
-  draw_path = (link) => {
+  drawPath = (link) => {
     var nodes = this.data.collections;
     var pre = nodes[link.pre];
     var post = nodes[link.post];
-
-    var x1 = pre.sketch.x,
-      y1 = pre.sketch.y,
-      x2 = post.sketch.x,
-      y2 = post.sketch.y,
-      dx = x2 - x1,
-      dy = y2 - y1,
-      dr = Math.sqrt(dx * dx + dy * dy),
-      r = 28,
-
-      // Defaults for normal edge.
-      drx = dr,
-      dry = dr,
-      xRotation = 0, // degrees
-      largeArc = 0, // 1 or 0
-      sweep = 1; // 1 or 0
-
-    // Self edge.
-    if (x1 === x2 && y1 === y2) {
-      // Fiddle with this angle to get loop oriented.
-      xRotation = 0;
-
-      // Needs to be 1.
-      largeArc = 1;
-
-      // Change sweep to change orientation of loop.
-      sweep = 0;
-
-      // Make drx and dry different to get an ellipse
-      // instead of a circle.
-      drx = 15;
-      dry = 20;
-
-      // For whatever reason the arc collapses to a point if the beginning
-      // and ending points of the arc are the same, so kludge it.
-
-      x1 = x1 - r / 2 / Math.sqrt(2);
-      y1 = y1 + r;
-      x2 = x2 + r / 2 / Math.sqrt(2);
-      y2 = y2 + r * Math.sqrt(2);
-    } else {
-      x1 = x1 + (dx / dr * r);
-      y1 = y1 + (dy / dr * r);
-      x2 = x2 - (dx / dr * r) * Math.sqrt(2);
-      y2 = y2 - (dy / dr * r) * Math.sqrt(2);
-    }
-    return 'M' + x1 + ',' + y1 + 'A' + drx + ',' + dry + ' ' + xRotation + ',' + largeArc + ',' + sweep + ' ' + x2 + ',' + y2;
-  };
+    return this._sketchService.drawPath(pre.sketch, post.sketch, true)
+  }
 
 }

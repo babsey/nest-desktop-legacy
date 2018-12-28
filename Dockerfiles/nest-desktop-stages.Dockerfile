@@ -66,10 +66,10 @@ RUN pip3 install flask==0.12.4 flask-cors && \
 RUN rm -rf /var/www/html/*
 
 COPY --from=nest-builder /opt/nest /opt/nest
-COPY --from=nest-desktop-builder /tmp/nest-desktop/dist/nest-desktop/* /var/www/html/
+COPY --from=nest-desktop-builder /tmp/nest-desktop/html/* /var/www/html/
 
 WORKDIR /opt/nest-server
 EXPOSE 80 5000
 
 RUN chmod 755 entrypoint.sh
-ENTRYPOINT ["bash entrypoint.sh /opt/nest"]
+ENTRYPOINT ["entrypoint.sh", "/opt/nest"]
