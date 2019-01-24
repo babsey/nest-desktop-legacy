@@ -28,7 +28,7 @@
     <div style="position:absolute; right:0; width:4px; height:100vh; z-index: 1000;" (mousemove)="buttonDisplay='1'"
       (mouseleave)="buttonDisplay='0.2'"></div>
 
-    <button mat-fab type="button" class="buttonRight"
+    <button mat-fab type="button" class="buttonRight no-print"
       [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
       [style.opacity]="buttonDisplay"
       (click)="toggleControllerSidenav()"

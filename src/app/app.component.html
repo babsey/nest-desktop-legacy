@@ -1,7 +1,6 @@
 <mat-sidenav-container id="container" hasBackdrop="false">
 
   <mat-sidenav id="navigation"
-    class="no-print"
     role="region"
     mode="side"
     position="start"
@@ -21,7 +20,7 @@
     <div style="position:absolute; left:0; width:4px; height:100vh; z-index: 1000;" (mousemove)="buttonDisplay='1'"
       (mouseleave)="buttonDisplay='0.2'"></div>
 
-    <button mat-fab type="button" class="buttonLeft"
+    <button mat-fab type="button" class="buttonLeft no-print"
       [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
       [style.opacity]="buttonDisplay"
       (click)="toggleNav()"
