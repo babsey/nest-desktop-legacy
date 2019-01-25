@@ -19,7 +19,7 @@
       </mat-tab>
 
       <mat-tab label="Raw view">
-        <pre>{{ _dataService.data | json }}</pre>
+        <pre>{{ _dataService.clean(_dataService.data) | json }}</pre>
       </mat-tab>
 
       <mat-tab label="Comment">
