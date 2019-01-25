@@ -35,7 +35,6 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.12",
     "@fortawesome/free-solid-svg-icons": "^5.6.3",
     "@material-extended/mde": "^2.1.1",
-    "@types/nedb": "^1.8.7",
     "core-js": "^2.6.3",
     "d3": "^5.7.0",
     "hammerjs": "^2.0.8",
@@ -53,13 +52,10 @@
     "@angular/compiler-cli": "^7.2.2",
     "@angular/language-service": "^7.2.2",
     "@types/hammerjs": "^2.0.36",
-    "@types/jasmine": "^3.3.7",
+    "@types/jasmine": "^3.3.8",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^10.12.18",
     "codelyzer": "^4.5.0",
-    "electron": "^3.1.1",
-    "electron-builder": "^20.38.5",
-    "electron-packager": "^13.0.1",
     "jasmine-core": "^3.3.0",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^3.1.4",
@@ -71,5 +67,11 @@
     "ts-node": "^7.0.1",
     "tslint": "^5.12.1",
     "typescript": "~3.1.6"
+  },
+  "electronDependencies": {
+    "@types/nedb": "^1.8.7",
+    "electron": "^3.1.2",
+    "electron-builder": "^20.38.5",
+    "electron-packager": "^13.0.1"
   }
 }
