@@ -2,7 +2,7 @@
   cursor: pointer;
 }
 
-::ng-deep .node circle {
+::ng-deep .node rect {
   fill: white;
   stroke-width: 3px;
   stroke-dashoffset: 4.5;

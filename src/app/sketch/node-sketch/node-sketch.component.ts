@@ -114,11 +114,15 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
         })
       )
 
-    nodesEnter.append('svg:circle')
-      .attr('r', r)
+    nodesEnter.append('svg:rect')
+      .attr('width', 2*r)
+      .attr('height', 2*r)
+      .attr('x', -r)
+      .attr('y', -r)
+      .attr('rx', d => d.element_type == 'recorder' ? r/2 : r)
+      .attr('ry', d => d.element_type == 'stimulator' ? 0 : r)
       .style('stroke', d => colors[d.idx % colors.length][0])
       .style('stroke-dasharray', d => this._sketchService.isSelectedNode(d) ? '9' : '');
-
     var tooltip = nodesEnter.append('svg:text')
       .text(d => this._sketchService.label(d.model))
       .attr('class', 'tooltip')
@@ -135,7 +139,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
     nodes.merge(nodesEnter) // ENTER + UPDATE
       .attr('transform', d => 'translate(' + d.sketch.x + ',' + d.sketch.y + ')');
 
-    nodes.selectAll('circle')
+    nodes.selectAll('rect')
       .style('stroke', d => colors[d.idx % colors.length][0])
       .style('stroke-dasharray', d => this._sketchService.isSelectedNode(d) ? '9' : '');
 
