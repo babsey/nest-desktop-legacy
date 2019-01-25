@@ -39,34 +39,53 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
     this.host = d3.select(elementRef.nativeElement.parentElement);
     this.selector = d3.select(elementRef.nativeElement);
 
-    // build the arrow.
-    this.host.append('svg:defs').selectAll('marker')
-      .data(['end-arrow']) // Different link/path types can be defined here
-      .enter().append('svg:marker') // This section adds in the arrows
-      .attr('id', String)
-      .attr('viewBox', '0 -1.5 6 6')
-      .attr('refX', 1.5)
-      .attr('refY', 0)
-      .attr('markerWidth', 6)
-      .attr('markerHeight', 6)
-      .attr('orient', 'auto')
-      .append('svg:path')
-      .attr('d', 'M0,-1.5L3,0L0,1.5');
+    var defs = this.host.append('svg:defs');
 
-    // build the circle.
-    this.host.append('svg:defs').selectAll('marker')
-      .data(['end-circle']) // Different link/path types can be defined here
-      .enter().append('svg:marker') // This section adds in the arrows
-      .attr('id', String)
-      .attr('viewBox', '0 0 3 3')
-      .attr('refX', 1.5)
+    var hillocks = defs.selectAll('.hillock').data(this._colorService.nodes)
+    hillocks.exit().remove();
+    hillocks.enter().append('svg:marker') // This section adds in the arrows
+      .attr('id', d => 'hillock_' + d[1])
+      .attr('class', 'hillock')
+      .attr('viewBox', '0 0 5 3')
+      .attr('refX', 3.5)
       .attr('refY', 1.5)
-      .attr('markerWidth', 3)
+      .attr('markerWidth', 5)
       .attr('markerHeight', 3)
       .attr('orient', 'auto')
+      .append('svg:path')
+      .attr('d', 'M0.5,0L5,1.5L0,2.5')
+      .style('fill', d => d[0]);
+
+    var exc = defs.selectAll('.exc').data(this._colorService.nodes)
+    exc.exit().remove();
+    exc.enter().append('svg:marker') // This section adds in the arrows
+      .attr('id', d => 'exc_' + d[1])
+      .attr('class', 'exc')
+      .attr('viewBox', '0 0 5 5')
+      .attr('refX', 4)
+      .attr('refY', 2.5)
+      .attr('markerWidth', 5)
+      .attr('markerHeight', 5)
+      .attr('orient', 'auto')
+      .append('svg:path')
+      .attr('d', 'M3.5,0L0,2.5L5,4.5')
+      .style('fill', d => d[0]);
+
+    var inh = defs.selectAll('.inh').data(this._colorService.nodes)
+    inh.exit().remove();
+    inh.enter().append('svg:marker') // This section adds in the arrows
+      .attr('id', d => 'inh_' + d[1])
+      .attr('class', 'inh')
+      .attr('viewBox', '0 0 5 5')
+      .attr('refX', 4)
+      .attr('refY', 2.5)
+      .attr('markerWidth', 5)
+      .attr('markerHeight', 5)
+      .attr('orient', 'auto')
       .append('svg:circle')
-      .attr('r', 1.5)
-      .attr('transform', 'translate(1.5,1.5)');
+      .attr('r', 2)
+      .style('fill', d => d[0])
+      .attr('transform', 'translate(2.5,2.5)');
   }
 
   ngOnInit() {
@@ -105,11 +124,26 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
       })
       .merge(links) // ENTER + UPDATE
       .attr('d', this.drawPath)
-      .style('stroke', d => this.linkColor(d))
-      .style('stroke-width', d => this.linkWidth(d))
+      .style('stroke', d => this.nodeColor(d.pre))
       .style('stroke-dasharray', d => this._sketchService.isSelectedLink(d) ? '10, 5' : '')
-      .style('marker-end', d => this.linkMarker(d))
-      .style('opacity', d => this._sketchService.isSelectedLink(d) ? 1. : .7)
+      .style('marker-start', d => 'url(#hillock_' + this.nodeColorname(d.pre) + ')')
+      .style('marker-end', d => 'url(#' + this.linkMarker(d) + '_' + this.nodeColorname(d.pre) + ')')
+  }
+
+  nodeColor(idx) {
+    var colors = this._colorService.nodes;
+    return colors[idx % colors.length][0]
+  }
+
+  nodeColorname(idx) {
+    var colors = this._colorService.nodes;
+    return colors[idx % colors.length][1]
+  }
+
+  linkMarker(link) {
+    if (!('syn_spec' in link)) return 'exc'
+    if (!('weight' in link['syn_spec'])) return 'exc'
+    return link.syn_spec.weight < 0 ? 'inh' : 'exc'
   }
 
   linkColor(link) {
@@ -120,25 +154,6 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
     return colors.exc
-  }
-
-  linkWidth(link) {
-    var weight = 5;
-    if ('syn_spec' in link) {
-      if ('weight' in link['syn_spec']) {
-        weight = Math.abs(link.syn_spec.weight);
-      }
-    }
-    return Math.min(10, Math.max(5, weight / 5))
-  }
-
-  linkMarker(link) {
-    if ('syn_spec' in link) {
-      if ('weight' in link['syn_spec']) {
-        return link.syn_spec.weight < 0 ? 'url(#end-circle)' : 'url(#end-arrow)'
-      }
-    }
-    return 'url(#end-arrow)'
   }
 
   drawPath = (link) => {

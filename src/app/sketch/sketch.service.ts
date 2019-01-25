@@ -143,22 +143,21 @@ export class SketchService {
 
       // Make drx and dry different to get an ellipse
       // instead of a circle.
-      drx = 15;
-      dry = 20;
+      drx = 23;
+      dry = 23;
 
       // For whatever reason the arc collapses to a point if the beginning
       // and ending points of the arc are the same, so kludge it.
-
-      x1 = x1 - r / 2 / Math.sqrt(2);
-      y1 = y1 + r;
-      x2 = x2 + (this.options.node.radius + 2) / 2 / Math.sqrt(2);
-      y2 = y2 + (this.options.node.radius + 2) * Math.sqrt(2);
+      x1 = x1 - r / 2 * Math.sqrt(2);
+      y1 = y1 + r / 2 * Math.sqrt(2);
+      x2 = x2 + r / 2 * Math.sqrt(2);
+      y2 = y2 + r / 2 * Math.sqrt(2);
     } else {
       x1 = x1 + (dx / dr * r);
       y1 = y1 + (dy / dr * r);
       if (isTargetNode) {
-        x2 = x2 - (dx / dr * (this.options.node.radius + 2)) * Math.sqrt(2);
-        y2 = y2 - (dy / dr * (this.options.node.radius + 2)) * Math.sqrt(2);
+        x2 = x2 - (dx / dr * r);
+        y2 = y2 - (dy / dr * r);
       } else {
         x2 = x2 - (dx / dr * 5) * Math.sqrt(2);
         y2 = y2 - (dy / dr * 5) * Math.sqrt(2);
