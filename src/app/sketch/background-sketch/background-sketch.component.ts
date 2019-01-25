@@ -73,6 +73,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
 
     if (!this._sketchService.events.sourceNode) {
       this.dragline.attr('d', 'M0,0L0,0')
+        .style('marker-start', '')
         .style('marker-end', '');
     }
 
@@ -104,8 +105,6 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
     this.dragline = this.selector.append('svg:path')
       .attr('class', 'link dragline')
       .style('pointer-events', 'none')
-      .style('stroke', 'steelblue')
-      .style('stroke-width', '5px')
       .attr('d', 'M0,0L0,0');
 
     background
@@ -119,7 +118,9 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
           };
           _this.dragline
             .attr('d', _this._sketchService.drawPath(source.sketch, target))
-            .style('marker-end', 'url(#end-arrow)');
+            .style('stroke', d => colors[source.idx % colors.length][0])
+            .style('marker-start', d => 'url(#hillock_' + colors[source.idx % colors.length][1] + ')')
+            .style('marker-end', d => 'url(#exc_' + colors[source.idx % colors.length][1] + ')');
         }
       })
       .on('click', function() {
