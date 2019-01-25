@@ -25,11 +25,11 @@
 }
 
 .slider-container .button {
-  display: none;
+  opacity: 0;
 }
 
 .slider-container:hover .button {
-  display: inline;
+  opacity: 1;
 }
 
 ::ng-deep .value-menu .button[mat-menu-item] {

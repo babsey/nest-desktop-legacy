@@ -24,10 +24,10 @@
   margin-left: 2px;
 }
 
-.slider-container button {
-  display: none;
+.slider-container .button {
+  opacity: 0;
 }
 
-.slider-container:hover button {
-  display: inline;
+.slider-container:hover .button {
+  opacity: 1;
 }
