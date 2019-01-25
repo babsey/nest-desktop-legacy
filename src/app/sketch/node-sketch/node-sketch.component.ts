@@ -76,7 +76,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
         var source = this._sketchService.events.sourceNode;
         if (source) {
           if (d.element_type != 'stimulator') {
-            var checkConnectomes = this.data.connectomes.filter(connectome => (connectome.pre.idx == source.idx && connectome.post.idx == d.idx));
+            var checkConnectomes = this.data.connectomes.filter(connectome => (connectome.pre == source.idx && connectome.post == d.idx));
             if (checkConnectomes.length == 0) {
               this._dataService.history(this.data)
               this._dataService.records = [];
