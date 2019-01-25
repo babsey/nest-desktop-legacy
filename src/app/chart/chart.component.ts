@@ -24,4 +24,12 @@ export class ChartComponent implements OnInit {
   ngOnInit() {
   }
 
+  hasSpikeData(model) {
+    return model == 'spike_detector';
+  }
+
+  hasAnalogData(model) {
+    return ['multimeter', 'voltmeter'].includes(model);
+  }
+
 }

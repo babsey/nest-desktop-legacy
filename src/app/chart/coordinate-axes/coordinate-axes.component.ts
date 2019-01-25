@@ -316,7 +316,7 @@ export class CoordinateAxesComponent implements OnInit, OnChanges, OnDestroy {
     let margin = this._chartService.g;
     let height = this.height - margin.top - margin.bottom;
 
-    let lineHeight = (height - axisHeight) / (this.n - 1);
+    let lineHeight = this.n == 1 ? axisHeight : (height - axisHeight) / (this.n - 1);
     // let lineHeight = (height - axisHeight * axisHeight / height) / this.n;
     this.selector.select('.focus').attr('transform', 'translate(0,' + (this.idx) * lineHeight + ')')
     this.change.emit({

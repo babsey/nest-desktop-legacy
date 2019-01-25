@@ -33,7 +33,6 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
   public xDomain: any;
   public yDomain: any;
 
-
   constructor(
     public _chartService: ChartService,
     private _colorService: ColorService,
