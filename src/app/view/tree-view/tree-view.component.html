@@ -12,7 +12,7 @@
 
   <mat-tree-node *matTreeNodeDef="let node; when: expandable" matTreeNodePadding>
     <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.key" [disabled]="node.disabled">
-      <fa-icon [icon]="treeControl.isExpanded(node) ? faChevronDown : faChevronRight">
+      <fa-icon [icon]="treeControl.isExpanded(node) ? 'chevron-down' : 'chevron-right'">
       </fa-icon>
     </button>
     <span class="key">{{ node.key }}</span>

@@ -8,10 +8,6 @@ import { GeneratorService } from '../../services/generator/generator.service';
 import { ArrayGeneratorDialogComponent } from '../array-generator-dialog/array-generator-dialog.component';
 import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-dialog.component';
 
-import {
-  faEllipsisV,
-} from '@fortawesome/free-solid-svg-icons';
-
 
 @Component({
   selector: 'app-array-input',
@@ -25,7 +21,6 @@ export class ArrayInputComponent implements OnInit {
   @Input() options: any = {};
   @Output() change = new EventEmitter;
 
-  public faEllipsisV = faEllipsisV;
 
   constructor(
     private _dataService: DataService,

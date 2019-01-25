@@ -3,14 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../../config/config.service';
 import { ModelService } from '../../model/model.service';
 
-import {
-  faEraser,
-  faPlus,
-  faSearch,
-  faEllipsisV,
-  faEdit,
-  faChevronLeft,
-} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-model-list',
@@ -22,12 +14,6 @@ export class ModelListComponent implements OnInit {
   public enabledModels: any;
   public filteredModels: any = [];
 
-  public faEraser = faEraser;
-  public faPlus = faPlus;
-  public faSearch = faSearch;
-  public faEllipsisV = faEllipsisV;
-  public faEdit = faEdit;
-  public faChevronLeft = faChevronLeft;
 
   constructor(
     public _configService: ConfigService,

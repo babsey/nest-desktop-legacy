@@ -5,10 +5,6 @@ import { MatDialog } from '@angular/material';
 import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-dialog.component';
 
 
-import {
-  faEllipsisV,
-} from '@fortawesome/free-solid-svg-icons';
-
 @Component({
   selector: 'app-value-slider',
   templateUrl: './value-slider.component.html',
@@ -21,7 +17,6 @@ export class ValueSliderComponent implements OnInit {
   @Input() options: any = {};
   @Output() change = new EventEmitter;
 
-  public faEllipsisV = faEllipsisV;
 
   constructor(
     private dialog: MatDialog,

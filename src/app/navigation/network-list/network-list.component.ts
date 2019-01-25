@@ -9,14 +9,6 @@ import { SimulationService } from '../../simulation/simulation.service';
 import { SketchService } from '../../sketch/sketch.service';
 
 
-import {
-  faEllipsisV,
-  faInfoCircle,
-  faPlus,
-  faSearch,
-  faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
-
 @Component({
   selector: 'app-network-list',
   templateUrl: './network-list.component.html',
@@ -27,12 +19,6 @@ export class NetworkListComponent implements OnInit {
   public network: any = {};
   public networks: any = [];
 
-  public faEllipsisV = faEllipsisV;
-  public faPlus = faPlus;
-  public faInfoCircle = faInfoCircle;
-  public faSearch = faSearch;
-  public faTrashAlt = faTrashAlt;
-
 
   constructor(
     private _networkService: NetworkService,
@@ -42,7 +28,6 @@ export class NetworkListComponent implements OnInit {
     public _dataService: DataService,
     public _navigationService: NavigationService,
   ) { }
-
 
   ngOnInit() {
     this._networkService.list(this)

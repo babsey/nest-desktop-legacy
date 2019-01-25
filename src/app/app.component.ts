@@ -9,12 +9,6 @@ import { NavigationService } from './navigation/navigation.service';
 import { ControllerService } from './controller/controller.service';
 
 
-import {
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons';
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,9 +17,6 @@ import {
 export class AppComponent implements OnInit {
   @ViewChild('content') content: any;
   public buttonDisplay: any = '0.2';
-
-  public faChevronLeft = faChevronLeft;
-  public faChevronRight = faChevronRight;
 
   constructor(
     private _chartService: ChartService,

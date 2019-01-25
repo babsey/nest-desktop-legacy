@@ -3,8 +3,6 @@ import { Component, Injectable, Input, OnInit, OnChanges } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { BehaviorSubject, Observable, of as observableOf } from 'rxjs';
 
-import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-
 import { DataService } from '../../services/data/data.service'
 
 @Injectable()
@@ -52,8 +50,6 @@ export class TreeViewComponent implements OnInit, OnChanges {
   treeFlattener: MatTreeFlattener<any, any>;
   dataSource: MatTreeFlatDataSource<any, any>;
 
-  public faChevronRight = faChevronRight;
-  public faChevronDown = faChevronDown;
 
   constructor(private database: Database) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this._getLevel,

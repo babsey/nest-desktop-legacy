@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
-
 import { ColorService } from '../../services/color/color.service';
 import { DataService } from '../../services/data/data.service';
 import { SketchService } from '../../sketch/sketch.service';
@@ -15,7 +13,6 @@ import { SketchService } from '../../sketch/sketch.service';
 export class LinksViewComponent implements OnInit {
   @Input() links: any;
   @Input() selectiveView: any = false;
-  public faLongArrowAltRight = faLongArrowAltRight
 
   constructor(
     private _colorService: ColorService,

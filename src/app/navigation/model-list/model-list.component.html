@@ -1,17 +1,17 @@
 <mat-menu #configMenu="matMenu">
   <button mat-menu-item (click)="_configService.edit(true)">
-    <fa-icon [icon]="faEdit"></fa-icon>
+    <fa-icon icon="edit"></fa-icon>
      Activate edit mode
   </button>
   <button mat-menu-item (click)="resetNESTConfig()">
-    <fa-icon [icon]="faEraser"></fa-icon>
+    <fa-icon icon="eraser"></fa-icon>
      Reset configuration
   </button>
 </mat-menu>
 
 <mat-nav-list>
   <mat-list-item routerLink="/config/app">
-    <fa-icon [icon]="faChevronLeft" style="padding-right: 10px"></fa-icon>
+    <fa-icon icon="chevron-left" style="padding-right: 10px"></fa-icon>
     App configuration
   </mat-list-item>
 </mat-nav-list>
@@ -19,11 +19,11 @@
 <div class="form-fields" style="display:flex; width:100%">
   <div>
   <mat-form-field floatLabel="never" color="primary">
-    <fa-icon matPrefix [icon]="faSearch" style="padding-right: 10px"></fa-icon>
+    <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
     <input matInput type="text" class="formControl" placeholder="Search for a model" (keyup)="search($event.target.value)" autocomplete="off" [value]="_modelService.searchTerm" />
   </mat-form-field>
       <button mat-icon-button [matMenuTriggerFor]="configMenu" class="button">
-      <fa-icon [icon]="faEllipsisV"></fa-icon>
+      <fa-icon icon="ellipsis-v"></fa-icon>
     </button>
   </div>
 

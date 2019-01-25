@@ -3,25 +3,25 @@
     <div style="position: absolute; top: 5px; right: 5px; z-index:1000">
       <mat-menu #levelMenu="matMenu" class="level-menu dense">
         <button mat-menu-item (click)="setLevel(1)">
-          <fa-icon class="check" [icon]="faCheck" [style.opacity]="isLevel(1) ? 1 : 0"></fa-icon>
+          <fa-icon class="check" icon="check" [style.opacity]="isLevel(1) ? 1 : 0"></fa-icon>
           <span>Rookie</span>
         </button>
         <button mat-menu-item (click)="setLevel(2)">
-          <fa-icon class="check"  [icon]="faCheck" [style.opacity]="isLevel(2) ? 1 : 0"></fa-icon>
+          <fa-icon class="check" icon="check" [style.opacity]="isLevel(2) ? 1 : 0"></fa-icon>
           <span>Beginner</span>
         </button>
         <button mat-menu-item (click)="setLevel(3)">
-          <fa-icon class="check"  [icon]="faCheck" [style.opacity]="isLevel(3) ? 1 : 0"></fa-icon>
+          <fa-icon class="check" icon="check" [style.opacity]="isLevel(3) ? 1 : 0"></fa-icon>
           <span>Advanced</span>
         </button>
         <button mat-menu-item (click)="setLevel(4)">
-          <fa-icon class="check"  [icon]="faCheck" [style.opacity]="isLevel(4) ? 1 : 0"></fa-icon>
+          <fa-icon class="check" icon="check" [style.opacity]="isLevel(4) ? 1 : 0"></fa-icon>
           <span>Expert</span>
         </button>
       </mat-menu>
 
       <button mat-icon-button [matMenuTriggerFor]="levelMenu" matTooltip="Level view">
-        <fa-icon [icon]="faEllipsisV"></fa-icon>
+        <fa-icon icon="ellipsis-v"></fa-icon>
       </button>
     </div>
 

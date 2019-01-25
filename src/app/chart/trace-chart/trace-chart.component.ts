@@ -9,10 +9,6 @@ import { DataService } from '../../services/data/data.service';
 import { MathService } from '../../services/math/math.service';
 import { SketchService } from '../../sketch/sketch.service';
 
-import {
-  faBars,
-} from '@fortawesome/free-solid-svg-icons';
-
 @Component({
   selector: 'app-trace-chart',
   templateUrl: './trace-chart.component.html',
@@ -39,7 +35,6 @@ export class TraceChartComponent implements OnInit, OnDestroy {
   public yDomain: any;
   public yScale: any;
 
-  public faBars = faBars;
 
   constructor(
     public _chartService: ChartService,

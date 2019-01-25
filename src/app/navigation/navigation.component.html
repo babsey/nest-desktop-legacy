@@ -7,16 +7,16 @@
     </span>
     <span class="navButton">
         <a mat-icon-button href="#" [class.mat-primary]="_navigationService.url()=='/'" matTooltip="Main page">
-        <fa-icon [icon]="faHome"></fa-icon>
+        <fa-icon icon="home"></fa-icon>
       </a>
       <a mat-icon-button [routerLink]="_navigationService.routerLink('view')" [class.mat-primary]="_navigationService.url().endsWith('view')" matTooltip="View network configuration">
-        <fa-icon [icon]="faInfo"></fa-icon>
+        <fa-icon icon="info"></fa-icon>
       </a>
       <a mat-icon-button [routerLink]="_navigationService.routerLink('simulate')" [class.mat-primary]="_navigationService.url().endsWith('simulate')" matTooltip="Simulation workspace">
-        <fa-icon [icon]="faSignature"></fa-icon>
+        <fa-icon icon="signature"></fa-icon>
       </a>
       <a mat-icon-button routerLink="/config/app" [class.mat-primary]="_navigationService.url().startsWith('/config')" matTooltip="Configure app or models">
-        <fa-icon [icon]="faPencilAlt"></fa-icon>
+        <fa-icon icon="pencil-alt"></fa-icon>
       </a>
     </span>
   </mat-toolbar-row>

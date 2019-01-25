@@ -8,26 +8,26 @@
 
       <mat-menu #nodeMenu="matMenu" class="node-menu">
         <!-- <button mat-menu-item (click)="_sketchService.toggleSelectNode(node)">
-          <fa-icon [icon]="faCrosshairs"></fa-icon>
+          <fa-icon icon="crosshairs"></fa-icon>
             <span *ngIf="!_sketchService.isSelectedNode(node)">Select</span>
             <span *ngIf="_sketchService.isSelectedNode(node)">Unselect</span>
           </button> -->
         <button mat-menu-item (click)="resetNode(node.idx)">
-          <fa-icon [icon]="faEraser"></fa-icon>
+          <fa-icon icon="eraser"></fa-icon>
           <span>Reset</span>
         </button>
         <button mat-menu-item (click)="freezeNode(node.idx)">
-          <fa-icon [icon]="faSnowflake"></fa-icon>
+          <fa-icon icon="snowflake"></fa-icon>
           <span>Freeze</span>
         </button>
         <button mat-menu-item (click)="deleteNode(node.idx)">
-          <fa-icon [icon]="faTrashAlt"></fa-icon>
+          <fa-icon icon="trash-alt"></fa-icon>
           <span>Delete</span>
         </button>
       </mat-menu>
 
       <button mat-icon-button [matMenuTriggerFor]="nodeMenu" class="button" color="primary">
-        <fa-icon [icon]="faEllipsisV"></fa-icon>
+        <fa-icon icon="ellipsis-v"></fa-icon>
       </button>
     </mat-list-item>
   </mat-list>

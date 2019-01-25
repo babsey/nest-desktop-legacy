@@ -10,7 +10,7 @@
         <div matPrefix style="width:10px"></div>
         <input matInput type="text" class="formControl" [readonly]="!_controllerService.options.edit" [(ngModel)]="_dataService.data.name" placeholder="Name of the network model" />
         <button mat-button *ngIf="_controllerService.options.edit && _dataService.data.name" matSuffix mat-icon-button aria-label="Clear" (click)="_dataService.data.name=''">
-          <fa-icon [icon]="faTimes"></fa-icon>
+          <fa-icon icon="times"></fa-icon>
         </button>
       </mat-form-field>
     </span>
@@ -35,8 +35,8 @@
       (mousemove)="buttonDisplay='1'"
       (mouseleave)="buttonDisplay='0.2'"
       >
-      <fa-icon *ngIf="!isOpened()"[icon]="faChevronLeft"></fa-icon>
-      <fa-icon *ngIf="isOpened()" [icon]="faChevronRight"></fa-icon>
+      <fa-icon *ngIf="!isOpened()" icon="chevron-left"></fa-icon>
+      <fa-icon *ngIf="isOpened()" icon="chevron-right"></fa-icon>
     </button>
 
     <div *ngIf="_dataService.records">
@@ -49,6 +49,6 @@
 
 <div *ngIf="!_controllerService.options.sheetOpened" class="no-print" style="position:absolute;left:10px;bottom:10px;z-index:1000;">
   <button mat-mini-fab type="button" (click)="toggleControllerSheet()" color="primary">
-    <fa-icon [icon]="faChevronUp"></fa-icon>
+    <fa-icon icon="chevron-up"></fa-icon>
   </button>
 </div>

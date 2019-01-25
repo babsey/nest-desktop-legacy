@@ -5,7 +5,7 @@
         <div style="display:flex;">
           <button mat-icon-button [style.border-color]="color(link.pre)[0]" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.pre])" class="pre">{{ link.pre }}</button>
           <button mat-icon-button class="button" (click)="_sketchService.toggleSelectLink(link)">
-          <fa-icon [icon]="faLongArrowAltRight" class="material-icons arrow" [style.color]="weight(link)"></fa-icon>
+          <fa-icon icon="long-arrow-alt-right" class="material-icons arrow" [style.color]="weight(link)"></fa-icon>
         </button>
           <button mat-icon-button [style.border-color]="color(link.post)[0]" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.post])" class="post">{{ link.post }}</button>
           <span class="flex-spacer"></span>

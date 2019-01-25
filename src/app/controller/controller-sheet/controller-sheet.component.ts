@@ -7,20 +7,6 @@ import { DataService } from '../../services/data/data.service';
 import { SketchService } from '../../sketch/sketch.service';
 import { SimulationService } from '../../simulation/simulation.service';
 
-import {
-  faBars,
-  faCheck,
-  faEllipsisV,
-  faPencilAlt,
-  faPlayCircle,
-  faRedoAlt,
-  faSave,
-  faShareAlt,
-  faSlidersH,
-  faTimes,
-  faTrashAlt,
-  faUndoAlt,
-} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-controller-sheet',
@@ -31,17 +17,6 @@ export class ControllerSheetComponent implements OnInit {
   private data: any;
   public viewSketch: any = false;
 
-  public faBars = faBars;
-  public faCheck = faCheck;
-  public faEllipsisV = faEllipsisV;
-  public faPencilAlt = faPencilAlt;
-  public faPlayCircle = faPlayCircle;
-  public faRedoAlt = faRedoAlt;
-  public faShareAlt = faShareAlt;
-  public faSlidersH = faSlidersH;
-  public faTimes = faTimes;
-  public faTrashAlt = faTrashAlt;
-  public faUndoAlt = faUndoAlt;
 
   constructor(
     private _simulationService: SimulationService,

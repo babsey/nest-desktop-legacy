@@ -2,7 +2,7 @@
   <mat-form-field class="select">
     <mat-select [placeholder]="placeholder" [(ngModel)]="selected" (selectionChange)="onSelectionChange()">
       <mat-form-field floatLabel="never" style="width:96%; padding: 0 5px">
-        <fa-icon matPrefix [icon]="faSearch" style="padding-right: 10px"></fa-icon>
+        <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
         <input class="search" matInput type="text" (keyup)="search($event.target.value)" autocomplete="off" placeholder="search">
       </mat-form-field>
       <mat-option *ngFor="let el of filteredElements" [value]="el" [style.color]="el==selected ? color : 'black'">{{ el }}</mat-option>

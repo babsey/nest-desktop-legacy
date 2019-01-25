@@ -2,63 +2,63 @@
 
 <span class="no-print" id="controllerSheetButtons">
   <button mat-icon-button (click)="onClick('simulation', 'showSlider')" [class.mat-primary]="_configService.config.app.simulation.showSlider" matTooltip="Modify parameters">
-    <fa-icon [icon]="faSlidersH"></fa-icon>
+    <fa-icon icon="sliders-h"></fa-icon>
   </button>
   <button mat-icon-button (click)="run()" matTooltip="Run simulation">
-    <fa-icon [icon]="faPlayCircle"></fa-icon>
+    <fa-icon icon="play-circle"></fa-icon>
   </button>
   <button mat-icon-button (click)="toggleNetworkSketchView()" [class.mat-primary]="viewSketch" matTooltip="Show network sketch">
-    <fa-icon [icon]="faShareAlt"></fa-icon>
+    <fa-icon icon="share-alt"></fa-icon>
   </button>
   <button mat-icon-button (click)="edit()" [class.mat-primary]="_controllerService.options.edit" matTooltip="Edit network">
-    <fa-icon [icon]="faPencilAlt"></fa-icon>
+    <fa-icon icon="pencil-alt"></fa-icon>
   </button>
   <button mat-icon-button (click)="undo()" [disabled]="_dataService.undoStack.length<=1" [matBadgeHidden]="_dataService.undoStack.length<=1" [matBadge]="_dataService.undoStack.length-1" matBadgeColor="accent" matBadgePosition="below after" matTooltip="Undo network configuration">
-    <fa-icon [icon]="faUndoAlt"></fa-icon>
+    <fa-icon icon="undo-alt"></fa-icon>
   </button>
   <button mat-icon-button (click)="redo()" [disabled]="_dataService.redoStack.length==0" [matBadgeHidden]="_dataService.redoStack.length==0" [matBadge]="_dataService.redoStack.length" matBadgeColor="accent" matBadgePosition="below after" matTooltip="Redo network configuration">
-    <fa-icon [icon]="faRedoAlt"></fa-icon>
+    <fa-icon icon="redo-alt"></fa-icon>
   </button>
   <button mat-icon-button (click)="delete()" matTooltip="Clear network configuration" matTooltipPosition="above">
-    <fa-icon [icon]="faTrashAlt"></fa-icon>
+    <fa-icon icon="trash-alt"></fa-icon>
   </button>
   <div style="flex-grow:1"></div>
   <mat-menu #configMenu="matMenu">
     <button mat-menu-item (click)="onClick('simulation', 'autoSimulation')">
       <div class="flexLine">
         <span>Auto simulation</span>
-        <fa-icon [icon]="faCheck" *ngIf="_configService.config.app.simulation.autoSimulation"></fa-icon>
+        <fa-icon icon="check" *ngIf="_configService.config.app.simulation.autoSimulation"></fa-icon>
       </div>
     </button>
     <button mat-menu-item (click)="onClick('simulation', 'autoProtocol')">
       <div class="flexLine">
         <span>Auto protocol</span>
-        <fa-icon [icon]="faCheck" *ngIf="_configService.config.app.simulation.autoProtocol"></fa-icon>
+        <fa-icon icon="check" *ngIf="_configService.config.app.simulation.autoProtocol"></fa-icon>
       </div>
     </button>
     <button mat-menu-item (click)="onClick('simulation', 'randomSeed')">
       <div class="flexLine">
         <span>Randomize seed</span>
-        <fa-icon [icon]="faCheck" *ngIf="_configService.config.app.simulation.randomSeed"></fa-icon>
+        <fa-icon icon="check" *ngIf="_configService.config.app.simulation.randomSeed"></fa-icon>
       </div>
     </button>
     <button mat-menu-item (click)="onClick('chart', 'color')">
       <div class="flexLine">
         <span>Colorify chart</span>
-        <fa-icon [icon]="faCheck" *ngIf="_configService.config.app.chart.color"></fa-icon>
+        <fa-icon icon="check" *ngIf="_configService.config.app.chart.color"></fa-icon>
       </div>
     </button>
     <button mat-menu-item (click)="_configService.config.app.chart.autoscale=!_configService.config.app.chart.autoscale">
       <div class="flexLine">
         <span>Autoscale chart</span>
-        <fa-icon [icon]="faCheck" *ngIf="onClick('chart', 'autoscale')"></fa-icon>
+        <fa-icon icon="check" *ngIf="onClick('chart', 'autoscale')"></fa-icon>
       </div>
     </button>
   </mat-menu>
   <button mat-icon-button  [matMenuTriggerFor]="configMenu">
-    <fa-icon [icon]="faEllipsisV"></fa-icon>
+    <fa-icon icon="ellipsis-v"></fa-icon>
   </button>
   <button mat-icon-button (click)="close()">
-    <fa-icon [icon]="faTimes"></fa-icon>
+    <fa-icon icon="times"></fa-icon>
   </button>
 </span>

@@ -9,14 +9,14 @@
   <mat-list-item>
     <span style="width:100%; display:flex">
       <mat-form-field floatLabel="never" style="flex-grow:1">
-        <fa-icon matPrefix [icon]="faSearch" style="padding-right: 10px"></fa-icon>
+        <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
         <input matInput type="text" class="formControl" placeholder="Search for a network" (keyup)="search($event.target.value)" autocomplete="off" />
       </mat-form-field>
     </span>
 
     <mat-menu #networksMenu="matMenu" class="networks-menu dense">
       <button mat-menu-item [routerLink]="_navigationService.routerLink('simulate')" (click)="_controllerService.options.edit=true">
-        <fa-icon [icon]="faPlus" style="margin-right:10px"></fa-icon>
+        <fa-icon icon="plus" style="margin-right:10px"></fa-icon>
         Add a new network
       </button>
       <button mat-menu-item (click)="clearNetworks()">
@@ -25,7 +25,7 @@
     </mat-menu>
 
     <button mat-icon-button [matMenuTriggerFor]="networksMenu" class="button">
-      <fa-icon [icon]="faEllipsisV" style="font-size:12px"></fa-icon>
+      <fa-icon icon="ellipsis-v" style="font-size:12px"></fa-icon>
     </button>
   </mat-list-item>
 </mat-list>
@@ -36,16 +36,16 @@
 
     <mat-menu #networkMenu="matMenu" class="network-menu dense">
       <button mat-menu-item>
-        <fa-icon [icon]="faTrashAlt"></fa-icon><span style="margin-left:10px">Delete network</span>
+        <fa-icon icon="trash-alt"></fa-icon><span style="margin-left:10px">Delete network</span>
       </button>
     </mat-menu>
 
     <button mat-icon-button *ngIf="_navigationService.url().endsWith('view')" [matMenuTriggerFor]="networkMenu" class="button">
-      <fa-icon [icon]="faEllipsisV" style="font-size:12px"></fa-icon>
+      <fa-icon icon="ellipsis-v" style="font-size:12px"></fa-icon>
     </button>
 
     <button mat-icon-button *ngIf="_navigationService.url().endsWith('simulate')" (mouseover)="openPopover(networkTarget)" class="button">
-      <fa-icon [icon]="faInfoCircle" style="font-size:12px"></fa-icon>
+      <fa-icon icon="info-circle" style="font-size:12px"></fa-icon>
     </button>
   </mat-list-item>
 </mat-nav-list>

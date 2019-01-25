@@ -9,14 +9,6 @@ import { SimulationService } from '../../simulation/simulation.service';
 import { SketchService } from '../../sketch/sketch.service';
 
 
-import {
-  faEllipsisV,
-  faInfoCircle,
-  faPlus,
-  faSearch,
-  faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
-
 @Component({
   selector: 'app-protocol-list',
   templateUrl: './protocol-list.component.html',
@@ -28,12 +20,6 @@ export class ProtocolListComponent implements OnInit, OnDestroy {
   public filteredProtocols: any = [];
   public protocol: any = {};
   public protocols: any = [];
-
-  public faEllipsisV = faEllipsisV;
-  public faInfoCircle = faInfoCircle;
-  public faPlus = faPlus;
-  public faSearch = faSearch;
-  public faTrashAlt = faTrashAlt;
 
 
   constructor(

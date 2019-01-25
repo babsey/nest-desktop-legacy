@@ -3,12 +3,6 @@ import * as d3 from 'd3';
 
 import { ChartService } from '../chart.service';
 
-import {
-  faHome,
-  faArrowsAlt,
-  faArrowsAltV,
-  faArrowsAltH,
-} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-coordinate-axes',
@@ -33,11 +27,6 @@ export class CoordinateAxesComponent implements OnInit, OnChanges, OnDestroy {
   private subscription: any;
   public pos: any;
   private idx: any = 0;
-
-  public faHome = faHome;
-  public faArrowsAlt = faArrowsAlt;
-  public faArrowsAltV = faArrowsAltV;
-  public faArrowsAltH = faArrowsAltH;
 
   constructor(
     public _chartService: ChartService,

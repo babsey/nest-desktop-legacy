@@ -9,10 +9,6 @@ import { DataService } from '../../services/data/data.service';
 import { MathService } from '../../services/math/math.service';
 import { SketchService } from '../../sketch/sketch.service';
 
-import {
-  faBars,
-} from '@fortawesome/free-solid-svg-icons';
-
 @Component({
   selector: 'app-spike-chart',
   templateUrl: './spike-chart.component.html',
@@ -37,7 +33,6 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
   public xDomain: any;
   public yDomain: any;
 
-  public faBars = faBars;
 
   constructor(
     public _chartService: ChartService,

@@ -27,8 +27,8 @@
       (mousemove)="buttonDisplay='1'"
       (mouseleave)="buttonDisplay='0.2'"
       >
-      <fa-icon *ngIf="!isOpened()" [icon]="faChevronRight"></fa-icon>
-      <fa-icon *ngIf="isOpened()"[icon]="faChevronLeft"></fa-icon>
+      <fa-icon *ngIf="!isOpened()" icon="chevron-right"></fa-icon>
+      <fa-icon *ngIf="isOpened()" icon="chevron-left"></fa-icon>
     </button>
 
     <router-outlet></router-outlet>

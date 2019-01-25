@@ -11,10 +11,6 @@ import { DataService } from '../../services/data/data.service';
 import { SimulationService } from '../../simulation/simulation.service';
 
 
-import {
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
-
 @Component({
   selector: 'app-select',
   templateUrl: './select.component.html',
@@ -29,7 +25,6 @@ export class SelectComponent implements OnInit {
   public elements: any;
   public filteredElements: any;
 
-  public faSearch = faSearch;
 
   constructor(
     private _configService: ConfigService,

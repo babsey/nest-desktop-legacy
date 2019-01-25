@@ -9,7 +9,7 @@
   <mat-list-item>
     <span style="width:100%; display:flex">
       <mat-form-field floatLabel="never" style="flex-grow:1">
-        <fa-icon matPrefix [icon]="faSearch" style="padding-right: 10px"></fa-icon>
+        <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
         <input matInput type="text" class="formControl" placeholder="Search for a protocol" (keyup)="search($event.target.value)" autocomplete="off" />
       </mat-form-field>
     </span>
@@ -21,14 +21,14 @@
     </mat-menu>
 
     <button mat-icon-button *ngIf="options.menuProtocols" [matMenuTriggerFor]="protocolsMenu" class="button">
-      <fa-icon [icon]="faEllipsisV" style="font-size:11px"></fa-icon>
+      <fa-icon icon="ellipsis-v" style="font-size:11px"></fa-icon>
     </button>
   </mat-list-item>
 </mat-list>
 
 <mat-nav-list dense *ngIf="options.addProtocol">
   <mat-list-item (click)="saveProtocol()">
-    <fa-icon [icon]="faPlus" style="padding-right: 10px"></fa-icon>
+    <fa-icon icon="plus" style="padding-right: 10px"></fa-icon>
     Protocol this simulation
   </mat-list-item>
 </mat-nav-list>
@@ -45,15 +45,15 @@
 
     <mat-menu #protocolMenu="matMenu" class="protocol-menu dense">
       <button mat-menu-item (click)="deleteProtocol(protocol._id)">
-        <fa-icon [icon]="faTrashAlt"></fa-icon><span style="margin-left:10px">Delete protocol</span>
+        <fa-icon icon="trash-alt"></fa-icon><span style="margin-left:10px">Delete protocol</span>
       </button>
     </mat-menu>
 
     <button mat-icon-button *ngIf="options.menuProtocol && _navigationService.url().endsWith('view')" [matMenuTriggerFor]="protocolMenu" class="button">
-      <fa-icon [icon]="faEllipsisV" style="font-size:11px"></fa-icon>
+      <fa-icon icon="ellipsis-v" style="font-size:11px"></fa-icon>
     </button>
     <button mat-icon-button *ngIf="_navigationService.url().endsWith('simulate')" (mouseover)="openPopover(protocolTarget)" class="button">
-      <fa-icon [icon]="faInfoCircle" style="font-size:11px"></fa-icon>
+      <fa-icon icon="info-circle" style="font-size:11px"></fa-icon>
     </button>
   </mat-list-item>
 </mat-nav-list>

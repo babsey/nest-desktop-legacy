@@ -7,15 +7,6 @@ import { DataService } from '../../services/data/data.service';
 import { SimulationService } from '../../simulation/simulation.service';
 import { SketchService } from '../../sketch/sketch.service';
 
-import {
-    faLongArrowAltRight,
-    faEllipsisV,
-    faCrosshairs,
-    faEraser,
-    faBan,
-    faMinusCircle,
-    faCheck,
-} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-link-controller',
@@ -31,13 +22,6 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   public options: any;
   public synModel: any;
 
-  public faLongArrowAltRight = faLongArrowAltRight;
-  public faEllipsisV = faEllipsisV;
-  public faCrosshairs = faCrosshairs;
-  public faEraser = faEraser;
-  public faBan = faBan;
-  public faMinusCircle = faMinusCircle;
-  public faCheck = faCheck;
 
   constructor(
     public _colorService: ColorService,

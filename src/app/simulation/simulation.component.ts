@@ -8,13 +8,6 @@ import { MatBottomSheet } from '@angular/material';
 
 import { ControllerSheetComponent } from '../controller/controller-sheet/controller-sheet.component';
 
-import {
-  faChevronLeft,
-  faChevronRight,
-  faChevronUp,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
-
 import { ChartService } from '../chart/chart.service';
 import { ConfigService } from '../config/config.service';
 import { ControllerService } from '../controller/controller.service';
@@ -35,10 +28,6 @@ export class SimulationComponent implements OnInit {
   @ViewChild('content') content: any;
   public buttonDisplay: any = '0.2';
 
-  public faChevronLeft = faChevronLeft;
-  public faChevronRight = faChevronRight;
-  public faChevronUp = faChevronUp;
-  public faTimes = faTimes;
 
   constructor(
     private route: ActivatedRoute,
