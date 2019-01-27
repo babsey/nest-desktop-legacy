@@ -9,6 +9,10 @@ export class MathService {
 
   constructor() { }
 
+  fill(value, size) {
+    return Array.from({ length: size }, () => value);
+  }
+
   range(start, end = null, step = null) {
     if (!end) {
       return Array.from({ length: start }, (val, index) => index);

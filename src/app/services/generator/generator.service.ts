@@ -8,7 +8,7 @@ import { MathService } from '../math/math.service';
 })
 export class GeneratorService {
   public options: any = {
-    type: 'range',
+    type: 'fill',
     start: 0,
     end: -1,
     min: 0,
@@ -19,6 +19,18 @@ export class GeneratorService {
     size: 1,
     sort: true,
   }
+  public inputs: any = {
+    fill: ['value', 'size'],
+    range: ['start', 'end', 'step'],
+    linspace: ['start', 'end', 'size'],
+    randomUniformInt: ['min', 'max', 'size'],
+    randomUniformFloat: ['min', 'max', 'size'],
+    randomNormal: ['mu', 'sigma', 'size'],
+  }
+
+  view(param) {
+    return this.inputs[this.options.type].includes(param)
+  }
 
   constructor(
     private _mathService: MathService,
@@ -26,7 +38,9 @@ export class GeneratorService {
 
   generate(d) {
     var array: any[];
-    if (d.type == 'range') {
+    if (d.type == 'fill') {
+      array = this._mathService.fill(parseInt(d.size), parseFloat(d.value))
+    } else if (d.type == 'range') {
       array = this._mathService.range(parseFloat(d.start), parseFloat(d.end), parseFloat(d.step));
     } else if (d.type == 'linspace') {
       array = this._mathService.linspace(parseFloat(d.start), parseFloat(d.end), parseInt(d.size));
