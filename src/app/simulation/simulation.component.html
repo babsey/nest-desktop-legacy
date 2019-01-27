@@ -5,7 +5,7 @@
     (mouseleave)="buttonDisplay='0.2'"
     >
 
-    <span *ngIf="_dataService.data.name">
+    <span>
       <mat-form-field floatLabel="never" style="width: 100%; margin-bottom:-20px">
         <div matPrefix style="width:10px"></div>
         <input matInput type="text" class="formControl" [readonly]="!_controllerService.options.edit" [(ngModel)]="_dataService.data.name" placeholder="Name of the network model" />
