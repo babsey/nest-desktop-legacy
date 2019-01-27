@@ -14,15 +14,15 @@
       </div>
       <span class="flex-spacer"></span>
       <mat-menu #linkMenu="matMenu" class="link-menu">
-        <button mat-menu-item>
+        <!-- <button mat-menu-item>
           <fa-icon icon="eraser"></fa-icon>
           Reset
         </button>
         <button mat-menu-item>
           <fa-icon icon="ban"></fa-icon>
           Disable
-        </button>
-        <button mat-menu-item>
+        </button> -->
+        <button mat-menu-item (click)="deleteLink(link.idx)">
           <fa-icon icon="minus-circle"></fa-icon>
           Remove
         </button>

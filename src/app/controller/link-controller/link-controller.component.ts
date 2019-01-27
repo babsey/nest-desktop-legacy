@@ -83,4 +83,21 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this._dataService.history(this._dataService.data)
     this._simulationService.run()
   }
+
+  deleteLink(idx) {
+    var data = this._dataService.data;
+    this._dataService.history(data)
+
+    var connectomes = data.connectomes.filter(d => d.idx != idx);
+    connectomes.forEach((d, i) => {
+      d.idx = i;
+    })
+    data.connectomes = connectomes;
+
+    this._sketchService.update.emit()
+    this._dataService.records = this._dataService.records.filter(d => d.recorder.idx != idx)
+    if (!this._dataService.options.edit) {
+      this._simulationService.run()
+    }
+  }
 }
