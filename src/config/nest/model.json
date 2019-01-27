@@ -539,7 +539,7 @@
         "viewSpec": {}
       },
       "amplitude_values": {
-        "label": "Amplitudes of step current current",
+        "label": "Amplitudes of step current",
         "level": 1,
         "unit": "pA",
         "view": "arrayInput",
