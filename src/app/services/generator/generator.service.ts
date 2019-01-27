@@ -39,7 +39,7 @@ export class GeneratorService {
   generate(d) {
     var array: any[];
     if (d.type == 'fill') {
-      array = this._mathService.fill(parseInt(d.size), parseFloat(d.value))
+      array = this._mathService.fill(parseFloat(d.value), parseInt(d.size))
     } else if (d.type == 'range') {
       array = this._mathService.range(parseFloat(d.start), parseFloat(d.end), parseFloat(d.step));
     } else if (d.type == 'linspace') {
