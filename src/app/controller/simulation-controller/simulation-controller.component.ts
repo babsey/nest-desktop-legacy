@@ -24,8 +24,6 @@ export class SimulationControllerComponent implements OnInit {
   }
 
   onChange(id, value) {
-    if (typeof(value) != 'number') return
-    this._dataService.data.simulation[id] = value;
     this._simulationService.run()
   }
 

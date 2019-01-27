@@ -23,9 +23,7 @@ export class KernelControllerComponent implements OnInit {
   ngOnInit() {
   }
 
-  onChange(id, value) {
-    if (typeof(value) != 'number') return
-    this._dataService.data.kernel[id] = value;
+  onChange() {
     this._simulationService.run()
   }
 

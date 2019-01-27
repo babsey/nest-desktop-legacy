@@ -32,6 +32,14 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     public _sketchService: SketchService,
   ) { }
 
+  ngOnInit() {
+    this.update()
+  }
+
+  ngOnChanges() {
+    this.update()
+  }
+
   update() {
     this.link = this._dataService.data.connectomes[this.idx];
     var colors = this._colorService.nodes;
@@ -47,14 +55,6 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     var modelConfig = this._configService.config.nest.model;
     this.synModel = modelConfig[synModel]
     this.slider.synapse = this.synModel['options'] || {};
-  }
-
-  ngOnInit() {
-    this.update()
-  }
-
-  ngOnChanges() {
-    this.update()
   }
 
   keys(dict) {
@@ -76,8 +76,8 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this.update()
   }
 
-  onChange(ref, id, value, defaultValue) {
-    ref[id] = value;
+  onChange() {
+    // console.log('Change value in link controller')
     this.update()
     this._sketchService.update.emit()
     this._dataService.history(this._dataService.data)

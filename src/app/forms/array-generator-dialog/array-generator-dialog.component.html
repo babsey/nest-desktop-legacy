@@ -6,6 +6,7 @@
       <td>
         <mat-form-field class="select">
           <mat-select placeholder="Generator type" [(ngModel)]="_generatorService.options.type">
+            <mat-option value="fill">Fill with a number</mat-option>
             <mat-option value="range">Ranged numbers</mat-option>
             <mat-option value="linspace">Linear spaced numbers</mat-option>
             <mat-option value="randomUniformInt">Uniform distributed integers</mat-option>
@@ -16,7 +17,16 @@
       </td>
     </tr>
 
-    <tr *ngIf="_generatorService.options.type.indexOf('random') == -1">
+    <tr *ngIf="_generatorService.view('value')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Value</mat-label>
+          <input matInput type="number" [(ngModel)]="_generatorService.options.value" placeholder="0" value="0" defaultValue="0"/>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="_generatorService.view('start')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Start</mat-label>
@@ -25,7 +35,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="_generatorService.options.type.indexOf('random') == -1">
+    <tr *ngIf="_generatorService.view('end')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>End</mat-label>
@@ -34,7 +44,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="_generatorService.options.type.indexOf('Uniform') != -1">
+    <tr *ngIf="_generatorService.view('min')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Minimum</mat-label>
@@ -43,7 +53,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="_generatorService.options.type.indexOf('Uniform') != -1">
+    <tr *ngIf="_generatorService.view('max')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Maximum</mat-label>
@@ -52,7 +62,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="_generatorService.options.type == 'randomNormal'">
+    <tr *ngIf="_generatorService.view('mu')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Mean</mat-label>
@@ -61,7 +71,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="_generatorService.options.type == 'randomNormal'">
+    <tr *ngIf="_generatorService.view('sigma')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Standard deviation</mat-label>
@@ -70,7 +80,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="_generatorService.options.type == 'range'">
+    <tr *ngIf="_generatorService.view('step')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Step</mat-label>
@@ -79,7 +89,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="_generatorService.options.type != 'range'">
+    <tr *ngIf="_generatorService.view('size')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Size</mat-label>

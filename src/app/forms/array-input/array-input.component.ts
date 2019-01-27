@@ -19,7 +19,7 @@ export class ArrayInputComponent implements OnInit {
   @Input() id: any;
   @Input() value: any;
   @Input() options: any = {};
-  @Output() change = new EventEmitter;
+  @Output() valueChange = new EventEmitter;
 
 
   constructor(
@@ -29,16 +29,16 @@ export class ArrayInputComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // console.log('Init array input')
   }
 
-  onChange(event) {
-    let value = event.target.value;
+  onChange(value) {
+    // console.log('Change value of array input')
     if (value.length == 0) {
-      this.change.emit([])
+      this.valueChange.emit([])
     } else {
-      let valueArray = event.target.value.split(",");
-      this.value = valueArray.map(d => parseFloat(d));
-      this.change.emit(this.value)
+      let valueArray = value.split(",").map(d => parseFloat(d));
+      this.valueChange.emit(valueArray);
     }
   }
 
@@ -52,13 +52,13 @@ export class ArrayInputComponent implements OnInit {
         let resolution = this._dataService.data.kernel.resolution || 1.0
         d.toFixed = resolution >= 1 ? -1 : String(resolution).split('.')[1].length;
         this.value = this._generatorService.generate(d);
-        this.change.emit(this.value)
+        this.valueChange.emit(this.value)
       }
     });
   }
 
   setDefaultValue() {
-    this.change.emit(this.options.value)
+    this.valueChange.emit(this.options.value)
   }
 
   openConfigDialog() {

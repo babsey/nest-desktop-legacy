@@ -15,8 +15,7 @@ export class ValueSliderComponent implements OnInit {
   @Input() id: any;
   @Input() value: any;
   @Input() options: any = {};
-  @Output() change = new EventEmitter;
-
+  @Output() valueChange = new EventEmitter;
 
   constructor(
     private dialog: MatDialog,
@@ -26,17 +25,14 @@ export class ValueSliderComponent implements OnInit {
   ngOnInit() {
   }
 
-  onChange(value) {
-    // console.log('Change value slider')
-    let isNumber = typeof(value) == 'number';
-    let isString = typeof(value) == 'string' && value.length > 0;
-    this.value =  isNumber || isString  ? parseFloat(value) : this.options.value;
-    this.change.emit(this.value);
+  onChange(event) {
+    this.value = 'target' in event ? event.target.value : event.value;
+    this.valueChange.emit(this.value);
   }
 
   setDefaultValue() {
     this.value = parseFloat(this.options.value);
-    this.change.emit(this.value);
+    this.valueChange.emit(this.value);
   }
 
   openConfigDialog() {

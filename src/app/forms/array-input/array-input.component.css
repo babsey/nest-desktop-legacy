@@ -8,9 +8,9 @@
 }
 
 .form-container .button {
-  display: none;
+  opacity: 0;
 }
 
 .form-container:hover .button {
-  display: inline;
+  opacity: 1;
 }

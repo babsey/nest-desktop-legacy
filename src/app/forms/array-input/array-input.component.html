@@ -2,7 +2,7 @@
 
   <mat-form-field matTooltip="{{ id }}" matTooltipPosition="before">
     <mat-label>{{ options.label }}</mat-label>
-    <input matInput [placeholder]="options.label || id" [ngModel]="value" (change)="onChange($event)" />
+    <input matInput [placeholder]="options.label || id" [ngModel]="value" (change)="onChange($event.target.value)" />
   </mat-form-field>
 
   <span>

@@ -6,10 +6,10 @@
   </span>
 
   <div class="slider-content">
-    <mat-slider thumbLabel color="primary" class="slider" [ngModel]="value" [min]="options.viewSpec.min" [max]="options.viewSpec.max" [step]="options.viewSpec.step" (change)="onChange($event.value)">
+    <mat-slider thumbLabel color="primary" class="slider" [ngModel]="value" [min]="options.viewSpec.min" [max]="options.viewSpec.max" [step]="options.viewSpec.step" (change)="onChange($event)">
     </mat-slider>
     <mat-form-field class="slider-input" floatLabel="never">
-      <input matInput type="number" [ngModel]="value" [defaultValue]="options.value" [placeholder]="options.value" [step]="options.viewSpec.step" (change)="onChange($event.target.value)">
+      <input matInput type="number" [ngModel]="value" [defaultValue]="options.value" [placeholder]="options.value" [step]="options.viewSpec.step" (change)="onChange($event)">
     </mat-form-field>
 
     <span>

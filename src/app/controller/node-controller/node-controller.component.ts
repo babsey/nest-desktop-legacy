@@ -1,21 +1,11 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
 
-
 import { ColorService } from '../../services/color/color.service';
 import { ConfigService } from '../../config/config.service';
 import { ControllerService } from '../../controller/controller.service';
 import { DataService } from '../../services/data/data.service';
 import { SimulationService } from '../../simulation/simulation.service';
 import { SketchService } from '../../sketch/sketch.service';
-
-import {
-  faEllipsisV,
-  faCrosshairs,
-  faEraser,
-  faSnowflake,
-  faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
-
 
 @Component({
   selector: 'app-node-controller',
@@ -30,13 +20,6 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   public configModel: any = {};
   public slider: any;
 
-  public faEllipsisV = faEllipsisV;
-  public faCrosshairs = faCrosshairs;
-  public faEraser = faEraser;
-  public faSnowflake = faSnowflake;
-  public faTrashAlt = faTrashAlt;
-
-
   constructor(
     public _colorService: ColorService,
     public _configService: ConfigService,
@@ -48,6 +31,16 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    // console.log('Init node controller')
+  }
+
+  ngOnChanges() {
+    // console.log('Update node controller')
+    this.node = this._dataService.data.collections[this.idx];
+    var colors = this._colorService.nodes;
+    this.color = colors[this.node.idx % colors.length];
+    this.configModel = this._configService.config.nest.model[this.node.model];
+    this.updateParams(this.node)
   }
 
   updateParams(node) {
@@ -56,14 +49,6 @@ export class NodeControllerComponent implements OnInit, OnChanges {
       params[param] = this.node.params[param] || this.configModel.options[param].value
     })
     node.params = params;
-  }
-
-  ngOnChanges() {
-    this.node = this._dataService.data.collections[this.idx];
-    var colors = this._colorService.nodes;
-    this.color = colors[this.node.idx % colors.length];
-    this.configModel = this._configService.config.nest.model[this.node.model];
-    this.updateParams(this.node)
   }
 
   isRecorder(element_type) {
@@ -126,11 +111,8 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     }
   }
 
-  onChange(ref, id, value, defaultValue) {
-    // console.log('Change value')
-    if (typeof(value) != 'number') return
-    console.log(ref, id, value)
-    ref[id] = value;
+  onChange() {
+    // console.log('Change value in node controller')
     this._dataService.history(this._dataService.data)
     this._simulationService.run()
   }

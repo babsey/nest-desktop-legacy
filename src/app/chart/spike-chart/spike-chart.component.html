@@ -59,7 +59,7 @@
 
             <mat-list-item>
               <app-ticks-slider
-              (change)="onChange($event)"
+              (valueChange)="onChange($event)"
               [options]="_configService.config.app.slider.nbins"
               [value]="nbins"
               ></app-ticks-slider>

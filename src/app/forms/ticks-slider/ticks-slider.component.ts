@@ -16,7 +16,7 @@ export class TicksSliderComponent implements OnInit, OnChanges {
   @Input() options: any = {};
   @Input() thumbLabel: any = false;
   @Input() value: any;
-  @Output() change = new EventEmitter;
+  @Output() valueChange = new EventEmitter;
   public idx: any;
 
 
@@ -34,7 +34,7 @@ export class TicksSliderComponent implements OnInit, OnChanges {
 
   onChange(idx) {
     this.value = this.options.viewSpec.ticks[idx];
-    this.change.emit(this.value);
+    this.valueChange.emit(this.value);
   }
 
   displayWith(ticks) {
@@ -43,7 +43,7 @@ export class TicksSliderComponent implements OnInit, OnChanges {
 
   setDefaultValue() {
     this.value = this.options.value;
-    this.change.emit(this.value);
+    this.valueChange.emit(this.value);
   }
 
   openConfigDialog() {

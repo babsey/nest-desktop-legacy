@@ -8,10 +8,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ParamInputComponent implements OnInit {
   @Input() view: any;
   @Input() model: any;
+  @Input() params: any;
   @Input() id: any;
-  @Input() value: any;
   @Input() options: any;
-  @Output() change = new EventEmitter;
+  @Output() paramChange = new EventEmitter;
 
   constructor() { }
 
@@ -19,7 +19,8 @@ export class ParamInputComponent implements OnInit {
   }
 
   onChange(value) {
-    // console.log('Change value')
-    this.change.emit(value)
+    // console.log('Change param in param input')
+    this.params[this.id] = value || this.options.value;
+    this.paramChange.emit()
   }
 }

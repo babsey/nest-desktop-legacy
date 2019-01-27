@@ -47,7 +47,7 @@
 
           <mat-list-item>
             <app-value-slider
-              (change)="onChange('overlap', $event)"
+              (valueChange)="onChange('overlap', $event)"
               [options]="_configService.config.app.slider.overlap"
               [value]="overlap"
             ></app-value-slider>
@@ -55,7 +55,7 @@
 
           <mat-list-item>
             <app-value-slider
-              (change)="opacity=$event"
+              (valueChange)="opacity=$event"
               [options]="_configService.config.app.slider.opacity"
               [value]="opacity"
             ></app-value-slider>
@@ -63,7 +63,7 @@
 
           <mat-list-item *ngIf="autofocus">
             <app-value-slider
-              (change)="opacityFocus=$event"
+              (valueChange)="opacityFocus=$event"
               [options]="_configService.config.app.slider.opacity_focus"
               [value]="opacityFocus"
             ></app-value-slider>

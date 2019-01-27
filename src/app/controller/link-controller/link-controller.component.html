@@ -41,7 +41,7 @@
       </button>
     </mat-list-item>
     <mat-list-item *ngFor="let id of keys(slider.connection)" [style.border-left-color]="colors.pre[0]" [style.border-right-color]="colors.post[0]" [style.display]="_controllerService.display(2)">
-      <app-value-slider [value]="link.conn_spec[id]" [id]="id" [options]="slider.connection[id]" (change)="onChange(link.conn_spec, id, $event, slider.connection[id].value)" class="slider"></app-value-slider>
+      <app-param-input view="valueSlider" [params]="link.conn_spec" [id]="id" [options]="slider.connection[id]" (paramChange)="onChange()" class="input"></app-param-input>
     </mat-list-item>
     <mat-list-item [style.border-left-color]="colors.pre[0]" [style.border-right-color]="colors.post[0]" [style.display]="_controllerService.display(4)" >
       <app-select placeholder="Synapse model" element_type="synapse"  [color]="colors.pre[0]" [selected]="link.syn_spec.model" (selectChange)="onSelectSynModel($event)"></app-select>
@@ -50,7 +50,7 @@
       </button>
     </mat-list-item>
     <mat-list-item *ngFor="let id of keys(slider.synapse)" [ngSwitch]="slider.synapse[id].view" [style.border-left-color]="colors.pre[0]" [style.border-right-color]="colors.post[0]" [style.display]="_controllerService.display(2)">
-      <app-param-input [view]="slider.synapse[id].view" [id]="id" [value]="link.syn_spec[id]" [options]="slider.synapse[id]" (change)="onChange(link.syn_spec, id, $event, slider.synapse[id].value)" style="width:100%"></app-param-input>
+      <app-param-input [view]="slider.synapse[id].view" [params]="link.syn_spec" [id]="id" [options]="slider.synapse[id]" (paramChange)="onChange()" class="input"></app-param-input>
     </mat-list-item>
   </mat-list>
   </span>
