@@ -4,18 +4,18 @@
 }
 
 ::ng-deep .network .button {
-  display: none;
+  opacity: 0;
   height: 38px;
   line-height: 38px;
   width: 38px;
 }
 
 ::ng-deep .network.active .button {
-  display: inline;
+  opacity: 1;
 }
 
 ::ng-deep .network .mat-list-item-content:hover .button {
-  display: inline;
+  opacity: 1;
 }
 
 ::ng-deep .network .button fa-icon {

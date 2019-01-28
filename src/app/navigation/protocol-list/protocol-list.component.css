@@ -1,12 +1,12 @@
 .protocol .button {
-  display: none;
+  opacity: 0;
   height: 38px;
   line-height: 38px;
   width: 38px;
 }
 
 ::ng-deep .protocol .mat-list-item-content:hover .button {
-  display: inline;
+  opacity: 1;
 }
 
 ::ng-deep .protocol.active, .protocol.active:focus, .protocol.active:hover {
@@ -15,7 +15,7 @@
 }
 
 ::ng-deep .protocol.active .button {
-  display: inline;
+  opacity: 1;
 }
 
 .protocol .button fa-icon {
