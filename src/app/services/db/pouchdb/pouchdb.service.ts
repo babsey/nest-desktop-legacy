@@ -57,7 +57,7 @@ export class PouchDBService {
       .then(doc => {
         let keys = Object.keys(data);
         keys.filter(k => !k.startsWith('_'))
-          .map(k => doc[k] == data[k])
+          .map(k => doc[k] = data[k])
         doc['updatedAt'] = new Date();
         return db.put(doc)
           .catch(err => err);
