@@ -20,7 +20,7 @@
   </mat-list-item>
 
   <mat-list-item *ngFor="let param of _configService.selectedModel.params" class="param">
-    <app-param-input [view]="_configService.selectedModel.options[param].view" [model]="_modelService.selectedModel" [id]="param" [value]="_configService.selectedModel.options[param].value" [options]="_configService.selectedModel.options[param]" style="width:100%"></app-param-input>
+    <app-param-input [view]="_configService.selectedModel.options[param].view" [model]="_modelService.selectedModel" [params]="_configService.selectedModel.options[param]" [id]="param" [options]="_configService.selectedModel.options[param]" style="width:100%"></app-param-input>
   </mat-list-item>
 
 </mat-list>
