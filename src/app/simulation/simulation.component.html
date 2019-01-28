@@ -8,8 +8,8 @@
     <span>
       <mat-form-field floatLabel="never" style="width: 100%; margin-bottom:-20px">
         <div matPrefix style="width:10px"></div>
-        <input matInput type="text" class="formControl" [readonly]="!_controllerService.options.edit" [(ngModel)]="_dataService.data.name" placeholder="Name of the network model" />
-        <button mat-button *ngIf="_controllerService.options.edit && _dataService.data.name" matSuffix mat-icon-button aria-label="Clear" (click)="_dataService.data.name=''">
+        <input matInput type="text" class="formControl" [(ngModel)]="_dataService.data.name" placeholder="Name of the network model" />
+        <button mat-icon-button *ngIf="_dataService.data.name" matSuffix aria-label="Clear" (click)="_dataService.data.name=''" class="no-print">
           <fa-icon icon="times"></fa-icon>
         </button>
       </mat-form-field>
