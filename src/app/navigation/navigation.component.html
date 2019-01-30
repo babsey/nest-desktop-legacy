@@ -1,13 +1,11 @@
 <mat-toolbar color="accent">
   <mat-toolbar-row>
     <span class="nest-desktop">
-      <a href="http://www.nest-simulator.org" target="_blank">
-        <img height="42px" alt="NEST" src="./img/nest.svg" class="nest">
-      </a>
+      <img height="42px" alt="NEST" src="./assets/img/nest-accent.svg" class="nest">
     </span>
     <span class="navButton">
         <a mat-icon-button href="#" [class.mat-warn]="_navigationService.url()=='/'" matTooltip="Main page">
-        <fa-icon icon="home"></fa-icon>
+        <fa-icon icon="desktop"></fa-icon>
       </a>
       <a mat-icon-button [routerLink]="_navigationService.routerLink('view')" [class.mat-warn]="_navigationService.url().endsWith('view')" matTooltip="View network configuration">
         <fa-icon icon="info"></fa-icon>
