@@ -11,6 +11,7 @@ import { ChartService } from '../chart.service';
 export class SVGAreaChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data: any;
   @Input() height: any;
+  @Input() opacity: any;
   @Input() options: any;
   @Input() xDomain: any;
   @Input() xLabel: any;
@@ -75,10 +76,6 @@ export class SVGAreaChartComponent implements OnInit, OnChanges, OnDestroy {
 
   fill(d) {
     return this._chartService.selected.includes(d.idx) ? d.c : 'black'
-  }
-
-  opacity(d) {
-    return (this._chartService.selected.includes(d.idx) ? 2. : .2) / this.options.node_idx.length
   }
 
   onAxesChange(events) {

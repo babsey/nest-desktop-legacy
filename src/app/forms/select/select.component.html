@@ -5,7 +5,7 @@
         <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
         <input class="search" matInput type="text" (keyup)="search($event.target.value)" autocomplete="off" placeholder="search">
       </mat-form-field>
-      <mat-option *ngFor="let el of filteredElements" [value]="el" [style.color]="el==selected ? color : 'black'">{{ el }}</mat-option>
+      <mat-option *ngFor="let el of filteredElements" [value]="el">{{ el }}</mat-option>
     </mat-select>
   </mat-form-field>
 

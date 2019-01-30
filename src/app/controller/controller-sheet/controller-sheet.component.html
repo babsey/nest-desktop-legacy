@@ -1,16 +1,16 @@
 <app-sketch *ngIf="viewSketch" [data]="_dataService.data" width="540" height="300"></app-sketch>
 
 <span class="no-print" id="controllerSheetButtons">
-  <button mat-icon-button (click)="onClick('simulation', 'showSlider')" [class.mat-primary]="_configService.config.app.simulation.showSlider" matTooltip="Modify parameters">
+  <button mat-icon-button (click)="onClick('simulation', 'showSlider')" [class.mat-warn]="_configService.config.app.simulation.showSlider" matTooltip="Modify parameters">
     <fa-icon icon="sliders-h"></fa-icon>
   </button>
   <button mat-icon-button (click)="run()" matTooltip="Run simulation">
     <fa-icon icon="play-circle"></fa-icon>
   </button>
-  <button mat-icon-button (click)="toggleNetworkSketchView()" [class.mat-primary]="viewSketch" matTooltip="Show network sketch">
+  <button mat-icon-button (click)="toggleNetworkSketchView()" [class.mat-warn]="viewSketch" matTooltip="Show network sketch">
     <fa-icon icon="share-alt"></fa-icon>
   </button>
-  <button mat-icon-button (click)="edit()" [class.mat-primary]="_controllerService.options.edit" matTooltip="Edit network">
+  <button mat-icon-button (click)="edit()" [class.mat-warn]="_controllerService.options.edit" matTooltip="Edit network">
     <fa-icon icon="pencil-alt"></fa-icon>
   </button>
   <button mat-icon-button (click)="undo()" [disabled]="_dataService.undoStack.length<=1" [matBadgeHidden]="_dataService.undoStack.length<=1" [matBadge]="_dataService.undoStack.length-1" matBadgeColor="accent" matBadgePosition="below after" matTooltip="Undo network configuration">

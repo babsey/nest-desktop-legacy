@@ -3,11 +3,22 @@
 }
 
 .node-controller .controller-subheader .node {
-  height: 46px;
-  width: 46px;
-  margin: 5px;
+  height: 33px;
+  width: 33px;
+  margin: 0 5px 0 -11px;
+  line-height: 31.5px;
+  font-size: 11px;
+  border-width: 1.5px;
 }
 
+.node-controller .controller-subheader .menuButton {
+  font-size: 11px;
+  opacity: 0;
+}
+
+.node-controller .controller-subheader:hover .menuButton {
+  opacity: 1;
+}
 .node-controller .controller-menu mat-list-item {
   border-left: 1.5px solid black;
   width: calc(100% - 1.5px);

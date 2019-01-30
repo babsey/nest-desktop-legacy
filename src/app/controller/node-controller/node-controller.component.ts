@@ -3,6 +3,7 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { ColorService } from '../../services/color/color.service';
 import { ConfigService } from '../../config/config.service';
 import { ControllerService } from '../../controller/controller.service';
+import { ChartService } from '../../chart/chart.service';
 import { DataService } from '../../services/data/data.service';
 import { SimulationService } from '../../simulation/simulation.service';
 import { SketchService } from '../../sketch/sketch.service';
@@ -19,11 +20,13 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   public options: any = {};
   public configModel: any = {};
   public slider: any;
+  public toggleColorPicker: any = false;
 
   constructor(
     public _colorService: ColorService,
     public _configService: ConfigService,
     public _controllerService: ControllerService,
+    public _chartService: ChartService,
     public _dataService: DataService,
     public _simulationService: SimulationService,
     public _sketchService: SketchService,
@@ -37,8 +40,7 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   ngOnChanges() {
     // console.log('Update node controller')
     this.node = this._dataService.data.collections[this.idx];
-    var colors = this._colorService.nodes;
-    this.color = colors[this.node.idx % colors.length];
+    this.color = this._colorService.node(this.node);
     this.configModel = this._configService.config.nest.model[this.node.model];
     this.updateParams(this.node)
   }
@@ -62,12 +64,24 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     this.updateParams(this.node)
   }
 
-  resetNode(idx) {
+  selectColor(color) {
+    if (color == 'none') {
+      delete this.node['color'];
+      this.color = this._colorService.node(this.node);
+    } else {
+      this.color = color;
+      this.node['color'] = color;
+    }
+    this._sketchService.update.emit()
+    this._chartService.init.emit()
+  }
+
+  resetNode() {
     var configModel = this._configService.config.nest.model[this.node.model];
     var data = this._dataService.data;
-    this._dataService.data.collections[idx].params = {};
+    this._dataService.data.collections[this.idx].params = {};
     configModel.params.forEach(d => {
-      this._dataService.data.collections[idx].params[d] = configModel.options[d].value
+      this._dataService.data.collections[this.idx].params[d] = configModel.options[d].value
     })
     this._dataService.history(this._dataService.data)
     if (!this._dataService.options.edit) {
@@ -75,37 +89,37 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     }
   }
 
-  freezeNode(idx) {
+  freezeNode() {
     var data = this._dataService.data;
-    if (data.collections[idx].params['frozen']) {
-      data.collections[idx].params['frozen'] = false
+    if (data.collections[this.idx].params['frozen']) {
+      data.collections[this.idx].params['frozen'] = false
     } else {
-      data.collections[idx].params['frozen'] = true;
+      data.collections[this.idx].params['frozen'] = true;
     }
   }
 
-  deleteNode(idx) {
+  deleteNode() {
     var data = this._dataService.data;
     this._dataService.history(data)
 
-    var collections = data.collections.filter(d => d.idx != idx);
+    var collections = data.collections.filter(d => d.idx != this.idx);
     collections.forEach((d, i) => {
       d.idx = i;
     })
     data.collections = collections;
 
-    var connectomes = data.connectomes.filter(d => d.pre != idx && d.post != idx);
+    var connectomes = data.connectomes.filter(d => d.pre != this.idx && d.post != this.idx);
     if (connectomes.length != data.connectomes.length) {
       connectomes.forEach((d, i) => {
         d.idx = i;
-        d.pre = d.pre > idx ? d.pre - 1 : d.pre;
-        d.post = d.post > idx ? d.post - 1 : d.post;
+        d.pre = d.pre > this.idx ? d.pre - 1 : d.pre;
+        d.post = d.post > this.idx ? d.post - 1 : d.post;
       })
       data.connectomes = connectomes;
     }
 
     this._sketchService.update.emit()
-    this._dataService.records = this._dataService.records.filter(d => d.recorder.idx != idx)
+    this._dataService.records = this._dataService.records.filter(d => d.recorder.idx != this.idx)
     if (!this._dataService.options.edit) {
       this._simulationService.run()
     }

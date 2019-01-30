@@ -107,12 +107,6 @@ export class SketchService {
     this.update.emit()
   }
 
-  coloredNode() {
-    if (this.selected.node) {
-      return this._colorService.nodes[this.selected.node.idx];
-    }
-  }
-
   drawPath(source, target, isTargetNode=false) {
     var x1 = source.x,
       y1 = source.y,

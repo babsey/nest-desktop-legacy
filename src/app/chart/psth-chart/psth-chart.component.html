@@ -1,6 +1,7 @@
-<app-svg-area-chart *ngIf="chart.includes('area')"
+<!-- <app-svg-area-chart *ngIf="chart.includes('area')"
   [data]="psth"
   [height]="height"
+  [opacity]="opacity"
   [options]="options"
   [xDomain]="xDomain"
   [xScale]="xScale"
@@ -8,21 +9,24 @@
   [yLabel]="yLabel()"
   [yScale]="yScale"
   xLabel="Time [ms]"
-></app-svg-area-chart>
-<app-svg-bar-chart *ngIf="chart.includes('bar')"
+></app-svg-area-chart> -->
+
+<app-area-chart *ngIf="chart.includes('area')"
   [data]="psth"
   [height]="height"
+  [opacity]="opacity"
   [options]="options"
   [xDomain]="xDomain"
-  [xScale]="xScale"
+  [xScale]="_chartService.xScale"
   [yDomain]="yDomain"
   [yLabel]="yLabel()"
   [yScale]="yScale"
   xLabel="Time [ms]"
-></app-svg-bar-chart>
+></app-area-chart>
 <app-line-chart *ngIf="chart.includes('line')"
   [data]="psth"
   [height]="height"
+  [opacity]="opacity"
   [options]="options"
   [xDomain]="xDomain"
   [xScale]="xScale"
@@ -31,3 +35,15 @@
   [yScale]="yScale"
   xLabel="Time [ms]"
 ></app-line-chart>
+<app-svg-bar-chart *ngIf="chart.includes('bar')"
+  [data]="psth"
+  [height]="height"
+  [opacity]="opacity"
+  [options]="options"
+  [xDomain]="xDomain"
+  [xScale]="xScale"
+  [yDomain]="yDomain"
+  [yLabel]="yLabel()"
+  [yScale]="yScale"
+  xLabel="Time [ms]"
+></app-svg-bar-chart>

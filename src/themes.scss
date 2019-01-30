@@ -2,146 +2,17 @@
 @include mat-core();
 
 
-$nest-schemeCategory: (
-  100: #ff6633,
+$bw-schemeCategory: (
+  100: #333,
   200: #fafafa,
-  300: white,
-  contrast: (100: white, 200: black, 300: black)
+  300: #ff6633,
+  contrast: (100: #fafafa, 200: #333, 300: #fafafa)
 );
-$nest-primary: mat-palette($nest-schemeCategory, 100);
-$nest-accent: mat-palette($nest-schemeCategory, 200);
-$nest-warn: mat-palette($nest-schemeCategory, 300);
-$nest-light-theme: mat-light-theme($nest-primary, $nest-accent, $nest-warn);
+$bw-primary: mat-palette($bw-schemeCategory, 100);
+$bw-accent: mat-palette($bw-schemeCategory, 200);
+$bw-warn: mat-palette($bw-schemeCategory, 300);
+$bw-light-theme: mat-light-theme($bw-primary, $bw-accent, $bw-warn);
 
-.nest-theme {
-  @include angular-material-theme($nest-light-theme);
-}
-//
-//
-// define a real custom palette (using http://mcg.mbitson.com)
-$schemeCategory10-primary: (
-  50: #1f77b4,
-  100: #ff7f0e,
-  200: #2ca02c,
-  300: #d62728,
-  400: #9467bd,
-  500: #8c564b,
-  600: #e377c2,
-  700: #7f7f7f,
-  800: #bcbd22,
-  900: #17becf,
-  contrast: (50: white, 100: white, 200: white, 300: white, 400: white, 500: white, 600: white, 700: white, 800: white, 900: white)
-);
-$schemeCategory10-accent: (
-  50: white,
-  100: white,
-  200: white,
-  300: white,
-  400: white,
-  500: white,
-  600: white,
-  700: white,
-  800: white,
-  900: white,
-  contrast: (50: #1f77b4, 100: #ff7f0e, 200: #2ca02c, 300: #d62728, 400: #9467bd, 500: #8c564b, 600: #e377c2, 700: #7f7f7f, 800: #bcbd22, 900: #17becf,)
-);
-//
-//
-// Blue
-$blue-primary: mat-palette($schemeCategory10-primary, 50);
-$blue-accent: mat-palette($schemeCategory10-accent, 50);
-$blue-theme: mat-light-theme($blue-primary, $blue-accent, $blue-accent);
-
-.theme-blue {
-  @include angular-material-theme($blue-theme);
-}
-//
-//
-// Orange
-$orange-primary: mat-palette($schemeCategory10-primary, 100);
-$orange-accent: mat-palette($schemeCategory10-accent, 100);
-$orange-theme: mat-light-theme($orange-primary, $orange-accent, $orange-accent);
-
-.theme-orange {
-  @include angular-material-theme($orange-theme);
-}
-//
-//
-// Green
-$green-primary: mat-palette($schemeCategory10-primary, 200);
-$green-accent: mat-palette($schemeCategory10-accent, 200);
-$green-theme: mat-light-theme($green-primary, $green-accent, $green-accent);
-
-.theme-green {
-  @include angular-material-theme($green-theme);
-}
-//
-//
-// Red
-$red-primary: mat-palette($schemeCategory10-primary, 300);
-$red-accent: mat-palette($schemeCategory10-accent, 300);
-$red-theme: mat-light-theme($red-primary, $red-accent, $red-accent);
-
-.theme-red {
-  @include angular-material-theme($red-theme);
-}
-//
-//
-// Purple
-$purple-primary: mat-palette($schemeCategory10-primary, 400);
-$purple-accent: mat-palette($schemeCategory10-accent, 400);
-$purple-theme: mat-light-theme($purple-primary, $purple-accent, $purple-accent);
-
-.theme-purple {
-  @include angular-material-theme($purple-theme);
-}
-//
-//
-// Brown
-$brown-primary: mat-palette($schemeCategory10-primary, 500);
-$brown-accent: mat-palette($schemeCategory10-accent, 500);
-$brown-theme: mat-light-theme($brown-primary, $brown-accent, $brown-accent);
-
-.theme-brown {
-  @include angular-material-theme($brown-theme);
-}
-//
-//
-// Pink
-$pink-primary: mat-palette($schemeCategory10-primary, 600);
-$pink-accent: mat-palette($schemeCategory10-accent, 600);
-$pink-theme: mat-light-theme($pink-primary, $pink-accent, $pink-accent);
-
-.theme-pink {
-  @include angular-material-theme($pink-theme);
-}
-//
-//
-// Gray
-$gray-primary: mat-palette($schemeCategory10-primary, 700);
-$gray-accent: mat-palette($schemeCategory10-accent, 700);
-$gray-theme: mat-light-theme($gray-primary, $gray-accent, $gray-accent);
-
-.theme-gray {
-  @include angular-material-theme($gray-theme);
-}
-//
-//
-// Yellow
-$yellow-primary: mat-palette($schemeCategory10-primary, 800);
-$yellow-accent: mat-palette($schemeCategory10-accent, 800);
-$yellow-theme: mat-light-theme($yellow-primary, $yellow-accent, $yellow-accent);
-
-.theme-yellow {
-  @include angular-material-theme($yellow-theme);
-}
-//
-//
-// Cyan
-$cyan-primary: mat-palette($schemeCategory10-primary, 900);
-$cyan-accent: mat-palette($schemeCategory10-accent, 900);
-$cyan-theme: mat-light-theme($cyan-primary, $cyan-accent, $cyan-accent);
-
-.theme-cyan {
-  @include angular-material-theme($cyan-theme);
+.bw-theme {
+  @include angular-material-theme($bw-light-theme);
 }

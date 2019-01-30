@@ -1,16 +1,16 @@
 <mat-list dense style="width:97%">
   <ng-container *ngFor="let node of nodes | nodes">
-    <mat-list-item *ngIf="!_controllerService.options.edit && node.show" class="node theme-{{ color(node.idx)[1] }}" [style.display]="_sketchService.isSelectedNode_or_all(node) || !selectiveView ? '' : 'none'">
+    <mat-list-item *ngIf="!_controllerService.options.edit && node.show" class="node node{{node.idx}}" [style.display]="_sketchService.isSelectedNode_or_all(node) || !selectiveView ? '' : 'none'">
       <div class="line">
         <span>
-          <button mat-icon-button [style.border-color]="color(node.idx)[0]" (click)="_sketchService.toggleSelectNode(node)">{{ node.idx }}</button>
+          <button mat-icon-button [style.border-color]="_colorService.node(node)" (click)="_sketchService.toggleSelectNode(node)">{{ node.idx }}</button>
           <span style="font-weight: bold; margin-left:5px">{{ node.label }}</span>
         </span>
         <span>({{ node.n }})</span>
       </div>
-      <mat-list dense *ngIf="node.params" class="params theme-{{ color(node.idx)[1] }}">
+      <mat-list dense *ngIf="node.params" class="params">
         <ng-container *ngFor="let param of node.params">
-          <mat-list-item *ngIf="!_controllerService.options.edit && param.show" class="param view" [style.border-color]="color(node.idx)[0]">
+          <mat-list-item *ngIf="!_controllerService.options.edit && param.show" class="param view" [style.border-color]="_colorService.node(node)">
             <div class="line" matTooltip="{{ param.id }}" matTooltipPosition="before">
               <span>{{ param.label }}</span>
               <span>{{ param.value }} {{ param.unit }}</span>
@@ -20,16 +20,22 @@
       </mat-list>
 
     </mat-list-item>
-    <mat-list-item *ngIf="_controllerService.options.edit" class="node theme-{{ color(node.idx)[1] }}">
+
+    <mat-list-item *ngIf="_controllerService.options.edit" class="node node{{node.idx}}">
       <div class="line">
-        <mat-checkbox [(ngModel)]="node.show" color="primary" *ngIf="_controllerService.options.edit">
-          <span style="font-weight: bold">
+        <mat-checkbox [(ngModel)]="node.show" *ngIf="_controllerService.options.edit" color="warn">
+          <span style="font-weight: bold;">
             {{ node.label || param.id }}
           </span>
         </mat-checkbox>
+        <span>
+          <mcc-color-picker [selectedColor]="_colorService.node(node)" (selected)="selectColor(node.idx, $event)" hideEmptyUsedColors>
+            <mcc-color-picker-collection [colors]="this._colorService.colors" hideEmpty="true"></mcc-color-picker-collection>
+          </mcc-color-picker>
+        </span>
       </div>
 
-      <mat-list dense *ngIf="node.params" class="params theme-{{ color(node.idx)[1] }}">
+      <mat-list dense *ngIf="node.params" class="params node{{node.idx}}">
         <ng-container *ngFor="let param of node.params">
           <mat-list-item *ngIf="_controllerService.options.edit" class="param edit">
             <div class="line" matTooltip="{{ param.id }}" matTooltipPosition="before">

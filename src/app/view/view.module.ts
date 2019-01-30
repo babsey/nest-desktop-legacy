@@ -14,6 +14,8 @@ import { LinksViewComponent } from './links-view/links-view.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 import { ViewComponent } from './view.component';
 
+import { MccColorPickerModule } from 'material-community-components';
+
 @NgModule({
   imports: [
     AppFormsModule,
@@ -24,6 +26,9 @@ import { ViewComponent } from './view.component';
     FormsModule,
     MaterialModule,
     SketchModule,
+    MccColorPickerModule.forRoot({
+      used_colors: []
+    }),
   ],
   declarations: [
     NetworkViewComponent,

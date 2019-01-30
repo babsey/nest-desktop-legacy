@@ -30,3 +30,7 @@ body {
 .right-aligned-header>.mat-content>mat-panel-title, .right-aligned-header>.mat-content>mat-panel-description {
   flex: 0 0 auto;
 }
+
+.bw-theme .mat-slider-track-fill, .bw-theme .mat-slider-thumb, .bw-theme .mat-slider-thumb-label {
+  border: 2px solid #333;
+}

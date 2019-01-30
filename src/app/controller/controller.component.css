@@ -18,3 +18,7 @@
 ::ng-deep .controller .input, ::ng-deep .controller .slider {
   width: 100%;
 }
+
+::ng-deep #controller .mat-tab-header {
+  width: calc(100% - 50px);
+}

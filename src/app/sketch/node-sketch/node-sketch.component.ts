@@ -62,7 +62,6 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
     if (this.data == undefined) return
     if (Object.keys(this.data).length === 0 && this.data.constructor === Object) return
     let edit = this._controllerService.options.edit;
-    let colors = this._colorService.nodes;
     let r = this._sketchService.options.node.radius
 
     var nodes = this.selector.selectAll("g.node").data(this.data.collections); // UPDATE
@@ -121,7 +120,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
       .attr('y', -r)
       .attr('rx', d => d.element_type == 'recorder' ? r/2 : r)
       .attr('ry', d => d.element_type == 'stimulator' ? 0 : r)
-      .style('stroke', d => colors[d.idx % colors.length][0])
+      .style('stroke', d => this._colorService.node(d))
       .style('stroke-dasharray', d => this._sketchService.isSelectedNode(d) ? '9' : '');
     var tooltip = nodesEnter.append('svg:text')
       .text(d => this._sketchService.label(d.model))
@@ -140,7 +139,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
       .attr('transform', d => 'translate(' + d.sketch.x + ',' + d.sketch.y + ')');
 
     nodes.selectAll('rect')
-      .style('stroke', d => colors[d.idx % colors.length][0])
+      .style('stroke', d => this._colorService.node(d))
       .style('stroke-dasharray', d => this._sketchService.isSelectedNode(d) ? '9' : '');
 
     nodesEnter.append('svg:text')

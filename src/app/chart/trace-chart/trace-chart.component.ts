@@ -20,7 +20,6 @@ export class TraceChartComponent implements OnInit, OnDestroy {
   private subscription: any
   public autofocus: any = false;
   public color: any;
-  public colors: any;
   public data: any;
   public chart: any = 'line';
   public height: any;
@@ -38,13 +37,12 @@ export class TraceChartComponent implements OnInit, OnDestroy {
 
   constructor(
     public _chartService: ChartService,
-    private _colorService: ColorService,
+    public _colorService: ColorService,
     public _configService: ConfigService,
     public _dataService: DataService,
     private _mathService: MathService,
     public _sketchService: SketchService,
   ) {
-    this.colors = this._colorService.nodes;
   }
 
   ngOnInit() {
@@ -69,7 +67,7 @@ export class TraceChartComponent implements OnInit, OnDestroy {
     this.neurons = this._dataService.data.connectomes
       .filter(d => d.post == this.recorder.idx)
       .map(d => this._dataService.data.collections[d.pre]);
-    this.color = this.colors[this.recorder.idx % this.colors.length];
+    this.color = this._colorService.node(this.recorder);
 
     if (this._configService.config.app.chart.color) {
       this.selectAll()
@@ -93,7 +91,7 @@ export class TraceChartComponent implements OnInit, OnDestroy {
     });
     senders.forEach((d, i) => {
       var sender = senders[i];
-      data[i].c = this.colors[global_ids[sender] % this.colors.length][0];
+      data[i].c = this._colorService.nodeIdx(global_ids[sender]);
     })
     this.data = data;
 

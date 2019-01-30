@@ -32,7 +32,7 @@ export class NodesPipe implements PipeTransform {
           unit: config.options[param].unit,
         }
       })
-      return {
+      var node = {
         show: true,
         idx: d.idx,
         model: d.model,
@@ -40,6 +40,10 @@ export class NodesPipe implements PipeTransform {
         n: d.n || 1,
         params: params,
       }
+      if (d['color']) {
+        node['color'] = d['color']
+      }
+      return node
     })
   }
 

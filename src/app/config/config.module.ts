@@ -1,12 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../modules/material.module';
+import { NgModule } from '@angular/core';
 
 import { ConfigComponent } from './config.component';
 
 import { ConfigService } from './config.service';
+import { MccColorPickerModule } from 'material-community-components';
 
 
 @NgModule({
@@ -15,6 +16,9 @@ import { ConfigService } from './config.service';
     FontAwesomeModule,
     FormsModule,
     MaterialModule,
+    MccColorPickerModule.forRoot({
+      used_colors: []
+    }),
     ReactiveFormsModule,
   ],
   declarations: [

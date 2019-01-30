@@ -19,6 +19,8 @@ import { MaterialModule } from './modules/material.module';
 import { ModelModule } from './model/model.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { SimulationModule } from './simulation/simulation.module';
+import { MccColorPickerModule } from 'material-community-components';
+
 
 // components
 import { AppComponent } from './app.component';
@@ -40,6 +42,9 @@ import { AppComponent } from './app.component';
     ModelModule,
     NavigationModule,
     SimulationModule,
+        MccColorPickerModule.forRoot({
+      used_colors: []
+    }),
   ],
   bootstrap: [AppComponent]
 })

@@ -6,16 +6,16 @@
       </a>
     </span>
     <span class="navButton">
-        <a mat-icon-button href="#" [class.mat-primary]="_navigationService.url()=='/'" matTooltip="Main page">
+        <a mat-icon-button href="#" [class.mat-warn]="_navigationService.url()=='/'" matTooltip="Main page">
         <fa-icon icon="home"></fa-icon>
       </a>
-      <a mat-icon-button [routerLink]="_navigationService.routerLink('view')" [class.mat-primary]="_navigationService.url().endsWith('view')" matTooltip="View network configuration">
+      <a mat-icon-button [routerLink]="_navigationService.routerLink('view')" [class.mat-warn]="_navigationService.url().endsWith('view')" matTooltip="View network configuration">
         <fa-icon icon="info"></fa-icon>
       </a>
-      <a mat-icon-button [routerLink]="_navigationService.routerLink('simulate')" [class.mat-primary]="_navigationService.url().endsWith('simulate')" matTooltip="Simulation workspace">
+      <a mat-icon-button [routerLink]="_navigationService.routerLink('simulate')" [class.mat-warn]="_navigationService.url().endsWith('simulate')" matTooltip="Simulation workspace">
         <fa-icon icon="signature"></fa-icon>
       </a>
-      <a mat-icon-button routerLink="/config/app" [class.mat-primary]="_navigationService.url().startsWith('/config')" matTooltip="Configure app or models">
+      <a mat-icon-button routerLink="/config/app" [class.mat-warn]="_navigationService.url().startsWith('/config')" matTooltip="Configure app or models">
         <fa-icon icon="pencil-alt"></fa-icon>
       </a>
     </span>
@@ -24,7 +24,7 @@
 
 <app-main-list *ngIf="_navigationService.url()=='/'"></app-main-list>
 
-<mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex" *ngIf="_navigationService.url().endsWith('view') || _navigationService.url().endsWith('simulate')">
+<mat-tab-group mat-stretch-tabs color="primary" [selectedIndex]="selectedIndex" *ngIf="_navigationService.url().endsWith('view') || _navigationService.url().endsWith('simulate')">
 
   <mat-tab label="Networks">
     <app-network-list></app-network-list>

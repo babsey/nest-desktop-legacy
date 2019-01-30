@@ -11,6 +11,7 @@ export class ParamInputComponent implements OnInit {
   @Input() params: any;
   @Input() id: any;
   @Input() options: any;
+  @Input() color: any;
   @Output() paramChange = new EventEmitter;
 
   constructor() { }

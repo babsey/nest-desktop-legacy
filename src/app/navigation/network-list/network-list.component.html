@@ -2,6 +2,7 @@
   <mat-card style="width:360px">
     <app-sketch [data]="network" width="360" height="200"></app-sketch>
     <app-nodes-view [nodes]="network.collections"></app-nodes-view>
+    <app-links-view [data]="network"></app-links-view>
   </mat-card>
 </mde-popover>
 

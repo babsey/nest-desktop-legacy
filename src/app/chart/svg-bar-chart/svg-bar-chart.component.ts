@@ -11,6 +11,7 @@ import { ChartService } from '../chart.service';
 export class SVGBarChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data: any;
   @Input() height: any;
+  @Input() opacity: any;
   @Input() options: any;
   @Input() xDomain: any;
   @Input() xLabel: any;

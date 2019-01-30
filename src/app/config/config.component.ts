@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ConfigService } from './config.service';
+import { ColorService } from '../services/color/color.service';
 
 
 @Component({
@@ -9,9 +10,11 @@ import { ConfigService } from './config.service';
   styleUrls: ['./config.component.css']
 })
 export class ConfigComponent implements OnInit {
+  public selectedColor:any = 0;
 
   constructor(
     public _configService: ConfigService,
+    public _colorService: ColorService,
   ) { }
 
   ngOnInit() {
@@ -27,4 +30,17 @@ export class ConfigComponent implements OnInit {
     this.save()
     this._configService.check()
   }
+
+  selectColor(idx, color) {
+    this._configService.config.app.colors[idx] = color;
+    this.save()
+  }
+
+  selectScheme(event) {
+    this._colorService.selectedScheme = event.value;
+    this._colorService.colors = this._colorService.schemes[event.value];
+    this._configService.config.app.colors = this._colorService.colors;
+    this.save()
+  }
+
 }

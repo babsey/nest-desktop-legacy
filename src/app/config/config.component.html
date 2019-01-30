@@ -38,10 +38,10 @@
     </div>
 
     <mat-chip-list>
-      <mat-chip selected="true" class="mat-warn">REQUEST {{ _configService.options.NEST.request }}</mat-chip>
-      <mat-chip selected="true" class="mat-warn">RESPONSE server {{ _configService.options.NEST.running ? '' : 'not' }} running</mat-chip>
-      <mat-chip selected="true" class="mat-warn" *ngIf="_configService.options.NEST.running">VERSION {{ _configService.options.NEST.data.version }}</mat-chip>
-      <mat-chip selected="true" class="mat-warn" *ngIf="_configService.options.NEST.running">NEST {{ _configService.options.NEST.data.nest.version }}</mat-chip>
+      <mat-chip selected="true" class="mat-accent">REQUEST {{ _configService.options.NEST.request }}</mat-chip>
+      <mat-chip selected="true" class="mat-accent">RESPONSE server {{ _configService.options.NEST.running ? '' : 'not' }} running</mat-chip>
+      <mat-chip selected="true" class="mat-accent" *ngIf="_configService.options.NEST.running">VERSION {{ _configService.options.NEST.data.version }}</mat-chip>
+      <mat-chip selected="true" class="mat-accent" *ngIf="_configService.options.NEST.running">NEST {{ _configService.options.NEST.data.nest.version }}</mat-chip>
     </mat-chip-list>
   </mat-card-content>
 </mat-card>
@@ -52,7 +52,7 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    <mat-tab-group>
+    <mat-tab-group color="primary">
 
       <mat-tab label="Networks">
         <div class="form-fields">
@@ -142,6 +142,29 @@
     </mat-list>
   </mat-card-content>
 </mat-card>
+
+<mat-card>
+  <mat-card-subtitle>
+    Node colors
+  </mat-card-subtitle>
+
+  <div>
+    <mat-form-field>
+      <mat-select placeholder="Pick a color scheme" (selectionChange)="selectScheme($event)">
+        <mat-option *ngFor="let scheme of _colorService.schemesKeys()" [value]="scheme">
+          {{ scheme }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <ng-container *ngFor="let color of _configService.config.app.colors; let idx = index">
+    <mcc-color-picker [selectedColor]="color" (selected)="selectColor(idx, $event)" style="margin: 5px" [attr.title]="color" hideTransparentUsedColors hideEmptyUsedColors>
+      <mcc-color-picker-collection [colors]="_colorService.selectedColors()" hideEmpty="true"></mcc-color-picker-collection>
+    </mcc-color-picker>
+
+  </ng-container>
+  </mat-card>
 
 <mat-card>
   <mat-card-subtitle>

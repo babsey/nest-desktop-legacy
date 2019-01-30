@@ -25,9 +25,9 @@
       </button>
     </div>
 
-    <mat-tab-group>
+    <mat-tab-group mat-stretch-tabs color="primary">
       <mat-tab label="Nodes">
-        <app-node-controller *ngFor="let collection of _dataService.data.collections" class="node" [idx]="collection.idx" style="overflow-y:auto">
+        <app-node-controller *ngFor="let collection of _dataService.data.collections" class="node" [idx]="collection.idx">
         </app-node-controller >
       </mat-tab>
       <mat-tab label="Links">

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MaterialModule } from '../modules/material.module';
+
 import { AppFormsModule } from '../forms/forms.module';
+import { MaterialModule } from '../modules/material.module';
 import { SketchModule } from '../sketch/sketch.module';
 
 import { ControllerComponent } from './controller.component';
@@ -14,6 +15,8 @@ import { SimulationControllerComponent } from './simulation-controller/simulatio
 
 import { ControllerService } from './controller.service';
 
+import { MccColorPickerModule } from 'material-community-components';
+
 
 @NgModule({
   imports: [
@@ -22,6 +25,9 @@ import { ControllerService } from './controller.service';
     FontAwesomeModule,
     MaterialModule,
     SketchModule,
+    MccColorPickerModule.forRoot({
+      used_colors: []
+    }),
   ],
   declarations: [
     ControllerComponent,

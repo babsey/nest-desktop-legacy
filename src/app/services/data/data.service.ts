@@ -89,6 +89,9 @@ export class DataService {
     cloned_data['group'] = data['group'];
     cloned_data['collections'].map((d, i) => {
       d['sketch'] = data['collections'][i]['sketch'];
+      if (data['collections'][i]['color']) {
+        d['color'] = data['collections'][i]['color'];
+      }
     });
     return cloned_data
   }

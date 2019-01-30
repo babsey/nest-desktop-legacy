@@ -25,6 +25,7 @@
 }
 
 .slider-container .button {
+  font-size: 11px;
   opacity: 0;
 }
 

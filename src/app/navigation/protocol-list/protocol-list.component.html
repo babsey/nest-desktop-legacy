@@ -1,7 +1,8 @@
 <mde-popover #protocolDetails="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionY="above" mdePopoverPositionX="before" mdePopoverOffsetX="323">
-  <mat-card style="width:400px" >
+  <mat-card style="width:400px">
     <app-sketch [data]="protocol" width="400" height="200"></app-sketch>
     <app-nodes-view [nodes]="protocol.collections"></app-nodes-view>
+    <app-links-view [data]="protocol"></app-links-view>
   </mat-card>
 </mde-popover>
 
@@ -38,8 +39,8 @@
     <a matLine style="display:flex">
       {{ protocol.name }}
       <div class="flex-spacer"></div>
-      <span *ngIf="protocol.updatedAt">
-        ({{ protocol.updatedAt | timesince }})
+      <span *ngIf="protocol.updatedAt" class="timesince">
+        {{ protocol.updatedAt | timesince }}
       </span>
     </a>
 

@@ -4,18 +4,21 @@
   flex-direction: column;
   width: calc(100vw = 320px);
   height: 100vh;
-
+  line-height: 1.5em;
+  max-width: 800px;
 }
 
-.cards {
-  display: flex;
-  flex-direction: row;
-}
-
-mat-card {
+#main mat-card {
   margin: 5px;
 }
 
-.cards mat-card {
-  flex-grow: 1;
+.quote {
+  font-size: 28px;
+  line-height: 1.2em;
+  font-style: italic;
+  text-align: right;
+}
+
+.author {
+  float:right;
 }

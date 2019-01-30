@@ -87,7 +87,6 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
     if (this.data == {} || !this.data) return
     // console.log('Sketch background init')
     var _this = this;
-    var colors = this._colorService.nodes;
 
     var element_types = ['recorder', 'neuron', 'stimulator'];
     var modelDefaults = {
@@ -109,7 +108,9 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
 
     background
       .on('mousemove', function() {
+        var colors = _this._colorService.colors;
         var source = _this._sketchService.events.sourceNode;
+
         if (source) {
           var point = d3.mouse(this);
           var target = {
@@ -118,9 +119,9 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
           };
           _this.dragline
             .attr('d', _this._sketchService.drawPath(source.sketch, target))
-            .style('stroke', d => colors[source.idx % colors.length][0])
-            .style('marker-start', d => 'url(#hillock_' + colors[source.idx % colors.length][1] + ')')
-            .style('marker-end', d => 'url(#exc_' + colors[source.idx % colors.length][1] + ')');
+            .style('stroke', () => colors[source.idx % colors.length])
+            .style('marker-start', () => 'url(#hillock_' + colors[source.idx % colors.length] + ')')
+            .style('marker-end', () => 'url(#exc_' + colors[source.idx % colors.length] + ')');
         }
       })
       .on('click', function() {
@@ -156,6 +157,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
           .outerRadius(60);
 
         var sourceNode = _this._sketchService.events.sourceNode;
+        var colors = _this._colorService.colors;
         element_types.forEach((d, i) => {
           var arc = select.append('svg:path').attr('class', d)
             .datum({
@@ -163,7 +165,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
               endAngle: Math.PI * (i + 1) * 2 / 3,
             })
             .style('fill', 'white')
-            .style('stroke', () => colors[data.collections.length % colors.length][0])
+            .style('stroke', () => colors[data.collections.length % colors.length])
             .style('stroke-width', 4)
             .attr('d', arcFrame)
             .on('mouseover', function() {
@@ -171,8 +173,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
                 .style('visibility', 'visible');
 
               if (!sourceNode || d != 'stimulator') {
-                d3.select(this).style('fill',
-                  () => colors[data.collections.length % colors.length][0])
+                d3.select(this).style('fill', () => colors[data.collections.length % colors.length])
               }
             })
             .on('mouseout', function() {

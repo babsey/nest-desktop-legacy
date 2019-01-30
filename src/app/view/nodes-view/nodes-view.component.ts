@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { ColorService } from '../../services/color/color.service';
 import { ControllerService } from '../../controller/controller.service';
+import { ChartService } from '../../chart/chart.service';
 import { DataService } from '../../services/data/data.service';
 import { SketchService } from '../../sketch/sketch.service';
 
@@ -15,8 +16,9 @@ export class NodesViewComponent implements OnInit {
   @Input() selectiveView: any = false;
 
   constructor(
-    private _colorService: ColorService,
+    public _colorService: ColorService,
     public _controllerService: ControllerService,
+    private _chartService: ChartService,
     public _dataService: DataService,
     public _sketchService: SketchService,
   ) {
@@ -25,7 +27,15 @@ export class NodesViewComponent implements OnInit {
   ngOnInit() {
   }
 
-  color(idx) {
-    return this._colorService.nodes[idx % this._colorService.nodes.length]
+  selectColor(idx, color) {
+    console.log(color)
+    if (color == 'none') {
+      delete this.nodes[idx]['color']
+    } else {
+      this.nodes[idx]['color'] = color;
+    }
+    this._sketchService.update.emit()
+    this._chartService.init.emit()
   }
+
 }

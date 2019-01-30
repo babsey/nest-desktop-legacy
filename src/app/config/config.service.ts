@@ -39,6 +39,7 @@ export class ConfigService {
     this.syncFromFile('app', [
       'app',
       'chart',
+      'colors',
       'controller',
       'db',
       'groups',

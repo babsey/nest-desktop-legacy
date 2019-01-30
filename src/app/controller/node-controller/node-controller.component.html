@@ -1,10 +1,15 @@
-<span class="controller node-controller theme-{{color[1]}}" [style.display]="_sketchService.isSelectedNode_or_all(node) ? '' : 'none'">
+<span class="controller node-controller" [style.display]="_sketchService.isSelectedNode_or_all(node) ? '' : 'none'">
   <mat-list class="controller-subheader">
     <mat-list-item>
-      <button mat-icon-button class="button node" (click)="_sketchService.toggleSelectNode(node)" [style.border-color]="color[0]" [style.border-style]="_sketchService.isSelectedNode(node) ? 'dashed' : 'solid'">
+      <button mat-icon-button class="button node"
+        (click)="_sketchService.toggleSelectNode(node)"
+        [style.border-color]="color"
+        [style.border-style]="_sketchService.isSelectedNode(node) ? 'dashed' : 'solid'"
+        >
         {{ node.idx }}
       </button>
-      <app-select [element_type]="node.element_type" [selected]="node.model" [color]="color[0]" (selectChange)="selectModel($event)"></app-select>
+
+      <app-select [element_type]="node.element_type" [selected]="node.model" (selectChange)="selectModel($event)"></app-select>
 
       <mat-menu #nodeMenu="matMenu" class="node-menu">
         <!-- <button mat-menu-item (click)="_sketchService.toggleSelectNode(node)">
@@ -12,7 +17,14 @@
             <span *ngIf="!_sketchService.isSelectedNode(node)">Select</span>
             <span *ngIf="_sketchService.isSelectedNode(node)">Unselect</span>
           </button> -->
-        <button mat-menu-item (click)="resetNode(node.idx)">
+        <button mat-menu-item>
+          <!-- <fa-icon icon="fill"></fa-icon> -->
+          <mcc-color-picker [selectedColor]="color" (selected)="selectColor($event)" hideEmptyUsedColors>
+            <mcc-color-picker-collection [colors]="_colorService.selectedColors()" hideEmpty="true"></mcc-color-picker-collection>
+          </mcc-color-picker>
+          <span>Colorize node</span>
+        </button>
+        <button mat-menu-item (click)="resetNode()">
           <fa-icon icon="eraser"></fa-icon>
           <span>Reset</span>
         </button>
@@ -20,24 +32,24 @@
           <fa-icon icon="snowflake"></fa-icon>
           <span>Freeze</span>
         </button> -->
-        <button mat-menu-item (click)="deleteNode(node.idx)">
+        <button mat-menu-item (click)="deleteNode()">
           <fa-icon icon="trash-alt"></fa-icon>
           <span>Delete</span>
         </button>
       </mat-menu>
 
-      <button mat-icon-button [matMenuTriggerFor]="nodeMenu" class="button" color="primary">
+      <button mat-icon-button [matMenuTriggerFor]="nodeMenu" class="button menuButton">
         <fa-icon icon="ellipsis-v"></fa-icon>
       </button>
     </mat-list-item>
   </mat-list>
 
   <mat-list class="controller-menu" dense>
-    <mat-list-item *ngIf="!isRecorder(node.element_type)" [style.border-color]="color[0]" [style.display]="_controllerService.display(2)" >
-      <app-param-input view="valueSlider" [params]="node" id="n" [options]="_configService.config.nest.node.npop" (paramChange)="onChange()" class="input"></app-param-input>
+    <mat-list-item *ngIf="!isRecorder(node.element_type)" [style.border-color]="color" [style.display]="_controllerService.display(2)" >
+      <app-param-input view="valueSlider" [params]="node" id="n" [options]="_configService.config.nest.node.npop" [color]="color" (paramChange)="onChange()" class="input"></app-param-input>
     </mat-list-item>
-    <mat-list-item *ngFor="let id of configModel.params" [ngSwitch]="configModel.options[id].view" [style.border-color]="color[0]" [style.display]="_controllerService.display(configModel.options[id].level)" >
-      <app-param-input [view]="configModel.options[id].view" [model]="node.model" [params]="node.params" [id]="id" [options]="configModel.options[id]" (paramChange)="onChange()" class="input"></app-param-input>
+    <mat-list-item *ngFor="let id of configModel.params" [ngSwitch]="configModel.options[id].view" [style.border-color]="color" [style.display]="_controllerService.display(configModel.options[id].level)" >
+      <app-param-input [view]="configModel.options[id].view" [model]="node.model" [params]="node.params" [id]="id" [options]="configModel.options[id]"  [color]="color" (paramChange)="onChange()" class="input"></app-param-input>
     </mat-list-item>
   </mat-list>
 

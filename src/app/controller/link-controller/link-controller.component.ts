@@ -22,7 +22,6 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   public options: any;
   public synModel: any;
 
-
   constructor(
     public _colorService: ColorService,
     public _configService: ConfigService,
@@ -42,11 +41,10 @@ export class LinkControllerComponent implements OnInit, OnChanges {
 
   update() {
     this.link = this._dataService.data.connectomes[this.idx];
-    var colors = this._colorService.nodes;
     this.colors = {
-      pre: colors[this.link.pre % colors.length],
-      post: colors[this.link.post % colors.length],
-      weight: this.link.syn_spec.weight < 0 ? this._colorService.links.inh : this._colorService.links.exc,
+      pre: this._colorService.nodeIdx(this.link.pre),
+      post: this._colorService.nodeIdx(this.link.post),
+      weight: this._colorService.link(this),
     };
     var connectionConfig = this._configService.config.nest.connection;
     var connRule = this.link.conn_spec ? this.link.conn_spec.rule : 'all_to_all';

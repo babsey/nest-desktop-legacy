@@ -32,6 +32,8 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
   public xAxis: any;
   public xDomain: any;
   public yDomain: any;
+  public opacity: any = 1;
+  public overlap: any = 1;
 
   constructor(
     public _chartService: ChartService,
@@ -42,7 +44,6 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
     public _sketchService: SketchService,
   ) {
     // console.log('Construct spike chart')
-    this.colors = this._colorService.nodes;
     this.nbins = this._configService.config.nest.node.nbins.value || 100;
   }
 
@@ -67,7 +68,7 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
     this.neurons = this._dataService.data.connectomes
       .filter(d => d.post == this.recorder.idx)
       .map(d => this._dataService.data.collections[d.pre]);
-    this.color = this.colors[this.recorder.idx % this.colors.length];
+    this.color = this._colorService.node(this.recorder);
 
     if (this._configService.config.app.chart.color) {
       this.selectAll()
@@ -83,11 +84,12 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
       return {
         x: events.times[idx],
         y: events.senders[idx],
-        c: this.colors[global_ids[events.senders[idx]] % this.colors.length][0],
+        c: this._colorService.nodeIdx(global_ids[events.senders[idx]]),
       }
     });
 
     var senders = events['senders'].filter(this._mathService.onlyUnique);
+    senders.sort((a,b) => a-b)
 
     let scatterOptions = {};
     scatterOptions['recorder_idx'] = this.recorder.idx;

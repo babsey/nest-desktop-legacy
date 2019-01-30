@@ -1,36 +1,36 @@
 <mat-list dense style="width:97%">
-  <ng-container *ngFor="let link of links">
+  <ng-container *ngFor="let link of data.connectomes">
     <div style="margin: 10px 0;" [style.display]="_sketchService.isSelectedLink_or_all(link) || !selectiveView ? '' : 'none'">
-      <mat-list-item class="link theme-{{ color(link.pre)[1] }}">
+      <mat-list-item class="link link{{link.idx}}">
         <div style="display:flex;">
-          <button mat-icon-button [style.border-color]="color(link.pre)[0]" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.pre])" class="pre">{{ link.pre }}</button>
+          <button mat-icon-button [style.border-color]="_colorService.node(data.collections[link.pre])" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.pre])" class="pre">{{ link.pre }}</button>
           <button mat-icon-button class="button" (click)="_sketchService.toggleSelectLink(link)">
-          <fa-icon icon="long-arrow-alt-right" class="material-icons arrow" [style.color]="weight(link)"></fa-icon>
+          <fa-icon icon="long-arrow-alt-right" class="material-icons arrow" [style.color]="_colorService.link(link.idx)"></fa-icon>
         </button>
-          <button mat-icon-button [style.border-color]="color(link.post)[0]" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.post])" class="post">{{ link.post }}</button>
+          <button mat-icon-button [style.border-color]="_colorService.node(data.collections[link.post])" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.post])" class="post">{{ link.post }}</button>
           <span class="flex-spacer"></span>
         </div>
-        <mat-list dense class="params theme-{{ color(link.pre)[1] }}">
-          <mat-list-item *ngIf="link.conn_spec" [style.border-left-color]="color(link.pre)[0]" [style.border-right-color]="color(link.post)[0]">
+        <mat-list dense class="params">
+          <mat-list-item *ngIf="link.conn_spec" [style.border-left-color]="_colorService.node(data.collections[link.pre])" [style.border-right-color]="_colorService.node(data.collections[link.post])">
             <div style="width:100%; display:flex; justify-content: space-between">
               <span>Rule</span>
               <span>{{ link.conn_spec.rule | label }}</span>
             </div>
           </mat-list-item>
-          <mat-list-item *ngIf="link.syn_spec" [style.border-left-color]="color(link.pre)[0]" [style.border-right-color]="color(link.post)[0]">
+          <mat-list-item *ngIf="link.syn_spec" [style.border-left-color]="_colorService.node(data.collections[link.pre])" [style.border-right-color]="_colorService.node(data.collections[link.post])">
             <div style="width:100%; display:flex; justify-content: space-between">
               <span>Synapse model</span>
               <span>{{ link.syn_spec.model | label }}</span>
             </div>
           </mat-list-item>
           <ng-container *ngIf="link.syn_spec" >
-          <mat-list-item [style.border-left-color]="color(link.pre)[0]" [style.border-right-color]="color(link.post)[0]">
+          <mat-list-item [style.border-left-color]="_colorService.node(data.collections[link.pre])" [style.border-right-color]="_colorService.node(data.collections[link.post])">
             <div style="width:100%; display:flex; justify-content: space-between">
               <span>Synapse weight</span>
               <span>{{ link.syn_spec.weight || 1 }}</span>
             </div>
           </mat-list-item>
-          <mat-list-item [style.border-left-color]="color(link.pre)[0]" [style.border-right-color]="color(link.post)[0]">
+          <mat-list-item [style.border-left-color]="_colorService.node(data.collections[link.pre])" [style.border-right-color]="_colorService.node(data.collections[link.post])">
             <div style="width:100%; display:flex; justify-content: space-between">
               <span>Synapse delay</span>
               <span>{{ link.syn_spec.delay || 1 }}</span>

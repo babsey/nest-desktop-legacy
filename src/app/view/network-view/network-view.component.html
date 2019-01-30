@@ -10,7 +10,7 @@
       <mat-tab label="Details">
         <div style="display:flex; width:100%; height:calc(100vh - 380px)">
           <app-nodes-view [nodes]="_dataService.data.collections" style="width:50%" selectiveView="true"></app-nodes-view>
-          <app-links-view [links]="_dataService.data.connectomes" style="width:50%" selectiveView="true"></app-links-view>
+          <app-links-view [data]="_dataService.data" style="width:50%" selectiveView="true"></app-links-view>
         </div>
       </mat-tab>
 

@@ -20,7 +20,6 @@ export class SelectComponent implements OnInit {
   @Input() placeholder: any;
   @Input() element_type: any;
   @Input() selected: any = {};
-  @Input() color: any;
   @Output() selectChange = new EventEmitter();
   public elements: any;
   public filteredElements: any;
