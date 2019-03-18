@@ -1,5 +1,6 @@
 // https://bl.ocks.org/mbostock/3883245
 import { Component, Input, OnInit, OnChanges, OnDestroy, ElementRef } from '@angular/core';
+
 import * as d3 from 'd3';
 
 import { ChartService } from '../chart.service';
@@ -10,49 +11,52 @@ import { ChartService } from '../chart.service';
   styleUrls: ['./line-chart.component.css'],
 })
 export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() autofocus: any;
+  @Input() curve: any = d3.curveLinear;
   @Input() data: any;
-  @Input() height: any;
-  @Input() opacity: any = .25;
-  @Input() opacityFocus: any = .75;
-  @Input() options: any;
-  @Input() xDomain: any;
-  @Input() xLabel: any;
-  @Input() xScale: any;
-  @Input() yDomain: any;
-  @Input() yLabel: any;
-  @Input() yScale: any;
-  private line: any;
-  private selector: any;
-  private subscription: any;
+  @Input() height: number;
+  @Input() idx: number = 0;
+  @Input() opacity: number = 1;
+  @Input() options: any = {};
+  @Input() overlap: number = 0;
+  @Input() xDomain: number[];
+  @Input() xLabel: string = '';
+  @Input() xScale: d3.scaleLinear;
+  @Input() yDomain: number[];
+  @Input() yLabel: string = '';
+  @Input() yScale: d3.scaleLinear;
+  private line: d3.line;
+  private selector: d3.selection;
+  private subscription$: any;
   public n: any;
-  public xAxis: any;
-  public yAutoscale: any = true;
-  public yAxis: any;
-  private idx: any = 0;
+  public xAxis: d3.axisBottom;
+  public yAutoscale: boolean = true;
+  public yAxis: d3.axisLeft;
 
   constructor(
     public _chartService: ChartService,
     private elementRef: ElementRef,
   ) {
     this.selector = d3.select(this.elementRef.nativeElement);
-
   }
 
   ngOnInit() {
     // console.log('Init line chart')
-    this.subscription = this._chartService.update.subscribe(() => this.update())
+    this.subscription$ = this._chartService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy line chart')
-    this.subscription.unsubscribe()
+    this.subscription$.unsubscribe()
   }
 
   ngOnChanges() {
     // console.log('Changes line chart')
-    this.xAxis = d3.axisBottom(this.xScale);
-    this.yAxis = d3.axisLeft(this.yScale);
+    let margin = this._chartService.g;
+    let height = (this.height - margin.top - margin.bottom);
+    this.xAxis = d3.axisBottom(this.xScale)
+      .tickSize(-height);
+    this.yAxis = d3.axisLeft(this.yScale)
+      .tickSize(-this.xScale.range()[1])
     this.update()
   }
 
@@ -60,25 +64,29 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
     // console.log('Update line chart')
     this.xScale = this.xScale || this._chartService.xScale;
     let xDomain = this.xScale.domain();
-    let data = this.data.map(d => d.filter(dd => xDomain[0] <= dd.x && dd.x <= xDomain[1]));
+
+    let selected = this._chartService.selected;
+    var data = this.data; //.filter((d, i) => selected.length < 1 ? true : selected.includes(d._meta.nodeIdx));
+    var _meta = data.map(d => d._meta);
+    data = data.map(d => d.filter(dd => xDomain[0] <= dd.x && dd.x <= xDomain[1]));
     if (data.length == 0) return
+    this.n = data.length;
+
+    let width = this.xScale.range()[1];
+    let margin = this._chartService.g;
+    let height = (this.height - margin.top - margin.bottom);
+    let dataHeight = height / (this.n || 1);
+    let axisHeight = dataHeight + this.overlap * (height - dataHeight);
+    this.yScale.range([axisHeight, 0]);
 
     this.yAutoscale = this._chartService.yAutoscale || this.yAutoscale;
     if (this.yAutoscale) {
       let yDomain = d3.extent(d3.merge(data), d => d.y);
       this.yScale.domain(yDomain)
     }
-    // } else if (this._chartService.yAutoscale) {
-    //   this.yScale.domain(this.yDomain)
-    // }
 
     this.xAxis.scale(this.xScale).ticks(5);
     this.yAxis.scale(this.yScale).ticks(3);
-
-    let width = this.xScale.range()[1];
-    let margin = this._chartService.g;
-    let height = this.height - margin.top - margin.bottom;
-    let axisHeight = this.yScale.range()[0];
 
     var canvas = this.selector.select('.lines')
       .attr('width', width)
@@ -87,49 +95,26 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
     var context = canvas.node().getContext('2d');
 
     var line = d3.line()
-      .curve(this.options.curve ? this.options.curve : d3.curveLinear)
+      .curve(this.curve)
       .x(d => this.xScale(d.x))
       .y(d => this.yScale(d.y))
       .context(context);
 
-    this.n = data.length
-
     context.clearRect(0, 0, width, height);
+    data.reverse()
     data.forEach((d, i) => {
+      var idx = data.length - i - 1;
+      var color = selected.length != 0 && selected.includes(_meta[idx].nodeIdx) ? _meta[idx].color : 'black';
       context.beginPath();
-      if (data.length > 1) {
-        context.globalAlpha = this._opacity(i)
-      }
+      context.globalAlpha = (this.idx == idx) ? 1 : this.opacity;
       line(d);
       context.lineWidth = 2;
-      context.strokeStyle = this.color(this.data[i], i);
+      context.strokeStyle = color;
       context.stroke();
-      let lineHeight = (height - axisHeight) / (this.n - 1);
-      context.transform(1,0,0,1,0, height == lineHeight ? 0 : lineHeight)
+      let lineHeight = (this.n <= 1) ? 0 : (height - axisHeight) / (this.n - 1);
+      context.transform(1, 0, 0, 1, 0, lineHeight)
     })
 
-  }
-
-  color(d, i) {
-    if ('node_idx' in this.options) {
-      if (this._chartService.selected.includes(d.idx)) {
-        return d.c
-      }
-    } else if (this._chartService.selected.includes(this.options.global_ids[i])) {
-      return d.c
-    }
-    return 'black'
-  }
-
-  _opacity(idx) {
-    let margin = this._chartService.g;
-    let height = this.height - margin.top - margin.bottom;
-    let axisHeight = this.yScale.range()[0];
-    if (axisHeight == height || (this.idx != idx || !this.autofocus)) {
-      return this.opacity;
-    } else {
-      return this.opacityFocus;
-    }
   }
 
   onAxesChange(events) {
@@ -142,4 +127,5 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
       this.update()
     }
   }
+
 }

@@ -1,9 +1,9 @@
-::ng-deep .node {
+::ng-deep .sketch .node {
   cursor: pointer;
 }
 
-::ng-deep .node rect {
+::ng-deep .sketch .node rect {
   fill: white;
-  stroke-width: 3px;
+  stroke-width: 2px;
   stroke-dashoffset: 4.5;
 }

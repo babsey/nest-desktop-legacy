@@ -11,9 +11,9 @@ import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-
   styleUrls: ['./value-slider.component.css']
 })
 export class ValueSliderComponent implements OnInit {
-  @Input() model: any;
-  @Input() id: any;
-  @Input() value: any;
+  @Input() model: string = '';
+  @Input() id: string = '';
+  @Input() value: number;
   @Input() options: any = {};
   @Output() valueChange = new EventEmitter;
 
@@ -26,12 +26,12 @@ export class ValueSliderComponent implements OnInit {
   }
 
   onChange(event) {
-    this.value = 'target' in event ? event.target.value : event.value;
+    this.value = Number('target' in event ? event.target.value : event.value);
     this.valueChange.emit(this.value);
   }
 
   setDefaultValue() {
-    this.value = parseFloat(this.options.value);
+    this.value = Number(this.options.value);
     this.valueChange.emit(this.value);
   }
 

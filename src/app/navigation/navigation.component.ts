@@ -2,11 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MdePopoverTrigger } from '@material-extended/mde';
 import { MatBottomSheet } from '@angular/material';
+import { Router } from '@angular/router';
 
-import { ConfigService } from '../config/config.service';
+import { AppConfigService } from '../config/app-config/app-config.service'
 import { NavigationService } from './navigation.service';
-import { NetworkService } from '../services/network/network.service';
-import { ProtocolService } from '../services/protocol/protocol.service';
+
 
 
 @Component({
@@ -15,25 +15,15 @@ import { ProtocolService } from '../services/protocol/protocol.service';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-  public options: any;
-  public selectedIndex: any = '1';
 
   constructor(
-    private _configService: ConfigService,
-    private _networkService: NetworkService,
-    private _protocolService: ProtocolService,
+    public _appConfigService: AppConfigService,
     public _navigationService: NavigationService,
+    public router: Router,
   ) {
   }
 
   ngOnInit() {
-    this._configService.init()
-    this._networkService.init()
-    this._protocolService.init()
-    this._protocolService.list(this);
-    this._protocolService.count().then(val => {
-      this.selectedIndex = (val == 0 ? '0' : '1');
-    })
   }
 
 }

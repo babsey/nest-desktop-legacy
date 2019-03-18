@@ -1,0 +1,38 @@
+#simulation {
+  height: 100vh;
+}
+
+#simulation #controller {
+  width: 380px;
+  overflow-x: hidden;
+}
+
+#simulation #chart {
+  overflow: hidden;
+}
+
+.buttonRight {
+  padding-right: 20px;
+  position: absolute;
+  right: -28px;
+  z-index: 1000;
+}
+
+.label {
+  width: 100%;
+}
+
+.label .button {
+  opacity: 0;
+}
+
+.label:hover .button {
+  opacity: 1;
+}
+
+.controllerMode a {
+  min-width: 32px;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 11px;
+}

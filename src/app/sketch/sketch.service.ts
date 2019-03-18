@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material';
 import * as d3 from 'd3';
 
 import { ColorService } from '../services/color/color.service';
-import { ConfigService } from '../config/config.service';
+import { ModelService } from '../model/model.service';
 import { DataService } from '../services/data/data.service';
 
 
@@ -19,17 +19,18 @@ export class SketchService {
     width: 0,
     height: 0,
     node: {
-      radius: 23,
+      radius: 16,
     },
     link: {
       xRotation: 0,
-    }
+    },
+    drawing: false,
   };
   public update: EventEmitter<any>;
-  public events = {
+  public events: any = {
     sourceNode: null,
   };
-  public selected = {
+  public selected: any = {
     node: null,
     link: null,
   }
@@ -37,20 +38,25 @@ export class SketchService {
 
   constructor(
     private _colorService: ColorService,
-    private _configService: ConfigService,
+    private _modelService: ModelService,
     private _dataService: DataService,
     private snackBar: MatSnackBar,
   ) {
     this.update = new EventEmitter();
   }
 
-  draw() {
-    this._dataService.options.edit = true;
+  draw(mode) {
+    this.options.drawing = (mode != null) ? mode : !this.options.drawing;
     this.resetMouseVars()
+    if (this.options.drawing) {
+      console.log('Clear records')
+      this._dataService.records = [];
+    }
+    this.update.emit()
   }
 
   label(model) {
-    return this._configService.config.nest.model[model].label;
+    return this._modelService.models[model].label;
   }
 
   save() {
@@ -137,8 +143,8 @@ export class SketchService {
 
       // Make drx and dry different to get an ellipse
       // instead of a circle.
-      drx = 23;
-      dry = 23;
+      drx = 16;
+      dry = 16;
 
       // For whatever reason the arc collapses to a point if the beginning
       // and ending points of the arc are the same, so kludge it.

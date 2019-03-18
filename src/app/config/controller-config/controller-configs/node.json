@@ -1,0 +1,15 @@
+{
+  "id": "node",
+  "npop": {
+    "id": "n",
+    "label": "Population size",
+    "level": 1,
+    "value": 1,
+    "input": "valueSlider",
+    "inputSpec": {
+      "max": 100,
+      "min": 1,
+      "step": 1
+    }
+  }
+}

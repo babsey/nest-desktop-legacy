@@ -1,40 +1,48 @@
-<mat-sidenav-container id="container" hasBackdrop="false">
+<ng-container [ngSwitch]="ready">
 
-  <mat-sidenav id="navigation"
-    role="region"
-    mode="side"
-    position="start"
-    autoFocus="false"
-    [opened]="isOpened()"
-    (closed)="onClose()"
-    (openedChange)="onChange()"
-    (mousemove)="buttonDisplay='1'"
-    (mouseleave)="buttonDisplay='0.2'"
-    >
+  <span *ngSwitchCase="false">
+    <app-loading (ready)="ready=$event;" (buttonClick)="ready=true" [style.display]="_appConfigService.config.app.showLoading ? '' : 'None'"></app-loading>
+  </span>
 
-   <app-navigation></app-navigation>
+  <span *ngSwitchCase="true">
+    <mat-sidenav-container id="container" hasBackdrop="false">
 
-  </mat-sidenav>
+      <mat-sidenav id="navigation"
+        role="region"
+        mode="side"
+        position="start"
+        autoFocus="false"
+        [opened]="isOpened()"
+        (closed)="onClose()"
+        (openedChange)="onChange()"
+        (mousemove)="buttonDisplay='1'"
+        (mouseleave)="buttonDisplay='0.2'"
+        >
+        <app-navigation></app-navigation>
+        <router-outlet name="sidebar"></router-outlet>
+        <app-log></app-log>
+      </mat-sidenav>
 
-  <mat-sidenav-content #content>
-    <div style="position:absolute; left:0; width:4px; height:100vh; z-index: 1000;" (mousemove)="buttonDisplay='1'"
-      (mouseleave)="buttonDisplay='0.2'"></div>
+      <mat-sidenav-content #content>
 
-    <button mat-fab type="button" class="buttonLeft no-print"
-      [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
-      [style.opacity]="buttonDisplay"
-      (click)="toggleNav()"
-      (mousemove)="buttonDisplay='1'"
-      (mouseleave)="buttonDisplay='0.2'"
-      >
-      <fa-icon *ngIf="!isOpened()" icon="chevron-right"></fa-icon>
-      <fa-icon *ngIf="isOpened()" icon="chevron-left"></fa-icon>
-    </button>
+        <div style="position:absolute; left:0; width:4px; height:100vh; z-index: 1000;" (mousemove)="buttonDisplay='1'"
+          (mouseleave)="buttonDisplay='0.2'"></div>
 
-    <router-outlet></router-outlet>
+        <button mat-fab type="button" class="buttonLeft no-print"
+          [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
+          [style.opacity]="buttonDisplay"
+          (click)="toggleNavigationOpened()"
+          (mousemove)="buttonDisplay='1'"
+          (mouseleave)="buttonDisplay='0.2'"
+          >
+          <fa-icon *ngIf="!isNavigationOpened()" icon="chevron-right"></fa-icon>
+          <fa-icon *ngIf="isNavigationOpened()" icon="chevron-left"></fa-icon>
+        </button>
 
-  </mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
 
-</mat-sidenav-container>
+    </mat-sidenav-container>
+  </span>
 
-<!-- <mcc-color-picker overlay="false" class="colorPicker"></mcc-color-picker> -->
+</ng-container>

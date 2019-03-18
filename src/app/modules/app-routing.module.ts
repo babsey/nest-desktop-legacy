@@ -1,21 +1,28 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MainComponent } from '../main/main.component';
+import { HelpComponent } from '../help/help.component';
 import { ModelComponent } from '../model/model.component';
 import { ConfigComponent } from '../config/config.component';
-import { ViewComponent } from '../view/view.component';
-import { SimulationComponent } from '../simulation/simulation.component';
+import { DBConfigComponent } from '../config/db-config/db-config.component';
+import { NetworkComponent } from '../network/network.component';
+
+import { HelpListComponent } from '../help/help-list/help-list.component';
+import { ConfigListComponent } from '../config/config-list/config-list.component';
+import { ModelListComponent } from '../model/model-list/model-list.component';
+import { NetworkListComponent } from '../network/network-list/network-list.component';
 
 const appRoutes: Routes = [
-  { path: '', component: MainComponent },
-  { path: 'config/app', component: ConfigComponent },
-  { path: 'config/models/:model', component: ModelComponent },
-  { path: 'config/models', component: ModelComponent },
-  { path: 'view', component: ViewComponent },
-  { path: 'simulate', component: SimulationComponent },
-  { path: ':source/:id/view', component: ViewComponent },
-  { path: ':source/:id/simulate', component: SimulationComponent },
+  { path: 'config', component: ConfigListComponent, outlet: 'sidebar'},
+  { path: 'config/:config', component: ConfigComponent },
+  { path: 'help', component: HelpListComponent , outlet: 'sidebar'},
+  { path: 'help/:help', component: HelpComponent },
+  { path: 'model', component: ModelListComponent , outlet: 'sidebar'},
+  { path: 'model/:model', component: ModelComponent },
+  { path: 'network', component: NetworkListComponent, outlet: 'sidebar'},
+  { path: 'network', component: NetworkComponent },
+  { path: 'network/:id', component: NetworkComponent },
+  { path: 'network/:id/simulate', component: NetworkComponent },
 ];
 
 @NgModule({

@@ -5,7 +5,7 @@
   </span>
 
   <div class="slider-content mat-accent">
-    <mat-slider [thumbLabel]="thumbLabel" color="primary" class="slider" [ngModel]="idx" min="0" [max]="options.viewSpec.ticks.length-1" step="1" tickInterval="1" [displayWith]="displayWith(options.viewSpec.ticks)" (change)="onChange($event.value)">
+    <mat-slider [thumbLabel]="thumbLabel" color="primary" class="slider" [ngModel]="idx" min="0" [max]="options.inputSpec.ticks.length-1" step="1" tickInterval="1" [displayWith]="displayWith(options.inputSpec.ticks)" (change)="onChange($event.value)">
     </mat-slider>
     <mat-form-field class="slider-input" floatLabel="never">
       <input matInput [ngModel]="value" readonly [placeholder]="options.value">

@@ -1,76 +1,129 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MatSnackBar, MatTableDataSource } from '@angular/material';
+import { Injectable, EventEmitter } from '@angular/core';
 
-import { ConfigService } from '../config/config.service';
+import { DBService } from '../services/db/db.service';
+
+declare function require(url: string);
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModelService {
-  public view = 'enabled';
-  public element_type: any = 'all';
-  public searchTerm: string = '';
-  public selectedModel: any = null;
-  public helptext: any = '';
-  public defaults: any = {};
-  public progress: boolean = false;
+  public db: any;
+  public editing: boolean = false;
+  public elementType: string;
+  public enabledModel: boolean = false;
+  public models: any = {};
+  public ready: boolean;
+  public selectedModel: string = '';
+  public update = new EventEmitter();
+  public url: string = 'view';
+  public version: string;
 
   constructor(
-    private _configService: ConfigService,
-    private http: HttpClient,
-    private snackBar: MatSnackBar,
-  ) {}
+    private _dbService: DBService,
+  ) {
+  }
+
+  init() {
+    this.db = this._dbService.init('model');
+    this._dbService.checkVersion(this)
+    this.count().then(count => {
+      if (count == 0) {
+        this.fromFiles()
+        this.ready = true;
+      } else {
+        this._dbService.db.list(this.db).then(models => {
+          models.map(model => this.models[model.id] = model)
+          this.ready = true;
+        })
+      }
+    })
+  }
+
+
+
+    fromFiles() {
+      var files = [
+        'ac_generator',
+        'dc_generator',
+        'iaf_cond_alpha',
+        'iaf_psc_alpha',
+        'multimeter',
+        'noise_generator',
+        'poisson_generator',
+        'spike_detector',
+        'spike_generator',
+        'static_synapse',
+        'step_current_generator',
+        'voltmeter'
+      ];
+
+      var models = Object.keys(this.models)
+      for (var idx in files) {
+        if (!models.includes(files[idx])) {
+          var filename = files[idx];
+          var model = require('./models/' + filename + '.json');
+          this.models[model['id']] = model;
+          this._dbService.db.create(this.db, model)
+        }
+      }
+    }
+
+  list(elementType = null, sort = true) {
+    var models = Object.keys(this.models);
+    if (elementType) {
+      models = models.filter(id => {
+        var model = this.models[id];
+        return model['element_type'] == elementType
+      });
+    }
+    if (sort) {
+      models.sort()
+    }
+    return models
+  }
 
   selectModel(model) {
     this.selectedModel = model;
-    this._configService.selectModel(model)
+    this.enabledModel = this.hasModel(model);
   }
 
-  getModels() {
-    var urlRoot = this._configService.urlRoot()
-    return this.http.get(urlRoot + '/api/nest/Models')
+  hasModel(model = null) {
+    model = model || this.selectedModel;
+    return this.list().includes(model);
   }
 
-  getDoc(model) {
-    var urlRoot = this._configService.urlRoot()
-
-    var data = {
-      'obj': model,
-      'return_text': 'true',
-    };
-    this.progress = true;
-    this.helptext = '';
-    setTimeout(() => {
-      this.http.post(urlRoot + '/api/nest/help', data).subscribe(res => {
-        this.progress = false;
-        if ('error' in res) {
-          this.snackBar.open(res['error'], 'Ok');
-        } else {
-          this.helptext = res['response']['data'];
-        }
-      },
-        error => {
-          this.progress = false;
-          this.snackBar.open(JSON.stringify(error['error']), 'Ok');
-        }
-      )
-    }, 500)
+  config(model = null) {
+    return this.models[model || this.selectedModel];
   }
 
-  getDefaults(model) {
-    var urlRoot = this._configService.urlRoot()
-    var data = {
-      'model': model,
-    };
-    this.defaults = {};
-    this.progress = true;
-    setTimeout(() => {
-      this.http.post(urlRoot + '/api/nest/GetDefaults', data)
-        .subscribe(data => {
-          this.progress = false;
-          this.defaults = data['response']['data'];
-        })
-    }, 500)
+  count() {
+    return this._dbService.db.count(this.db)
+  }
+
+  save(config) {
+    return this._dbService.db.create(this.db, config)
+  }
+
+  load() {
+    return this._dbService.db.count(this.db).then(count => {
+      if (count == 0) {
+        this.init()
+        setTimeout(() => this.load(), 1000)
+      } else {
+        this._dbService.db.list(this.db).then(models => this.models = models)
+      }
+    })
+  }
+
+  delete(id) {
+    return this._dbService.db.delete(this.db, id)
+  }
+
+  reset() {
+    this.db.destroy().then(() => {
+      this.init()
+    })
   }
 }

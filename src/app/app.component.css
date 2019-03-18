@@ -14,32 +14,35 @@ router-outlet {
   height: 100%;
 }
 
-/* ::ng-deep .mat-sidenav {
-  border-left: none !important;
-  border-right: none !important;
-} */
+::ng-deep .flex {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+::ng-deep .ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 ::ng-deep .mat-drawer {
   background-color: #fafafa !important;
+  border-right: none !important;
+  border-left: none !important;
 }
 
 ::ng-deep a[mat-list-item].active {
   background-color: #f2f2f2;
 }
 
-.buttonLeft {
-  position: absolute;
-  left: -28px;
-  z-index: 1000;
-  padding-left: 20px;
+::ng-deep .nodes .mat-list-item-content, ::ng-deep .links .mat-list-item-content {
+  padding: 0 8px !important;
 }
 
-.colorPicker {
-  z-index: 1;
+.buttonLeft {
+  left: -28px;
+  padding-left: 20px;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 260px;
-  height: 460px;
-  margin-left: -130px;
-  margin-top: -230px;
+  z-index: 1000;
 }

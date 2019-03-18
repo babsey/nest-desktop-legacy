@@ -1,38 +1,21 @@
-<mat-toolbar color="accent">
-  <mat-toolbar-row>
+<mat-toolbar color="accent" style="min-height:40px">
+  <mat-toolbar-row class="flex" style="height:40px">
     <span class="nest-desktop">
-      <img height="42px" alt="NEST" src="./assets/img/nest-accent.svg" class="nest">
+      <img height="40px" alt="NEST" src="./assets/img/nest-accent.svg" class="nest" style="vertical-align:middle">
     </span>
-    <span class="navButton">
-        <a mat-icon-button href="#" [class.mat-warn]="_navigationService.url()=='/'" matTooltip="Main page">
-        <fa-icon icon="desktop"></fa-icon>
+    <nav mat-tab-nav-bar class="nav">
+      <a mat-tab-link [routerLink]="[{ outlets: { sidebar: ['network'] } }]" [active]="router.url.includes('sidebar:network')" matTooltip="Networks">
+        <fa-icon icon="bezier-curve"></fa-icon>
       </a>
-      <a mat-icon-button [routerLink]="_navigationService.routerLink('view')" [class.mat-warn]="_navigationService.url().endsWith('view')" matTooltip="View network configuration">
-        <fa-icon icon="info"></fa-icon>
+      <a mat-tab-link [routerLink]="[{ outlets: { sidebar: ['model'] } }]" [active]="router.url.includes('sidebar:model')" matTooltip="Models">
+        <fa-icon icon="brain"></fa-icon>
       </a>
-      <a mat-icon-button [routerLink]="_navigationService.routerLink('simulate')" [class.mat-warn]="_navigationService.url().endsWith('simulate')" matTooltip="Simulation workspace">
-        <fa-icon icon="signature"></fa-icon>
+      <a mat-tab-link [routerLink]="[{ outlets: { sidebar: ['config'] } }]" [active]="router.url.includes('sidebar:config')" matTooltip="Configurations">
+        <fa-icon icon="cog"></fa-icon>
       </a>
-      <a mat-icon-button routerLink="/config/app" [class.mat-warn]="_navigationService.url().startsWith('/config')" matTooltip="Configure app or models">
-        <fa-icon icon="pencil-alt"></fa-icon>
+      <a mat-tab-link [routerLink]="[{ outlets: { sidebar: ['help'] } }]" [active]="router.url.includes('sidebar:help')" matTooltip="Help">
+        <fa-icon icon="question"></fa-icon>
       </a>
-    </span>
+    </nav>
   </mat-toolbar-row>
 </mat-toolbar>
-
-<app-main-list *ngIf="_navigationService.url()=='/'"></app-main-list>
-
-<mat-tab-group mat-stretch-tabs color="primary" [selectedIndex]="selectedIndex" *ngIf="_navigationService.url().endsWith('view') || _navigationService.url().endsWith('simulate')">
-
-  <mat-tab label="Networks">
-    <app-network-list></app-network-list>
-  </mat-tab>
-
-  <mat-tab label="Protocols">
-    <app-protocol-list></app-protocol-list>
-  </mat-tab>
-
-</mat-tab-group>
-
-<app-config-list *ngIf="_navigationService.url().startsWith('/config/app')"></app-config-list>
-<app-model-list *ngIf="_navigationService.url().startsWith('/config/models')"></app-model-list>

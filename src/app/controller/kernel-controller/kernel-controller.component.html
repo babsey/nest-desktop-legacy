@@ -1,10 +1,10 @@
 <span class="controller kernel-controller">
-  <mat-list class="controller-menu" dense>
+  <mat-list dense>
     <mat-list-item mat-subheader>
       Kernel
     </mat-list-item>
-    <mat-list-item *ngFor="let id of _configService.config.nest.kernel.params">
-      <app-param-input view="tickSlider" [params]="_dataService.data.kernel" [id]="id" [options]="_configService.config.nest.kernel.options[id]" (paramChange)="onChange()" class="slider"></app-param-input>
+    <mat-list-item *ngFor="let param of params()">
+      <app-param-input view="tickSlider" class="slider" [params]="_dataService.data.kernel" [id]="param.id" [options]="param" (paramChange)="onChange()"></app-param-input>
     </mat-list-item>
   </mat-list>
 </span>

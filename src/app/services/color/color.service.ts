@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ConfigService } from '../../config/config.service';
+import { AppConfigService } from '../../config/app-config/app-config.service';
 import { DataService } from '../data/data.service';
 
 
@@ -9,15 +9,12 @@ import { DataService } from '../data/data.service';
   providedIn: 'root'
 })
 export class ColorService {
-  public colors: any;
   public schemes: any;
-  public selectedScheme: any = 'category10';
 
   constructor(
     private _dataService: DataService,
-    private _configService: ConfigService,
+    private _appConfigService: AppConfigService,
   ) {
-    this.colors = this._configService.config.app.colors;
     this.schemes = {
       category10: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
       paired: ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928'],
@@ -27,9 +24,14 @@ export class ColorService {
     }
   }
 
+  colors() {
+    return Array.apply([], this._appConfigService.config.color.cycle);
+  }
+
   node(node) {
     if (node.hasOwnProperty('color')) { return node['color'] }
-    return this.colors[node.idx % this.colors.length];
+    let colors = this._appConfigService.config.color.cycle;
+    return colors[node.idx % colors.length];
   }
 
   nodeIdx(idx) {
@@ -54,10 +56,6 @@ export class ColorService {
 
   weight(value) {
     return value < 0 ? '#b34846' : '#467ab3';
-  }
-
-  selectedColors() {
-    return this.schemes[this.selectedScheme];
   }
 
   schemesKeys() {

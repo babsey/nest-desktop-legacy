@@ -1,5 +1,13 @@
-<svg class="sketch" [attr.width]="width + 'px'" [attr.height]="height + 'px'" viewBox="0 0 550 300">
-  <g app-background-sketch [data]="data" [width]="width" [height]="height"></g>
-  <g app-link-sketch [data]="data"></g>
-  <g app-node-sketch [data]="data" [width]="width" [height]="height"></g>
-</svg>
+<span class="sketch">
+  <div class="message" [style.display]="_sketchService.options.drawing && drawing ? 'block': 'none'">Drawing mode is on.</div>
+
+  <span *ngIf="drawing" style="position:absolute; top:10px; right:10px" class="no-print">
+    <mat-slide-toggle [checked]="_sketchService.options.drawing" (change)="_sketchService.draw($event.checked)" class="mat-warn"></mat-slide-toggle>
+  </span>
+
+  <svg id="sketch" [attr.width]="width + 'px'" [attr.height]="height + 'px'" viewBox="0 0 540 200" [style.border-color]="_sketchService.options.drawing && drawing ? '#ff6633' : 'lightgrey'">
+    <g app-background-sketch [data]="data" [width]="width" [height]="height"></g>
+    <g app-link-sketch [data]="data"></g>
+    <g app-node-sketch [data]="data" [width]="width" [height]="height"></g>
+  </svg>
+<span>

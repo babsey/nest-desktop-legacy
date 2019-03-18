@@ -1,0 +1,96 @@
+<mat-menu #appConfigMenu="matMenu" class="dense">
+  <button mat-menu-item (click)="_appConfigService.reset()">
+    <fa-icon icon="broom" style="margin-right:10px"></fa-icon>
+    Reset configuration
+  </button>
+</mat-menu>
+
+<span class="center">
+  <div class="appConfig" *ngIf="_appConfigService.ready">
+    <mat-toolbar style="font-size:16px;line-height:40px" color="accent">
+      <span class="flex">
+        Application configuration
+        <span>
+          <button mat-icon-button [matMenuTriggerFor]="appConfigMenu">
+            <fa-icon icon="ellipsis-v"></fa-icon>
+          </button>
+        </span>
+      </span>
+    </mat-toolbar>
+
+    <mat-card>
+      <mat-card-subtitle>
+        Application
+      </mat-card-subtitle>
+      <mat-card-content>
+        <!-- <div class="form-fields">
+          <mat-form-field>
+            <input matInput placeholder="Title" name="title" [(ngModel)]="_appConfigService.config['app'].title" (change)="save('title')">
+          </mat-form-field>
+        </div> -->
+        <!-- <mat-list>
+          <mat-list-item>
+            <mat-slide-toggle [(ngModel)]="_appConfigService.config['app'].log" color="primary" (click)="save()" style="margin-right: 18px">Log</mat-slide-toggle>
+          </mat-list-item>
+        </mat-list> -->
+
+        <mat-selection-list class="mat-primary" (selectionChange)="onChange($event)">
+          <mat-list-option [selected]="_appConfigService.config['app'].showLoading" value="showLoading">Show loading page</mat-list-option>
+          <mat-list-option [selected]="_appConfigService.config['app'].autoStart" value="autoStart">Auto start</mat-list-option>
+          <mat-list-option [selected]="_appConfigService.config['app'].log" value="log">Log</mat-list-option>
+        </mat-selection-list>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-subtitle style="display:inline-flex">
+        <span>NEST Server</span>
+      </mat-card-subtitle>
+
+      <mat-card-content>
+
+        <div class="form-fields">
+          <mat-form-field>
+            <input matInput placeholder="Host" name="host" [(ngModel)]="_appConfigService.config['nest-server'].host" (change)="saveAndCheck('nest-server')">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="port" name="port" [(ngModel)]="_appConfigService.config['nest-server'].port" (change)="saveAndCheck('nest-server')">
+          </mat-form-field>
+        </div>
+
+        <mat-chip-list>
+          <mat-chip selected="true" class="mat-accent">REQUEST {{ _appConfigService.options.NEST.request }}</mat-chip>
+          <mat-chip selected="true" class="mat-accent">RESPONSE server {{ _appConfigService.options.NEST.running ? '' : 'not' }} running</mat-chip>
+          <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.options.NEST.running">VERSION {{ _appConfigService.options.NEST.data.version }}</mat-chip>
+          <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.options.NEST.running">NEST {{ _appConfigService.options.NEST.data.nest.version }}</mat-chip>
+        </mat-chip-list>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-subtitle>
+        Default color cycle of nodes
+      </mat-card-subtitle>
+
+      <div class="flex">
+        <span style="line-height:65px; vertical-align:middle">
+          <ng-container *ngFor="let color of _appConfigService.config.color.cycle; let idx = index">
+            <span [style.border-color]="color" style="border-width: 1.5px; border-radius: 15px; position:relative; line-height:normal; margin: 5px 10px">
+              <span style="pointer-events:none; position:absolute; left:0px; top:-7px; text-align:center; vertical-align:middle; width:25px; line-height:25px;">{{ idx + 1 }}</span>
+              <mcc-color-picker [selectedColor]="color" (selected)="selectColor(idx, $event)" class="color" hideTransparentUsedColors hideEmptyUsedColors></mcc-color-picker>
+            </span>
+          </ng-container>
+        </span>
+        <mat-form-field>
+          <mat-select placeholder="Pick a color scheme" [(ngModel)]="_appConfigService.config.color.scheme" (selectionChange)="selectScheme($event)">
+            <mat-option *ngFor="let scheme of _colorService.schemesKeys()" [value]="scheme">
+              {{ scheme }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card>
+
+  </div>
+</span>

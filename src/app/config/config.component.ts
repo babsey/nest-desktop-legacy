@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { ConfigService } from './config.service';
-import { ColorService } from '../services/color/color.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -9,38 +8,24 @@ import { ColorService } from '../services/color/color.service';
   templateUrl: './config.component.html',
   styleUrls: ['./config.component.css']
 })
-export class ConfigComponent implements OnInit {
-  public selectedColor:any = 0;
+export class ConfigComponent implements OnInit, OnDestroy {
+  public routeConfig: any;
+  private subscription$: any;
 
   constructor(
-    public _configService: ConfigService,
-    public _colorService: ColorService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this._configService.init()
-    this._configService.check()
+    this.subscription$ = this.route.params.subscribe(params => {
+      if ('config' in params) {
+        this.routeConfig = params['config'];
+      }
+    });
   }
 
-  save() {
-    this._configService.save('app', this._configService.config.app)
-  }
-
-  saveAndCheck() {
-    this.save()
-    this._configService.check()
-  }
-
-  selectColor(idx, color) {
-    this._configService.config.app.colors[idx] = color;
-    this.save()
-  }
-
-  selectScheme(event) {
-    this._colorService.selectedScheme = event.value;
-    this._colorService.colors = this._colorService.schemes[event.value];
-    this._configService.config.app.colors = this._colorService.colors;
-    this.save()
+  ngOnDestroy() {
+    this.subscription$.unsubscribe()
   }
 
 }

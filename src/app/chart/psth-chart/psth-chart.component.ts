@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
+
 import * as d3 from 'd3';
 
 import { ChartService } from '../chart.service';
@@ -13,20 +14,22 @@ import { DataService } from '../../services/data/data.service';
 export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() chart: any;
   @Input() data: any;
-  @Input() height: any;
-  @Input() nbins: any;
-  @Input() opacity: any;
+  @Input() height: number;
+  @Input() nbins: number;
+  @Input() opacity: number = 1;
   @Input() options: any;
-  @Input() ordinate: any;
-  @Input() overlap: any;
-  @Input() xScale: any;
-  @Input() yScale: any;
+  @Input() ordinate: string;
+  @Input() overlap: number = 0;
+  @Input() xScale: d3.scaleLinear;
+  @Input() yScale: d3.scaleLinear;
+  private popsize: any[];
   private selector: d3.Selection;
-  private subscription: any;
+  private subscription$: any;
+  public curve: d3.curveStep = d3.curveStep;
   public psth: any;
-  public xDomain: any;
-  public yDomain: any;
-  private popsize: any;
+  public view: string;
+  public xDomain: number[];
+  public yDomain: number[];
 
   constructor(
     private _chartService: ChartService,
@@ -40,12 +43,12 @@ export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     // console.log('Init PSTH chart')
     this.xDomain = this._chartService.xScale.domain();
-    this.subscription = this._chartService.update.subscribe(d => this.update())
+    this.subscription$ = this._chartService.update.subscribe(d => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy PSTH chart')
-    this.subscription.unsubscribe()
+    this.subscription$.unsubscribe()
   }
 
   ngOnChanges() {
@@ -65,6 +68,8 @@ export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
       xTicks.push(xDomain[1])
     }
 
+    this.view = this.chart.split(' ')[2];
+
     if (!this.chart.includes('bar')) {
       var margin = this._chartService.g;
       let height = (this.height - margin.top - margin.bottom)
@@ -76,11 +81,9 @@ export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
       .domain(xDomain)
       .thresholds(xTicks);
 
-    this.popsize = this.count(this.options.global_ids);
-    this.options['nbins'] = this.nbins;
+    this.popsize = this.count(this.options.senders.map(d => this.options.neuron2node[d]));
 
     if (this.chart.includes('bar')) { // bar chart
-      this.options.view = this.chart.split(' ')[2];
       if (this._chartService.selected.length < 2) { // one population
         let node_idx = this.options.node_idx;
         this.options.colors = node_idx.filter(d => this._chartService.selected.includes(d)).map(d => this._colorService.nodeIdx(d));
@@ -105,10 +108,10 @@ export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
           }
         })
         this.psth = hist;
-        this.yDomain = [0, d3.max(hist, d => this.options.view == 'stack' ? d.y1 : d.y)]
+        this.yDomain = [0, d3.max(hist, d => this.view == 'stack' ? d.y1 : d.y)]
       } else { // more than one population
         let node_idx = this._chartService.selected;
-        let data = node_idx.map(idx => this.data.filter(d => idx == this.options.global_ids[this.options.senders.indexOf(d.y)]).map(d => d.x));
+        let data = node_idx.map(idx => this.data.filter(d => idx == this.options.neuron2node[d.y]).map(d => d.x));
         let hist = data.map(d => histogram(d));
         let dataset = xTicks.map(d => { return { x: d } });
         hist.forEach((d, i) => d.filter((dd, ii) => ii < dataset.length).map((dd, ii) => dataset[ii][node_idx[i]] = dd.length))
@@ -126,30 +129,31 @@ export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
           }
         }))
         psth.map((d, i) => d.map((dd, ii) => {
-            var y0 = i == 0 ? 0 : psth[i - 1][ii]['y1'];
-            dd['y0'] = y0;
-            dd['y1'] = y0 + dd['y'];
-          })
+          var y0 = i == 0 ? 0 : psth[i - 1][ii]['y1'];
+          dd['y0'] = y0;
+          dd['y1'] = y0 + dd['y'];
+        })
         )
         this.psth = d3.merge(psth);
-        this.yDomain = [0, d3.max(d3.merge(psth), d => this.options.view == 'stack' ? d.y1 : d.y)]
+        this.yDomain = [0, d3.max(d3.merge(psth), d => this.view == 'stack' ? d.y1 : d.y)]
       }
     } else { // line chart
       var node_idx = this.options.node_idx;
-      // node_idx = this._chartService.selected.length == 0 ? node_idx : node_idx.filter(d => this._chartService.selected.includes(d))
-      let data = node_idx.map(idx => this.data.filter(d => idx == this.options.global_ids[this.options.senders.indexOf(d.y)]).map(d => d.x));
+      let data = node_idx.map(idx => this.data.filter(d => idx == this.options.neuron2node[d.y]).map(d => d.x));
       let hist = data.map(d => histogram(d))
       hist.forEach((d, i) => d.map(dd => {
         dd['x'] = (dd.x1 + dd.x0) / 2;
-        dd['y'] = this.count_or_rate(hist.length - i - 1, dd.length, dd.x1 - dd.x0);
+        dd['y'] = this.count_or_rate(i, dd.length, dd.x1 - dd.x0);
       }))
       hist.forEach((d, i) => {
-        d['idx'] = node_idx[i];
-        d['c'] = this._colorService.nodeIdx(node_idx[i]);
+        d['_meta'] = {
+          nodeIdx: node_idx[i],
+          color: this._colorService.nodeIdx(node_idx[i]),
+        };
       })
+
       let margin = this._chartService.g;
-      this.options['lineHeight'] = this.yScale.range()[0];
-      this.options['curve'] = d3.curveStep;
+      // this.options['lineHeight'] = this.yScale.range()[0];
       this.psth = hist;
       this.yDomain = [0, d3.max(d3.merge(hist), d => d.y)]
     }
@@ -170,7 +174,7 @@ export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   count_or_rate(i, d, dx) {
-    if (d == 0 || dx == 0) { return 0 }
+    if (d == 0 || dx == 0 || this.popsize[1][i] == 0) { return 0 }
     return this.ordinate == 'count' ? d : d / dx / this.popsize[1][i] * 1000;
   }
 

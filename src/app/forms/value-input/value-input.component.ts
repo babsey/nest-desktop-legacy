@@ -28,12 +28,12 @@ export class ValueInputComponent implements OnInit {
 
   onChange(value) {
     let isString = typeof(value) == 'string' && value.length > 0;
-    this.value =  isString  ? parseFloat(value) : this.options.value;
+    this.value =  isString ? Number(value) : this.options.value;
     this.valueChange.emit(this.value)
   }
 
   setDefaultValue() {
-    this.value = parseFloat(this.options.value);
+    this.value = Number(this.options.value);
     this.valueChange.emit(this.value)
   }
 

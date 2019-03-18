@@ -1,14 +1,24 @@
-.param.description {
+.item {
+  height: 3em !important;
+}
+
+.item.description {
   color: #999;
   padding: 0 10px;
 }
 
-.param.enabled {
+.item.enabled {
   background-color: #3366ff;
   color: white !important;
 }
 
-.param.enabled .description {
+.item.enabled .description {
   background-color: #3366ff;
   color: white !important;
+}
+
+.flex {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }

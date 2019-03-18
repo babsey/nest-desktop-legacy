@@ -1,5 +1,6 @@
 // https://bl.ocks.org/mbostock/3883245
 import { Component, Input, OnInit, OnChanges, OnDestroy, ElementRef } from '@angular/core';
+
 import * as d3 from 'd3';
 
 import { ChartService } from '../chart.service';
@@ -12,21 +13,21 @@ import { ChartService } from '../chart.service';
 export class SVGLineChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() axisShift: any;
   @Input() data: any;
-  @Input() height: any;
+  @Input() height: number;
   @Input() options: any;
-  @Input() xDomain: any;
-  @Input() xLabel: any;
-  @Input() xScale: any;
-  @Input() yDomain: any;
-  @Input() yLabel: any;
-  @Input() yScale: any;
-  private selector: any;
-  private subscription: any;
-  public n: any;
-  public xAxis: any;
-  public yAutoscale: any = true;
-  public yAxis: any;
-  private idx: any = 0;
+  @Input() xDomain: number[];
+  @Input() xLabel: string = '';
+  @Input() xScale: d3.scaleLinear;
+  @Input() yDomain: number[];
+  @Input() yLabel: string = '';
+  @Input() yScale: d3.scaleLinear;
+  private idx: number = 0;
+  private selector: d3.Selection;
+  private subscription$: any;
+  public n: number;
+  public xAxis: d3.axisLeft;
+  public yAutoscale: boolean = true;
+  public yAxis: d3.axisBottom;
 
   constructor(
     public _chartService: ChartService,
@@ -38,12 +39,12 @@ export class SVGLineChartComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     // console.log('Init SVG line chart')
-    this.subscription = this._chartService.update.subscribe(() => this.update())
+    this.subscription$ = this._chartService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy SVG line chart')
-    this.subscription.unsubscribe()
+    this.subscription$.unsubscribe()
   }
 
   ngOnChanges() {

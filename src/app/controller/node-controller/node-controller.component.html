@@ -1,15 +1,16 @@
-<span class="controller node-controller" [style.display]="_sketchService.isSelectedNode_or_all(node) ? '' : 'none'">
-  <mat-list class="controller-subheader">
+<span class="controller node-controller" [style.display]="nodeDisplay(node) ? '' : 'None'">
+
+  <mat-list class="controller-subheader" dense>
     <mat-list-item>
       <button mat-icon-button class="button node"
-        (click)="_sketchService.toggleSelectNode(node)"
+        (click)="toggleSelectNode(node)"
         [style.border-color]="color"
         [style.border-style]="_sketchService.isSelectedNode(node) ? 'dashed' : 'solid'"
         >
-        {{ node.idx }}
+        {{ node.idx + 1 }}
       </button>
 
-      <app-select [element_type]="node.element_type" [selected]="node.model" (selectChange)="selectModel($event)"></app-select>
+      <app-select [options]="models" [selected]="node.model" (selectChange)="selectModel($event)"></app-select>
 
       <mat-menu #nodeMenu="matMenu" class="node-menu">
         <!-- <button mat-menu-item (click)="_sketchService.toggleSelectNode(node)">
@@ -18,11 +19,11 @@
             <span *ngIf="_sketchService.isSelectedNode(node)">Unselect</span>
           </button> -->
         <button mat-menu-item>
-          <!-- <fa-icon icon="fill"></fa-icon> -->
-          <mcc-color-picker [selectedColor]="color" (selected)="selectColor($event)" hideEmptyUsedColors>
-            <mcc-color-picker-collection [colors]="_colorService.selectedColors()" hideEmpty="true"></mcc-color-picker-collection>
+          <fa-icon [style.color]="color" icon="paint-brush"></fa-icon>
+          <span style="pointer-events:none;">Colorize</span>
+          <mcc-color-picker [selectedColor]="color" (selected)="selectColor($event)" class="color" hideEmptyUsedColors>
+            <mcc-color-picker-collection [colors]="_colorService.colors()" hideEmpty="true"></mcc-color-picker-collection>
           </mcc-color-picker>
-          <span>Colorize node</span>
         </button>
         <button mat-menu-item (click)="resetNode()">
           <fa-icon icon="eraser"></fa-icon>
@@ -44,12 +45,12 @@
     </mat-list-item>
   </mat-list>
 
-  <mat-list class="controller-menu" dense>
-    <mat-list-item *ngIf="!isRecorder(node.element_type)" [style.border-color]="color" [style.display]="_controllerService.display(2)" >
-      <app-param-input view="valueSlider" [params]="node" id="n" [options]="_configService.config.nest.node.npop" [color]="color" (paramChange)="onChange()" class="input"></app-param-input>
+  <mat-list class="controller-menu" dense style="padding:0 8px">
+    <mat-list-item *ngIf="!isRecorder(node.element_type)" [style.border-color]="color" [style.display]="_controllerConfigService.config.level < 0 || _controllerService.display(2) ? '' : 'None'" >
+      <app-param-input view="valueSlider" [params]="node" id="n" [options]="_controllerConfigService.config['node'].npop" [color]="color" (paramChange)="onChange()" class="input"></app-param-input>
     </mat-list-item>
-    <mat-list-item *ngFor="let id of configModel.params" [ngSwitch]="configModel.options[id].view" [style.border-color]="color" [style.display]="_controllerService.display(configModel.options[id].level)" >
-      <app-param-input [view]="configModel.options[id].view" [model]="node.model" [params]="node.params" [id]="id" [options]="configModel.options[id]"  [color]="color" (paramChange)="onChange()" class="input"></app-param-input>
+    <mat-list-item *ngFor="let param of this.configModel.params" [style.border-color]="color" [style.display]="paramDisplay(node, param.id) ? '' : 'None'" >
+      <app-param-input [view]="param.input" [model]="node.model" [params]="node.params" [id]="param.id" [options]="param"  [color]="color" (paramChange)="onChange()" class="input"></app-param-input>
     </mat-list-item>
   </mat-list>
 

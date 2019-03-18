@@ -6,10 +6,6 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { ConfigService } from '../../config/config.service';
-import { DataService } from '../../services/data/data.service';
-import { SimulationService } from '../../simulation/simulation.service';
-
 
 @Component({
   selector: 'app-select',
@@ -17,39 +13,31 @@ import { SimulationService } from '../../simulation/simulation.service';
   styleUrls: ['./select.component.css'],
 })
 export class SelectComponent implements OnInit {
-  @Input() placeholder: any;
-  @Input() element_type: any;
+  @Input() filter: boolean = false;
+  @Input() placeholder: string = '';
   @Input() selected: any = {};
   @Output() selectChange = new EventEmitter();
-  public elements: any;
-  public filteredElements: any;
+  @Input() options: any[] = [];
+  public filteredOptions: string[] = [];
 
-
-  constructor(
-    private _configService: ConfigService,
-    private _dataService: DataService,
-    private _simulationService: SimulationService,
-  ) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.elements = this._configService.list(this.element_type);
-    this.filteredElements = this.elements;
+    this.filteredOptions = this.options;
   }
 
   search(query: string) {
     let result: string[] = [];
-    for (let element of this.elements) {
-      if (element.toLowerCase().indexOf(query.toLowerCase()) > -1) {
-        result.push(element)
+    for (let option of this.options) {
+      if (option.label.toLowerCase().indexOf(query.toLowerCase()) > -1) {
+        result.push(option)
       }
     }
-    this.filteredElements = result;
+    this.filteredOptions = result;
   }
 
   onSelectionChange() {
     this.selectChange.emit(this.selected);
-    if (this._dataService.options.edit) return
-    this._simulationService.run()
   }
 }

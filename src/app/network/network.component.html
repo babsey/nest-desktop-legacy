@@ -1,0 +1,4 @@
+<span [ngSwitch]="mode">
+  <app-network-details *ngSwitchCase="'details'"></app-network-details>
+  <app-network-simulation *ngSwitchCase="'simulation'"></app-network-simulation>
+</span>

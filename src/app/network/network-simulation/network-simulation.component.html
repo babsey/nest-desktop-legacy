@@ -1,0 +1,99 @@
+<mat-menu #controllerMenu="matMenu" class="controller-menu dense">
+  <button mat-menu-item (click)="clearDisplay()">
+    <fa-icon icon="eye" style="margin-right:10px"></fa-icon>
+    Default network display
+  </button>
+
+  <mat-selection-list class="level-menu dense mat-primary" (selectionChange)="setLevel($event)">
+    <mat-list-option [selected]="isLevel(1)" [value]="'1'" class="item">
+      <span>Rookie</span>
+    </mat-list-option>
+    <mat-list-option [selected]="isLevel(2)" [value]="'2'" class="item">
+      <span>Beginner</span>
+    </mat-list-option>
+    <mat-list-option [selected]="isLevel(3)" [value]="'3'" class="item">
+      <span>Advanced</span>
+    </mat-list-option>
+    <mat-list-option [selected]="isLevel(4)" [value]="'4'" class="item">
+      <span>Expert</span>
+    </mat-list-option>
+    <mat-list-option [selected]="isLevel(-1)" [value]="'-1'" class="item">
+      <span>Custom</span>
+    </mat-list-option>
+  </mat-selection-list>
+</mat-menu>
+
+<mat-sidenav-container id="simulation" (window:resize)="resize()">
+
+  <mat-sidenav id="controller" role="region" mode="side" [opened]="isControllerOpened()" position="end"
+        (openedChange)="onChange()">
+
+    <mat-toolbar class="mat-accent" style="margin-bottom: -16px">
+      <mat-toolbar-row style="padding:0">
+        <span style="display:flex; width:100%">
+          <mat-form-field class="label" floatLabel="never" style="height:32px; ">
+            <div matPrefix style="width:10px"></div>
+            <input matInput type="text" class="formControl" [(ngModel)]="_dataService.data.name" placeholder="Name of the network model" />
+            <button mat-icon-button *ngIf="_dataService.data.name" matSuffix aria-label="Clear" (click)="_dataService.data.name=''" class="button no-print">
+              <fa-icon icon="times" style="font-size:11px"></fa-icon>
+            </button>
+          </mat-form-field>
+          <span style="vertical-align: bottom; height: 57px; margin-top:24px">
+          <nav mat-tab-nav-bar class="controllerMode no-print">
+            <a mat-tab-link
+               (click)="showSlider(false)"
+               [active]="!_controllerConfigService.config.showSlider" matTooltip="Param list"> <fa-icon icon="eye"></fa-icon> </a>
+            <a mat-tab-link
+               (click)="showSlider(true)"
+               [active]="_controllerConfigService.config.showSlider" matTooltip="Param slider"> <fa-icon icon="sliders-h"></fa-icon> </a>
+            <a mat-tab-link [matMenuTriggerFor]="controllerMenu" class="button">
+              <fa-icon icon="ellipsis-v" style="font-size:11px"></fa-icon></a>
+          </nav>
+          </span>
+        </span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    <app-controller *ngIf="_controllerConfigService.config.showSlider"></app-controller>
+
+    <span *ngIf="!_controllerConfigService.config.showSlider">
+      <mat-toolbar class="mat-accent no-print">
+        <span class="flex">
+          Network specifications
+          <span>
+            <mat-slide-toggle [checked]="_controllerService.options.editing" (change)="_controllerService.options.editing=$event.checked" class="mat-primary"></mat-slide-toggle>
+          </span>
+        </span>
+      </mat-toolbar>
+      <app-nodes-view [nodes]="_dataService.data.collections" [editing]="true" [selective]="true" [slide]="true"></app-nodes-view>
+      <app-links-view [data]="_dataService.data" [editing]="true" [selective]="true" [slide]="true"></app-links-view>
+    </span>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content #content id="chart">
+    <button mat-fab type="button" class="buttonRight no-print"
+      [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
+      [style.opacity]="buttonDisplay"
+      (click)="toggleControllerOpened()"
+      (mousemove)="buttonDisplay='1'"
+      (mouseleave)="buttonDisplay='0.2'"
+      >
+      <fa-icon *ngIf="!isControllerOpened()" icon="chevron-left"></fa-icon>
+      <fa-icon *ngIf="isControllerOpened()" icon="chevron-right"></fa-icon>
+    </button>
+
+    <div style="position:absolute; right:0; width:4px; height:100vh; z-index: 1000;" (mousemove)="buttonDisplay='1'"
+      (mouseleave)="buttonDisplay='0.2'"></div>
+
+    <app-chart *ngIf="_dataService.records.length > 0"></app-chart>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+
+<div [style.display]="isBottomSheetOpened() ? 'None' : ''" class="no-print" style="position:absolute;left:10px;bottom:10px;z-index:1000;">
+  <button mat-mini-fab type="button" (click)="openBottomSheet()" color="primary">
+    <fa-icon icon="chevron-up"></fa-icon>
+  </button>
+</div>

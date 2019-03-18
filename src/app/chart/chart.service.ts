@@ -6,38 +6,42 @@ import {
 import * as d3 from 'd3';
 
 import { DataService } from '../services/data/data.service';
+import { ChartConfigService } from '../config/chart-config/chart-config.service';
+
+var STORAGE_NAME = 'chart-config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChartService {
-  public svg = {
+  public svg: any = {
     width: 640,
     height: 480,
     left: 36,
-    top: 74,
+    top: 58,
   }
-  public g = {
-    top: 10,
-    right: 20,
+  public g: any = {
+    top: 15,
+    right: 22,
     bottom: 30,
     left: 50,
   }
-  public selected: any = [];
-  public init: EventEmitter<any>;
-  public update: EventEmitter<any>;
-  public xScale: any;
-  public transition: any;
-  public drag: any = false;
-  public xAutoscale: any = true;
-  public yAutoscale: any = true;
-  public show: any = true;
+  public selected: any[] = [];
+  public init = new EventEmitter();
+  public update = new EventEmitter();
+  public xScale: d3.scaleLinear;
+  public transition: d3.transition;
+  public drag: boolean = false;
+  public xAutoscale: boolean = true;
+  public yAutoscale: boolean = true;
+  public show: boolean = true;
+  public sidenavOpened: boolean = false;
+  public selectedIndex: number = 0;
 
   constructor(
     private _dataService: DataService,
+    public _chartConfigService: ChartConfigService,
   ) {
-    this.init = new EventEmitter();
-    this.update = new EventEmitter();
     this.xScale = d3.scaleLinear().range([0, this.svg.width - this.g.left - this.g.right]).domain([0., this._dataService.data.kernel['time'] || 1000.])
     this.transition = d3.transition();
   }

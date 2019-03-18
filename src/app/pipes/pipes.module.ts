@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TimesincePipe } from './timesince/timesince.pipe';
-import { LabelPipe } from './label/label.pipe';
 import { FormatPipe } from './format/format.pipe';
-import { ParamsPipe } from './params/params.pipe';
-import { NodesPipe } from './nodes/nodes.pipe';
+import { TimedeltaPipe } from './timedelta/timedelta.pipe';
+import { TimesincePipe } from './timesince/timesince.pipe';
 
 
 @NgModule({
@@ -14,16 +12,12 @@ import { NodesPipe } from './nodes/nodes.pipe';
   ],
   declarations: [
     FormatPipe,
-    LabelPipe,
-    NodesPipe,
-    ParamsPipe,
+    TimedeltaPipe,
     TimesincePipe,
   ],
   exports: [
     FormatPipe,
-    LabelPipe,
-    NodesPipe,
-    ParamsPipe,
+    TimedeltaPipe,
     TimesincePipe,
   ]
 })

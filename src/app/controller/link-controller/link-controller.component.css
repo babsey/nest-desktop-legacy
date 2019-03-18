@@ -3,9 +3,12 @@
 }
 
 .link-controller .controller-subheader .button {
-  height: 46px;
-  width: 46px;
-  margin: 5px;
+  height: 32px;
+  width: 32px;
+  margin: 0 5px 0 -11px;
+  line-height: 30.5px;
+  font-size: 11px;
+  border-width: 1.5px;
 }
 
 .link-controller .controller-subheader .arrow {

@@ -1,9 +1,5 @@
-.nest-desktop {
-  color: #ff6633;
-  height: 42px;
-}
-
-.navButton {
-  margin-left: 5px;
-  display: inline-block;
+.nav a {
+  min-width: 40px;
+  padding: 0 12px;
+  height: 40px;
 }

@@ -6,22 +6,29 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./param-input.component.css']
 })
 export class ParamInputComponent implements OnInit {
-  @Input() view: any;
-  @Input() model: any;
-  @Input() params: any;
-  @Input() id: any;
+  @Input() color: string;
+  @Input() id: string;
+  @Input() model: string;
   @Input() options: any;
-  @Input() color: any;
+  @Input() params: any = {};
+  @Input() view: string;
   @Output() paramChange = new EventEmitter;
+
 
   constructor() { }
 
   ngOnInit() {
+    if (this.params[this.id] == undefined || this.params[this.id] == '') {
+      this.params[this.id] = this.options.value;
+    }
   }
 
   onChange(value) {
     // console.log('Change param in param input')
-    this.params[this.id] = value || this.options.value;
+    if (value == undefined || value == '') {
+      value = this.options.value;
+    }
+    this.params[this.id] = value;
     this.paramChange.emit()
   }
 }

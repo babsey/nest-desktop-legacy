@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { DataService } from '../../services/data/data.service';
-import { ConfigService } from '../../config/config.service';
-import { SimulationService } from '../../simulation/simulation.service';
+import { ControllerConfigService } from '../../config/controller-config/controller-config.service';
 
 
 @Component({
@@ -12,19 +11,23 @@ import { SimulationService } from '../../simulation/simulation.service';
 })
 export class KernelControllerComponent implements OnInit {
   public options: any;
+  @Output() kernelChange = new EventEmitter();
 
   constructor(
+    private _controllerConfigService: ControllerConfigService,
     public _dataService: DataService,
-    public _configService: ConfigService,
-    public _simulationService: SimulationService,
   ) {
   }
 
   ngOnInit() {
   }
 
+  params() {
+    return this._controllerConfigService.config.kernel.params;
+  }
+
   onChange() {
-    this._simulationService.run()
+    this.kernelChange.emit()
   }
 
 }

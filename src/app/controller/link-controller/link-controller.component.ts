@@ -1,10 +1,10 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, Output, EventEmitter } from '@angular/core';
 
 import { ColorService } from '../../services/color/color.service';
-import { ConfigService } from '../../config/config.service';
+import { ControllerConfigService } from '../../config/controller-config/controller-config.service';
+import { ModelService } from '../../model/model.service';
 import { ControllerService } from '../../controller/controller.service';
 import { DataService } from '../../services/data/data.service';
-import { SimulationService } from '../../simulation/simulation.service';
 import { SketchService } from '../../sketch/sketch.service';
 
 
@@ -14,20 +14,24 @@ import { SketchService } from '../../sketch/sketch.service';
   styleUrls: ['./link-controller.component.css'],
 })
 export class LinkControllerComponent implements OnInit, OnChanges {
-  @Input() idx: any;
+  @Input() idx: number;
+  @Output() linkChange = new EventEmitter();
   public data: any;
   public link: any;
-  public colors: any;
-  public slider: any = {}
+  public colors: any = {};
+  public slider: any = {};
   public options: any;
   public synModel: any;
+  public connOptions: any[] = [];
+  public connRules: any[] = [];
+  public synModels: any[] = [];
 
   constructor(
+    private _modelService: ModelService,
+    private _controllerConfigService: ControllerConfigService,
     public _colorService: ColorService,
-    public _configService: ConfigService,
     public _controllerService: ControllerService,
     public _dataService: DataService,
-    public _simulationService: SimulationService,
     public _sketchService: SketchService,
   ) { }
 
@@ -46,32 +50,49 @@ export class LinkControllerComponent implements OnInit, OnChanges {
       post: this._colorService.nodeIdx(this.link.post),
       weight: this._colorService.link(this),
     };
-    var connectionConfig = this._configService.config.nest.connection;
+    var connectionConfig = this._controllerConfigService.config.connection;
+    this.connRules = connectionConfig.specs.map(spec => { return { value: spec.rule, label: spec.label } });
     var connRule = this.link.conn_spec ? this.link.conn_spec.rule : 'all_to_all';
-    this.slider.connection = connectionConfig[connRule]['options'] || {};
+    this.slider.connection = connectionConfig.specs.find(spec => spec.rule == connRule).params || [];
+
+    var synapses = this._modelService.list('synapse')
+    this.synModels = synapses.map(synapse => { return { value: synapse, label: this._modelService.config(synapse).label } });
     var synModel = 'model' in this.link.syn_spec ? this.link.syn_spec.model : "static_synapse";
-    var modelConfig = this._configService.config.nest.model;
-    this.synModel = modelConfig[synModel]
-    this.slider.synapse = this.synModel['options'] || {};
+    this.synModel = this._modelService.config(synModel);
+    this.slider.synapse = this.synModel.params || [];
   }
 
   keys(dict) {
     return Object.keys(dict)
   }
 
+  toggleSelectNode(node) {
+    this._controllerService.selected = null;
+    this._sketchService.toggleSelectNode(node)
+  }
+
+  toggleSelectLink(link) {
+    this._controllerService.selected = null;
+    this._sketchService.toggleSelectLink(link)
+  }
+
   onSelectConnRule(rule) {
     this.link.conn_spec = {}
     this.link.conn_spec.rule = rule;
-    var options = this._configService.config.nest.connection[rule].options;
-    for (var key in options) {
-      this.link.conn_spec[key] = options[key].value;
+    var conn_spec = this._controllerConfigService.config.connection.specs.find(conn_spec => conn_spec.rule == rule);
+    if ('params' in conn_spec) {
+      conn_spec.params.map(param => {
+        this.link.conn_spec[param.id] = param.value;
+      })
     }
     this.update()
+    this.linkChange.emit()
   }
 
   onSelectSynModel(model) {
     this.link.syn_spec.model = model;
     this.update()
+    this.linkChange.emit()
   }
 
   onChange() {
@@ -79,23 +100,23 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this.update()
     this._sketchService.update.emit()
     this._dataService.history(this._dataService.data)
-    this._simulationService.run()
+    this.linkChange.emit()
   }
 
-  deleteLink(idx) {
-    var data = this._dataService.data;
-    this._dataService.history(data)
-
-    var connectomes = data.connectomes.filter(d => d.idx != idx);
-    connectomes.forEach((d, i) => {
-      d.idx = i;
-    })
-    data.connectomes = connectomes;
-
+  deleteLink() {
+    this._dataService.deleteLink(this.idx)
     this._sketchService.update.emit()
-    this._dataService.records = this._dataService.records.filter(d => d.recorder.idx != idx)
-    if (!this._dataService.options.edit) {
-      this._simulationService.run()
-    }
+    this._dataService.records = this._dataService.records.filter(d => d.recorder.idx != this.idx)
+    this.linkChange.emit()
+  }
+
+  linkDisplay(link) {
+    var display = 'display' in link ? link.display.includes('link') : true;
+    return this._sketchService.isSelectedLink_or_all(link) && display ? '' : 'none'
+  }
+
+  paramDisplay(link, param) {
+    var display = 'display' in link ? link.display.includes(param) : true;
+    return display ? '' : 'none'
   }
 }

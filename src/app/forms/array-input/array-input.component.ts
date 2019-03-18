@@ -15,8 +15,8 @@ import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-
   styleUrls: ['./array-input.component.css']
 })
 export class ArrayInputComponent implements OnInit {
-  @Input() model: any;
-  @Input() id: any;
+  @Input() model: string;
+  @Input() id: string;
   @Input() value: any;
   @Input() options: any = {};
   @Output() valueChange = new EventEmitter;

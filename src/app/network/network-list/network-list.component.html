@@ -1,0 +1,80 @@
+<mde-popover #networkDetails="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionX="before" mdePopoverOffsetX="323" mdePopoverPositionY="below" mdePopoverOffsetY="0">
+  <mat-card style="width:600px">
+    <app-sketch [data]="network" width="600" height="200"></app-sketch>
+    <span style="display:flex">
+      <app-nodes-view [nodes]="network.collections" style="width:360px"></app-nodes-view>
+      <app-links-view [data]="network" style="width:240px"></app-links-view>
+    </span>
+  </mat-card>
+</mde-popover>
+
+<mat-menu #networksMenu="matMenu" class="networks-menu dense">
+  <button mat-menu-item (click)="clearNetwork()">
+    <fa-icon icon="broom" style="margin-right:10px"></fa-icon>
+    Empty network
+  </button>
+  <button mat-menu-item (click)="clearProtocols()">
+    <fa-icon icon="snowplow" style="margin-right:10px"></fa-icon>
+    Remove all protocols
+  </button>
+</mat-menu>
+
+<mat-menu #networkMenu="matMenu" class="network-menu dense">
+  <button mat-menu-item  *ngIf="network.source=='protocol'" (click)="deleteProtocol(network._id)">
+    <fa-icon icon="trash-alt"></fa-icon><span style="margin-left:10px">Delete protocol</span>
+  </button>
+</mat-menu>
+
+<mat-toolbar style="font-size:16px;line-height:32px;height:32px" color="accent">
+  <span class="flex">
+    Networks
+    <span style="display:flex">
+      <nav mat-tab-nav-bar class="networkMode">
+        <a mat-tab-link
+           (click)="details()"
+           [active]="!router.url.includes('simulate')" matTooltip="View network details"> <fa-icon icon="eye"></fa-icon> </a>
+        <a mat-tab-link
+           (click)="simulate()"
+           [active]="router.url.includes('simulate')" matTooltip="Go to simulation workspace"> <fa-icon icon="running"></fa-icon> </a>
+        <a mat-tab-link [matMenuTriggerFor]="networksMenu" class="button">
+          <fa-icon icon="ellipsis-v" style="font-size:11px"></fa-icon></a>
+      </nav>
+    </span>
+  </span>
+</mat-toolbar>
+
+<mat-nav-list dense>
+  <mat-list-item (click)="saveProtocol()">
+    <fa-icon icon="plus" style="padding-right: 10px"></fa-icon>
+    Save the current network
+  </mat-list-item>
+</mat-nav-list>
+
+<mat-list dense class="networks">
+  <mat-list-item>
+    <span style="width:100%; display:flex">
+      <mat-form-field floatLabel="never" style="flex-grow:1">
+        <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
+        <input matInput type="text" class="formControl" placeholder="Search a network" (keyup)="search($event.target.value)" autocomplete="off" />
+      </mat-form-field>
+    </span>
+  </mat-list-item>
+</mat-list>
+
+<mat-nav-list dense [mdePopoverTriggerFor]="networkDetails" mdePopoverTriggerOn="none" #networkTarget="mdePopoverTrigger" (mouseleave)="networkTarget.closePopover()">
+  <mat-list-item *ngFor="let network of filteredNetworks" (click)="load(network)" (mouseover)="view(network, networkTarget)" [class.active]="isLoaded(network._id)" class="network">
+    <a matLine style="display:flex">
+      <span><fa-icon matPrefix [icon]="network.source == 'network' ? 'upload' : 'download'" style="margin-right:10px"></fa-icon></span>
+      {{ network.name }}
+      <div class="flex-spacer"></div>
+      <span *ngIf="network.updatedAt" class="timesince">
+        {{ network.updatedAt | timesince }}
+      </span>
+    </a>
+
+    <button mat-icon-button [matMenuTriggerFor]="networkMenu" class="button" [style.display]="router.url.includes('simulate') ? 'None' : ''">
+      <fa-icon icon="ellipsis-v" style="font-size:12px"></fa-icon>
+    </button>
+
+  </mat-list-item>
+</mat-nav-list>

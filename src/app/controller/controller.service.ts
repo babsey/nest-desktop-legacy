@@ -1,9 +1,7 @@
-import {
-  Injectable,
-  EventEmitter
-} from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
-import { ConfigService } from '../config/config.service';
+import { AppConfigService } from '../config/app-config/app-config.service';
+import { ControllerConfigService } from '../config/controller-config/controller-config.service';
 
 
 @Injectable({
@@ -12,18 +10,33 @@ import { ConfigService } from '../config/config.service';
 export class ControllerService {
   public options: any = {
     sidenavOpened: true,
-    sheetOpened: false,
-    edit: false,
+    editing: false,
   };
+  public selected: any = null;
 
   constructor(
-    private _configService: ConfigService,
+    private _appConfigService: AppConfigService,
+    private _controllerConfigService: ControllerConfigService,
   ) {
   }
 
   display(level) {
-    return level > this._configService.config.app.controller.level ? 'None' : ''
+    var value = level <= this._controllerConfigService.config.level;
+    return value
   }
 
+  edit(mode = null) {
+    this.options.editing = (mode != null) ? mode : !this.options.editing;
+  }
+
+  openBottomSheet() {
+    this._controllerConfigService.config.bottomSheetOpened = true;
+    this._controllerConfigService.save()
+  }
+
+  closeBottomSheet() {
+    this._controllerConfigService.config.bottomSheetOpened = false;
+    this._controllerConfigService.save()
+  }
 
 }

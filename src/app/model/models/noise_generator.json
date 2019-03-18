@@ -1,0 +1,58 @@
+{
+  "id": "noise_generator",
+  "element_type": "stimulator",
+  "label": "Gaussian white noise",
+  "params": [{
+      "id": "mean",
+      "label": "Mean value of the noise current",
+      "level": 1,
+      "unit": "pA",
+      "value": 0,
+      "input": "valueSlider",
+      "inputSpec": {
+        "max": 1000,
+        "min": 0,
+        "step": 1
+      }
+    },
+    {
+      "id": "std",
+      "label": "Standard deviation of noise current",
+      "level": 1,
+      "unit": "pA",
+      "value": 0,
+      "input": "valueSlider",
+      "inputSpec": {
+        "max": 100,
+        "min": 0,
+        "step": 1
+      }
+    },
+    {
+      "id": "start",
+      "label": "Start time",
+      "level": 2,
+      "unit": "ms",
+      "value": 0,
+      "input": "valueSlider",
+      "inputSpec": {
+        "max": 1000,
+        "min": 0,
+        "step": 1
+      }
+    },
+    {
+      "id": "stop",
+      "label": "Stop time",
+      "level": 2,
+      "unit": "ms",
+      "value": 1000,
+      "input": "valueSlider",
+      "inputSpec": {
+        "max": 1000,
+        "min": 0,
+        "step": 1
+      }
+    }
+  ]
+}

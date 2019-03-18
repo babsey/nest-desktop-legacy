@@ -1,43 +1,64 @@
 .node {
-  line-height: 2.5;
+  width: calc(100% - 17.5px);
+  margin: 0 8px;
 }
 
-.node button {
-  line-height: 31.5px;
-  width: 33px;
-  height: 33px;
+.node .header {
+  line-height: 32px;
+  height: 32px;
+  margin-left: 1.5px;
+}
+
+.node button.nodeButton {
+  line-height: 32px;
+  width: 32px;
+  height: 32px;
   border: 1.5px solid black;
   font-size: 11px;
-  margin: 0 5px;
+  margin-right: 5px;
 }
 
-.params .view {
+.item {
   border-left: 1.5px solid black;
   height: 1.5em !important;
 }
 
-.params .edit {
-  border-left: 0;
-  height: 1.5em !important;
+.item .label {
+  min-width: 50%;
+  max-width: 80%;
+  white-space: nowrap;
 }
 
-::ng-deep .params .edit .mat-list-item-content {
-  padding: 0 !important;
+.item .slider {
+  display: none;
 }
 
-.line {
+.item:hover .view {
+  display: none;
+}
+
+.item:hover .control {
   display: flex;
-  justify-content: space-between;
 }
 
-.node .line {
-  width: calc(100% - 15px);
+::ng-deep .item mat-slider {
+  height: 14px;
+  padding: 0;
 }
 
-.params .view .line {
-  width: 100%;
+::ng-deep .item mat-slider .mat-slider-wrapper {
+  top: 6px;
 }
 
-.params .edit .line {
-  width: calc(100% - 15px);
+::ng-deep .item .mat-slider-thumb-label {
+  transform: rotate(45deg) !important;
+  border-radius: 50% 50% 0 !important;
+}
+
+::ng-deep .item .mat-slider-thumb {
+  transform: scale(0) !important;
+}
+
+::ng-deep .item .mat-slider-thumb-label-text {
+  opacity: 1 !important;
 }

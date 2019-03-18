@@ -1,13 +1,6 @@
 // `http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
+import { Component, OnInit, OnChanges, Input, ElementRef, OnDestroy } from '@angular/core';
 
-import {
-  Component,
-  OnInit,
-  OnChanges,
-  Input,
-  ElementRef,
-  OnDestroy,
-} from '@angular/core';
 import * as d3 from 'd3';
 
 import { ColorService } from '../../services/color/color.service';
@@ -21,13 +14,13 @@ import { SketchService } from '../../sketch/sketch.service';
   styleUrls: ['./link-sketch.component.css'],
 })
 export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() data: any;
-  @Input() width: any;
-  @Input() height: any;
+  @Input() data: any = {};
+  @Input() width: number;
+  @Input() height: number;
   private host: d3.Selection;
   private selector: d3.Selection;
-  private drag_line: any
-  private subscription: any
+  private drag_line: any;
+  private subscription$: any;
 
   constructor(
     private _colorService: ColorService,
@@ -43,12 +36,12 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     // console.log('Init link sketch')
-    this.subscription = this._sketchService.update.subscribe(() => this.update())
+    this.subscription$ = this._sketchService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy link sketch')
-    this.subscription.unsubscribe()
+    this.subscription$.unsubscribe()
   }
 
   ngOnChanges() {
@@ -63,12 +56,11 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
     var nodes = this.data.collections;
     var _this = this;
 
-    var colors = [];
-    this._colorService.colors.map(d => colors.push(d));
-    nodes.map(d => {
-      if ('color' in d) {
-        if (colors.indexOf(d['color']) == -1) {
-          colors.push(d['color'])
+    var colors = this._colorService.colors();
+    nodes.map(node => {
+      if ('color' in node) {
+        if (colors.indexOf(node['color']) == -1) {
+          colors.push(node['color'])
         }
       }
     })

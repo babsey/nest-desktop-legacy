@@ -1,42 +1,61 @@
+<mat-menu #levelMenu="matMenu">
+  <mat-selection-list class="level-menu dense mat-primary" (selectionChange)="setLevel($event)">
+    <mat-list-option [selected]="isLevel(1)" [value]="'1'" class="item">
+      <span>Rookie</span>
+    </mat-list-option>
+    <mat-list-option [selected]="isLevel(2)" [value]="'2'" class="item">
+      <span>Beginner</span>
+    </mat-list-option>
+    <mat-list-option [selected]="isLevel(3)" [value]="'3'" class="item">
+      <span>Advanced</span>
+    </mat-list-option>
+    <mat-list-option [selected]="isLevel(4)" [value]="'4'" class="item">
+      <span>Expert</span>
+    </mat-list-option>
+    <mat-list-option [selected]="isLevel(-1)" [value]="'-1'" class="item">
+      <span>Custom</span>
+    </mat-list-option>
+  </mat-selection-list>
+</mat-menu>
+
 <div id="controller" [style.width]="_controllerService.options.width" [style.background-color]="_controllerService.options.color">
   <div style="position:relative">
-    <div style="position: absolute; top: 5px; right: 5px; z-index:1000">
-      <mat-menu #levelMenu="matMenu" class="level-menu dense">
-        <button mat-menu-item (click)="setLevel(1)">
-          <fa-icon class="check" icon="check" [style.opacity]="isLevel(1) ? 1 : 0"></fa-icon>
-          <span>Rookie</span>
-        </button>
-        <button mat-menu-item (click)="setLevel(2)">
-          <fa-icon class="check" icon="check" [style.opacity]="isLevel(2) ? 1 : 0"></fa-icon>
-          <span>Beginner</span>
-        </button>
-        <button mat-menu-item (click)="setLevel(3)">
-          <fa-icon class="check" icon="check" [style.opacity]="isLevel(3) ? 1 : 0"></fa-icon>
-          <span>Advanced</span>
-        </button>
-        <button mat-menu-item (click)="setLevel(4)">
-          <fa-icon class="check" icon="check" [style.opacity]="isLevel(4) ? 1 : 0"></fa-icon>
-          <span>Expert</span>
-        </button>
-      </mat-menu>
-
-      <button mat-icon-button [matMenuTriggerFor]="levelMenu" matTooltip="Level view">
-        <fa-icon icon="ellipsis-v"></fa-icon>
+    <!-- <span style="position: absolute; top: 5px; right: 5px; z-index:1000">
+      <button mat-icon-button [matMenuTriggerFor]="levelMenu" matTooltip="Level of display">
+        <fa-icon icon="ellipsis-v" style="font-size:11px"></fa-icon>
       </button>
-    </div>
+    </span> -->
 
     <mat-tab-group mat-stretch-tabs color="primary">
-      <mat-tab label="Nodes">
-        <app-node-controller *ngFor="let collection of _dataService.data.collections" class="node" [idx]="collection.idx">
-        </app-node-controller >
+
+      <mat-tab label="Nodes" class="nodes">
+        <mat-toolbar class="mat-accent" id="elementType">
+          <nav mat-tab-nav-bar class="nodeNav" fxLayout="row">
+            <a mat-tab-link fxFlex
+               (click)="toggleType('stimulator')"
+               [active]="_controllerService.selected == 'stimulator'" matTooltip="Networks"> Stimulator </a>
+            <a mat-tab-link fxFlex
+               (click)="toggleType('neuron')"
+               [active]="_controllerService.selected == 'neuron'" matTooltip="Models"> Neuron </a>
+            <a mat-tab-link fxFlex
+               (click)="toggleType('recorder')"
+               [active]="_controllerService.selected == 'recorder'" matTooltip="Configurations"> Recorder </a>
+          </nav>
+        </mat-toolbar>
+        <ng-container *ngFor="let collection of _dataService.data.collections">
+          <app-node-controller [style.display]="isSelected(collection.element_type) ? '': 'None'" class="node" [idx]="collection.idx" (nodeChange)="onChange()"></app-node-controller>
+        </ng-container>
       </mat-tab>
+
       <mat-tab label="Links">
-        <app-link-controller *ngFor="let connectome of _dataService.data.connectomes" class="link" [idx]="connectome.idx">
-        </app-link-controller>
+        <ng-container *ngFor="let connectome of _dataService.data.connectomes" >
+          <app-link-controller [style.display]="isSelected(_dataService.data.collections[connectome.pre].element_type) ? '': 'None'" class="link" [idx]="connectome.idx" (linkChange)="onChange()"></app-link-controller>
+        </ng-container>
       </mat-tab>
+
       <mat-tab label="General">
-        <app-kernel-controller class="kernel"></app-kernel-controller>
-        <app-simulation-controller class="simulation"></app-simulation-controller>
+        <app-kernel-controller class="kernel" (kernelChange)="onChange()"></app-kernel-controller>
+        <app-simulation-controller class="simulation" (simulationChange)="onChange()"></app-simulation-controller>
       </mat-tab>
     </mat-tab-group>
   </div>

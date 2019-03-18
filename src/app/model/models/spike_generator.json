@@ -1,0 +1,22 @@
+{
+  "id": "spike_generator",
+  "element_type": "stimulator",
+  "label": "Spike generator",
+  "params": [{
+      "id": "spike_times",
+      "label": "Times of spike",
+      "level": 1,
+      "unit": "ms",
+      "input": "arrayInput",
+      "inputSpec": {}
+    },
+    {
+      "id": "spike_weights",
+      "label": "Weights of spike",
+      "level": 3,
+      "unit": "pA",
+      "input": "arrayInput",
+      "inputSpec": {}
+    }
+  ]
+}

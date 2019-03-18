@@ -3,8 +3,20 @@
     <mat-list-item mat-subheader>
       Simulation
     </mat-list-item>
-    <mat-list-item *ngFor="let id of _configService.config.nest.simulation.params">
-      <app-param-input view="valueSlider" [params]="_dataService.data.simulation" [id]="id" [options]="_configService.config.nest.simulation.options[id]" (paramChange)="onChange()" class="input"></app-param-input>
+    <mat-list-item *ngFor="let param of params()">
+      <app-param-input view="valueSlider" class="input" [params]="_dataService.data.simulation" [id]="param.id" [options]="param" (paramChange)="onChange()"></app-param-input>
     </mat-list-item>
   </mat-list>
+
+  <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
+    <mat-list-option [selected]="_networkSimulationService.config['autoRandomSeed']" value="autoRandomSeed">
+      <span>Randomize seed</span>
+    </mat-list-option>
+    <mat-list-option [selected]="_networkSimulationService.config['autoSimulation']" value="autoSimulation">
+      <span>Simulate after change</span>
+    </mat-list-option>
+    <mat-list-option [selected]="_networkSimulationService.config['autoProtocol']" value="autoProtocol">
+      <span>Protocol after simulation (Be careful!)</span>
+    </mat-list-option>
+  </mat-selection-list>
 </span>

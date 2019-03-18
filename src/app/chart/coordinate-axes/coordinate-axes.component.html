@@ -3,31 +3,34 @@
 </div>
 
 <div style="position:absolute;top:0;right:0" class="chart-controller no-print">
-  <a mat-icon-button (click)="autoscale()">
-    <fa-icon icon="arrows-alt"></fa-icon>
-  </a>
-  <!-- <a mat-icon-button (click)="togglexAutoscale()">
-    <fa-icon icon="arrows-alt-h"></fa-icon>
-  </a>
-  <a mat-icon-button (click)="toggleyAutoscale()">
-    <fa-icon icon="arrows-alt-v"></fa-icon>
-  </a> -->
-  <!-- <a mat-icon-button (click)="_chartService.drag=!_chartService.drag" [class.mat-primary]="_chartService.drag">
-    <fa-icon icon="arrows-alt"></fa-icon>
-  </a> -->
+  <span style="display:flex; flex-direction:column">
+    <a mat-icon-button (click)="autoscale()">
+      <fa-icon icon="arrows-alt"></fa-icon>
+    </a>
+    <a mat-icon-button (click)="autoscaleX()">
+      <fa-icon icon="arrows-alt-h"></fa-icon>
+    </a>
+    <a mat-icon-button (click)="autoscaleY(!yAutoscale)" [class.mat-primary]="yAutoscale">
+      <fa-icon icon="arrows-alt-v"></fa-icon>
+    </a>
+    <!-- <a mat-icon-button (click)="_chartService.drag=!_chartService.drag" [class.mat-primary]="_chartService.drag">
+      <fa-icon icon="arrows-alt"></fa-icon>
+    </a> -->
+  </span>
 </div>
 
 <svg [attr.width]="_chartService.svg.width" [attr.height]="height">
   <svg:g [attr.transform]="'translate(' + _chartService.g.left + ',' + _chartService.g.top + ')'">
     <svg:rect class="overlay"></svg:rect>
     <svg:g class="focus">
+      <svg:rect class="overlayFocus"></svg:rect>
       <svg:rect class="overlay--y"></svg:rect>
       <svg:g class="axis axis--y"></svg:g>
-      <svg:text class="label label--y"></svg:text>
     </svg:g>
     <svg:rect class="overlay--x"></svg:rect>
     <svg:g class="axis axis--x"></svg:g>
     <svg:text class="label label--x"></svg:text>
+    <svg:text class="label label--y"></svg:text>
   </svg:g>
 </svg>
 

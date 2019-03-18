@@ -11,13 +11,13 @@ import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-
   styleUrls: ['./ticks-slider.component.css']
 })
 export class TicksSliderComponent implements OnInit, OnChanges {
-  @Input() model: any;
-  @Input() id: any;
+  @Input() model: string = '';
+  @Input() id: string = '';
   @Input() options: any = {};
-  @Input() thumbLabel: any = false;
-  @Input() value: any;
+  @Input() thumbLabel: boolean = false;
+  @Input() value: number;
   @Output() valueChange = new EventEmitter;
-  public idx: any;
+  public idx: number;
 
 
   constructor(
@@ -29,11 +29,11 @@ export class TicksSliderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.idx = this.options.viewSpec.ticks.indexOf(this.value);
+    this.idx = this.options.inputSpec.ticks.indexOf(this.value);
   }
 
   onChange(idx) {
-    this.value = this.options.viewSpec.ticks[idx];
+    this.value = Number(this.options.inputSpec.ticks[idx]);
     this.valueChange.emit(this.value);
   }
 

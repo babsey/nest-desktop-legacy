@@ -1,14 +1,11 @@
-<h1 mat-dialog-title>{{ data.id }}</h1>
+<div mat-dialog-header>
+<span mat-dialog-title style="margin: 0">{{ data.id }}</span>
+<!-- <span mat-dialog-subtitle>{{ data.model }}</span> -->
+</div>
 
-<div mat-dialog-content class="params-config">
+<div mat-dialog-content class="params-config" style="padding: 20px 10px 4px 10px">
 
-  <mat-list dense style="padding: 4px 0">
-    <mat-list-item>
-      <mat-form-field>
-        <input matInput placeholder="Model" name="model" [ngModel]="data.model" readonly="true">
-      </mat-form-field>
-    </mat-list-item>
-
+  <mat-list dense>
     <mat-list-item>
       <mat-form-field>
         <input matInput placeholder="Label" name="label" [(ngModel)]="options.label">
@@ -35,37 +32,37 @@
 
     <mat-list-item>
       <mat-form-field class="select">
-        <mat-select placeholder="View" [(ngModel)]="options.view">
+        <mat-select placeholder="Input" [(ngModel)]="options.input">
           <mat-option value="valueInput">Value input</mat-option>
           <mat-option value="arrayInput">Array input</mat-option>
           <mat-option value="valueSlider">Value slider</mat-option>
-          <mat-option value="rangeSlider">Range slider</mat-option>
+          <!-- <mat-option value="rangeSlider">Range slider</mat-option> -->
           <mat-option value="tickSlider">Tick slider</mat-option>
         </mat-select>
       </mat-form-field>
     </mat-list-item>
 
-    <mat-list-item *ngIf="options.view == 'valueSlider'">
+    <mat-list-item *ngIf="options.input == 'valueSlider'">
       <mat-form-field>
-        <input matInput type="number" placeholder="Minimum value" name="min" [(ngModel)]="options.viewSpec.min">
+        <input matInput type="number" placeholder="Minimum value" name="min" [(ngModel)]="options.inputSpec.min">
       </mat-form-field>
     </mat-list-item>
 
-    <mat-list-item *ngIf="options.view == 'valueSlider'">
+    <mat-list-item *ngIf="options.input == 'valueSlider'">
       <mat-form-field>
-        <input matInput type="number" placeholder="Maximum value" name="max" [(ngModel)]="options.viewSpec.max">
+        <input matInput type="number" placeholder="Maximum value" name="max" [(ngModel)]="options.inputSpec.max">
       </mat-form-field>
     </mat-list-item>
 
-    <mat-list-item *ngIf="options.view.indexOf('value') != -1">
+    <mat-list-item *ngIf="options.input.indexOf('value') != -1">
       <mat-form-field>
-        <input matInput type="number" placeholder="Change step" name="step" [(ngModel)]="options.viewSpec.step">
+        <input matInput type="number" placeholder="Change step" name="step" [(ngModel)]="options.inputSpec.step">
       </mat-form-field>
     </mat-list-item>
 
-    <mat-list-item *ngIf="options.view == 'tickSlider'">
+    <mat-list-item *ngIf="options.input == 'tickSlider'">
       <mat-form-field>
-        <input matInput placeholder="Tick values" name="ticks" [(ngModel)]="options.viewSpec.ticks" (change)="valueChanged($event)">
+        <input matInput placeholder="Tick values" name="ticks" [(ngModel)]="options.inputSpec.ticks" (change)="valueChanged($event)">
       </mat-form-field>
     </mat-list-item>
 

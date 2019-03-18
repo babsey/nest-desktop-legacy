@@ -1,18 +1,42 @@
 .link {
-  line-height: 3;
+  width: calc(100% - 19px);
+  margin: 0 8px;
+}
+
+.link .header {
+  line-height: 32px;
+  height: 32px;
+  margin-left: 1.5px;
 }
 
 .link .pre, .link .post {
-  line-height: 31.5px;
-  width: 33px;
-  height: 33px;
+  line-height: 32px;
+  width: 32px;
+  height: 32px;
   border: 1.5px solid black;
   font-size: 11px;
-  margin: 0 5px;
 }
 
-.params mat-list-item {
+.item {
   border-left: 1.5px solid black;
   border-right: 1.5px solid black;
   height: 1.5em !important;
+}
+
+.item .label {
+  min-width: 50%;
+  max-width: 80%;
+  white-space: nowrap;
+}
+
+.item .slider {
+  display: none;
+}
+
+.item:hover .view {
+  display: none;
+}
+
+.item:hover .control {
+  display: flex;
 }

@@ -13,6 +13,15 @@
   opacity: 0;
 }
 
+.overlayFocus {
+  cursor: cell;
+  opacity: 0;
+  /* fill: none;
+  stroke: black;
+  stroke-width: 1px;
+  shape-rendering: crispEdges; */
+}
+
 .overlay--x {
   cursor: col-resize;
   opacity: 0;
@@ -27,3 +36,14 @@
   font-size: 10px;
   pointer-events: none;
 }
+
+::ng-deep .axis line {
+  stroke-width: 1px;
+  stroke: grey;
+  stroke-dasharray: 5, 20;
+  shape-rendering: crispEdges;
+}
+
+/* ::ng-deep .axis--y .domain {
+  stroke: none;
+} */

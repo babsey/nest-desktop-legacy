@@ -19,6 +19,31 @@
   width: 100%;
 }
 
-::ng-deep #controller .mat-tab-header {
-  width: calc(100% - 50px);
+::ng-deep .controller .mat-list {
+  padding: 0 8px;
+}
+
+::ng-deep .controller .mat-list-item-content {
+  padding: 0 8px !important;
+}
+
+#elementType {
+  height: 32px;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  height: 2em !important;
+}
+
+.nodeNav {
+  width: 100%;
+}
+
+.nodeNav a {
+  min-width: 0;
+  padding: 0;
+  height: 32px;
+  font-size: 10px;
 }

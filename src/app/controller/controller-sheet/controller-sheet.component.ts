@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material';
 
-import { ConfigService } from '../../config/config.service';
-import { ControllerService } from '../controller.service';
+import { AppConfigService } from '../../config/app-config/app-config.service';
+import { ControllerConfigService } from '../../config/controller-config/controller-config.service';
 import { DataService } from '../../services/data/data.service';
+import { ChartService } from '../../chart/chart.service';
+import { ControllerService } from '../controller.service';
+import { NetworkSimulationService } from '../../network/network-simulation/network-simulation.service';
 import { SketchService } from '../../sketch/sketch.service';
-import { SimulationService } from '../../simulation/simulation.service';
 
 
 @Component({
@@ -13,54 +15,54 @@ import { SimulationService } from '../../simulation/simulation.service';
   templateUrl: './controller-sheet.component.html',
   styleUrls: ['./controller-sheet.component.css']
 })
-export class ControllerSheetComponent implements OnInit {
-  private data: any;
-  public viewSketch: any = false;
-
+export class ControllerSheetComponent {
 
   constructor(
-    private _simulationService: SimulationService,
-    public _configService: ConfigService,
-    public _controllerService: ControllerService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    public _networkSimulationService: NetworkSimulationService,
+    public _appConfigService: AppConfigService,
+    public _controllerConfigService: ControllerConfigService,
     public _dataService: DataService,
+    public _controllerService: ControllerService,
+    public _chartService: ChartService,
     public _sketchService: SketchService,
     public bottomSheetRef: MatBottomSheetRef<ControllerSheetComponent>,
-  ) { }
-
-  ngOnInit() {
-    // console.log('Init controller sheet');
+  ) {
+    this._sketchService.update.subscribe(() => this._changeDetectorRef.markForCheck());
   }
 
   run() {
-    this._simulationService.run(true)
-  }
-
-  toggleNetworkSketchView() {
-    this.viewSketch = !this.viewSketch;
-  }
-
-  edit() {
-    // console.log('Draw Network sketch')
-    this._sketchService.resetMouseVars()
-    this._controllerService.options.edit = !this._controllerService.options.edit;
+    this._sketchService.draw(false);
+    this._networkSimulationService.run(true)
   }
 
   undo() {
     this._dataService.undo()
     setTimeout(() => this._sketchService.update.emit(), 100)
-    this._simulationService.run()
+    this._networkSimulationService.run()
   }
 
   redo() {
     this._dataService.redo()
     setTimeout(() => this._sketchService.update.emit(), 100)
-    this._simulationService.run()
+    this._networkSimulationService.run()
   }
 
   delete() {
-    // console.log('Network sketch sheet delete')
+    if (this._sketchService.selected.node) {
+      var idx = this._sketchService.selected.node.idx;
+      this._dataService.deleteNode(idx)
+    } else if (this._sketchService.selected.link) {
+      var idx = this._sketchService.selected.link.idx;
+      this._dataService.deleteLink(idx)
+    }
     this._sketchService.resetMouseVars()
-    this._controllerService.options.edit = true;
+    this._sketchService.update.emit()
+  }
+
+  clear() {
+    // console.log('Network sketch sheet delete')
+    this._sketchService.draw(true);
     this._dataService.history(this._dataService.data)
     this._dataService.records = [];
     this._dataService.data.connectomes = [];
@@ -70,13 +72,13 @@ export class ControllerSheetComponent implements OnInit {
 
   close() {
     // console.log('Network sketch sheet close')
-    this._controllerService.options.edit = false;
-    this._controllerService.options.sheetOpened = false;
+    this._sketchService.draw(false);
     this.bottomSheetRef.dismiss()
+    this._controllerService.closeBottomSheet()
   }
 
-  onClick(key1, key2) {
-    this._configService.config.app[key1][key2] = !this._configService.config.app[key1][key2]
-    this._configService.save('app', this._configService.config.app)
+  toggleSketchShow() {
+    this._controllerConfigService.config.showSketch = !this._controllerConfigService.config.showSketch;
+    this._controllerConfigService.save()
   }
 }

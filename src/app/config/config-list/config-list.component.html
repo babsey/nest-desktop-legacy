@@ -1,0 +1,12 @@
+<mat-toolbar style="font-size:16px;line-height:32px;height:32px" color="accent">
+  Configurations
+</mat-toolbar>
+
+<mat-nav-list class="mat-primary">
+  <mat-list-item (click)="navigate('app')" [class.active]="isActive('app')">
+    <fa-icon icon="clipboard-check"></fa-icon>Application
+  </mat-list-item>
+  <mat-list-item (click)="navigate('db')" [class.active]="isActive('db')">
+    <fa-icon icon="database"></fa-icon>Database
+  </mat-list-item>
+</mat-nav-list>

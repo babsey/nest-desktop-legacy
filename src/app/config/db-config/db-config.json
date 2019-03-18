@@ -1,0 +1,33 @@
+{
+  "version": "1.2.0",
+  "model": {
+    "label": "Model database",
+    "host": "",
+    "port": "",
+    "name": "models",
+    "auth": {
+      "username": "",
+      "password": ""
+    }
+  },
+  "network": {
+    "label": "Network database",
+    "host": "",
+    "port": "",
+    "name": "networks",
+    "auth": {
+      "username": "",
+      "password": ""
+    }
+  },
+  "network-protocol": {
+    "label": "Protocol database",
+    "host": "",
+    "port": "",
+    "name": "protocols",
+    "auth": {
+      "username": "",
+      "password": ""
+    }
+  }
+}

@@ -1,90 +1,139 @@
+<mat-toolbar class="chart-header">
+  <span style="margin-right:10px">Spike chart for:</span>
+  <ng-container *ngFor="let neuron of neurons">
+    <button mat-icon-button class="node neuron" [style.border-color]="_colorService.node(neuron)" [style.background-color]="_chartService.isSelected(neuron) ? _colorService.node(neuron) : 'white'" [class.selected]="_sketchService.isSelectedNode(neuron)" (click)="_chartService.select(neuron)">
+      {{ neuron.idx + 1 }}
+    </button>
+  </ng-container>
+  <span class="flex-spacer"></span>
+  <div class="no-print">
+    <button mat-icon-button type="button" (click)="_chartService.sidenavOpened=!_chartService.sidenavOpened" [class.mat-primary]="_chartService.sidenavOpened">
+      <fa-icon icon="bars"></fa-icon>
+    </button>
+  </div>
+  <button mat-icon-button class="node" [style.border-color]="color" [class.selected]="_sketchService.isSelectedNode(recorder)" (click)="_sketchService.toggleSelectNode(recorder)">
+    {{ recorder.idx + 1 }}
+  </button>
+</mat-toolbar>
+
 <mat-card class="chart" [style.display]="_chartService.show ? '' : 'none'">
-  <mat-card-subtitle class="chart-header">
-    <span style="margin:5px">Spike chart for:</span>
-    <mat-chip-list style="margin: 0 2px;">
-      <span *ngFor="let neuron of neurons">
-        <mat-chip class="neuron mat-accent" selected="true" (click)="_chartService.select(neuron)" [style.color]="_colorService.node(neuron)" [style.border-color]="_colorService.node(neuron)" [class.colored]="_chartService.isSelected(neuron)" [class.selected]="_sketchService.isSelectedNode(neuron)">
-          <!-- <span style="margin-right:3px">{{ neuron.model }}</span> -->
-          <span *ngIf="neuron.global_ids.length==1">[{{neuron.global_ids}}]</span>
-          <span *ngIf="neuron.global_ids.length>1">[{{neuron.global_ids[0]}}..{{neuron.global_ids[neuron.global_ids.length-1]}}]</span>
-        </mat-chip>
-      </span>
-      <mat-chip class="mat-accent" selected="true" (click)="selectAll()">all</mat-chip>
-      <mat-chip class="mat-accent" selected="true" (click)="selectNone()">none</mat-chip>
-    </mat-chip-list>
-
-    <span class="floatRight" style="display:flex">
-      <div class="no-print">
-        <button mat-icon-button type="button" (click)="sidenavOpened=!sidenavOpened" class="mat-primary">
-          <fa-icon icon="bars"></fa-icon>
-        </button>
-      </div>
-
-      <button mat-icon-button class="node" [style.border-color]="color" [class.selected]="_sketchService.isSelectedNode(recorder)" (click)="_sketchService.toggleSelectNode(recorder)">
-        {{ recorder.idx }}
-      </button>
-    </span>
-  </mat-card-subtitle>
-
   <mat-card-content>
     <mat-sidenav-container hasBackdrop="false">
-      <mat-sidenav class="chart-sidenav" role="region" mode="over" [opened]="sidenavOpened" position="end" style="width:345px" autoFocus="false">
-        <mat-list class="chart-menu" dense>
-          <mat-list-item mat-subheader>Subchart configuration</mat-list-item>
+      <mat-sidenav class="chart-sidenav" role="region" mode="over" [opened]="_chartService.sidenavOpened" position="end" style="width:345px" autoFocus="false">
 
-          <mat-list-item>
-            <mat-form-field class="select">
-              <mat-select [(value)]="subchart" placeholder="Subchart" (selectionChange)="rescaleY()">
-                <mat-option value="none">No subchart</mat-option>
-                <mat-option value="psth line">PSTH line</mat-option>
-                <mat-option value="psth area">PSTH area</mat-option>
-                <mat-option value="psth bar overlap">PSTH bar (group)</mat-option>
-                <mat-option value="psth bar stack">PSTH bar (stack)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </mat-list-item>
+        <mat-tab-group mat-stretch-tabs [(selectedIndex)]="_chartService.selectedIndex">
 
-          <ng-container *ngIf="subchart.includes('psth')">
-            <mat-divider></mat-divider>
-            <mat-list-item mat-subheader>PSTH configuration</mat-list-item>
+          <mat-tab label="Statistics">
+            <mat-toolbar style="font-size:13px" class="mat-accent">Statistics of the spike events</mat-toolbar>
+            <div [style.height]="(height - 120) + 'px'">
+              <mat-table [dataSource]="dataStats">
 
-            <mat-list-item>
-              <mat-form-field class="select">
-                <mat-select [(value)]="ordinate" placeholder="Ordinate">
-                  <mat-option value="count">Spike count</mat-option>
-                  <mat-option value="rate">Firing rate [Hz]</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </mat-list-item>
+                <ng-container matColumnDef="sender">
+                  <mat-header-cell *matHeaderCellDef> Sender </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [style.color]="element.color">
+                    <span *ngIf="element.sender.length==1">{{ element.sender[0] }}</span>
+                    <span *ngIf="element.sender.length>1">[{{ element.sender[0] }}..{{ element.sender[element.sender.length-1] }}]</span>
+                  </mat-cell>
+                </ng-container>
 
-            <mat-list-item>
-              <app-ticks-slider
-              (valueChange)="onChange($event)"
-              [options]="_configService.config.app.slider.nbins"
-              [value]="nbins"
-              style="width:100%"
-              ></app-ticks-slider>
-            </mat-list-item>
+                <ng-container matColumnDef="rate">
+                  <mat-header-cell *matHeaderCellDef> Rate [Hz]</ mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{ element.rate | format }} </mat-cell>
+                </ng-container>
 
-            <mat-list-item *ngIf="!subchart.includes('bar')">
-              <app-value-slider
-                (valueChange)="overlap=$event"
-                [options]="_configService.config.app.slider.overlap"
-                [value]="overlap"
-                style="width:100%"
-              ></app-value-slider>
-            </mat-list-item>
+                <ng-container matColumnDef="mean_isi">
+                  <mat-header-cell *matHeaderCellDef> &mu;(ISI) [ms]</mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{ element.mean_isi | format }} </mat-cell>
+                </ng-container>
 
-            <mat-list-item *ngIf="!subchart.includes('bar')">
-              <app-value-slider
-                (valueChange)="opacity=$event"
-                [options]="_configService.config.app.slider.opacity"
-                [value]="opacity"
-                style="width:100%"
-              ></app-value-slider>
-            </mat-list-item>
-          </ng-container>
-        </mat-list>
+                <ng-container matColumnDef="std_isi">
+                  <mat-header-cell mat-header-cell *matHeaderCellDef> &sigma;(ISI) [ms]</mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{ element.std_isi | format }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cv_isi">
+                  <mat-header-cell mat-header-cell *matHeaderCellDef> CV(ISI) </mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{ element.cv_isi | format }} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+            </div>
+
+          </mat-tab>
+
+
+          <mat-tab label="Configuration">
+            <mat-toolbar style="font-size:13px" class="mat-accent">Configuration of the spike chart</mat-toolbar>
+            <mat-list class="chart-menu" dense style="margin: 5px 0">
+
+              <mat-list-item>
+                <mat-form-field class="select">
+                  <mat-select [(value)]="subchart" placeholder="Subchart" (selectionChange)="rescaleY()">
+                    <mat-option value="none">No subchart</mat-option>
+                    <mat-option value="psth line">PSTH line</mat-option>
+                    <mat-option value="psth area">PSTH area</mat-option>
+                    <mat-option value="psth bar overlap">PSTH bar (group)</mat-option>
+                    <mat-option value="psth bar stack">PSTH bar (stack)</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </mat-list-item>
+
+              <ng-container *ngIf="subchart.includes('psth')">
+                <mat-divider></mat-divider>
+                <mat-list-item mat-subheader>PSTH configuration</mat-list-item>
+
+                <mat-list-item>
+                  <mat-form-field class="select">
+                    <mat-select [(value)]="ordinate" placeholder="Ordinate">
+                      <mat-option value="count">Spike count</mat-option>
+                      <mat-option value="rate">Firing rate [Hz]</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </mat-list-item>
+
+                <mat-list-item>
+                  <app-ticks-slider
+                  (valueChange)="onChange($event)"
+                  [options]="_chartConfigService.config.slider.nbins"
+                  [value]="nbins"
+                  style="width:100%"
+                  ></app-ticks-slider>
+                </mat-list-item>
+
+                <mat-list-item *ngIf="!subchart.includes('bar')">
+                  <app-value-slider
+                    (valueChange)="opacity=$event"
+                    [options]="_chartConfigService.config.slider.opacity"
+                    [value]="opacity"
+                    style="width:100%"
+                  ></app-value-slider>
+                </mat-list-item>
+
+                <mat-list-item *ngIf="!subchart.includes('bar')">
+                  <app-value-slider
+                    (valueChange)="overlap=$event"
+                    [options]="_chartConfigService.config.slider.overlap"
+                    [value]="overlap"
+                    style="width:100%"
+                  ></app-value-slider>
+                </mat-list-item>
+
+              </ng-container>
+            </mat-list>
+
+            <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
+              <mat-list-option [selected]="_chartConfigService.config.autoColor" value="autoColor">
+                <span>Colorize chart</span>
+              </mat-list-option>
+              <mat-list-option [selected]="_chartConfigService.config.resetScale" value="resetScale">
+                <span>Reset scale after simulation</span>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-tab>
+
+        </mat-tab-group>
       </mat-sidenav>
 
       <mat-sidenav-content class="chart-content">
@@ -97,7 +146,7 @@
           [yDomain]="yDomain"
           [yScale]="scatter.yScale"
           xLabel="Time [ms]"
-          yLabel="Neuron"
+          yLabel="Sender"
           ></app-scatter-chart>
 
         <app-psth-chart *ngIf="subchart.includes('psth')"

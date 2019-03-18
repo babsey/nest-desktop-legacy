@@ -1,14 +1,8 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ElementRef,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, ElementRef, OnDestroy } from '@angular/core';
+
 import * as d3 from 'd3';
 
 import { ColorService } from '../../services/color/color.service';
-import { ControllerService } from '../../controller/controller.service';
 import { DataService } from '../../services/data/data.service';
 import { SketchService } from '../../sketch/sketch.service';
 
@@ -19,68 +13,20 @@ import { SketchService } from '../../sketch/sketch.service';
 })
 export class BackgroundSketchComponent implements OnInit, OnDestroy {
   @Input() data: any;
-  @Input() width: any;
-  @Input() height: any;
+  @Input() width: number;
+  @Input() height: number;
   private selector: d3.Selection;
   private dragline: any;
-  private subscription: any;
+  private subscription$: any;
+  private sourceNode: any;
 
   constructor(
     private _colorService: ColorService,
-    private _controllerService: ControllerService,
     private _dataService: DataService,
     private _sketchService: SketchService,
     private elementRef: ElementRef,
   ) {
     this.selector = d3.select(elementRef.nativeElement);
-  }
-
-  addCollection(idx, point) {
-    this._dataService.records = [];
-    return {
-      idx: idx,
-      element_type: '',
-      model: '',
-      params: {},
-      sketch: {
-        x: point[0],
-        y: point[1],
-      }
-    }
-  }
-
-  addConnectome(idx, pre, post) {
-    this._dataService.records = [];
-    return {
-      idx: idx,
-      pre: pre,
-      post: post,
-      conn_spec: {
-        rule: 'all_to_all',
-      },
-      syn_spec: {
-        model: 'static_synapse',
-        weight: 1.0,
-      },
-    }
-  }
-
-  update() {
-    if (this.data == {}) return
-    this.selector.select('rect.background')
-      .attr('width', this.width)
-      .attr('height', this.height)
-
-    if (!this._sketchService.events.sourceNode) {
-      this.dragline.attr('d', 'M0,0L0,0')
-        .style('marker-start', '')
-        .style('marker-end', '');
-    }
-
-    if (!this._controllerService.options.edit) {
-      this.selector.selectAll('.select').remove();
-    }
-
   }
 
   ngOnInit() {
@@ -108,7 +54,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
 
     background
       .on('mousemove', function() {
-        var colors = _this._colorService.colors;
+        var colors = _this._colorService.colors();
         var source = _this._sketchService.events.sourceNode;
 
         if (source) {
@@ -129,7 +75,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
         if (data == {} || !data) return
         _this.selector.selectAll('.select').remove();
         _this._sketchService.resetMouseVars()
-        if (!_this._controllerService.options.edit) {
+        if (!_this._sketchService.options.drawing) {
           _this._sketchService.options.show = false;
           return
         }
@@ -140,11 +86,11 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
 
         var tooltip = select.append('svg:text')
           .attr('class', 'tooltip')
-          .attr('transform', 'translate(0, -65)')
+          .attr('transform', 'translate(0, -45)')
           .style('visibility', 'hidden');
 
         select.append('svg:circle')
-          .attr('r', 23)
+          .attr('r', 16)
           .attr('fill', 'white')
           .on('click', () => {
             _this._sketchService.events.sourceNode = null;
@@ -153,11 +99,11 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
           })
 
         var arcFrame = d3.arc()
-          .innerRadius(23)
-          .outerRadius(60);
+          .innerRadius(16)
+          .outerRadius(40);
 
         var sourceNode = _this._sketchService.events.sourceNode;
-        var colors = _this._colorService.colors;
+        var colors = _this._colorService.colors();
         element_types.forEach((d, i) => {
           var arc = select.append('svg:path').attr('class', d)
             .datum({
@@ -166,7 +112,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
             })
             .style('fill', 'white')
             .style('stroke', () => colors[data.collections.length % colors.length])
-            .style('stroke-width', 4)
+            .style('stroke-width', 2.5)
             .attr('d', arcFrame)
             .on('mouseover', function() {
               tooltip.text(d)
@@ -184,16 +130,20 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
               _this.selector.selectAll('.select').remove();
               var sourceNode = _this._sketchService.events.sourceNode;
               if (!sourceNode || d != 'stimulator') {
-                _this._dataService.history(data)
-                var idx = data.collections.length;
-                var collection = _this.addCollection(idx, point)
                 _this._sketchService.resetMouseVars()
-                collection.element_type = d;
-                collection.model = modelDefaults[d];
-                _this.data.collections.push(collection);
+                _this._dataService.history(data)
+                var newNode = _this._dataService.newNode();
+                newNode['idx'] = data.collections.length;
+                newNode['element_type'] = d;
+                newNode['model'] = modelDefaults[d];
+                newNode['sketch'] = {'x': point[0], 'y': point[1]};
+                _this.data.collections.push(newNode);
                 if (sourceNode) {
-                  var connectome = _this.addConnectome(data.connectomes.length, sourceNode.idx, collection.idx)
-                  _this.data.connectomes.push(connectome);
+                  var newLink = _this._dataService.newLink();
+                  newLink['idx'] = data.connectomes.length;
+                  newLink['pre'] = sourceNode.idx;
+                  newLink['post'] = newNode['idx'];
+                  _this.data.connectomes.push(newLink);
                 }
               }
               _this._sketchService.events.sourceNode = null;
@@ -204,17 +154,37 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
           select.append('svg:text')
             .attr('class', 'label')
             .attr('fill', (sourceNode && d == 'stimulator') ? '#cccccc' : 'black')
-            .attr('dx', Math.sin(Math.PI * f) * 40)
-            .attr('dy', -Math.cos(Math.PI * f) * 40 + 5)
+            .attr('dx', Math.sin(Math.PI * f) * 28)
+            .attr('dy', -Math.cos(Math.PI * f) * 28 + 5)
             .text(d.slice(0, 1).toUpperCase());
         })
       })
 
-    this.subscription = this._sketchService.update.subscribe(() => this.update())
+    this.subscription$ = this._sketchService.update.subscribe(() => this.update())
     this.update()
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe()
+    this.subscription$.unsubscribe()
   }
+
+  update() {
+    if (this.data == {}) return
+    this.selector.select('rect.background')
+      .attr('width', this.width)
+      .attr('height', this.height)
+
+    if (this.sourceNode == null || this._sketchService.events.sourceNode != this.sourceNode) {
+      this.dragline.attr('d', 'M0,0L0,0')
+        .style('marker-start', '')
+        .style('marker-end', '');
+    }
+    this.sourceNode = this._sketchService.events.sourceNode;
+
+    if (!this._sketchService.options.drawing) {
+      this.selector.selectAll('.select').remove();
+    }
+
+  }
+
 }

@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, Output, EventEmitter } from '@angular/core';
 
 import { ColorService } from '../../services/color/color.service';
-import { ConfigService } from '../../config/config.service';
+import { ModelService } from '../../model/model.service';
+import { ControllerConfigService } from '../../config/controller-config/controller-config.service';
 import { ControllerService } from '../../controller/controller.service';
 import { ChartService } from '../../chart/chart.service';
 import { DataService } from '../../services/data/data.service';
-import { SimulationService } from '../../simulation/simulation.service';
 import { SketchService } from '../../sketch/sketch.service';
 
 @Component({
@@ -14,21 +14,22 @@ import { SketchService } from '../../sketch/sketch.service';
   styleUrls: ['./node-controller.component.css'],
 })
 export class NodeControllerComponent implements OnInit, OnChanges {
-  @Input() idx: any;
+  @Input() idx: number;
+  @Output() nodeChange = new EventEmitter();
   public node: any;
-  public color: any;
+  public color: string;
   public options: any = {};
   public configModel: any = {};
-  public slider: any;
-  public toggleColorPicker: any = false;
+  public toggleColorPicker: boolean = false;
+  public models: any[] = [];
 
   constructor(
+    private _modelService: ModelService,
     public _colorService: ColorService,
-    public _configService: ConfigService,
+    public _controllerConfigService: ControllerConfigService,
     public _controllerService: ControllerService,
     public _chartService: ChartService,
     public _dataService: DataService,
-    public _simulationService: SimulationService,
     public _sketchService: SketchService,
   ) {
   }
@@ -40,15 +41,17 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   ngOnChanges() {
     // console.log('Update node controller')
     this.node = this._dataService.data.collections[this.idx];
+    var models = this._modelService.list(this.node.element_type);
+    this.models = models.map(model => {return {value: model, label: this._modelService.config(model).label}});
     this.color = this._colorService.node(this.node);
-    this.configModel = this._configService.config.nest.model[this.node.model];
+    this.configModel = this._modelService.config(this.node.model);
     this.updateParams(this.node)
   }
 
   updateParams(node) {
     var params = {};
-    this.configModel.params.forEach((param) => {
-      params[param] = this.node.params[param] || this.configModel.options[param].value
+    this.configModel.params.forEach(param => {
+      params[param.id] = this.node.params[param.id] || param.value;
     })
     node.params = params;
   }
@@ -57,10 +60,15 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     return element_type == 'recorder'
   }
 
+  toggleSelectNode(node) {
+    this._controllerService.selected = null;
+    this._sketchService.toggleSelectNode(node)
+  }
+
   selectModel(model) {
     this.node.model = model;
     this.node.params = {};
-    this.configModel = this._configService.config.nest.model[this.node.model];
+    this.configModel = this._modelService.config(this.node.model);
     this.updateParams(this.node)
   }
 
@@ -77,16 +85,13 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   }
 
   resetNode() {
-    var configModel = this._configService.config.nest.model[this.node.model];
     var data = this._dataService.data;
     this._dataService.data.collections[this.idx].params = {};
-    configModel.params.forEach(d => {
-      this._dataService.data.collections[this.idx].params[d] = configModel.options[d].value
+    this.configModel.params.forEach(param => {
+      this._dataService.data.collections[this.idx].params[param.id] = param.value
     })
     this._dataService.history(this._dataService.data)
-    if (!this._dataService.options.edit) {
-      this._simulationService.run()
-    }
+    this.nodeChange.emit()
   }
 
   freezeNode() {
@@ -96,39 +101,35 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     } else {
       data.collections[this.idx].params['frozen'] = true;
     }
+    this.nodeChange.emit()
   }
 
   deleteNode() {
-    var data = this._dataService.data;
-    this._dataService.history(data)
-
-    var collections = data.collections.filter(d => d.idx != this.idx);
-    collections.forEach((d, i) => {
-      d.idx = i;
-    })
-    data.collections = collections;
-
-    var connectomes = data.connectomes.filter(d => d.pre != this.idx && d.post != this.idx);
-    if (connectomes.length != data.connectomes.length) {
-      connectomes.forEach((d, i) => {
-        d.idx = i;
-        d.pre = d.pre > this.idx ? d.pre - 1 : d.pre;
-        d.post = d.post > this.idx ? d.post - 1 : d.post;
-      })
-      data.connectomes = connectomes;
-    }
-
+    this._dataService.deleteNode(this.idx)
     this._sketchService.update.emit()
     this._dataService.records = this._dataService.records.filter(d => d.recorder.idx != this.idx)
-    if (!this._dataService.options.edit) {
-      this._simulationService.run()
-    }
+    this.nodeChange.emit()
   }
 
   onChange() {
     // console.log('Change value in node controller')
     this._dataService.history(this._dataService.data)
-    this._simulationService.run()
+    this.nodeChange.emit()
+  }
+
+  nodeDisplay(node) {
+    var display = 'display' in node ? node.display.includes('node') : true;
+    return this._sketchService.isSelectedNode_or_all(node) && display;
+  }
+
+  paramDisplay(node, param) {
+    if (this._controllerConfigService.config.level > 0) {
+      var level = this.configModel.params.find(d => d.id == param).level;
+      var display:any = level <= this._controllerConfigService.config.level;
+    } else {
+      var display:any = 'display' in node ? node.display.includes(param) : true;
+    }
+    return display;
   }
 
 }

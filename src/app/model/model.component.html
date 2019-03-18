@@ -1,17 +1,32 @@
 <mat-sidenav-container id="model">
   <mat-sidenav role="region" mode="side" position="end" [opened]="_modelService.selectedModel">
-    <mat-tab-group>
-      <mat-tab label="Parameters">
-        <app-model-details></app-model-details>
-      </mat-tab>
-      <mat-tab label="Controller view" [disabled]="!isEnabled()">
-        <app-model-config *ngIf="_configService.selectedModel"></app-model-config>
-      </mat-tab>
-    </mat-tab-group>
+    <span *ngIf="_modelService.selectedModel">
+      <mat-toolbar style="font-size:16px" color="accent">
+        <span class="flex">
+          Model
+          <mat-checkbox *ngIf="_modelService.editing" [checked]="_modelService.enabledModel" (change)="changeModel($event)" color="primary" title="Enable model" labelPosition="before">
+            Enabled
+          </mat-checkbox>
+        </span>
+      </mat-toolbar>
+
+      <mat-tab-group mat-stretch-tabs>
+        <mat-tab label="Parameters">
+          <app-model-details [model]="_modelService.selectedModel"></app-model-details>
+        </mat-tab>
+        <mat-tab label="Controller" [disabled]="!_modelService.enabledModel">
+          <app-model-config *ngIf="_modelService.enabledModel" [model]="_modelService.config()"></app-model-config>
+        </mat-tab>
+      </mat-tab-group>
+
+    </span>
+
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <app-model-description *ngIf="_modelService.selectedModel"></app-model-description>
+    <span style="display:flex; width:100%; justify-content: center">
+      <app-model-documentation *ngIf="_modelService.selectedModel" [model]="_modelService.selectedModel"></app-model-documentation>
+    </span>
   </mat-sidenav-content>
 
 </mat-sidenav-container>

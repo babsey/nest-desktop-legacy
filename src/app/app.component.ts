@@ -1,12 +1,9 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 
 import { ChartService } from './chart/chart.service';
-import { NavigationService } from './navigation/navigation.service';
 import { ControllerService } from './controller/controller.service';
+import { NavigationService } from './navigation/navigation.service';
+import { AppConfigService } from './config/app-config/app-config.service';
 
 
 @Component({
@@ -16,22 +13,22 @@ import { ControllerService } from './controller/controller.service';
 })
 export class AppComponent implements OnInit {
   @ViewChild('content') content: any;
-  public buttonDisplay: any = '0.2';
+  public ready: boolean = false;
+  public buttonDisplay: string = '0.2';
 
   constructor(
     private _chartService: ChartService,
-    private _navigationService: NavigationService,
     private _controllerService: ControllerService,
+    private _navigationService: NavigationService,
+    public _appConfigService: AppConfigService,
   ) {
   }
 
   ngOnInit() {
-
   }
 
-  toggleNav() {
-    this.buttonDisplay = '0.2';
-    this._navigationService.options.sidenavOpened = !this._navigationService.options.sidenavOpened;
+  onReady(event) {
+    this.ready = event;
   }
 
   isOpened() {
@@ -48,7 +45,13 @@ export class AppComponent implements OnInit {
     this._chartService.resize(width, height);
   }
 
+  toggleNavigationOpened() {
+    this.buttonDisplay = '0.2';
+    this._navigationService.options.sidenavOpened = !this._navigationService.options.sidenavOpened;
+  }
 
-
+  isNavigationOpened() {
+    return this._navigationService.options.sidenavOpened;
+  }
 
 }

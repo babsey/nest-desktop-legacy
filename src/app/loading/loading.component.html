@@ -1,0 +1,152 @@
+<span class="loading">
+  <img src="./assets/img/spike_transmission_carlos.png" width="700px" style="margin:50px" />
+
+  <div style="margin:20px">
+    <pre class="quote">"Ah! my poor brain is racked and crazed,
+      My spirit and senses amazed!"</pre>
+    <div class="author">Johann Wolfgang Von Goethe (from Faust, 1808)</div>
+  </div>
+
+  <span class="left">
+    <mat-card>
+      <mat-toolbar class="mat-accent">
+        NEST Desktop
+      </mat-toolbar>
+
+      <mat-card-content>
+        <mat-list role="list" dense>
+          <mat-list-item role="listitem">
+            <span class="flex">
+              Database configuration
+              <span>
+                {{ _dbConfigService.version }}
+                <span>
+                  <fa-icon *ngIf="_dbConfigService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_dbConfigService.ready" icon="check" class="green"></fa-icon>
+                </span> </span>
+            </span>
+          </mat-list-item>
+
+          <mat-list-item role="listitem">
+            <span class="flex">
+              Application configuration
+              <span>
+                {{ _appConfigService.config.version }}
+                <span>
+                  <fa-icon *ngIf="_appConfigService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.ready" icon="check" class="green"></fa-icon>
+                </span>
+              </span>
+            </span>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <span class="flex">
+              Chart configuration
+              <span>
+                {{ _chartConfigService.config.version }}
+                <span>
+                  <fa-icon *ngIf="_chartConfigService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_chartConfigService.ready" icon="check" class="green"></fa-icon>
+                </span>
+              </span>
+            </span>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <span class="flex">
+              Controller configuration
+              <span>
+                {{ _controllerConfigService.version }}
+                <span>
+                  <fa-icon *ngIf="_controllerConfigService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_controllerConfigService.ready" icon="check" class="green"></fa-icon>
+                </span>
+              </span>
+            </span>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <span class="flex">
+              NEST models
+              <span>
+                {{ _modelService.version }}
+                <span>
+                  <fa-icon *ngIf="_modelService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_modelService.ready" icon="check" class="green"></fa-icon>
+                </span>
+              </span>
+            </span>
+          </mat-list-item>
+
+          <mat-divider [inset]="true"></mat-divider>
+
+          <mat-list-item role="listitem">
+            <span class="flex">Networks
+              <span>
+                {{ _networkService.version }}
+                <span>
+                  <fa-icon *ngIf="_networkService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_networkService.ready" icon="check" class="green"></fa-icon>
+                </span>
+              </span>
+            </span>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <span class="flex">Network protocols
+              <span>
+                {{ _networkProtocolService.version }}
+                <span>
+                  <fa-icon *ngIf="_networkProtocolService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_networkProtocolService.ready" icon="check" class="green"></fa-icon>
+                </span>
+              </span>
+            </span>
+          </mat-list-item>
+
+          <mat-divider [inset]="true"></mat-divider>
+
+          <mat-list-item role="listitem">
+            <span class="flex">
+              NEST Server
+              <span>
+                {{ _appConfigService.serverVersion }}
+                <span>
+                  <fa-icon *ngIf="_appConfigService.options.NEST.running==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.options.NEST.running==false" icon="times" class="red"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.options.NEST.running" icon="check" class="green"></fa-icon>
+                </span>
+              </span>
+            </span>
+          </mat-list-item>
+
+          <mat-list-item role="listitem">
+            <span class="flex">
+              NEST
+              <span>
+                {{ _appConfigService.nestVersion }}
+                <span>
+                  <fa-icon *ngIf="_appConfigService.options.NEST.running==undefined" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.options.NEST.running==false" icon="times" class="red"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.options.NEST.running" icon="check" class="green"></fa-icon>
+                </span>
+              </span>
+            </span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <span class="flex">
+          <span class="flex-spacer"></span>
+          <button mat-button (click)="buttonClick.emit()" [disabled]="!isReady()">
+            <span *ngIf="!isReady()">Loading</span>
+            <span *ngIf="isReady()">Start</span>
+          </button>
+        </span>
+      </mat-card-actions>
+
+    </mat-card>
+
+    <mat-card>
+      <app-config-list (configClick)="buttonClick.emit()"></app-config-list>
+    </mat-card>
+  </span>
+</span>

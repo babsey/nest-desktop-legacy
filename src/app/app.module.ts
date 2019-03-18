@@ -14,21 +14,24 @@ library.add(fas);
 // modules
 import { AppRoutingModule } from './modules/app-routing.module';
 import { ConfigModule } from './config/config.module';
-import { MainModule } from './main/main.module';
+import { HelpModule } from './help/help.module';
+import { LogModule } from './log/log.module';
 import { MaterialModule } from './modules/material.module';
+import { MccColorPickerModule } from 'material-community-components';
 import { ModelModule } from './model/model.module';
 import { NavigationModule } from './navigation/navigation.module';
-import { SimulationModule } from './simulation/simulation.module';
-import { MccColorPickerModule } from 'material-community-components';
+import { NetworkModule } from './network/network.module';
 
 
 // components
 import { AppComponent } from './app.component';
+import { LoadingComponent } from './loading/loading.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoadingComponent,
   ],
   imports: [
     // NoopAnimationsModule,
@@ -37,12 +40,13 @@ import { AppComponent } from './app.component';
     BrowserModule,
     ConfigModule,
     FontAwesomeModule,
-    MainModule,
+    HelpModule,
+    LogModule,
     MaterialModule,
     ModelModule,
     NavigationModule,
-    SimulationModule,
-        MccColorPickerModule.forRoot({
+    NetworkModule,
+    MccColorPickerModule.forRoot({
       used_colors: []
     }),
   ],

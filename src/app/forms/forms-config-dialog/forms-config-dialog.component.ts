@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-import { ConfigService } from '../../config/config.service';
+import { ModelService } from '../../model/model.service';
 
 @Component({
   selector: 'app-forms-config-dialog',
@@ -9,24 +9,28 @@ import { ConfigService } from '../../config/config.service';
   styleUrls: ['./forms-config-dialog.component.css']
 })
 export class FormsConfigDialogComponent implements OnInit {
-  public options: any;
+  public options: any = {};
+  private idx: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public _configService: ConfigService,
+    public _modelService: ModelService,
     public dialogRef: MatDialogRef<FormsConfigDialogComponent>,
   ) {
   }
 
   ngOnInit() {
-    this.options = JSON.parse(JSON.stringify(this._configService.config.nest.model[this.data.model].options[this.data.id]));
+    var params = this._modelService.config(this.data.model).params.find(param => param.id == this.data.id);
+    this.idx = this._modelService.config(this.data.model).params.indexOf(params);
+    this.options = Object.apply({}, params);
+    // this.options = params;
   }
 
   valueChanged(event) {
     var value = event.target.value;
     var ticks = value.split(',');
     ticks = ticks.map(d => parseFloat(d));
-    this.options.viewSpec.ticks = ticks;
+    this.options.inputSpec.ticks = ticks;
   }
 
   onNoClick(): void {
@@ -34,8 +38,8 @@ export class FormsConfigDialogComponent implements OnInit {
   }
 
   onSave() {
-    this._configService.config.nest.model[this.data.model].options[this.data.id] = this.options;
-    this._configService.save('nest', this._configService.config.nest);
+    this._modelService.config(this.data.model).params[this.idx] = this.options;
+    // this._modelService.save(this.options);
     this.dialogRef.close();
   }
 

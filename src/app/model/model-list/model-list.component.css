@@ -1,0 +1,19 @@
+.model {
+  color: #999999 !important;
+}
+
+.model.enabled {
+  color: black !important;
+}
+
+.model.active, .model.active:focus, .model.active:hover {
+  background-color: #3366ff;
+  color: white !important;
+}
+
+.modelMode a {
+  min-width: 32px;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 11px;
+}

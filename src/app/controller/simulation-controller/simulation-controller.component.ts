@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { DataService } from '../../services/data/data.service';
-import { ConfigService } from '../../config/config.service';
-import { SimulationService } from '../../simulation/simulation.service';
+import { ControllerConfigService } from '../../config/controller-config/controller-config.service';
+import { NetworkSimulationService } from '../../network/network-simulation/network-simulation.service';
+
 
 
 @Component({
@@ -12,19 +13,29 @@ import { SimulationService } from '../../simulation/simulation.service';
 })
 export class SimulationControllerComponent implements OnInit {
   public options: any;
+  @Output() simulationChange = new EventEmitter();
 
   constructor(
+    private _controllerConfigService: ControllerConfigService,
     public _dataService: DataService,
-    public _configService: ConfigService,
-    public _simulationService: SimulationService,
+    public _networkSimulationService: NetworkSimulationService,
   ) {
   }
 
   ngOnInit() {
   }
 
-  onChange(id, value) {
-    this._simulationService.run()
+  params() {
+    return this._controllerConfigService.config.simulation.params;
+  }
+
+  onChange() {
+    this.simulationChange.emit()
+  }
+
+  onSelectionChange(event) {
+    this._networkSimulationService.config[event.option.value] = event.option.selected;
+    this._networkSimulationService.saveConfig()
   }
 
 }

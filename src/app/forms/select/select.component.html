@@ -1,11 +1,11 @@
 <span style="display:flex; position:relative;">
   <mat-form-field class="select">
     <mat-select [placeholder]="placeholder" [(ngModel)]="selected" (selectionChange)="onSelectionChange()">
-      <mat-form-field floatLabel="never" style="width:96%; padding: 0 5px">
+      <mat-form-field *ngIf="filter" floatLabel="never" style="width:96%; padding: 0 5px" >
         <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
         <input class="search" matInput type="text" (keyup)="search($event.target.value)" autocomplete="off" placeholder="search">
       </mat-form-field>
-      <mat-option *ngFor="let el of filteredElements" [value]="el">{{ el }}</mat-option>
+      <mat-option *ngFor="let option of filteredOptions" [value]="option.value">{{ option.label || option.value }}</mat-option>
     </mat-select>
   </mat-form-field>
 

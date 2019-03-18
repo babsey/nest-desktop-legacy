@@ -1,15 +1,15 @@
-<span class="controller link-controller" [style.display]="_sketchService.isSelectedLink_or_all(link) ? '' : 'none'">
+<span class="controller link-controller" [style.display]="linkDisplay(link)">
 
-  <mat-list class="controller-subheader">
+  <mat-list class="controller-subheader" dense>
     <mat-list-item>
-      <button mat-icon-button class="button node" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.pre])" [style.border-color]="colors.pre" [style.border-style]="_sketchService.isSelectedNode(_dataService.data.collections[link.pre]) ? 'dashed' : 'solid'">{{ link.pre }}</button>
+      <button mat-icon-button class="button node" (click)="toggleSelectNode(_dataService.data.collections[link.pre])" [style.border-color]="colors.pre" [style.border-style]="_sketchService.isSelectedNode(_dataService.data.collections[link.pre]) ? 'dashed' : 'solid'">{{ link.pre + 1 }}</button>
       <span class="flex-spacer"></span>
-      <button mat-icon-button class="button" (click)="_sketchService.toggleSelectLink(link)">
+      <button mat-icon-button class="button" (click)="toggleSelectLink(link)">
         <fa-icon icon="long-arrow-alt-right" class="material-icons arrow" [style.color]="colors.weight"></fa-icon>
       </button>
       <span class="flex-spacer"></span>
       <div>
-        <button mat-icon-button class="button node" (click)="_sketchService.toggleSelectNode(_dataService.data.collections[link.post])" [style.border-color]="colors.post" [style.border-style]="_sketchService.isSelectedNode(_dataService.data.collections[link.post]) ? 'dashed' : 'solid'">{{ link.post }}</button>
+        <button mat-icon-button class="button node" (click)="toggleSelectNode(_dataService.data.collections[link.post])" [style.border-color]="colors.post" [style.border-style]="_sketchService.isSelectedNode(_dataService.data.collections[link.post]) ? 'dashed' : 'solid'">{{ link.post + 1 }}</button>
       </div>
       <span class="flex-spacer"></span>
       <mat-menu #linkMenu="matMenu" class="link-menu">
@@ -21,7 +21,7 @@
           <fa-icon icon="ban"></fa-icon>
           Disable
         </button> -->
-        <button mat-menu-item (click)="deleteLink(link.idx)">
+        <button mat-menu-item (click)="deleteLink()">
           <fa-icon icon="minus-circle"></fa-icon>
           Remove
         </button>
@@ -33,23 +33,23 @@
   </mat-list>
 
   <mat-list class="controller-menu" dense>
-    <mat-list-item [style.border-left-color]="colors.pre" [style.border-right-color]="colors.post" [style.display]="_controllerService.display(3)" >
-      <app-select placeholder="Connection rule" element_type="connection" [selected]="link.conn_spec.rule" (selectChange)="onSelectConnRule($event)"></app-select>
+    <mat-list-item [style.border-left-color]="colors.pre" [style.border-right-color]="colors.post" [style.display]="paramDisplay(link, 'connRule')" >
+      <app-select placeholder="Connection rule" [options]="connRules" [selected]="link.conn_spec.rule" (selectChange)="onSelectConnRule($event)"></app-select>
       <button mat-icon-button class="button">
         <fa-icon icon="ellipsis-v" style="display:none"></fa-icon>
       </button>
     </mat-list-item>
-    <mat-list-item *ngFor="let id of keys(slider.connection)" [style.border-left-color]="colors.pre" [style.border-right-color]="colors.post" [style.display]="_controllerService.display(2)">
-      <app-param-input view="valueSlider" [params]="link.conn_spec" [id]="id" [options]="slider.connection[id]" (paramChange)="onChange()" class="input"></app-param-input>
+    <mat-list-item *ngFor="let conn of slider.connection" [style.border-left-color]="colors.pre" [style.border-right-color]="colors.post" [style.display]="paramDisplay(link, 'connRule')">
+      <app-param-input view="valueSlider" [params]="link.conn_spec" [id]="conn.id" [options]="conn" (paramChange)="onChange()" class="input"></app-param-input>
     </mat-list-item>
-    <mat-list-item [style.border-left-color]="colors.pre" [style.border-right-color]="colors.post" [style.display]="_controllerService.display(4)" >
-      <app-select placeholder="Synapse model" element_type="synapse" [selected]="link.syn_spec.model" (selectChange)="onSelectSynModel($event)"></app-select>
+    <mat-list-item [style.border-left-color]="colors.pre" [style.border-right-color]="colors.post" [style.display]="paramDisplay(link, 'synModel')" >
+      <app-select placeholder="Synapse model" [options]="synModels" [selected]="link.syn_spec.model" (selectChange)="onSelectSynModel($event)"></app-select>
       <button mat-icon-button class="button">
         <fa-icon icon="ellipsis-v" style="display:none"></fa-icon>
       </button>
     </mat-list-item>
-    <mat-list-item *ngFor="let id of keys(slider.synapse)" [ngSwitch]="slider.synapse[id].view" [style.border-left-color]="colors.pre" [style.border-right-color]="colors.post" [style.display]="_controllerService.display(2)">
-      <app-param-input [view]="slider.synapse[id].view" [params]="link.syn_spec" [id]="id" [options]="slider.synapse[id]" (paramChange)="onChange()" class="input"></app-param-input>
+    <mat-list-item *ngFor="let syn of slider.synapse" [style.border-left-color]="colors.pre" [style.border-right-color]="colors.post" [style.display]="paramDisplay(link, 'synWeight')">
+      <app-param-input [view]="syn.input" [params]="link.syn_spec" [id]="syn.id" [options]="syn" (paramChange)="onChange()" class="input"></app-param-input>
     </mat-list-item>
   </mat-list>
   </span>

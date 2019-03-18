@@ -1,17 +1,15 @@
-<app-sketch *ngIf="viewSketch" [data]="_dataService.data" width="540" height="300"></app-sketch>
+<span *ngIf="_controllerConfigService.config.showSketch">
+  <span style="width:540px; display: block">
+    <app-sketch [data]="_dataService.data" width="540" height="200" [drawing]="true"></app-sketch>
+  </span>
+</span>
 
 <span class="no-print" id="controllerSheetButtons">
-  <button mat-icon-button (click)="onClick('simulation', 'showSlider')" [class.mat-warn]="_configService.config.app.simulation.showSlider" matTooltip="Modify parameters">
-    <fa-icon icon="sliders-h"></fa-icon>
-  </button>
   <button mat-icon-button (click)="run()" matTooltip="Run simulation">
     <fa-icon icon="play-circle"></fa-icon>
   </button>
-  <button mat-icon-button (click)="toggleNetworkSketchView()" [class.mat-warn]="viewSketch" matTooltip="Show network sketch">
+  <button mat-icon-button (click)="toggleSketchShow()" [class.mat-primary]="_controllerConfigService.config.showSketch" matTooltip="Show network sketch">
     <fa-icon icon="share-alt"></fa-icon>
-  </button>
-  <button mat-icon-button (click)="edit()" [class.mat-warn]="_controllerService.options.edit" matTooltip="Edit network">
-    <fa-icon icon="pencil-alt"></fa-icon>
   </button>
   <button mat-icon-button (click)="undo()" [disabled]="_dataService.undoStack.length<=1" [matBadgeHidden]="_dataService.undoStack.length<=1" [matBadge]="_dataService.undoStack.length-1" matBadgeColor="accent" matBadgePosition="below after" matTooltip="Undo network configuration">
     <fa-icon icon="undo-alt"></fa-icon>
@@ -19,44 +17,12 @@
   <button mat-icon-button (click)="redo()" [disabled]="_dataService.redoStack.length==0" [matBadgeHidden]="_dataService.redoStack.length==0" [matBadge]="_dataService.redoStack.length" matBadgeColor="accent" matBadgePosition="below after" matTooltip="Redo network configuration">
     <fa-icon icon="redo-alt"></fa-icon>
   </button>
-  <button mat-icon-button (click)="delete()" matTooltip="Clear network configuration" matTooltipPosition="above">
-    <fa-icon icon="trash-alt"></fa-icon>
+  <button mat-icon-button (click)="delete()" [disabled]="!this._sketchService.selected.node && !this._sketchService.selected.link" matTooltip="Delete selected" matTooltipPosition="above">
+    <fa-icon icon="eraser"></fa-icon>
   </button>
   <div style="flex-grow:1"></div>
-  <mat-menu #configMenu="matMenu">
-    <button mat-menu-item (click)="onClick('simulation', 'autoSimulation')">
-      <div class="flexLine">
-        <span>Auto simulation</span>
-        <fa-icon icon="check" *ngIf="_configService.config.app.simulation.autoSimulation"></fa-icon>
-      </div>
-    </button>
-    <button mat-menu-item (click)="onClick('simulation', 'autoProtocol')">
-      <div class="flexLine">
-        <span>Auto protocol</span>
-        <fa-icon icon="check" *ngIf="_configService.config.app.simulation.autoProtocol"></fa-icon>
-      </div>
-    </button>
-    <button mat-menu-item (click)="onClick('simulation', 'randomSeed')">
-      <div class="flexLine">
-        <span>Randomize seed</span>
-        <fa-icon icon="check" *ngIf="_configService.config.app.simulation.randomSeed"></fa-icon>
-      </div>
-    </button>
-    <button mat-menu-item (click)="onClick('chart', 'color')">
-      <div class="flexLine">
-        <span>Colorify chart</span>
-        <fa-icon icon="check" *ngIf="_configService.config.app.chart.color"></fa-icon>
-      </div>
-    </button>
-    <button mat-menu-item (click)="_configService.config.app.chart.autoscale=!_configService.config.app.chart.autoscale">
-      <div class="flexLine">
-        <span>Autoscale chart</span>
-        <fa-icon icon="check" *ngIf="onClick('chart', 'autoscale')"></fa-icon>
-      </div>
-    </button>
-  </mat-menu>
-  <button mat-icon-button  [matMenuTriggerFor]="configMenu">
-    <fa-icon icon="ellipsis-v"></fa-icon>
+  <button mat-icon-button (click)="clear()" matTooltip="Clear network configuration" matTooltipPosition="above">
+    <fa-icon icon="trash-alt"></fa-icon>
   </button>
   <button mat-icon-button (click)="close()">
     <fa-icon icon="times"></fa-icon>

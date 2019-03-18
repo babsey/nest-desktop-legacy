@@ -1,0 +1,38 @@
+::ng-deep .network.active, .network.active:focus, .network.active:hover {
+  background-color: #3366ff;
+  color: white !important;
+}
+
+/* .active fa-icon {
+  color: #3366ff;
+} */
+
+::ng-deep .network .button {
+  display: none;
+  height: 38px;
+  line-height: 38px;
+  width: 38px;
+}
+
+.network .timesince {
+  font-size: 10px;
+}
+
+::ng-deep .network .mat-list-item-content:hover .timesince {
+  display: none;
+}
+
+::ng-deep .network .mat-list-item-content:hover .button {
+  display: inline;
+}
+
+::ng-deep .network .button fa-icon {
+  font-size: 12px;
+}
+
+.networkMode a {
+  min-width: 32px;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 11px;
+}

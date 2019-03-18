@@ -1,11 +1,5 @@
-import {
-  Component,
-  OnInit,
-  OnChanges,
-  Input,
-  ElementRef,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ElementRef, OnDestroy } from '@angular/core';
+
 import * as d3 from 'd3';
 
 import { ColorService } from '../../services/color/color.service';
@@ -19,16 +13,16 @@ import { SketchService } from '../sketch.service';
   styleUrls: ['./node-sketch.component.css'],
 })
 export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() data: any;
-  @Input() width: any;
-  @Input() height: any;
+  @Input() data: any = {};
+  @Input() width: number;
+  @Input() height: number;
   private host: d3.Selection;
   private selector: d3.Selection;
-  private subscription: any;
+  private subscription$: any;
 
   constructor(
     private _colorService: ColorService,
-    private _controllerService: ControllerService,
+    public _controllerService: ControllerService,
     private _dataService: DataService,
     private _sketchService: SketchService,
     private elementRef: ElementRef,
@@ -39,7 +33,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     // console.log('Init node sketch')
-    this.subscription = this._sketchService.update.subscribe(() => {
+    this.subscription$ = this._sketchService.update.subscribe(() => {
       // console.log('Node sketch update emitted')
       this.selector.selectAll(".node").remove()
       this.update()
@@ -48,7 +42,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     // console.log('Destroy node sketch')
-    this.subscription.unsubscribe()
+    this.subscription$.unsubscribe()
   }
 
   ngOnChanges() {
@@ -61,7 +55,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
     // console.log('Update node sketch')
     if (this.data == undefined) return
     if (Object.keys(this.data).length === 0 && this.data.constructor === Object) return
-    let edit = this._controllerService.options.edit;
+    let drawing = this._sketchService.options.drawing;
     let r = this._sketchService.options.node.radius
 
     var nodes = this.selector.selectAll("g.node").data(this.data.collections); // UPDATE
@@ -70,43 +64,51 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
 
     var nodesEnter = nodes.enter().append("svg:g") // ENTER
       .attr('class', 'node')
+      .on('dblclick', d => {
+        if (d.element_type == 'neuron') {
+          this._dataService.history(this.data)
+          var checkConnectomes = this.data.connectomes.filter(connectome => (connectome.pre == d.idx && connectome.post == d.idx));
+          if (checkConnectomes.length > 0) {
+            this._dataService.deleteLink(checkConnectomes[0].idx)
+          } else {
+            var newLink = this._dataService.newLink();
+            newLink['idx'] = this.data.connectomes.length;
+            newLink['pre'] = d.idx;
+            newLink['post'] = d.idx;
+            this.data.connectomes.push(newLink)
+          }
+          this._sketchService.update.emit()
+        }
+      })
       .on('click', d => {
+        this._controllerService.selected = null;
         this.selector.selectAll('.select').remove();
         var source = this._sketchService.events.sourceNode;
+        if (source == null || source != this._sketchService.selected.node) {
+          this._sketchService.toggleSelectNode(d);
+        }
         if (source) {
+          if (source.idx == d.idx) return
           if (d.element_type != 'stimulator') {
             var checkConnectomes = this.data.connectomes.filter(connectome => (connectome.pre == source.idx && connectome.post == d.idx));
             if (checkConnectomes.length == 0) {
               this._dataService.history(this.data)
-              this._dataService.records = [];
-              var idx = this.data.connectomes.length
-              var new_connectome = {
-                idx: idx,
-                pre: source.idx,
-                post: d.idx,
-                conn_spec: {
-                  rule: 'all_to_all',
-                },
-                syn_spec: {
-                  model: 'static_synapse',
-                  weight: 1.0,
-                },
-              };
-              this.data.connectomes.push(new_connectome)
+              var newLink = this._dataService.newLink();
+              newLink['idx'] = this.data.connectomes.length;
+              newLink['pre'] = source.idx;
+              newLink['post'] = d.idx;
+              this.data.connectomes.push(newLink)
             }
           }
-          this._sketchService.events.sourceNode = null;
-          this._sketchService.selected.node = null;
-          this._sketchService.update.emit()
-        } else if (d.element_type != 'recorder') {
-          this._sketchService.events.sourceNode = d;
-          this._sketchService.toggleSelectNode(d)
-        } else if (!edit) {
-          this._sketchService.toggleSelectNode(d)
         }
+        this._sketchService.events.sourceNode = null;
+        if (drawing && d.element_type != 'recorder') {
+          this._sketchService.events.sourceNode = d;
+        }
+        this._sketchService.update.emit()
       }).call(d3.drag()
         .on('drag', d => {
-          if (edit) return
+          if (drawing) return
           d.sketch.x = d3.event.x;
           d.sketch.y = d3.event.y;
           this._sketchService.update.emit()
@@ -114,11 +116,11 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
       )
 
     nodesEnter.append('svg:rect')
-      .attr('width', 2*r)
-      .attr('height', 2*r)
+      .attr('width', 2 * r)
+      .attr('height', 2 * r)
       .attr('x', -r)
       .attr('y', -r)
-      .attr('rx', d => d.element_type == 'recorder' ? r/2 : r)
+      .attr('rx', d => d.element_type == 'recorder' ? r / 2 : r)
       .attr('ry', d => d.element_type == 'stimulator' ? 0 : r)
       .style('stroke', d => this._colorService.node(d))
       .style('stroke-dasharray', d => this._sketchService.isSelectedNode(d) ? '9' : '');
@@ -129,11 +131,11 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
 
     nodesEnter
       .on('mouseover', function() {
-          d3.select(this).classed('active', true)
-        })
+        d3.select(this).classed('active', true)
+      })
       .on('mouseout', function() {
-          d3.select(this).classed('active', false)
-        })
+        d3.select(this).classed('active', false)
+      })
 
     nodes.merge(nodesEnter) // ENTER + UPDATE
       .attr('transform', d => 'translate(' + d.sketch.x + ',' + d.sketch.y + ')');
@@ -146,9 +148,9 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
       .attr('class', 'label')
       .attr('dx', 0)
       .attr('dy', '.4em')
-      .text(d => d.idx);
+      .text(d => d.idx + 1);
 
-    if (edit) {
+    if (drawing) {
       nodes.on('.drag', null)
     } else {
       this._sketchService.events.sourceNode = null;
@@ -157,7 +159,7 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
           d3.select(this).classed('active', true)
         })
         .on('drag', d => {
-          if (edit) return
+          if (drawing) return
           if (d3.event.x < r || d3.event.x > this.width - r) return
           if (d3.event.y < r || d3.event.y > this.height - r) return
           d.sketch.x = d3.event.x;
