@@ -49,4 +49,10 @@ sudo service nginx restart
 ```
 Open a web browser with this link [localhost](http://localhost).
 
+### FAQ
+
+#### Troubleshootings
+
+It is not able to start. With minor version bumping (1.x to 1.y) some configurations or database might not be compatible. Sometimes it helps when you clear the browsering data.
+
 ### License [MIT](LICENSE)
