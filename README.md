@@ -2,7 +2,7 @@
 
 **An interactive desktop application for [NEST simulator](http://www.nest-simulator.org/)**
 
-![nest logo](app/img/nest.svg)
+![nest logo](app/assets/img/nest.svg)
 
 ### Abstract
 
