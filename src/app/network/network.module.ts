@@ -5,10 +5,11 @@ import { MdePopoverModule } from '@material-extended/mde';
 import { NgModule } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LogModule } from '../log/log.module';
 import { MaterialModule } from '../modules/material.module';
+import { NetworkSimulationModule } from './network-simulation/network-simulation.module';
 import { SketchModule } from '../sketch/sketch.module';
 import { ViewModule } from '../view/view.module';
-import { NetworkSimulationModule } from './network-simulation/network-simulation.module';
 
 import { NetworkComponent } from './network.component';
 import { NetworkDetailsComponent } from './network-details/network-details.component';
@@ -35,6 +36,7 @@ import { NetworkScriptComponent } from './network-script/network-script.componen
     AppRoutingModule,
     CommonModule,
     FontAwesomeModule,
+    LogModule,
     MaterialModule,
     MdePopoverModule,
     NetworkSimulationModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { MatSort, MatTableDataSource } from '@angular/material';
 
 import * as d3 from 'd3';
@@ -27,15 +27,19 @@ export interface StatElement {
 })
 export class TraceChartComponent implements OnInit, OnDestroy {
   @Input() idx: number;
+  @Input() height: number = 0;
+  @Input() width: number = 0;
+  @ViewChild('controller') controller: any;
+  public right: number = 0;
   private record: any;
-  private subscription$: any;
+  private subscriptionInit: any;
+  private subscriptionRescale: any;
   public chart: string = 'line';
   public color: string;
   public data: any;
-  public height: number;
   public neurons: any[];
   public opacity: number = 1;
-  public overlap: number = 1;
+  public overlap: number = 0.5;
   public record_from: string = 'V_m';
   public recorder: any;
   public sender: any;
@@ -50,9 +54,7 @@ export class TraceChartComponent implements OnInit, OnDestroy {
     "label": "Neuron",
     "value": 0,
     "view": "tickSlider",
-    "inputSpec": {
-      "ticks": []
-    }
+    "ticks": []
   };
 
   // @ViewChild(MatSort) sort: MatSort;
@@ -68,36 +70,40 @@ export class TraceChartComponent implements OnInit, OnDestroy {
     private _mathService: MathService,
     public _controllerConfigService: ControllerConfigService,
     public _sketchService: SketchService,
+    private elementRef: ElementRef,
   ) {
   }
 
   ngOnInit() {
     this._logService.log('Init trace chart')
-    this.subscription$ = this._chartService.init.subscribe(() => this.update())
-    this.yScale = d3.scaleLinear();
-    this.update()
+    this.subscriptionInit = this._chartService.init.subscribe(() => this.init())
+    this.subscriptionRescale = this._chartService.rescale.subscribe(() => this.rescale())
+    this.init()
   }
 
   ngOnDestroy() {
     this._logService.log('Destroy trace chart')
-    this.subscription$.unsubscribe()
+    this.subscriptionInit.unsubscribe()
+    this.subscriptionRescale.unsubscribe()
   }
 
-  update() {
+  init() {
     this.data = [];
     if (this._dataService.records.length == 0) return
     this._logService.log('Update trace chart')
 
+    this.rescale()
+
     this.record = this._dataService.records[this.idx];
     this.recorder = this._dataService.data.collections[this.record.recorder.idx];
-    if (!(['voltmeter', 'multimeter'].includes(this.recorder.model))) return
+    if (!(['voltmeter', 'multimeter'].includes(this.record.recorder.model))) return
     if ('record_from' in this.recorder && !this.recorder.record_from.includes('V_m')) {
       this.record_from = this.recorder.record_from[0];
     }
 
     this.neurons = this._dataService.data.connectomes
-      .filter(d => d.post == this.recorder.idx)
-      .map(d => this._dataService.data.collections[d.pre]);
+      .filter(d => d.pre == this.recorder.idx)
+      .map(d => this._dataService.data.collections[d.post]);
     this.color = this._colorService.node(this.recorder);
 
     if (this._chartConfigService.config.autoColor) {
@@ -113,7 +119,7 @@ export class TraceChartComponent implements OnInit, OnDestroy {
     this.senders = events['senders'].filter(this._mathService.onlyUnique);
     this.sender = this.senders[0];
     this.senderConfig.value = this.senders[0];
-    this.senderConfig.inputSpec.ticks = this.senders;
+    this.senderConfig.ticks = this.senders;
 
     var data = this.senders.map(() => { return [] });
     var dataStats = [];
@@ -142,17 +148,30 @@ export class TraceChartComponent implements OnInit, OnDestroy {
       })
     })
     this.data = data;
+    var senders = data.map(d => d._meta.sender);
     this.dataStats.data = dataStats;
 
-    this.xDomain = d3.extent(events['times']);
+    this.xDomain = [0, this._dataService.data.kernel.time || 1000.]
     this.yDomain = d3.extent(events[this.record_from]);
 
     this.xLabel = 'Time [ms]';
     let yAxis = this._controllerConfigService.config.label[this.record_from];
     this.yLabel = yAxis.label + (yAxis.unit ? ' [' + yAxis.unit + ']' : '');
 
-    this.height = this._chartService.height();
+    this.yScale = d3.scaleLinear();
   }
+
+  rescale() {
+    this.rescaleX()
+  }
+
+  rescaleX() {
+    let margin = this._chartService.g;
+    let width = this.width - margin.left - margin.right;
+    // this.right = this._chartService.sidenavOpened ? 320 : 0;
+    this._chartService.xScale.range([0, width - this.right])
+  }
+
 
   selectAll() {
     this.neurons.forEach(neuron => {

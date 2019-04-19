@@ -1,7 +1,7 @@
 {
   "id": "ac_generator",
   "element_type": "stimulator",
-  "label": "Alternating current (AC)",
+  "label": "alternating current (AC)",
   "params": [{
       "id": "amplitude",
       "label": "Amplitude of sine current",
@@ -9,76 +9,64 @@
       "unit": "pA",
       "value": 0,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 1000,
-        "min": 0,
-        "step": 1
-      }
+      "max": 1000,
+      "min": 0,
+      "step": 1
     },
     {
       "id": "frequency",
-      "label": "Frequency",
+      "label": "frequency",
       "level": 1,
       "unit": "Hz",
       "value": 0,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 100,
-        "min": 0,
-        "step": 1
-      }
+      "max": 100,
+      "min": 0,
+      "step": 1
     },
     {
       "id": "offset",
-      "label": "Constant amplitude offset",
+      "label": "constant amplitude offset",
       "level": 3,
       "unit": "pA",
       "value": 0,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 1000,
-        "min": 0,
-        "step": 1
-      }
+      "max": 1000,
+      "min": 0,
+      "step": 1
     },
     {
       "id": "phase",
-      "label": "Phase of sine current",
+      "label": "phase of sine current",
       "level": 3,
       "unit": "deg",
       "value": 0,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 360,
-        "min": 0,
-        "step": 1
-      }
+      "max": 360,
+      "min": 0,
+      "step": 1
     },
     {
       "id": "start",
-      "label": "Start time",
+      "label": "start time",
       "level": 2,
       "unit": "ms",
       "value": 0,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 1000,
-        "min": 0,
-        "step": 1
-      }
+      "max": 1000,
+      "min": 0,
+      "step": 1
     },
     {
       "id": "stop",
-      "label": "Stop time",
+      "label": "stop time",
       "level": 2,
       "unit": "ms",
       "value": 1000,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 1000,
-        "min": 0,
-        "step": 1
-      }
+      "max": 1000,
+      "min": 0,
+      "step": 1
     }
   ]
 }

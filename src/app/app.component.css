@@ -2,14 +2,6 @@
   height: 100vh;
 }
 
-#container .mat-sidenav {
-  width: 321px;
-}
-
-app-navigation {
-  width: 100vw;
-}
-
 router-outlet {
   height: 100%;
 }
@@ -26,10 +18,12 @@ router-outlet {
   overflow: hidden;
 }
 
-::ng-deep .mat-drawer {
-  background-color: #fafafa !important;
-  border-right: none !important;
-  border-left: none !important;
+::ng-deep mat-toolbar {
+  background-color: white !important;
+}
+
+::ng-deep mat-sidenav-content {
+  background-color: white !important;
 }
 
 ::ng-deep a[mat-list-item].active {
@@ -37,12 +31,23 @@ router-outlet {
 }
 
 ::ng-deep .nodes .mat-list-item-content, ::ng-deep .links .mat-list-item-content {
-  padding: 0 8px !important;
+  padding: 0 10px !important;
+}
+
+::ng-deep input {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .buttonLeft {
-  left: -28px;
-  padding-left: 20px;
+  left: -20px;
+  padding-left: 15px;
   position: absolute;
   z-index: 1000;
+  height: 40px;
+  width: 40px;
+  line-height: 40px !important;
+}
+
+::ng-deep .buttonLeft .mat-button-wrapper {
+  padding: 0 !important;
 }

@@ -14,7 +14,7 @@ export class ControllerConfigService {
     bottomSheetOpened: true,
     showSlider: false,
     showSketch: true,
-    version: '1.2.0',
+    version: '1.3.0',
   };
   public ready: boolean;
   public version: string;

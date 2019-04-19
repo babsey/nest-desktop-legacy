@@ -1,9 +1,9 @@
 <div style="position:relative">
   <svg class="dataChart"
-    [attr.height]="height - _chartService.g.top - _chartService.g.bottom"
-    [attr.width]="width"
-    [style.left]="_chartService.g.left + 'px'"
-    [style.top]="_chartService.g.top + 'px'"
+    [attr.height]="height - margin.top - margin.bottom"
+    [attr.width]="width - margin.left - margin.right"
+    [style.left]="margin.left + 'px'"
+    [style.top]="margin.top + 'px'"
     >
     <svg:g class="bars">
       <svg:g class="bar" *ngFor="let d of data" [attr.transform]="transform(d)">
@@ -23,10 +23,11 @@
   <app-coordinate-axes
     (change)="onAxesChange($event)"
     [height]="height"
+    [margin]="margin"
+    [width]="width"
     [xAxis]="xAxis"
     [xDomain]="xDomain"
     [xLabel]="xLabel"
-    [xScale]="_chartService.xScale"
     [yAutoscale]="yAutoscale"
     [yAxis]="yAxis"
     [yDomain]="yDomain"

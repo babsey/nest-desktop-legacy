@@ -3,50 +3,59 @@
   "name": "Spike trains",
   "group": "nest-desktop",
   "user": "nest-desktop",
-  "version": "1.0",
+  "version": "1.3.0",
   "description": "It contains a minimal configuration of the network model. The simulation shows spike activities of a set of 100 neurons.",
-  "simulation": {
-    "time": 1000.0
-  },
   "kernel": {
     "resolution": 0.1
+  },
+  "models": {
+    "stimulator-0": {
+      "existing": "poisson_generator",
+      "params": {
+        "rate": 6500.0
+      }
+    },
+    "neuron-1": {
+      "existing": "iaf_psc_alpha",
+      "params": {
+        "V_m": -70.0,
+        "E_L": -70.0,
+        "I_e": 0.0,
+        "C_m": 250.0,
+        "tau_m": 10.0,
+        "V_th": -55.0,
+        "V_reset": -70.0,
+        "t_ref": 2.0,
+        "tau_syn_ex": 2.0,
+        "tau_syn_in": 2.0
+      }
+    },
+    "recorder-2": {
+      "existing": "spike_detector",
+      "params": {}
+    }
   },
   "collections": [{
     "idx": 0,
     "element_type": "stimulator",
-    "model": "poisson_generator",
+    "model": "stimulator-0",
     "sketch": {
       "x": 50,
       "y": 50
-    },
-    "params": {
-      "rate": 6500.0
     }
   }, {
     "idx": 1,
     "element_type": "neuron",
-    "model": "iaf_psc_alpha",
+    "model": "neuron-1",
+    "n": 100,
     "sketch": {
       "x": 200,
       "y": 100
-    },
-    "n": 100,
-    "params": {
-      "V_m": -70.0,
-      "E_L": -70.0,
-      "I_e": 0.0,
-      "C_m": 250.0,
-      "tau_m": 10.0,
-      "V_th": -55.0,
-      "V_reset": -70.0,
-      "t_ref": 2.0,
-      "tau_syn_ex": 2.0,
-      "tau_syn_in": 2.0
     }
   }, {
     "idx": 2,
     "element_type": "recorder",
-    "model": "spike_detector",
+    "model": "recorder-2",
     "sketch": {
       "x": 350,
       "y": 50
@@ -63,5 +72,8 @@
     "idx": 1,
     "pre": 1,
     "post": 2
-  }]
+  }],
+  "simulation": {
+    "time": 1000.0
+  }
 }

@@ -11,12 +11,9 @@ import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-
   styleUrls: ['./value-input.component.css']
 })
 export class ValueInputComponent implements OnInit {
-  @Input() model: any;
-  @Input() id: any;
   @Input() value: any;
   @Input() options: any = {};
   @Output() valueChange = new EventEmitter;
-
 
   constructor(
     private dialog: MatDialog,
@@ -35,17 +32,6 @@ export class ValueInputComponent implements OnInit {
   setDefaultValue() {
     this.value = Number(this.options.value);
     this.valueChange.emit(this.value)
-  }
-
-  openConfigDialog() {
-    if (this.id && this.model) {
-      this.dialog.open(FormsConfigDialogComponent, {
-        data: {
-          id: this.id,
-          model: this.model,
-        }
-      });
-    }
   }
 
 }

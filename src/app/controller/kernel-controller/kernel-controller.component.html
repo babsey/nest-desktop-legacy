@@ -4,7 +4,7 @@
       Kernel
     </mat-list-item>
     <mat-list-item *ngFor="let param of params()">
-      <app-param-input view="tickSlider" class="slider" [params]="_dataService.data.kernel" [id]="param.id" [options]="param" (paramChange)="onChange()"></app-param-input>
+      <app-ticks-slider class="slider" [id]="param.id" [value]="_dataService.data.kernel[param.id] || param.value" [options]="param" (valueChange)="onChange(param.id, $event)"></app-ticks-slider>
     </mat-list-item>
   </mat-list>
 </span>

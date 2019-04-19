@@ -17,12 +17,14 @@ import { SketchService } from '../../sketch/sketch.service';
   styleUrls: ['./spike-chart.component.css'],
 })
 export class SpikeChartComponent implements OnInit, OnDestroy {
+  @Input() height: number = 0;
   @Input() idx: number;
+  @Input() width: number = 0;
   private records: any;
-  private subscription$: any;
+  private subscriptionInit: any;
+  private subscriptionRescale: any;
   public color: string;
   public data: any;
-  public height: number;
   public nbins: number;
   public neurons: any[];
   public opacity: number = 1;
@@ -30,11 +32,13 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
   public overlap: number = 1;
   public psth: any;
   public recorder: any;
+  public right: number = 0;
   public scatter: any;
   public subchart: string = 'none';
-  public xAxis: d3.axisBottom;
   public xDomain: number[];
+  public xScale: d3.scaleLinear;
   public yDomain: number[];
+  public yScale: d3.scaleLinear;
 
   public displayedColumns: string[] = ['sender', 'rate', 'mean_isi', 'std_isi'];
   public dataStats = new MatTableDataSource();
@@ -50,20 +54,24 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
   ) {
     // console.log('Construct spike chart')
     this.nbins = 100;
+    this.xScale = this._chartService.xScale;
   }
 
   ngOnInit() {
     this._logService.log('Init spike chart')
-    this.subscription$ = this._chartService.init.subscribe(() => this.update())
-    this.update()
+    this.subscriptionInit = this._chartService.init.subscribe(() => this.init())
+    this.subscriptionRescale = this._chartService.rescale.subscribe(() => this.rescale())
+    this.yScale = d3.scaleLinear()
+    this.init()
   }
 
   ngOnDestroy() {
     this._logService.log('Destroy spike chart')
-    this.subscription$.unsubscribe()
+    this.subscriptionInit.unsubscribe()
+    this.subscriptionRescale.unsubscribe()
   }
 
-  update() {
+  init() {
     this.data = [];
     if (this._dataService.records.length == 0) return
     this._logService.log('Update spike chart')
@@ -79,7 +87,7 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
       this.selectAll()
     }
 
-    if (this.recorder.model != 'spike_detector') return
+    if (this.records.recorder.model != 'spike_detector') return
     var events = this.records.events;
     if (!('times' in events)) return
 
@@ -117,7 +125,7 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
 
     var ISIPooled = this.neurons.map(neuron =>
       d3.merge(
-        neuron.global_ids.map(global_id =>  {
+        neuron.global_ids.map(global_id => {
           return senders.includes(global_id) ? ISI[senders.indexOf(global_id)] : [];
         })
       )
@@ -142,9 +150,12 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
     scatterOptions['senders'] = senders;
     scatterOptions['neuron2node'] = neuron2node;
     scatterOptions['node_idx'] = this.neurons.map(d => d.idx);
+
     this.xDomain = [0, this._dataService.data.kernel.time || 1000.];
+    this.xScale.domain(this.xDomain);
     let yDomain = d3.extent(d3.merge(global_ids_all));
-    this.yDomain = [yDomain[0] - .5, yDomain[1] + .5];
+    this.yDomain = [yDomain[1] + .5, yDomain[0] - .5]
+    this.yScale.domain(this.yDomain);
 
     this.scatter = {
       options: scatterOptions,
@@ -156,13 +167,24 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
       overlap: 0.5,
     };
 
+    this.rescale()
+  }
+
+  rescale() {
+    this.rescaleX()
     this.rescaleY()
-    this.height = this._chartService.height();
+  }
+
+  rescaleX() {
+    let margin = this._chartService.g;
+    let width = this.width - margin.left - margin.right;
+    // this.right = this._chartService.sidenavOpened ? 320 : 0;
+    this.xScale.range([0, width - this.right]);
   }
 
   rescaleY() {
     var margin = this._chartService.g;
-    var height = this._chartService.height();
+    var height = this.height - this._chartService.top;
     this.scatter.height = height * (this.subchart == 'none' ? 1. : .7);
     this.psth.height = height * (this.subchart == 'none' ? 1. : .3);
     this.scatter.yScale = d3.scaleLinear().range([this.scatter.height - margin.top - margin.bottom, 0]);
@@ -198,4 +220,5 @@ export class SpikeChartComponent implements OnInit, OnDestroy {
       event.option.selected ? this.selectAll() : this.selectNone()
     }
   }
+
 }

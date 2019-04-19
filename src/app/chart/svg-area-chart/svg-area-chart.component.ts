@@ -19,7 +19,7 @@ export class SVGAreaChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() yDomain: number[];
   @Input() yLabel: string = '';
   @Input() yScale: d3.scaleLinear;
-  private subscription$: any;
+  private subscription: any;
   public width: number;
   public xAxis: d3.axisBottom;
   public yAutoscale: boolean = true;
@@ -32,12 +32,12 @@ export class SVGAreaChartComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     // console.log('Init SVG area chart')
-    this.subscription$ = this._chartService.update.subscribe(() => this.update())
+    this.subscription = this._chartService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy SVG area chart')
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   ngOnChanges() {

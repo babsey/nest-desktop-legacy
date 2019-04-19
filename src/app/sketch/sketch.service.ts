@@ -2,7 +2,6 @@ import {
   Injectable,
   EventEmitter
 } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
 
 import * as d3 from 'd3';
 
@@ -19,7 +18,7 @@ export class SketchService {
     width: 0,
     height: 0,
     node: {
-      radius: 16,
+      radius: 20,
     },
     link: {
       xRotation: 0,
@@ -34,13 +33,11 @@ export class SketchService {
     node: null,
     link: null,
   }
-  private snackBarRef: any;
 
   constructor(
     private _colorService: ColorService,
     private _modelService: ModelService,
     private _dataService: DataService,
-    private snackBar: MatSnackBar,
   ) {
     this.update = new EventEmitter();
   }
@@ -49,14 +46,14 @@ export class SketchService {
     this.options.drawing = (mode != null) ? mode : !this.options.drawing;
     this.resetMouseVars()
     if (this.options.drawing) {
-      console.log('Clear records')
       this._dataService.records = [];
     }
     this.update.emit()
   }
 
-  label(model) {
-    return this._modelService.models[model].label;
+  label(models, model) {
+    var existingModel = models[model].existing;
+    return this._modelService.models[existingModel].label;
   }
 
   save() {
@@ -93,7 +90,7 @@ export class SketchService {
     return false
   }
 
-  toggleSelectNode(node) {
+  selectNode(node) {
     if (this.selected.node == node) {
       this.selected.node = null;
     } else {
@@ -103,7 +100,7 @@ export class SketchService {
     this.update.emit()
   }
 
-  toggleSelectLink(link) {
+  selectLink(link) {
     if (this.selected.link == link) {
       this.selected.link = null;
     } else {

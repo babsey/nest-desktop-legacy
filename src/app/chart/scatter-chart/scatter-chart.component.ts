@@ -11,16 +11,18 @@ import { ChartService } from '../chart.service';
 })
 export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data: any;
-  @Input() height: number;
+  @Input() height: number = 0;
+  @Input() margin: any = { top: 0, right: 0, bottom: 0, left: 0 };
   @Input() options: any;
-  @Input() xDomain: number[];
+  @Input() width: number = 0;
+  @Input() xDomain: number[] = [0,1];
   @Input() xLabel: string = '';
   @Input() xScale: d3.scaleLinear;
-  @Input() yDomain: number[];
+  @Input() yDomain: number[] = [0,1];
   @Input() yLabel: string = '';
   @Input() yScale: d3.scaleLinear;
   private selector: d3.Selection;
-  private subscription$: any;
+  private subscription: any;
   public xAxis: d3.axisBottom;
   public yAutoscale: boolean = true;
   public yAxis: d3.axisLeft;
@@ -30,32 +32,32 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
     private elementRef: ElementRef,
   ) {
     this.selector = d3.select(this.elementRef.nativeElement);
+    this.xScale = this.xScale || this._chartService.xScale;
   }
 
   ngOnInit() {
     // console.log('Init scatter chart')
-    this.subscription$ = this._chartService.update.subscribe(() => this.update())
+    this.subscription = this._chartService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy scatter chart')
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   ngOnChanges() {
     // console.log('Change scatter chart')
-    let margin = this._chartService.g;
-    let height = (this.height - margin.top - margin.bottom);
-    this.xAxis = d3.axisBottom(this.xScale)
-      .tickSize(-height);
-    this.yAxis = d3.axisLeft(this.yScale)
-      .tickSize(-this.xScale.range()[1]);
-
     this.update()
   }
 
   update() {
     // console.log('Update scatter chart')
+
+    let height = (this.height - this.margin.top - this.margin.bottom);
+    let width = (this.width - this.margin.left - this.margin.right);
+
+    this.xAxis = d3.axisBottom(this.xScale).tickSize(-height);
+    this.yAxis = d3.axisLeft(this.yScale).tickSize(-width);
 
     this.yAutoscale = this._chartService.yAutoscale || this.yAutoscale;
     if (this.yAutoscale) {
@@ -65,10 +67,8 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
     this.xAxis.scale(this.xScale).ticks(5);
     this.yAxis.scale(this.yScale).ticks(3);
 
-    let width = this.xScale.range()[1]
-    let height = this.yScale.range()[0];
-    var yDomain = this.yScale.domain();
-    var dy = height / (yDomain[1] - yDomain[0]) - 2;
+    let yDomain = this.yScale.domain()
+    var dy = height / Math.abs(yDomain[1] - yDomain[0]) - 2;
 
     var canvas = this.selector.select('.dots')
     .attr('width', width)

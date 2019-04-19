@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 
 import { AppFormsModule } from '../forms/forms.module';
+import { AppNodeModule } from '../node/node.module';
+import { AppPipesModule } from '../pipes/pipes.module';
 import { MaterialModule } from '../modules/material.module';
 import { SketchModule } from '../sketch/sketch.module';
 
@@ -19,16 +22,6 @@ import { MccColorPickerModule } from 'material-community-components';
 
 
 @NgModule({
-  imports: [
-    AppFormsModule,
-    CommonModule,
-    FontAwesomeModule,
-    MaterialModule,
-    SketchModule,
-    MccColorPickerModule.forRoot({
-      used_colors: []
-    }),
-  ],
   declarations: [
     ControllerComponent,
     ControllerSheetComponent,
@@ -44,6 +37,19 @@ import { MccColorPickerModule } from 'material-community-components';
     LinkControllerComponent,
     NodeControllerComponent,
     SimulationControllerComponent,
+  ],
+  imports: [
+    AppFormsModule,
+    CommonModule,
+    FontAwesomeModule,
+    FormsModule,
+    MaterialModule,
+    AppNodeModule,
+    AppPipesModule,
+    SketchModule,
+    MccColorPickerModule.forRoot({
+      used_colors: []
+    }),
   ],
   providers: [
     ControllerService,

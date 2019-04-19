@@ -1,0 +1,3 @@
+<ng-container *ngFor="let node of data.collections">
+  <svg:g app-node [node]="node" class="nodeMask" [attr.transform]="'translate('+ node.sketch.x + ',' + node.sketch.y + ')'"></svg:g>
+</ng-container>

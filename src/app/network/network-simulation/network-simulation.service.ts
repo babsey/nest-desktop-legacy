@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
 
@@ -17,12 +17,14 @@ var STORAGE_NAME = 'simulation-config';
 })
 export class NetworkSimulationService {
   private snackBarRef: any;
-  public sidenavListOpened: boolean = false;
   public config: Object = {
     autoSimulation: true,
     autoProtocol: false,
     autoRandomSeed: false,
   }
+  public resize = new EventEmitter();
+  public sidenavListOpened: boolean = false;
+  public simulating: boolean = false;
 
   constructor(
     private _appConfigService: AppConfigService,
@@ -49,6 +51,7 @@ export class NetworkSimulationService {
   }
 
   run(force = false) {
+    if (this.simulating) return
     // console.log('Run simulation')
     if (!(force || this.config['autoSimulation'])) return
     if (this._sketchService.options.drawing) return
@@ -68,10 +71,11 @@ export class NetworkSimulationService {
     this._dataService.history(this._dataService.data)
     this._chartService.selected = [];
 
-
     this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     this._logService.log('Request to server');
+    this.simulating = true;
     this.http.post(urlRoot + '/simulate', data_cleaned).subscribe(res => {
+      this.simulating = false;
       if ('error' in res) {
         this.snackBarRef = this.snackBar.open(res['error'], 'Ok');
       } else {
@@ -83,12 +87,16 @@ export class NetworkSimulationService {
         if (this.config['autoProtocol']) {
           this._networkProtocolService.save(this._dataService.data)
         }
-        let time = res['data'].kernel.time
+        let time = res['data'].kernel.time;
         this._dataService.data.kernel['time'] = time;
         res['data'].collections.map((collection, idx) => {
           this._dataService.data.collections[idx]['global_ids'] = collection.global_ids;
-          if ('record_from' in collection.params) {
-            this._dataService.data.collections[idx]['record_from'] = collection.params.record_from;
+          let params = this._dataService.data.models[collection.model].params;
+          if ('record_from' in params) {
+            this._dataService.data.collections[idx]['record_from'] = params.record_from;
+          }
+          if ('topology' in collection) {
+            this._dataService.data.collections[idx].topology['positions'] = collection.topology.positions;
           }
         })
         this._logService.log('Update record data')
@@ -113,6 +121,7 @@ export class NetworkSimulationService {
       }
     },
       error => {
+        this.simulating = false;
         console.log(error['error'])
         this.snackBarRef = this.snackBar.open('Simulation failed. NEST Server not found. Please check the configuration.', 'Ok');
       }

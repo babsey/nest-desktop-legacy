@@ -1,26 +1,38 @@
-<div style="position:absolute;top:-1px;left:0;font-size:10px" class="no-print">
+<div style="position:absolute;top:-1px;left:10px;font-size:10px" class="no-print">
   <span>{{ pos }}</span>
 </div>
 
-<div style="position:absolute;top:0;right:0" class="chart-controller no-print">
+<div style="position:absolute;top:0;right:0;height:calc(100% - 33px);background-color:white" class="chart-controller no-print">
   <span style="display:flex; flex-direction:column">
-    <a mat-icon-button (click)="autoscale()">
-      <fa-icon icon="arrows-alt"></fa-icon>
+    <a mat-icon-button (click)="rescale()" [style.display]="zoomDirection=='both' ? '' : 'none'">
+      <fa-icon icon="home"></fa-icon>
+      <fa-icon icon="arrows-alt" style="position:absolute; font-size:8px"></fa-icon>
     </a>
-    <a mat-icon-button (click)="autoscaleX()">
-      <fa-icon icon="arrows-alt-h"></fa-icon>
+    <a mat-icon-button (click)="rescaleX()" [style.display]="zoomDirection=='abscissa' ? '' : 'none'">
+      <fa-icon icon="home"></fa-icon>
+      <fa-icon icon="arrows-alt-h" style="position:absolute; font-size:8px"></fa-icon>
     </a>
-    <a mat-icon-button (click)="autoscaleY(!yAutoscale)" [class.mat-primary]="yAutoscale">
-      <fa-icon icon="arrows-alt-v"></fa-icon>
+    <a mat-icon-button (click)="rescaleY(!yAutoscale)" [style.display]="zoomDirection=='ordinate' ? '' : 'none'">
+      <fa-icon icon="home"></fa-icon>
+      <fa-icon icon="arrows-alt-v" style="position:absolute; font-size:8px"></fa-icon>
     </a>
-    <!-- <a mat-icon-button (click)="_chartService.drag=!_chartService.drag" [class.mat-primary]="_chartService.drag">
-      <fa-icon icon="arrows-alt"></fa-icon>
-    </a> -->
+    <a mat-icon-button (click)="zoomDirection='abscissa'" [style.display]="zoomDirection=='both' ? '' : 'none'">
+      <fa-icon icon="search"></fa-icon>
+      <fa-icon icon="arrows-alt" style="position:absolute; font-size:8px"></fa-icon>
+    </a>
+    <a mat-icon-button (click)="zoomDirection='ordinate'" [style.display]="zoomDirection=='abscissa' ? '' : 'none'">
+      <fa-icon icon="search"></fa-icon>
+      <fa-icon icon="arrows-alt-h" style="position:absolute; font-size:8px"></fa-icon>
+    </a>
+    <a mat-icon-button (click)="zoomDirection='both'" [style.display]="zoomDirection=='ordinate' ? '' : 'none'">
+      <fa-icon icon="search"></fa-icon>
+      <fa-icon icon="arrows-alt-v" style="position:absolute; font-size:8px"></fa-icon>
+    </a>
   </span>
 </div>
 
-<svg [attr.width]="_chartService.svg.width" [attr.height]="height">
-  <svg:g [attr.transform]="'translate(' + _chartService.g.left + ',' + _chartService.g.top + ')'">
+<svg [attr.width]="width" [attr.height]="height">
+  <svg:g [attr.transform]="'translate(' + margin.left + ',' + margin.top + ')'">
     <svg:rect class="overlay"></svg:rect>
     <svg:g class="focus">
       <svg:rect class="overlayFocus"></svg:rect>
@@ -33,9 +45,3 @@
     <svg:text class="label label--y"></svg:text>
   </svg:g>
 </svg>
-
-<!-- <svg [attr.width]="_chartService.svg.width" [attr.height]="40" style="position:absolute">
-  <svg:g [attr.transform]="'translate(' + _chartService.g.left + ',' + _chartService.g.top + ')'">
-    <svg:g class="brush"></svg:g>
-  </svg:g>
-</svg> -->

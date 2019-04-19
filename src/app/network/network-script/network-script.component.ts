@@ -28,16 +28,29 @@ export class NetworkScriptComponent implements OnInit, OnChanges {
     var data = this._dataService.data;
 
     var networkScript = '';
-    networkScript += 'import nest\n\n';
+    networkScript += 'import nest\n';
+    networkScript += 'import numpy as np\n';
+
+    networkScript += '\n\nnp.random.seed(' + (data.simulation.seed || 0) + ')\n';
+
+    networkScript += '\n\n# Reset kernel\n';
     networkScript += this._networkScriptService.kernel(data.kernel);
-    networkScript += '\n# Create nodes\n';
-    data.collections.map(node => {
-      networkScript += this._networkScriptService.create(node);
+
+    networkScript += '\n\n# Copy models\n';
+    Object.keys(data.models).map(model => {
+      networkScript += this._networkScriptService.copyModel(model, data.models[model]);
     })
+
+    networkScript += '\n\n# Create nodes\n';
+    data.collections.map(node => {
+      networkScript += this._networkScriptService.createNode(node);
+    })
+
     networkScript += '\n\n# Connect nodes\n';
     data.connectomes.map(link => {
-      networkScript += this._networkScriptService.connect(link);
+      networkScript += this._networkScriptService.connectNodes(link);
     })
+
     networkScript += '\n';
     networkScript += this._networkScriptService.simulate(data.simulation.time);
 

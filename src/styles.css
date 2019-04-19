@@ -11,12 +11,25 @@
 body {
   font-family: Roboto;
   margin: 0;
+  background-color: white;
 }
 
 @media print {
   .no-print, .no-print * {
     display: none !important;
   }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+  /* height: 2px; */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #3366ff;
+  /* background: rgba(0,0,0,.12); */
 }
 
 .flex-spacer {

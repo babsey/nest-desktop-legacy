@@ -1,10 +1,7 @@
-.item {
-  height: 3em !important;
-}
-
-.item.description {
-  color: #999;
+.item .description {
+  color: #666;
   padding: 0 10px;
+  font-size: 11px
 }
 
 .item.enabled {
@@ -13,12 +10,5 @@
 }
 
 .item.enabled .description {
-  background-color: #3366ff;
   color: white !important;
-}
-
-.flex {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
 }

@@ -1,32 +1,28 @@
 {
   "id": "spike_detector",
   "element_type": "recorder",
-  "label": "Spike detector",
+  "label": "spike detector",
   "params": [{
       "id": "start",
-      "label": "Start time",
+      "label": "start time",
       "level": 2,
       "unit": "ms",
       "value": 0,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 1000,
-        "min": 0,
-        "step": 1
-      }
+      "max": 1000,
+      "min": 0,
+      "step": 1
     },
     {
       "id": "stop",
-      "label": "Stop time",
+      "label": "stop time",
       "level": 2,
       "unit": "ms",
       "value": 1000,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 1000,
-        "min": 0,
-        "step": 1
-      }
+      "max": 1000,
+      "min": 0,
+      "step": 1
     }
   ]
 }

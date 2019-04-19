@@ -14,17 +14,19 @@ import { DataService } from '../../services/data/data.service';
 export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() chart: any;
   @Input() data: any;
-  @Input() height: number;
-  @Input() nbins: number;
+  @Input() height: number = 0;
+  @Input() margin: any = { top: 0, right: 0, bottom: 0, left: 0 };
+  @Input() nbins: number = 10;
   @Input() opacity: number = 1;
   @Input() options: any;
   @Input() ordinate: string;
   @Input() overlap: number = 0;
+  @Input() width: number = 0;
   @Input() xScale: d3.scaleLinear;
   @Input() yScale: d3.scaleLinear;
   private popsize: any[];
   private selector: d3.Selection;
-  private subscription$: any;
+  private subscription: any;
   public curve: d3.curveStep = d3.curveStep;
   public psth: any;
   public view: string;
@@ -43,12 +45,12 @@ export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     // console.log('Init PSTH chart')
     this.xDomain = this._chartService.xScale.domain();
-    this.subscription$ = this._chartService.update.subscribe(d => this.update())
+    this.subscription = this._chartService.update.subscribe(d => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy PSTH chart')
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   ngOnChanges() {
@@ -57,7 +59,7 @@ export class PsthChartComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   update() {
-    if (this.data == undefined || this.data.length == 0) return
+    if (this.data == undefined) return
     // console.log('Upate PSTH chart')
     let xDomain = this._chartService.xScale.domain();
     var xTicks = this.nbins == 1 ? xDomain : this._chartService.xScale.ticks(this.nbins);

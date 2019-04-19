@@ -1,5 +1,18 @@
-.nav a {
-  min-width: 40px;
-  padding: 0 12px;
-  height: 40px;
+.colNav {
+  padding-top: 0;
+  display: flex;
+  background-color: white;
+}
+
+.colNav .mat-list-item {
+  width: 40px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.colNav .logo {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+::ng-deep .colNav .mat-list-item-content {
+  width: 40px;
 }

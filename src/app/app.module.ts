@@ -15,7 +15,6 @@ library.add(fas);
 import { AppRoutingModule } from './modules/app-routing.module';
 import { ConfigModule } from './config/config.module';
 import { HelpModule } from './help/help.module';
-import { LogModule } from './log/log.module';
 import { MaterialModule } from './modules/material.module';
 import { MccColorPickerModule } from 'material-community-components';
 import { ModelModule } from './model/model.module';
@@ -41,7 +40,6 @@ import { LoadingComponent } from './loading/loading.component';
     ConfigModule,
     FontAwesomeModule,
     HelpModule,
-    LogModule,
     MaterialModule,
     ModelModule,
     NavigationModule,

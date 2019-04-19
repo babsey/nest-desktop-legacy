@@ -13,11 +13,12 @@ import {
   styleUrls: ['./select.component.css'],
 })
 export class SelectComponent implements OnInit {
+  @Input() disabled: boolean = false;
   @Input() filter: boolean = false;
+  @Input() options: any[] = [];
   @Input() placeholder: string = '';
   @Input() selected: any = {};
   @Output() selectChange = new EventEmitter();
-  @Input() options: any[] = [];
   public filteredOptions: string[] = [];
 
   constructor() {

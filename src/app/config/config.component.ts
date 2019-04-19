@@ -10,14 +10,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ConfigComponent implements OnInit, OnDestroy {
   public routeConfig: any;
-  private subscription$: any;
+  private subscription: any;
 
   constructor(
     private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.subscription$ = this.route.params.subscribe(params => {
+    this.subscription = this.route.params.subscribe(params => {
       if ('config' in params) {
         this.routeConfig = params['config'];
       }
@@ -25,7 +25,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
 }

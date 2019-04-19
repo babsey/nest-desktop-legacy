@@ -26,7 +26,8 @@ export class KernelControllerComponent implements OnInit {
     return this._controllerConfigService.config.kernel.params;
   }
 
-  onChange() {
+  onChange(id, value) {
+    this._dataService.data.kernel[id] = value;
     this.kernelChange.emit()
   }
 

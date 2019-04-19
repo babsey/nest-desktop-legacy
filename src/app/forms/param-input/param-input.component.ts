@@ -1,19 +1,18 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+
 @Component({
   selector: 'app-param-input',
   templateUrl: './param-input.component.html',
   styleUrls: ['./param-input.component.css']
 })
 export class ParamInputComponent implements OnInit {
-  @Input() color: string;
   @Input() id: string;
   @Input() model: string;
   @Input() options: any;
   @Input() params: any = {};
   @Input() view: string;
   @Output() paramChange = new EventEmitter;
-
 
   constructor() { }
 

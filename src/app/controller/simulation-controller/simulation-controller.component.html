@@ -1,10 +1,10 @@
-<span class="controller simulation-controller">
+<span class="controller simulation-controller mat-primary">
   <mat-list class="controller-menu" dense>
     <mat-list-item mat-subheader>
       Simulation
     </mat-list-item>
     <mat-list-item *ngFor="let param of params()">
-      <app-param-input view="valueSlider" class="input" [params]="_dataService.data.simulation" [id]="param.id" [options]="param" (paramChange)="onChange()"></app-param-input>
+      <app-value-slider class="slider" [value]="_dataService.data.simulation[param.id] || param.value" [options]="param" (valueChange)="onChange(param.id, $event)"></app-value-slider>
     </mat-list-item>
   </mat-list>
 

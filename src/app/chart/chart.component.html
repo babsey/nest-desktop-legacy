@@ -1,4 +1,4 @@
 <ng-container *ngFor="let record of _dataService.records">
-  <app-spike-chart *ngIf="hasSpikeData(record.recorder.model)" [idx]="record.idx"></app-spike-chart>
-  <app-trace-chart *ngIf="hasAnalogData(record.recorder.model)" [idx]="record.idx"></app-trace-chart>
+  <app-spike-chart *ngIf="hasSpikeData(record.recorder.model)" [idx]="record.idx" [height]="height / _dataService.records.length - _dataService.records.length" [width]="width" class="chart-container"></app-spike-chart>
+  <app-trace-chart *ngIf="hasAnalogData(record.recorder.model)" [idx]="record.idx" [height]="height / _dataService.records.length - _dataService.records.length" [width]="width" class="chart-container"></app-trace-chart>
 </ng-container>

@@ -2,54 +2,99 @@
   <ng-container *ngFor="let link of data.connectomes">
     <mat-list dense class="link" [style.display]="linkDisplay(link)">
       <mat-list-item class="header">
-        <span class="flex" style="height:32px">
-          <button mat-icon-button [style.border-color]="colorNode(link.pre)" class="pre">{{ link.pre }}</button>
-          <button mat-icon-button class="button" (click)="_sketchService.toggleSelectLink(link)">
+        <span class="flex" style="height:40px">
+          <svg width="40" height="40">
+            <g app-node [node]="data.collections[link.pre]" (nodeClick)="_sketchService.selectNode(data.collections[link.pre])" transform="translate(20,20)"></g>
+          </svg>
+          <button mat-icon-button class="button" (click)="_sketchService.selectLink(link)">
             <fa-icon icon="long-arrow-alt-right" class="material-icons arrow" [style.color]="_colorService.link(link.idx)"></fa-icon>
           </button>
-          <button mat-icon-button [style.border-color]="colorNode(link.post)" class="post">{{ link.post }}</button>
+          <svg width="40" height="40">
+            <g app-node [node]="data.collections[link.post]" (nodeClick)="_sketchService.selectNode(data.collections[link.post])" transform="translate(20,20)"></g>
+          </svg>
           <span class="flex-spacer"></span>
         </span>
       </mat-list-item>
 
-      <mat-list-item class="item" [style.display]="paramDisplay(link, 'connRule')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
-        <span class="flex">
-          <span>Rule</span>
-          <span class="flex-spacer"></span>
-          <span>{{ link.conn_spec.rule || 'all_to_all' }}</span>
-        </span>
-      </mat-list-item>
-
-      <mat-list-item class="item" [style.display]="paramDisplay(link, 'synModel')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
-        <span class="flex">
-          <span>Synapse model</span>
-          <span class="flex-spacer"></span>
-          <span>{{ link.syn_spec.model || 'static_synapse' }}</span>
-        </span>
-      </mat-list-item>
-
-      <mat-list-item class="item" [style.display]="paramDisplay(link, 'synWeight')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
-        <div class="flex">
-          <span class="label ellipsis" (dblclick)="paramReset(link.syn_spec, 'weight', 1)">Synapse weight</span>
-          <span class="flex-spacer"></span>
-          <span [class.view]="slide" class="ellipsis">{{ _formatService.format(link.syn_spec.weight || 1) }}</span>
-          <span [class.view]="slide" style="margin-left: 2px">pA</span>
-          <span [class.control]="slide" class="slider" style="position:relative; width:50%">
-            <mat-slider thumbLabel [(ngModel)]="link.syn_spec.weight" [min]="-10" [max]="10" [step]="1" (change)="onChange()" style="width:100%"></mat-slider>
-            <span style="position:absolute;bottom:-4px;left:0;font-size:9px;">-10</span>
-            <span style="position:absolute;bottom:-4px;right:0;font-size:9px;">10</span>
+      <ng-container *ngIf="isBothLayer(link)">
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'connection_type')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <span class="flex">
+            <span>Connection type</span>
+            <span class="flex-spacer"></span>
+            <span>{{ link.projections.connection_type }}</span>
           </span>
-        </div>
-      </mat-list-item>
+        </mat-list-item>
 
-      <mat-list-item class="item" [style.display]="paramDisplay(link, 'synDelay')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
-        <div class="flex">
-          <span>Synapse delay</span>
-          <span class="flex-spacer"></span>
-          <span>{{ _formatService.format(link.syn_spec.delay || 1) }}</span>
-          <span style="margin-left: 2px">ms</span>
-        </div>
-      </mat-list-item>
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'kernel')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <span class="flex">
+            <span>Kernel</span>
+            <span class="flex-spacer"></span>
+            <span>{{ link.projections.kernel }}</span>
+          </span>
+        </mat-list-item>
+
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'number_of_connections')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <span class="flex">
+            <span>Number of connections</span>
+            <span class="flex-spacer"></span>
+            <span>{{ link.projections.number_of_connections }}</span>
+          </span>
+        </mat-list-item>
+
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'weights')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <span class="flex">
+            <span>Weights</span>
+            <span class="flex-spacer"></span>
+            <span>{{ _formatService.format(link.projections.weights || 1) }}</span>
+            <span style="margin-left: 2px">pA</span>
+          </span>
+        </mat-list-item>
+
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'delays')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <span class="flex">
+            <span>Delays</span>
+            <span class="flex-spacer"></span>
+            <span>{{ _formatService.format(link.projections.delays || 1) }}</span>
+            <span style="margin-left: 2px">ms</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+
+      <ng-container *ngIf="!isBothLayer(link)">
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'conn_spec.rule')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <span class="flex">
+            <span>Connection rule</span>
+            <span class="flex-spacer"></span>
+            <span>{{ link.conn_spec.rule || 'all_to_all' }}</span>
+          </span>
+        </mat-list-item>
+
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'syn_spec.model')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <span class="flex">
+            <span>Synapse model</span>
+            <span class="flex-spacer"></span>
+            <span>{{ link.syn_spec.model || 'static_synapse' }}</span>
+          </span>
+        </mat-list-item>
+
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'syn_spec.weight')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <div class="flex">
+            <span>Synapse weight</span>
+            <span class="flex-spacer"></span>
+            <span>{{ _formatService.format(link.syn_spec.weight || 1) }}</span>
+            <span style="margin-left: 2px">pA</span>
+          </div>
+        </mat-list-item>
+
+        <mat-list-item class="item" [style.display]="paramDisplay(link, 'syn_spec.delay')" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <div class="flex">
+            <span>Synapse delay</span>
+            <span class="flex-spacer"></span>
+            <span>{{ _formatService.format(link.syn_spec.delay || 1) }}</span>
+            <span style="margin-left: 2px">ms</span>
+          </div>
+        </mat-list-item>
+      </ng-container>
 
     </mat-list>
   </ng-container>
@@ -59,47 +104,52 @@
   <ng-container *ngFor="let link of data.connectomes">
     <mat-selection-list dense class="link mat-primary" [(ngModel)]="link.display">
       <mat-list-option value="link" class="header" (dblclick)="dblclick(link)">
-        <span class="flex" style="height:32px">
-          <button mat-icon-button [style.border-color]="colorNode(link.pre)" class="pre">{{ link.pre }}</button>
+        <span class="flex" style="height:40px">
+          <svg width="40" height="40">
+            <g app-node [node]="data.collections[link.pre]" transform="translate(20,20)"></g>
+          </svg>
           <button mat-icon-button class="button">
             <fa-icon icon="long-arrow-alt-right" class="material-icons arrow" [style.color]="_colorService.link(link.idx)"></fa-icon>
           </button>
-          <button mat-icon-button [style.border-color]="colorNode(link.post)" class="post">{{ link.post }}</button>
+          <svg width="40" height="40">
+            <g app-node [node]="data.collections[link.post]" transform="translate(20,20)"></g>
+          </svg>
           <span class="flex-spacer"></span>
         </span>
       </mat-list-option>
 
-      <mat-list-option value="connRule" class="item" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
-        <div class="flex">
-          <span>Rule</span>
-          <span class="flex-spacer"></span>
-          <span>{{ link.conn_spec.rule }}</span>
-        </div>
-      </mat-list-option>
-
-      <mat-list-option value="synModel" class="item" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
-        <div class="flex">
-          <span>Synapse model</span>
-          <span class="flex-spacer"></span>
-          <span>{{ link.syn_spec.model }}</span>
-        </div>
-      </mat-list-option>
-      <mat-list-option value="synWeight" class="item" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
-        <span class="flex">
-          <span>Synapse weight</span>
-          <span class="flex-spacer"></span>
-          <span>{{ _formatService.format(link.syn_spec.weight || 1) }}</span>
-          <span style="margin-left: 2px">pA</span>
-        </span>
-      </mat-list-option>
-      <mat-list-option value="synDelay" class="item" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
-        <div class="flex">
-          <span>Synapse delay</span>
-          <span class="flex-spacer"></span>
-          <span>{{ _formatService.format(link.syn_spec.delay || 1) }}</span>
-          <span style="margin-left: 2px">ms</span>
-        </div>
-      </mat-list-option>
+      <ng-container *ngIf="!isBothLayer(link)">
+        <mat-list-option value="connRule" class="item" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <div class="flex">
+            <span>Connection rule</span>
+            <span class="flex-spacer"></span>
+            <span>{{ link.conn_spec.rule }}</span>
+          </div>
+        </mat-list-option>
+        <mat-list-option value="synModel" class="item" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <div class="flex">
+            <span>Synapse model</span>
+            <span class="flex-spacer"></span>
+            <span>{{ link.syn_spec.model }}</span>
+          </div>
+        </mat-list-option>
+        <mat-list-option value="weight" class="item" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <span class="flex">
+            <span>Synapse weight</span>
+            <span class="flex-spacer"></span>
+            <span>{{ _formatService.format(link.syn_spec.weight || 1) }}</span>
+            <span style="margin-left: 2px">pA</span>
+          </span>
+        </mat-list-option>
+        <mat-list-option value="delay" class="item" [style.border-left-color]="colorNode(link.pre)" [style.border-right-color]="colorNode(link.post)">
+          <div class="flex">
+            <span>Synapse delay</span>
+            <span class="flex-spacer"></span>
+            <span>{{ _formatService.format(link.syn_spec.delay || 1) }}</span>
+            <span style="margin-left: 2px">ms</span>
+          </div>
+        </mat-list-option>
+      </ng-container>
 
     </mat-selection-list>
   </ng-container>

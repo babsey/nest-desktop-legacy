@@ -1,29 +1,29 @@
-<span class="form-container">
+<mat-menu #paramMenu="matMenu" class="param-menu">
+  <button mat-menu-item (click)="openGeneratorDialog()">Generate numbers</button>
+</mat-menu>
 
-  <mat-form-field matTooltip="{{ id }}" matTooltipPosition="before">
-    <mat-label>
-      {{ options.label }}
-      <span *ngIf="options.unit">({{ options.unit }})</span>
-    </mat-label>
-    <input matInput [placeholder]="options.label || id" [ngModel]="value" (change)="onChange($event.target.value)" />
-  </mat-form-field>
+<mat-menu #inputMenu="matMenu" class="input-menu" overlapTrigger="true">
+  <span class="input-container mat-accent" (click)="$event.stopPropagation();">
+    <div class="input-header flex">
+      <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
+      <span class="flex-spacer"></span>
+      <mat-nav-list style="padding:0;display:flex;">
+        <mat-list-item class="param-menu-button" [matMenuTriggerFor]="paramMenu">
+          <span class="param-unit">{{ options.unit }}</span>
+          <fa-icon class="param-menu-button-icon" icon="ellipsis-v"></fa-icon>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
 
-  <span>
-    <mat-menu #valueMenu="matMenu" class="value-menu">
-      <button mat-menu-item (click)="openGeneratorDialog()">
-        <span>Generate numbers</span>
-      </button>
-      <button mat-menu-item *ngIf="options.value" matTooltip="Default value: {{ options.value }}" matTooltipPosition="before" (click)="setDefaultValue()">
-        <span>Set default value</span>
-      </button>
-      <button mat-menu-item *ngIf="model" (click)="openConfigDialog()">
-        <span>Configure</span>
-      </button>
-    </mat-menu>
-
-    <button mat-icon-button [matMenuTriggerFor]="valueMenu" class="button">
-      <fa-icon icon="ellipsis-v"></fa-icon>
-    </button>
+    <mat-form-field style="width:calc(100% - 10px); font-size:12px; padding: 0 5px">
+      <textarea matInput class="input" [value]="stringify(value)" (change)="onChange($event.target.value)"></textarea>
+    </mat-form-field>
   </span>
+</mat-menu>
 
+<span class="param-container flex" [matMenuTriggerFor]="inputMenu">
+  <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
+  <span class="flex-spacer"></span>
+  <span class="param-value ellipsis">{{ value || options.value | json }}</span>
+  <span class="param-unit">{{ options.unit }}</span>
 </span>

@@ -15,10 +15,9 @@ import { SketchService } from '../../sketch/sketch.service';
   styleUrls: ['./nodes-view.component.css']
 })
 export class NodesViewComponent implements OnInit {
-  @Input() nodes: any[] = [];
+  @Input() data: any = {};
   @Input() editing: boolean = false;
   @Input() selective: boolean = false;
-  @Input() slide: boolean = false;
 
   constructor(
     private _chartService: ChartService,
@@ -35,47 +34,32 @@ export class NodesViewComponent implements OnInit {
   ngOnInit() {
   }
 
-  label(node) {
-    let config = this._modelService.config(node.model);
-    return config.label;
+  model(node) {
+    return this.data.models[node.model];
   }
 
-  params(node) {
-    return this._modelService.config(node.model).params;
+  modelConfig(node) {
+    return this._modelService.config(this.model(node).existing);
   }
 
   nodeDisplay(node) {
-    var display = 'display' in node ? node.display.includes('node') : true;
-    return (this._sketchService.isSelectedNode_or_all(node) || !this.selective) && display ? '' : 'none';
+    return (this._sketchService.isSelectedNode_or_all(node) || !this.selective);
   }
 
-  paramDisplay(node, param) {
-    var display = 'display' in node ? node.display.includes(param) : true;
-    return display ? '' : 'none';
+  paramDisplay(obj, param) {
+    return 'display' in obj ? obj.display.includes(param) : true;
   }
 
   dblclick(node) {
-    if (node.display.includes('node')) {
-      node.display = [];
-    } else {
-      var display = this.params(node).map(param => param.id)
+    var model = this.model(node.model);
+    var display: any = [];
+    if (!model.display.includes('node')) {
+      display = this.modelConfig(node).params.map(param => param.id)
+      display.push('node');
+      display.push('n');
       display.sort();
-      display = ['node'].concat(display);
-      node.display = display;
     }
-  }
-
-  onChange() {
-    if (!this._dataService.options.edit) {
-      this._networkSimulationService.run()
-    }
-  }
-
-  paramReset(node, param) {
-    if (this.slide) {
-      node.params[param.id] = param.value;
-      this.onChange()
-    }
+    model.display = display;
   }
 
 }

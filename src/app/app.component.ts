@@ -4,6 +4,7 @@ import { ChartService } from './chart/chart.service';
 import { ControllerService } from './controller/controller.service';
 import { NavigationService } from './navigation/navigation.service';
 import { AppConfigService } from './config/app-config/app-config.service';
+import { NetworkSimulationService } from './network/network-simulation/network-simulation.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
     private _chartService: ChartService,
     private _controllerService: ControllerService,
     private _navigationService: NavigationService,
+    private _networkSimulationService: NetworkSimulationService,
     public _appConfigService: AppConfigService,
   ) {
   }
@@ -39,10 +41,8 @@ export class AppComponent implements OnInit {
     this._navigationService.options.sidenavOpened = false;
   }
 
-  onChange() {
-    var width = this.content.elementRef.nativeElement.clientWidth - (this._controllerService.options.sidenavOpened ? 380 : 0);
-    var height = this.content.elementRef.nativeElement.clientHeight;
-    this._chartService.resize(width, height);
+  navigationWidth() {
+    return this._navigationService.options.sidenavShortView ? '40px' : '320px';
   }
 
   toggleNavigationOpened() {
@@ -52,6 +52,10 @@ export class AppComponent implements OnInit {
 
   isNavigationOpened() {
     return this._navigationService.options.sidenavOpened;
+  }
+
+  resize() {
+    this._networkSimulationService.resize.emit()
   }
 
 }

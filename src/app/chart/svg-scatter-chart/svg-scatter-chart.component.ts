@@ -11,7 +11,8 @@ import { ChartService } from '../chart.service';
 })
 export class SVGScatterChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data: any;
-  @Input() height: number;
+  @Input() height: number = 0;
+  @Input() width: number = 0;
   @Input() options: any;
   @Input() xDomain: number[];
   @Input() xLabel: string = '';
@@ -20,7 +21,7 @@ export class SVGScatterChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() yLabel: string = '';
   @Input() yScale: d3.scaleLinear;
   private selector: d3.Selection;
-  private subscription$: any;
+  private subscription: any;
   public xAxis: d3.axisBottom;
   public yAutoscale: boolean = true;
   public yAxis: d3.axisLeft;
@@ -34,12 +35,12 @@ export class SVGScatterChartComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     // console.log('Init SVG scatter chart')
-    this.subscription$ = this._chartService.update.subscribe(() => this.update())
+    this.subscription = this._chartService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy SVG scatter chart')
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   ngOnChanges() {

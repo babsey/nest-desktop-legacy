@@ -13,6 +13,7 @@ import { ModelListComponent } from '../model/model-list/model-list.component';
 import { NetworkListComponent } from '../network/network-list/network-list.component';
 
 const appRoutes: Routes = [
+  { path: '',   redirectTo: '/(sidebar:network)', pathMatch: 'full' },
   { path: 'config', component: ConfigListComponent, outlet: 'sidebar'},
   { path: 'config/:config', component: ConfigComponent },
   { path: 'help', component: HelpListComponent , outlet: 'sidebar'},
@@ -21,6 +22,7 @@ const appRoutes: Routes = [
   { path: 'model/:model', component: ModelComponent },
   { path: 'network', component: NetworkListComponent, outlet: 'sidebar'},
   { path: 'network', component: NetworkComponent },
+  { path: 'network/simulate', component: NetworkComponent },
   { path: 'network/:id', component: NetworkComponent },
   { path: 'network/:id/simulate', component: NetworkComponent },
 ];

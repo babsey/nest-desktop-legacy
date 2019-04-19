@@ -6,67 +6,59 @@
     "level": 1
   }, {
     "rule": "fixed_indegree",
-    "label": "Fixed indegree",
+    "label": "fixed indegree",
     "level": 2,
     "params": [{
       "id": "indegree",
-      "label": "Indegree",
+      "label": "indegree",
       "value": 1,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 100,
-        "min": 1,
-        "step": 1
-      }
+      "max": 100,
+      "min": 1,
+      "step": 1
     }]
   }, {
     "rule": "fixed_outdegree",
-    "label": "Fixed outdegree",
+    "label": "fixed outdegree",
     "level": 2,
     "params": [{
       "id": "outdegree",
-      "label": "Outdegree",
+      "label": "outdegree",
       "value": 1,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 100,
-        "min": 1,
-        "step": 1
-      }
+      "max": 100,
+      "min": 1,
+      "step": 1
     }]
   }, {
     "rule": "fixed_total_number",
-    "label": "Fixed total number",
+    "label": "fixed total number",
     "level": 2,
     "params": [{
       "id": "N",
       "label": "N",
       "value": 1,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 1000,
-        "min": 1,
-        "step": 1
-      }
+      "max": 1000,
+      "min": 1,
+      "step": 1
     }]
   }, {
     "rule": "one_to_one",
-    "label": "One to one",
+    "label": "one to one",
     "level": 1
   }, {
     "rule": "pairwise_bernoulli",
-    "label": "Pairwise Bernoulli",
+    "label": "pairwise Bernoulli",
     "level": 2,
     "params": [{
       "id": "p",
       "label": "p",
       "value": 0.1,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 0.99,
-        "min": 0.01,
-        "step": 0.01
-      }
+      "max": 0.99,
+      "min": 0.01,
+      "step": 0.01
     }]
   }]
 }

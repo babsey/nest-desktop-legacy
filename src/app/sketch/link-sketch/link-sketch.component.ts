@@ -20,7 +20,7 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
   private host: d3.Selection;
   private selector: d3.Selection;
   private drag_line: any;
-  private subscription$: any;
+  private subscription: any;
 
   constructor(
     private _colorService: ColorService,
@@ -36,12 +36,12 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     // console.log('Init link sketch')
-    this.subscription$ = this._sketchService.update.subscribe(() => this.update())
+    this.subscription = this._sketchService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy link sketch')
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   ngOnChanges() {
@@ -122,7 +122,7 @@ export class LinkSketchComponent implements OnInit, OnChanges, OnDestroy {
       .attr('class', 'link')
       .on('mousedown', function() {
         if (!_this._controllerService.options.edit) {
-          _this._sketchService.toggleSelectLink(this.__data__)
+          _this._sketchService.selectLink(this.__data__)
         }
       })
       .merge(links) // ENTER + UPDATE

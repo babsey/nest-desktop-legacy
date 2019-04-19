@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { AppConfigService } from '../../config/app-config/app-config.service';
+import { NavigationService } from '../../navigation/navigation.service';
 import { ModelService } from '../model.service';
 
 
@@ -11,7 +12,7 @@ import { ModelService } from '../model.service';
   styleUrls: ['./model-list.component.css']
 })
 export class ModelListComponent implements OnInit, OnDestroy {
-  private subscription$: any;
+  private subscription: any;
   public availableModels: any[] = [];
   public enabledModels: any[] = [];
   public filteredModels: any[] = [];
@@ -28,16 +29,17 @@ export class ModelListComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     public _appConfigService: AppConfigService,
     public _modelService: ModelService,
+    public _navigationService: NavigationService,
   ) { }
 
   ngOnInit() {
     this._appConfigService.check()
     this.update()
-    this.subscription$ = this._modelService.update.subscribe(() => this.update())
+    this.subscription = this._modelService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   update() {
@@ -128,6 +130,10 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   resetModelConfigs() {
     this._modelService.reset()
+  }
+
+  shortLabel(label) {
+    return label.split('_').map(d => d[0]).join('')
   }
 
 }

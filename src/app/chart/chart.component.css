@@ -1,39 +1,28 @@
 ::ng-deep .chart-header {
-  display: flex;
-  height: 36px;
-  background-color: #fafafa !important;
   font-size: 13px;
-  line-height: 36px;
-  vertical-align: middle;
 }
 
-::ng-deep .chart-header .node {
-  border-style: solid;
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
-  border-width: 1.5px;
-  font-size: 11px;
-  margin: 2px;
+::ng-deep .chart-header {
+  border-top: 1px solid rgba(0,0,0,0.12);
 }
 
-::ng-deep .chart-header .selected {
-  border-style: dashed;
-}
-
-::ng-deep .chart {
+/* ::ng-deep .chart {
   margin: 5px;
   padding: 4px !important;
   background-color: white !important;
-}
+} */
 
 ::ng-deep .chart .chart-sidenav {
-  background-color: white !important;
+  /* background-color: white !important; */
   overflow: hidden;
 }
 
+::ng-deep .chart .chart-sidenav .mat-tab-label {
+  min-width: 0px;
+}
+
 ::ng-deep .chart .chart-sidenav .select {
-  width: calc(100% - 20px);
+  width: 100%;
 }
 
 ::ng-deep .chart .chart-content {

@@ -1,48 +1,105 @@
-<mat-menu #configMenu="matMenu">
+<mat-menu #modelsMenu="matMenu">
   <button mat-menu-item (click)="resetModelConfigs()">
     <fa-icon icon="eraser"></fa-icon>
-     Reset configuration
+     Reset models
   </button>
 </mat-menu>
 
-<mat-toolbar style="font-size:16px;line-height:32px;height:32px" color="accent">
-  <span class="flex">
-    Models
-    <nav mat-tab-nav-bar class="modelMode">
-      <a mat-tab-link
-         (click)="_modelService.editing=false"
-         [active]="_modelService.editing==false" matTooltip="View model"> <fa-icon icon="info"></fa-icon> </a>
-      <a mat-tab-link
-         (click)="_modelService.editing=true"
-         [active]="_modelService.editing==true" matTooltip="Edit model"> <fa-icon icon="pencil-alt"></fa-icon> </a>
-      <a mat-tab-link
-        [matMenuTriggerFor]="configMenu" class="button"> <fa-icon icon="ellipsis-v" style="font-size:11px"></fa-icon> </a>
-    </nav>
+<ng-container [ngSwitch]="_navigationService.options.sidenavShortView">
+
+  <span *ngSwitchCase="true">
+    <mat-nav-list dense style="padding:0">
+
+      <mat-list-item [matMenuTriggerFor]="modelsMenu">
+        <fa-icon class="icon" icon="ellipsis-v"></fa-icon>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="!_modelService.editing" (click)="_modelService.editing=true">
+        <fa-icon class="icon" icon="info"></fa-icon>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="_modelService.editing" (click)="_modelService.editing=false">
+        <fa-icon class="icon" icon="pencil-alt"></fa-icon>
+      </mat-list-item>
+
+      <mat-list-item class="searchItem">
+        <div style="width:40px;height:40px;line-height:40px;margin:0 -16px;text-align:center" *ngIf="view=='enabled'" (click)="viewModels('available')">
+          <fa-icon class="icon" icon="search"></fa-icon>
+        </div>
+
+        <div style="width:40px;height:40px;line-height:40px;margin:0 -16px;text-align:center" *ngIf="view=='available'" (click)="viewModels('enabled')">
+          <fa-icon class="icon" icon="search-plus"></fa-icon>
+        </div>
+
+        <span class="searchField">
+          <mat-form-field floatLabel="never" style="margin:0 5px" >
+            <input matInput [value]="searchTerm" type="text" class="formControl" placeholder="Search model" (keyup)="search($event.target.value)" autocomplete="off" />
+          </mat-form-field>
+        </span>
+
+      </mat-list-item>
+
+    </mat-nav-list>
+
+    <mat-nav-list dense class="model" style="padding:0; height:calc(100vh - 160px); overflow-x:hidden">
+      <ng-container *ngFor="let model of filteredModels">
+        <mat-list-item (click)="_modelService.selectModel(model)" routerLink="/model/{{model}}" [class.active]="isSelected(model)" [class.enabled]="isEnabled(model)" class="model">
+          <span style="margin:-16px;width:40px;text-align:center">{{ shortLabel(model) }}</span>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+
   </span>
-</mat-toolbar>
 
-<nav mat-tab-nav-bar class="modelMode">
-  <a mat-tab-link style="width:160px"
-     (click)="viewModels('available')"
-     [active]="view=='available'" matTooltip="Available models"> Available models </a>
-  <a mat-tab-link style="width:160px"
-     (click)="viewModels('enabled')"
-     [active]="view=='enabled'" matTooltip="Enabled models"> Enabled models </a>
-</nav>
+  <span *ngSwitchCase="false">
+    <mat-toolbar style="font-size:16px;line-height:40px;height:40px" color="accent">
+      <span class="flex">
+        Models
+        <span class="flex-spacer"></span>
+        <button mat-icon-button>
+          <fa-icon icon="ellipsis-v" style="font-size:12px"></fa-icon>
+        </button>
+      </span>
+    </mat-toolbar>
 
-<mat-list dense>
-  <mat-list-item>
-    <span style="display:flex; width:100%">
-      <mat-form-field floatLabel="never" style="flex-grow:1">
-        <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
-        <input matInput type="text" class="formControl" placeholder="Search a model" (keyup)="search($event.target.value)" autocomplete="off" [value]="searchTerm" />
-      </mat-form-field>
-    </span>
-  </mat-list-item>
-</mat-list>
+    <mat-nav-list dense style="padding:0">
+      <mat-list-item *ngIf="!_modelService.editing" (click)="_modelService.editing=true">
+        <fa-icon class="icon" icon="info"></fa-icon> Show model info
+      </mat-list-item>
 
-<mat-nav-list dense class="model">
-  <mat-list-item *ngFor="let model of filteredModels" (click)="_modelService.selectModel(model)" routerLink="/model/{{model}}" [class.active]="isSelected(model)" [class.enabled]="isEnabled(model)" class="model">
-    {{ model }}
-  </mat-list-item>
-</mat-nav-list>
+      <mat-list-item *ngIf="_modelService.editing" (click)="_modelService.editing=false">
+        <fa-icon class="icon" icon="pencil-alt"></fa-icon> Edit model settings
+      </mat-list-item>
+
+      <mat-list-item>
+        <span style="display:flex; width:100%">
+
+          <div style="width:40px;height:40px;line-height:48px;position:absolute;left:0;text-align:center">
+            <span *ngIf="view=='enabled'" (click)="viewModels('available')">
+              <fa-icon class="icon" icon="search"></fa-icon>
+            </span>
+            <span *ngIf="view=='available'" (click)="viewModels('enabled')">
+              <fa-icon class="icon" icon="search-plus"></fa-icon>
+            </span>
+          </div>
+
+          <span style="margin-left:20px; width:100%">
+            <mat-form-field floatLabel="never" style="width:100%">
+              <input matInput type="text" class="formControl" placeholder="Search model" (keyup)="search($event.target.value)" autocomplete="off" [value]="searchTerm" />
+            </mat-form-field>
+          </span>
+
+        </span>
+      </mat-list-item>
+
+    </mat-nav-list>
+
+    <mat-nav-list dense class="model" style="padding:0">
+      <mat-list-item *ngFor="let model of filteredModels" (click)="_modelService.selectModel(model)" routerLink="/model/{{model}}" [class.active]="isSelected(model)" [class.enabled]="isEnabled(model)" class="model">
+        {{ model }}
+      </mat-list-item>
+    </mat-nav-list>
+
+  </span>
+
+</ng-container>

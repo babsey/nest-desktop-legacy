@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import * as d3 from 'd3';
 
+import { DataService } from '../services/data/data.service';
 import { SketchService } from './sketch.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class SketchComponent implements OnInit {
   private selector: d3.Selection;
 
   constructor(
+    private _dataService: DataService,
     public _sketchService: SketchService,
     private elementRef: ElementRef,
   ) {
@@ -31,5 +33,38 @@ export class SketchComponent implements OnInit {
       _this._sketchService.update.emit();
     })
   }
+
+  undo() {
+    this._dataService.undo()
+    setTimeout(() => this._sketchService.update.emit(), 100)
+  }
+
+  redo() {
+    this._dataService.redo()
+    setTimeout(() => this._sketchService.update.emit(), 100)
+  }
+
+  delete() {
+    if (this._sketchService.selected.node) {
+      var idx = this._sketchService.selected.node.idx;
+      this._dataService.deleteNode(idx)
+    } else if (this._sketchService.selected.link) {
+      var idx = this._sketchService.selected.link.idx;
+      this._dataService.deleteLink(idx)
+    }
+    this._sketchService.resetMouseVars()
+    this._sketchService.update.emit()
+  }
+
+  clear() {
+    // console.log('Network sketch sheet delete')
+    this._sketchService.draw(true);
+    this._dataService.history(this._dataService.data)
+    this._dataService.records = [];
+    this._dataService.data.connectomes = [];
+    this._dataService.data.collections = [];
+    this._sketchService.update.emit()
+  }
+
 
 }

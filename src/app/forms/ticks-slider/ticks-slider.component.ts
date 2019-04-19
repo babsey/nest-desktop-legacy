@@ -29,11 +29,11 @@ export class TicksSliderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.idx = this.options.inputSpec.ticks.indexOf(this.value);
+    this.idx = this.options.ticks.indexOf(this.value);
   }
 
   onChange(idx) {
-    this.value = Number(this.options.inputSpec.ticks[idx]);
+    this.value = Number(this.options.ticks[idx]);
     this.valueChange.emit(this.value);
   }
 

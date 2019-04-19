@@ -17,7 +17,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
   @Input() height: number;
   private selector: d3.Selection;
   private dragline: any;
-  private subscription$: any;
+  private subscription: any;
   private sourceNode: any;
 
   constructor(
@@ -132,11 +132,19 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
               if (!sourceNode || d != 'stimulator') {
                 _this._sketchService.resetMouseVars()
                 _this._dataService.history(data)
-                var newNode = _this._dataService.newNode();
-                newNode['idx'] = data.collections.length;
-                newNode['element_type'] = d;
-                newNode['model'] = modelDefaults[d];
-                newNode['sketch'] = {'x': point[0], 'y': point[1]};
+                var element_type = d;
+                var idx =  data.collections.length
+                var newModel = element_type + '-' + idx;
+                data.models[newModel] = {
+                  existing: modelDefaults[d],
+                  params: {},
+                };
+                var newNode = {
+                  idx: idx,
+                  element_type: element_type,
+                  model: newModel,
+                  sketch: {'x': point[0], 'y': point[1]}
+                };
                 _this.data.collections.push(newNode);
                 if (sourceNode) {
                   var newLink = _this._dataService.newLink();
@@ -160,12 +168,12 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
         })
       })
 
-    this.subscription$ = this._sketchService.update.subscribe(() => this.update())
+    this.subscription = this._sketchService.update.subscribe(() => this.update())
     this.update()
   }
 
   ngOnDestroy() {
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   update() {

@@ -2,24 +2,20 @@
   "id": "simuation",
   "params": [{
     "id": "random_seed",
-    "label": "Seed of random number generator",
+    "label": "seed of random number generator",
     "value": 0,
     "input": "valueSlider",
-    "inputSpec": {
-      "max": 1000,
-      "min": 0,
-      "step": 1
-    }
+    "max": 1000,
+    "min": 0,
+    "step": 1
   }, {
     "id": "time",
-    "label": "Simulation time",
+    "label": "simulation time",
     "unit": "ms",
     "value": 1000,
     "input": "valueSlider",
-    "inputSpec": {
-      "max": 2000,
-      "min": 0,
-      "step": 10
-    }
+    "max": 2000,
+    "min": 0,
+    "step": 10
   }]
 }

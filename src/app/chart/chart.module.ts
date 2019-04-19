@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { AppFormsModule } from '../forms/forms.module';
-import { MaterialModule } from '../modules/material.module';
+import { AppNodeModule } from '../node/node.module';
 import { AppPipesModule } from '../pipes/pipes.module';
+import { MaterialModule } from '../modules/material.module';
 
 import { ChartComponent } from './chart.component';
 import { AreaChartComponent } from './area-chart/area-chart.component';
@@ -23,13 +25,6 @@ import { TraceChartComponent } from './trace-chart/trace-chart.component';
 import { ChartService } from './chart.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule,
-    FontAwesomeModule,
-    AppFormsModule,
-    AppPipesModule
-  ],
   declarations: [
     ChartComponent,
     AreaChartComponent,
@@ -46,9 +41,6 @@ import { ChartService } from './chart.service';
     SVGScatterChartComponent,
     TraceChartComponent,
   ],
-  providers: [
-    ChartService,
-  ],
   exports: [
     ChartComponent,
     AreaChartComponent,
@@ -62,6 +54,17 @@ import { ChartService } from './chart.service';
     SVGLineChartComponent,
     SVGScatterChartComponent,
     TraceChartComponent,
+  ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    FontAwesomeModule,
+    AppFormsModule,
+    AppPipesModule,
+    AppNodeModule,
+  ],
+  providers: [
+    ChartService,
   ]
 })
 export class ChartModule { }

@@ -1,16 +1,17 @@
 <div style="position:relative">
   <canvas class="plot dots"
-    [style.left]="_chartService.g.left + 'px'"
-    [style.top]="_chartService.g.top + 'px'"
+    [style.left]="margin.left + 'px'"
+    [style.top]="margin.top + 'px'"
   ></canvas>
 
   <app-coordinate-axes
     (change)="onAxesChange($event)"
     [height]="height"
+    [margin]="margin"
+    [width]="width"
     [xAxis]="xAxis"
     [xDomain]="xDomain"
     [xLabel]="xLabel"
-    [xScale]="_chartService.xScale"
     [yAutoscale]="yAutoscale"
     [yAxis]="yAxis"
     [yDomain]="yDomain"

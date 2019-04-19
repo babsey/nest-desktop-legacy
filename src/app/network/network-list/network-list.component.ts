@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-
-
 import { Router } from '@angular/router';
 import { MdePopoverTrigger } from '@material-extended/mde';
 
 import { AppConfigService } from '../../config/app-config/app-config.service';
 import { ControllerService } from '../../controller/controller.service';
 import { DataService } from '../../services/data/data.service';
+import { NavigationService } from '../../navigation/navigation.service';
 import { NetworkProtocolService } from '../network-protocol/network-protocol.service';
 import { NetworkService } from '../network.service';
 import { NetworkSimulationService } from '../../network/network-simulation/network-simulation.service';
@@ -24,7 +23,7 @@ export class NetworkListComponent implements OnInit, OnDestroy {
   public searchTerm: string = '';
   public network: any = {};
   public networks: any[] = [];
-  private subscription$: any;
+  private subscription: any;
 
   constructor(
     private _networkProtocolService: NetworkProtocolService,
@@ -32,6 +31,7 @@ export class NetworkListComponent implements OnInit, OnDestroy {
     public _appConfigService: AppConfigService,
     public _controllerService: ControllerService,
     public _dataService: DataService,
+    public _navigationService: NavigationService,
     public _networkService: NetworkService,
     public _sketchService: SketchService,
     public router: Router,
@@ -41,7 +41,7 @@ export class NetworkListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._dataService.initData()
     this.list()
-    this.subscription$ = this._networkProtocolService.change.subscribe(() => {
+    this.subscription = this._networkProtocolService.change.subscribe(() => {
       this.list()
       var url = this.router.url.split('/');
       url[2] = this._dataService.data._id;
@@ -50,7 +50,7 @@ export class NetworkListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   list() {
@@ -96,7 +96,7 @@ export class NetworkListComponent implements OnInit, OnDestroy {
   }
 
   clearNetwork() {
-    this.router.navigate([{ outlets: { primary: 'network/' } }])
+    this.router.navigate([{ outlets: { primary: 'network/simulate' } }])
     this._dataService.initData()
   }
 
@@ -110,6 +110,8 @@ export class NetworkListComponent implements OnInit, OnDestroy {
     this.router.navigate([{ outlets: { primary: url} }])
     this._sketchService.resetMouseVars()
     this._sketchService.draw(false);
+    this._dataService['undoStack'] = [];
+    this._dataService['redoStack'] = [];
     this._dataService['records'] = [];
     this._dataService['data'] = this._dataService.clean(network);
     this._dataService.options.ready = true;
@@ -123,6 +125,10 @@ export class NetworkListComponent implements OnInit, OnDestroy {
     return id == this._dataService.data._id;
   }
 
+  shortLabel(label) {
+    return label.slice(0,5)
+  }
+
   view(network, ref: MdePopoverTrigger) {
     if (this.router.url.includes('simulate')) {
       this.network = this._dataService.clean(network);
@@ -130,10 +136,6 @@ export class NetworkListComponent implements OnInit, OnDestroy {
     } else {
       ref.closePopover()
     }
-  }
-
-  saveProtocol() {
-    this._networkProtocolService.save(this._dataService.data)
   }
 
   clearProtocols() {

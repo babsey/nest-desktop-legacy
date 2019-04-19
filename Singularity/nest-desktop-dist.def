@@ -6,7 +6,7 @@ From: ubuntu:18.04
   ./nginx /tmp/
 
 %labels
-  AUTHOR <spreizer@web.de>
+  AUTHOR Sebastian Spreizer <spreizer@web.de>
 
 %post
   apt update && apt install -y \

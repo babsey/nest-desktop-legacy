@@ -14,21 +14,17 @@ var STORAGE_NAME = 'chart-config';
   providedIn: 'root'
 })
 export class ChartService {
-  public svg: any = {
-    width: 640,
-    height: 480,
-    left: 36,
-    top: 58,
-  }
+  public top: number = 40;
   public g: any = {
     top: 15,
-    right: 22,
+    right: 41,
     bottom: 30,
     left: 50,
   }
   public selected: any[] = [];
   public init = new EventEmitter();
   public update = new EventEmitter();
+  public rescale = new EventEmitter();
   public xScale: d3.scaleLinear;
   public transition: d3.transition;
   public drag: boolean = false;
@@ -42,12 +38,8 @@ export class ChartService {
     private _dataService: DataService,
     public _chartConfigService: ChartConfigService,
   ) {
-    this.xScale = d3.scaleLinear().range([0, this.svg.width - this.g.left - this.g.right]).domain([0., this._dataService.data.kernel['time'] || 1000.])
+    this.xScale = d3.scaleLinear().domain([0., this._dataService.data.kernel['time'] || 1000.])
     this.transition = d3.transition();
-  }
-
-  height() {
-    return (this.svg.height / (this._dataService.records.length || 1)) - this.svg.top
   }
 
   isSelected(neuron) {
@@ -68,11 +60,4 @@ export class ChartService {
     return this.drag ? 'none' : 'all';
   }
 
-  resize(width, height) {
-    // console.log('resize')
-    this.svg.height = height;
-    this.svg.width = width - this.svg.left;
-    this.xScale.range([0, this.svg.width - this.g.left - this.g.right]);
-    this.init.emit()
-  }
 }

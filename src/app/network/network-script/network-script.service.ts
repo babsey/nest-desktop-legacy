@@ -16,7 +16,7 @@ export class NetworkScriptService {
 
 
   kernel(kernel) {
-    var str = '\n# Reset kernel\n';
+    var str = '';
     str += 'nest.ResetKernel()\n';
     str += 'nest.SetKernelStatus({\n';
     str += '\t"resolution": ' + this._formatService.format(kernel.resolution) + ',\n';
@@ -28,15 +28,12 @@ export class NetworkScriptService {
     return node.model.split('_').map(a => a[0]).join('') + (node.idx + 1);
   }
 
-  create(node) {
+  copyModel(newModel, model) {
     var str = '';
-    str += this.nodeVariable(node) + ' = nest.Create("' + node.model + '"';
-    if (node.n > 1) {
-      str += ', ' + node.n;
-    }
+    str += 'nest.CopyModel("' + model.existing + '", "' + newModel + '"';
     var params = [];
-    Object.keys(node.params).map(param => {
-      params.push('\t"' + param + '": \t' + this._formatService.format(node.params[param]));
+    Object.keys(model.params).map(param => {
+      params.push('\t"' + param + '": \t' + this._formatService.format(model.params[param]));
     })
     if (params.length > 0) {
       str += ', params={\n';
@@ -47,7 +44,17 @@ export class NetworkScriptService {
     return str + '\n';
   }
 
-  connect(link) {
+  createNode(node) {
+    var str = '';
+    str += this.nodeVariable(node) + ' = nest.Create("' + node.model + '"';
+    if (node.n > 1) {
+      str += ', ' + node.n;
+    }
+    str += ')';
+    return str + '\n';
+  }
+
+  connectNodes(link) {
     var str = '';
     var pre = this._dataService.data.collections[link.pre];
     var post = this._dataService.data.collections[link.post];

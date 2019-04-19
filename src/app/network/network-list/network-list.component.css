@@ -1,38 +1,27 @@
-::ng-deep .network.active, .network.active:focus, .network.active:hover {
-  background-color: #3366ff;
-  color: white !important;
+.sidenavItem {
+  display: flex !important;
 }
 
-/* .active fa-icon {
-  color: #3366ff;
-} */
+.icon {
+  width: 20px;
+}
 
-::ng-deep .network .button {
-  display: none;
-  height: 38px;
-  line-height: 38px;
-  width: 38px;
+::ng-deep #network-nav .active, #network-nav .active:focus, #network-nav .active:hover {
+  background-color: #3366ff;
+  color: white !important;
 }
 
 .network .timesince {
   font-size: 10px;
 }
 
-::ng-deep .network .mat-list-item-content:hover .timesince {
+.searchField {
+  position: fixed;
+  left: 41px;
+  background-color: white;
   display: none;
 }
 
-::ng-deep .network .mat-list-item-content:hover .button {
-  display: inline;
-}
-
-::ng-deep .network .button fa-icon {
-  font-size: 12px;
-}
-
-.networkMode a {
-  min-width: 32px;
-  padding: 0 12px;
-  height: 32px;
-  font-size: 11px;
+.searchItem:hover .searchField {
+  display: block;
 }

@@ -3,8 +3,7 @@
 }
 
 #simulation #controller {
-  width: 380px;
-  overflow-x: hidden;
+  width: 320px;
 }
 
 #simulation #chart {
@@ -12,27 +11,15 @@
 }
 
 .buttonRight {
-  padding-right: 20px;
+  right: -20px;
+  padding-right: 15px;
   position: absolute;
-  right: -28px;
   z-index: 1000;
+  height: 40px;
+  width: 40px;
+  line-height: 40px !important;
 }
 
-.label {
-  width: 100%;
-}
-
-.label .button {
-  opacity: 0;
-}
-
-.label:hover .button {
-  opacity: 1;
-}
-
-.controllerMode a {
-  min-width: 32px;
-  padding: 0 12px;
-  height: 32px;
-  font-size: 11px;
+::ng-deep .buttonRight .mat-button-wrapper {
+  padding: 0 !important;
 }

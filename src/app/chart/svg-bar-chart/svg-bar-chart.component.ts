@@ -11,18 +11,19 @@ import { ChartService } from '../chart.service';
 })
 export class SVGBarChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data: any;
-  @Input() height: number;
+  @Input() height: number = 0;
+  @Input() margin: any = { top: 0, right: 0, bottom: 0, left: 0 };
   @Input() opacity: number = 1;
   @Input() options: any;
   @Input() view: string;
+  @Input() width: number = 0;
   @Input() xDomain: number[];
   @Input() xLabel: string = '';
   @Input() xScale: d3.scaleLinear;
   @Input() yDomain: number[];
   @Input() yLabel: string = '';
   @Input() yScale: d3.scaleLinear;
-  private subscription$: any;
-  public width: number;
+  private subscription: any;
   public xAxis: d3.axisBottom;
   public yAutoscale: boolean = true;
   public yAxis: d3.axisLeft;
@@ -30,30 +31,28 @@ export class SVGBarChartComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     public _chartService: ChartService,
   ) {
+    this.xScale = this.xScale || this._chartService.xScale;
   }
 
   ngOnInit() {
     // console.log('Init SVG bar chart')
-    this.subscription$ = this._chartService.update.subscribe(() => this.update())
+    this.subscription = this._chartService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy SVG bar chart')
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   ngOnChanges() {
     // console.log('Change SVG bar chart')
-
-    this.width = this.xScale.range()[1];
-    this.xAxis = d3.axisBottom(this.xScale)
-    this.yAxis = d3.axisLeft(this.yScale)
-
     this.update()
   }
 
   update() {
     // console.log('Update SVG bar chart')
+    this.xAxis = d3.axisBottom(this.xScale)
+    this.yAxis = d3.axisLeft(this.yScale)
 
     this.yAutoscale = this._chartService.yAutoscale || this.yAutoscale;
     if (this.yAutoscale) {

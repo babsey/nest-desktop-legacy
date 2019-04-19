@@ -15,8 +15,6 @@ import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-
   styleUrls: ['./array-input.component.css']
 })
 export class ArrayInputComponent implements OnInit {
-  @Input() model: string;
-  @Input() id: string;
   @Input() value: any;
   @Input() options: any = {};
   @Output() valueChange = new EventEmitter;
@@ -32,14 +30,14 @@ export class ArrayInputComponent implements OnInit {
     // console.log('Init array input')
   }
 
-  onChange(value) {
+  stringify(value) {
+    return JSON.stringify(value);
+  }
+
+  onChange(valueJSON) {
     // console.log('Change value of array input')
-    if (value.length == 0) {
-      this.valueChange.emit([])
-    } else {
-      let valueArray = value.split(",").map(d => parseFloat(d));
-      this.valueChange.emit(valueArray);
-    }
+    var value = JSON.parse(valueJSON) || [];
+    this.valueChange.emit(value);
   }
 
   openGeneratorDialog(): void {
@@ -55,21 +53,6 @@ export class ArrayInputComponent implements OnInit {
         this.valueChange.emit(this.value)
       }
     });
-  }
-
-  setDefaultValue() {
-    this.valueChange.emit(this.options.value)
-  }
-
-  openConfigDialog() {
-    if (this.id && this.model) {
-      this.dialog.open(FormsConfigDialogComponent, {
-        data: {
-          id: this.id,
-          model: this.model,
-        }
-      });
-    }
   }
 
 }

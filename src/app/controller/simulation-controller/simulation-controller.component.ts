@@ -29,7 +29,12 @@ export class SimulationControllerComponent implements OnInit {
     return this._controllerConfigService.config.simulation.params;
   }
 
-  onChange() {
+  onChange(id, value) {
+    this._dataService.data.simulation[id] = value;
+    if (id == 'random_seed') {
+      this._networkSimulationService.config['autoRandomSeed'] = false;
+      this._networkSimulationService.saveConfig()
+    }
     this.simulationChange.emit()
   }
 

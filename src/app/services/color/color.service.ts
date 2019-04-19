@@ -35,7 +35,6 @@ export class ColorService {
   }
 
   nodeIdx(idx) {
-    if (!this._dataService.options.ready) return ''
     var node = this._dataService.data.collections[idx];
     return this.node(node)
   }

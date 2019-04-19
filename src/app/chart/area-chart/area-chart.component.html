@@ -1,18 +1,20 @@
 <div style="position:relative">
   <canvas class="plot areas"
-    [style.left]="_chartService.g.left + 'px'"
-    [style.top]="_chartService.g.top + 'px'"
+    [style.left]="margin.left + 'px'"
+    [style.top]="margin.top + 'px'"
   ></canvas>
 
   <app-coordinate-axes
     (change)="onAxesChange($event)"
     [height]="height"
-    [idx]="idx"
+    [idx]="n-idx-1"
+    [margin]="margin"
     [n]="n"
+    [width]="width"
     [xAxis]="xAxis"
     [xDomain]="xDomain"
     [xLabel]="xLabel"
-    [xScale]="_chartService.xScale"
+    [xScale]="xScale"
     [yAutoscale]="yAutoscale"
     [yAxis]="yAxis"
     [yDomain]="yDomain"

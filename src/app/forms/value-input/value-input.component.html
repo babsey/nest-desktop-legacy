@@ -1,23 +1,30 @@
-<span class="form-container">
+<mat-menu #valueMenu="matMenu" class="value-menu">
+  <button mat-menu-item *ngIf="options.value" matTooltip="Default value: {{ options.value }}" matTooltipPosition="before" (click)="setDefaultValue()">Set default value</button>
+</mat-menu>
 
-  <mat-form-field matTooltip="{{ id }}" matTooltipPosition="before">
-    <mat-label>{{ options.label }}</mat-label>
-    <input matInput type="number" [(ngModel)]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.inputSpec.min || 0" [max]="options.inputSpec.max || 1" [step]="options.inputSpec.step || 1" (change)="onChange($event.target.value)" />
-  </mat-form-field>
+<mat-menu #inputMenu="matMenu" class="input-menu" overlapTrigger="true">
+  <span class="input-container mat-accent" (click)="$event.stopPropagation();">
+    <div class="input-header flex">
+      <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
+      <span class="flex-spacer"></span>
+      <mat-nav-list style="padding:0;display:flex;">
+        <mat-list-item class="param-menu-button" [matMenuTriggerFor]="valueMenu">
+          <span class="param-unit">{{ options.unit }}</span>
+          <fa-icon class="param-menu-button-icon" icon="ellipsis-v"></fa-icon>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
 
-  <span>
-    <mat-menu #valueMenu="matMenu" class="value-menu">
-      <button mat-menu-item *ngIf="options.value" matTooltip="Default value: {{ options.value }}" matTooltipPosition="before" (click)="setDefaultValue()">
-        <span>Set default value</span>
-      </button>
-      <button mat-menu-item *ngIf="model" matTooltip="Config" matTooltipPosition="before" (click)="openConfigDialog()">
-        <span>Configure</span>
-      </button>
-    </mat-menu>
-
-    <button mat-icon-button [matMenuTriggerFor]="valueMenu" class="button">
-      <fa-icon icon="ellipsis-v"></fa-icon>
-    </button>
+    <mat-form-field style="width:calc(100% - 10px); font-size:12px; padding: 0 5px">
+      <input class="input" type="number" [(ngModel)]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
+    </mat-form-field>
   </span>
 
+</mat-menu>
+
+<span class="param-container flex" [matMenuTriggerFor]="inputMenu">
+  <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
+  <span class="flex-spacer"></span>
+  <span class="param-value ellipsis">{{ value || options.value }}</span>
+  <span class="param-unit">{{ options.unit }}</span>
 </span>

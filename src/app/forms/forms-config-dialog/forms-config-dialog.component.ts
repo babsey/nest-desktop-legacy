@@ -20,9 +20,10 @@ export class FormsConfigDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    var params = this._modelService.config(this.data.model).params.find(param => param.id == this.data.id);
-    this.idx = this._modelService.config(this.data.model).params.indexOf(params);
-    this.options = Object.apply({}, params);
+    var configModel = this._modelService.config(this.data.model)
+    var params = configModel.params.find(param => param.id == this.data.id);
+    this.idx = configModel.params.map(param => param.id).indexOf(params.id);
+    this.options = Object.assign({}, params);
     // this.options = params;
   }
 
@@ -30,7 +31,7 @@ export class FormsConfigDialogComponent implements OnInit {
     var value = event.target.value;
     var ticks = value.split(',');
     ticks = ticks.map(d => parseFloat(d));
-    this.options.inputSpec.ticks = ticks;
+    this.options.ticks = ticks;
   }
 
   onNoClick(): void {

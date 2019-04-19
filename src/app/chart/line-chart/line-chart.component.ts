@@ -13,11 +13,13 @@ import { ChartService } from '../chart.service';
 export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() curve: any = d3.curveLinear;
   @Input() data: any;
-  @Input() height: number;
+  @Input() height: number = 0;
   @Input() idx: number = 0;
+  @Input() margin: any = { left: 0, right: 0, top: 0, bottom: 0 };
   @Input() opacity: number = 1;
   @Input() options: any = {};
   @Input() overlap: number = 0;
+  @Input() width: number = 0;
   @Input() xDomain: number[];
   @Input() xLabel: string = '';
   @Input() xScale: d3.scaleLinear;
@@ -26,7 +28,7 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() yScale: d3.scaleLinear;
   private line: d3.line;
   private selector: d3.selection;
-  private subscription$: any;
+  private subscription: any;
   public n: any;
   public xAxis: d3.axisBottom;
   public yAutoscale: boolean = true;
@@ -41,48 +43,45 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     // console.log('Init line chart')
-    this.subscription$ = this._chartService.update.subscribe(() => this.update())
+    this.subscription = this._chartService.update.subscribe(() => this.update())
   }
 
   ngOnDestroy() {
     // console.log('Destroy line chart')
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   ngOnChanges() {
     // console.log('Changes line chart')
-    let margin = this._chartService.g;
-    let height = (this.height - margin.top - margin.bottom);
-    this.xAxis = d3.axisBottom(this.xScale)
-      .tickSize(-height);
-    this.yAxis = d3.axisLeft(this.yScale)
-      .tickSize(-this.xScale.range()[1])
     this.update()
   }
 
   update() {
     // console.log('Update line chart')
+    if (this.data.length == 0) return
+    let height = (this.height - this.margin.top - this.margin.bottom);
+    let width = (this.width - this.margin.left - this.margin.right);
+
+    this.xAxis = d3.axisBottom(this.xScale).tickSize(-height);
+    this.yAxis = d3.axisLeft(this.yScale).tickSize(-width)
+
     this.xScale = this.xScale || this._chartService.xScale;
+    this.xScale.range([0, width])
     let xDomain = this.xScale.domain();
 
-    let selected = this._chartService.selected;
-    var data = this.data; //.filter((d, i) => selected.length < 1 ? true : selected.includes(d._meta.nodeIdx));
-    var _meta = data.map(d => d._meta);
-    data = data.map(d => d.filter(dd => xDomain[0] <= dd.x && dd.x <= xDomain[1]));
-    if (data.length == 0) return
-    this.n = data.length;
-
-    let width = this.xScale.range()[1];
-    let margin = this._chartService.g;
-    let height = (this.height - margin.top - margin.bottom);
-    let dataHeight = height / (this.n || 1);
+    let dataHeight = height / (this.data.length || 1);
     let axisHeight = dataHeight + this.overlap * (height - dataHeight);
     this.yScale.range([axisHeight, 0]);
+
+    let selected = this._chartService.selected;
+    var data = this.data.map(d => d.filter(dd => xDomain[0] <= dd.x && dd.x <= xDomain[1]));
+    var _meta = this.data.map(d => d._meta);
+    this.n = data.length;
 
     this.yAutoscale = this._chartService.yAutoscale || this.yAutoscale;
     if (this.yAutoscale) {
       let yDomain = d3.extent(d3.merge(data), d => d.y);
-      this.yScale.domain(yDomain)
+      this.yScale.domain(this.yDomain)
     }
 
     this.xAxis.scale(this.xScale).ticks(5);
@@ -101,9 +100,7 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
       .context(context);
 
     context.clearRect(0, 0, width, height);
-    data.reverse()
-    data.forEach((d, i) => {
-      var idx = data.length - i - 1;
+    data.forEach((d, idx) => {
       var color = selected.length != 0 && selected.includes(_meta[idx].nodeIdx) ? _meta[idx].color : 'black';
       context.beginPath();
       context.globalAlpha = (this.idx == idx) ? 1 : this.opacity;

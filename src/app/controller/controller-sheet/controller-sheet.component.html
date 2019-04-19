@@ -1,30 +1,6 @@
-<span *ngIf="_controllerConfigService.config.showSketch">
-  <span style="width:540px; display: block">
-    <app-sketch [data]="_dataService.data" width="540" height="200" [drawing]="true"></app-sketch>
-  </span>
-</span>
-
-<span class="no-print" id="controllerSheetButtons">
-  <button mat-icon-button (click)="run()" matTooltip="Run simulation">
-    <fa-icon icon="play-circle"></fa-icon>
-  </button>
-  <button mat-icon-button (click)="toggleSketchShow()" [class.mat-primary]="_controllerConfigService.config.showSketch" matTooltip="Show network sketch">
-    <fa-icon icon="share-alt"></fa-icon>
-  </button>
-  <button mat-icon-button (click)="undo()" [disabled]="_dataService.undoStack.length<=1" [matBadgeHidden]="_dataService.undoStack.length<=1" [matBadge]="_dataService.undoStack.length-1" matBadgeColor="accent" matBadgePosition="below after" matTooltip="Undo network configuration">
-    <fa-icon icon="undo-alt"></fa-icon>
-  </button>
-  <button mat-icon-button (click)="redo()" [disabled]="_dataService.redoStack.length==0" [matBadgeHidden]="_dataService.redoStack.length==0" [matBadge]="_dataService.redoStack.length" matBadgeColor="accent" matBadgePosition="below after" matTooltip="Redo network configuration">
-    <fa-icon icon="redo-alt"></fa-icon>
-  </button>
-  <button mat-icon-button (click)="delete()" [disabled]="!this._sketchService.selected.node && !this._sketchService.selected.link" matTooltip="Delete selected" matTooltipPosition="above">
-    <fa-icon icon="eraser"></fa-icon>
-  </button>
-  <div style="flex-grow:1"></div>
-  <button mat-icon-button (click)="clear()" matTooltip="Clear network configuration" matTooltipPosition="above">
-    <fa-icon icon="trash-alt"></fa-icon>
-  </button>
-  <button mat-icon-button (click)="close()">
+<span style="width:540px; display: block">
+  <button mat-icon-button (click)="bottomSheetRef.dismiss()" style="position:absolute; right:20px; top:10px; z-index:1000">
     <fa-icon icon="times"></fa-icon>
   </button>
+  <app-sketch [data]="_dataService.data" width="540" height="200" [drawing]="true"></app-sketch>
 </span>

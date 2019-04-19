@@ -1,17 +1,81 @@
-.form-container {
-  display: inline-flex;
+.param-container {
+  display: flex;
+  padding: 0;
+}
+
+.param-container .mat-list-item {
+  height: 24px !important;
+  line-height: 24px;
+}
+
+::ng-deep .param-container .param .mat-list-item-content {
+  padding: 0 !important;
+}
+
+.param-container .param-label {
   width: 100%;
 }
 
-.form-container mat-form-field {
+.param-container .param-value {
+  max-width: 50%;
+  min-width: 20%;
+  text-align: right;
+}
+
+.param-container .param-unit {
+  text-align: right;
+  width: 24px;
+}
+
+::ng-deep .param-menu .mat-menu-item {
+  height: 24px !important;
+  line-height: 24px;
+}
+
+::ng-deep .input-menu {
+  width: 280px;
+}
+
+::ng-deep .input-menu .input-container {
+  position: relative;
   width: 100%;
 }
 
-.form-container .button {
-  font-size: 11px;
-  opacity: 0;
+::ng-deep .input-menu .input-container .input-header {
+  font-size: 12px;
+  width: calc(100% - 20px);
+  margin: 0 10px;
 }
 
-.form-container:hover .button {
-  opacity: 1;
+::ng-deep .input-menu .input-container .input-header .param-menu-button {
+  font-size: 12px;
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+  text-align: center;
+}
+
+::ng-deep .input-menu .input-container .input-header .mat-list-item-content {
+  padding: 0 !important;
+}
+
+::ng-deep .input-menu .input-container .input-header .param-unit {
+  width: 24px;
+}
+
+::ng-deep .input-menu .input-container:hover .input-header .param-unit {
+  display: none;
+}
+
+::ng-deep .input-menu .input-container .input-header .param-menu-button-icon {
+  width: 24px;
+  display: none;
+}
+
+::ng-deep .input-menu .input-container:hover .input-header .param-menu-button-icon {
+  display: block;
+}
+
+::ng-deep .input-menu .input-container .input {
+  width: 100%;
 }

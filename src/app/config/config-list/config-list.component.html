@@ -1,12 +1,34 @@
-<mat-toolbar style="font-size:16px;line-height:32px;height:32px" color="accent">
-  Configurations
-</mat-toolbar>
+<ng-container [ngSwitch]="_navigationService.options.sidenavShortView">
 
-<mat-nav-list class="mat-primary">
-  <mat-list-item (click)="navigate('app')" [class.active]="isActive('app')">
-    <fa-icon icon="clipboard-check"></fa-icon>Application
-  </mat-list-item>
-  <mat-list-item (click)="navigate('db')" [class.active]="isActive('db')">
-    <fa-icon icon="database"></fa-icon>Database
-  </mat-list-item>
-</mat-nav-list>
+  <span *ngSwitchCase="true">
+    <mat-nav-list dense class="mat-primary" style="padding:0">
+      <a mat-list-item>
+        <fa-icon class="icon" icon="ellipsis-v"></fa-icon>
+      </a>
+      <a mat-list-item (click)="navigate('app')" [class.active]="isActive('app')">
+        <fa-icon class="icon" icon="clipboard-check"></fa-icon>
+      </a>
+      <a mat-list-item (click)="navigate('db')" [class.active]="isActive('db')">
+        <fa-icon class="icon" icon="database"></fa-icon>
+      </a>
+    </mat-nav-list>
+
+  </span>
+
+  <span *ngSwitchCase="false">
+    <mat-toolbar style="font-size:16px;line-height:40px;height:40px" color="accent">
+      Configurations
+    </mat-toolbar>
+
+    <mat-nav-list dense class="mat-primary" style="padding:0">
+      <a mat-list-item (click)="navigate('app')" [class.active]="isActive('app')">
+        <fa-icon icon="clipboard-check"></fa-icon>Application
+      </a>
+      <a mat-list-item (click)="navigate('db')" [class.active]="isActive('db')">
+        <fa-icon icon="database"></fa-icon>Database
+      </a>
+    </mat-nav-list>
+
+  </span>
+
+</ng-container>

@@ -56,17 +56,15 @@ export class ModelDetailsComponent implements OnInit, OnChanges {
 
   addParam(id, value) {
     var param = {
-        id: id,
-        label: id,
-        value: value,
-        level: 1,
-        input: 'valueSlider',
-        inputSpec: {
-          min: 0,
-          max: 100,
-          step: 1,
-        }
-      };
+      id: id,
+      label: id,
+      value: value,
+      level: 1,
+      input: 'valueSlider',
+      min: 0,
+      max: 100,
+      step: 1
+    };
     if (Array.isArray(value)) {
       param.input = 'arrayInput';
     }

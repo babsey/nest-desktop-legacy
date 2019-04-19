@@ -1,28 +1,25 @@
 <span class="nodes" *ngIf="!_controllerService.options.editing || !editing">
-  <ng-container *ngFor="let node of nodes">
-    <mat-list dense class="node" [style.display]="nodeDisplay(node)">
+  <ng-container *ngFor="let node of data.collections">
+    <mat-list dense class="node" [style.display]="nodeDisplay(node) ? '' : 'none'">
       <mat-list-item class="header">
         <span class="flex">
-          <span>
-            <button mat-icon-button class="nodeButton" [style.border-color]="_colorService.node(node)" (click)="_sketchService.toggleSelectNode(node)">{{ node.idx }}</button>
-            <span style="font-weight: bold; margin-left:5px">{{ label(node) }}</span>
+          <span style="display:flex">
+            <svg width="40" height="40">
+              <g app-node [node]="node" (nodeClick)="_sketchService.selectNode(node)" transform="translate(20,20)"></g>
+            </svg>
+            <span style="font-weight: bold; margin-left: 8px">{{ modelConfig(node).label | capitalize }}</span>
           </span>
-          <span>({{ node.n || 1 }})</span>
+          <span [style.display]="paramDisplay(node, 'n') ? '' : 'none'">({{ node.n || 1 }})</span>
         </span>
       </mat-list-item>
 
-      <ng-container *ngFor="let param of params(node)">
-        <mat-list-item class="item" [style.border-color]="_colorService.node(node)" [style.display]="paramDisplay(node, param.id)">
+      <ng-container *ngFor="let param of modelConfig(node).params ">
+        <mat-list-item class="item" [style.border-color]="_colorService.node(node)" [style.display]="paramDisplay(model(node), param.id) ? '' : 'none'">
           <span class="flex">
-            <span class="label ellipsis" (dblclick)="paramReset(node, param)">{{ param.label }}</span>
+            <span class="label ellipsis">{{ param.label | capitalize }}</span>
             <span class="flex-spacer"></span>
-            <span [class.view]="slide" class="ellipsis">{{ _formatService.format(node.params[param.id] || param.value) }}</span>
-            <span [class.view]="slide" style="margin-left: 2px">{{ param.unit }}</span>
-            <span [class.control]="slide" *ngIf="param.input=='valueSlider'" class="slider" style="position:relative; width:100%">
-              <mat-slider thumbLabel [(ngModel)]="node.params[param.id]" [min]="param.inputSpec.min" [max]="param.inputSpec.max" [step]="param.inputSpec.step" (change)="onChange()" style="width:100%"></mat-slider>
-              <span style="position:absolute;bottom:-4px;left:0;font-size:9px;">{{param.inputSpec.min}}</span>
-              <span style="position:absolute;bottom:-4px;right:0;font-size:9px;">{{param.inputSpec.max}}</span>
-            </span>
+            <span class="ellipsis">{{ _formatService.format(model(node).params[param.id] || param.value) }}</span>
+            <span style="margin-left: 2px">{{ param.unit }}</span>
           </span>
         </mat-list-item>
       </ng-container>
@@ -31,24 +28,32 @@
 </span>
 
 <span class="nodes" *ngIf="_controllerService.options.editing && editing">
-  <ng-container *ngFor="let node of nodes">
-    <mat-selection-list dense class="node mat-primary" [(ngModel)]="node.display">
+  <ng-container *ngFor="let node of data.collections">
+    <mat-selection-list dense class="node mat-primary" [(ngModel)]="model.display">
       <mat-list-option value="node" class="header" (dblclick)="dblclick(node)">
         <span class="flex">
-          <span>
-            <button mat-icon-button class="nodeButton" [style.border-color]="_colorService.node(node)" (click)="_sketchService.toggleSelectNode(node)">{{ node.idx }}</button>
-            <span style="font-weight: bold; margin-left:5px">{{ label(node) }}</span>
+          <span style="display:flex;">
+            <svg width="40" height="40">
+              <g app-node [node]="node" transform="translate(20,20)"></g>
+            </svg>
+            <span style="font-weight: bold; margin-left:8px">{{ modelConfig(node).label | capitalize }}</span>
           </span>
-          <span>({{ node.n }})</span>
         </span>
       </mat-list-option>
 
-      <ng-container *ngFor="let param of params(node)">
+      <mat-list-option value="n" class="item" [style.border-color]="_colorService.node(node)">
+        <span class="flex">
+          <span>Population size</span>
+          <span>{{ node.n }}</span>
+        </span>
+      </mat-list-option>
+
+      <ng-container *ngFor="let param of modelConfig(node).params ">
         <mat-list-option [value]="param.id" [style.border-color]="_colorService.node(node)" class="item">
           <span class="flex" matTooltip="{{ param.id }}" matTooltipPosition="before">
-            <span class="ellipsis" style="min-width: 50%; max-width: 80%; white-space: nowrap">{{ param.label }}</span>
+            <span class="ellipsis" style="min-width: 50%; max-width: 80%; white-space: nowrap">{{ param.label | capitalize }}</span>
             <span class="flex-spacer"></span>
-            <span class="ellipsis">{{ _formatService.format(node.params[param.id] || param.value) }}</span>
+            <span class="ellipsis">{{ _formatService.format(model(node).params[param.id] || param.value) }}</span>
             <span style="margin-left: 2px">{{ param.unit }}</span>
           </span>
         </mat-list-option>

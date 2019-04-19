@@ -3,5 +3,15 @@
 }
 
 #model mat-sidenav {
-  width: 400px;
+  width: 320px;
+}
+
+::ng-deep #model mat-sidenav .mat-tab-label {
+  min-width: 0px;
+}
+
+#model .modelToolbar {
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
 }

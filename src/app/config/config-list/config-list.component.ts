@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { Router } from '@angular/router';
+import { NavigationService } from '../../navigation/navigation.service';
 
 @Component({
   selector: 'app-config-list',
@@ -12,6 +13,7 @@ export class ConfigListComponent implements OnInit {
 
   constructor(
     private router: Router,
+    public _navigationService: NavigationService,
   ) { }
 
   ngOnInit() {

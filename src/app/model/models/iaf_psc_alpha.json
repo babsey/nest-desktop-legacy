@@ -4,133 +4,113 @@
   "label": "IAF psc alpha",
   "params": [{
       "id": "C_m",
-      "label": "Capacitance of the membrane",
+      "label": "capacitance of the membrane",
       "level": 2,
       "unit": "pF",
       "value": 250,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 500,
-        "min": 1,
-        "step": 1
-      }
+      "max": 500,
+      "min": 1,
+      "step": 1
     },
     {
       "id": "E_L",
-      "label": "Leak reversal potential",
+      "label": "leak reversal potential",
       "level": 2,
       "unit": "mV",
       "value": -70,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 100,
-        "min": -100,
-        "step": 1
-      }
+      "max": 100,
+      "min": -100,
+      "step": 1
     },
     {
       "id": "I_e",
-      "label": "Constant external input current",
+      "label": "constant external input current",
       "level": 2,
       "unit": "pA",
       "value": 0,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 100,
-        "min": -100,
-        "step": 1
-      }
+      "max": 100,
+      "min": -100,
+      "step": 1
     },
     {
       "id": "V_m",
-      "label": "Initial membrane potential",
+      "label": "initial membrane potential",
       "level": 3,
       "unit": "mV",
       "value": -70,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 100,
-        "min": -100,
-        "step": 1
-      }
+      "max": 100,
+      "min": -100,
+      "step": 1
     },
     {
       "id": "V_reset",
-      "label": "Reset Potential of the membrane",
+      "label": "reset Potential of the membrane",
       "level": 3,
       "unit": "mV",
       "value": -70,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 100,
-        "min": -100,
-        "step": 1
-      }
+      "max": 100,
+      "min": -100,
+      "step": 1
     },
     {
       "id": "V_th",
-      "label": "Spike threshold",
+      "label": "spike threshold",
       "level": 3,
       "unit": "mV",
       "value": -55,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 100,
-        "min": -100,
-        "step": 1
-      }
+      "max": 100,
+      "min": -100,
+      "step": 1
     },
     {
       "id": "t_ref",
-      "label": "Duration of refractory period",
+      "label": "duration of refractory period",
       "level": 3,
       "unit": "ms",
       "value": 2,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 5,
-        "min": 0.1,
-        "step": 0.1
-      }
+      "max": 5,
+      "min": 0.1,
+      "step": 0.1
     },
     {
       "id": "tau_m",
-      "label": "Membrane time constant",
+      "label": "membrane time constant",
       "level": 2,
       "unit": "ms",
       "value": 10,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 30,
-        "min": 1,
-        "step": 0.1
-      }
+      "max": 30,
+      "min": 1,
+      "step": 0.1
     },
     {
       "id": "tau_syn_ex",
-      "label": "Rise time of the excitatory synaptic alpha function",
+      "label": "rise time of the excitatory synaptic alpha function",
       "level": 4,
       "unit": "ms",
       "value": 2,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 4,
-        "min": 0.1,
-        "step": 0.1
-      }
+      "max": 4,
+      "min": 0.1,
+      "step": 0.1
     },
     {
       "id": "tau_syn_in",
-      "label": "Rise time of the inhibitory synaptic alpha function",
+      "label": "rise time of the inhibitory synaptic alpha function",
       "level": 4,
       "unit": "ms",
       "value": 2,
       "input": "valueSlider",
-      "inputSpec": {
-        "max": 4,
-        "min": 0.1,
-        "step": 0.1
-      }
+      "max": 4,
+      "min": 0.1,
+      "step": 0.1
     }
   ]
 }

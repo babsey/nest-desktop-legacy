@@ -2,30 +2,26 @@
   "id": "kernel",
   "params": [{
     "id": "local_num_threads",
-    "label": "Local number of threads",
+    "label": "local number of threads",
     "value": 1,
     "input": "tickSlider",
-    "inputSpec": {
-      "ticks": [
-        1,
-        2,
-        4,
-        8
-      ]
-    }
+    "ticks": [
+      1,
+      2,
+      4,
+      8
+    ]
   }, {
     "id": "resolution",
-    "label": "Time resolution",
+    "label": "time resolution",
     "unit": "ms",
     "value": 0.1,
     "input": "tickSlider",
-    "inputSpec": {
-      "ticks": [
-        0.001,
-        0.01,
-        0.1,
-        1
-      ]
-    }
+    "ticks": [
+      0.001,
+      0.01,
+      0.1,
+      1
+    ]
   }]
 }

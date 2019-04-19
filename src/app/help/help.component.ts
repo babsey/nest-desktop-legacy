@@ -10,14 +10,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HelpComponent implements OnInit, OnDestroy {
   public help: string = '';
-  private subscription$: any;
+  private subscription: any;
 
   constructor(
     private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.subscription$ = this.route.params.subscribe(params => {
+    this.subscription = this.route.params.subscribe(params => {
       if ('help' in params) {
         this.help = params['help'];
       }
@@ -25,7 +25,7 @@ export class HelpComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription$.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
 }

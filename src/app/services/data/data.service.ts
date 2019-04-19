@@ -36,13 +36,13 @@ export class DataService {
     return {
       _id: '',
       name: '',
-      simulation: {
-        time: 1000.0,
-      },
       kernel: {},
-      models: [],
+      models: {},
       collections: [],
       connectomes: [],
+      simulation: {
+        time: 1000.0,
+      }
     }
   }
 
@@ -54,31 +54,43 @@ export class DataService {
     if (data['kernel']) {
       cloned['kernel'] = Object.assign({}, data['kernel']);
     }
+    if (data['models']) {
+      cloned['models'] = Object.assign({}, data['models']);
+    }
     if (data['collections']) {
       cloned['collections'] = data['collections'].map(collection => {
-        return Object.assign({
-          n: 1,
-          params: {},
-        }, {
-            idx: collection['idx'],
-            element_type: collection['element_type'],
-            model: collection['model'],
-            n: collection['n'] || 1,
-            params: Object.assign({}, collection['params']),
-          })
+        var newCollection = Object.assign({}, {
+          idx: collection['idx'],
+          element_type: collection['element_type'],
+          model: collection['model'],
+        })
+        if ('topology' in collection) {
+          var topology = collection['topology'];
+          newCollection['topology'] = topology;
+        } else {
+          newCollection['n'] = collection['n'] || 1;
+        }
+        return newCollection
       })
     }
     if (data['connectomes']) {
       cloned['connectomes'] = data['connectomes'].map(connectome => {
-        return {
+        var newConnectome = {
           idx: connectome['idx'],
           pre: connectome['pre'],
           post: connectome['post'],
-          conn_spec: Object.assign(
-            { 'rule': 'all_to_all' }, connectome['conn_spec']),
-          syn_spec: Object.assign(
-            { 'model': 'static_synapse' }, connectome['syn_spec']),
+        };
+        if (this.isBothLayer(connectome, data['collections'])) {
+          newConnectome['projections'] = Object.assign({
+            'allow_autapses': true,
+            'allow_multapses': true,
+            'connection_type': 'divergent'
+          }, connectome['projections']);
+        } else {
+          newConnectome['conn_spec'] = Object.assign({ 'rule': 'all_to_all' }, connectome['conn_spec']);
+          newConnectome['syn_spec'] = Object.assign({ 'model': 'static_synapse' }, connectome['syn_spec']);
         }
+        return newConnectome;
       })
     }
     return cloned;
@@ -140,11 +152,18 @@ export class DataService {
     var data = this.data;
     this.history(data)
 
+    var models = data.models;
+    data.models = {};
     var collections = data.collections.filter(d => d.idx != idx);
     collections.forEach((d, i) => {
       d.idx = i;
+      var model = models[d.model];
+      var newModel = d.element_type + '-' + d.idx;
+      data.models[newModel] = model;
+      d.model = newModel;
     })
     data.collections = collections;
+    console.log(data)
 
     var connectomes = data.connectomes.filter(d => d.pre != idx && d.post != idx);
     if (connectomes.length != data.connectomes.length) {
@@ -217,6 +236,13 @@ export class DataService {
         model: 'static_synapse'
       }
     }
+  }
+
+  isBothLayer(connectome, collections=null) {
+    var collection = collection || this.data.collections;
+    var pre = collections[connectome.pre];
+    var post = collections[connectome.post];
+    return pre.hasOwnProperty('topology') && post.hasOwnProperty('topology');
   }
 
 }

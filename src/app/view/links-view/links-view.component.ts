@@ -17,7 +17,6 @@ export class LinksViewComponent implements OnInit {
   @Input() data: any = {};
   @Input() selective: boolean = false;
   @Input() editing: boolean = false;
-  @Input() slide: boolean = false;
 
   constructor(
     private _networkSimulationService: NetworkSimulationService,
@@ -39,13 +38,13 @@ export class LinksViewComponent implements OnInit {
     if (link.display.includes('link')) {
       link.display = [];
     } else {
-      link.display = ['link', 'connRule', 'synModel', 'synWeight', 'synDelay'];
+      link.display = ['link', 'connRule', 'synModel', 'weight', 'delay'];
     }
   }
 
   linkDisplay(link) {
-    var display = 'display' in link ? link.display.includes('link') : true;
-    return (this._sketchService.isSelectedLink_or_all(link) || !this.selective) && display ? '' : 'none'
+    // var display = 'display' in link ? link.display.includes('link') : true;
+    return (this._sketchService.isSelectedLink_or_all(link) || !this.selective) ? '' : 'none'
   }
 
   paramDisplay(link, param) {
@@ -53,17 +52,8 @@ export class LinksViewComponent implements OnInit {
     return display ? '' : 'none'
   }
 
-  onChange() {
-    if (!this._dataService.options.edit) {
-      this._networkSimulationService.run()
-    }
-  }
-
-  paramReset(obj, key, val) {
-    if (this.slide) {
-      obj[key] = val;
-      this.onChange()
-    }
+  isBothLayer(link) {
+    return this._dataService.isBothLayer(link, this.data.collections);
   }
 
 }

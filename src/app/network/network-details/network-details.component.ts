@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AppConfigService } from '../../config/app-config/app-config.service';
 import { ControllerService } from '../../controller/controller.service';
@@ -18,6 +19,7 @@ export class NetworkDetailsComponent implements OnInit {
     public _controllerService: ControllerService,
     public _dataService: DataService,
     public _networkService: NetworkService,
+    public router: Router,
   ) { }
 
   ngOnInit() {
@@ -30,6 +32,10 @@ export class NetworkDetailsComponent implements OnInit {
     this._dataService.data.connectomes.map(connectome => {
       delete connectome['display']
     })
+  }
+
+  simulate() {
+    this.router.navigate([{ outlets: { primary: 'network/' + this._dataService.data._id + '/simulate' } }])
   }
 
 }

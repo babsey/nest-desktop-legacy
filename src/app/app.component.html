@@ -5,7 +5,7 @@
   </span>
 
   <span *ngSwitchCase="true">
-    <mat-sidenav-container id="container" hasBackdrop="false">
+    <mat-sidenav-container id="container" hasBackdrop="false" autosize>
 
       <mat-sidenav id="navigation"
         role="region"
@@ -14,13 +14,14 @@
         autoFocus="false"
         [opened]="isOpened()"
         (closed)="onClose()"
-        (openedChange)="onChange()"
+        (openedChange)="resize()"
         (mousemove)="buttonDisplay='1'"
         (mouseleave)="buttonDisplay='0.2'"
+        [style.width]="navigationWidth()"
+        style="padding-top:40px"
         >
-        <app-navigation></app-navigation>
+        <app-navigation style="position:fixed; top:0"></app-navigation>
         <router-outlet name="sidebar"></router-outlet>
-        <app-log></app-log>
       </mat-sidenav>
 
       <mat-sidenav-content #content>
