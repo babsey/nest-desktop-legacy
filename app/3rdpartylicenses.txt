@@ -211,6 +211,7 @@ to represent the company, product, or service to which they refer.**
 
 
 @material-extended/mde
+MIT
 The MIT License (MIT)
 
 Copyright (c) 2018 UIXD LTD.
