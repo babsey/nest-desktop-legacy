@@ -1,11 +1,13 @@
 Bootstrap: docker
 From: ubuntu:18.04
 
-%files
-  /home/spreizer/Projects/nest-desktop/dev/nest-desktop-ng /tmp/nest-desktop
-
 %labels
   AUTHOR Sebastian Spreizer <spreizer@web.de>
+  VERSION 1.4.0
+
+%files
+  ../dist/nest-desktop /opt/nest-desktop
+  ../nginx /tmp/
 
 %post
   apt update && apt install -y \
@@ -32,19 +34,11 @@ From: ubuntu:18.04
   git fetch
   git checkout nest-3
   git checkout 4348e5
-
   mkdir /tmp/nest-build
+
   cd /tmp/nest-build
   cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest/ -Dwith-python=3 /tmp/nest-simulator
   make
   make install
-
-  curl -sL https://deb.nodesource.com/setup_10.x | bash -
-  apt update && apt install -y nodejs
-
-  cd /tmp/nest-desktop
-  npm i
-  npm run build
-  cp -rf /tmp/nest-desktop/dist/nest-desktop /opt/
 
   rm -rf /tmp/*

@@ -9,7 +9,7 @@
   </mat-card>
 </mde-popover>
 
-<mde-popover #networkDetailsRight="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionX="before" mdePopoverOffsetX="321" mdePopoverPositionY="below" mdePopoverOffsetY="0">
+<mde-popover #networkDetailsRight="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionX="before" mdePopoverOffsetX="261" mdePopoverPositionY="below" mdePopoverOffsetY="0">
   <mat-card style="width:600px">
     <app-sketch [data]="network" width="600" height="200"></app-sketch>
     <span style="display:flex">
@@ -24,9 +24,13 @@
     <fa-icon icon="broom" style="margin-right:10px"></fa-icon>
     Empty network
   </button>
+  <button mat-menu-item (click)="selectionList=!selectionList">
+    <fa-icon icon="snowplow" style="margin-right:10px"></fa-icon>
+    Delete protocols
+  </button>
   <button mat-menu-item (click)="clearProtocols()">
     <fa-icon icon="snowplow" style="margin-right:10px"></fa-icon>
-    Remove all protocols
+    Delete all protocols
   </button>
 </mat-menu>
 
@@ -34,8 +38,8 @@
   <ng-container [ngSwitch]="_navigationService.options.sidenavShortView">
 
     <span *ngSwitchCase="true">
-      <mat-nav-list dense style="padding:0">
 
+      <mat-nav-list dense style="padding:0">
         <mat-list-item [matMenuTriggerFor]="networksMenu">
           <fa-icon class="icon" icon="ellipsis-v"></fa-icon>
         </mat-list-item>
@@ -48,35 +52,35 @@
             </mat-form-field>
           </span>
         </mat-list-item>
-
-
       </mat-nav-list>
 
       <mat-nav-list dense [mdePopoverTriggerFor]="networkDetailsLeft" mdePopoverTriggerOn="none" #networkTarget="mdePopoverTrigger" (mouseleave)="networkTarget.closePopover()" style="padding:0">
-        <mat-list-item *ngFor="let network of filteredNetworks" (click)="load(network)" (mouseover)="view(network, networkTarget)" [class.active]="isLoaded(network._id)" class="network">
-          <!-- <fa-icon matPrefix class="icon" [icon]="network.source == 'network' ? 'caret-right' : 'angle-right'"></fa-icon> -->
-          <span style="margin:-16px;width:40px;text-align:center">{{ shortLabel(network.name) }}</span>
-        </mat-list-item>
+        <ng-container *ngFor="let network of filteredNetworks" >
+          <mat-list-item (click)="load(network)" (mouseover)="view(network, networkTarget)" [class.active]="isLoaded(network._id)" class="network">
+            <!-- <fa-icon matPrefix class="icon" [icon]="network.source == 'network' ? 'caret-right' : 'angle-right'"></fa-icon> -->
+            <span style="margin:-16px;width:40px;text-align:center">{{ shortLabel(network.name) }}</span>
+          </mat-list-item>
+        </ng-container>
       </mat-nav-list>
 
     </span>
 
     <span *ngSwitchCase="false">
 
-      <mat-toolbar *ngIf="!_navigationService.options.sidenavShortView" style="font-size:16px;line-height:40px;height:40px" color="accent">
-        <span style="display:flex; width:100%">
-          Networks
-          <span class="flex-spacer"></span>
-          <button mat-icon-button style="font-size:12px" [matMenuTriggerFor]="networksMenu">
-            <fa-icon icon="ellipsis-v"></fa-icon>
-          </button>
-        </span>
-      </mat-toolbar>
-
+      <ng-container *ngIf="!_navigationService.options.sidenavShortView">
+        <mat-toolbar style="font-size:16px;line-height:40px;height:40px" color="accent">
+          <span style="display:flex; width:100%">
+            Networks
+            <span class="flex-spacer"></span>
+            <button mat-icon-button style="font-size:12px" [matMenuTriggerFor]="networksMenu">
+              <fa-icon icon="ellipsis-v"></fa-icon>
+            </button>
+          </span>
+        </mat-toolbar>
+      </ng-container>
 
       <mat-list dense style="padding:0">
-
-          <mat-list-item class="network">
+        <mat-list-item class="network">
           <span matLine class="sidenavItem">
             <span class="icon" style="height:48px;line-height:48px">
               <fa-icon icon="search"></fa-icon>
@@ -88,29 +92,54 @@
             </span>
           </span>
         </mat-list-item>
-
       </mat-list>
 
-      <mat-nav-list dense [mdePopoverTriggerFor]="networkDetailsRight" mdePopoverTriggerOn="none" #networkTarget="mdePopoverTrigger" (mouseleave)="networkTarget.closePopover()" style="padding:0">
-        <mat-list-item *ngFor="let network of filteredNetworks" (click)="load(network)" (mouseover)="view(network, networkTarget)" [class.active]="isLoaded(network._id)" class="network">
-          <a matLine class="sidenavItem">
-            <!-- <span class="icon">
-              <fa-icon matPrefix [icon]="network.source == 'network' ? 'caret-right' : 'angle-right'"></fa-icon>
-            </span> -->
-            <span class="flex">
+      <ng-container *ngIf="!selectionList">
+        <mat-nav-list dense [mdePopoverTriggerFor]="networkDetailsRight" mdePopoverTriggerOn="none" #networkTarget="mdePopoverTrigger" (mouseleave)="networkTarget.closePopover()" style="padding:0">
+          <ng-container *ngFor="let network of filteredNetworks">
+            <mat-list-item (click)="load(network)" (mouseover)="view(network, networkTarget)" [class.active]="isLoaded(network._id)" class="network">
+              <a matLine class="sidenavItem">
+                <!-- <span class="icon">
+                  <fa-icon matPrefix [icon]="network.source == 'network' ? 'caret-right' : 'angle-right'"></fa-icon>
+                </span> -->
+                <span class="flex">
+                  {{ network.name }}
+                  <div class="flex-spacer"></div>
+                  <ng-container *ngIf="network.updatedAt">
+                    <span class="timesince">
+                      {{ network.updatedAt | timesince }}
+                    </span>
+                  </ng-container>
+                </span>
+              </a>
+            </mat-list-item>
+          </ng-container>
+        </mat-nav-list>
+      </ng-container>
+
+      <ng-container *ngIf="selectionList">
+        <mat-selection-list dense [(ngModel)]="deleteProtocols" class="mat-primary" style="padding:0">
+          <ng-container *ngFor="let network of filteredNetworks">
+            <mat-list-option [value]="network._id" [disabled]="network.source=='network'" class="network">
               {{ network.name }}
-              <div class="flex-spacer"></div>
-              <span *ngIf="network.updatedAt" class="timesince">
-                {{ network.updatedAt | timesince }}
-              </span>
-            </span>
-          </a>
-        </mat-list-item>
-      </mat-nav-list>
+            </mat-list-option>
+          </ng-container>
+        </mat-selection-list>
+
+        <mat-nav-list>
+          <mat-list-item class="flex" (click)="deleteSelected()">
+            <span>Delete selected</span>
+            <span class="flex-spacer"></span>
+            <span>{{deleteProtocols.length}}</span>
+          </mat-list-item>
+        </mat-nav-list>
+      </ng-container>
 
     </span>
 
   </ng-container>
 </span>
 
-<app-log *ngIf="!_navigationService.options.sidenavShortView"></app-log>
+<ng-container *ngIf="!_navigationService.options.sidenavShortView">
+  <app-log></app-log>
+</ng-container>

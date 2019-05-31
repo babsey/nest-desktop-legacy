@@ -19,15 +19,17 @@
 <div class="chart">
   <mat-sidenav-container hasBackdrop="false" autosize>
     <mat-sidenav #controller class="chart-sidenav" role="region" mode="side" [opened]="_chartService.sidenavOpened" position="end" style="width:320px" autoFocus="false" (openedChange)="rescaleX()">
-      <mat-list dense *ngIf="recorder.record_from">
-        <mat-list-item>
-          <mat-form-field class="select">
-            <mat-select [(value)]="record_from" placeholder="Record from" (selectionChange)="init()">
-              <mat-option *ngFor="let rec of recorder.record_from" [value]="rec">{{ _controllerConfigService.config.label[rec].label }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-list-item>
-      </mat-list>
+      <ng-container *ngIf="record.record_from">
+        <mat-list dense>
+          <mat-list-item>
+            <mat-form-field class="select">
+              <mat-select [(ngModel)]="record_from" placeholder="Record from" (selectionChange)="init()">
+                <mat-option *ngFor="let rec of record.record_from" [value]="rec">{{ _controllerConfigService.config.label[rec].label | capitalize }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-list-item>
+        </mat-list>
+      </ng-container>
 
       <mat-tab-group mat-stretch-tabs [(selectedIndex)]="_chartService.selectedIndex">
 
@@ -56,14 +58,14 @@
 
               <ng-container matColumnDef="mean">
                 <mat-header-cell *matHeaderCellDef> &mu;
-                  <span *ngIf="_controllerConfigService.config.label[record_from].unit">&nbsp;[{{ _controllerConfigService.config.label[record_from].unit }}]</span>
+                  <!-- <span *ngIf="_controllerConfigService.config.label[record_from].unit">&nbsp;[{{ _controllerConfigService.config.label[record_from].unit }}]</span> -->
                 </mat-header-cell>
                 <mat-cell *matCellDef="let element" (mouseover)="sender=element.sender"> {{ element.mean | format }} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="std">
                 <mat-header-cell *matHeaderCellDef> &sigma;
-                  <span *ngIf="_controllerConfigService.config.label[record_from].unit">&nbsp;[{{ _controllerConfigService.config.label[record_from].unit }}]</span>
+                  <!-- <span *ngIf="_controllerConfigService.config.label[record_from].unit">&nbsp;[{{ _controllerConfigService.config.label[record_from].unit }}]</span> -->
                 </mat-header-cell>
                 <mat-cell *matCellDef="let element" (mouseover)="sender=element.sender"> {{ element.std | format }} </mat-cell>
               </ng-container>

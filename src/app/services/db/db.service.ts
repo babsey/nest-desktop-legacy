@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { DBConfigService } from '../../config/db-config/db-config.service';
 import { PouchDBService } from './pouchdb/pouchdb.service';
 
-declare function require(url: string);
 
 @Injectable({
   providedIn: 'root'

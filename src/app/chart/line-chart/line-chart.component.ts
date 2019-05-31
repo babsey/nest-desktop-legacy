@@ -69,14 +69,23 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
     this.xScale.range([0, width])
     let xDomain = this.xScale.domain();
 
-    let dataHeight = height / (this.data.length || 1);
+    var canvas = this.selector.select('.lines')
+    .attr('width', width)
+    .attr('height', height)
+    .attr('transform', 'translate(10,10)');
+    var context = canvas.node().getContext('2d');
+    context.clearRect(0, 0, width, height);
+
+    let data = this.data;
+    let dataHeight = height / (data.length || 1);
     let axisHeight = dataHeight + this.overlap * (height - dataHeight);
     this.yScale.range([axisHeight, 0]);
 
     let selected = this._chartService.selected;
-    var data = this.data.map(d => d.filter(dd => xDomain[0] <= dd.x && dd.x <= xDomain[1]));
-    var _meta = this.data.map(d => d._meta);
-    this.n = data.length;
+    var data_filtered = data.map(d => d.filter(dd => xDomain[0] <= dd.x && dd.x <= xDomain[1]));
+    var _meta = data.map(d => d._meta);
+    this.n = data_filtered.length;
+    let lineHeight = (this.n <= 1) ? 0 : (height - axisHeight) / (this.n - 1);
 
     this.yAutoscale = this._chartService.yAutoscale || this.yAutoscale;
     if (this.yAutoscale) {
@@ -87,20 +96,13 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
     this.xAxis.scale(this.xScale).ticks(5);
     this.yAxis.scale(this.yScale).ticks(3);
 
-    var canvas = this.selector.select('.lines')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('transform', 'translate(10,10)');
-    var context = canvas.node().getContext('2d');
-
     var line = d3.line()
-      .curve(this.curve)
-      .x(d => this.xScale(d.x))
-      .y(d => this.yScale(d.y))
-      .context(context);
+    .curve(this.curve)
+    .x(d => this.xScale(d.x))
+    .y(d => this.yScale(d.y))
+    .context(context);
 
-    context.clearRect(0, 0, width, height);
-    data.forEach((d, idx) => {
+    data_filtered.forEach((d, idx) => {
       var color = selected.length != 0 && selected.includes(_meta[idx].nodeIdx) ? _meta[idx].color : 'black';
       context.beginPath();
       context.globalAlpha = (this.idx == idx) ? 1 : this.opacity;
@@ -108,7 +110,6 @@ export class LineChartComponent implements OnInit, OnChanges, OnDestroy {
       context.lineWidth = 2;
       context.strokeStyle = color;
       context.stroke();
-      let lineHeight = (this.n <= 1) ? 0 : (height - axisHeight) / (this.n - 1);
       context.transform(1, 0, 0, 1, 0, lineHeight)
     })
 

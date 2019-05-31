@@ -7,12 +7,17 @@ import { DataService } from '../../services/data/data.service';
 import { DBService } from '../../services/db/db.service';
 import { NavigationService } from '../../navigation/navigation.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class NetworkProtocolService {
   public db: any;
-  public ready: boolean;
+  public status: any = {
+    loading: false,
+    ready: false,
+    valid: false,
+  };
   public version: string;
   public change = new EventEmitter();
 
@@ -93,4 +98,13 @@ export class NetworkProtocolService {
     return this._dbService.db.delete(this.db, id)
   }
 
+  deleteBulk(ids) {
+    return this._dbService.db.deleteBulk(this.db, ids)
+  }
+
+  reset() {
+    this.db.destroy().then(() => {
+      this.init()
+    })
+  }
 }

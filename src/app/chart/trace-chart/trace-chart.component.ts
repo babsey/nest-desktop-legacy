@@ -29,9 +29,7 @@ export class TraceChartComponent implements OnInit, OnDestroy {
   @Input() idx: number;
   @Input() height: number = 0;
   @Input() width: number = 0;
-  @ViewChild('controller') controller: any;
-  public right: number = 0;
-  private record: any;
+  @ViewChild('controller') controller: ElementRef;
   private subscriptionInit: any;
   private subscriptionRescale: any;
   public chart: string = 'line';
@@ -39,9 +37,11 @@ export class TraceChartComponent implements OnInit, OnDestroy {
   public data: any;
   public neurons: any[];
   public opacity: number = 1;
-  public overlap: number = 0.5;
+  public overlap: number = 0.;
   public record_from: string = 'V_m';
+  public record: any;
   public recorder: any;
+  public right: number = 0;
   public sender: any;
   public senders: any;
   public xDomain: number[];
@@ -97,8 +97,8 @@ export class TraceChartComponent implements OnInit, OnDestroy {
     this.record = this._dataService.records[this.idx];
     this.recorder = this._dataService.data.collections[this.record.recorder.idx];
     if (!(['voltmeter', 'multimeter'].includes(this.record.recorder.model))) return
-    if ('record_from' in this.recorder && !this.recorder.record_from.includes('V_m')) {
-      this.record_from = this.recorder.record_from[0];
+    if (this.record.hasOwnProperty('record_from') && !this.record['record_from'].includes('V_m')) {
+      this.record_from = 'V_m';
     }
 
     this.neurons = this._dataService.data.connectomes
@@ -127,7 +127,7 @@ export class TraceChartComponent implements OnInit, OnDestroy {
       var senderIdx = this.senders.indexOf(sender);
       data[senderIdx].push({
         x: events['times'][idx],
-        y: events[this.record_from][idx]
+        y: events[this.record_from][idx],
       })
     });
     this.senders.forEach((d, i) => {

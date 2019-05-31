@@ -68,4 +68,11 @@ export class PouchDBService {
       .then(doc => db.remove(doc));
   }
 
+  deleteBulk(db, ids) {
+    return this.list(db).then(docs => {
+      docs.filter(doc => ids.includes(doc._id)).map(doc => doc._deleted = true)
+      return db.bulkDocs(docs)
+    })
+  }
+
 }

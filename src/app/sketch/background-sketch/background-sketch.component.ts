@@ -152,6 +152,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy {
                   newLink['pre'] = sourceNode.idx;
                   newLink['post'] = newNode['idx'];
                   _this.data.connectomes.push(newLink);
+                  _this._dataService.validate()
                 }
               }
               _this._sketchService.events.sourceNode = null;

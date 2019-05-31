@@ -1,8 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 import { DBService } from '../services/db/db.service';
-
-declare function require(url: string);
 
 
 @Injectable({
@@ -14,8 +13,12 @@ export class ModelService {
   public elementType: string;
   public enabledModel: boolean = false;
   public models: any = {};
-  public ready: boolean;
   public selectedModel: string = '';
+  public status: any = {
+    loading: false,
+    ready: false,
+    valid: false,
+  };
   public update = new EventEmitter();
   public url: string = 'view';
   public version: string;
@@ -26,49 +29,55 @@ export class ModelService {
   }
 
   init() {
+    this.status.loading = true;
+    this.status.ready = false;
     this.db = this._dbService.init('model');
     this._dbService.checkVersion(this)
     this.count().then(count => {
       if (count == 0) {
         this.fromFiles()
-        this.ready = true;
+        this.status.ready = true;
+        this.status.loading = false;
+        this.status.valid = this.version == environment.VERSION;
       } else {
         this._dbService.db.list(this.db).then(models => {
           models.map(model => this.models[model.id] = model)
-          this.ready = true;
+          this.status.ready = true;
+          this.status.loading = false;
+          this.status.valid = this.version == environment.VERSION;
         })
       }
     })
   }
 
+  fromFiles() {
+    var files = [
+      'ac_generator',
+      'dc_generator',
+      'hh_psc_alpha',
+      'iaf_cond_alpha',
+      'iaf_psc_alpha',
+      'multimeter',
+      'noise_generator',
+      'parrot_neuron',
+      'poisson_generator',
+      'spike_detector',
+      'spike_generator',
+      'static_synapse',
+      'step_current_generator',
+      'voltmeter'
+    ];
 
-
-    fromFiles() {
-      var files = [
-        'ac_generator',
-        'dc_generator',
-        'iaf_cond_alpha',
-        'iaf_psc_alpha',
-        'multimeter',
-        'noise_generator',
-        'poisson_generator',
-        'spike_detector',
-        'spike_generator',
-        'static_synapse',
-        'step_current_generator',
-        'voltmeter'
-      ];
-
-      var models = Object.keys(this.models)
-      for (var idx in files) {
-        if (!models.includes(files[idx])) {
-          var filename = files[idx];
-          var model = require('./models/' + filename + '.json');
-          this.models[model['id']] = model;
-          this._dbService.db.create(this.db, model)
-        }
+    var models = Object.keys(this.models)
+    for (var idx in files) {
+      if (!models.includes(files[idx])) {
+        var filename = files[idx];
+        var model = require('./models/' + filename + '.json');
+        this.models[model['id']] = model;
+        this._dbService.db.create(this.db, model)
       }
     }
+  }
 
   list(elementType = null, sort = true) {
     var models = Object.keys(this.models);

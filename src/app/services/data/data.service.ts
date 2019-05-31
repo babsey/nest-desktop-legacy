@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 
 import * as objectHash from 'object-hash';
 
@@ -18,7 +19,9 @@ export class DataService {
   public undoStack: any[] = [];
   public redoStack: any[] = [];
 
-  constructor() {
+  constructor(
+    private snackBar: MatSnackBar,
+  ) {
     this.changed = new EventEmitter();
     this.initData()
   }
@@ -120,7 +123,7 @@ export class DataService {
         d['display'] = data['connectomes'][i]['display'];
       }
     })
-
+    this.validate()
     return cloned_data
   }
 
@@ -243,6 +246,29 @@ export class DataService {
     var pre = collections[connectome.pre];
     var post = collections[connectome.post];
     return pre.hasOwnProperty('topology') && post.hasOwnProperty('topology');
+  }
+
+  validate() {
+    var data = this.data;
+    var validated = false;
+    this.data.connectomes.map(connectome => {
+      var preNode = data.collections[connectome.pre];
+      var postNode = data.collections[connectome.post];
+      var preModel = data.models[preNode.model].existing;
+      var postModel = data.models[postNode.model].existing;
+      if (
+        postNode.element_type == 'stimulator' ||
+        preModel == 'spike_detector' ||
+        ['voltmeter', 'multimeter'].includes(postModel)
+      ) {
+        connectome.post = [connectome.pre, connectome.pre = connectome.post][0];
+        validated = true;
+      }
+    })
+    if (validated) {
+      setTimeout(() =>
+        this.snackBar.open('Warning! A connection was reversed.', 'Ok'), 100);
+    }
   }
 
 }

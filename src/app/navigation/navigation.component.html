@@ -11,9 +11,9 @@
   <a mat-list-item *ngIf="show" [routerLink]="[{ outlets: { sidebar: ['config'] } }]" [class.active]="router.url.includes('sidebar:config')" matTooltip="Configurations">
     <fa-icon icon="cog"></fa-icon>
   </a>
-  <a mat-list-item *ngIf="show" [routerLink]="[{ outlets: { sidebar: ['help'] } }]" [class.active]="router.url.includes('sidebar:help')" matTooltip="Help">
+  <!-- <a mat-list-item *ngIf="show" [routerLink]="[{ outlets: { sidebar: ['help'] } }]" [class.active]="router.url.includes('sidebar:help')" matTooltip="Help">
     <fa-icon icon="question"></fa-icon>
-  </a>
+  </a> -->
   <span class="logo" *ngIf="show">
     <img height="40px" alt="NEST" src="./assets/img/nest-accent.svg" class="nest" [class.show]="show" style="vertical-align:middle">
   </span>

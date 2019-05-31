@@ -6,7 +6,7 @@
 </mat-menu>
 
 <span class="center">
-  <div class="appConfig" *ngIf="_appConfigService.ready">
+  <div class="appConfig" *ngIf="_appConfigService.status.ready">
     <mat-toolbar style="font-size:16px;line-height:40px" color="accent">
       <span class="flex">
         Application configuration
@@ -60,10 +60,9 @@
         </div>
 
         <mat-chip-list>
-          <mat-chip selected="true" class="mat-accent">REQUEST {{ _appConfigService.options.NEST.request }}</mat-chip>
-          <mat-chip selected="true" class="mat-accent">RESPONSE server {{ _appConfigService.options.NEST.running ? '' : 'not' }} running</mat-chip>
-          <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.options.NEST.running">VERSION {{ _appConfigService.options.NEST.data.version }}</mat-chip>
-          <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.options.NEST.running">NEST {{ _appConfigService.options.NEST.data.nest.version }}</mat-chip>
+          <mat-chip selected="true" class="mat-accent" *ngIf="!_appConfigService.status.NEST.server.ready">Server is not running</mat-chip>
+          <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.status.NEST.server.ready">Server v{{ _appConfigService.status.NEST.server.version }}</mat-chip>
+          <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.status.NEST.simulator.ready">Simulator v{{ _appConfigService.status.NEST.simulator.version }}</mat-chip>
         </mat-chip-list>
       </mat-card-content>
     </mat-card>

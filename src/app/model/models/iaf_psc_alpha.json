@@ -2,6 +2,7 @@
   "id": "iaf_psc_alpha",
   "element_type": "neuron",
   "label": "IAF psc alpha",
+  "recordables": ["I_syn_ex", "I_syn_in", "V_m", "weighted_spikes_ex", "weighted_spikes_in"],
   "params": [{
       "id": "C_m",
       "label": "capacitance of the membrane",

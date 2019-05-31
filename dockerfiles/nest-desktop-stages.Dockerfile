@@ -18,12 +18,11 @@ WORKDIR /tmp
 RUN git clone https://github.com/compneuronmbu/nest-simulator.git && \
     cd /tmp/nest-simulator && \
     git fetch && \
-    git checkout nest-3 && \
-    git checkout 4348e5 && \
+    git checkout v2.16.0 && \
     mkdir /tmp/nest-build
 
 WORKDIR /tmp/nest-build
-RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest/ -Dwith-python=3 /tmp/nest-simulator && \
+RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest-simulator/ -Dwith-python=3 /tmp/nest-simulator && \
     make && \
     make install && \
     rm -rf /tmp/*
@@ -65,11 +64,11 @@ RUN pip3 install flask==0.12.4 flask-cors && \
 
 RUN rm -rf /var/www/html/*
 
-COPY --from=nest-builder /opt/nest /opt/nest
+COPY --from=nest-builder /opt/nest-simulator /opt/nest-simulator
 COPY --from=nest-desktop-builder /tmp/nest-desktop/html/* /var/www/html/
 
-WORKDIR /opt/nest-server
+WORKDIR /tmp/
 EXPOSE 80 5000
 
 RUN chmod 755 entrypoint.sh
-ENTRYPOINT ["entrypoint.sh", "/opt/nest"]
+ENTRYPOINT "entrypoint.sh"

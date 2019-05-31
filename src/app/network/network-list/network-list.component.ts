@@ -19,11 +19,13 @@ import { SketchService } from '../../sketch/sketch.service';
   styleUrls: ['./network-list.component.css']
 })
 export class NetworkListComponent implements OnInit, OnDestroy {
+  private subscription: any;
+  public deleteProtocols: any[] = [];
   public filteredNetworks: any[] = [];
-  public searchTerm: string = '';
   public network: any = {};
   public networks: any[] = [];
-  private subscription: any;
+  public searchTerm: string = '';
+  public selectionList: boolean = false;
 
   constructor(
     private _networkProtocolService: NetworkProtocolService,
@@ -101,13 +103,13 @@ export class NetworkListComponent implements OnInit, OnDestroy {
   }
 
   navigate(network) {
-    this.router.navigate([{ outlets: { primary: 'network/' + network._id + this.router.url.includes('simulate') ? '/simulate' : ''} }])
+    this.router.navigate([{ outlets: { primary: 'network/' + network._id + this.router.url.includes('simulate') ? '/simulate' : '' } }])
   }
 
   load(network) {
     if (this._dataService.data._id == network._id) return
     var url = 'network/' + network._id + (this.router.url.includes('simulate') ? '/simulate' : '');
-    this.router.navigate([{ outlets: { primary: url} }])
+    this.router.navigate([{ outlets: { primary: url } }])
     this._sketchService.resetMouseVars()
     this._sketchService.draw(false);
     this._dataService['undoStack'] = [];
@@ -126,7 +128,7 @@ export class NetworkListComponent implements OnInit, OnDestroy {
   }
 
   shortLabel(label) {
-    return label.slice(0,5)
+    return label.slice(0, 5)
   }
 
   view(network, ref: MdePopoverTrigger) {
@@ -145,6 +147,17 @@ export class NetworkListComponent implements OnInit, OnDestroy {
     }).catch((err) => {
       console.log(err)
     });
+  }
+
+  deleteSelected() {
+    this._networkProtocolService.deleteBulk(this.deleteProtocols)
+      .then(() => {
+        setTimeout(() => {
+          this.selectionList = false;
+          this.deleteProtocols = []
+          this.list()
+        }, 100)
+      });
   }
 
   deleteProtocol(id) {

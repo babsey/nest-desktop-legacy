@@ -1,10 +1,13 @@
-import { AppPipesModule } from '../pipes/pipes.module';
-import { AppRoutingModule } from '../modules/app-routing.module';
 import { CommonModule } from '@angular/common';
-import { MdePopoverModule } from '@material-extended/mde';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MdePopoverModule } from '@material-extended/mde';
+
+import { AppPipesModule } from '../pipes/pipes.module';
+import { AppRoutingModule } from '../modules/app-routing.module';
+
 import { LogModule } from '../log/log.module';
 import { MaterialModule } from '../modules/material.module';
 import { NetworkSimulationModule } from './network-simulation/network-simulation.module';
@@ -36,6 +39,7 @@ import { NetworkScriptComponent } from './network-script/network-script.componen
     AppRoutingModule,
     CommonModule,
     FontAwesomeModule,
+    FormsModule,
     LogModule,
     MaterialModule,
     MdePopoverModule,

@@ -1,3 +1,17 @@
+<mat-menu #configMenu="matMenu" class="dense">
+  <button mat-menu-item (click)="resetConfigs()">
+    <fa-icon icon="broom" style="margin-right:10px"></fa-icon>
+    Reset configurations
+  </button>
+</mat-menu>
+
+<mat-menu #databaseMenu="matMenu" class="dense">
+  <button mat-menu-item (click)="resetDatabases()">
+    <fa-icon icon="broom" style="margin-right:10px"></fa-icon>
+    Reset databases
+  </button>
+</mat-menu>
+
 <span class="loading">
   <img src="./assets/img/spike_transmission_carlos.png" width="700px" style="margin:50px" />
 
@@ -11,107 +25,130 @@
     <mat-card>
       <mat-toolbar class="mat-accent">
         NEST Desktop
+        <span style="font-size:12px"></span>
       </mat-toolbar>
 
       <mat-card-content>
         <mat-list role="list" dense>
+
+          <span class="flex">
+            <h3 mat-subheader>Configurations</h3>
+            <button mat-icon-button [matMenuTriggerFor]="configMenu" style="font-size:11px; height:32px; width:32px; line-height:32px">
+              <fa-icon icon="ellipsis-v"></fa-icon>
+            </button>
+          </span>
+
           <mat-list-item role="listitem">
             <span class="flex">
-              Database configuration
+              Database
               <span>
                 {{ _dbConfigService.version }}
                 <span>
-                  <fa-icon *ngIf="_dbConfigService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_dbConfigService.ready" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="_dbConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_dbConfigService.status.ready && !_dbConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_dbConfigService.status.ready && _dbConfigService.status.valid" icon="check" class="green"></fa-icon>
                 </span> </span>
             </span>
           </mat-list-item>
 
           <mat-list-item role="listitem">
             <span class="flex">
-              Application configuration
+              Application
               <span>
                 {{ _appConfigService.config.version }}
                 <span>
-                  <fa-icon *ngIf="_appConfigService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_appConfigService.ready" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.ready && !_appConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.ready && _appConfigService.status.valid" icon="check" class="green"></fa-icon>
                 </span>
               </span>
             </span>
           </mat-list-item>
           <mat-list-item role="listitem">
             <span class="flex">
-              Chart configuration
+              Chart
               <span>
                 {{ _chartConfigService.config.version }}
                 <span>
-                  <fa-icon *ngIf="_chartConfigService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_chartConfigService.ready" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="_chartConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_chartConfigService.status.ready && !_chartConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_chartConfigService.status.ready && _chartConfigService.status.valid" icon="check" class="green"></fa-icon>
                 </span>
               </span>
             </span>
           </mat-list-item>
           <mat-list-item role="listitem">
             <span class="flex">
-              Controller configuration
+              Controller
               <span>
-                {{ _controllerConfigService.version }}
+                {{ _controllerConfigService.config.version }}
                 <span>
-                  <fa-icon *ngIf="_controllerConfigService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_controllerConfigService.ready" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="_controllerConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_controllerConfigService.status.ready && !_controllerConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_controllerConfigService.status.ready && _controllerConfigService.status.valid" icon="check" class="green"></fa-icon>
                 </span>
               </span>
             </span>
           </mat-list-item>
+
+          <span class="flex">
+            <h3 mat-subheader>Databases</h3>
+            <button mat-icon-button [matMenuTriggerFor]="databaseMenu" style="font-size:11px; height:32px; width:32px; line-height:32px">
+              <fa-icon icon="ellipsis-v"></fa-icon>
+            </button>
+          </span>
+
           <mat-list-item role="listitem">
             <span class="flex">
-              NEST models
+              Model
               <span>
                 {{ _modelService.version }}
                 <span>
-                  <fa-icon *ngIf="_modelService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_modelService.ready" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="_modelService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_modelService.status.ready && !_modelService.status.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_modelService.status.ready && _modelService.status.valid" icon="check" class="green"></fa-icon>
                 </span>
               </span>
             </span>
           </mat-list-item>
 
-          <mat-divider [inset]="true"></mat-divider>
-
           <mat-list-item role="listitem">
-            <span class="flex">Networks
+            <span class="flex">Network
               <span>
                 {{ _networkService.version }}
                 <span>
-                  <fa-icon *ngIf="_networkService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_networkService.ready" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="_networkService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_networkService.status.ready && !_networkService.status.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_networkService.status.ready && _networkService.status.valid" icon="check" class="green"></fa-icon>
                 </span>
               </span>
             </span>
           </mat-list-item>
           <mat-list-item role="listitem">
-            <span class="flex">Network protocols
+            <span class="flex">Protocol
               <span>
                 {{ _networkProtocolService.version }}
                 <span>
-                  <fa-icon *ngIf="_networkProtocolService.ready==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_networkProtocolService.ready" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="_networkProtocolService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_networkProtocolService.status.ready&& !_networkProtocolService.status.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_networkProtocolService.status.ready&& _networkProtocolService.status.valid" icon="check" class="green"></fa-icon>
                 </span>
               </span>
             </span>
           </mat-list-item>
 
-          <mat-divider [inset]="true"></mat-divider>
+          <h3 mat-subheader>NEST</h3>
 
           <mat-list-item role="listitem">
             <span class="flex">
-              NEST Server
+              Server
               <span>
-                {{ _appConfigService.serverVersion }}
+                {{ _appConfigService.status.NEST.server.version }}
                 <span>
-                  <fa-icon *ngIf="_appConfigService.options.NEST.running==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_appConfigService.options.NEST.running==false" icon="times" class="red"></fa-icon>
-                  <fa-icon *ngIf="_appConfigService.options.NEST.running" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="!_appConfigService.status.NEST.server.response" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.NEST.server.response && !_appConfigService.status.NEST.server.ready" icon="times" class="red"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.NEST.server.response && _appConfigService.status.NEST.server.ready && !_appConfigService.status.NEST.server.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.NEST.server.response && _appConfigService.status.NEST.server.ready && _appConfigService.status.NEST.server.valid" icon="check" class="green"></fa-icon>
                 </span>
               </span>
             </span>
@@ -119,13 +156,14 @@
 
           <mat-list-item role="listitem">
             <span class="flex">
-              NEST
+              Simulator
               <span>
-                {{ _appConfigService.nestVersion }}
+                {{ _appConfigService.status.NEST.simulator.version }}
                 <span>
-                  <fa-icon *ngIf="_appConfigService.options.NEST.running==undefined" icon="circle-notch" [spin]="true"></fa-icon>
-                  <fa-icon *ngIf="_appConfigService.options.NEST.running==false" icon="times" class="red"></fa-icon>
-                  <fa-icon *ngIf="_appConfigService.options.NEST.running" icon="check" class="green"></fa-icon>
+                  <fa-icon *ngIf="!_appConfigService.status.NEST.server.response" icon="circle-notch" [spin]="true"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.NEST.server.response && !_appConfigService.status.NEST.simulator.ready" icon="times" class="red"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.NEST.server.response && _appConfigService.status.NEST.simulator.ready && !_appConfigService.status.NEST.simulator.valid" icon="exclamation" class="orange"></fa-icon>
+                  <fa-icon *ngIf="_appConfigService.status.NEST.server.response && _appConfigService.status.NEST.simulator.ready && _appConfigService.status.NEST.simulator.valid" icon="check" class="green"></fa-icon>
                 </span>
               </span>
             </span>

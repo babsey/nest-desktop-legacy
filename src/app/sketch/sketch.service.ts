@@ -52,6 +52,7 @@ export class SketchService {
   }
 
   label(models, model) {
+    if ( models[model] == undefined ) return model;
     var existingModel = models[model].existing;
     return this._modelService.models[existingModel].label;
   }

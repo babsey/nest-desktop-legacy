@@ -3,7 +3,6 @@
   "name": "Spike trains",
   "group": "nest-desktop",
   "user": "nest-desktop",
-  "version": "1.3.0",
   "description": "It contains a minimal configuration of the network model. The simulation shows spike activities of a set of 100 neurons.",
   "kernel": {
     "resolution": 0.1

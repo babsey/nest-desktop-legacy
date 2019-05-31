@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppFormsModule } from '../forms/forms.module';
 import { AppNodeModule } from '../node/node.module';
@@ -40,12 +41,12 @@ import { MccColorPickerModule } from 'material-community-components';
   ],
   imports: [
     AppFormsModule,
+    AppNodeModule,
+    AppPipesModule,
     CommonModule,
     FontAwesomeModule,
     FormsModule,
     MaterialModule,
-    AppNodeModule,
-    AppPipesModule,
     SketchModule,
     MccColorPickerModule.forRoot({
       used_colors: []

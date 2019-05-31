@@ -85,7 +85,8 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
     nodes.merge(nodesEnter) // ENTER + UPDATE
       .attr('transform', d => 'translate(' + d.sketch.x + ',' + d.sketch.y + ')');
 
-    nodes.selectAll('rect')
+    nodes.merge(nodesEnter).selectAll('text')
+      .text(d => this._sketchService.label(this.data.models, d.model))
 
     if (drawing) {
       nodes.on('.drag', null)
@@ -99,12 +100,13 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
     this._controllerService.selected = null;
     this.selector.selectAll('.select').remove();
     var source = this._sketchService.events.sourceNode;
-    if (source == null || source != this._sketchService.selected.node) {
+    if (source != this._sketchService.selected.node) {
       this._sketchService.selectNode(d);
     }
     if (source) {
       if (source.idx == d.idx) return
       this._dataService.history(this.data)
+      let models = this._dataService.data.models;
       var checkConnectomes = this.data.connectomes.filter(connectome => (connectome.pre == source.idx && connectome.post == d.idx));
       if (checkConnectomes.length == 0) {
         this._dataService.history(this.data)
@@ -114,11 +116,9 @@ export class NodeSketchComponent implements OnInit, OnChanges, OnDestroy {
         newLink['post'] = d.idx;
         this.data.connectomes.push(newLink)
       }
+      this._dataService.validate()
     }
-    this._sketchService.events.sourceNode = null;
-    if (this._sketchService.options.drawing) {
-      this._sketchService.events.sourceNode = d;
-    }
+    this._sketchService.events.sourceNode = this._sketchService.options.drawing ? d : null;
     this._sketchService.update.emit()
   }
 

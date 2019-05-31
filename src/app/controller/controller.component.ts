@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ControllerSheetComponent } from './controller-sheet/controller-sheet.component';
 
 import { AppConfigService } from '../config/app-config/app-config.service';
+import { ChartService } from '../chart/chart.service';
 import { ControllerConfigService } from '../config/controller-config/controller-config.service';
 import { ControllerService } from './controller.service';
 import { DataService } from '../services/data/data.service';
@@ -23,6 +24,7 @@ export class ControllerComponent implements OnInit, OnDestroy {
 
   constructor(
     private _appConfigService: AppConfigService,
+    private _chartService: ChartService,
     private _controllerConfigService: ControllerConfigService,
     private _networkProtocolService: NetworkProtocolService,
     private _sketchService: SketchService,
@@ -65,6 +67,8 @@ export class ControllerComponent implements OnInit, OnDestroy {
   }
 
   onChange() {
+    this._sketchService.update.emit()
+    this._chartService.init.emit()
     if (!this._dataService.options.edit) {
       this._networkSimulationService.run()
     }

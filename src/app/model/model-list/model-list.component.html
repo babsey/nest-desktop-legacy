@@ -1,5 +1,5 @@
 <mat-menu #modelsMenu="matMenu">
-  <button mat-menu-item (click)="resetModelConfigs()">
+  <button mat-menu-item (click)="_modelService.reset()">
     <fa-icon icon="eraser"></fa-icon>
      Reset models
   </button>
@@ -56,7 +56,7 @@
       <span class="flex">
         Models
         <span class="flex-spacer"></span>
-        <button mat-icon-button>
+        <button mat-icon-button [matMenuTriggerFor]="modelsMenu">
           <fa-icon icon="ellipsis-v" style="font-size:12px"></fa-icon>
         </button>
       </span>

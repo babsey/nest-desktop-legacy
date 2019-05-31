@@ -2,25 +2,32 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { timeout, catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
-
-declare function require(url: string);
+import { environment } from '../../../environments/environment';
 
 var STORAGE_NAME = 'app-config';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppConfigService {
-  public options: any = {
+  public config: any = {};
+  public status: any = {
+    loading: false,
+    ready: false,
+    valid: false,
     NEST: {
-      running: undefined,
-      data: {},
+      server: {
+        response: false,
+        ready: false,
+        valid: false,
+      },
+      simulator: {
+        ready: false,
+        valid: false,
+      },
     }
   };
-  public config: any = {};
-  public ready: boolean;
-  public serverVersion: string;
-  public nestVersion: string;
 
   constructor(
     private http: HttpClient,
@@ -28,15 +35,20 @@ export class AppConfigService {
   }
 
   init() {
+    this.status.loading = true;
+    this.status.ready = false;
     let configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
       this.config = JSON.parse(configJSON);
     } else {
       this.config = require('./app-config.json');
+      this.config['version'] = environment.VERSION;
       this.save()
     }
-    this.ready = true;
-    this.check()
+    this.status.ready = true;
+    this.status.loading = false;
+    this.status.valid = this.config.version == environment.VERSION;
+    this.check();
   }
 
   save() {
@@ -45,7 +57,6 @@ export class AppConfigService {
   }
 
   reset() {
-    this.ready = false;
     localStorage.removeItem(STORAGE_NAME)
     this.init()
   }
@@ -60,18 +71,21 @@ export class AppConfigService {
     this.http.get(this.urlRoot())
       .pipe(
         timeout(1000), catchError(e => {
-          this.options.NEST.running = false;
-          this.options.NEST.request = 'failed';
+          this.status.NEST.server.response = true;
           return of(e);
         })
       )
       .subscribe(res => {
-        this.options.NEST.request = 'ok'
-        if ('nest' in res) {
-          this.options.NEST.running = true;
-          this.options.NEST.data = res;
-          this.serverVersion = res['version'];
-          this.nestVersion = res['nest']['version'];
+        this.status.NEST.server.response = true;
+        if ('server' in res) {
+          this.status.NEST.server.ready = true;
+          this.status.NEST.server['version'] = res['server']['version'];
+          this.status.NEST.server.valid = res['server']['version'] == environment.VERSION;
+        }
+        if ('simulator' in res) {
+          this.status.NEST.simulator.ready = true;
+          this.status.NEST.simulator['version'] = res['simulator']['version'];
+          this.status.NEST.simulator.valid = res['simulator']['version'] == '2.16.0';
         }
       })
   }

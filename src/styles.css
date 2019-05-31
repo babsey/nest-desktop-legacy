@@ -22,14 +22,12 @@ body {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 2px;
-  /* height: 2px; */
+  width: 4px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #3366ff;
-  /* background: rgba(0,0,0,.12); */
 }
 
 .flex-spacer {

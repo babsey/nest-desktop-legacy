@@ -8,6 +8,7 @@ import { ControllerConfigService } from '../config/controller-config/controller-
 import { NetworkProtocolService } from '../network/network-protocol/network-protocol.service';
 import { NetworkService } from '../network/network.service';
 
+
 @Component({
   selector: 'app-loading',
   templateUrl: './loading.component.html',
@@ -38,6 +39,9 @@ export class LoadingComponent implements OnInit {
   }
 
   ngDoCheck() {
+    if (!this._appConfigService.config.app.showLoading) {
+      this._appConfigService.config.app.showLoading = !this.isSimulatorReady()
+    }
     var autoStart = Number(this._appConfigService.config.app.autoStart);
     var hideLoading = Number(!this._appConfigService.config.app.showLoading);
     var ready = autoStart || (autoStart ^ hideLoading);
@@ -48,15 +52,43 @@ export class LoadingComponent implements OnInit {
 
   isReady() {
     return (
-      this._dbConfigService.ready &&
-      this._appConfigService.ready &&
-      this._controllerConfigService.ready &&
-      this._chartConfigService.ready &&
-      this._modelService.ready &&
-      this._networkService.ready &&
-      this._networkProtocolService.ready &&
-      this._appConfigService.options.NEST.running
+      this._dbConfigService.status.ready &&
+      this._appConfigService.status.ready &&
+      this._controllerConfigService.status.ready &&
+      this._chartConfigService.status.ready &&
+      this._modelService.status.ready &&
+      this._networkService.status.ready &&
+      this._networkProtocolService.status.ready
     )
+  }
+
+  isLoading() {
+    return (
+      this._dbConfigService.status.loading &&
+      this._appConfigService.status.loading &&
+      this._controllerConfigService.status.loading &&
+      this._chartConfigService.status.loading &&
+      this._modelService.status.loading &&
+      this._networkService.status.loading &&
+      this._networkProtocolService.status.loading
+    )
+  }
+
+  isSimulatorReady() {
+    return this._appConfigService.status.NEST.response && this._appConfigService.status.NEST.simulator.ready
+  }
+
+  resetConfigs() {
+    this._dbConfigService.reset()
+    this._appConfigService.reset()
+    this._controllerConfigService.reset()
+    this._chartConfigService.reset()
+  }
+
+  resetDatabases() {
+    this._modelService.reset()
+    this._networkService.reset()
+    this._networkProtocolService.reset()
   }
 
 }

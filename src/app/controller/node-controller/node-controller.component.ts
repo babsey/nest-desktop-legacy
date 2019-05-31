@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 import { ColorService } from '../../services/color/color.service';
 import { ModelService } from '../../model/model.service';
 import { ControllerConfigService } from '../../config/controller-config/controller-config.service';
 import { ControllerService } from '../../controller/controller.service';
-import { ChartService } from '../../chart/chart.service';
 import { DataService } from '../../services/data/data.service';
 import { SketchService } from '../../sketch/sketch.service';
 
@@ -13,9 +12,11 @@ import { SketchService } from '../../sketch/sketch.service';
   templateUrl: './node-controller.component.html',
   styleUrls: ['./node-controller.component.css'],
 })
-export class NodeControllerComponent implements OnInit, OnChanges {
+export class NodeControllerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() idx: number;
   @Output() nodeChange = new EventEmitter();
+  public record_from = [];
+  public recordables: string[] = [];
   public color: string;
   public configModel: any = {};
   public linkedNode: any = null;
@@ -25,6 +26,7 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   public nodes: any = [];
   public options: any = {};
   public selectionList: boolean = false;
+  private subscription: any;
   public toggleColorPicker: boolean = false;
   public topologyOptions: any = {
     "extent": {
@@ -60,7 +62,6 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     public _colorService: ColorService,
     public _controllerConfigService: ControllerConfigService,
     public _controllerService: ControllerService,
-    public _chartService: ChartService,
     public _dataService: DataService,
     public _sketchService: SketchService,
   ) {
@@ -68,6 +69,11 @@ export class NodeControllerComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     // console.log('Init node controller')
+    this.subscription = this._sketchService.update.subscribe(() => this.updateRecordFrom())
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe()
   }
 
   ngOnChanges() {
@@ -75,7 +81,7 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     this.node = this._dataService.data.collections[this.idx];
     this.nodes = this._dataService.data.collections.filter(node => node.element_type == this.node.element_type && node != this.node);
     this.model = this._dataService.data.models[this.node.model];
-    this.updateParams(this.node)
+    this.updateParams()
     var models = this._modelService.list(this.node.element_type);
     this.models = models.map(model => { return { value: model, label: this._modelService.config(model).label } });
     this.color = this._colorService.node(this.node);
@@ -91,7 +97,7 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     })
   }
 
-  updateParams(node) {
+  updateParams() {
     this.configModel = this._modelService.config(this.model.existing);
     this.configModel.params.forEach(param => {
       if (!(param.id in this.model.params)) {
@@ -102,6 +108,22 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     if (this.model.display == undefined) {
       this.model.display = [];
       this.configModel.params.map(param => this.model.display.push(param.id));
+    }
+    this.updateRecordFrom()
+  }
+
+  updateRecordFrom() {
+    if (this.model.existing != 'multimeter') return
+    let recordedNeurons = this._dataService.data.connectomes.filter(link => link.pre == this.idx)
+    if (recordedNeurons.length > 0) {
+      let recordedNeuron = this._dataService.data.collections[recordedNeurons[0].post];
+      this.recordables = this._modelService.config(this._dataService.data.models[recordedNeuron.model].existing).recordables || [];
+      if (this.model.params.hasOwnProperty('record_from')) {
+        this.record_from = this.model.params['record_from'];
+      } else {
+        this.record_from = this.recordables.includes('V_m') ? ['V_m'] : [];
+        this.model.params['record_from'] = this.record_from;
+      }
     }
   }
 
@@ -119,10 +141,14 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   }
 
   selectModel(model) {
+    if (this.node.element_type == 'recorder') {
+      this._dataService.records = [];
+    }
     this.model['existing'] = model;
     delete this.model.display;
     this.model.params = {};
-    this.updateParams(this.node);
+    this.updateParams();
+    this._dataService.validate()
     this.nodeChange.emit()
   }
 
@@ -134,8 +160,7 @@ export class NodeControllerComponent implements OnInit, OnChanges {
       this.color = color;
       this.node['color'] = color;
     }
-    this._sketchService.update.emit()
-    this._chartService.init.emit()
+    this.nodeChange.emit()
   }
 
   linkModel(model, changeEmit=true) {
@@ -163,7 +188,6 @@ export class NodeControllerComponent implements OnInit, OnChanges {
   deleteNode() {
     this._dataService.deleteNode(this.idx)
     this._dataService.records = this._dataService.records.filter(d => d.recorder.idx != this.idx)
-    this._sketchService.update.emit()
     this.nodeChange.emit()
   }
 
@@ -203,7 +227,7 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     } else if (event.option.value == 'edge_wrap') {
       this.node.topology.edge_wrap = event.option.selected;
     }
-    this._sketchService.update.emit()
+    this.nodeChange.emit()
   }
 
   onTopoChange(param, value) {
@@ -216,5 +240,9 @@ export class NodeControllerComponent implements OnInit, OnChanges {
     this.nodeChange.emit()
   }
 
+  onRecordChange() {
+    this._dataService.records = [];
+    this.model.params['record_from'] = this.record_from;
+  }
 
 }

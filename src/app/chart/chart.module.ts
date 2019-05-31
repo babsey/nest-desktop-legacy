@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 
 import { AppFormsModule } from '../forms/forms.module';
 import { AppNodeModule } from '../node/node.module';
@@ -59,6 +60,7 @@ import { ChartService } from './chart.service';
     CommonModule,
     MaterialModule,
     FontAwesomeModule,
+    FormsModule,
     AppFormsModule,
     AppPipesModule,
     AppNodeModule,

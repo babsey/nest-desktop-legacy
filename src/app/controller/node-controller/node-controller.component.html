@@ -15,9 +15,11 @@
       <fa-icon icon="trash-alt"></fa-icon>
     </mat-list-item>
 
-    <mat-list-item *ngIf="node.element_type!='recorder'" (click)="$event.stopPropagation();" [matMenuTriggerFor]="linkNodeMenu" [class.disabled]="nodes.length == 0" class="navButton" matTooltip="Link model to other node">
-      <fa-icon icon="link"></fa-icon>
-    </mat-list-item>
+    <ng-container *ngIf="node.element_type!='recorder'">
+      <mat-list-item (click)="$event.stopPropagation();" [matMenuTriggerFor]="linkNodeMenu" [class.disabled]="nodes.length == 0" class="navButton" matTooltip="Link model to other node">
+        <fa-icon icon="link"></fa-icon>
+      </mat-list-item>
+    </ng-container>
 
     <mat-list-item (click)="$event.stopPropagation()" [matMenuTriggerFor]="levelMenu" [class.disabled]="linkedNode" class="navButton" matTooltip="Set level for parameter view">
       <fa-icon icon="eye"></fa-icon>
@@ -58,118 +60,138 @@
   </mat-list>
 </mat-menu>
 
-<span class="controller node-controller" *ngIf="isSelected()">
+<ng-container *ngIf="isSelected()">
+  <span class="controller node-controller">
 
-  <mat-list class="controller-subheader" dense style="display:flex; padding: 0; width:100%">
-    <mat-list-item style="width:64px">
-      <svg width="40" height="40">
-        <g app-node [node]="node" (nodeClick)="selectNode(node)" transform="translate(20,20)"></g>
-      </svg>
-    </mat-list-item>
-
-    <mat-list-item [style.display]="linkedNode ? 'None' : ''" >
-      <app-select [options]="models" [selected]="model.existing"  (selectChange)="selectModel($event)" [matTooltip]="node.element_type + ' model'" matTooltipPosition="before" style="height:40px;line-height:48px"></app-select>
-    </mat-list-item>
-
-    <ng-container *ngIf="linkedNode">
-      <mat-list-item style="width:64px;">
-        <button mat-icon-button class="button linkButton" style="line-height:32px" (click)="linkModel(node.element_type + '-' + node.idx)">
-          <fa-icon icon="link" style="width:100%" class="link" style="line-height:32px"></fa-icon>
-          <fa-icon icon="unlink" style="width:100%" class="unlink" style="line-height:32px"></fa-icon>
-        </button>
-      </mat-list-item>
-
-      <mat-list-item style="width:64px;">
+    <mat-list class="controller-subheader" dense style="display:flex; padding: 0; width:100%">
+      <mat-list-item style="width:64px">
         <svg width="40" height="40">
-          <g app-node [node]="linkedNode" (nodeClick)="selectNode(linkedNode)" transform="translate(20,20)"></g>
+          <g app-node [node]="node" (nodeClick)="selectNode(node)" transform="translate(20,20)"></g>
         </svg>
       </mat-list-item>
-    </ng-container>
 
-    <ng-container *ngIf="linkedNode">
-      <mat-list-item></mat-list-item>
-    </ng-container>
+      <mat-list-item [style.display]="linkedNode ? 'None' : ''" >
+        <app-select [options]="models" [selected]="model.existing"  (selectChange)="selectModel($event)" [matTooltip]="node.element_type + ' model'" matTooltipPosition="before" style="height:40px;line-height:48px"></app-select>
+      </mat-list-item>
 
-    <mat-list-item class="nodeMenuItem">
-      <button mat-icon-button [matMenuTriggerFor]="nodeMenu" class="nodeMenuButton">
-        <fa-icon icon="ellipsis-h"></fa-icon>
-      </button>
-    </mat-list-item>
-  </mat-list>
+      <ng-container *ngIf="linkedNode">
+        <mat-list-item style="width:64px;">
+          <button mat-icon-button class="button linkButton" style="line-height:32px" (click)="linkModel(node.element_type + '-' + node.idx)">
+            <fa-icon icon="link" style="width:100%" class="link" style="line-height:32px"></fa-icon>
+            <fa-icon icon="unlink" style="width:100%" class="unlink" style="line-height:32px"></fa-icon>
+          </button>
+        </mat-list-item>
 
-  <span *ngIf="!selectionList">
-
-    <ng-container *ngIf="!isRecorder()">
-      <mat-selection-list dense style="padding:0 8px" class="mat-primary" (selectionChange)="topologyEvent($event)">
-        <mat-list-option class="item no-print" value="topology" [selected]="node.hasOwnProperty('topology')" [style.border-color]="color" >As a layer</mat-list-option>
-        <mat-list-option *ngIf="isLayer()" class="item" value="edge_wrap" [selected]="node.topology['edge_wrap']" [style.border-color]="color">Wrapped edges</mat-list-option>
-      </mat-selection-list>
-
-      <ng-container *ngIf="isLayer()">
-        <mat-nav-list dense style="padding: 0 8px">
-          <mat-list-item class="item" [style.border-color]="color">
-            <app-array-input [value]="node.topology['center']" [options]="topologyOptions['center']" style="width:100%" (valueChange)="onTopoChange('center', $event)"></app-array-input>
-          </mat-list-item>
-          <mat-list-item class="item" [style.border-color]="color">
-            <app-array-input [value]="node.topology['extent']" [options]="topologyOptions['extent']" style="width:100%" (valueChange)="onTopoChange('extent', $event)"></app-array-input>
-          </mat-list-item>
-          <mat-list-item class="item" [style.border-color]="color">
-            <app-param-value-slider [value]="node.topology['rows']" [options]="topologyOptions['rows']" style="width:100%" (valueChange)="onTopoChange('rows', $event)"></app-param-value-slider>
-          </mat-list-item>
-          <mat-list-item class="item" [style.border-color]="color">
-            <app-param-value-slider [value]="node.topology['columns']" [options]="topologyOptions['columns']" style="width:100%" (valueChange)="onTopoChange('columns', $event)"></app-param-value-slider>
-          </mat-list-item>
-          <mat-list-item class="item" [style.border-color]="color">
-            <app-array-input [value]="node.topology['positions']" [options]="topologyOptions['positions']" style="width:100%" (valueChange)="onTopoChange('positions', $event)"></app-array-input>
-          </mat-list-item>
-        </mat-nav-list>
-      </ng-container>
-    </ng-container>
-
-    <mat-nav-list dense style="padding:0 8px">
-
-      <ng-container *ngIf="!(isRecorder() || isLayer())">
-        <mat-list-item class="item" [style.border-color]="color" [style.display]="paramDisplay(node, 'n') ? '' : 'None'" >
-          <app-param-input view="valueSlider" [params]="node" id="n" [options]="_controllerConfigService.config['node'].npop" (paramChange)="onChange()" class="input"></app-param-input>
+        <mat-list-item style="width:64px;">
+          <svg width="40" height="40">
+            <g app-node [node]="linkedNode" (nodeClick)="selectNode(linkedNode)" transform="translate(20,20)"></g>
+          </svg>
         </mat-list-item>
       </ng-container>
 
-      <ng-container *ngIf="!linkedNode">
-        <ng-container *ngFor="let param of this.configModel.params">
-          <mat-list-item class="item" [style.border-color]="color" [style.display]="paramDisplay(model, param.id) ? '' : 'None'" >
-            <app-param-input [view]="param.input" [model]="model.existing" [params]="model.params" [id]="param.id" [options]="param" (paramChange)="onChange()" class="input"></app-param-input>
-          </mat-list-item>
+      <ng-container *ngIf="linkedNode">
+        <mat-list-item></mat-list-item>
+      </ng-container>
+
+      <mat-list-item class="nodeMenuItem">
+        <button mat-icon-button [matMenuTriggerFor]="nodeMenu" class="nodeMenuButton">
+          <fa-icon icon="ellipsis-h"></fa-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+
+    <span *ngIf="!selectionList">
+
+      <ng-container *ngIf="!isRecorder()">
+        <mat-selection-list dense style="padding:0 8px" class="mat-primary" (selectionChange)="topologyEvent($event)">
+          <mat-list-option class="item no-print" value="topology" [selected]="node.hasOwnProperty('topology')" [style.border-color]="color" style="display:none">As a layer</mat-list-option>
+          <ng-container *ngIf="isLayer()">
+            <mat-list-option class="item" value="edge_wrap" [selected]="node.topology['edge_wrap']" [style.border-color]="color">Wrapped edges</mat-list-option>
+          </ng-container>
+        </mat-selection-list>
+
+        <ng-container *ngIf="isLayer()">
+          <mat-nav-list dense style="padding: 0 8px">
+            <mat-list-item class="item" [style.border-color]="color">
+              <app-array-input [value]="node.topology['center']" [options]="topologyOptions['center']" style="width:100%" (valueChange)="onTopoChange('center', $event)"></app-array-input>
+            </mat-list-item>
+            <mat-list-item class="item" [style.border-color]="color">
+              <app-array-input [value]="node.topology['extent']" [options]="topologyOptions['extent']" style="width:100%" (valueChange)="onTopoChange('extent', $event)"></app-array-input>
+            </mat-list-item>
+            <mat-list-item class="item" [style.border-color]="color">
+              <app-param-value-slider [value]="node.topology['rows']" [options]="topologyOptions['rows']" style="width:100%" (valueChange)="onTopoChange('rows', $event)"></app-param-value-slider>
+            </mat-list-item>
+            <mat-list-item class="item" [style.border-color]="color">
+              <app-param-value-slider [value]="node.topology['columns']" [options]="topologyOptions['columns']" style="width:100%" (valueChange)="onTopoChange('columns', $event)"></app-param-value-slider>
+            </mat-list-item>
+            <mat-list-item class="item" [style.border-color]="color">
+              <app-array-input [value]="node.topology['positions']" [options]="topologyOptions['positions']" style="width:100%" (valueChange)="onTopoChange('positions', $event)"></app-array-input>
+            </mat-list-item>
+          </mat-nav-list>
         </ng-container>
       </ng-container>
 
-    </mat-nav-list>
+      <mat-nav-list dense style="padding:0 8px">
+
+        <ng-container *ngIf="!(isRecorder() || isLayer())">
+          <mat-list-item class="item" [style.border-color]="color" [style.display]="paramDisplay(node, 'n') ? '' : 'None'" >
+            <app-param-input view="valueSlider" [params]="node" id="n" [options]="_controllerConfigService.config['node'].npop" (paramChange)="onChange()" class="input"></app-param-input>
+          </mat-list-item>
+        </ng-container>
+
+        <ng-container *ngIf="!linkedNode">
+          <ng-container *ngFor="let param of this.configModel.params">
+            <mat-list-item class="item" [style.border-color]="color" [style.display]="paramDisplay(model, param.id) ? '' : 'None'" >
+              <app-param-input [view]="param.input" [model]="model.existing" [params]="model.params" [id]="param.id" [options]="param" (paramChange)="onChange()" class="input"></app-param-input>
+            </mat-list-item>
+          </ng-container>
+        </ng-container>
+
+      </mat-nav-list>
+
+      <mat-list dense style="padding:0 8px">
+        <mat-list-item class="item" style="height:40px" [style.border-color]="color" [style.display]="model.existing == 'multimeter' ? '' : 'None'" >
+          <mat-form-field style="width:100%">
+            <mat-label>Record from</mat-label>
+            <mat-select [(ngModel)]="record_from" multiple (selectionChange)="onRecordChange()">
+              <ng-container *ngFor="let recordable of recordables">
+                <mat-option [value]="recordable">{{ recordable }}</mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+        </mat-list-item>
+
+      </mat-list>
+
+    </span>
+
+    <ng-container *ngIf="selectionList">
+      <span class="mat-primary">
+        <mat-selection-list dense [(ngModel)]="node.display" style="padding:0 8px">
+          <ng-container *ngIf="node.element_type!='recorder'">
+            <mat-list-option value="n" class="item" [style.border-color]="color">
+              <span class="flex">
+                <span class="ellipsis">{{ _controllerConfigService.config['node'].npop.label | capitalize }}</span>
+                <span>{{ node.n || _controllerConfigService.config['node'].npop.value }}</span>
+              </span>
+            </mat-list-option>
+          </ng-container>
+        </mat-selection-list>
+
+        <ng-container *ngIf="!linkedModel">
+          <mat-selection-list dense [(ngModel)]="model.display" style="padding:0 8px">
+            <ng-container *ngFor="let param of this.configModel.params">
+              <mat-list-option [value]="param.id" class="item" [style.border-color]="color">
+                <span class="flex">
+                  <span class="ellipsis">{{ param.label | capitalize }}</span>
+                  <span>{{ model.params[param.id] || param.value }}</span>
+                </span>
+              </mat-list-option>
+            </ng-container>
+          </mat-selection-list>
+        </ng-container>
+      </span>
+    </ng-container>
 
   </span>
-
-  <span class="mat-primary" *ngIf="selectionList">
-    <mat-selection-list dense [(ngModel)]="node.display" style="padding:0 8px">
-
-      <mat-list-option value="n" class="item" [style.border-color]="color" *ngIf="node.element_type!='recorder'">
-        <span class="flex">
-          <span class="ellipsis">{{ _controllerConfigService.config['node'].npop.label | capitalize }}</span>
-          <span>{{ node.n || _controllerConfigService.config['node'].npop.value }}</span>
-        </span>
-      </mat-list-option>
-
-    </mat-selection-list>
-
-    <mat-selection-list dense *ngIf="!linkedModel" [(ngModel)]="model.display" style="padding:0 8px">
-
-      <ng-container *ngFor="let param of this.configModel.params">
-        <mat-list-option [value]="param.id" class="item" [style.border-color]="color">
-          <span class="flex">
-            <span class="ellipsis">{{ param.label | capitalize }}</span>
-            <span>{{ model.params[param.id] || param.value }}</span>
-          </span>
-        </mat-list-option>
-      </ng-container>
-
-    </mat-selection-list>
-  </span>
-
-</span>
+</ng-container>

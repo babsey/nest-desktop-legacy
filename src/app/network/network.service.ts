@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import * as PouchDB from 'pouchdb/dist/pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert/dist/pouchdb.upsert';
 
+import { environment } from '../../environments/environment';
+
 import { DataService } from '../services/data/data.service';
 import { DBService } from '../services/db/db.service';
 import { NavigationService } from '../navigation/navigation.service';
 import { NetworkProtocolService } from './network-protocol/network-protocol.service';
 
-declare function require(url: string);
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,11 @@ declare function require(url: string);
 export class NetworkService {
   public db: any;
   public networks: any[] = [];
-  public ready: boolean;
+  public status: any = {
+    loading: false,
+    ready: false,
+    valid: false,
+  };
   public mode: string = 'view';
   public version: string;
 
@@ -29,14 +34,22 @@ export class NetworkService {
   }
 
   init() {
+    this.status.ready = false;
+    this.status.loading = true;
     this.db = this._dbService.init('network');
     this._dbService.checkVersion(this)
     this.loadNetworks().then(networks => {
       this.networks = this.networks.concat(networks)
-      this.ready = true;
+      this.status.loading = false;
+      this.status.ready = true;
+      this.status.valid = this.version == environment.VERSION;
+      this._networkProtocolService.status.loading = true;
+      this._networkProtocolService.status.ready = false;
       this._networkProtocolService.loadNetworks().then(networks => {
         this.networks = this.networks.concat(networks)
-        this._networkProtocolService.ready = true;
+        this._networkProtocolService.status.loading = false;
+        this._networkProtocolService.status.ready = true;
+        this._networkProtocolService.status.valid = this._networkProtocolService.version == environment.VERSION;
       })
     })
   }
@@ -60,6 +73,7 @@ export class NetworkService {
     for (var idx in files) {
       var filename = files[idx];
       var data = require('./networks/' + filename + '.json');
+      data['version'] = environment.VERSION;
       let data_cleaned = this._dataService.clean(data);
       networks.push(data_cleaned);
       this._dbService.db.create(this.db, data_cleaned)
@@ -113,6 +127,12 @@ export class NetworkService {
           }
         })
       }
+    })
+  }
+
+  reset() {
+    this.db.destroy().then(() => {
+      this.init()
     })
   }
 

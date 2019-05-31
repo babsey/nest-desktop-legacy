@@ -7,7 +7,7 @@
       "label": "time interval of recording",
       "level": 3,
       "unit": "ms",
-      "value": 1,
+      "value": 0.1,
       "input": "tickSlider",
       "ticks": [
         0.001,

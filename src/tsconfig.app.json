@@ -5,11 +5,17 @@
     "baseUrl": "./",
     "module": "es2015",
     "types": [
-      "hammerjs"
+      "hammerjs",
+      "node",
     ]
   },
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
+  ],
+  "files": [
+  ],
+  "include": [
+    "**/*.ts",
   ]
 }

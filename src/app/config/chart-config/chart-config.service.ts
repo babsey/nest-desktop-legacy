@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-
-declare function require(url: string);
+import { environment } from '../../../environments/environment';
 
 var STORAGE_NAME = 'chart-config';
 
@@ -9,23 +8,37 @@ var STORAGE_NAME = 'chart-config';
 })
 export class ChartConfigService {
   public config: any;
-  public ready: boolean = false;
+  public status: any = {
+    loading: false,
+    ready: false,
+    valid: false,
+  };
 
   constructor() { }
 
   init() {
+    this.status.loading = true;
+    this.status.ready = false;
     var configJSON = localStorage.getItem(STORAGE_NAME)
-      if (configJSON) {
-        this.config = JSON.parse(configJSON);
-      } else {
-        this.config = require('./chart-config.json');
-        this.save()
-      }
-      this.ready = true;
+    if (configJSON) {
+      this.config = JSON.parse(configJSON);
+    } else {
+      this.config = require('./chart-config.json');
+      this.config['version'] = environment.VERSION;
+      this.save()
     }
+    this.status.ready = true;
+    this.status.loading = false;
+    this.status.valid = this.config.version == environment.VERSION;
+  }
 
   save() {
     let configJSON = JSON.stringify(this.config);
     localStorage.setItem(STORAGE_NAME, configJSON);
+  }
+
+  reset() {
+    localStorage.removeItem(STORAGE_NAME)
+    this.init()
   }
 }

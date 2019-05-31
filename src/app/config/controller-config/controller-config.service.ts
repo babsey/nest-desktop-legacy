@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-
-declare function require(url: string);
+import { environment } from '../../../environments/environment';
 
 var STORAGE_NAME = 'controller-config';
 
@@ -14,25 +13,28 @@ export class ControllerConfigService {
     bottomSheetOpened: true,
     showSlider: false,
     showSketch: true,
-    version: '1.3.0',
   };
-  public ready: boolean;
-  public version: string;
-
-  constructor(
-  ) {
+  public status: any = {
+    loading: false,
+    ready: false,
+    valid: false,
   }
 
+  constructor() { }
+
   init() {
+    this.status.loading = true;
+    this.status.ready = false;
     var configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
       this.config = JSON.parse(configJSON);
-      this.version = this.config.version;
     } else {
       this.fromFiles()
       this.save()
     }
-    this.ready = true;
+    this.status.loading = false;
+    this.status.ready = true;
+    this.status.valid = this.config.version == environment.VERSION;
   }
 
   fromFiles() {
@@ -49,11 +51,17 @@ export class ControllerConfigService {
       var configData = require('./controller-configs/' + filename + '.json');
       this.config[filename] = configData;
     }
+    this.config['version'] = environment.VERSION;
   }
 
   save() {
     let configJSON = JSON.stringify(this.config);
     localStorage.setItem(STORAGE_NAME, configJSON);
+  }
+
+  reset() {
+    localStorage.removeItem(STORAGE_NAME)
+    this.init()
   }
 
 }

@@ -14,9 +14,9 @@
       <svg:text class="label" dx="0" dy=".6em" text-anchor="middle">{{ node.idx + 1 }}</svg:text>
     </ng-container>
     <ng-container *ngIf="node.element_type=='recorder'">
-      <!-- <svg:polygon class="node" points="-19,-15 -19,-13 -7,-13, -7,5 0,15 7,5 7,-13 19,-13 19,-15" [style.stroke]="_colorService.node(node)" [style.stroke-dasharray]="_sketchService.isSelectedNode(node) ? '7.85' : ''"></svg:polygon> -->
-      <svg:polygon class="node" points="-19,-15 0,15 19,-15" [style.stroke]="_colorService.node(node)" [style.stroke-dasharray]="_sketchService.isSelectedNode(node) ? '7.85' : ''"></svg:polygon>
-      <svg:text class="label" dx="0" dy="0" text-anchor="middle">{{ node.idx + 1 }}</svg:text>
+      <svg:polygon class="node" points="-15,-15 15,-15 15,15 -15,15 -15,-15" [style.stroke]="_colorService.node(node)" [style.stroke-dasharray]="_sketchService.isSelectedNode(node) ? '7.85' : ''"></svg:polygon>
+      <!-- <svg:polygon class="node" points="-19,-15 0,15 19,-15" [style.stroke]="_colorService.node(node)" [style.stroke-dasharray]="_sketchService.isSelectedNode(node) ? '7.85' : ''"></svg:polygon> -->
+      <svg:text class="label" dx="0" dy=".4em" text-anchor="middle">{{ node.idx + 1 }}</svg:text>
     </ng-container>
   </ng-container>
 </svg:g>

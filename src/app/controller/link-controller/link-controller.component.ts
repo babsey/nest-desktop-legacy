@@ -149,7 +149,7 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     if (conn_spec.hasOwnProperty('params')) {
       conn_spec.params.map(param => {
         this.link.conn_spec[param.id] = param.value;
-        this.link.display.push(param.id);
+        this.link.display.push('conn_spec.' + param.id);
       })
     }
     this.update()

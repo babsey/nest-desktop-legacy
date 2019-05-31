@@ -1,9 +1,8 @@
 {
-  "version": "1.3.0",
   "app": {
     "title": "NEST Desktop",
     "log": false,
-    "autoStart": true,
+    "autoStart": false,
     "showLoading": false
   },
   "nest-server": {
