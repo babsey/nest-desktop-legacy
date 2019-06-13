@@ -10,6 +10,7 @@ import { ColorService } from '../../services/color/color.service';
   styleUrls: ['./app-config.component.css']
 })
 export class AppConfigComponent implements OnInit {
+  public host: any;
 
   constructor(
     public _appConfigService: AppConfigService,
@@ -17,6 +18,7 @@ export class AppConfigComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.host = this._appConfigService.urlRoot();
   }
 
   onChange(event) {

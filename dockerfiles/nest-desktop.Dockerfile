@@ -7,10 +7,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     cython3 \
     git \
-    libgsl0-dev \
-    libltdl7-dev \
+    libgsl-dev \
+    libltdl-dev \
     libncurses5-dev \
-    libreadline6-dev \
+    libreadline-dev \
     nginx \
     python3-all-dev \
     python3-numpy \
@@ -20,14 +20,14 @@ WORKDIR /tmp
 RUN git clone https://github.com/compneuronmbu/nest-simulator.git && \
     cd /tmp/nest-simulator && \
     git fetch && \
-    git checkout v2.16.0 && \
-    mkdir /tmp/nest-build
+    git checkout v2.16.0
 
-WORKDIR /tmp/nest-build
-RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest-simulator/ -Dwith-python=3 /tmp/nest-simulator && \
+RUN mkdir /tmp/nest-build && \
+    cd /tmp/nest-build && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest-simulator/ -Dwith-python=3 /tmp/nest-simulator && \
     make && \
     make install && \
-    rm -rf /tmp/*
+    rm -rf /tmp/simulator /tmp/nest-build
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
     apt-get update && \

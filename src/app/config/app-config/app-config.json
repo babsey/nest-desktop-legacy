@@ -6,7 +6,7 @@
     "showLoading": false
   },
   "nest-server": {
-    "host": "localhost",
+    "host": "",
     "port": "5000"
   },
   "color": {

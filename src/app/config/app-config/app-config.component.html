@@ -59,11 +59,17 @@
           </mat-form-field>
         </div>
 
-        <mat-chip-list>
-          <mat-chip selected="true" class="mat-accent" *ngIf="!_appConfigService.status.NEST.server.ready">Server is not running</mat-chip>
-          <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.status.NEST.server.ready">Server v{{ _appConfigService.status.NEST.server.version }}</mat-chip>
-          <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.status.NEST.simulator.ready">Simulator v{{ _appConfigService.status.NEST.simulator.version }}</mat-chip>
-        </mat-chip-list>
+        <span class="flex">
+          {{ host }}
+
+          <span>
+            <mat-chip-list>
+              <mat-chip selected="true" class="mat-accent" *ngIf="!_appConfigService.status.NEST.server.ready">Server is not running</mat-chip>
+              <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.status.NEST.server.ready">Server v{{ _appConfigService.status.NEST.server.version }}</mat-chip>
+              <mat-chip selected="true" class="mat-accent" *ngIf="_appConfigService.status.NEST.simulator.ready">Simulator v{{ _appConfigService.status.NEST.simulator.version }}</mat-chip>
+            </mat-chip-list>
+          </span>
+        </span>
       </mat-card-content>
     </mat-card>
 

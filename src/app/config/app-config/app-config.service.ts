@@ -62,8 +62,9 @@ export class AppConfigService {
   }
 
   urlRoot() {
-    var nestServer = this.config['nest-server'];
-    return 'http://' + nestServer['host'] + ':' + nestServer['port'];
+    var server = this.config['nest-server'];
+    var host = server['host'] || window.location.host.split(':')[0] || 'localhost';
+    return 'http://' + host + ':' + server['port'];
   }
 
   check() {
