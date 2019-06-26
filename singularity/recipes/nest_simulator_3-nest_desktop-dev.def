@@ -6,8 +6,7 @@ From: ubuntu:18.04
   VERSION 1.4.0
 
 %files
-  ../dist/nest-desktop /opt/nest-desktop
-  ../nginx /tmp/
+  ./dist/nest-desktop /opt/nest-desktop
 
 %post
   apt update && apt install -y \
@@ -20,12 +19,11 @@ From: ubuntu:18.04
   libltdl7-dev \
   libncurses5-dev \
   libreadline6-dev \
-  nginx \
   python3-all-dev \
   python3-numpy \
   python3-pip
 
-  pip3 install flask==0.12.4 flask-cors
+  pip3 install uwsgi flask flask-cors
   git clone https://github.com/babsey/nest-server.git /opt/nest-server
 
   cd /tmp
@@ -34,11 +32,10 @@ From: ubuntu:18.04
   git fetch
   git checkout nest-3
   git checkout 4348e5
-  mkdir /tmp/nest-build
 
-  cd /tmp/nest-build
-  cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest/ -Dwith-python=3 /tmp/nest-simulator
+  rm -rf /tmp/nest-build; mkdir /tmp/nest-build; cd /tmp/nest-build
+  cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/nest-simulator/ -Dwith-python=3 /tmp/nest-simulator
   make
   make install
 
-  rm -rf /tmp/*
+  rm -rf /tmp/nest-build /tmp/nest-simulator

@@ -29,7 +29,7 @@ export class TraceChartComponent implements OnInit, OnDestroy {
   @Input() idx: number;
   @Input() height: number = 0;
   @Input() width: number = 0;
-  @ViewChild('controller') controller: ElementRef;
+  @ViewChild('controller', {static: false}) controller: ElementRef;
   private subscriptionInit: any;
   private subscriptionRescale: any;
   public chart: string = 'line';

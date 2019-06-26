@@ -74,26 +74,31 @@ Start docker daemon
 ```
 sudo service docker start
 ```
-
-###### Step 3
-Build a docker image
+or
 ```
-sudo docker build -f Dockerfiles/nest-desktop.Dockerfile -t nest-desktop .
+sudo systemctl start docker
 ```
 
-###### Step 3 (better)
-Build a docker image using build stages. Minimize space of docker image.
+###### Step 3.a
+Build a docker image using build stages. It minimizes space of docker image.
+(X.Y refers to a specific version number)
 ```
-sudo docker build -f Dockerfiles/nest-desktop-stages.Dockerfile -t nest-desktop .
-```
-
-###### Step 3 (alternative)
-Build docker image and copy html files from host.
-```
-sudo docker build -f Dockerfiles/nest-desktop-html.Dockerfile -t nest-desktop .
+sudo docker build -f docker/dockerfiles/nest-desktop-build.Dockerfile -t nest/nest-desktop:X.Y .
 ```
 
-###### Step 3 (alternative)
+###### Step 3.b (alternative)
+Build a docker image in one stage.
+```
+sudo docker build -f docker/dockerfiles/nest-desktop.Dockerfile -t nest/nest-desktop:X.Y .
+```
+
+###### Step 3.c (alternative)
+Build docker image and copy dist files from host.
+```
+sudo docker build -f docker/dockerfiles/nest-desktop-dist.Dockerfile -t nest/nest-desktop:X.Y .
+```
+
+###### Step 3.d (alternative)
 Load image from a file (`nest-desktop-vX.Y.dimg`)
 ```
 sudo docker load --input nest-desktop-vX.Y.dimg
@@ -108,7 +113,7 @@ sudo docker images
 ###### Step 5
 Run docker container with daemon.
 ```
-sudo docker run -d -p 8000:80 -p 5000:5000 -t nest-desktop:X.Y
+sudo docker run -d -p 8000:80 -p 5000:5000 -t nest/nest-desktop:X.Y
 ```
 
 ###### Step 6

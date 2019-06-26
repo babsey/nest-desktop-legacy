@@ -1,5 +1,4 @@
 /.git
-/archives
 /dockerfiles
-/singularity
 /node_modules
+/singularity

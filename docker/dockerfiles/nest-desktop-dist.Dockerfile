@@ -27,30 +27,12 @@ RUN mkdir /tmp/nest-build && \
     rm -rf /tmp/simulator /tmp/nest-build
 
 
-### STAGE 2: Build NEST Desktop ###
-FROM ubuntu:18.04 as desktop-builder
-LABEL maintainer="Sebastian Spreizer <spreizer@web.de>"
-
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    git
-
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-    apt-get update && \
-    apt-get install -y nodejs
-
-COPY . /tmp/nest-desktop
-WORKDIR /tmp/nest-desktop
-RUN npm i && \
-    npm run build
-
-
-### STAGE 3: Setup ###
+### STAGE 2: Setup ###
 FROM ubuntu:18.04
 LABEL maintainer="Sebastian Spreizer <spreizer@web.de>"
 
 RUN apt-get update && apt-get install -y \
+    curl \
     git \
     libgsl-dev \
     libltdl-dev \
@@ -58,14 +40,17 @@ RUN apt-get update && apt-get install -y \
     python3-numpy \
     python3-pip
 
-RUN pip3 install flask==0.12.4 flask-cors && \
-    git clone https://github.com/babsey/nest-server /opt/nest-server
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+    apt update && apt install -y nodejs
+    npm install --global --unsafe-perm=true pouchdb-server pouchdb-adapter-leveldb
 
-RUN rm -rf /var/www/html/*
+RUN pip3 install uwsgi flask flask-cors && \
+    git clone https://github.com/babsey/nest-server /opt/nest-server && \
+    rm -rf /var/www/html
 
 COPY --from=simulator-builder /opt/nest-simulator /opt/nest-simulator
-COPY --from=desktop-builder /tmp/nest-desktop/dist/nest-desktop/* /var/www/html/
-COPY entrypoint.sh .
+COPY ./dist/nest-desktop /var/www/html
+COPY ./docker/entrypoint.sh .
 
 EXPOSE 80 5000
 RUN chmod 755 /entrypoint.sh

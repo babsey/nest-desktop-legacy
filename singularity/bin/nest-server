@@ -1,0 +1,43 @@
+#!/bin/bash
+
+pid() {
+  pgrep -f 'uwsgi --http-socket :5000 --module app.main:app'
+}
+
+status() {
+  export pid=`nest-server pid`
+  if [ $pid ]; then
+    echo 'NEST Server is running.'
+  else
+    echo 'NEST Server is not running.'
+  fi
+}
+
+start() {
+  export pid=`nest-server pid`
+  if [ $pid ]; then
+    echo 'NEST Server is already running.'
+  else
+    cd /opt/nest-server
+    uwsgi --http-socket :5000 --module app.main:app
+  fi
+}
+
+stop() {
+  export pid=`nest-server pid`
+  if [ $pid ]; then
+    kill $pid
+    echo 'NEST Server has stopped.'
+  fi
+}
+
+case "$1" in
+  pid) pid ;;
+  status)  status ;;
+  start)   start ;;
+  stop)    stop ;;
+  restart) stop; start ;;
+  *) echo "usage: $0 pid|status|start|stop|restart" >&2
+     exit 1
+     ;;
+esac

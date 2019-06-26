@@ -8,6 +8,7 @@ import { ControllerConfigService } from '../config/controller-config/controller-
 import { NetworkProtocolService } from '../network/network-protocol/network-protocol.service';
 import { NetworkService } from '../network/network.service';
 
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-loading',
@@ -17,6 +18,7 @@ import { NetworkService } from '../network/network.service';
 export class LoadingComponent implements OnInit {
   @Output() ready = new EventEmitter();
   @Output() buttonClick = new EventEmitter();
+  public version = environment.VERSION;
 
   constructor(
     public _appConfigService: AppConfigService,

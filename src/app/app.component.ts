@@ -13,7 +13,7 @@ import { NetworkSimulationService } from './network/network-simulation/network-s
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  @ViewChild('content') content: ElementRef;
+  @ViewChild('content', {static: false}) content: ElementRef;
   public ready: boolean = false;
   public buttonDisplay: string = '0.2';
 

@@ -74,7 +74,7 @@ export class NetworkSimulationService {
     this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     this._logService.log('Request to server');
     this.simulating = true;
-    this.http.post(urlRoot + '/simulate', data_cleaned).subscribe(res => {
+    this.http.post(urlRoot + '/script/simple/simulate', data_cleaned).subscribe(res => {
       this.simulating = false;
       if ('error' in res) {
         this.snackBarRef = this.snackBar.open(res['error'], 'Ok');

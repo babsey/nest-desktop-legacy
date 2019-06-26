@@ -19,7 +19,7 @@ import { SketchService } from '../../sketch/sketch.service';
   styleUrls: ['./network-simulation.component.css']
 })
 export class NetworkSimulationComponent implements OnInit, OnDestroy {
-  @ViewChild('content') content: any;
+  @ViewChild('content', {static: false}) content: any;
   public buttonDisplay: string = '0.2';
   public height: number = 0;
   public width: number = 0;
@@ -66,6 +66,7 @@ export class NetworkSimulationComponent implements OnInit, OnDestroy {
 
   resize() {
     // console.log('resize')
+    if (!this.content) return
     this.height = this.content.elementRef.nativeElement.clientHeight;
     this.width = this.content.elementRef.nativeElement.clientWidth;
     setTimeout(() => this._chartService.rescale.emit(), 1)
