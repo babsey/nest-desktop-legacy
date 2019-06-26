@@ -5,8 +5,6 @@ From: ubuntu:18.04
   AUTHOR Sebastian Spreizer <spreizer@web.de>
 
 %post
-  apt update && apt install -y
-  curl
-
+  apt update && apt install -y curl
   curl -sL https://deb.nodesource.com/setup_10.x | bash -
   apt update && apt install -y nodejs
