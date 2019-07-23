@@ -86,7 +86,7 @@ export class AppConfigService {
         if ('simulator' in res) {
           this.status.NEST.simulator.ready = true;
           this.status.NEST.simulator['version'] = res['simulator']['version'];
-          this.status.NEST.simulator.valid = res['simulator']['version'] == '2.16.0';
+          this.status.NEST.simulator.valid = res['simulator']['version'].endsWith('2.18.0');
         }
       })
   }
