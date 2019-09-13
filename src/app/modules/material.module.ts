@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 
+import {CdkTableModule} from '@angular/cdk/table';
+
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -16,12 +18,14 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatPaginatorModule,
   MatProgressBarModule,
   MatSelectModule,
   MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule,
   MatSnackBarModule,
+  MatSortModule,
   MatStepperModule,
   MatTableModule,
   MatTabsModule,
@@ -32,6 +36,7 @@ import {
 
 @NgModule({
   imports: [
+    CdkTableModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -47,12 +52,14 @@ import {
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatSelectModule,
     MatSidenavModule,
     MatSliderModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatSortModule,
     MatStepperModule,
     MatTableModule,
     MatTabsModule,
@@ -61,6 +68,7 @@ import {
     MatTreeModule,
   ],
   exports: [
+    CdkTableModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -76,12 +84,14 @@ import {
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatSelectModule,
     MatSidenavModule,
     MatSliderModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatSortModule,
     MatStepperModule,
     MatTableModule,
     MatTabsModule,

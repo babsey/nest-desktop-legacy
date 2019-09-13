@@ -6,10 +6,10 @@ import { ModelService } from '../../model/model.service';
 @Component({
   selector: 'app-forms-config-dialog',
   templateUrl: './forms-config-dialog.component.html',
-  styleUrls: ['./forms-config-dialog.component.css']
+  styleUrls: ['./forms-config-dialog.component.scss']
 })
 export class FormsConfigDialogComponent implements OnInit {
-  public options: any = {};
+  public options: any;
   private idx: number;
 
   constructor(
@@ -20,9 +20,10 @@ export class FormsConfigDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    var configModel = this._modelService.config(this.data.model)
-    var params = configModel.params.find(param => param.id == this.data.id);
-    this.idx = configModel.params.map(param => param.id).indexOf(params.id);
+    // console.log(this.data)
+    var configModel = this._modelService.models[this.data.model];
+    var params = configModel['params'].find(param => param.id == this.data.id);
+    this.idx = configModel['params'].map(param => param.id).indexOf(params.id);
     this.options = Object.assign({}, params);
     // this.options = params;
   }

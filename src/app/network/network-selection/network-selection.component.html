@@ -1,0 +1,18 @@
+<nav mat-tab-nav-bar>
+  <a mat-tab-link (click)="selectElementType(null)" [active]="isSelected(null)" class="tab-nav"> All </a>
+  <a mat-tab-link (click)="selectElementType('stimulator')" [active]="isSelected('stimulator')" class="tab-nav"> Stimulator </a>
+  <a mat-tab-link (click)="selectElementType('neuron')" [active]="isSelected('neuron')" class="tab-nav"> Neuron </a>
+  <a mat-tab-link (click)="selectElementType('recorder')" [active]="isSelected('recorder')" class="tab-nav"> Recorder </a>
+</nav>
+
+<ng-container *ngIf="data.app">
+  <div style="height:calc(100vh - 82px); overflow-y: auto">
+    <ng-container *ngFor="let node of data.app.nodes">
+      <app-node-selection (nodeChange)="onSelectionChange($event)" [data]="data" [idx]="node.idx" [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'" ></app-node-selection>
+    </ng-container>
+
+    <ng-container *ngFor="let link of data.app.links">
+      <app-link-selection (linkChange)="onSelectionChange($event)" [data]="data" [idx]="link.idx" [style.display]="isSelectedPre(link) ? '': 'None'" ></app-link-selection>
+    </ng-container>
+  </div>
+</ng-container>

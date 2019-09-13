@@ -1,0 +1,36 @@
+<mat-list dense>
+  <mat-list-item mat-subheader>
+    Histogram
+  </mat-list-item>
+
+  <mat-list-item >
+    <app-select
+      (selectedChange)="onBarmodeChange($event)"
+      [matTooltip]="'Barmode'"
+      [options]="_recordsVisualizationService.barmodes"
+      [(selected)]="_recordsVisualizationService.barmode"
+      matTooltipPosition="before"
+    ></app-select>
+  </mat-list-item>
+
+  <mat-list-item >
+    <app-select
+      (selectedChange)="onBarnormChange($event)"
+      [matTooltip]="'Barnorm'"
+      [options]="_recordsVisualizationService.barnorms"
+      [(selected)]="_recordsVisualizationService.barnorm"
+      matTooltipPosition="before"
+    ></app-select>
+  </mat-list-item>
+
+  <mat-list-item>
+    <app-ticks-slider-inline
+      (valueChange)="onBinSizeChange($event)"
+      [matTooltip]="'Bin size'"
+      [options]="_visualizationConfigService.config.chart.slider.binsize"
+      [value]="_recordsVisualizationService.binsize"
+      style="width:100%"
+    ></app-ticks-slider-inline>
+  </mat-list-item>
+
+</mat-list>

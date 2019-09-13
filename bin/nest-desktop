@@ -1,0 +1,55 @@
+#!/bin/bash
+
+HOST="127.0.0.1"
+PORT="8000"
+
+usage() {
+  echo "Usage: $0 pid|status|start|stop|restart [-h <host>] [-p <port>]" >&2; exit 1
+}
+
+pid() {
+  pgrep -f 'python3 -m nest_desktop.app $HOST $PORT'
+}
+
+status() {
+  export pid=`nest-desktop pid`
+  if [ $pid ]; then
+    echo 'NEST Desktop is running.'
+  else
+    echo 'NEST Desktop is not running.'
+  fi
+}
+
+start() {
+  export pid=`nest-desktop pid`
+  if [ $pid ]; then
+    echo 'NEST Desktop is already running.'
+  else
+    python3 -m nest_desktop.app $HOST $PORT
+  fi
+}
+
+stop() {
+  export pid=`nest-desktop pid`
+  if [ $pid ]; then
+    kill $pid
+    echo 'NEST Desktop has stopped.'
+  fi
+}
+
+CMD=$1; shift
+while getopts "h:p:" opt; do
+    case $opt in
+        h) HOST=$OPTARG ;;
+        p) PORT=$OPTARG ;;
+    esac
+done
+
+case "$CMD" in
+  pid) pid ;;
+  status)  status ;;
+  start)   start ;;
+  stop)    stop ;;
+  restart) stop; start ;;
+  *) usage ;;
+esac

@@ -1,0 +1,25 @@
+#simulation {
+  height: 100vh;
+
+  #controller,
+  #selection {
+    width: 321px;
+  }
+
+  .title {
+    height: 48px;
+    line-height: 48px;
+    margin-top: -23px;
+    width: 100%;
+
+    mat-form-field {
+      width: 100%;
+      font-weight: 500;
+    }
+  }
+
+  .visualization-content {
+    height: 100vh;
+    overflow: hidden;
+  }
+}

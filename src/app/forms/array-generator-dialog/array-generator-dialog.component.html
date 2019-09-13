@@ -100,7 +100,7 @@
 
     <tr *ngIf="_generatorService.options.type.indexOf('random') != -1">
       <td>
-        <mat-slide-toggle class="mat-primary" [(ngModel)]="_generatorService.options.sort">Sort numbers</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="_generatorService.options.sort">Sort numbers</mat-slide-toggle>
       </td>
     </tr>
   </table>

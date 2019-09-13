@@ -1,0 +1,8 @@
+.node-controller {
+  .list-item {
+    border-left: 2.5px solid black;
+    width: calc(100% - 2.5px);
+    height: 24px;
+    line-height: 24px;
+  }
+}

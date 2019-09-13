@@ -1,0 +1,24 @@
+<svg:g>
+  <ng-container [ngSwitch]="spatial">
+    <ng-container *ngSwitchCase="true">
+      <svg:polygon class="node" [attr.points]="layer()" [style.stroke]="color" [style.stroke-dasharray]="selected ? '7.85' : ''"></svg:polygon>
+      <svg:text class="label" dx="0" dy=".4em" text-anchor="middle">{{ idx + 1 }}</svg:text>
+    </ng-container>
+    <ng-container *ngSwitchCase="false">
+      <ng-container [ngSwitch]="elementType">
+        <ng-container *ngSwitchCase="'neuron'">
+          <svg:circle class="node circle" [attr.r]="radius" [style.stroke]="color" [style.stroke-dasharray]="selected ? '7.85' : ''"></svg:circle>
+          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle">{{ idx + 1 }}</svg:text>
+        </ng-container>
+        <ng-container *ngSwitchCase="'stimulator'">
+          <svg:polygon class="node triangle" [attr.points]="triangle()" [style.stroke]="color" [style.stroke-dasharray]="selected ? '7.85' : ''"></svg:polygon>
+          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle">{{ idx + 1 }}</svg:text>
+        </ng-container>
+        <ng-container *ngSwitchCase="'recorder'">
+          <svg:polygon class="node square" [attr.points]="square()" [style.stroke]="color" [style.stroke-dasharray]="selected ? '7.85' : ''"></svg:polygon>
+          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle">{{ idx + 1 }}</svg:text>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</svg:g>

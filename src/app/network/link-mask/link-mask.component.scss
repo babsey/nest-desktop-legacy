@@ -1,0 +1,33 @@
+:host {
+  width: 100%;
+}
+
+.mask-container {
+  display: flex;
+  padding: 0;
+}
+
+::ng-deep .mask-menu {
+  max-width: none;
+  height: 516px;
+}
+
+::ng-deep .mask-menu .mat-subheader {
+  line-height: 16px !important;
+}
+
+::ng-deep .mask-menu .mat-subheader .navButton {
+  font-size: 12px;
+  height: 32px !important;
+  line-height: 32px;
+  width: 32px !important;
+  text-align: center;
+}
+
+::ng-deep .mask-menu .mat-subheader .navButton .mat-list-item-content {
+  padding: 0 !important;
+}
+
+::ng-deep .mask-menu .mat-subheader .navButton fa-icon {
+  min-width: 32px;
+}

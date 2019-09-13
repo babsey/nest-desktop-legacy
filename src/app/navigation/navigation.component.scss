@@ -1,0 +1,11 @@
+.navigation-button {
+  opacity: 0.5;
+}
+
+.navigation:hover .navigation-button {
+  opacity: 1.0;
+}
+
+.navigation-button.active {
+  opacity: 1.0;
+}

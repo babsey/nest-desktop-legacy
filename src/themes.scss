@@ -1,18 +1,87 @@
-@import '~@angular/material/theming';
-@include mat-core();
+@import '~@angular/material/theming'; // Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core(); // https://www.sessions.edu/color-calculator/
 
-
-$bw-schemeCategory: (
-  100: #3366ff,
-  200: #fafafa,
-  300: #ff6633,
-  contrast: (100: #fafafa, 200: #333, 300: #fafafa)
+$appSchemeCategory: (
+  100: #F7F7F7,
+  200: #93B5AD,
+  300: #BE6442,
+  400: #CE934A,
+  500: #ff6633,
+  600: #30373E,
+  contrast: (100: #30373E, 200: #F7F7F7, 300: #F7F7F7, 400: #F7F7F7, 500: #F7F7F7, 600: #F7F7F7)
 );
-$bw-primary: mat-palette($bw-schemeCategory, 100);
-$bw-accent: mat-palette($bw-schemeCategory, 200);
-$bw-warn: mat-palette($bw-schemeCategory, 300);
-$bw-light-theme: mat-light-theme($bw-primary, $bw-accent, $bw-warn);
 
-.bw-theme {
-  @include angular-material-theme($bw-light-theme);
+$wildsand: mat-palette($appSchemeCategory, 100);
+$summergreen: mat-palette($appSchemeCategory, 200);
+$crail: mat-palette($appSchemeCategory, 300);
+$sycamore: mat-palette($appSchemeCategory, 400);
+$nest: mat-palette($appSchemeCategory, 500);
+$outerspace: mat-palette($appSchemeCategory, 600);
+
+$light-theme: mat-light-theme($outerspace, $outerspace);
+$simulation-theme: mat-light-theme($summergreen, $outerspace);
+$model-theme: mat-light-theme($crail, $outerspace);
+$config-theme: mat-light-theme($sycamore, $outerspace);
+$nest-theme: mat-light-theme($nest, $outerspace);
+$dark-theme: mat-light-theme($wildsand, $wildsand);
+
+fa-icon {
+  color: inherit;
+}
+
+.mat-list-item.active {
+  color: mat-color($wildsand) !important;
+  font-weight: bold;
+}
+
+.mat-button-base.active {
+  color: mat-color($outerspace) !important;
+}
+
+.light-theme {
+  @include angular-material-theme($light-theme);
+}
+
+.dark-theme {
+  @include angular-material-theme($dark-theme);
+}
+
+.simulation-theme {
+  @include angular-material-theme($simulation-theme);
+
+  .mat-list-item.active {
+    background-color: mat-color($summergreen) !important;
+  }
+
+  .mat-footer-row {
+    background-color: mat-color($summergreen) !important;
+    color: mat-color($wildsand) !important;
+  }
+}
+
+.model-theme {
+  @include angular-material-theme($model-theme);
+
+  .mat-list-item.active {
+    background-color: mat-color($crail) !important;
+  }
+
+  .mat-button.active {
+    color: mat-color($outerspace);
+  }
+}
+
+.config-theme {
+  @include angular-material-theme($config-theme);
+
+  .mat-list-item.active {
+    background-color: mat-color($sycamore) !important;
+  }
+}
+
+.nest-theme {
+  @include angular-material-theme($nest-theme);
 }

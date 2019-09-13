@@ -1,0 +1,47 @@
+<mat-toolbar color="primary" style="height:40px; padding-left:60px; opacity:0.8" [style.background-color]="_colorService.node(node)">
+  Statistics of
+  <ng-container [ngSwitch]="recordFrom.length==0">
+    <ng-container *ngSwitchCase="true">
+      {{ selectedRecord }}
+    </ng-container>
+    <ng-container *ngSwitchCase="false">
+      &nbsp;
+      <mat-select (selectionChange)="update()" [(ngModel)]="selectedRecord">
+        <ng-container *ngFor="let record of recordFrom">
+          <mat-option [value]="record">{{ record }}</mat-option>
+        </ng-container>
+      </mat-select>
+    </ng-container>
+  </ng-container>
+</mat-toolbar>
+
+<div style="overflow:auto" [style.height.px]="height()">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- id Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sticky> Id </th>
+      <td mat-cell *matCellDef="let element"> {{ element.id }} </td>
+      <td mat-footer-cell *matFooterCellDef></td>
+    </ng-container>
+
+    <!-- mean Column -->
+    <ng-container matColumnDef="mean">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> &mu;({{ selectedRecord }}) </th>
+      <td mat-cell *matCellDef="let element"> {{element.mean | format }} </td>
+      <td mat-footer-cell *matFooterCellDef> &lambda; = {{ mean('mean') | format }} </td>
+    </ng-container>
+
+    <!-- std Column -->
+    <ng-container matColumnDef="std">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> &sigma;({{ selectedRecord }}) </th>
+      <td mat-cell *matCellDef="let element"> {{ element.std | format }} </td>
+      <td mat-footer-cell *matFooterCellDef> &lambda; = {{ mean('std') | format }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+  </table>
+
+</div>

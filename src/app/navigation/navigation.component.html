@@ -1,40 +1,14 @@
-<mat-nav-list dense class="colNav" (mouseleave)="show=!_navigationService.options.sidenavShortView">
-  <mat-list-item (click)="resize()" (mouseenter)="show=true" class="bar">
-    <fa-icon icon="bars"></fa-icon>
-  </mat-list-item>
-  <a mat-list-item *ngIf="show" [routerLink]="[{ outlets: { sidebar: ['network'] } }]" [class.active]="router.url.includes('sidebar:network')" matTooltip="Networks">
-    <fa-icon icon="bezier-curve"></fa-icon>
-  </a>
-  <a mat-list-item *ngIf="show" [routerLink]="[{ outlets: { sidebar: ['model'] } }]" [class.active]="router.url.includes('sidebar:model')" matTooltip="Models">
-    <fa-icon icon="brain"></fa-icon>
-  </a>
-  <a mat-list-item *ngIf="show" [routerLink]="[{ outlets: { sidebar: ['config'] } }]" [class.active]="router.url.includes('sidebar:config')" matTooltip="Configurations">
-    <fa-icon icon="cog"></fa-icon>
-  </a>
-  <!-- <a mat-list-item *ngIf="show" [routerLink]="[{ outlets: { sidebar: ['help'] } }]" [class.active]="router.url.includes('sidebar:help')" matTooltip="Help">
-    <fa-icon icon="question"></fa-icon>
-  </a> -->
-  <span class="logo" *ngIf="show">
-    <img height="40px" alt="NEST" src="assets/img/nest-accent.svg" class="nest" [class.show]="show" style="vertical-align:middle">
+<span class="navigation">
+  <span class="dark-theme" routerLinkActive="active">
+    <button mat-icon-button color="primary" (click)="toggleSidenav()"><fa-icon icon="bars"></fa-icon></button>
   </span>
-</mat-nav-list>
-
-<!-- <span *ngIf="!_navigationService.options.sidenavShortView" class="flex" color="accent" style="height:40px">
-  <span class="nest-desktop">
-    <img height="40px" alt="NEST" src="assets/img/nest-accent.svg" class="nest" style="vertical-align:middle">
+  <span class="navigation-button simulation-theme" routerLinkActive="active">
+    <button mat-icon-button color="primary" [routerLink]="[{ outlets: { nav: ['simulation'] } }]" (click)="openSidenav()" matTooltip="Simulation" matTooltipPosition="after"><fa-icon icon="brain"></fa-icon></button>
   </span>
-  <nav mat-tab-nav-bar class="nav">
-    <a mat-tab-link [routerLink]="[{ outlets: { sidebar: ['network'] } }]" [active]="router.url.includes('sidebar:network')" matTooltip="Networks">
-      <fa-icon icon="bezier-curve"></fa-icon>
-    </a>
-    <a mat-tab-link [routerLink]="[{ outlets: { sidebar: ['model'] } }]" [active]="router.url.includes('sidebar:model')" matTooltip="Models">
-      <fa-icon icon="brain"></fa-icon>
-    </a>
-    <a mat-tab-link [routerLink]="[{ outlets: { sidebar: ['config'] } }]" [active]="router.url.includes('sidebar:config')" matTooltip="Configurations">
-      <fa-icon icon="cog"></fa-icon>
-    </a>
-    <a mat-tab-link [routerLink]="[{ outlets: { sidebar: ['help'] } }]" [active]="router.url.includes('sidebar:help')" matTooltip="Help">
-      <fa-icon icon="question"></fa-icon>
-    </a>
-  </nav>
-</span> -->
+  <span class="navigation-button model-theme" routerLinkActive="active">
+    <button mat-icon-button color="primary" [routerLink]="[{ outlets: { nav: ['model'] } }]" (click)="openSidenav()" matTooltip="Model" matTooltipPosition="after"><fa-icon icon="square-root-alt"></fa-icon></button>
+  </span>
+  <span class="navigation-button config-theme" routerLinkActive="active">
+    <button mat-icon-button color="primary" [routerLink]="[{ outlets: { nav: ['config'] } }]" (click)="openSidenav()" matTooltip="Configuration" matTooltipPosition="after"><fa-icon icon="cog"></fa-icon></button>
+  </span>
+</span>

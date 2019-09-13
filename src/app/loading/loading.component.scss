@@ -1,0 +1,66 @@
+.loading {
+  background-color: #fafafa;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .left {
+    width: 280px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .mat-subheader {
+    button {
+      font-size: 11px;
+      height: 32px;
+      width: 32px;
+      line-height: 32px;
+    }
+  }
+
+  mat-card {
+    width: 280px;
+    margin: 10px;
+  }
+
+  mat-list-item {
+    height: 18px;
+  }
+}
+
+.nest {
+  mat-toolbar {
+    margin: 5px;
+    border-radius: 10px 10px 10px 0;
+  }
+}
+
+.green {
+  color: #6e994c;
+  margin-left: 10px;
+}
+
+.orange {
+  color: #ec8814;
+  margin-left: 10px;
+}
+
+.red {
+  color: #f44336;
+  margin-left: 10px;
+}
+
+.quote {
+  font-size: 28px;
+  line-height: 1.2em;
+  font-style: italic;
+  text-align: right;
+}
+
+.author {
+  float: right;
+}

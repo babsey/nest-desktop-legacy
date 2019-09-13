@@ -1,6 +1,0 @@
-<span [ngSwitch]="view">
-  <app-value-input *ngSwitchCase="'valueInput'" [value]="params[id]" [options]="options" (valueChange)="onChange($event)" class="input"></app-value-input>
-  <app-array-input *ngSwitchCase="'arrayInput'" [value]="params[id]" [options]="options" (valueChange)="onChange($event)" class="input"></app-array-input>
-  <app-param-value-slider *ngSwitchCase="'valueSlider'" [model]="model" [id]="id" [value]="params[id]" [options]="options" (valueChange)="onChange($event)" class="slider"></app-param-value-slider>
-  <app-param-ticks-slider *ngSwitchCase="'tickSlider'"  [model]="model" [id]="id" [value]="params[id]" [options]="options" (valueChange)="onChange($event)" class="slider"></app-param-ticks-slider>
-</span>

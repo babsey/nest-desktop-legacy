@@ -1,0 +1,2 @@
+include nest_desktop/app/*
+include nest_desktop/app/assets/img/*

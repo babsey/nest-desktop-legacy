@@ -8,7 +8,7 @@ import { GeneratorService } from '../../services/generator/generator.service';
 @Component({
   selector: 'app-array-generator-dialog',
   templateUrl: './array-generator-dialog.component.html',
-  styleUrls: ['./array-generator-dialog.component.css']
+  styleUrls: ['./array-generator-dialog.component.scss']
 })
 export class ArrayGeneratorDialogComponent implements OnInit {
 

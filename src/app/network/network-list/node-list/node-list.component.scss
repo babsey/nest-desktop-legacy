@@ -1,0 +1,18 @@
+.node {
+  .header {
+    line-height: 40px;
+    height: 40px;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  .list-item {
+    border-left: 2.5px solid black;
+    height: 20px !important;
+
+    .unit {
+      text-align: right;
+      width: 20px;
+    }
+  }
+}

@@ -1,36 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { DataService } from '../services/data/data.service';
-import { NetworkProtocolService } from './network-protocol/network-protocol.service';
-import { NetworkService } from './network.service';
+import { NetworkSketchService } from './network-sketch/network-sketch.service';
+import { SimulationService } from '../simulation/services/simulation.service';
+import { SimulationProtocolService } from '../simulation/services/simulation-protocol.service';
+
+import { Data } from '../classes/data';
 
 
 @Component({
   selector: 'app-network',
   templateUrl: './network.component.html',
-  styleUrls: ['./network.component.css']
+  styleUrls: ['./network.component.scss']
 })
-export class NetworkComponent implements OnInit {
-  public mode: string = 'details';
+export class NetworkComponent implements OnInit, AfterViewInit {
+  @Input() data: Data;
+  @Output() networkChange: EventEmitter<any> = new EventEmitter();
+  @ViewChild('content', { static: false }) content: ElementRef;
+  public width: number = 600;
+  public height: number = 400;
 
   constructor(
-    private _networkProtocolService: NetworkProtocolService,
-    public _dataService: DataService,
-    public _networkService: NetworkService,
-    public route: ActivatedRoute,
-    public router: Router,
-  ) { }
+    private _networkSketchService: NetworkSketchService,
+    private _simulationService: SimulationService,
+    private _simulationProtocolService: SimulationProtocolService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+  }
 
   ngOnInit() {
-    if (this.router.url.includes('simulate')) {
-      this.mode = 'simulation';
-    }
-    let paramMap = this.route.snapshot.paramMap;
-    let id = paramMap.get('id');
-    if (id) {
-      this._networkService.load(id)
-    }
+    // console.log('Init network')
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.height = this.content['elementRef'].nativeElement.clientHeight;
+      this.width = this.content['elementRef'].nativeElement.clientWidth - 40;
+    }, 1)
+  }
+
+  onNetworkChange(data) {
+    this.networkChange.emit(data);
+  }
+
+  save() {
+    this._networkSketchService.edit(false);
+    this._simulationProtocolService.save(this.data, true)
   }
 
 }

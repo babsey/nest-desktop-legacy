@@ -1,8 +1,9 @@
-import { AppRoutingModule } from '../modules/app-routing.module';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { AppRoutingModule } from '../modules/app-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MaterialModule } from '../modules/material.module';
-import { NgModule } from '@angular/core';
 
 import { NavigationComponent } from './navigation.component';
 

@@ -9,7 +9,7 @@ import { ModelService } from '../model.service';
 @Component({
   selector: 'app-model-list',
   templateUrl: './model-list.component.html',
-  styleUrls: ['./model-list.component.css']
+  styleUrls: ['./model-list.component.scss']
 })
 export class ModelListComponent implements OnInit, OnDestroy {
   private subscription: any;
@@ -33,7 +33,6 @@ export class ModelListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this._appConfigService.check()
     this.update()
     this.subscription = this._modelService.update.subscribe(() => this.update())
   }
@@ -51,7 +50,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
   }
 
   requestModels() {
-    var urlRoot = this._appConfigService.urlRoot()
+    var urlRoot = this._appConfigService.urlRoot();
     return this.http.get(urlRoot + '/api/nest/Models')
   }
 

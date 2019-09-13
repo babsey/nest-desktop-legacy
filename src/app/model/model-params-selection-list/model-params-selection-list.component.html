@@ -1,0 +1,21 @@
+<mat-selection-list dense (selectionChange)="changeParam($event)" [disabled]="!_modelService.hasModel()">
+  <mat-list-item style="font-weight:bold">
+    <span class="flex">
+      <span>Parameter</span>
+      <span class="flex-spacer"></span>
+      <span>Value</span>
+    </span>
+  </mat-list-item>
+
+  <ng-container *ngFor="let param of objectKeys(_modelService.defaults)">
+    <mat-list-option [selected]="hasParam(param)" [value]="{'id': param, 'value':  _modelService.defaults[param]}" class="item">
+      <span class="flex">
+        <span>{{ param }}</span>
+        <span class="flex-spacer"></span>
+        <span class="description">
+          {{ _modelService.defaults[param] }}
+        </span>
+      </span>
+    </mat-list-option>
+  </ng-container>
+</mat-selection-list>

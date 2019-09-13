@@ -1,0 +1,58 @@
+<span class="network-sketch" [style.width]="width + 'px'" [style.height]="height + 'px'">
+  <div class="message" [style.display]="_networkSketchService.options.drawing ? 'block': 'none'">Drawing mode is on.</div>
+
+  <span (mouseleave)="resetDragLine()">
+    <svg
+      [attr.height]="(height-12) + 'px'"
+      [attr.width]="(width-10) + 'px'"
+      [style.border-color]="_networkSketchService.options.drawing ? '#ff6633' : 'lightgrey'"
+      id="sketch"
+      >
+      <g app-background-sketch
+        [data]="data"
+        [width]="(width-10)"
+        [height]="(height-12)"
+        (nodeChange)="onChange($event)"
+        transform="translate(1,1)"
+      ></g>
+      <g app-links-sketch
+        [data]="data"
+        transform="translate(1,1)"></g>
+      <g app-nodes-sketch
+        (linkChange)="onChange($event)"
+        [data]="data"
+        [height]="(height-12)"
+        [width]="(width-10)"
+        transform="translate(1,1)"
+        ></g>
+    </svg>
+  </span>
+
+  <span class="no-print" style="position:absolute; right:10px; bottom:10px; display:flex; line-height:40px; height:40px">
+    <ng-container *ngIf="_networkSketchService.options.drawing">
+      <span>
+        <!-- <button mat-icon-button (click)="undo()" [disabled]="dataStack.length==0 || idx==0"
+          matTooltip="Undo network configuration">
+          <fa-icon icon="undo-alt"></fa-icon>
+        </button>
+        <button mat-icon-button (click)="redo()" [disabled]="dataStack.length==0 || idx==dataStack.length-1"
+          matTooltip="Redo network configuration">
+          <fa-icon icon="redo-alt"></fa-icon>
+        </button> -->
+        <button mat-icon-button (click)="deleteSelected()" [disabled]="!this._networkService.selected.node && !this._networkService.selected.link" matTooltip="Delete selected" matTooltipPosition="above">
+          <fa-icon icon="eraser"></fa-icon>
+        </button>
+        <button mat-icon-button (click)="clear()" matTooltip="Clear network configuration" matTooltipPosition="above">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </span>
+    </ng-container>
+
+    <ng-container *ngIf="editable">
+      <button mat-icon-button (click)="_networkSketchService.edit()" matTooltip="Draw" matTooltipPosition="above" [class.active]="_networkSketchService.options.drawing">
+        <fa-icon icon="pen"></fa-icon>
+      </button>
+    </ng-container>
+  </span>
+
+<span>

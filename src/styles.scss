@@ -1,0 +1,185 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+}
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+}
+
+.flex {
+  display: flex !important;
+  width: 100%;
+
+  .flex-spacer {
+    flex-grow: 1;
+  }
+}
+
+.form-field {
+  width: 100%;
+}
+
+.dense {
+  font-size: 12px !important;
+
+  .mat-list-item-content {
+    padding: 0 8px !important;
+  }
+}
+
+.navbar {
+  height: 40px !important;
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+mat-divider.style-fix {
+  height: 32px;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.content {
+  padding-left: 40px !important;
+}
+
+.config {
+  max-width: 640px !important;
+}
+
+.navItem {
+  width: 40px !important;
+  height: 40px !important;
+
+  span {
+    width: 100%;
+    text-align: center;
+
+    fa-icon {
+      width: 100%;
+    }
+  }
+}
+
+.menu-icon {
+  display: inline-block;
+  width: 20px;
+}
+
+.list-icon {
+  display: inline-block;
+  width: 30px;
+}
+
+.node-shape {
+  width: 56px;
+
+  .mat-list-item-content {
+    padding: 0 !important;
+  }
+}
+
+.node-menu {
+  .color-picker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    .btn-picker {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+}
+
+
+.controller .input,
+.controller .slider {
+  width: 100%;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+// .active,
+// .active:focus,
+// .active:hover {
+//   background-color: #3366ff !important;
+//   color: white !important;
+// }
+
+.right-aligned-header > .mat-content {
+  justify-content: space-between;
+}
+
+.right-aligned-header > .mat-content > mat-panel-description,
+.right-aligned-header > .mat-content > mat-panel-title {
+  flex: 0 0 auto;
+}
+
+.mat-slider-thumb,
+.mat-slider-track-fill {
+  border: 2px solid #333;
+}
+
+.mat-slider-thumb-label {
+  border: 1px solid #333;
+}
+
+.mat-bottom-sheet-container {
+  padding: 1px;
+  box-shadow: none !important;
+}
+
+input {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.readonly-wrapper {
+  pointer-events: none;
+}
+
+.mat-menu-panel {
+  min-height: 0 !important;
+}
+
+.links .mat-list-item-content,
+.nodes .mat-list-item-content {
+  padding: 0 10px !important;
+}
+
+.controller .mat-list {
+  padding: 0 8px;
+
+  .mat-list-item-content {
+    padding: 0 8px !important;
+  }
+
+  .mat-list-option .mat-list-text {
+    padding-right: 5px !important;
+  }
+}
+
+.disabled,
+.disabled:hover {
+  opacity: 0.38 !important;
+  pointer-events: none;
+}
+
+app-select {
+  width: 100% !important;
+
+  .select {
+    width: 100%;
+  }
+}

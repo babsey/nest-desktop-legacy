@@ -1,0 +1,20 @@
+<mat-list dense class="model">
+  <mat-list-item>
+    <h3 matSubheader>Model</h3>
+  </mat-list-item>
+
+  <mat-list-item>
+    <mat-form-field style="width:100%">
+      <input matInput placeholder="Name" name="name" [(ngModel)]="model.label" (change)="save()">
+    </mat-form-field>
+  </mat-list-item>
+
+  <mat-list-item>
+    <h3 matSubheader>Controller view</h3>
+  </mat-list-item>
+
+  <mat-list-item *ngFor="let param of model.params" class="param">
+    <app-input-popup [view]="param.input" [model]="model.id" [id]="param.id" [options]="param" style="width:100%"></app-input-popup>
+  </mat-list-item>
+
+</mat-list>

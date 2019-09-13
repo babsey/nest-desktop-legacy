@@ -5,26 +5,29 @@ import { HelpComponent } from '../help/help.component';
 import { ModelComponent } from '../model/model.component';
 import { ConfigComponent } from '../config/config.component';
 import { DBConfigComponent } from '../config/db-config/db-config.component';
+import { SimulationComponent } from '../simulation/simulation.component';
 import { NetworkComponent } from '../network/network.component';
 
 import { HelpListComponent } from '../help/help-list/help-list.component';
 import { ConfigListComponent } from '../config/config-list/config-list.component';
 import { ModelListComponent } from '../model/model-list/model-list.component';
-import { NetworkListComponent } from '../network/network-list/network-list.component';
+import { SimulationNavigationComponent } from '../simulation-navigation/simulation-navigation.component';
+
 
 const appRoutes: Routes = [
-  { path: '',   redirectTo: '/(sidebar:network)', pathMatch: 'full' },
-  { path: 'config', component: ConfigListComponent, outlet: 'sidebar'},
+  { path: '',   redirectTo: '/(nav:simulation)', pathMatch: 'full' },
+  { path: 'config', component: ConfigListComponent, outlet: 'nav'},
   { path: 'config/:config', component: ConfigComponent },
-  { path: 'help', component: HelpListComponent , outlet: 'sidebar'},
+  { path: 'help', component: HelpListComponent , outlet: 'nav'},
   { path: 'help/:help', component: HelpComponent },
-  { path: 'model', component: ModelListComponent , outlet: 'sidebar'},
+  { path: 'model', component: ModelListComponent , outlet: 'nav'},
   { path: 'model/:model', component: ModelComponent },
-  { path: 'network', component: NetworkListComponent, outlet: 'sidebar'},
   { path: 'network', component: NetworkComponent },
-  { path: 'network/simulate', component: NetworkComponent },
   { path: 'network/:id', component: NetworkComponent },
-  { path: 'network/:id/simulate', component: NetworkComponent },
+  { path: 'simulation', component: SimulationNavigationComponent, outlet: 'nav'},
+  { path: 'simulation', component: SimulationComponent },
+  { path: 'simulation/:id', component: SimulationComponent },
+  { path: 'simulation/:id/run', component: SimulationComponent },
 ];
 
 @NgModule({

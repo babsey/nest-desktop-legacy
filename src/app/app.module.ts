@@ -4,27 +4,27 @@ import {
   BrowserAnimationsModule,
   NoopAnimationsModule
 } from '@angular/platform-browser/animations';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { MccColorPickerModule } from 'material-community-components';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-library.add(fas);
-
 
 // modules
 import { AppRoutingModule } from './modules/app-routing.module';
+import { MaterialModule } from './modules/material.module';
+
 import { ConfigModule } from './config/config.module';
 import { HelpModule } from './help/help.module';
-import { MaterialModule } from './modules/material.module';
-import { MccColorPickerModule } from 'material-community-components';
 import { ModelModule } from './model/model.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { NetworkModule } from './network/network.module';
-
+import { SimulationModule } from './simulation/simulation.module';
+import { SimulationNavigationModule } from './simulation-navigation/simulation-navigation.module';
+import { VisualizationModule } from './visualization/visualization.module';
 
 // components
 import { AppComponent } from './app.component';
 import { LoadingComponent } from './loading/loading.component';
+
 
 
 @NgModule({
@@ -44,10 +44,17 @@ import { LoadingComponent } from './loading/loading.component';
     ModelModule,
     NavigationModule,
     NetworkModule,
+    SimulationModule,
+    SimulationNavigationModule,
+    VisualizationModule,
     MccColorPickerModule.forRoot({
       used_colors: []
     }),
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private library: FaIconLibrary) {
+    library.addIconPacks(fas);
+  }
+ }

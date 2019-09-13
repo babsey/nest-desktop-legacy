@@ -4,7 +4,7 @@
   "label": "spike generator",
   "params": [{
       "id": "spike_times",
-      "label": "times of spike",
+      "label": "spike times",
       "level": 1,
       "unit": "ms",
       "input": "arrayInput"

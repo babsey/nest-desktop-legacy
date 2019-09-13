@@ -1,0 +1,30 @@
+<ng-container *ngIf="_networkConfigService.status.ready">
+  <mat-list class="content config">
+    <h3 mat-subheader>
+      Default color cycle of nodes
+    </h3>
+
+    <mat-list-item>
+      <div class="flex">
+        <span style="line-height:65px; vertical-align:middle">
+          <ng-container *ngFor="let color of _networkConfigService.config.color.cycle; let idx = index">
+            <span [style.border-color]="color" style="border-width: 1.5px; border-radius: 15px; position:relative; line-height:normal; margin: 5px">
+              <span style="pointer-events:none; position:absolute; left:0px; top:-7px; text-align:center; vertical-align:middle; width:25px; line-height:25px;"></span>
+              <mcc-color-picker [selectedColor]="color" (selected)="selectColor(idx, $event)" class="color" hideTransparentUsedColors hideEmptyUsedColors></mcc-color-picker>
+            </span>
+          </ng-container>
+        </span>
+        <span class="flex-spacer"></span>
+        <mat-form-field>
+          <mat-select placeholder="Pick a color scheme" [(ngModel)]="_networkConfigService.config.color.scheme" (selectionChange)="selectScheme($event)">
+            <mat-option *ngFor="let scheme of _colorService.schemesKeys()" [value]="scheme">
+              {{ scheme }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-divider></mat-divider>
+</ng-container>

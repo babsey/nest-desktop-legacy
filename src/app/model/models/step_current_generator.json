@@ -2,6 +2,7 @@
   "id": "step_current_generator",
   "element_type": "stimulator",
   "label": "step current generator",
+  "recordables": ["I"],
   "params": [{
       "id": "amplitude_times",
       "label": "times at which current changes",

@@ -8,5 +8,5 @@ import { version } from '../../package.json';
 export const environment = {
   baseUrl: '',
   production: false,
-  VERSION: version,
+  VERSION: 'v' + version,
 };

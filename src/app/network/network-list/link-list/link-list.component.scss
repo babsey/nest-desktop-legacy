@@ -1,0 +1,21 @@
+.link {
+
+  .header {
+    line-height: 40px;
+    height: 40px;
+    opacity: 0.8;
+  }
+
+  .list-item {
+    border-left: 2.5px solid black;
+    border-right: 2.5px solid black;
+    width: calc(100% - 5px);
+    height: 20px !important;
+
+    .unit {
+      text-align: right;
+      width: 20px;
+    }
+  }
+
+}

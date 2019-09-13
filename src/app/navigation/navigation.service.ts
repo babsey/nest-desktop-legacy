@@ -5,10 +5,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class NavigationService {
-  public options: any = {
-    sidenavOpened: true,
-    sidenavShortView: false,
-  };
+  public sidenavShortView: boolean = false;
+  public sidenavOpened: boolean = true;
 
   constructor(
   ) { }

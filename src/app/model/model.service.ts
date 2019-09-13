@@ -1,6 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { AppConfigService } from '../config/app-config/app-config.service';
 
+import { HttpClient } from '@angular/common/http';
 import { DBService } from '../services/db/db.service';
 
 
@@ -9,7 +11,7 @@ import { DBService } from '../services/db/db.service';
 })
 export class ModelService {
   public db: any;
-  public editing: boolean = false;
+  public params: string = 'list';
   public elementType: string;
   public enabledModel: boolean = false;
   public models: any = {};
@@ -19,12 +21,16 @@ export class ModelService {
     ready: false,
     valid: false,
   };
-  public update = new EventEmitter();
+  public update: EventEmitter<any> = new EventEmitter();
   public url: string = 'view';
   public version: string;
+  public defaults: any = {};
+  public progress: boolean = false;
 
   constructor(
+    private _appConfigService: AppConfigService,
     private _dbService: DBService,
+    private http: HttpClient,
   ) {
   }
 
@@ -93,9 +99,26 @@ export class ModelService {
     return models
   }
 
+  requestModelDefaults(model) {
+    var urlRoot = this._appConfigService.urlRoot()
+    var data = {
+      'model': model,
+    };
+    this.defaults = {};
+    this.progress = true;
+    setTimeout(() => {
+      this.http.post(urlRoot + '/api/nest/GetDefaults', data)
+        .subscribe(data => {
+          this.progress = false;
+          this.defaults = data['response']['data'];
+        })
+    }, 500)
+  }
+
   selectModel(model) {
     this.selectedModel = model;
     this.enabledModel = this.hasModel(model);
+    this.requestModelDefaults(model);
   }
 
   hasModel(model = null) {

@@ -1,0 +1,16 @@
+<ng-container *ngIf="data">
+  <ng-container *ngFor="let node of data.app.nodes">
+    <svg:g app-node-shape
+      (click)="onClick(node)"
+      (mouseover)="onMouseOver(node)"
+      [radius]="nodeRadius(node)"
+      [color]="_colorService.node(node)"
+      [elementType]="collection(node.idx).element_type"
+      [idx]="node.idx"
+      [selected]="_networkService.selected.node == node"
+      [spatial]="isSpatial(node)"
+      [attr.transform]="'translate('+ node.position.x + ',' + node.position.y + ')'"
+      class="node"
+    ></svg:g>
+  </ng-container>
+</ng-container>

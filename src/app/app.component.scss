@@ -1,0 +1,37 @@
+#container {
+  height: 100vh;
+}
+
+#navigation-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  width: 40px;
+}
+
+router-outlet {
+  height: 100%;
+}
+
+.buttonLeft {
+  left: -20px;
+  padding-left: 15px;
+  position: absolute;
+  z-index: 1000;
+  height: 40px;
+  width: 40px;
+  line-height: 40px !important;
+
+  .mat-button-wrapper {
+    padding: 0 !important;
+  }
+}
+
+.navButton {
+  position: absolute;
+  left: 0;
+  width: 4px;
+  height: 100vh;
+  z-index: 1000;
+}

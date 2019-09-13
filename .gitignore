@@ -7,6 +7,17 @@
 # Only exists if Bazel was run
 /bazel-out
 
+# sphinx (docs) build
+/docs/_build
+
+# sdist build
+/build
+/dist
+/nest_desktop.egg-info
+
+# angular build
+/nest_desktop/app
+
 # dependencies
 /node_modules
 

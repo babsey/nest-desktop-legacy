@@ -9,17 +9,17 @@
       "password": ""
     }
   },
-  "network": {
-    "label": "Network database",
+  "simulation": {
+    "label": "Simulation database",
     "host": "",
     "port": "",
-    "name": "networks",
+    "name": "simulations",
     "auth": {
       "username": "",
       "password": ""
     }
   },
-  "network-protocol": {
+  "protocol": {
     "label": "Protocol database",
     "host": "",
     "port": "",

@@ -1,0 +1,33 @@
+:host {
+  width: 100%;
+}
+
+.spatial-container {
+  display: flex;
+  padding: 0;
+}
+
+::ng-deep .spatial-menu {
+  max-width: none;
+  height: 516px;
+
+  .mat-subheader {
+    line-height: 16px !important;
+
+    .navButton {
+      font-size: 12px;
+      height: 32px !important;
+      line-height: 32px;
+      width: 32px !important;
+      text-align: center;
+
+      .mat-list-item-content {
+        padding: 0 !important;
+      }
+
+      fa-icon {
+        min-width: 32px;
+      }
+    }
+  }
+}

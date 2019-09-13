@@ -1,0 +1,26 @@
+.link-controller {
+  mat-toolbar {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    opacity: 0.8;
+
+    .arrow {
+      font-size: 24px;
+      vertical-align: middle;
+    }
+  }
+
+  .controller-menu {
+    padding: 0;
+
+    mat-list-item,
+    mat-list-option {
+      border-left: 2.5px solid black;
+      border-right: 2.5px solid black;
+      width: calc(100% - 5px);
+      height: 24px;
+      line-height: 24px;
+    }
+  }
+}

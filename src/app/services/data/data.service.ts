@@ -11,184 +11,125 @@ export class DataService {
     edit: false,
     ready: false,
   };
-  public data: any;
   public selected: any;
   public models: any;
-  public changed: EventEmitter<any>;
-  public records: any[] = [];
-  public undoStack: any[] = [];
-  public redoStack: any[] = [];
+  public changed: EventEmitter<any> = new EventEmitter();
+  public mode: string = 'details';
 
   constructor(
     private snackBar: MatSnackBar,
   ) {
-    this.changed = new EventEmitter();
     this.initData()
   }
 
   initData() {
-    this.records = [];
     this.selected = {
       collection: null,
       connectome: null,
     };
-    this.data = this.emptyData();
   }
 
   emptyData() {
     return {
       _id: '',
       name: '',
-      kernel: {},
-      models: {},
-      collections: [],
-      connectomes: [],
+      description: '',
+      hash: '',
+      createdAt: '',
+      updatedAt: '',
+      user: '',
+      group: '',
+      app: {
+        kernel: { time: 0 },
+        models: {},
+        nodes: [],
+        links: []
+      },
       simulation: {
-        time: 1000.0,
+        kernel: {},
+        models: {},
+        collections: [],
+        connectomes: [],
+        time: 1000.0
+      },
+
+    }
+  }
+
+  newCollection() {
+    return {
+      params: {},
+    }
+  }
+
+  newConnectome() {
+    return {
+      conn_spec: {
+        rule: 'all_to_all',
+      },
+      syn_spec: {
+        model: 'static_synapse'
       }
     }
   }
 
-  clone(data) {
-    var cloned = {}
-    if (data['simulation']) {
-      cloned['simulation'] = Object.assign({}, data['simulation']);
-    }
-    if (data['kernel']) {
-      cloned['kernel'] = Object.assign({}, data['kernel']);
-    }
-    if (data['models']) {
-      cloned['models'] = Object.assign({}, data['models']);
-    }
-    if (data['collections']) {
-      cloned['collections'] = data['collections'].map(collection => {
-        var newCollection = Object.assign({}, {
-          idx: collection['idx'],
-          element_type: collection['element_type'],
-          model: collection['model'],
-        })
-        if ('topology' in collection) {
-          var topology = collection['topology'];
-          newCollection['topology'] = topology;
-        } else {
-          newCollection['n'] = collection['n'] || 1;
-        }
-        return newCollection
-      })
-    }
-    if (data['connectomes']) {
-      cloned['connectomes'] = data['connectomes'].map(connectome => {
-        var newConnectome = {
-          idx: connectome['idx'],
-          pre: connectome['pre'],
-          post: connectome['post'],
-        };
-        if (this.isBothLayer(connectome, data['collections'])) {
-          newConnectome['projections'] = Object.assign({
-            'allow_autapses': true,
-            'allow_multapses': true,
-            'connection_type': 'divergent'
-          }, connectome['projections']);
-        } else {
-          newConnectome['conn_spec'] = Object.assign({ 'rule': 'all_to_all' }, connectome['conn_spec']);
-          newConnectome['syn_spec'] = Object.assign({ 'model': 'static_synapse' }, connectome['syn_spec']);
-        }
-        return newConnectome;
-      })
-    }
-    return cloned;
+  hash(data) {
+    return objectHash(data);
   }
 
   clean(data) {
-    // console.log(data)
-    var cloned_data = this.clone(data);
-    cloned_data['hash'] = objectHash(cloned_data);
-    cloned_data['_id'] = data['_id'];
-    cloned_data['updatedAt'] = data['updatedAt'];
-    cloned_data['name'] = data['name'];
-    cloned_data['description'] = data['description'];
-    cloned_data['user'] = data['user'];
-    cloned_data['group'] = data['group'];
-    cloned_data['collections'].map((d, i) => {
-      d['sketch'] = data['collections'][i]['sketch'];
-      if (data['collections'][i]['color']) {
-        d['color'] = data['collections'][i]['color'];
-      }
-      if (data['collections'][i]['display']) {
-        d['display'] = data['collections'][i]['display'];
-      }
-    });
-    cloned_data['connectomes'].map((d, i) => {
-      if (data['connectomes'][i]['display']) {
-        d['display'] = data['connectomes'][i]['display'];
+    // console.log('Clean data')
+    var newData = JSON.parse(JSON.stringify(data))
+    this.deleteGlobalIds(newData.app.nodes);
+
+    this.validate(newData);
+    newData['hash'] = this.hash(newData['simulation']);
+    return newData;
+  }
+
+  deleteGlobalIds(nodes) {
+    nodes.forEach(node => {
+      if (node.hasOwnProperty('global_ids')) {
+        delete node.global_ids
       }
     })
-    this.validate()
-    return cloned_data
   }
 
-  undo() {
-    // console.log('Undo data')
-    if (this.undoStack.length == 1) return
-    this.redoStack.unshift(this.undoStack.pop());
-    this.data = this.undoStack[this.undoStack.length - 1];
-  }
-
-  redo() {
-    // console.log('Redo data')
-    if (this.redoStack.length == 0) return
-    this.undoStack.push(this.redoStack.shift());
-    this.data = this.undoStack[this.undoStack.length - 1];
-  }
-
-  history(data) {
-    var data_cleaned = this.clean(data);
-    if (this.undoStack.length == 0) {
-      this.undoStack.push(data_cleaned)
-    } else if (data_cleaned['hash'] != this.undoStack[this.undoStack.length - 1]['hash']) {
-      this.undoStack.push(data_cleaned)
-    }
-    this.redoStack = [];
-  }
-
-  deleteNode(idx) {
-    var data = this.data;
-    this.history(data)
-
-    var models = data.models;
-    data.models = {};
-    var collections = data.collections.filter(d => d.idx != idx);
-    collections.forEach((d, i) => {
-      d.idx = i;
-      var model = models[d.model];
-      var newModel = d.element_type + '-' + d.idx;
-      data.models[newModel] = model;
-      d.model = newModel;
-    })
-    data.collections = collections;
-    console.log(data)
-
-    var connectomes = data.connectomes.filter(d => d.pre != idx && d.post != idx);
-    if (connectomes.length != data.connectomes.length) {
-      connectomes.forEach((d, i) => {
-        d.idx = i;
-        d.pre = d.pre > idx ? d.pre - 1 : d.pre;
-        d.post = d.post > idx ? d.post - 1 : d.post;
-      })
-      data.connectomes = connectomes;
-    }
-  }
-
-  deleteLink(idx) {
-    var data = this.data;
-    this.history(data)
-
-    var connectomes = data.connectomes.filter(d => d.idx != idx);
-    connectomes.forEach((d, i) => {
-      d.idx = i;
-    })
-    data.connectomes = connectomes;
-  }
+  // deleteNode(data, idx) {
+  //   data.app.nodes = data.app.nodes.filter((node, i) => i != idx);
+  //   data.simulation.collections = data.simulation.collections.filter((node, i) => i != idx);
+  //   data.app.nodes.forEach((node, i) => {
+  //     node.idx = i;
+  //   })
+  //
+  //   var links = data.app.links.filter(link => {
+  //     var connectome = data.simulation.connectomes[link.idx];
+  //     return connectome.pre != idx && connectome.post != idx;
+  //   });
+  //   if (links.length != data.simulation.connectomes.length) {
+  //
+  //     links.forEach((link, i) => {
+  //       link.idx = i;
+  //     })
+  //     data.app.links = links;
+  //     var connectomes = data.simulation.connectomes.filter(connectome => connectome.pre != idx && connectome.post != idx);
+  //     connectomes.forEach(connectome => {
+  //       connectome.pre = connectome.pre > idx ? connectome.pre - 1 : connectome.pre;
+  //       connectome.post = connectome.post > idx ? connectome.post - 1 : connectome.post;
+  //     })
+  //     data.simulation.connectomes = connectomes;
+  //   }
+  //   return data
+  // }
+  //
+  // deleteLink(data, idx) {
+  //   data.simulation.connectomes = data.simulation.connectomes.filter((connectome, i) => i != idx);
+  //   data.app.links = data.app.links.filter(link => link.idx != idx);
+  //   data.app.links.forEach((link, i) => {
+  //     link.idx = i;
+  //   })
+  //   return data
+  // }
 
   reduce(data, maxVal) {
     if (data.length < maxVal) return data
@@ -224,40 +165,95 @@ export class DataService {
     }
   }
 
-  newNode() {
-    return {
-      params: {},
-    }
-  }
-
-  newLink() {
-    return {
-      conn_spec: {
-        rule: 'all_to_all',
-      },
-      syn_spec: {
-        model: 'static_synapse'
-      }
-    }
-  }
-
-  isBothLayer(connectome, collections=null) {
-    var collection = collection || this.data.collections;
+  isBothSpatial(connectome, collections) {
     var pre = collections[connectome.pre];
     var post = collections[connectome.post];
-    return pre.hasOwnProperty('topology') && post.hasOwnProperty('topology');
+    return pre.hasOwnProperty('spatial') && post.hasOwnProperty('spatial');
   }
 
-  validate() {
-    var data = this.data;
+  deleteNode(data, idx) {
+    data.app.nodes = data.app.nodes.filter((node, i) => i != idx);
+    data.simulation.collections = data.simulation.collections.filter((node, i) => i != idx);
+    data.app.nodes.forEach((node, i) => node.idx = i)
+
+    var links = data.app.links.filter(link => {
+      var connectome = data.simulation.connectomes[link.idx];
+      return connectome.pre != idx && connectome.post != idx;
+    });
+    if (links.length != data.simulation.connectomes.length) {
+      links.forEach((link, i) => link.idx = i)
+      data.app.links = links;
+      var connectomes = data.simulation.connectomes.filter(connectome => connectome.pre != idx && connectome.post != idx);
+      connectomes.forEach(connectome => {
+        connectome.pre = connectome.pre > idx ? connectome.pre - 1 : connectome.pre;
+        connectome.post = connectome.post > idx ? connectome.post - 1 : connectome.post;
+      })
+      data.simulation.connectomes = connectomes;
+    }
+    this.validateModels(data)
+  }
+
+  deleteLink(data, idx) {
+    data.simulation.connectomes = data.simulation.connectomes.filter((connectome, i) => i != idx);
+    data.app.links = data.app.links.filter(link => link.idx != idx);
+    data.app.links.forEach((link, i) => link.idx = i)
+  }
+
+  validate(data) {
+    this.validateKernel(data)
+    this.validateModels(data)
+    this.validateLinks(data)
+  }
+
+  validateKernel(data) {
+    data.app['kernel'] = { time: 0 };
+    if (!data.simulation.kernel.hasOwnProperty('resolution')) {
+      data.simulation.kernel['resolution'] = 0.1;
+    }
+  }
+
+  validateLinks(data) {
     var validated = false;
-    this.data.connectomes.map(connectome => {
-      var preNode = data.collections[connectome.pre];
-      var postNode = data.collections[connectome.post];
-      var preModel = data.models[preNode.model].existing;
-      var postModel = data.models[postNode.model].existing;
+    var models = data.simulation.models;
+    var collections = data.simulation.collections;
+    var connectomes = data.simulation.connectomes;
+    connectomes.map(connectome => {
+      if (this.isBothSpatial(connectome, collections) && !connectome.hasOwnProperty('projections')) {
+        var conn_spec = connectome.conn_spec;
+        var weights = { parametertype: 'constant', specs: { value: 1 } };
+        var delays = { parametertype: 'constant', specs: { value: 1 } };
+        if (conn_spec && conn_spec.hasOwnProperty('rule')) {
+          var connection_type = conn_spec['rule'] == 'fixed_indegree' ? 'convergent' : 'convergent';
+          var number_of_connections = conn_spec['indegree'] || conn_spec['outdegree'] || 1;
+          connectome['projections'] = {
+            connection_type: connection_type,
+            number_of_connections: number_of_connections,
+            weights: weights,
+            delays: delays
+          };
+        } else {
+          var kernel = { parametertype: 'constant', specs: { value: 1 } };
+          connectome['projections'] = {
+            connection_type: 'divergent',
+            kernel: kernel,
+            weights: weights,
+            delays: delays
+          };
+        }
+        delete connectome['conn_spec']
+        delete connectome['syn_spec']
+      }
+      if (!this.isBothSpatial(connectome, collections) && connectome.hasOwnProperty('projections')) {
+        delete connectome['projections']
+      }
+
+      if (connectome.pre == connectome.post) return
+      var preCollection = collections[connectome.pre];
+      var postCollection = collections[connectome.post];
+      var preModel = models[preCollection.model].existing;
+      var postModel = models[postCollection.model].existing;
       if (
-        postNode.element_type == 'stimulator' ||
+        // postCollection.element_type == 'stimulator' ||
         preModel == 'spike_detector' ||
         ['voltmeter', 'multimeter'].includes(postModel)
       ) {
@@ -267,8 +263,22 @@ export class DataService {
     })
     if (validated) {
       setTimeout(() =>
-        this.snackBar.open('Warning! A connection was reversed.', 'Ok'), 100);
+        this.snackBar.open('Warning! A connection was reversed.', null, {duration: 2000}), 100);
     }
+  }
+
+  validateModels(data) {
+    var simModels = data.simulation.models;
+    var appModels = data.app.models;
+    data.simulation.models = {};
+    data.app.models = {};
+    data.app.nodes.forEach(node => {
+      var collection = data.simulation.collections[node.idx];
+      var newName = collection.element_type + '-' + node.idx;
+      data.simulation.models[newName] = simModels[collection.model];
+      collection['model'] = newName;
+      data.app.models[newName] = appModels[collection.model];
+    })
   }
 
 }

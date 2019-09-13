@@ -10,26 +10,29 @@ import { MaterialModule } from '../modules/material.module';
 import { AppPipesModule } from '../pipes/pipes.module';
 
 import { ModelComponent } from './model.component';
-import { ModelConfigComponent } from './model-config/model-config.component';
 import { ModelDocumentationComponent } from './model-documentation/model-documentation.component';
-import { ModelDetailsComponent } from './model-details/model-details.component';
 import { ModelListComponent } from './model-list/model-list.component';
+import { ModelParamsListComponent } from './model-params-list/model-params-list.component';
+import { ModelParamsSelectionListComponent } from './model-params-selection-list/model-params-selection-list.component';
+import { ModelParamsSliderComponent } from './model-params-slider/model-params-slider.component';
 
 
 @NgModule({
   declarations: [
     ModelComponent,
-    ModelConfigComponent,
     ModelDocumentationComponent,
-    ModelDetailsComponent,
     ModelListComponent,
+    ModelParamsListComponent,
+    ModelParamsSelectionListComponent,
+    ModelParamsSliderComponent,
   ],
   exports: [
     ModelComponent,
-    ModelConfigComponent,
     ModelDocumentationComponent,
-    ModelDetailsComponent,
     ModelListComponent,
+    ModelParamsListComponent,
+    ModelParamsSelectionListComponent,
+    ModelParamsSliderComponent,
   ],
   imports: [
     AppPipesModule,

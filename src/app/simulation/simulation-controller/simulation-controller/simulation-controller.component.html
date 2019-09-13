@@ -1,0 +1,24 @@
+<span class="controller simulation-controller">
+  <mat-list dense class="controller-menu light-theme">
+    <mat-list-item mat-subheader>
+      Simulation
+    </mat-list-item>
+    <mat-list-item *ngFor="let param of params()">
+      <app-value-slider-inline
+        (valueChange)="onChange(param.id, $event)"
+        [options]="param"
+        [value]="data.simulation[param.id] || param.value"
+        class="slider"
+      ></app-value-slider-inline>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
+    <mat-list-option [selected]="_simulationRunService.config['autoRandomSeed']" value="autoRandomSeed">
+      <span>Randomize seed</span>
+    </mat-list-option>
+    <mat-list-option [selected]="_simulationRunService.config['autoSimulation']" value="autoSimulation">
+      <span>Simulate after change</span>
+    </mat-list-option>
+  </mat-selection-list>
+</span>

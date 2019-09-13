@@ -1,0 +1,14 @@
+#help {
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  line-height: 1.5em;
+  align-items: center;
+  
+  mat-card {
+    margin: 5px;
+    width: 960px;
+  }
+}

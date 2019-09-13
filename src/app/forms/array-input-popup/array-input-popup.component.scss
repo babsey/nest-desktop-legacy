@@ -1,0 +1,85 @@
+.param-container {
+  display: flex;
+  padding: 0;
+
+  .mat-list-item {
+    height: 24px !important;
+    line-height: 24px;
+  }
+
+  .param .mat-list-item-content {
+    padding: 0 !important;
+  }
+
+  .param-label {
+    width: 100%;
+  }
+
+  .param-value {
+    max-width: 50%;
+    min-width: 20%;
+    text-align: right;
+  }
+
+  .param-unit {
+    text-align: right;
+    width: 24px;
+  }
+}
+
+::ng-deep .param-menu .mat-menu-item {
+  height: 24px !important;
+  line-height: 24px;
+}
+
+::ng-deep .input-menu {
+  width: 280px;
+
+  .input-container {
+    position: relative;
+    width: 100%;
+
+    .input-header {
+      font-size: 12px;
+      width: calc(100% - 20px);
+      margin: 0 10px;
+
+      .param-menu-button {
+        font-size: 12px;
+        height: 24px;
+        width: 24px;
+        line-height: 24px;
+        text-align: center;
+      }
+
+      .mat-list-item-content {
+        padding: 0 !important;
+      }
+
+      .param-unit {
+        width: 24px;
+      }
+
+      .param-menu-button-icon {
+        width: 24px;
+        display: none;
+      }
+    }
+
+    .input {
+      width: 100%;
+    }
+  }
+
+  .input-container:hover {
+    .input-header {
+      .param-unit {
+        display: none;
+      }
+    }
+  }
+}
+
+::ng-deep .input-menu .input-container:hover .input-header .param-menu-button-icon {
+  display: block;
+}

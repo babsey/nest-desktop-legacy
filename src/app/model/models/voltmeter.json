@@ -7,7 +7,7 @@
     "label": "time interval of recording",
     "level": 3,
     "unit": "ms",
-    "value": 1,
+    "value": 0.1,
     "input": "tickSlider",
     "ticks": [
       0.001,
@@ -23,18 +23,18 @@
     "unit": "ms",
     "value": 0,
     "input": "valueSlider",
-    "max": 1000,
+    "max": 10000,
     "min": 0,
-    "step": 1
+    "step": 10
   }, {
     "id": "stop",
     "label": "stop time",
     "level": 2,
     "unit": "ms",
-    "value": 1000,
+    "value": 10000,
     "input": "valueSlider",
-    "max": 1000,
+    "max": 10000,
     "min": 0,
-    "step": 1
+    "step": 10
   }]
 }

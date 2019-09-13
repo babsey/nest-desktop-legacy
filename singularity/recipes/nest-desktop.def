@@ -1,0 +1,36 @@
+Bootstrap: docker
+From: nestsim/nest:2.18.0
+
+%labels
+  AUTHOR Sebastian Spreizer <spreizer@web.de>
+  VERSION 2.0.0
+
+%runscript
+  nest-desktop start &
+  uwsgi --http-socket :5000 --uid nest --module nest_server.main:app
+
+%post
+  apt update && apt install -y python3-pip
+  pip3 install nest-desktop==2.0.0
+
+%environment
+  # NEST is installed here. When you relocate NEST, change this variable.
+  export NEST_INSTALL_DIR=/opt/nest
+
+  # NEST finds standard *.sli files $NEST_DATA_DIR/sli
+  export NEST_DATA_DIR=$NEST_INSTALL_DIR/share/nest
+
+  # NEST finds help files $NEST_DOC_DIR/help
+  export NEST_DOC_DIR=$NEST_INSTALL_DIR/share/doc/nest
+
+  # The path where NEST looks for user modules.
+  export NEST_MODULE_PATH=$NEST_INSTALL_DIR/lib/nest
+
+  # The path where the PyNEST bindings are installed.
+  export NEST_PYTHON_PREFIX=$NEST_INSTALL_DIR/lib/python3.6/site-packages
+
+  # Prepend NEST to PYTHONPATH in a safe way even if PYTHONPATH is undefined
+  export PYTHONPATH=$NEST_PYTHON_PREFIX${PYTHONPATH:+:$PYTHONPATH}
+
+  # Make nest / sli /... executables visible.
+  export PATH=$NEST_INSTALL_DIR/bin:$PATH

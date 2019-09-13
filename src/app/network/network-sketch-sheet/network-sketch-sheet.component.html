@@ -1,0 +1,6 @@
+<span style="width:540px; display: block; position:relative">
+  <button mat-icon-button (click)="bottomSheetRef.dismiss()" style="position:absolute; right:10px; top:10px; z-index:1000">
+    <fa-icon icon="times"></fa-icon>
+  </button>
+  <app-network-sketch [data]="data" width="540" height="200" [editable]="false"></app-network-sketch>
+</span>

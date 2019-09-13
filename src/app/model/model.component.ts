@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { AppConfigService } from '../config/app-config/app-config.service';
 import { ModelService } from './model.service';
 import { NavigationService } from '../navigation/navigation.service';
 
@@ -8,15 +9,16 @@ import { NavigationService } from '../navigation/navigation.service';
 @Component({
   selector: 'app-model',
   templateUrl: './model.component.html',
-  styleUrls: ['./model.component.css']
+  styleUrls: ['./model.component.scss']
 })
 export class ModelComponent implements OnInit {
   public enabled: boolean = false;
 
   constructor(
-    public _modelService: ModelService,
+    private _appConfigService: AppConfigService,
     private _navigationService: NavigationService,
     private route: ActivatedRoute,
+    public _modelService: ModelService,
   ) { }
 
   ngOnInit() {
@@ -25,6 +27,10 @@ export class ModelComponent implements OnInit {
     if (model) {
       this._modelService.selectModel(model);
     }
+  }
+
+  advanced() {
+    return this._appConfigService.config['app'].level == 'advanced';
   }
 
   addModel() {

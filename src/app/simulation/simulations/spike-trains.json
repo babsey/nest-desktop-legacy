@@ -1,0 +1,102 @@
+{
+  "name": "Spike trains",
+  "description": "The simulation shows spike activities of a set of 100 neurons as response to massive incoming spikes",
+  "app": {
+    "models": {
+      "stimulator-0": {
+        "display": [
+          "rate"
+        ]
+      },
+      "neuron-1": {
+        "display": []
+      },
+      "recorder-2": {
+        "display": []
+      }
+    },
+    "nodes": [{
+      "idx": 0,
+      "position": {
+        "x": 50,
+        "y": 50
+      }
+    }, {
+      "idx": 1,
+      "position": {
+        "x": 200,
+        "y": 100
+      }
+    }, {
+      "idx": 2,
+      "position": {
+        "x": 350,
+        "y": 50
+      }
+    }],
+    "links": [{
+      "idx": 0
+    }, {
+      "idx": 1
+    }]
+  },
+  "simulation": {
+    "kernel": {
+      "resolution": 0.1
+    },
+    "models": {
+      "stimulator-0": {
+        "existing": "poisson_generator",
+        "params": {
+          "rate": 6500
+        }
+      },
+      "neuron-1": {
+        "existing": "iaf_psc_alpha",
+        "params": {
+          "V_m": -70,
+          "E_L": -70,
+          "I_e": 0,
+          "C_m": 250,
+          "tau_m": 10,
+          "V_th": -55,
+          "V_reset": -70,
+          "t_ref": 2,
+          "tau_syn_ex": 2,
+          "tau_syn_in": 2
+        }
+      },
+      "recorder-2": {
+        "existing": "spike_detector",
+        "params": {}
+      }
+    },
+    "collections": [{
+      "element_type": "stimulator",
+      "model": "stimulator-0",
+      "n": 1
+    }, {
+      "element_type": "neuron",
+      "model": "neuron-1",
+      "n": 100
+    }, {
+      "element_type": "recorder",
+      "model": "recorder-2",
+      "n": 1
+    }],
+    "connectomes": [{
+      "pre": 0,
+      "post": 1,
+      "syn_spec": {
+        "weight": 10
+      }
+    }, {
+      "pre": 1,
+      "post": 2
+    }],
+    "time": 1000
+  },
+  "_id": "5a86a52e-9283-475e-8c6e-3642fa355a83",
+  "group": "nest-desktop",
+  "user": "nest-desktop"
+}

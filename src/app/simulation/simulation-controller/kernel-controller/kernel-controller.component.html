@@ -1,0 +1,16 @@
+<span class="controller kernel-controller">
+  <mat-list dense class="light-theme">
+    <mat-list-item mat-subheader>
+      Kernel
+    </mat-list-item>
+    <mat-list-item *ngFor="let param of params()">
+      <app-ticks-slider-inline
+        (valueChange)="onChange(param.id, $event)"
+        [id]="param.id"
+        [options]="param"
+        [value]="data.simulation.kernel[param.id] || param.value"
+        class="slider"
+      ></app-ticks-slider-inline>
+    </mat-list-item>
+  </mat-list>
+</span>

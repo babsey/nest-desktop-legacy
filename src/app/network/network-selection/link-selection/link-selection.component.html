@@ -1,0 +1,101 @@
+<mat-menu #linkMenu="matMenu" class="menu link-menu">
+  <button mat-menu-item class="menu-item" (click)="deleteLink()">
+    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete link
+  </button>
+</mat-menu>
+
+<span class="selection link-selection" [style.display]="linkDisplay() ? '' : 'none'">
+
+  <span [class.dark-theme]="advanced()">
+    <mat-toolbar [style.background-image]="backgroundImage" color="primary">
+      <span class="flex" style="height:40px">
+        <app-link-sketch [data]="data" [idx]="idx" style="width:100%"></app-link-sketch>
+        <ng-container *ngIf="advanced()">
+          <span style="margin-right:-16px">
+            <button mat-icon-button [matMenuTriggerFor]="linkMenu">
+              <fa-icon icon="ellipsis-v"></fa-icon>
+            </button>
+          </span>
+        </ng-container>
+      </span>
+    </mat-toolbar>
+  </span>
+
+  <span>
+    <mat-selection-list dense [(ngModel)]="link.display" class="selection-menu" (click)="linkChange.emit(data)">
+      <ng-container *ngIf="isBothSpatial()">
+        <mat-list-option value="connection_type" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+          <span class="flex">
+            <span class="ellipsis">Connection type</span>
+          </span>
+        </mat-list-option>
+
+        <mat-list-option value="kernel" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+          <span class="flex">
+            <span class="ellipsis">Kernel</span>
+          </span>
+        </mat-list-option>
+
+        <mat-list-option value="number_of_connections" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+          <span class="flex">
+            <span class="ellipsis">Number of connections</span>
+          </span>
+        </mat-list-option>
+
+        <mat-list-option value="mask" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+          <span class="flex">
+            <span class="ellipsis">Mask</span>
+          </span>
+        </mat-list-option>
+
+        <mat-list-option value="weights" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+          <span class="flex">
+            <span class="ellipsis">Weights</span>
+            <span>pA</span>
+          </span>
+        </mat-list-option>
+
+        <mat-list-option value="delays" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+          <span class="flex">
+            <span class="ellipsis">Delays</span>
+            <span>ms</span>
+          </span>
+        </mat-list-option>
+      </ng-container>
+
+      <ng-container *ngIf=!isBothSpatial()>
+
+        <mat-list-option value="conn_spec.rule" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+          <span class="flex">
+            <span class="ellipsis">Connection rule</span>
+          </span>
+        </mat-list-option>
+
+        <ng-container *ngFor="let conn of slider.connection">
+          <mat-list-option [value]="'conn_spec.' + conn.id" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+            <span class="flex">
+              <span class="ellipsis">{{ conn.label | capitalize }}</span>
+            </span>
+          </mat-list-option>
+        </ng-container>
+
+        <mat-list-option value="syn_spec.model" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+          <span class="flex">
+            <span class="ellipsis">Synaptic model</span>
+          </span>
+        </mat-list-option>
+
+        <ng-container *ngFor="let syn of slider.synapse">
+          <mat-list-option [value]="'syn_spec.' + syn.id" class="paramItem" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
+            <span class="flex">
+              <span class="ellipsis">{{ syn.label | capitalize }}</span>
+              <span>{{ syn.unit }}</span>
+            </span>
+          </mat-list-option>
+        </ng-container>
+
+      </ng-container>
+    </mat-selection-list>
+  </span>
+
+</span>

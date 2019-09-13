@@ -1,0 +1,11 @@
+table {
+  width: 100%;
+}
+
+.mat-row {
+  cursor: pointer;
+}
+
+.mat-row:hover td {
+  background-color: rgba(0,0,0,0.12);
+}

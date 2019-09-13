@@ -1,0 +1,28 @@
+{
+  "extent": {
+    "label": "extent",
+    "value": [1, 1]
+  },
+  "center": {
+    "label": "center",
+    "value": [0, 0]
+  },
+  "rows": {
+    "label": "rows",
+    "value": 1,
+    "min": 1,
+    "max": 10,
+    "step": 1
+  },
+  "columns": {
+    "label": "columns",
+    "value": 1,
+    "min": 1,
+    "max": 10,
+    "step": 1
+  },
+  "positions": {
+    "label": "positions",
+    "value": []
+  }
+}

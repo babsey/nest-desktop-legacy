@@ -1,43 +1,50 @@
 import { Component, OnInit, Output, EventEmitter, DoCheck } from '@angular/core';
 
 import { AppConfigService } from '../config/app-config/app-config.service';
-import { ChartConfigService } from '../config/chart-config/chart-config.service';
 import { DBConfigService } from '../config/db-config/db-config.service';
 import { ModelService } from '../model/model.service';
-import { ControllerConfigService } from '../config/controller-config/controller-config.service';
-import { NetworkProtocolService } from '../network/network-protocol/network-protocol.service';
-import { NetworkService } from '../network/network.service';
+import { NestServerService } from '../services/nest-server/nest-server.service';
+import { NetworkConfigService } from '../network/network-config/network-config.service';
+import { SimulationConfigService } from '../simulation/simulation-config/simulation-config.service';
+import { SimulationProtocolService } from '../simulation/services/simulation-protocol.service';
+import { SimulationService } from '../simulation/services/simulation.service';
+import { VisualizationConfigService } from '../visualization/visualization-config/visualization-config.service';
+
 
 import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-loading',
   templateUrl: './loading.component.html',
-  styleUrls: ['./loading.component.css']
+  styleUrls: ['./loading.component.scss']
 })
 export class LoadingComponent implements OnInit {
-  @Output() ready = new EventEmitter();
-  @Output() buttonClick = new EventEmitter();
+  @Output() ready: EventEmitter<any> = new EventEmitter();
+  @Output() buttonClick: EventEmitter<any> = new EventEmitter();
   public version = environment.VERSION;
 
   constructor(
     public _appConfigService: AppConfigService,
-    public _chartConfigService: ChartConfigService,
+    public _simulationConfigService: SimulationConfigService,
     public _dbConfigService: DBConfigService,
     public _modelService: ModelService,
-    public _controllerConfigService: ControllerConfigService,
-    public _networkProtocolService: NetworkProtocolService,
-    public _networkService: NetworkService,
+    public _networkConfigService: NetworkConfigService,
+    public _visualizationConfigService: VisualizationConfigService,
+    public _simulationProtocolService: SimulationProtocolService,
+    public _simulationService: SimulationService,
+    public _nestServerService: NestServerService,
   ) { }
 
   ngOnInit() {
     this._dbConfigService.init()
     this._appConfigService.init()
-    this._controllerConfigService.init()
+    this._networkConfigService.init()
+    this._simulationConfigService.init()
     this._modelService.init()
-    this._chartConfigService.init()
-    this._networkService.init()
-    this._networkProtocolService.init()
+    this._visualizationConfigService.init()
+    this._simulationService.init()
+    this._simulationProtocolService.init()
+    this._nestServerService.check(this._appConfigService.urlRoot())
   }
 
   ngDoCheck() {
@@ -56,11 +63,12 @@ export class LoadingComponent implements OnInit {
     return (
       this._dbConfigService.status.ready &&
       this._appConfigService.status.ready &&
-      this._controllerConfigService.status.ready &&
-      this._chartConfigService.status.ready &&
+      this._networkConfigService.status.ready &&
+      this._simulationConfigService.status.ready &&
+      this._visualizationConfigService.status.ready &&
       this._modelService.status.ready &&
-      this._networkService.status.ready &&
-      this._networkProtocolService.status.ready
+      this._simulationService.status.ready &&
+      this._simulationProtocolService.status.ready
     )
   }
 
@@ -68,29 +76,31 @@ export class LoadingComponent implements OnInit {
     return (
       this._dbConfigService.status.loading &&
       this._appConfigService.status.loading &&
-      this._controllerConfigService.status.loading &&
-      this._chartConfigService.status.loading &&
+      this._networkConfigService.status.loading &&
+      this._simulationConfigService.status.loading &&
+      this._visualizationConfigService.status.loading &&
       this._modelService.status.loading &&
-      this._networkService.status.loading &&
-      this._networkProtocolService.status.loading
+      this._simulationService.status.loading &&
+      this._simulationProtocolService.status.loading
     )
   }
 
   isSimulatorReady() {
-    return this._appConfigService.status.NEST.response && this._appConfigService.status.NEST.simulator.ready
+    return this._nestServerService.status.response && this._nestServerService.status.simulator.ready
   }
 
   resetConfigs() {
     this._dbConfigService.reset()
     this._appConfigService.reset()
-    this._controllerConfigService.reset()
-    this._chartConfigService.reset()
+    this._networkConfigService.reset()
+    this._simulationConfigService.reset()
+    this._visualizationConfigService.reset()
   }
 
   resetDatabases() {
     this._modelService.reset()
-    this._networkService.reset()
-    this._networkProtocolService.reset()
+    this._simulationService.reset()
+    this._simulationProtocolService.reset()
   }
 
 }

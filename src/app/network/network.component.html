@@ -1,4 +1,30 @@
-<span [ngSwitch]="mode">
-  <app-network-details *ngSwitchCase="'details'"></app-network-details>
-  <app-network-simulation *ngSwitchCase="'simulation'"></app-network-simulation>
+<span id="network">
+  <mat-sidenav-container class="network-container">
+    <mat-sidenav
+      class="network-sidenav"
+      disableClose="true"
+      mode="side"
+      opened="true"
+      position="end"
+      role="region">
+
+      <app-network-selection
+        (selectionChange)="onNetworkChange($event)"
+        [data]="data"
+      ></app-network-selection>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="network-content content" #content>
+      <ng-container *ngIf="data != undefined">
+        <app-network-sketch
+          (sketchChange)="onNetworkChange($event)"
+          [data]="data"
+          [editable]="true"
+          [height]="height"
+          [width]="width"
+          class="network-sketch"
+        ></app-network-sketch>
+      </ng-container>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </span>

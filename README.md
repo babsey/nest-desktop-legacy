@@ -1,27 +1,40 @@
-# NestDesktop
+# NEST Desktop
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.1.
+**An interactive desktop application for [NEST simulator](http://www.nest-simulator.org/)**
 
-## Development server
+![nest logo](http://www.nest-simulator.org/wp-content/uploads/2015/03/nest_logo.png)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Introduction
 
-## Code scaffolding
+In the past few years, we have developed a web-based graphical user interface (GUI) for the NEST simulation code of the NEST Desktop. This GUI enables the rapid construction, parametrization, and instrumentation of neuronal network models typically used in computational neuroscience. The primary objective of our development was to create a tool of classroom strength that allows non-specialists to rapidly explore interesting neuroscience concepts without the need to learn a simulator control language at the same time.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+To date, we have used NEST Desktop very successfully in two courses at the University of Freiburg addressing students at the bachelor, master, and graduate level with diverse background including biology, physics, computer science and electrical engineering (Single Neuron Modeling and Biophysics of Neurons and Networks). NEST Desktop replaced the Mathematica notebooks we used for many years. With the new tool, we observed much faster learning progress than before and a highly motivating effect on the side of the students.
 
-## Build
+Currently, NEST Desktop requires NEST Server with a full NEST installation, limiting uptake by a non-expert audience and limiting networks studied to such that can be simulated on a laptop. To ease the use of NEST Desktop and the range of simulations possible with NEST Desktop, we want to separate GUI from simulation kernel, rendering the GUI in the web browser of the user, while the simulation kernel is running on a centrally maintained server.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Setup
+To install NEST Desktop:
+```
+pip3 install [--user] nest-desktop
+```
 
-## Running unit tests
+### Usage
+To start NEST Desktop:
+```
+nest-desktop start [-h 127.0.0.1 -p 8000]
+```
+Open a web browser with this link [http://localhost:8000](http://localhost:8000).
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Alternatively, to start NEST Server in Python interface (e.g. IPython, Jupyter):
+```
+from nest_desktop import app
+app.run(host='127.0.0.1', port=5000)
+```
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### Troubleshootings
 
-## Further help
+It is not able to start. With version upgrading some configurations or database might not be compatible.
+Sometimes it helps when you clear the browsing data.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### License [MIT](LICENSE)

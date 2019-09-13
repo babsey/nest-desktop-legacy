@@ -6,20 +6,16 @@ import { Router } from '@angular/router';
 
 import { AppConfigService } from '../config/app-config/app-config.service'
 import { NavigationService } from './navigation.service';
-import { NetworkSimulationService } from '../network/network-simulation/network-simulation.service';
-
 
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.css']
+  styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit {
-  public show: boolean = true;
 
   constructor(
-    private _networkSimulationService: NetworkSimulationService,
     public _appConfigService: AppConfigService,
     public _navigationService: NavigationService,
     public router: Router,
@@ -29,9 +25,11 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
   }
 
-  resize() {
-    this._navigationService.options.sidenavShortView = !this._navigationService.options.sidenavShortView;
-    setTimeout(() => this._networkSimulationService.resize.emit(), 500)
+  toggleSidenav() {
+    this._navigationService.sidenavOpened = !this._navigationService.sidenavOpened;
   }
 
+  openSidenav() {
+    this._navigationService.sidenavOpened = true;
+  }
 }

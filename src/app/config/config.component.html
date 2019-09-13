@@ -1,5 +1,22 @@
-<span [ngSwitch]="routeConfig">
-  <app-db-config *ngSwitchCase="'db'"></app-db-config>
-  <app-app-config *ngSwitchCase="'app'"></app-app-config>
-  <app-controller-config *ngSwitchCase="'controller'"></app-controller-config>
+<mat-menu #configMenu="matMenu" class="dense">
+  <button mat-menu-item (click)="reset()">
+    <fa-icon icon="undo" style="margin-right:10px"></fa-icon>
+    Reset configuration
+  </button>
+</mat-menu>
+
+<span class="config-theme">
+  <mat-toolbar class="navbar content" color="primary">
+    {{ routeConfig | capitalize }}
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="configMenu"><fa-icon icon="ellipsis-v"></fa-icon></button>
+  </mat-toolbar>
 </span>
+
+<ng-container [ngSwitch]="routeConfig">
+  <app-db-config *ngSwitchCase="'database'" class="config"></app-db-config>
+  <app-app-config *ngSwitchCase="'application'" class="config"></app-app-config>
+  <app-network-config *ngSwitchCase="'network'" class="config"></app-network-config>
+  <app-simulation-config *ngSwitchCase="'simulation'" class="config"></app-simulation-config>
+  <app-visualization-config *ngSwitchCase="'visualization'" class="config"></app-visualization-config>
+</ng-container>

@@ -1,0 +1,113 @@
+<input type="file" style="display:none" #file (change)="onFileAdded()"/>
+
+<mat-menu #simulationMenu="matMenu" class="simulation-menu dense">
+  <button mat-menu-item (click)="newNetwork()">
+    <fa-icon class="menu-icon" icon="plus"></fa-icon>
+    New network
+  </button>
+  <button mat-menu-item (click)="selectionList=!selectionList" [class.active]="selectionList">
+    <fa-icon class="menu-icon" icon="edit"></fa-icon>
+    Select protocols
+  </button>
+  <button mat-menu-item (click)="openUploadDialog()">
+    <fa-icon class="menu-icon" icon="upload"></fa-icon>
+    Upload protocols
+  </button>
+  <button mat-menu-item (click)="downloadAllProtocols()">
+    <fa-icon class="menu-icon" icon="download"></fa-icon>
+    Download all protocols
+  </button>
+  <button mat-menu-item (click)="clearProtocols()">
+    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon>
+    Delete all protocols
+  </button>
+</mat-menu>
+
+<span>
+  <ng-container [ngSwitch]="_navigationService.sidenavShortView">
+
+    <ng-container *ngSwitchCase="true">
+      <mat-nav-list dense style="padding:0">
+        <mat-list-item [matMenuTriggerFor]="simulationMenu">
+          <fa-icon class="icon" icon="ellipsis-v"></fa-icon>
+        </mat-list-item>
+      </mat-nav-list>
+
+      <mat-nav-list dense style="padding:0">
+        <mat-list-item class="simulation searchItem">
+          <fa-icon class="icon" icon="search"></fa-icon>
+          <span class="searchField">
+            <mat-form-field floatLabel="never" style="margin:0 5px">
+              <input matInput [value]="searchTerm" type="text" class="formControl" placeholder="Search simulation" (keyup)="search($event.target.value)" autocomplete="off" />
+            </mat-form-field>
+          </span>
+        </mat-list-item>
+      </mat-nav-list>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="false">
+      <mat-toolbar class="navbar" color="primary">
+        Simulation
+        <span class="spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="simulationMenu"><fa-icon icon="ellipsis-v"></fa-icon></button>
+      </mat-toolbar>
+
+      <mat-list dense style="padding:0">
+        <mat-list-item class="simulation">
+          <span matLine class="sidenavItem">
+            <span class="icon" style="height:48px;line-height:48px">
+              <fa-icon icon="search"></fa-icon>
+            </span>
+            <span style="flex-grow:1">
+              <mat-form-field floatLabel="never" style="width:100%">
+                <input matInput type="text" class="formControl" placeholder="Search simulation" (keyup)="search($event.target.value)" autocomplete="off" />
+              </mat-form-field>
+            </span>
+          </span>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+
+  </ng-container>
+
+  <ng-container [ngSwitch]="selectionList" class="simulation-theme">
+
+    <ng-container *ngSwitchCase="false">
+
+      <ng-container [ngSwitch]="_navigationService.sidenavShortView">
+        <ng-container *ngSwitchCase="false">
+          <app-simulation-list
+            (select)="navigate($event)"
+            [id]="id"
+            [popover]="_dataService.mode=='run'"
+            [simulations]="filteredSimulations"
+            class="simulation-theme"
+            ></app-simulation-list>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-simulation-short-list
+            (select)="navigate($event)"
+            [id]="id"
+            [popover]="_dataService.mode=='run'"
+            [simulations]="filteredSimulations"
+            ></app-simulation-short-list>
+        </ng-container>
+      </ng-container>
+
+    </ng-container>
+
+    <ng-container *ngSwitchCase="true">
+      <app-simulation-selection
+        (select)="onSelection($event)"
+        [simulations]="filteredSimulations"
+        class="simulation-theme"
+      ></app-simulation-selection>
+    </ng-container>
+
+  </ng-container>
+
+  <ng-container *ngIf="!_navigationService.sidenavShortView">
+    <app-log></app-log>
+  </ng-container>
+</span>

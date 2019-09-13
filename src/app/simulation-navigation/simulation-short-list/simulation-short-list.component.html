@@ -1,0 +1,21 @@
+<mde-popover #simulationDetails="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionX="before" mdePopoverOffsetX="41" mdePopoverPositionY="below" mdePopoverOffsetY="0">
+  <ng-container *ngIf="simulation">
+    <mat-card style="width:600px">
+      {{ simulation.name }}
+      <app-network-sketch [data]="simulation" width="600" height="200"></app-network-sketch>
+      <app-network-list [data]="simulation" [selective]="false"></app-network-list>
+    </mat-card>
+  </ng-container>
+</mde-popover>
+
+<mat-nav-list dense [mdePopoverTriggerFor]="simulationDetails" mdePopoverTriggerOn="none" #simulationTarget="mdePopoverTrigger" (mouseleave)="simulationTarget.closePopover()" style="padding:0">
+  <ng-container *ngFor="let simulation of simulations">
+    <mat-list-item
+      (click)="select.emit(simulation)"
+      (mouseover)="view(simulation, simulationTarget)"
+      [class.active]="simulation._id==activeId"
+      class="simulation">
+      <span style="margin:-16px;width:40px;text-align:center">{{ shortLabel(simulation.name) }}</span>
+    </mat-list-item>
+  </ng-container>
+</mat-nav-list>

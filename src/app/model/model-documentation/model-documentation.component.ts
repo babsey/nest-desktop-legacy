@@ -7,7 +7,7 @@ import { AppConfigService } from '../../config/app-config/app-config.service';
 @Component({
   selector: 'app-model-documentation',
   templateUrl: './model-documentation.component.html',
-  styleUrls: ['./model-documentation.component.css']
+  styleUrls: ['./model-documentation.component.scss']
 })
 export class ModelDocumentationComponent implements OnInit, OnChanges {
   @Input() model: string = '';

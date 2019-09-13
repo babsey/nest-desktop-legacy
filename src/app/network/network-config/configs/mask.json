@@ -1,0 +1,86 @@
+{
+  "id": "mask",
+  "rectangular": {
+    "specs": [{
+      "id": "lower_left",
+      "label": "lower left",
+      "input": "arrayInput",
+      "value": [-0.5, -0.5]
+    }, {
+      "id": "upper_right",
+      "label": "upper right",
+      "input": "arrayInput",
+      "value": [0.5, 0.5]
+    }, {
+      "id": "azimuth_angle",
+      "label": "azimuth angle",
+      "input": "valueSlider",
+      "value": 0,
+      "max": 360,
+      "min": 0,
+      "step": 1
+    }]
+  },
+  "circular": {
+    "specs": [{
+      "id": "radius",
+      "label": "radius",
+      "value": 0.5,
+      "input": "valueSlider",
+      "max": 10,
+      "min": 0,
+      "step": 0.1
+    }]
+  },
+  "doughnut": {
+    "specs": [{
+      "id": "inner_radius",
+      "label": "inner radius",
+      "value": 0.1,
+      "input": "valueSlider",
+      "max": 10,
+      "min": 0,
+      "step": 0.1
+    }, {
+      "id": "outer_radius",
+      "label": "outer radius",
+      "value": 0.5,
+      "input": "valueSlider",
+      "max": 10,
+      "min": 0,
+      "step": 0.1
+    }]
+  },
+  "elliptical": {
+    "specs": [{
+      "id": "major_axis",
+      "label": "major axis",
+      "value": 1,
+      "input": "valueSlider",
+      "max": 10,
+      "min": 0,
+      "step": 0.1
+    }, {
+      "id": "minor_axis",
+      "label": "minor_axis",
+      "value": 1,
+      "input": "valueSlider",
+      "max": 10,
+      "min": 0,
+      "step": 0.1
+    }, {
+      "id": "azimuth_angle",
+      "label": "azimuth angle",
+      "input": "valueSlider",
+      "value": 0,
+      "max": 360,
+      "min": 0,
+      "step": 1
+    }, {
+      "id": "anchor",
+      "label": "anchor",
+      "input": "arrayInput",
+      "value": [0, 0]
+    }]
+  }
+}

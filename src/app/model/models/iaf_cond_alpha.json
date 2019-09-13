@@ -70,7 +70,7 @@
     },
     {
       "id": "V_reset",
-      "label": "reset Potential of the membrane",
+      "label": "reset potential of the membrane",
       "level": 3,
       "unit": "mV",
       "value": -60,

@@ -1,0 +1,36 @@
+<mat-menu #paramMenu="matMenu" class="param-menu">
+  <button mat-menu-item (click)="setDefaultValue()">Set default value: {{ options.value }} {{ options.unit }}</button>
+  <button mat-menu-item *ngIf="model" (click)="openConfigDialog()">Configure</button>
+</mat-menu>
+
+<mat-menu #sliderMenu="matMenu" class="slider-menu" overlapTrigger="true">
+  <span class="slider-container" (click)="$event.stopPropagation();">
+    <div class="slider-header flex">
+      <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
+      <span class="flex-spacer"></span>
+      <span style="display:flex">
+        <input readonly class="slider-input" type="number" [(ngModel)]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
+        <mat-nav-list style="padding:0;display:flex;">
+          <mat-list-item class="param-menu-button" [matMenuTriggerFor]="paramMenu">
+            <span class="param-unit">{{ options.unit }}</span>
+            <fa-icon class="param-menu-button-icon" icon="ellipsis-v"></fa-icon>
+          </mat-list-item>
+        </mat-nav-list>
+      </span>
+    </div>
+
+    <mat-slider class="slider" [ngModel]="idx" min="0" [max]="options.ticks.length-1" step="1" tickInterval="1" [displayWith]="displayWith(options.ticks)" (change)="onChange($event.value)"></mat-slider>
+    <span class="slider-ticklabels">
+      <ng-container *ngFor="let tick of options.ticks">
+        <span style="width:10px">{{ tick }}</span>
+      </ng-container>
+    </span>
+  </span>
+</mat-menu>
+
+<span class="param-container flex" [matMenuTriggerFor]="sliderMenu">
+  <span class="param-label ellipsis" matTooltip="{{ options.label | capitalize }}" matTooltipPosition="before">{{ options.label | capitalize }}</span>
+  <span class="flex-spacer"></span>
+  {{ value || options.value }}
+  <span class="param-unit">{{ options.unit }}</span>
+</span>

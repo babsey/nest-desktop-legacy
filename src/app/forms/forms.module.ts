@@ -5,17 +5,26 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MaterialModule } from '../modules/material.module';
 import { AppPipesModule } from '../pipes/pipes.module';
 
-import { ArrayInputComponent } from './array-input/array-input.component';
-import { ParamInputComponent } from './param-input/param-input.component';
-import { ParamTicksSliderComponent } from './param-ticks-slider/param-ticks-slider.component';
-import { ParamValueSliderComponent } from './param-value-slider/param-value-slider.component';
+import * as PlotlyJS from 'plotly.js/dist/plotly.js';
+import { PlotlyModule } from 'angular-plotly.js';
+PlotlyModule.plotlyjs = PlotlyJS;
+
+import { ArrayInputPopupComponent } from './array-input-popup/array-input-popup.component';
+import { InputPopupComponent } from './input-popup/input-popup.component';
+import { ParamSliderPopupComponent } from './param-slider-popup/param-slider-popup.component';
 import { SelectComponent } from './select/select.component';
-import { TicksSliderComponent } from './ticks-slider/ticks-slider.component';
-import { ValueInputComponent } from './value-input/value-input.component';
-import { ValueSliderComponent } from './value-slider/value-slider.component';
+import { SelectOptgroupComponent } from './select-optgroup/select-optgroup.component';
+import { SelectFilterComponent } from './select-filter/select-filter.component';
+import { TicksSliderInlineComponent } from './ticks-slider-inline/ticks-slider-inline.component';
+import { TicksSliderPopupComponent } from './ticks-slider-popup/ticks-slider-popup.component';
+import { ValueInputInlineComponent } from './value-input-inline/value-input-inline.component';
+import { ValueInputPopupComponent } from './value-input-popup/value-input-popup.component';
+import { ValueSliderInlineComponent } from './value-slider-inline/value-slider-inline.component';
+import { ValueSliderPopupComponent } from './value-slider-popup/value-slider-popup.component';
 
 import { ArrayGeneratorDialogComponent } from './array-generator-dialog/array-generator-dialog.component';
 import { FormsConfigDialogComponent } from './forms-config-dialog/forms-config-dialog.component';
+import { ParamConfigComponent } from './param-config/param-config.component';
 
 @NgModule({
   imports: [
@@ -25,29 +34,40 @@ import { FormsConfigDialogComponent } from './forms-config-dialog/forms-config-d
     MaterialModule,
     ReactiveFormsModule,
     AppPipesModule,
+    PlotlyModule,
   ],
   declarations: [
     ArrayGeneratorDialogComponent,
-    ArrayInputComponent,
+    ArrayInputPopupComponent,
     FormsConfigDialogComponent,
-    ParamInputComponent,
-    ParamTicksSliderComponent,
-    ParamValueSliderComponent,
+    InputPopupComponent,
+    ParamSliderPopupComponent,
     SelectComponent,
-    TicksSliderComponent,
-    ValueInputComponent,
-    ValueSliderComponent,
+    SelectOptgroupComponent,
+    SelectFilterComponent,
+    TicksSliderInlineComponent,
+    TicksSliderPopupComponent,
+    ValueInputInlineComponent,
+    ValueInputPopupComponent,
+    ValueSliderInlineComponent,
+    ValueSliderPopupComponent,
+    ParamConfigComponent,
   ],
   exports: [
     ArrayGeneratorDialogComponent,
-    ArrayInputComponent,
-    ParamInputComponent,
-    ParamTicksSliderComponent,
-    ParamValueSliderComponent,
+    ArrayInputPopupComponent,
+    FormsConfigDialogComponent,
+    InputPopupComponent,
+    ParamSliderPopupComponent,
     SelectComponent,
-    TicksSliderComponent,
-    ValueInputComponent,
-    ValueSliderComponent,
+    SelectOptgroupComponent,
+    SelectFilterComponent,
+    TicksSliderInlineComponent,
+    TicksSliderPopupComponent,
+    ValueInputInlineComponent,
+    ValueInputPopupComponent,
+    ValueSliderInlineComponent,
+    ValueSliderPopupComponent,
   ],
   entryComponents: [
     ArrayGeneratorDialogComponent,

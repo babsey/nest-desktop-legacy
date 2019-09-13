@@ -1,0 +1,57 @@
+<ng-container *ngIf="selectedModel!=undefined">
+  <span class="dark-theme">
+    <button mat-mini-fab color="primary" (click)="unselect()" style="z-index:1000;position:absolute;top:5px;left:10px">
+      <fa-icon icon="arrow-left"></fa-icon>
+    </button>
+  </span>
+</ng-container>
+
+<ng-container [ngSwitch]="selectedModel">
+
+  <ng-container *ngSwitchCase="'spike_detector'">
+    <app-spike-stats [records]="records" [idx]="selectedIdx"></app-spike-stats>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'multimeter'">
+    <app-analog-stats [records]="records" [idx]="selectedIdx" [recordFrom]="recordFrom" [selectedRecord]="selectedRecord"></app-analog-stats>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'voltmeter'">
+    <app-analog-stats [records]="records" [idx]="selectedIdx" [selectedRecord]="'V_m'"></app-analog-stats>
+  </ng-container>
+
+  <ng-container *ngSwitchDefault>
+    <mat-nav-list dense>
+      <h3 matSubheader>
+        <span class="flex">
+          Id
+          <span class="flex-spacer"></span>
+          Model
+          <span class="flex-spacer"></span>
+          Data size
+        </span>
+      </h3>
+      <ng-container *ngFor="let record of records">
+        <mat-list-item (click)="select(record)" style="width:100%;line-height:40px">
+          <span class="flex" style="height:40px">
+            <span>
+              <svg width="40" height="40">
+                <g app-node-shape
+                  [color]="_colorService.node(record.recorder)"
+                  [elementType]="'recorder'"
+                  [idx]="record.recorder.idx"
+                  transform="translate(20,20)"
+                ></g>
+              </svg>
+            </span>
+            <span class="flex-spacer"></span>
+            <span>{{ record.recorder.model }}</span>
+            <span class="flex-spacer"></span>
+            <span>{{ record.events.senders.length }}</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+
+</ng-container>
