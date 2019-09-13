@@ -42,6 +42,6 @@ COPY --from=nest-builder /opt/nest /opt/nest
 
 EXPOSE 5000 8000
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

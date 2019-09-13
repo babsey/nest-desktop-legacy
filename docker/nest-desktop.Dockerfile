@@ -6,6 +6,6 @@ RUN apt-get update && apt-get install -y python3-pip && \
 
 EXPOSE 5000 8000
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
