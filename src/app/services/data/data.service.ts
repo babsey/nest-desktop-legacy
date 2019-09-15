@@ -95,42 +95,6 @@ export class DataService {
     })
   }
 
-  // deleteNode(data, idx) {
-  //   data.app.nodes = data.app.nodes.filter((node, i) => i != idx);
-  //   data.simulation.collections = data.simulation.collections.filter((node, i) => i != idx);
-  //   data.app.nodes.forEach((node, i) => {
-  //     node.idx = i;
-  //   })
-  //
-  //   var links = data.app.links.filter(link => {
-  //     var connectome = data.simulation.connectomes[link.idx];
-  //     return connectome.pre != idx && connectome.post != idx;
-  //   });
-  //   if (links.length != data.simulation.connectomes.length) {
-  //
-  //     links.forEach((link, i) => {
-  //       link.idx = i;
-  //     })
-  //     data.app.links = links;
-  //     var connectomes = data.simulation.connectomes.filter(connectome => connectome.pre != idx && connectome.post != idx);
-  //     connectomes.forEach(connectome => {
-  //       connectome.pre = connectome.pre > idx ? connectome.pre - 1 : connectome.pre;
-  //       connectome.post = connectome.post > idx ? connectome.post - 1 : connectome.post;
-  //     })
-  //     data.simulation.connectomes = connectomes;
-  //   }
-  //   return data
-  // }
-  //
-  // deleteLink(data, idx) {
-  //   data.simulation.connectomes = data.simulation.connectomes.filter((connectome, i) => i != idx);
-  //   data.app.links = data.app.links.filter(link => link.idx != idx);
-  //   data.app.links.forEach((link, i) => {
-  //     link.idx = i;
-  //   })
-  //   return data
-  // }
-
   reduce(data, maxVal) {
     if (data.length < maxVal) return data
     let delta = Math.floor(data.length / maxVal);
