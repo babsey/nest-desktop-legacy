@@ -27,7 +27,7 @@
   </button>
 </mat-menu>
 
-<span class="node-selection" [style.display]="isSelected() ? '' : 'none'">
+<span class="node-selection" [style.display]="nodeDisplay()">
 
   <span [class.dark-theme]="advanced()">
     <mat-toolbar color="primary" style="height:40px; opacity:0.8" [style.background-color]="advanced() ? '' : color">

@@ -124,8 +124,7 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
   }
 
   linkDisplay() {
-    var preNode = this.data.app.nodes[this.connectome.pre];
-    return this._networkService.isSelected(preNode, this.link, true);
+    return this._networkService.isLinkSelected(this.link, this.data) ? '' : 'none';
   }
 
   paramDisplay(param) {

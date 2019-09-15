@@ -65,7 +65,7 @@ export class NodeListComponent implements OnInit, OnChanges {
   }
 
   isSelected() {
-    return this._networkService.isSelected(this.node, null);
+    return this._networkService.isNodeSelected(this.node, this.data, false);
   }
 
   onClick() {

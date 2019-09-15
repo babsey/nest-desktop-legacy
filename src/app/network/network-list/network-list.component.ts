@@ -24,20 +24,11 @@ export class NetworkListComponent implements OnInit {
   }
 
   nodeDisplay(node) {
-    var links = this.data.app.links.filter(link => {
-      var connectome = this.data.simulation.connectomes[link.idx];
-      return connectome.pre == node.idx || connectome.post == node.idx;
-    })
-    var selected = links.filter(link => this._networkService.isSelected(node, link, true));
-    return !this.selective || selected.length > 0 || this._networkService.isSelected(node, null, false);
+    return this._networkService.isNodeSelected(node, this.data) || !this.selective;
   }
 
   linkDisplay(link) {
-    var connectome = this.data.simulation.connectomes[link.idx];
-    var preNode = this.data.app.nodes[connectome.pre];
-    var selected = this._networkService.isSelected(preNode, link, true)
-    return selected || !this.selective;
+    return this._networkService.isLinkSelected(link, this.data) || !this.selective;
   }
-
 
 }

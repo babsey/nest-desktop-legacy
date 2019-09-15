@@ -75,7 +75,6 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
         this.model.params[param.id] = param.value;
       }
     })
-    this.node.display = this.node.display || ['n'];
   }
 
   setLevel(level: number) {
@@ -92,13 +91,8 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
     return this.collection.element_type == 'recorder';
   }
 
-  isSelected() {
-    var links = this.data.app.links.filter(link => {
-      var connectome = this.data.simulation.connectomes[link.idx];
-      return connectome.pre == this.idx || connectome.post == this.idx;
-    })
-    var selected = links.filter(link => this._networkService.isSelected(this.node, link, true));
-    return selected.length > 0 || this._networkService.isSelected(this.node, null, false)
+  nodeDisplay() {
+    return this._networkService.isNodeSelected(this.node, this.data) ? '' : 'none';
   }
 
   selectNode(node: any) {

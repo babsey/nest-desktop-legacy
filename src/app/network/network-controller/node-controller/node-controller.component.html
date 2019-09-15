@@ -41,9 +41,9 @@
   </mat-list>
 </mat-menu>
 
-<ng-container *ngIf="idx != undefined && isSelected()">
+<ng-container *ngIf="idx != undefined">
 
-  <span class="controller node-controller">
+  <span class="controller node-controller" [style.display]="nodeDisplay()">
 
     <span [class.dark-theme]="advanced()">
       <mat-toolbar color="primary" style="height:40px; opacity:0.8" [style.background-color]="advanced() ? '' : _colorService.node(node)">
