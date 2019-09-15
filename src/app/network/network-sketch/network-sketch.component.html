@@ -28,7 +28,13 @@
     </svg>
   </span>
 
-  <span class="no-print" style="position:absolute; right:10px; bottom:10px; display:flex; line-height:40px; height:40px">
+  <span class="no-print" style="position:absolute; left:10px; bottom:10px; display:flex; line-height:40px; height:40px">
+    <ng-container *ngIf="editable">
+      <button mat-icon-button (click)="_networkSketchService.edit()" matTooltip="Draw" matTooltipPosition="above" [class.active]="_networkSketchService.options.drawing">
+        <fa-icon icon="pen"></fa-icon>
+      </button>
+    </ng-container>
+
     <ng-container *ngIf="_networkSketchService.options.drawing">
       <span>
         <!-- <button mat-icon-button (click)="undo()" [disabled]="dataStack.length==0 || idx==0"
@@ -46,12 +52,6 @@
           <fa-icon icon="trash-alt"></fa-icon>
         </button>
       </span>
-    </ng-container>
-
-    <ng-container *ngIf="editable">
-      <button mat-icon-button (click)="_networkSketchService.edit()" matTooltip="Draw" matTooltipPosition="above" [class.active]="_networkSketchService.options.drawing">
-        <fa-icon icon="pen"></fa-icon>
-      </button>
     </ng-container>
   </span>
 
