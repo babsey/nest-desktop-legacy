@@ -17,6 +17,7 @@
 
 # angular build
 /nest_desktop/app
+/nest_desktop/__pycache__/
 
 # dependencies
 /node_modules
