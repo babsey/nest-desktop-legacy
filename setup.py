@@ -10,7 +10,7 @@ VERSION = "2.0"
 
 setuptools.setup(
     name="nest-desktop",
-    version=VERSION + ".0",
+    version=VERSION + ".1",
     description="A web-based GUI application for NEST Simulator",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -26,6 +26,6 @@ setuptools.setup(
     ],
     python_requires=">=3.6",
     install_requires=[
-        "nest-server>=" + VERSION
+        "nest-server==" + VERSION + ".*"
     ],
 )

@@ -3,7 +3,6 @@ From: ubuntu:18.04
 
 %labels
   AUTHOR Sebastian Spreizer <spreizer@web.de>
-  VERSION 2.0.0
 
 %runscript
   nest-desktop start &
@@ -24,7 +23,7 @@ From: ubuntu:18.04
   python3-pip \
   wget
 
-  pip3 install nest-desktop==2.0.0
+  pip3 install nest-desktop==2.0.*
 
   cd /tmp/
   VERSION=2.18.0

@@ -1,17 +1,12 @@
 Bootstrap: docker
-From: nestsim/nest:2.18.0
+From: babsey/nest-desktop
 
 %labels
   AUTHOR Sebastian Spreizer <spreizer@web.de>
-  VERSION 2.0.0
 
 %runscript
   nest-desktop start &
   uwsgi --http-socket :5000 --uid nest --module nest_server.main:app
-
-%post
-  apt update && apt install -y python3-pip
-  pip3 install nest-desktop==2.0.0
 
 %environment
   # NEST is installed here. When you relocate NEST, change this variable.
