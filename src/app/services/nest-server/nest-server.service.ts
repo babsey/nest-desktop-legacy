@@ -37,15 +37,18 @@ export class NestServerService {
       )
       .subscribe(res => {
         this.status.server.response = true;
+        var appVersion = environment.VERSION.split('.');
         if ('server' in res) {
           this.status.server.ready = true;
-          this.status.server['version'] = 'v' + res['server']['version'];
-          this.status.server.valid = this.status.server['version'] == environment.VERSION;
+          this.status.server['version'] = res['server']['version'];
+          var serverVersion = this.status.server['version'].split('.');
+          this.status.server.valid = appVersion[0] == serverVersion[0] && appVersion[1] == serverVersion[1];
         }
         if ('simulator' in res) {
           this.status.simulator.ready = true;
-          this.status.simulator['version'] = ((typeof res['simulator']['version'][0] === 'number') ? 'v' : '') + res['simulator']['version'];
-          this.status.simulator.valid = true;
+          this.status.simulator['version'] = res['simulator']['version'].split('-')[1];
+          var simulatorVersion = this.status.server['version'].split('.');
+          this.status.simulator.valid = appVersion[0] == simulatorVersion[0];
         }
       })
   }
