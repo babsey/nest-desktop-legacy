@@ -3,7 +3,7 @@ LABEL maintainer="Sebastian Spreizer <spreizer@web.de>"
 
 RUN apt-get update && apt-get install -y python3-pip
 
-RUN pip3 install nest-desktop==2.0.*
+RUN pip3 install nest-desktop==2.0.* --upgrade
 
 EXPOSE 5000 8000
 
