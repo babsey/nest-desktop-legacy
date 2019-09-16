@@ -23,7 +23,7 @@ From: ubuntu:18.04
   python3-pip \
   wget
 
-  pip3 install nest-desktop==2.0.*
+  pip3 install nest-desktop==2.*.*
 
   cd /tmp/
   VERSION=2.18.0
