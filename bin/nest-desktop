@@ -4,7 +4,11 @@ HOST="127.0.0.1"
 PORT="8000"
 
 usage() {
-  echo "Usage: $0 pid|status|start|stop|restart [-h <host>] [-p <port>]" >&2; exit 1
+  echo "Usage: $0 version|pid|status|start|stop|restart [-h <host>] [-p <port>]" >&2; exit 1
+}
+
+version() {
+   python3 -c "from nest_desktop import __version__; print(__version__)"
 }
 
 pid() {
@@ -51,5 +55,6 @@ case "$CMD" in
   start)   start ;;
   stop)    stop ;;
   restart) stop; start ;;
+  version) version ;;
   *) usage ;;
 esac

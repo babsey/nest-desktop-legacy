@@ -1,16 +1,16 @@
 import setuptools
 import sys
 
+from nest_desktop import __version__
+
 assert sys.version_info >= (3,), "Python 3 is required to run NEST Desktop"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-VERSION = "2.0"
-
 setuptools.setup(
     name="nest-desktop",
-    version=VERSION + ".1",
+    version=__version__,
     description="A web-based GUI application for NEST Simulator",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -26,6 +26,6 @@ setuptools.setup(
     ],
     python_requires=">=3.6",
     install_requires=[
-        "nest-server==" + VERSION + ".*"
+        "nest-server==" + ".".join(__version__.split('.')[:-1]) + ".*"
     ],
 )
