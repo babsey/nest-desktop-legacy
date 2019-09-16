@@ -32,7 +32,9 @@ export class AppConfigService {
     }
     this.status.ready = true;
     this.status.loading = false;
-    this.status.valid = this.config.version == environment.VERSION;
+    var appVersion = environment.VERSION.split('.');
+    var configVersion = this.config.version.split('.');
+    this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
   }
 
   fromFiles() {

@@ -36,17 +36,17 @@ export class SimulationService {
     this.status.ready = false;
     this.status.loading = true;
     this.db = this._dbService.init('simulation');
-    this._dbService.checkVersion(this)
+    this._dbService.initVersion(this);
     this.loadSimulations().then(simulations => {
       this.status.loading = false;
       this.status.ready = true;
-      this.status.valid = this.version == environment.VERSION;
+      this._dbService.checkVersion(this);
       this._simulationProtocolService.status.loading = true;
       this._simulationProtocolService.status.ready = false;
       this._simulationProtocolService.loadSimulations().then(simulations => {
         this._simulationProtocolService.status.loading = false;
         this._simulationProtocolService.status.ready = true;
-        this._simulationProtocolService.status.valid = this._simulationProtocolService.version == environment.VERSION;
+        this._dbService.checkVersion(this._simulationProtocolService);
       })
     })
   }

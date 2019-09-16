@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { DBConfigService } from '../../config/db-config/db-config.service';
 import { PouchDBService } from './pouchdb/pouchdb.service';
 
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +24,20 @@ export class DBService {
     return this.db.init(name, config)
   }
 
-  checkVersion(obj) {
+  initVersion(obj) {
     this.getVersion(obj.db).catch(() => this.setVersion(obj.db)
       .then(version => obj.version = version)
     ).then(version => obj.version = version)
   }
 
+  checkVersion(obj) {
+    var appVersion = environment.VERSION.split('.');
+    var dbVersion = obj.version.split('.');
+    obj.status.valid = appVersion[0] == dbVersion[0] && appVersion[1] == dbVersion[1];
+  }
+
   setVersion(db) {
-    var version = this._dbConfigService.config['version'];
+    var version = environment.VERSION;
     return db.put({
       _id: '_local/version',
       version: version,

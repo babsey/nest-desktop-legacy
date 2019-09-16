@@ -34,7 +34,7 @@ export class SimulationProtocolService {
 
   init() {
     this.db = this._dbService.init('protocol');
-    this._dbService.checkVersion(this);
+    this._dbService.initVersion(this);
   }
 
   loadSimulations() {

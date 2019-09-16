@@ -38,19 +38,19 @@ export class ModelService {
     this.status.loading = true;
     this.status.ready = false;
     this.db = this._dbService.init('model');
-    this._dbService.checkVersion(this)
+    this._dbService.initVersion(this);
     this.count().then(count => {
       if (count == 0) {
         this.fromFiles()
         this.status.ready = true;
         this.status.loading = false;
-        this.status.valid = this.version == environment.VERSION;
+        this._dbService.checkVersion(this);
       } else {
         this._dbService.db.list(this.db).then(models => {
           models.map(model => this.models[model.id] = model)
           this.status.ready = true;
           this.status.loading = false;
-          this.status.valid = this.version == environment.VERSION;
+          this._dbService.checkVersion(this);
         })
       }
     })
@@ -80,6 +80,7 @@ export class ModelService {
         var filename = files[idx];
         var model = require('./models/' + filename + '.json');
         this.models[model['id']] = model;
+        model['version'] = environment.VERSION;
         this._dbService.db.create(this.db, model)
       }
     }
