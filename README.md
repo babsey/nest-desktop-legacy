@@ -15,7 +15,7 @@ Currently, NEST Desktop requires NEST Server with a full NEST installation, limi
 ### Setup
 To install NEST Desktop:
 ```
-pip3 install [--user] nest-desktop
+pip3 install nest-desktop
 ```
 
 ### Usage
@@ -23,7 +23,6 @@ To start NEST Desktop:
 ```
 nest-desktop start [-h 127.0.0.1 -p 8000]
 ```
-Open a web browser with this link [http://localhost:8000](http://localhost:8000).
 
 Alternatively, to start NEST Server in Python interface (e.g. IPython, Jupyter):
 ```
@@ -31,10 +30,12 @@ from nest_desktop import app
 app.run(host='127.0.0.1', port=5000)
 ```
 
+Open a web browser with this link [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
 
 ### Troubleshootings
 
-It is not able to start. With version upgrading some configurations or database might not be compatible.
-Sometimes it helps when you clear the browsing data.
+With version upgrading some configurations or database might not be compatible.
+Sometimes it helps when you reset configurations or databases. If not, then clear the browsing data.
 
 ### License [MIT](LICENSE)
