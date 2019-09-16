@@ -15,7 +15,7 @@ echo '. /opt/nest/bin/nest_vars.sh' >> /home/nest/.bashrc
 source /opt/nest/bin/nest_vars.sh
 
 # start NEST Desktop
-python3 -m nest_desktop.app &
+nest-desktop start &
 
 # start NEST Server
 uwsgi --http-socket :5000 --uid nest --module nest_server.main:app
