@@ -1,4 +1,4 @@
 /.git
-/dockerfiles
 /node_modules
 /singularity
+/src
