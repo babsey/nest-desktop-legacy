@@ -1,8 +1,11 @@
 .link-selection {
-  mat-toolbar {
+  .header {
+    border-left: 2.5px solid black;
+    border-right: 2.5px solid black;
     height: 40px;
     line-height: 40px;
-    opacity: 0.8;
+    font-size: 14px;
+    font-weight: bold;
   }
 
   mat-selection-list {
@@ -11,9 +14,9 @@
     mat-list-option {
       border-left: 2.5px solid black;
       border-right: 2.5px solid black;
-      width: calc(100% - 5px);
       height: 24px;
       line-height: 24px;
+      width: calc(100% - 5px);
     }
   }
 }

@@ -2,7 +2,7 @@
   <ng-container *ngIf="idx!=undefined">
 
     <span [class.dark-theme]="advanced()">
-      <mat-toolbar class="header" [style.background-image]="backgroundImage" color="primary">
+      <mat-toolbar class="header"  color="primary" [style.background-image]="backgroundImage" [style.border-left-color]="preColor" [style.border-right-color]="postColor">
         <app-link-sketch [data]="data" [idx]="idx" style="width:100%"></app-link-sketch>
       </mat-toolbar>
     </span>

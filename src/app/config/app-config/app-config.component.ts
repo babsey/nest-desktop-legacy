@@ -11,7 +11,6 @@ import { NestServerService } from '../../services/nest-server/nest-server.servic
 })
 export class AppConfigComponent implements OnInit {
   public host: any;
-  public levels = ['beginner', 'advanced'];
 
   constructor(
     public _appConfigService: AppConfigService,
@@ -33,7 +32,8 @@ export class AppConfigComponent implements OnInit {
 
   saveAndCheck() {
     this._appConfigService.save()
-    this._nestServerService.check(this._appConfigService.urlRoot())
+    this.host = this._appConfigService.urlRoot();
+    this._nestServerService.check(this.host)
   }
 
 }

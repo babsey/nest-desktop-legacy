@@ -2,7 +2,7 @@
   "autoColor": true,
   "resetScale": true,
   "autoScale": true,
-  "slider": {
+  "controller": {
     "binsize": {
       "id": "binsize",
       "label": "Bin size",

@@ -1,22 +1,10 @@
 <ng-container *ngIf="_appConfigService.status.ready">
   <mat-selection-list class="content config" (selectionChange)="onSelectionChange($event)">
-    <mat-list-option [selected]="_appConfigService.config['app'].showLoading" value="showLoading">Show loading page</mat-list-option>
-    <mat-list-option [selected]="_appConfigService.config['app'].autoStart" value="autoStart">Auto start</mat-list-option>
+    <mat-list-option [selected]="_appConfigService.config['app'].loading" value="loading">Show loading page</mat-list-option>
+    <mat-list-option [selected]="_appConfigService.config['app'].autoStart" value="autoStart" [disabled]="!_appConfigService.config['app'].loading">Auto start</mat-list-option>
     <mat-list-option [selected]="_appConfigService.config['app'].log" value="log">Log</mat-list-option>
+    <mat-list-option [selected]="_appConfigService.config['app'].advanced" value="advanced">Advanced view</mat-list-option>
   </mat-selection-list>
-
-  <mat-list dense class="content config">
-    <mat-list-item>
-      <mat-form-field class="form-field">
-        <mat-label>User level</mat-label>
-        <mat-select [(ngModel)]="_appConfigService.config['app'].level" class="form-field" (selectionChange)="onChange($event)">
-          <ng-container *ngFor="let level of levels">
-            <mat-option [value]="level">{{ level | capitalize }}</mat-option>
-          </ng-container>
-        </mat-select>
-      </mat-form-field>
-    </mat-list-item>
-  </mat-list>
 
   <mat-divider></mat-divider>
 

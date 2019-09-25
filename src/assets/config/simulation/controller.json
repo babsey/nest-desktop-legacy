@@ -1,0 +1,50 @@
+{
+  "kernel": {
+    "id": "kernel",
+    "params": [{
+      "id": "local_num_threads",
+      "label": "local number of threads",
+      "value": 1,
+      "input": "tickSlider",
+      "ticks": [
+        1,
+        2,
+        4,
+        8
+      ]
+    }, {
+      "id": "resolution",
+      "label": "time resolution",
+      "unit": "ms",
+      "value": 0.1,
+      "input": "tickSlider",
+      "ticks": [
+        0.001,
+        0.01,
+        0.1,
+        1
+      ]
+    }]
+  },
+  "simulation": {
+    "id": "simuation",
+    "params": [{
+      "id": "random_seed",
+      "label": "seed of random number generator",
+      "value": 0,
+      "input": "valueSlider",
+      "max": 1000,
+      "min": 0,
+      "step": 1
+    }, {
+      "id": "time",
+      "label": "simulation time",
+      "unit": "ms",
+      "value": 1000,
+      "input": "valueSlider",
+      "max": 2000,
+      "min": 0,
+      "step": 10
+    }]
+  }
+}

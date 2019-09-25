@@ -1,49 +1,50 @@
-<ng-container [ngSwitch]="ready">
-
-  <span *ngSwitchCase="false">
-    <app-loading
-      (buttonClick)="ready=true"
-      (ready)="ready=$event;"
-      [style.display]="_appConfigService.config.app.showLoading ? '' : 'None'"
-    ></app-loading>
-  </span>
-
-  <span *ngSwitchCase="true">
-    <mat-sidenav-container id="container" autosize>
-      <mat-sidenav id="navigation"
-        [(opened)]="_navigationService.sidenavOpened"
-        [mode]="mobileQuery.matches ? 'over' : 'side'"
-        [style.width]="navigationWidth()"
-        role="region"
-        position="start"
-        autoFocus="false">
+<mat-sidenav-container id="container" autosize>
+  <mat-sidenav id="navigation" [(opened)]="_navigationService.sidenavOpened" [mode]="mobileQuery.matches ? 'over' : 'side'" [style.width]="navigationWidth()" role="region" position="start" autoFocus="false">
+    <ng-container [ngSwitch]="ready">
+      <ng-container *ngSwitchCase="false">
+        <app-loading (buttonClick)="ready=true" [(ready)]="ready" [style.display]="_appConfigService.config.app.loading ? '' : 'None'"></app-loading>
+      </ng-container>
+      <ng-container *ngSwitchCase="true">
         <router-outlet name="nav"></router-outlet>
-      </mat-sidenav>
+      </ng-container>
+    </ng-container>
+  </mat-sidenav>
 
-      <mat-sidenav-content #content>
+  <mat-sidenav-content #content>
+
+    <!-- <div
+      (mouseleave)="buttonDisplay='0.2'"
+      (mousemove)="buttonDisplay='1'"
+      class="navButton"
+    ></div> -->
+
+    <!-- <button mat-fab type="button" class="buttonLeft no-print"
+      [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
+      [style.opacity]="buttonDisplay"
+      (click)="toggleNavigationOpened()"
+      (mousemove)="buttonDisplay='1'"
+      (mouseleave)="buttonDisplay='0.2'"
+      >
+      <fa-icon *ngIf="!isNavigationOpened()" icon="chevron-right"></fa-icon>
+      <fa-icon *ngIf="isNavigationOpened()" icon="chevron-left"></fa-icon>
+    </button> -->
+
+    <ng-container [ngSwitch]="ready">
+      <ng-container *ngSwitchCase="false">
+        <span class="background" [style.display]="_appConfigService.config.app.loading ? '' : 'None'">
+          <img src="/assets/img/spike_transmission_carlos.png" width="700px" style="margin:50px" />
+
+          <div style="margin:20px">
+            <pre class="quote">"Ah! My poor brain is racked and crazed, my spirit and senses amazed!"</pre>
+            <div class="author">Johann Wolfgang Von Goethe (from Faust, 1808)</div>
+          </div>
+        </span>
+      </ng-container>
+      <ng-container *ngSwitchCase="true">
         <app-navigation id="navigation-button"></app-navigation>
-
-        <!-- <div
-          (mouseleave)="buttonDisplay='0.2'"
-          (mousemove)="buttonDisplay='1'"
-          class="navButton"
-        ></div> -->
-
-        <!-- <button mat-fab type="button" class="buttonLeft no-print"
-          [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
-          [style.opacity]="buttonDisplay"
-          (click)="toggleNavigationOpened()"
-          (mousemove)="buttonDisplay='1'"
-          (mouseleave)="buttonDisplay='0.2'"
-          >
-          <fa-icon *ngIf="!isNavigationOpened()" icon="chevron-right"></fa-icon>
-          <fa-icon *ngIf="isNavigationOpened()" icon="chevron-left"></fa-icon>
-        </button> -->
-
         <router-outlet></router-outlet>
-      </mat-sidenav-content>
+      </ng-container>
+    </ng-container>
+  </mat-sidenav-content>
 
-    </mat-sidenav-container>
-  </span>
-
-</ng-container>
+</mat-sidenav-container>

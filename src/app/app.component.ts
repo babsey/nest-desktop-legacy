@@ -22,10 +22,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    private _navigationService: NavigationService,
     private changeDetectorRef: ChangeDetectorRef,
     private media: MediaMatcher,
     public _appConfigService: AppConfigService,
+    public _navigationService: NavigationService,
     public router: Router,
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');

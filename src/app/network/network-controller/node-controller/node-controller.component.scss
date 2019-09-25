@@ -1,4 +1,12 @@
 .node-controller {
+  .header {
+    border-left: 2.5px solid black;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
   .list-item {
     border-left: 2.5px solid black;
     width: calc(100% - 2.5px);

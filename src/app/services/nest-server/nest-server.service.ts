@@ -46,7 +46,7 @@ export class NestServerService {
         }
         if ('simulator' in res) {
           this.status.simulator.ready = true;
-          this.status.simulator['version'] = res['simulator']['version'].split('-')[1];
+          this.status.simulator['version'] = res['simulator']['version'];
           var simulatorVersion = this.status.server['version'].split('.');
           this.status.simulator.valid = appVersion[0] == simulatorVersion[0];
         }

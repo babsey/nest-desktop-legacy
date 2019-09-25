@@ -1,0 +1,27 @@
+{
+  "app": {
+    "title": "NEST Desktop",
+    "log": false,
+    "autoStart": false,
+    "loading": true,
+    "advanced": false
+  },
+  "nest-server": {
+    "host": "",
+    "port": "5000"
+  },
+  "user": {
+    "id": "user",
+    "userId": "",
+    "name": "",
+    "password": "",
+    "group": "public"
+  },
+  "groups": [{
+    "id": "nest-desktop",
+    "name": "NEST desktop"
+  }, {
+    "id": "public",
+    "name": "Public"
+  }]
+}

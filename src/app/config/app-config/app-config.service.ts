@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-
-import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 var STORAGE_NAME = 'app-config';
 
@@ -9,47 +8,41 @@ var STORAGE_NAME = 'app-config';
   providedIn: 'root'
 })
 export class AppConfigService {
-  public config: any = {};
+  public config: any = {
+    app: {
+      showLoading: false
+    }
+  };
   public status: any = {
-    loading: false,
     ready: false,
     valid: false
   };
+  private version: string;
 
   constructor(
+    private http: HttpClient,
   ) {
   }
 
-  init() {
-    this.status.loading = true;
+  init(version = null) {
+    this.version = version || this.version;
     this.status.ready = false;
     let configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
       this.config = JSON.parse(configJSON);
+      this.isVersionValid()
     } else {
-      this.fromFiles()
-      this.save()
+      this.load()
     }
-    this.status.ready = true;
-    this.status.loading = false;
-    var appVersion = environment.VERSION.split('.');
-    var configVersion = this.config.version.split('.');
-    this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
   }
 
-  fromFiles() {
-    var files = [
-      'app',
-      'nest-server',
-      'user',
-      'groups',
-    ];
-    for (var idx in files) {
-      var filename = files[idx];
-      var configData = require('./configs/' + filename + '.json');
-      this.config[filename] = configData;
-    }
-    this.config['version'] = environment.VERSION;
+  load() {
+    this.http.get('/assets/config/app/app.json').subscribe(config => {
+      this.config = config;
+      this.config['version'] = this.version;
+      this.save()
+      this.isVersionValid()
+    })
   }
 
   save() {
@@ -62,10 +55,21 @@ export class AppConfigService {
     this.init()
   }
 
+  isVersionValid() {
+    var appVersion = this.version.split('.');
+    var configVersion = this.config.version.split('.');
+    this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
+    this.status.ready = true;
+  }
+
   urlRoot() {
     var server = this.config['nest-server'];
     var host = server['host'] || window.location.host.split(':')[0] || 'localhost';
-    return 'http://' + host + ':' + server['port'];
+    var url = 'http://' + host;
+    if (server['port']) {
+      url = url + ':' + server['port'];
+    }
+    return url;
   }
 
 }

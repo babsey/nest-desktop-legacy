@@ -21,18 +21,15 @@ export class ChartControllerComponent implements OnInit {
   }
 
   onBinSizeChange(value) {
-    this._recordsVisualizationService.binsize = value;
     this._recordsVisualizationService.init.emit();
   }
 
   onBarmodeChange(value) {
-    this._recordsVisualizationService.barmode = value;
     this._recordsVisualizationService.init.emit();
   }
 
   onBarnormChange(value) {
     this._recordsVisualizationService.barmode = 'stack';
-    this._recordsVisualizationService.barnorm = value;
     this._recordsVisualizationService.init.emit();
   }
 

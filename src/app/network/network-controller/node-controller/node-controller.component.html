@@ -46,12 +46,12 @@
   <span class="controller node-controller" [style.display]="nodeDisplay()">
 
     <span [class.dark-theme]="advanced()">
-      <mat-toolbar color="primary" style="height:40px; opacity:0.8" [style.background-color]="advanced() ? '' : _colorService.node(node)">
+      <mat-toolbar color="primary" class="header" [style.border-color]="color" [style.background-color]="advanced() ? '' : color">
         <span style="display:inherit; margin-left:-8px; margin-right: 10px">
           <svg width="40" height="40">
             <g app-node-shape
               (click)="selectNode(node)"
-              [color]="_colorService.node(node)"
+              [color]="color"
               [elementType]="collection().element_type"
               [idx]="idx"
               [spatial]="isSpatial()"

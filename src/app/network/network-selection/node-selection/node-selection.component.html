@@ -30,7 +30,7 @@
 <span class="node-selection" [style.display]="nodeDisplay()">
 
   <span [class.dark-theme]="advanced()">
-    <mat-toolbar color="primary" style="height:40px; opacity:0.8" [style.background-color]="advanced() ? '' : color">
+    <mat-toolbar color="primary" class="header" [style.border-color]="color" [style.background-color]="advanced() ? '' : color">
       <span style="display:inherit; margin-left:-8px; margin-right: 10px">
         <svg width="40" height="40">
           <g app-node-shape
@@ -56,11 +56,22 @@
         </ng-container>
       </mat-select>
 
-      <ng-container *ngIf="advanced()">
-        <span style="margin-right:-16px" >
-          <button mat-icon-button [matMenuTriggerFor]="nodeMenu"><fa-icon icon="ellipsis-v"></fa-icon></button>
-        </span>
+      <ng-container [ngSwitch]="advanced()">
+        <!-- <ng-container *ngSwitchCase="false">
+          <span style="margin-right:-16px" >
+            <button mat-menu-item (click)="deleteNode()" matTooltip="Delete node">
+              <fa-icon class="menu-icon" icon="trash-alt"></fa-icon>
+            </button>
+          </span>
+        </ng-container> -->
+        <ng-container *ngSwitchCase="true">
+          <span style="margin-right:-16px" >
+            <button mat-icon-button [matMenuTriggerFor]="nodeMenu">
+              <fa-icon icon="ellipsis-v"></fa-icon>
+            </button>
+          </span>
       </ng-container>
+    </ng-container>
     </mat-toolbar>
   </span>
 

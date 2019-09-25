@@ -1,16 +1,19 @@
 .link {
 
   .header {
-    line-height: 40px;
+    border-left: 2.5px solid black;
+    border-right: 2.5px solid black;
     height: 40px;
-    opacity: 0.8;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: bold;
   }
 
   .list-item {
     border-left: 2.5px solid black;
     border-right: 2.5px solid black;
+    height: 24px;
     width: calc(100% - 5px);
-    height: 20px !important;
 
     .unit {
       text-align: right;

@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 
 import * as PouchDB from 'pouchdb/dist/pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert/dist/pouchdb.upsert';
@@ -7,6 +9,7 @@ import { environment } from '../../../environments/environment';
 
 import { DataService } from '../../services/data/data.service';
 import { DBService } from '../../services/db/db.service';
+import { DBVersionService } from '../../services/db/db-version/db-version.service';
 import { NavigationService } from '../../navigation/navigation.service';
 import { SimulationProtocolService } from './simulation-protocol.service';
 
@@ -17,36 +20,36 @@ import { SimulationProtocolService } from './simulation-protocol.service';
 export class SimulationService {
   public db: any;
   public status: any = {
-    loading: false,
     ready: false,
     valid: false,
   };
   public mode: string = 'view';
-  public version: string;
+  public version: any;
 
   constructor(
     private _dataService: DataService,
     private _dbService: DBService,
+    private _dbVersionService: DBVersionService,
     private _navigationService: NavigationService,
     private _simulationProtocolService: SimulationProtocolService,
+    private http: HttpClient,
   ) {
   }
 
   init() {
     this.status.ready = false;
-    this.status.loading = true;
+    this._simulationProtocolService.status.ready = false;
     this.db = this._dbService.init('simulation');
-    this._dbService.initVersion(this);
+    this._dbVersionService.init(this);
     this.loadSimulations().then(simulations => {
-      this.status.loading = false;
       this.status.ready = true;
-      this._dbService.checkVersion(this);
-      this._simulationProtocolService.status.loading = true;
-      this._simulationProtocolService.status.ready = false;
       this._simulationProtocolService.loadSimulations().then(simulations => {
-        this._simulationProtocolService.status.loading = false;
+        if (simulations.length == 0) {
+          this._simulationProtocolService.status.valid = true;
+        } else {
+          this._simulationProtocolService.status.valid = this._dbVersionService.isValid(this.version);
+        }
         this._simulationProtocolService.status.ready = true;
-        this._dbService.checkVersion(this._simulationProtocolService);
       })
     })
   }
@@ -54,8 +57,11 @@ export class SimulationService {
   loadSimulations() {
     return this.count().then(count => {
       if (count == 0) {
-        return this.fromFiles()
+        this.status.valid = true;
+        var files = ['current-input', 'spike-input', 'spike-trains'];
+        return this.fromFiles(files)
       } else {
+        this.status.valid = this._dbVersionService.isValid(this.version);
         return this.list().then(simulations => {
           simulations.map(simulation => simulation['source'] = 'simulation')
           return simulations;
@@ -64,17 +70,17 @@ export class SimulationService {
     })
   }
 
-  fromFiles() {
-    var files = ['current-input', 'spike-input', 'spike-trains'];
+  fromFiles(filenames) {
     var simulations = [];
-    for (var idx in files) {
-      var filename = files[idx];
-      var data = require('../simulations/' + filename + '.json');
-      data['version'] = environment.VERSION;
-      let data_cleaned = this._dataService.clean(data);
-      simulations.push(data_cleaned);
-      this._dbService.db.create(this.db, data_cleaned)
-    }
+    var files = filenames.map(filename => this.http.get('/assets/simulations/' + filename + '.json'))
+    forkJoin(files).subscribe(simulations => {
+      simulations.map(simulation => {
+        simulation['version'] = environment.VERSION;
+        let simulation_cleaned = this._dataService.clean(simulation);
+        simulations.push(simulation_cleaned);
+        this._dbService.db.create(this.db, simulation_cleaned)
+      })
+    })
     return simulations;
   }
 

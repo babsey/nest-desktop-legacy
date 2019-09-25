@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 var STORAGE_NAME = 'db-config';
 
@@ -10,35 +10,38 @@ var STORAGE_NAME = 'db-config';
 export class DBConfigService {
   public config: any = {};
   public status: any = {
-    loading: false,
     ready: false,
     valid: false,
   };
-  public version: string;
+  private version: string;
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+  ) { }
 
-  init() {
-    this.status.loading = true;
+  init(version = null) {
+    this.version = version || this.version;
     this.status.ready = false;
     var configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
       this.config = JSON.parse(configJSON);
-      this.version = this.config.version;
+      this.isVersionValid()
     } else {
-      this.config = require('./db-config.json');
-      this.config['version'] = environment.VERSION;
-      this.save()
+      this.load()
     }
-    this.status.loading = false;
-    this.status.ready = true;
-    var appVersion = environment.VERSION.split('.');
-    var configVersion = this.config.version.split('.');
-    this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
   }
 
   list() {
     return Object.keys(this.config).filter(key => key != 'version').map(key => this.config[key])
+  }
+
+  load() {
+    this.http.get('/assets/config/app/db.json').subscribe(config => {
+      this.config = config;
+      this.config['version'] = this.version;
+      this.save()
+      this.isVersionValid()
+    })
   }
 
   save() {
@@ -49,6 +52,13 @@ export class DBConfigService {
   reset() {
     localStorage.removeItem(STORAGE_NAME)
     this.init()
+  }
+
+  isVersionValid() {
+    var appVersion = this.version.split('.');
+    var configVersion = this.config.version.split('.');
+    this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
+    this.status.ready = true;
   }
 
 }

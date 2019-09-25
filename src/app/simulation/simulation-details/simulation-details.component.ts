@@ -19,8 +19,8 @@ export class SimulationDetailsComponent implements OnInit {
   ngOnInit() {
   }
 
-  level() {
-    return this._appConfigService.config['app'].level;
+  advanced() {
+    return this._appConfigService.config['app'].advanced;
   }
 
 }

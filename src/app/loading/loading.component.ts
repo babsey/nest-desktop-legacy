@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
 
 import { AppConfigService } from '../config/app-config/app-config.service';
 import { DBConfigService } from '../config/db-config/db-config.service';
@@ -19,9 +19,11 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./loading.component.scss']
 })
 export class LoadingComponent implements OnInit {
-  @Output() ready: EventEmitter<any> = new EventEmitter();
+  @Input() ready: boolean = false;
+  @Output() readyChange: EventEmitter<any> = new EventEmitter();
   @Output() buttonClick: EventEmitter<any> = new EventEmitter();
   public version = environment.VERSION;
+  public dbInit: boolean = false;
 
   constructor(
     public _appConfigService: AppConfigService,
@@ -36,57 +38,52 @@ export class LoadingComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this._dbConfigService.init()
-    this._appConfigService.init()
-    this._networkConfigService.init()
-    this._simulationConfigService.init()
-    this._modelService.init()
-    this._visualizationConfigService.init()
-    this._simulationService.init()
-    this._simulationProtocolService.init()
-    this._nestServerService.check(this._appConfigService.urlRoot())
+    this._dbConfigService.init(this.version)
+    this._appConfigService.init(this.version)
+    this._networkConfigService.init(this.version)
+    this._simulationConfigService.init(this.version)
+    this._visualizationConfigService.init(this.version)
   }
 
   ngDoCheck() {
-    if (!this._appConfigService.config.app.showLoading) {
-      this._appConfigService.config.app.showLoading = !this.isSimulatorReady()
+    if (this.isConfigReady() && !this.dbInit) {
+      this.dbInit = true;
+      this._modelService.init()
+      this._simulationService.init()
+      this._simulationProtocolService.init()
+      this._nestServerService.check(this._appConfigService.urlRoot())
     }
-    var autoStart = Number(this._appConfigService.config.app.autoStart);
-    var hideLoading = Number(!this._appConfigService.config.app.showLoading);
-    var ready = autoStart || (autoStart ^ hideLoading);
+
     if (this.isReady()) {
-      setTimeout(() => this.ready.emit(ready), 100)
+      var autoStart = this._appConfigService.config.app.loading ? this._appConfigService.config.app.autoStart : true;
+      setTimeout(() => this.readyChange.emit(autoStart), 100)
     }
   }
 
-  isReady() {
+  isConfigReady() {
     return (
       this._dbConfigService.status.ready &&
       this._appConfigService.status.ready &&
       this._networkConfigService.status.ready &&
       this._simulationConfigService.status.ready &&
-      this._visualizationConfigService.status.ready &&
+      this._visualizationConfigService.status.ready
+    )
+  }
+
+  isDatabaseReady() {
+    return (
       this._modelService.status.ready &&
       this._simulationService.status.ready &&
       this._simulationProtocolService.status.ready
     )
   }
 
-  isLoading() {
-    return (
-      this._dbConfigService.status.loading &&
-      this._appConfigService.status.loading &&
-      this._networkConfigService.status.loading &&
-      this._simulationConfigService.status.loading &&
-      this._visualizationConfigService.status.loading &&
-      this._modelService.status.loading &&
-      this._simulationService.status.loading &&
-      this._simulationProtocolService.status.loading
-    )
+  isReady() {
+    return this.isConfigReady() && this.isDatabaseReady()
   }
 
   isSimulatorReady() {
-    return this._nestServerService.status.response && this._nestServerService.status.simulator.ready
+    return this._nestServerService.status.response && this._nestServerService.status.simulator.ready;
   }
 
   resetConfigs() {

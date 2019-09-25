@@ -43,7 +43,7 @@ export class NodeListComponent implements OnInit, OnChanges {
   }
 
   advanced() {
-    return this._appConfigService.config['app'].level == 'advanced';
+    return this._appConfigService.config['app'].advanced;
   }
 
   update() {

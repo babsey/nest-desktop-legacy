@@ -1,13 +1,21 @@
 .node-selection {
 
+  .header {
+    border-left: 2.5px solid black;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
   mat-nav-list, mat-selection-list {
     padding: 0;
 
     .list-item {
       border-left: 2.5px solid black;
-      width: calc(100% - 2.5px);
       height: 24px;
       line-height: 24px;
+      width: calc(100% - 2.5px);
     }
   }
 }

@@ -2,75 +2,65 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 
-var STORAGE_NAME = 'network-config';
-
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NetworkConfigService {
+export class ConfigService {
   public config: any = {};
   public status: any = {
     ready: false,
     valid: false
   };
-  private version: string;
+  name: string = '';
+  files: string[] = [];
 
   constructor(
     private http: HttpClient,
   ) {
   }
 
-  init(version = null) {
-    this.version = version || this.version;
+  init(name = null, files = null) {
+    this.name = name || this.name;
+    this.files = files || this.files;
     this.status.ready = false;
-    let configJSON = localStorage.getItem(STORAGE_NAME);
+    let configJSON = localStorage.getItem(this.name);
     if (configJSON) {
       this.config = JSON.parse(configJSON);
-      this.isVersionValid()
+      this.checkVersions()
     } else {
       this.load()
     }
   }
 
   load() {
-    var files = [
-      'color',
-      'label',
-      'connection',
-      'mask',
-      'node',
-      'projections',
-      'receptor',
-      'spatial',
-    ];
-
-    var configs = files.map(file => this.http.get('/assets/config/network/' + file + '.json'));
+    var url = '/assets/config/' + this.name + '/';
+    var configs = this.files.map(file => this.http.get(url + file + '.json'));
     forkJoin(configs).subscribe(configs => {
-      files.map((file, idx) => {
+      this.files.map((file, idx) => {
         this.config[file] = configs[idx]
       })
-      this.config['version'] = this.version;
+      this.config['version'] = environment.VERSION;
       this.save()
-      this.isVersionValid()
+      this.checkVersions()
     })
   }
 
   save() {
     let configJSON = JSON.stringify(this.config);
-    localStorage.setItem(STORAGE_NAME, configJSON);
+    localStorage.setItem(this.name, configJSON);
   }
 
-  isVersionValid() {
-    var appVersion = this.version.split('.');
+  checkVersions() {
+    var appVersion = environment.VERSION.split('.');
     var configVersion = this.config.version.split('.');
     this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
     this.status.ready = true;
   }
 
   reset() {
-    localStorage.removeItem(STORAGE_NAME)
+    localStorage.removeItem(this.name)
     this.init()
   }
-
 }

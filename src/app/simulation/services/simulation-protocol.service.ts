@@ -5,9 +5,10 @@ import * as PouchDB from 'pouchdb/dist/pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert/dist/pouchdb.upsert';
 
 import { DataService } from '../../services/data/data.service';
-import { DBService } from '../../services/db/db.service';
-import { NavigationService } from '../../navigation/navigation.service';
 import { DBConfigService } from '../../config/db-config/db-config.service';
+import { DBService } from '../../services/db/db.service';
+import { DBVersionService } from '../../services/db/db-version/db-version.service';
+import { NavigationService } from '../../navigation/navigation.service';
 
 
 @Injectable({
@@ -16,17 +17,17 @@ import { DBConfigService } from '../../config/db-config/db-config.service';
 export class SimulationProtocolService {
   public db: any;
   public status: any = {
-    loading: false,
     ready: false,
     valid: false,
   };
-  public version: string;
+  public version: any;
   public change: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private _dbConfigService: DBConfigService,
     private _dataService: DataService,
+    private _dbConfigService: DBConfigService,
     private _dbService: DBService,
+    private _dbVersionService: DBVersionService,
     private _navigationService: NavigationService,
     private snackBar: MatSnackBar,
   ) {
@@ -34,7 +35,7 @@ export class SimulationProtocolService {
 
   init() {
     this.db = this._dbService.init('protocol');
-    this._dbService.initVersion(this);
+    this._dbVersionService.init(this);
   }
 
   loadSimulations() {

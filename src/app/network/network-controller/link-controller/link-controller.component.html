@@ -18,7 +18,7 @@
     <span class="controller link-controller" [style.display]="linkDisplay()">
 
       <span [class.dark-theme]="advanced()">
-        <mat-toolbar [style.background-image]="backgroundImage" color="primary">
+        <mat-toolbar class="header" color="primary" [style.border-left-color]="preColor" [style.border-right-color]="postColor" [style.background-image]="backgroundImage">
           <span class="flex" style="height:40px">
             <app-link-sketch [data]="data" [idx]="idx" style="width:100%"></app-link-sketch>
             <ng-container *ngIf="advanced()">

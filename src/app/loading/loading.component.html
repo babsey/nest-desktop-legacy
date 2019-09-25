@@ -13,211 +13,203 @@
 </mat-menu>
 
 <span class="loading">
-  <img src="assets/img/spike_transmission_carlos.png" width="700px" style="margin:50px" />
 
-  <div style="margin:20px">
-    <pre class="quote">"Ah! my poor brain is racked and crazed,
-      My spirit and senses amazed!"</pre>
-    <div class="author">Johann Wolfgang Von Goethe (from Faust, 1808)</div>
-  </div>
-
-  <span class="left">
-
-    <span class="nest-theme nest">
-      <mat-toolbar class="flex" color="primary">
-        NEST Desktop
-        <span class="flex-spacer"></span>
-        <span class="dense">{{ version }}</span>
-      </mat-toolbar>
-    </span>
-
-    <div>
-      <mat-list role="list" dense>
-
-        <span class="flex">
-          <h3 mat-subheader>
-            <fa-icon class="list-icon" icon="cog"></fa-icon> Configurations
-          </h3>
-          <span class="flex-spacer"></span>
-          <button mat-icon-button [matMenuTriggerFor]="configMenu">
-            <fa-icon icon="ellipsis-v"></fa-icon>
-          </button>
-        </span>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Database
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _dbConfigService.version }}
-              <span>
-                <fa-icon *ngIf="_dbConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_dbConfigService.status.ready && !_dbConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_dbConfigService.status.ready && _dbConfigService.status.valid" icon="check" class="green"></fa-icon>
-              </span> </span>
-          </span>
-        </mat-list-item>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Application
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _appConfigService.config.version }}
-              <span>
-                <fa-icon *ngIf="_appConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_appConfigService.status.ready && !_appConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_appConfigService.status.ready && _appConfigService.status.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Network
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _networkConfigService.config.version }}
-              <span>
-                <fa-icon *ngIf="_networkConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_networkConfigService.status.ready && !_networkConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_networkConfigService.status.ready && _networkConfigService.status.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Simulation
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _visualizationConfigService.config.version }}
-              <span>
-                <fa-icon *ngIf="_simulationConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_simulationConfigService.status.ready && !_simulationConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_simulationConfigService.status.ready && _simulationConfigService.status.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Visualization
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _visualizationConfigService.config.version }}
-              <span>
-                <fa-icon *ngIf="_visualizationConfigService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_visualizationConfigService.status.ready && !_visualizationConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_visualizationConfigService.status.ready && _visualizationConfigService.status.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-
-        <span class="flex">
-          <h3 mat-subheader>
-            <fa-icon class="list-icon" icon="database"></fa-icon> Databases
-          </h3>
-          <span class="flex-spacer"></span>
-          <button mat-icon-button [matMenuTriggerFor]="databaseMenu">
-            <fa-icon icon="ellipsis-v"></fa-icon>
-          </button>
-        </span>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Model
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _modelService.version }}
-              <span>
-                <fa-icon *ngIf="_modelService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_modelService.status.ready && !_modelService.status.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_modelService.status.ready && _modelService.status.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Simulation
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _simulationService.version }}
-              <span>
-                <fa-icon *ngIf="_simulationService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_simulationService.status.ready && !_simulationService.status.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_simulationService.status.ready && _simulationService.status.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Protocol
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _simulationProtocolService.version }}
-              <span>
-                <fa-icon *ngIf="_simulationProtocolService.status.loading" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_simulationProtocolService.status.ready && !_simulationProtocolService.status.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_simulationProtocolService.status.ready && _simulationProtocolService.status.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-
-        <h3 mat-subheader>
-          <fa-icon class="list-icon" icon="server"></fa-icon> NEST
-        </h3>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Server
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _nestServerService.status.server.version }}
-              <span>
-                <fa-icon *ngIf="!_nestServerService.status.server.response" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_nestServerService.status.server.response && !_nestServerService.status.server.ready" icon="times" class="red"></fa-icon>
-                <fa-icon *ngIf="_nestServerService.status.server.response && _nestServerService.status.server.ready && !_nestServerService.status.server.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_nestServerService.status.server.response && _nestServerService.status.server.ready && _nestServerService.status.server.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-
-        <mat-list-item role="listitem">
-          <span class="flex">
-            Simulator
-            <span class="flex-spacer"></span>
-            <span>
-              {{ _nestServerService.status.simulator.version }}
-              <span>
-                <fa-icon *ngIf="!_nestServerService.status.server.response" icon="circle-notch" [spin]="true"></fa-icon>
-                <fa-icon *ngIf="_nestServerService.status.server.response && !_nestServerService.status.simulator.ready" icon="times" class="red"></fa-icon>
-                <fa-icon *ngIf="_nestServerService.status.server.response && _nestServerService.status.simulator.ready && !_nestServerService.status.simulator.valid" icon="exclamation" class="orange"></fa-icon>
-                <fa-icon *ngIf="_nestServerService.status.server.response && _nestServerService.status.simulator.ready && _nestServerService.status.simulator.valid" icon="check" class="green"></fa-icon>
-              </span>
-            </span>
-          </span>
-        </mat-list-item>
-      </mat-list>
-    </div>
-
-    <p class="flex">
+  <span class="nest-theme nest">
+    <mat-toolbar class="flex" color="primary">
+      NEST Desktop
       <span class="flex-spacer"></span>
-      <button mat-raised-button (click)="buttonClick.emit()" [disabled]="!isReady()">
-        <span *ngIf="!isReady()">Loading</span>
-        <span *ngIf="isReady()">Start</span>
-      </button>
-    </p>
-
-    <app-config-list (configClick)="buttonClick.emit()"></app-config-list>
+      <span class="dense">{{ version }}</span>
+    </mat-toolbar>
   </span>
+
+  <span>
+    <mat-list role="list" dense>
+
+      <span class="flex">
+        <h3 mat-subheader>
+          <fa-icon class="list-icon" icon="cog"></fa-icon> Configurations
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="configMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Database
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _dbConfigService.config.version }}
+            <span>
+              <fa-icon *ngIf="!_dbConfigService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_dbConfigService.status.ready && !_dbConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_dbConfigService.status.ready && _dbConfigService.status.valid" icon="check" class="green"></fa-icon>
+            </span> </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Application
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _appConfigService.config.version }}
+            <span>
+              <fa-icon *ngIf="!_appConfigService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_appConfigService.status.ready && !_appConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_appConfigService.status.ready && _appConfigService.status.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Network
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _networkConfigService.config.version }}
+            <span>
+              <fa-icon *ngIf="!_networkConfigService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_networkConfigService.status.ready && !_networkConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_networkConfigService.status.ready && _networkConfigService.status.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Simulation
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _simulationConfigService.config.version }}
+            <span>
+              <fa-icon *ngIf="!_simulationConfigService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_simulationConfigService.status.ready && !_simulationConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_simulationConfigService.status.ready && _simulationConfigService.status.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Visualization
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _visualizationConfigService.config.version }}
+            <span>
+              <fa-icon *ngIf="!_visualizationConfigService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_visualizationConfigService.status.ready && !_visualizationConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_visualizationConfigService.status.ready && _visualizationConfigService.status.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <span class="flex">
+        <h3 mat-subheader>
+          <fa-icon class="list-icon" icon="database"></fa-icon> Databases
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="databaseMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Model
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _modelService.version }}
+            <span>
+              <fa-icon *ngIf="!_modelService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_modelService.status.ready && !_modelService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_modelService.status.ready && _modelService.status.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Simulation
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _simulationService.version }}
+            <span>
+              <fa-icon *ngIf="!_simulationService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_simulationService.status.ready && !_simulationService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_simulationService.status.ready && _simulationService.status.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Protocol
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _simulationProtocolService.version }}
+            <span>
+              <fa-icon *ngIf="!_simulationProtocolService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_simulationProtocolService.status.ready && !_simulationProtocolService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_simulationProtocolService.status.ready && _simulationProtocolService.status.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <h3 mat-subheader>
+        <fa-icon class="list-icon" icon="server"></fa-icon> NEST
+      </h3>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Server
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _nestServerService.status.server.version }}
+            <span>
+              <fa-icon *ngIf="!_nestServerService.status.server.response" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_nestServerService.status.server.response && !_nestServerService.status.server.ready" icon="times" class="red"></fa-icon>
+              <fa-icon *ngIf="_nestServerService.status.server.response && _nestServerService.status.server.ready && !_nestServerService.status.server.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_nestServerService.status.server.response && _nestServerService.status.server.ready && _nestServerService.status.server.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Simulator
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _nestServerService.status.simulator.version }}
+            <span>
+              <fa-icon *ngIf="!_nestServerService.status.server.response" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_nestServerService.status.server.response && !_nestServerService.status.simulator.ready" icon="times" class="red"></fa-icon>
+              <fa-icon *ngIf="_nestServerService.status.server.response && _nestServerService.status.simulator.ready && !_nestServerService.status.simulator.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_nestServerService.status.server.response && _nestServerService.status.simulator.ready && _nestServerService.status.simulator.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
+        </span>
+      </mat-list-item>
+    </mat-list>
+
+    <span class="flex">
+      <span class="flex-spacer"></span>
+      <span style="margin:10px">
+        <button mat-raised-button (click)="buttonClick.emit()" [disabled]="!isReady()">
+          <span *ngIf="!isReady()">Loading</span>
+          <span *ngIf="isReady()">Start</span>
+        </button>
+      </span>
+    </span>
+  </span>
+
+  <app-config-list (configClick)="buttonClick.emit()"></app-config-list>
 </span>

@@ -27,8 +27,8 @@
     <app-ticks-slider-inline
       (valueChange)="onBinSizeChange($event)"
       [matTooltip]="'Bin size'"
-      [options]="_visualizationConfigService.config.chart.slider.binsize"
-      [value]="_recordsVisualizationService.binsize"
+      [options]="_visualizationConfigService.config.chart.controller.binsize"
+      [(value)]="_recordsVisualizationService.binsize"
       style="width:100%"
     ></app-ticks-slider-inline>
   </mat-list-item>
