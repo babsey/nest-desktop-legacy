@@ -13,7 +13,6 @@ def run(host="127.0.0.1", port=8000):
 
     Handler = http.server.SimpleHTTPRequestHandler
     with socketserver.TCPServer(("", port), Handler) as httpd:
-        print("NEST Desktop is serving at http://%s:%s" %(host,port))
         httpd.serve_forever()
 
 if __name__ == "__main__":
