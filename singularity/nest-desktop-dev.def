@@ -12,10 +12,7 @@ From: ubuntu:18.04
 
   npm install npm --upgrade
 
-  pip3 install setuptools wheel twine sphinx sphinx_rtd_theme --upgrade
-
-%runscript
-  nest-desktop start
+  pip3 install setuptools wheel sphinx sphinx_rtd_theme --upgrade
 
 %environment
   export PATH=$PATH:$HOME/.local/bin

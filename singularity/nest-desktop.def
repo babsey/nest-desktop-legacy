@@ -5,8 +5,8 @@ From: babsey/nest-desktop
   AUTHOR Sebastian Spreizer <spreizer@web.de>
 
 %runscript
-  nest-server start -h 0.0.0.0
-  nest-desktop start -h 0.0.0.0
+  nest-server start -d
+  nest-desktop start
   nest-server stop
 
 %environment

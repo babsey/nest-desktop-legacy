@@ -5,7 +5,7 @@ From: ubuntu:18.04
   AUTHOR Sebastian Spreizer <spreizer@web.de>
 
 %runscript
-  nest-server start
+  nest-server start -d
   nest-desktop start
   nest-server stop
 
