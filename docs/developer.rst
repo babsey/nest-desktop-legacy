@@ -4,7 +4,21 @@ NEST Desktop is a web-based GUI application for NEST Simulator.
 
 Requirements for nest-desktop
  * Python 3.4 or higher
- * nest-server
+ * NEST Server, NEST Simulator (Test app)
+ * NodeJS, npm  (Build app)
+ * sphinx, sphinx rth theme (for Readthedocs)
+ * ssetuptools, wheel, twine (for PyPI)
+
+
+Source code
+===========
+The source code of NEST desktop is located in :code:`https://github.com/babsey/nest-desktop`
+
+Clone NEST Desktop from the github repository:
+
+.. code-block:: none
+
+   git clone https://github.com/babsey/nest-desktop
 
 
 Development environment
@@ -27,14 +41,9 @@ Go to shell of singularity container:
 
 Setup
 =====
-Clone NEST Desktop from the github:
-
-.. code-block:: none
-
-   git clone https://github.com/babsey/nest-desktop
 
 Install NEST Desktop from source code using :code:`pip` (where it finds :code:`setup.py`).
-Best option is to install it in user home using :code`pip install --user`.
+Best method is to install it in user home using :code:`pip install --user`.
 
 .. code-block:: none
 
