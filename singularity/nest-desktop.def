@@ -1,0 +1,13 @@
+Bootstrap: docker
+From: babsey/nest-desktop
+
+%labels
+  AUTHOR Sebastian Spreizer <spreizer@web.de>
+
+%runscript
+  nest-server start -h 0.0.0.0
+  nest-desktop start -h 0.0.0.0
+  nest-server stop
+
+%environment
+  . /opt/nest/bin/nest_vars.sh

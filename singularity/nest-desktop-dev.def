@@ -1,0 +1,21 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%labels
+  AUTHOR Sebastian Spreizer <spreizer@web.de>
+
+%post
+  apt update && apt install -y curl python3-pip
+
+  curl -sL https://deb.nodesource.com/setup_12.x | bash -
+  apt update && apt install -y nodejs
+
+  npm install npm --upgrade
+
+  pip3 install setuptools wheel twine sphinx sphinx_rtd_theme --upgrade
+
+%runscript
+  nest-desktop start
+
+%environment
+  export PATH=$PATH:$HOME/.local/bin
