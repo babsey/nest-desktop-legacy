@@ -4,7 +4,7 @@ HOST="127.0.0.1"
 PORT="8000"
 
 usage() {
-  echo "Usage: $0 version|pid|status|start|stop|restart [-h <host>] [-p <port>]" >&2; exit 1
+  echo "Usage: $0 version|status|start|stop|restart [-h <host>] [-p <port>]" >&2; exit 1
 }
 
 version() {
@@ -12,32 +12,37 @@ version() {
 }
 
 pid() {
-  pgrep -f 'python3 -m nest_desktop.app $HOST $PORT'
+  pgrep -f "python3 -m nest_desktop.app"
 }
 
-status() {
-  export pid=`nest-desktop pid`
-  if [ $pid ]; then
-    echo 'NEST Desktop is running.'
-  else
-    echo 'NEST Desktop is not running.'
-  fi
+ps-aux() {
+  ps aux | grep "[p]ython3 -m nest_desktop.app"
+}
+
+ps-cmd() {
+  ps-aux | awk '{ for(i=1;i<=NF;i++) {if ( i >= 11 ) printf $i" "}; printf "\n" }'
 }
 
 start() {
-  export pid=`nest-desktop pid`
-  if [ $pid ]; then
-    echo 'NEST Desktop is already running.'
+  if [ `pid` ]; then
+    echo "NEST Desktop is already serving."
+    `nest-server process`
   else
+    echo "NEST Desktop is serving at http://$HOST:$PORT."
+    echo "Use Control-C to stop this service."
     python3 -m nest_desktop.app $HOST $PORT
   fi
 }
 
+status() {
+  printf "HTTP-SOCKET\t\tUID\n"
+  ps-cmd | awk '{ for(i=1;i<=NF;i++) {if ( i == 5 || i == 7 ) printf $i"\t\t"}; printf "\n" }'
+}
+
 stop() {
-  export pid=`nest-desktop pid`
-  if [ $pid ]; then
-    kill $pid
-    echo 'NEST Desktop has stopped.'
+  if [ `nest-desktop pid` ]; then
+    kill `nest-desktop pid`
+    echo "NEST Desktop has stopped."
   fi
 }
 
@@ -51,10 +56,10 @@ done
 
 case "$CMD" in
   pid) pid ;;
-  status)  status ;;
+  restart) stop; sleep .5; start ;;
   start)   start ;;
+  status)  status ;;
   stop)    stop ;;
-  restart) stop; start ;;
   version) version ;;
   *) usage ;;
 esac
