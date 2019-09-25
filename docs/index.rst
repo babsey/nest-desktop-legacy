@@ -5,7 +5,7 @@
 
 NEST Desktop
 ============
-NEST Desktop is a frontend using NEST Server as backend
+NEST Desktop is a frontend application for performing simulations with NEST.
 
 .. toctree::
    :maxdepth: 2
