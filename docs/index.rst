@@ -4,12 +4,20 @@
    contain the root `toctree` directive.
 
 NEST Desktop
-========================================
+============
+NEST Desktop is a frontend using NEST Server as backend
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: User Documentation
 
+   user
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Developer Documentation
+
+   developer
 
 
 Indices and tables
