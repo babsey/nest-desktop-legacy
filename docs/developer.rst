@@ -39,6 +39,34 @@ Go to shell of singularity container:
    singularity shell nest-desktop-dev.sif
 
 
+Development
+===========
+
+Install node modules for NEST Desktop source code:
+
+.. code-block:: none
+
+   npm install
+
+Check if any node module are outdated:
+
+.. code-block:: none
+
+   npm out
+
+Check if any node module are outdated:
+
+.. code-block:: none
+
+   npm up
+
+Serve Angular Live Development Server serving at http://localhost:4200
+
+.. code-block:: none
+
+   npm start
+
+
 Setup
 =====
 
