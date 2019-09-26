@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { AppConfigService } from '../../config/app-config/app-config.service';
 import { ModelService } from '../model.service';
 
 @Component({
@@ -13,7 +12,6 @@ export class ModelParamsListComponent implements OnInit {
   public objectKeys = Object.keys;
 
   constructor(
-    private _appConfigService: AppConfigService,
     public _modelService: ModelService,
   ) {
   }

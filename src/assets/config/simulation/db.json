@@ -1,0 +1,20 @@
+{
+  "simulation": {
+    "host": "",
+    "port": "",
+    "name": "simulation",
+    "auth": {
+      "username": "",
+      "password": ""
+    }
+  },
+  "protocol": {
+    "host": "",
+    "port": "",
+    "name": "protocol",
+    "auth": {
+      "username": "",
+      "password": ""
+    }
+  }
+}

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AppConfigService } from './app-config.service';
-import { NestServerService } from '../../services/nest-server/nest-server.service';
 
 
 @Component({
@@ -14,11 +13,10 @@ export class AppConfigComponent implements OnInit {
 
   constructor(
     public _appConfigService: AppConfigService,
-    public _nestServerService: NestServerService,
   ) { }
 
   ngOnInit() {
-    this.host = this._appConfigService.urlRoot();
+    this._appConfigService.init()
   }
 
   onSelectionChange(event) {
@@ -30,10 +28,5 @@ export class AppConfigComponent implements OnInit {
     this._appConfigService.save()
   }
 
-  saveAndCheck() {
-    this._appConfigService.save()
-    this.host = this._appConfigService.urlRoot();
-    this._nestServerService.check(this.host)
-  }
 
 }

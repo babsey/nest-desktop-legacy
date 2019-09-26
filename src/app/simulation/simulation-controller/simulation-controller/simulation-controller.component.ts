@@ -26,7 +26,7 @@ export class SimulationControllerComponent implements OnInit {
   }
 
   params() {
-    return this._simulationConfigService.config.simulation.params;
+    return this._simulationConfigService.config.controller.simulation.params;
   }
 
   onChange(id, value) {

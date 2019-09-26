@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { AppConfigService } from '../../config/app-config/app-config.service';
+import { NestServerService } from '../../nest-server/nest-server.service';
 import { NavigationService } from '../../navigation/navigation.service';
 import { ModelService } from '../model.service';
 
@@ -27,7 +27,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
-    public _appConfigService: AppConfigService,
+    public _nestServerService: NestServerService,
     public _modelService: ModelService,
     public _navigationService: NavigationService,
   ) { }
@@ -50,7 +50,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
   }
 
   requestModels() {
-    var urlRoot = this._appConfigService.urlRoot();
+    var urlRoot = this._nestServerService.url();
     return this.http.get(urlRoot + '/api/nest/Models')
   }
 

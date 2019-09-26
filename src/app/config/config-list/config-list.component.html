@@ -9,11 +9,7 @@
         <mat-list-item (click)="navigate('app')" [class.active]="isActive('app')">
           <span><fa-icon class="icon" icon="clipboard-check"></fa-icon></span>
         </mat-list-item>
-        <mat-list-item (click)="navigate('database')" [class.active]="isActive('database')">
-          <span><fa-icon class="icon" icon="database"></fa-icon></span>
-        </mat-list-item>
       </mat-nav-list>
-
     </span>
 
     <span *ngSwitchCase="false">
@@ -24,21 +20,24 @@
       </mat-toolbar>
 
       <mat-nav-list dense class="navlist config-theme" style="padding:0">
+        <mat-list-item (click)="navigate('nest-server')" [class.active]="isActive('nest-server')">
+          <fa-icon class="list-icon" icon="server"></fa-icon> NEST Server
+        </mat-list-item>
         <mat-list-item (click)="navigate('application')" [class.active]="isActive('app')">
           <fa-icon class="list-icon" icon="clipboard-check"></fa-icon> Application
         </mat-list-item>
-        <mat-list-item (click)="navigate('database')" [class.active]="isActive('database')">
-          <fa-icon class="list-icon" icon="database"></fa-icon> Database
+        <mat-list-item (click)="navigate('model')" [class.active]="isActive('model')">
+          <fa-icon class="list-icon" icon="square-root-alt"></fa-icon> Model
         </mat-list-item>
         <mat-list-item (click)="navigate('network')" [class.active]="isActive('network')">
           <fa-icon class="list-icon" icon="bezier-curve"></fa-icon> Network
         </mat-list-item>
-        <!-- <mat-list-item (click)="navigate('simulation')" [class.active]="isActive('simulation')">
+        <mat-list-item (click)="navigate('simulation')" [class.active]="isActive('simulation')">
           <fa-icon class="list-icon" icon="cogs"></fa-icon> Simulation
         </mat-list-item>
         <mat-list-item (click)="navigate('visualization')" [class.active]="isActive('visualization')">
           <fa-icon class="list-icon" icon="chart-line"></fa-icon> Visualization
-        </mat-list-item> -->
+        </mat-list-item>
       </mat-nav-list>
 
     </span>

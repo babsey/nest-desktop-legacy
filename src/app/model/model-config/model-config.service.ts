@@ -4,29 +4,30 @@ import { forkJoin } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
-var STORAGE_NAME = 'visualization-config';
+var STORAGE_NAME = 'model-config';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class VisualizationConfigService {
+export class ModelConfigService {
   public config: any = {};
   public status: any = {
     ready: false,
-    valid: false,
+    valid: false
   };
   private files: string[] = [
-    'chart'
+    'db'
   ];
 
   constructor(
     private http: HttpClient,
-  ) { }
+  ) {
+  }
 
   init() {
     this.status.ready = false;
-    var configJSON = localStorage.getItem(STORAGE_NAME);
+    let configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
       this.config = JSON.parse(configJSON);
       this.isValid()
@@ -36,7 +37,7 @@ export class VisualizationConfigService {
   }
 
   fromFiles(files) {
-    var configFiles = files.map(file => this.http.get('/assets/config/visualization/' + file + '.json'));
+    var configFiles = files.map(file => this.http.get('/assets/config/model/' + file + '.json'));
     forkJoin(configFiles).subscribe(configs => {
       configs.map((config, idx) => {
         this.config[files[idx]] = config;

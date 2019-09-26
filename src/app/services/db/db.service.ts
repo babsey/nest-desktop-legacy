@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { DBConfigService } from '../../config/db-config/db-config.service';
 import { PouchDBService } from './pouchdb/pouchdb.service';
 
 
@@ -12,14 +11,12 @@ export class DBService {
   public db: any;
 
   constructor(
-    private _dbConfigService: DBConfigService,
     private _pouchDBService: PouchDBService,
   ) {
     this.db = _pouchDBService;
   }
 
-  init(name) {
-    let config = this._dbConfigService.config[name];
+  init(name, config) {
     return this.db.init(name, config);
   }
 

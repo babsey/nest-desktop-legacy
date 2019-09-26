@@ -10,6 +10,7 @@ import { MaterialModule } from '../modules/material.module';
 import { AppPipesModule } from '../pipes/pipes.module';
 
 import { ModelComponent } from './model.component';
+import { ModelConfigComponent } from './model-config/model-config.component';
 import { ModelDocumentationComponent } from './model-documentation/model-documentation.component';
 import { ModelListComponent } from './model-list/model-list.component';
 import { ModelParamsListComponent } from './model-params-list/model-params-list.component';
@@ -20,6 +21,7 @@ import { ModelParamsSliderComponent } from './model-params-slider/model-params-s
 @NgModule({
   declarations: [
     ModelComponent,
+    ModelConfigComponent,
     ModelDocumentationComponent,
     ModelListComponent,
     ModelParamsListComponent,
@@ -28,6 +30,7 @@ import { ModelParamsSliderComponent } from './model-params-slider/model-params-s
   ],
   exports: [
     ModelComponent,
+    ModelConfigComponent,
     ModelDocumentationComponent,
     ModelListComponent,
     ModelParamsListComponent,

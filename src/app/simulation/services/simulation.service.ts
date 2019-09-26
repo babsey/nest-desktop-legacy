@@ -2,15 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 
-import * as PouchDB from 'pouchdb/dist/pouchdb';
-import * as PouchDBUpsert from 'pouchdb-upsert/dist/pouchdb.upsert';
-
 import { environment } from '../../../environments/environment';
 
 import { DataService } from '../../services/data/data.service';
 import { DBService } from '../../services/db/db.service';
-import { DBVersionService } from '../../services/db/db-version/db-version.service';
 import { NavigationService } from '../../navigation/navigation.service';
+import { SimulationConfigService } from '../simulation-config/simulation-config.service';
 import { SimulationProtocolService } from './simulation-protocol.service';
 
 
@@ -24,13 +21,13 @@ export class SimulationService {
     valid: false,
   };
   public mode: string = 'view';
-  public version: any;
+  public version: string;
 
   constructor(
     private _dataService: DataService,
     private _dbService: DBService,
-    private _dbVersionService: DBVersionService,
     private _navigationService: NavigationService,
+    private _simulationConfigService: SimulationConfigService,
     private _simulationProtocolService: SimulationProtocolService,
     private http: HttpClient,
   ) {
@@ -39,29 +36,23 @@ export class SimulationService {
   init() {
     this.status.ready = false;
     this._simulationProtocolService.status.ready = false;
-    this.db = this._dbService.init('simulation');
-    this._dbVersionService.init(this);
+    var config = this._simulationConfigService.config['db']['simulation'];
+    this.db = this._dbService.init('simulation', config);
+    this.initVersion()
     this.loadSimulations().then(simulations => {
-      this.status.ready = true;
       this._simulationProtocolService.loadSimulations().then(simulations => {
-        if (simulations.length == 0) {
-          this._simulationProtocolService.status.valid = true;
-        } else {
-          this._simulationProtocolService.status.valid = this._dbVersionService.isValid(this.version);
-        }
-        this._simulationProtocolService.status.ready = true;
+        this._simulationProtocolService.isValid(simulations.length);
       })
     })
   }
 
   loadSimulations() {
     return this.count().then(count => {
+      this.isValid(count);
       if (count == 0) {
-        this.status.valid = true;
         var files = ['current-input', 'spike-input', 'spike-trains'];
         return this.fromFiles(files)
       } else {
-        this.status.valid = this._dbVersionService.isValid(this.version);
         return this.list().then(simulations => {
           simulations.map(simulation => simulation['source'] = 'simulation')
           return simulations;
@@ -130,6 +121,24 @@ export class SimulationService {
     this.db.destroy().then(() => {
       this.init()
     })
+  }
+
+  initVersion() {
+    this._dbService.db.getVersion(this.db)
+      .catch(() => this._dbService.db.setVersion(this.db, environment.VERSION)
+        .then(version => this.version = version)
+      ).then(version => this.version = version)
+  }
+
+  isValid(count) {
+    if (count == 0) {
+      this.status.valid = true;
+    } else {
+      var appVersion = environment.VERSION.split('.');
+      var dbVersion = this.version.split('.');
+      this.status.valid = appVersion[0] == dbVersion[0] && appVersion[1] == dbVersion[1];
+    }
+    this.status.ready = true;
   }
 
 }

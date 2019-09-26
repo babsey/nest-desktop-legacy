@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
 
 import { AppConfigService } from '../config/app-config/app-config.service';
-import { DBConfigService } from '../config/db-config/db-config.service';
+import { ModelConfigService } from '../model/model-config/model-config.service';
 import { ModelService } from '../model/model.service';
-import { NestServerService } from '../services/nest-server/nest-server.service';
+import { NestServerService } from '../nest-server/nest-server.service';
+import { NestServerConfigService } from '../nest-server/nest-server-config/nest-server-config.service';
 import { NetworkConfigService } from '../network/network-config/network-config.service';
 import { SimulationConfigService } from '../simulation/simulation-config/simulation-config.service';
 import { SimulationProtocolService } from '../simulation/services/simulation-protocol.service';
@@ -27,32 +28,24 @@ export class LoadingComponent implements OnInit {
 
   constructor(
     public _appConfigService: AppConfigService,
-    public _simulationConfigService: SimulationConfigService,
-    public _dbConfigService: DBConfigService,
+    public _modelConfigService: ModelConfigService,
     public _modelService: ModelService,
+    public _nestServerConfigService: NestServerConfigService,
+    public _nestServerService: NestServerService,
     public _networkConfigService: NetworkConfigService,
-    public _visualizationConfigService: VisualizationConfigService,
+    public _simulationConfigService: SimulationConfigService,
     public _simulationProtocolService: SimulationProtocolService,
     public _simulationService: SimulationService,
-    public _nestServerService: NestServerService,
+    public _visualizationConfigService: VisualizationConfigService,
   ) { }
 
   ngOnInit() {
-    this._dbConfigService.init(this.version)
-    this._appConfigService.init(this.version)
-    this._networkConfigService.init(this.version)
-    this._simulationConfigService.init(this.version)
-    this._visualizationConfigService.init(this.version)
+    this.initConfig()
+    setTimeout(() => this.checkServer(), 100)
   }
 
   ngDoCheck() {
-    if (this.isConfigReady() && !this.dbInit) {
-      this.dbInit = true;
-      this._modelService.init()
-      this._simulationService.init()
-      this._simulationProtocolService.init()
-      this._nestServerService.check(this._appConfigService.urlRoot())
-    }
+    this.initDatabase()
 
     if (this.isReady()) {
       var autoStart = this._appConfigService.config.app.loading ? this._appConfigService.config.app.autoStart : true;
@@ -60,14 +53,36 @@ export class LoadingComponent implements OnInit {
     }
   }
 
+  initConfig() {
+    this._nestServerConfigService.init()
+    this._appConfigService.init()
+    this._modelConfigService.init()
+    this._networkConfigService.init()
+    this._simulationConfigService.init()
+    this._visualizationConfigService.init()
+  }
+
   isConfigReady() {
     return (
-      this._dbConfigService.status.ready &&
+      this._nestServerConfigService.status.ready &&
       this._appConfigService.status.ready &&
+      this._modelConfigService.status.ready &&
       this._networkConfigService.status.ready &&
       this._simulationConfigService.status.ready &&
       this._visualizationConfigService.status.ready
     )
+  }
+
+  checkServer() {
+    this._nestServerService.check()
+  }
+
+  initDatabase() {
+    if (!this.isConfigReady() || this.dbInit) return
+    this.dbInit = true;
+    this._modelService.init()
+    this._simulationService.init()
+    this._simulationProtocolService.init()
   }
 
   isDatabaseReady() {
@@ -87,8 +102,9 @@ export class LoadingComponent implements OnInit {
   }
 
   resetConfigs() {
-    this._dbConfigService.reset()
+    this._nestServerConfigService.reset()
     this._appConfigService.reset()
+    this._modelConfigService.reset()
     this._networkConfigService.reset()
     this._simulationConfigService.reset()
     this._visualizationConfigService.reset()

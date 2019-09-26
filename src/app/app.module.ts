@@ -16,6 +16,7 @@ import { ConfigModule } from './config/config.module';
 import { HelpModule } from './help/help.module';
 import { ModelModule } from './model/model.module';
 import { NavigationModule } from './navigation/navigation.module';
+import { NestServerModule } from './nest-server/nest-server.module';
 import { NetworkModule } from './network/network.module';
 import { SimulationModule } from './simulation/simulation.module';
 import { SimulationNavigationModule } from './simulation-navigation/simulation-navigation.module';
@@ -24,7 +25,6 @@ import { VisualizationModule } from './visualization/visualization.module';
 // components
 import { AppComponent } from './app.component';
 import { LoadingComponent } from './loading/loading.component';
-
 
 
 @NgModule({
@@ -43,6 +43,7 @@ import { LoadingComponent } from './loading/loading.component';
     MaterialModule,
     ModelModule,
     NavigationModule,
+    NestServerModule,
     NetworkModule,
     SimulationModule,
     SimulationNavigationModule,

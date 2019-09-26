@@ -1,46 +1,44 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-var STORAGE_NAME = 'db-config';
+import { environment } from '../../../environments/environment';
+
+
+var STORAGE_NAME = 'nest-server-config';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class DBConfigService {
+export class NestServerConfigService {
   public config: any = {};
   public status: any = {
     ready: false,
     valid: false,
   };
-  private version: string;
 
   constructor(
     private http: HttpClient,
   ) { }
 
-  init(version = null) {
-    this.version = version || this.version;
+  init() {
     this.status.ready = false;
     var configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
       this.config = JSON.parse(configJSON);
-      this.isVersionValid()
+      this.isValid()
     } else {
       this.load()
     }
   }
 
-  list() {
-    return Object.keys(this.config).filter(key => key != 'version').map(key => this.config[key])
-  }
-
   load() {
-    this.http.get('/assets/config/app/db.json').subscribe(config => {
-      this.config = config;
-      this.config['version'] = this.version;
-      this.save()
-      this.isVersionValid()
+    this.http.get('/assets/config/nest-server/nest-server.json')
+      .subscribe(config => {
+        this.config = config;
+        this.config['version'] = environment.VERSION;
+        this.save()
+        this.isValid()
     })
   }
 
@@ -54,10 +52,11 @@ export class DBConfigService {
     this.init()
   }
 
-  isVersionValid() {
-    var appVersion = this.version.split('.');
+  isValid() {
+    var appVersion = environment.VERSION.split('.');
     var configVersion = this.config.version.split('.');
-    this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
+    var versionValid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
+    this.status.valid = versionValid;
     this.status.ready = true;
   }
 

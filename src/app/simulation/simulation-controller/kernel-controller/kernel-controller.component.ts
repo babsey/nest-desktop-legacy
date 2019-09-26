@@ -24,7 +24,7 @@ export class KernelControllerComponent implements OnInit {
   }
 
   params() {
-    return this._simulationConfigService.config.kernel.params;
+    return this._simulationConfigService.config.controller.kernel.params;
   }
 
   onChange(id, value) {

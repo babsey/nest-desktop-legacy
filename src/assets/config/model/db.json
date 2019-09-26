@@ -1,0 +1,9 @@
+{
+  "host": "",
+  "port": "",
+  "name": "model",
+  "auth": {
+    "username": "",
+    "password": ""
+  }
+}

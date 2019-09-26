@@ -4,9 +4,9 @@ import { forkJoin } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
-import { AppConfigService } from '../config/app-config/app-config.service';
+import { NestServerService } from '../nest-server/nest-server.service';
+import { ModelConfigService } from './model-config/model-config.service';
 import { DBService } from '../services/db/db.service';
-import { DBVersionService } from '../services/db/db-version/db-version.service';
 
 
 @Injectable({
@@ -25,22 +25,23 @@ export class ModelService {
   };
   public update: EventEmitter<any> = new EventEmitter();
   public url: string = 'view';
-  public version: any;
+  public version: string;
   public defaults: any = {};
   public progress: boolean = false;
 
   constructor(
-    private _appConfigService: AppConfigService,
+    private _nestServerService: NestServerService,
+    private _modelConfigService: ModelConfigService,
     private _dbService: DBService,
-    private _dbVersionService: DBVersionService,
     private http: HttpClient,
   ) {
   }
 
   init() {
     this.status.ready = false;
-    this.db = this._dbService.init('model');
-    this._dbVersionService.init(this);
+    var config = this._modelConfigService.config['db'];
+    this.db = this._dbService.init('model', config);
+    this.initVersion()
     this.count().then(count => {
       if (count == 0) {
         var files = [
@@ -65,8 +66,7 @@ export class ModelService {
       } else {
         this._dbService.db.list(this.db).then(models => {
           models.map(model => this.models[model.id] = model)
-          this.status.valid = this._dbVersionService.isValid(this.version);
-          this.status.ready = true;
+          this.isValid(models.length);
         })
       }
     })
@@ -98,7 +98,7 @@ export class ModelService {
   }
 
   requestModelDefaults(model) {
-    var urlRoot = this._appConfigService.urlRoot()
+    var urlRoot = this._nestServerService.url();
     var data = {
       'model': model,
     };
@@ -155,5 +155,23 @@ export class ModelService {
     this.db.destroy().then(() => {
       this.init()
     })
+  }
+
+  initVersion() {
+    this._dbService.db.getVersion(this.db)
+      .catch(() => this._dbService.db.setVersion(this.db, environment.VERSION)
+        .then(version => this.version = version)
+      ).then(version => this.version = version)
+  }
+
+  isValid(count) {
+    if (count == 0) {
+      this.status.valid = true;
+    } else {
+      var appVersion = environment.VERSION.split('.');
+      var dbVersion = this.version.split('.');
+      this.status.valid = appVersion[0] == dbVersion[0] && appVersion[1] == dbVersion[1];
+    }
+    this.status.ready = true;
   }
 }

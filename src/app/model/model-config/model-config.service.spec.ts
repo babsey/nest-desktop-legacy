@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DbVersionService } from './db-version.service';
+import { ModelConfigService } from './model-config.service';
 
-describe('DbVersionService', () => {
+describe('ModelConfigService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: DbVersionService = TestBed.get(DbVersionService);
+    const service: ModelConfigService = TestBed.get(ModelConfigService);
     expect(service).toBeTruthy();
   });
 });

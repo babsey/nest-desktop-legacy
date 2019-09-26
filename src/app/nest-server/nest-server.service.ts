@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { timeout, catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
+import { NestServerConfigService } from './nest-server-config/nest-server-config.service';
 
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +25,22 @@ export class NestServerService {
 
   constructor(
     private http: HttpClient,
+    private _nestServerConfigService: NestServerConfigService,
   ) { }
 
-  check(url) {
+  url() {
+    var config = this._nestServerConfigService.config;
+    var host = config['host'] || window.location.host.split(':')[0] || 'localhost';
+    var url = 'http://' + host;
+    if (config['port']) {
+      url = url + ':' + config['port'];
+    }
+    return url;
+  }
+
+  check() {
     // console.log('Check')
+    var url = this.url();
     this.http.get(url)
       .pipe(
         timeout(1000), catchError(e => {

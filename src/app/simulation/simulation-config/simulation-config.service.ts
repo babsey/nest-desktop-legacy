@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 
-var STORAGE_NAME = 'simulation-controller-config';
+import { environment } from '../../../environments/environment';
+
+var STORAGE_NAME = 'simulation-config';
 
 
 @Injectable({
@@ -13,30 +16,35 @@ export class SimulationConfigService {
     ready: false,
     valid: false,
   }
-  private version: string;
+  private files: string[] = [
+    'controller',
+    'db'
+  ];
 
   constructor(
     private http: HttpClient,
   ) { }
 
-  init(version = null) {
-    this.version = version || this.version;
+  init() {
     this.status.ready = false;
     var configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
       this.config = JSON.parse(configJSON);
-      this.isVersionValid()
+      this.isValid()
     } else {
-      this.load()
+      this.fromFiles(this.files)
     }
   }
 
-  load() {
-    this.http.get('/assets/config/simulation/controller.json').subscribe(config => {
-      this.config = config;
-      this.config['version'] = this.version;
+  fromFiles(files) {
+    var configFiles = files.map(file => this.http.get('/assets/config/simulation/' + file + '.json'));
+    forkJoin(configFiles).subscribe(configs => {
+      configs.map((config, idx) => {
+        this.config[files[idx]] = config;
+      })
+      this.config['version'] = environment.VERSION;
       this.save()
-      this.isVersionValid()
+      this.isValid()
     })
   }
 
@@ -45,16 +53,19 @@ export class SimulationConfigService {
     localStorage.setItem(STORAGE_NAME, configJSON);
   }
 
-  isVersionValid() {
-    var appVersion = this.version.split('.');
-    var configVersion = this.config.version.split('.');
-    this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
-    this.status.ready = true;
-  }
-
   reset() {
     localStorage.removeItem(STORAGE_NAME)
     this.init()
+  }
+
+  isValid() {
+    var appVersion = environment.VERSION.split('.');
+    var configVersion = this.config.version.split('.');
+    var versionValid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
+    var configValid = this.files.filter(file => this.config.hasOwnProperty(file)).length != 0;
+    this.status.valid = versionValid && configValid;
+    this.status.ready = true;
+
   }
 
 }

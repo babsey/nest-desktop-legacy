@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { AppConfigService } from '../../config/app-config/app-config.service';
+import { NestServerService } from '../../nest-server/nest-server.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
   public progress: boolean = false;
 
   constructor(
-    private _appConfigService: AppConfigService,
+    private _nestServerService: NestServerService,
     private http: HttpClient,
   ) { }
 
@@ -28,7 +28,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
   }
 
   requestModelDoc() {
-    var urlRoot = this._appConfigService.urlRoot()
+    var urlRoot = this._nestServerService.url();
 
     var data = {
       'obj': this.model,

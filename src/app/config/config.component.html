@@ -7,15 +7,16 @@
 
 <span class="config-theme">
   <mat-toolbar class="navbar content" color="primary">
-    {{ routeConfig | capitalize }}
+    {{ routeConfig.replace('-', ' ') | capitalize }}
     <span class="spacer"></span>
     <button mat-icon-button [matMenuTriggerFor]="configMenu"><fa-icon icon="ellipsis-v"></fa-icon></button>
   </mat-toolbar>
 </span>
 
 <ng-container [ngSwitch]="routeConfig">
-  <app-db-config *ngSwitchCase="'database'" class="config"></app-db-config>
   <app-app-config *ngSwitchCase="'application'" class="config"></app-app-config>
+  <app-nest-server-config *ngSwitchCase="'nest-server'" class="config"></app-nest-server-config>
+  <app-model-config *ngSwitchCase="'model'" class="config"></app-model-config>
   <app-network-config *ngSwitchCase="'network'" class="config"></app-network-config>
   <app-simulation-config *ngSwitchCase="'simulation'" class="config"></app-simulation-config>
   <app-visualization-config *ngSwitchCase="'visualization'" class="config"></app-visualization-config>

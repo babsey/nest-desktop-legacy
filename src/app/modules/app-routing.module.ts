@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { HelpComponent } from '../help/help.component';
 import { ModelComponent } from '../model/model.component';
 import { ConfigComponent } from '../config/config.component';
-import { DBConfigComponent } from '../config/db-config/db-config.component';
 import { SimulationComponent } from '../simulation/simulation.component';
 import { NetworkComponent } from '../network/network.component';
 

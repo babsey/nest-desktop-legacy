@@ -75,4 +75,17 @@ export class PouchDBService {
     })
   }
 
+  // Version
+
+  setVersion(db, version) {
+    return db.put({
+      _id: '_local/version',
+      version: version,
+    }).then(() => this.getVersion(db));
+  }
+
+  getVersion(db) {
+    return db.get('_local/version').then(doc => doc['version']);
+  }
+
 }

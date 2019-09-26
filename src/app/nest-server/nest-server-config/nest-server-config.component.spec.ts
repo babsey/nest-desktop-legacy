@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AppConfigComponent } from './app-config.component';
+import { NestServerConfigComponent } from './nest-server-config.component';
 
-describe('AppConfigComponent', () => {
-  let component: AppConfigComponent;
-  let fixture: ComponentFixture<AppConfigComponent>;
+describe('NestServerConfigComponent', () => {
+  let component: NestServerConfigComponent;
+  let fixture: ComponentFixture<NestServerConfigComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppConfigComponent ]
+      declarations: [ NestServerConfigComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AppConfigComponent);
+    fixture = TestBed.createComponent(NestServerConfigComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

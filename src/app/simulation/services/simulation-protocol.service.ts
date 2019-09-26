@@ -1,14 +1,12 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
-import * as PouchDB from 'pouchdb/dist/pouchdb';
-import * as PouchDBUpsert from 'pouchdb-upsert/dist/pouchdb.upsert';
+import { environment } from '../../../environments/environment';
 
 import { DataService } from '../../services/data/data.service';
-import { DBConfigService } from '../../config/db-config/db-config.service';
 import { DBService } from '../../services/db/db.service';
-import { DBVersionService } from '../../services/db/db-version/db-version.service';
 import { NavigationService } from '../../navigation/navigation.service';
+import { SimulationConfigService } from '../simulation-config/simulation-config.service';
 
 
 @Injectable({
@@ -20,22 +18,22 @@ export class SimulationProtocolService {
     ready: false,
     valid: false,
   };
-  public version: any;
+  public version: string;
   public change: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private _dataService: DataService,
-    private _dbConfigService: DBConfigService,
     private _dbService: DBService,
-    private _dbVersionService: DBVersionService,
     private _navigationService: NavigationService,
+    private _simulationConfigService: SimulationConfigService,
     private snackBar: MatSnackBar,
   ) {
   }
 
   init() {
-    this.db = this._dbService.init('protocol');
-    this._dbVersionService.init(this);
+    var config = this._simulationConfigService.config['db']['protocol'];
+    this.db = this._dbService.init('protocol', config);
+    this.initVersion()
   }
 
   loadSimulations() {
@@ -145,10 +143,10 @@ export class SimulationProtocolService {
   }
 
   upload(data) {
-    var protocolDBConfig = this._dbConfigService.config['protocol'];
-    protocolDBConfig['host'] = "";
-    protocolDBConfig['port'] = "";
-    this.db = this._dbService.init('protocol');
+    var config = this._simulationConfigService.config.db.protocol;
+    config['host'] = "";
+    config['port'] = "";
+    this.db = this._dbService.init('protocol', config);
     this.db.bulkDocs(data, (err, response) => {
       if (err) {
         this.snackBar.open(err, 'Ok');
@@ -160,4 +158,23 @@ export class SimulationProtocolService {
       }
     });
   }
+
+  initVersion() {
+    this._dbService.db.getVersion(this.db)
+      .catch(() => this._dbService.db.setVersion(this.db, environment.VERSION)
+        .then(version => this.version = version)
+      ).then(version => this.version = version)
+  }
+
+  isValid(count) {
+    if (count == 0) {
+      this.status.valid = true;
+    } else {
+      var appVersion = environment.VERSION.split('.');
+      var dbVersion = this.version.split('.');
+      this.status.valid = appVersion[0] == dbVersion[0] && appVersion[1] == dbVersion[1];
+    }
+    this.status.ready = true;
+  }
+
 }

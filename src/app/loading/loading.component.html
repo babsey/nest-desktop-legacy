@@ -12,6 +12,13 @@
   </button>
 </mat-menu>
 
+<mat-menu #serverMenu="matMenu" class="dense">
+  <button mat-menu-item (click)="checkServer()">
+    <fa-icon class="menu-icon" icon="search"></fa-icon>
+    Check server
+  </button>
+</mat-menu>
+
 <span class="loading">
 
   <span class="nest-theme nest">
@@ -37,15 +44,16 @@
 
       <mat-list-item role="listitem">
         <span class="flex">
-          Database
+          Nest Server
           <span class="flex-spacer"></span>
           <span>
-            {{ _dbConfigService.config.version }}
+            {{ _nestServerConfigService.config.version }}
             <span>
-              <fa-icon *ngIf="!_dbConfigService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
-              <fa-icon *ngIf="_dbConfigService.status.ready && !_dbConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
-              <fa-icon *ngIf="_dbConfigService.status.ready && _dbConfigService.status.valid" icon="check" class="green"></fa-icon>
-            </span> </span>
+              <fa-icon *ngIf="!_nestServerConfigService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_nestServerConfigService.status.ready && !_nestServerConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_nestServerConfigService.status.ready && _nestServerConfigService.status.valid" icon="check" class="green"></fa-icon>
+            </span>
+          </span>
         </span>
       </mat-list-item>
 
@@ -61,6 +69,20 @@
               <fa-icon *ngIf="_appConfigService.status.ready && _appConfigService.status.valid" icon="check" class="green"></fa-icon>
             </span>
           </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Model
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _modelConfigService.config.version }}
+            <span>
+              <fa-icon *ngIf="!_modelConfigService.status.ready" icon="circle-notch" [spin]="true"></fa-icon>
+              <fa-icon *ngIf="_modelConfigService.status.ready && !_modelConfigService.status.valid" icon="exclamation" class="orange"></fa-icon>
+              <fa-icon *ngIf="_modelConfigService.status.ready && _modelConfigService.status.valid" icon="check" class="green"></fa-icon>
+            </span> </span>
         </span>
       </mat-list-item>
 
@@ -163,9 +185,15 @@
         </span>
       </mat-list-item>
 
-      <h3 mat-subheader>
+      <span class="flex">
+        <h3 mat-subheader>
         <fa-icon class="list-icon" icon="server"></fa-icon> NEST
-      </h3>
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="serverMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
 
       <mat-list-item role="listitem">
         <span class="flex">

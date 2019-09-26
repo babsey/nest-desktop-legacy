@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
 
-import { AppConfigService } from '../../config/app-config/app-config.service';
+import { NestServerService } from '../../nest-server/nest-server.service';
 import { DataService } from '../../services/data/data.service';
 import { LogService } from '../../log/log.service';
 
@@ -21,7 +21,7 @@ export class SimulationRunService {
   public simulated: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private _appConfigService: AppConfigService,
+    private _nestServerService: NestServerService,
     private _dataService: DataService,
     private _logService: LogService,
     private http: HttpClient,
@@ -45,8 +45,7 @@ export class SimulationRunService {
     // console.log('Run simulation')
     if (!(force || this.config['autoSimulation'])) return
 
-    var urlRoot = this._appConfigService.urlRoot();
-
+    var urlRoot = this._nestServerService.url();
     this._logService.reset()
 
     if (this.config['autoRandomSeed']) {
