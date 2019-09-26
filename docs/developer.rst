@@ -5,9 +5,9 @@ NEST Desktop is a web-based GUI application for NEST Simulator.
 Requirements for nest-desktop
  * Python 3.4 or higher
  * NEST Server, NEST Simulator (Test app)
- * NodeJS, npm  (Build app)
+ * nodeJS, npm  (Build app)
  * sphinx, sphinx rth theme (for Readthedocs)
- * ssetuptools, wheel, twine (for PyPI)
+ * setuptools, wheel, twine (for PyPI)
 
 
 Source code
