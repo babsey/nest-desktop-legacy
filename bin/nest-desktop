@@ -4,11 +4,9 @@ HOST="127.0.0.1"
 PORT="8000"
 
 usage() {
+  echo "NEST Desktop "`version`
+  echo "------------------"
   echo "Usage: $0 version|status|start|stop|restart [-h <host>] [-p <port>]" >&2; exit 1
-}
-
-version() {
-   python3 -c "from nest_desktop import __version__; print(__version__)"
 }
 
 pid() {
@@ -24,9 +22,11 @@ ps-cmd() {
 }
 
 start() {
+  echo "NEST Desktop "`version`
+  echo "------------------"
+
   if [ `pid` ]; then
     echo "NEST Desktop is already serving."
-    `nest-server process`
   else
     echo "NEST Desktop is serving at http://$HOST:$PORT."
     echo "Use Control-C to stop this service."
@@ -45,6 +45,11 @@ stop() {
     echo "NEST Desktop has stopped."
   fi
 }
+
+version() {
+   python3 -c "from nest_desktop import __version__; print(__version__)"
+}
+
 
 CMD=$1; shift
 while getopts "h:p:" opt; do
