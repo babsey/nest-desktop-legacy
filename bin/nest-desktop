@@ -6,7 +6,7 @@ PORT="8000"
 usage() {
   echo "NEST Desktop "`version`
   echo "------------------"
-  echo "Usage: $0 version|status|start|stop|restart [-h <host>] [-p <port>]" >&2; exit 1
+  echo "Usage: $0 status|start|stop|restart [-h <host>] [-p <port>]" >&2; exit 1
 }
 
 pid() {
