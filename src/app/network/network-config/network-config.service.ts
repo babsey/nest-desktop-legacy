@@ -18,12 +18,13 @@ export class NetworkConfigService {
   };
   private files: string[] = [
     'color',
-    'label',
     'connection',
+    'label',
     'mask',
     'node',
     'projections',
     'receptor',
+    'spatial',
   ];
 
   constructor(
