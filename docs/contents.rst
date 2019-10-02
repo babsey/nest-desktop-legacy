@@ -51,3 +51,8 @@ References
 .. [2] NEST InstrumentationApp https://github.com/compneuronmbu/NESTInstrumentationApp
 .. [3] Senk J, et al. (2018) VIOLA—A Multi-Purpose and Web-Based Visualization Tool for Neuronal-Network Simulation Output. Front. Neuroinform. doi: 10.3389/fninf.2018.00075
 .. [4] Oehrl et al. (2018) Streaming Live Neuronal Simulation Data into Visualization and Analysis. Conference Paper doi: 10.1007/978-3-030-02465-9_18
+
+
+.. toctree::
+   :maxdepth: 2
+   index
