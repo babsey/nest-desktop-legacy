@@ -13,7 +13,7 @@ RUN chown nest:nest /home/nest/entrypoint.sh && \
     chmod +x /home/nest/entrypoint.sh && \
     echo '. /opt/nest/bin/nest_vars.sh' >> /home/nest/.bashrc
 
-COPY nest_desktop/app/ /opt/nest-desktop
+COPY package.json /tmp/
 
 # install nest-desktop and nest-server
 RUN pip3 install nest-desktop==2.0.* --upgrade
