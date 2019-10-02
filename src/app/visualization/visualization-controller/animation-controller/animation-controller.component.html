@@ -21,7 +21,7 @@
     <span class="label">Frame Rate</span>
     <mat-slider (change)="onChange()" [(value)]="_animationControllerService.frames.rate" [min]="0" [max]="50" class="slider" style="width:240px"></mat-slider>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.frames.rate }} Hz
     </span>
   </mat-list-item>
@@ -34,7 +34,7 @@
       </ng-container>
     </span>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.frames.idx / 10 }} ms
     </span>
   </mat-list-item>
@@ -43,7 +43,7 @@
     <span class="label">Time window size</span>
     <mat-slider (change)="onChange()" [(value)]="_animationControllerService.frames.windowSize" [min]="1" [max]="100" class="slider" style="width:240px"></mat-slider>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.frames.windowSize / 10 }} ms
     </span>
   </mat-list-item>
@@ -52,7 +52,7 @@
     <span class="label">Dot size</span>
     <mat-slider (change)="onChange()" [(value)]="_animationControllerService.dotSize" [min]="1" [max]="20" class="slider" style="width:240px"></mat-slider>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.dotSize }}
     </span>
   </mat-list-item>
@@ -77,7 +77,7 @@
     <span class="label">Trail length</span>
     <mat-slider (change)="onChange()" [(value)]="_animationControllerService.trail.length" [min]="0" [max]="1000" class="slider" style="width:240px"></mat-slider>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.trail.length / 10 }} ms
     </span>
   </mat-list-item>
@@ -96,7 +96,7 @@
     <span class="label">Camera Position x</span>
     <mat-slider (change)="onCameraChange()" [(value)]="_animationControllerService.camera.position.x" [disabled]="!_animationControllerService.camera.control" [min]="-40" [max]="40" class="slider" style="width:240px"></mat-slider>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.camera.position.x | format }}
     </span>
   </mat-list-item>
@@ -107,7 +107,7 @@
       <mat-slider (change)="onCameraChange()" [(value)]="_animationControllerService.camera.position.y" [disabled]="!_animationControllerService.camera.control" [min]="-40" [max]="40" class="slider" style="width:100%"></mat-slider>
     </span>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.camera.position.y | format }}
     </span>
   </mat-list-item>
@@ -118,7 +118,7 @@
       <mat-slider (change)="onCameraChange()" [(value)]="_animationControllerService.camera.position.z" [disabled]="!_animationControllerService.camera.control" [min]="-40" [max]="40" class="slider" style="width:100%"></mat-slider>
     </span>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.camera.position.z | format }}
     </span>
   </mat-list-item>
@@ -131,7 +131,7 @@
     <span class="label">Camera speed</span>
     <mat-slider (change)="onCameraChange()" [(value)]="_animationControllerService.camera.rotation.speed" [min]="0" [max]="1" [step]="0.1" class="slider" style="width:240px"></mat-slider>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.camera.rotation.speed }}
     </span>
   </mat-list-item>
@@ -142,7 +142,7 @@
       <mat-slider (change)="onCameraChange()" [(value)]="_animationControllerService.camera.rotation.theta" [min]="0" [max]="360" [step]="0.1" class="slider" style="width:100%"></mat-slider>
     </span>
     <span class="flex-spacer"></span>
-    <span style="width:50px;text-align:right">
+    <span class="value">
       {{ _animationControllerService.camera.rotation.theta | format }}
     </span>
   </mat-list-item>

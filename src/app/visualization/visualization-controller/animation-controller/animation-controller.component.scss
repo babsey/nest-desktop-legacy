@@ -5,12 +5,18 @@ button {
 .item {
   padding: 2px 4px;
   line-height: 40px;
-}
 
-.label {
-  position: absolute;
-  font-size: 11px;
-  top: -12px;
-  left: 8px;
-  pointer-events: none;
+  .label {
+    position: absolute;
+    font-size: 11px;
+    top: -12px;
+    left: 8px;
+    pointer-events: none;
+  }
+
+  .value {
+    width:60px;
+    text-align:right;
+    white-space: nowrap;
+  }
 }

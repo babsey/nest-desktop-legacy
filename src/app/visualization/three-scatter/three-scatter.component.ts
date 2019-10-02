@@ -250,8 +250,8 @@ export class ThreeScatterComponent implements OnInit, OnDestroy, OnChanges {
     this._animationControllerService.camera.control = true;
   }
 
-  @HostListener('window:resize', ['$event'])
-  public onResize() {
+  @HostListener('window:resize', [])
+  onResize(): void {
     this.canvas.style.width = "100%";
     this.canvas.style.height = "100%";
     this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
