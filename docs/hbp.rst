@@ -1,3 +1,11 @@
+.. toctree::
+   :hidden:
+
+   contents
+   usage
+   development
+
+
 ===================
 Human Brain Project
 ===================

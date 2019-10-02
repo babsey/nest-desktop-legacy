@@ -1,3 +1,11 @@
+.. toctree::
+   :hidden:
+
+   contents
+   development
+   hbp
+
+
 =====
 Usage
 =====
