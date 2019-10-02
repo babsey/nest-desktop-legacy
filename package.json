@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -10,19 +10,16 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "build": {
-    "appId": "nest-desktop"
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^8.2.8",
-    "@angular/cdk": "^8.2.1",
+    "@angular/cdk": "^8.2.2",
     "@angular/common": "^8.2.8",
     "@angular/compiler": "^8.2.8",
     "@angular/core": "^8.2.8",
     "@angular/flex-layout": "^8.0.0-beta.27",
     "@angular/forms": "^8.2.8",
-    "@angular/material": "^8.2.1",
+    "@angular/material": "^8.2.2",
     "@angular/platform-browser": "^8.2.8",
     "@angular/platform-browser-dynamic": "^8.2.8",
     "@angular/router": "^8.2.8",
@@ -56,10 +53,10 @@
     "@angular/language-service": "^8.2.8",
     "@types/d3": "^5.7.2",
     "@types/hammerjs": "^2.0.36",
-    "@types/jasmine": "^3.4.1",
-    "@types/jasminewd2": "^2.0.7",
+    "@types/jasmine": "^3.4.2",
+    "@types/jasminewd2": "^2.0.8",
     "@types/mathjs": "^6.0.2",
-    "@types/node": "^12.7.8",
+    "@types/node": "^12.7.9",
     "@types/plotly.js": "^1.44.11",
     "@types/pouchdb": "^6.4.0",
     "@types/stats.js": "^0.17.0",
