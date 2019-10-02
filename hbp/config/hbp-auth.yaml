@@ -1,0 +1,62 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: hbp-auth-config
+labels:
+  template: hbp-auth-config
+  app: nest-desktop
+objects:
+- kind: ConfigMap
+  apiVersion: v1
+  metadata:
+    name: hbp-auth-config
+  data:
+    00-nest-desktop.apps-dev.hbp.eu.conf: |-
+      #
+      # this is a sample config to be used for development
+      #   we only listen on http (port 80)
+      #
+      <VirtualHost *:80>
+          # Your domain name
+          ServerName nest-desktop.apps-dev.hbp.eu
+
+          # The OIDC service provider. For the HBP, it is here:
+          OIDCProviderMetadataURL "https://services.humanbrainproject.eu/oidc/.well-known/openid-configuration"
+          # You can register your OpenID Client from https://collab.humanbrainproject.eu/#/collab/54/nav/1051
+          # using the server flow. Set the redirect_uri to your domain + /redirect_uri, and
+          # change it to match OIDCRedirectURI bellow.
+          # Obtain these from the HBP OpenID Server.
+          OIDCClientID "4f9e2d50-58d9-4f79-86b0-fa8451ee49d2"
+          # OIDCClientSecret ""
+          # /redirect_uri is used to authenticate you. It will be consumed by Apache and will not be requests to it
+          # will not be forwarded to your application.
+          OIDCRedirectURI "http://nest-desktop.apps-dev.hbp.eu/redirect_uri"
+          # Set a random passphrase here
+          OIDCCryptoPassphrase "I should be a random password. Please set me."
+          # This is the user id field used by your OpenID Connect provider. HBP uses `sub`.
+          # it will copy the sub to the REMOTE_USER http header, and pass it to the backend server
+          OIDCAuthNHeader "sub"
+
+          DocumentRoot /var/www/html
+
+          # This enables openID. Leave as is.
+          <Location "/">
+              AuthType openid-connect
+              Require valid-user
+          </Location>
+
+          # This handles proxying, leave as is.
+          RewriteEngine On
+          ProxyAddHeaders On
+          ProxyPreserveHost On
+          #
+          # special url used by mod oidc, do not proxy
+          # ProxyPass /redirect_uri !
+          #
+          # proxy all other calls to the backend-server (you may need to change the name to you backend container name)
+          #
+          # ProxyPass / http://backend-server/
+          # proxy reverse (for possible redirects)
+          # ProxyPassReverse / http://backend-server/
+      </VirtualHost>

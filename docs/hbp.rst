@@ -47,7 +47,7 @@ Create config map to find NEST Server:
 
 .. code-block:: bash
 
-   oc new-app hbp/nest-server-config.yaml
+   oc new-app hbp/config/nest-server.yaml
 
 Mount the volume of NEST Server config to NEST Desktop:
 

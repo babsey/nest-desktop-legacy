@@ -17,7 +17,6 @@ RUN chown nest:nest /home/nest/entrypoint.sh && \
     echo '. /opt/nest/bin/nest_vars.sh' >> /home/nest/.bashrc
 
 # Setup user authentication for HBP
-
 RUN apt-get update && apt-get install -y \
     apache2 \
     libapache2-mod-auth-openidc && \
@@ -39,10 +38,6 @@ RUN a2dissite 000-default
 #
 RUN ln -sf /proc/self/fd/1 /var/log/apache2/other_vhosts_access.log && \
     ln -sf /proc/self/fd/2 /var/log/apache2/error.log
-
-COPY ./hbp/auth/apache2/00-nest-desktop.apps-dev.hbp.eu.conf ./etc/apache2/sites-enabled/
-
-CMD service apache2 start
 
 EXPOSE 80 5000 8000
 WORKDIR /home/nest
