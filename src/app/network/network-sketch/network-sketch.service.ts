@@ -28,7 +28,7 @@ export class NetworkSketchService {
   ) {
   }
 
-  edit(mode: any) {
+  edit(mode: any = null) {
     this.options.drawing = (mode != null) ? mode : !this.options.drawing;
   }
 
