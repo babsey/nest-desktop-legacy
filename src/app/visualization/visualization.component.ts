@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { VisualizationService } from './visualization.service';
 
 @Component({
   selector: 'app-visualization',
@@ -14,7 +13,6 @@ export class VisualizationComponent implements OnInit {
   @Input() config: any = {};
 
   constructor(
-    public _visualizationervice: VisualizationService,
   ) { }
 
   ngOnInit() {
