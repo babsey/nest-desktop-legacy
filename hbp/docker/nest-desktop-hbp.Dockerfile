@@ -42,6 +42,8 @@ RUN ln -sf /proc/self/fd/1 /var/log/apache2/other_vhosts_access.log && \
 
 COPY ./hbp/auth/apache2/01-nest-desktop.apps-dev.hbp.eu.conf ./etc/apache2/sites-enabled/
 
+CMD service apache2 start
+
 EXPOSE 80 5000 8000
 WORKDIR /home/nest
 USER nest
