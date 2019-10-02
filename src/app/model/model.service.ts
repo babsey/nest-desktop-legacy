@@ -28,6 +28,7 @@ export class ModelService {
   public version: string;
   public defaults: any = {};
   public progress: boolean = false;
+  public editing: boolean = false;
 
   constructor(
     private _nestServerService: NestServerService,
