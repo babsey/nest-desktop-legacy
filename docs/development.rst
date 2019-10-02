@@ -1,12 +1,3 @@
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   contents
-   usage
-   hbp
-
-
 ===========
 Development
 ===========

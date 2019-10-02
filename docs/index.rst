@@ -7,6 +7,3 @@ NEST Desktop
    :caption: Documentations
 
    contents
-   usage
-   development
-   hbp
