@@ -40,7 +40,7 @@ RUN a2dissite 000-default
 RUN ln -sf /proc/self/fd/1 /var/log/apache2/other_vhosts_access.log && \
     ln -sf /proc/self/fd/2 /var/log/apache2/error.log
 
-COPY ./hbp/auth/apache2/01-nest-desktop.apps-dev.hbp.eu.conf ./etc/apache2/sites-enabled/
+COPY ./hbp/auth/apache2/00-nest-desktop.apps-dev.hbp.eu.conf ./etc/apache2/sites-enabled/
 
 CMD service apache2 start
 
