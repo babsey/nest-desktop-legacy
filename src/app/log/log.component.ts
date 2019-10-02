@@ -13,7 +13,7 @@ import { LogService } from './log.service';
 export class LogComponent implements OnInit {
 
   constructor(
-    private _logService: LogService,
+    public _logService: LogService,
     public _appConfigService: AppConfigService,
     public router: Router,
   ) { }
