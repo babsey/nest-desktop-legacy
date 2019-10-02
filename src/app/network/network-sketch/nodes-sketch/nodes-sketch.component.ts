@@ -26,10 +26,10 @@ export class NodesSketchComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private _dataService: DataService,
-    private _networkService: NetworkService,
     private _networkSketchService: NetworkSketchService,
     private elementRef: ElementRef,
     public _colorService: ColorService,
+    public _networkService: NetworkService,
   ) {
     this.host = d3.select(elementRef.nativeElement.parentElement);
     this.selector = d3.select(elementRef.nativeElement);

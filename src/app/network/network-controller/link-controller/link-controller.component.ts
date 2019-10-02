@@ -211,7 +211,7 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this.connectomeChange.emit(this.data)
   }
 
-  onMaskChange() {
+  onMaskChange(event) {
     this.connectomeChange.emit(this.data)
   }
 }

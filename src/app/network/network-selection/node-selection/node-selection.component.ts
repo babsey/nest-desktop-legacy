@@ -35,11 +35,11 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
   constructor(
     private _appConfigService: AppConfigService,
     private _modelService: ModelService,
-    private _networkConfigService: NetworkConfigService,
     private _networkControllerService: NetworkControllerService,
     private _networkService: NetworkService,
     private _positionService: PositionService,
     public _colorService: ColorService,
+    public _networkConfigService: NetworkConfigService,
   ) {
   }
 
