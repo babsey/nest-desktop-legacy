@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y \
     python3-numpy \
     python3-pip
 
-RUN pip3 install nest-desktop==2.*.* --upgrade
+RUN pip3 install nest-desktop==2.0.* --upgrade
 
 COPY --from=nest-builder /opt/nest /opt/nest
 
