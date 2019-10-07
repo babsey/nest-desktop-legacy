@@ -37,30 +37,23 @@ Create an project/Switch to project:
 
    oc project nest-desktop
 
-Deploy from docker hub and create service:
+Deploy image from docker hub:
 
 .. code-block:: bash
 
-   oc new-app babsey/nest-desktop:latest
+   oc new-app babsey/nest-desktop
 
-Create config map to find NEST Server:
+Create config map from template to find NEST Server:
 
 .. code-block:: bash
 
-   oc new-app hbp/nest-server-config.yaml
+   oc new-app hbp/nest-desktop.yaml
 
 Mount the volume of NEST Server config to NEST Desktop:
 
 .. code-block:: bash
 
-   oc set volume dc/nest-desktop --add --name=nest-desktop-volume --configmap-name=nest-server-config --mount-path=/usr/local/lib/python3.6/dist-packages/nest_desktop/app/assets/config/nest-server
-
-Expose service to internet:
-
-.. code-block:: bash
-
-   oc expose svc/nest-desktop --name='nest-desktop' --port=8000 --hostname='nest-desktop.apps-dev.hbp.eu'
-   oc expose svc/nest-desktop --name='nest-server' --port=5000 --hostname='nest-server.apps-dev.hbp.eu'
+   oc set volume dc/nest-desktop --add --name=nest-desktop --configmap-name=nest-desktop --mount-path=/usr/local/lib/python3.6/dist-packages/nest_desktop/app/assets/config/nest-server
 
 Now, NEST Desktop is running on HBP infrastructure.
 
@@ -88,7 +81,35 @@ Delete all routes (Cover service from internet):
 
 Authentication
 --------------
-tba
+
+It ask openID Connect (https://services.humanbrainproject.eu/oidc) for user authentication.
+Source code: https://github.com/babsey/hbp-auth
+
+Deploy image from docker hub:
+
+.. code-block:: bash
+
+   oc new-app babsey/hbp-auth
+
+Create config map from template to get env for OIDC (non-public access):
+
+.. code-block:: bash
+
+   oc new-app hbp-auth.yaml
+
+Mount the volume of NEST Server config to NEST Desktop:
+
+.. code-block:: bash
+
+   oc set env --from=configmap/hbp-auth dc/hbp-auth
+
+Expose the hbp-auth to internet:
+
+.. code-block:: bash
+
+   oc expose svc/hbp-auth --port=8080 --hostname='nest-desktop.apps-dev.hbp.eu'
+
+
 
 Maintenance
 -----------
