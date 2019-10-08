@@ -22,8 +22,8 @@
         <input matInput type="number" [ngModel]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
       </mat-form-field>
 
-      <span>
-        <button mat-icon-button [matMenuTriggerFor]="valueMenu" class="button">
+      <span style="width:20px; height:20px; line-height:40px; margin-right:-10px">
+        <button mat-icon-button [matMenuTriggerFor]="valueMenu" class="button" style="width:20px; height:20px !important;line-height:20px">
           <fa-icon icon="ellipsis-v"></fa-icon>
         </button>
       </span>
