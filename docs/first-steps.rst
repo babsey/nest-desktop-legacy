@@ -1,8 +1,8 @@
 First steps
 ===========
 
-Select or build a new network
------------------------------
+Select or make a new
+--------------------
 
 .. raw:: html
 
@@ -10,6 +10,15 @@ Select or build a new network
    <img src="_static/img/select-or-new.gif">
    </embed>
 
+
+Build network and save
+----------------------
+
+.. raw:: html
+
+   <embed>
+   <img src="_static/img/build-and-save.gif">
+   </embed>
 
 
 Simulate and analyze
