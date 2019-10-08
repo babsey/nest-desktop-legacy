@@ -5,11 +5,11 @@
 
 <mat-menu #sliderMenu="matMenu" class="slider-menu" overlapTrigger="true" xPosition="before">
   <span class="slider-container" (click)="$event.stopPropagation();">
-    <div class="slider-header flex">
+    <span class="slider-header flex">
       <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
       <span class="flex-spacer"></span>
       <span style="display:flex">
-        <input class="slider-input" type="number" [(ngModel)]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
+        <input cdkFocusInitial class="slider-input" type="number" [(ngModel)]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
         <mat-nav-list style="padding:0;display:flex;">
           <mat-list-item class="param-menu-button" [matMenuTriggerFor]="paramMenu">
             <span class="param-unit">{{ options.unit }}</span>
@@ -17,12 +17,16 @@
           </mat-list-item>
         </mat-nav-list>
       </span>
-    </div>
+    </span>
 
-    <mat-slider class="slider" [value]="value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)" (input)="value=$event.value"></mat-slider>
-    <span class="slider-ticklabels">
-      <span>{{ options.min }}</span>
-      <span>{{ options.max }}</span>
+    <span>
+      <mat-slider class="slider" [value]="value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)" (input)="value=$event.value"></mat-slider>
+    </span>
+
+    <span class="flex" style="font-size:10px; margin:0 10px; width: calc(100% - 20px)">
+      <span (click)="openConfigDialog()" style="cursor:pointer">{{ options.min }}</span>
+      <span class="flex-spacer"></span>
+      <span (click)="openConfigDialog()" style="cursor:pointer">{{ options.max }}</span>
     </span>
   </span>
 </mat-menu>

@@ -27,7 +27,6 @@
 }
 
 ::ng-deep .slider-menu .slider-container {
-  position: relative;
   width: 100%;
 }
 
@@ -83,16 +82,6 @@
 }
 
 ::ng-deep .slider-menu .slider-container .slider {
-  width: 100%;
-}
-
-::ng-deep .slider-menu .slider-container .slider-ticklabels {
-  bottom: -18px;
-  display: flex;
-  font-size: 10px;
-  justify-content: space-between;
-  margin: 0 5px;
-  pointer-events: none;
-  position: absolute;
-  width: calc(100% - 10px);
+  margin: 0 10px;
+  width: calc(100% - 20px);
 }

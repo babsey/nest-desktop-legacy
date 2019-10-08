@@ -15,7 +15,6 @@ export class ValueSliderPopupComponent implements OnInit {
   @Input() options: any;
   @Input() value: number;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
-  public showSlider: boolean = false;
 
   constructor(
     private dialog: MatDialog,
