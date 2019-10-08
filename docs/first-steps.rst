@@ -11,8 +11,8 @@ Select or make a new
    </embed>
 
 
-Build network and save
-----------------------
+Build and save
+--------------
 
 .. raw:: html
 
