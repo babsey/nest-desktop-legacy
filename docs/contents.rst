@@ -3,6 +3,7 @@
    :caption: Documentations
 
    abstract
+   first-steps
    usage
    development
    hbp
