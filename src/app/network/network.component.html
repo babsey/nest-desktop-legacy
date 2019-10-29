@@ -1,25 +1,53 @@
 <span id="network">
+  <div class="button-toolbar">
+    <button mat-icon-button
+      (click)="mode='selection'"
+      [class.mat-mini-fab]="mode=='selection'"
+      matTooltip="Network selection"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="check-square"></fa-icon>
+    </button>
+    <button mat-icon-button
+      (click)="mode='sketch'"
+      [class.mat-mini-fab]="mode=='sketch'"
+      matTooltip="Sketch configurations"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="bezier-curve"></fa-icon>
+    </button>
+  </div>
+
   <mat-sidenav-container class="network-container">
     <mat-sidenav
-      class="network-sidenav"
+      class="network-sidenav controller"
       disableClose="true"
       mode="side"
       opened="true"
       position="end"
       role="region">
 
-      <app-network-selection
-        (selectionChange)="onNetworkChange($event)"
-        [data]="data"
-      ></app-network-selection>
+      <ng-container [ngSwitch]="mode">
+
+        <ng-container *ngSwitchCase="'selection'">
+          <app-network-selection
+            [(data)]="data"
+          ></app-network-selection>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'sketch'">
+          <app-network-sketch-controller></app-network-sketch-controller>
+        </ng-container>
+
+      </ng-container>
     </mat-sidenav>
 
-    <mat-sidenav-content class="network-content content" #content>
+    <mat-sidenav-content #content class="network-content content">
       <ng-container *ngIf="data != undefined">
         <app-network-sketch
-          (sketchChange)="onNetworkChange($event)"
-          [data]="data"
-          [editable]="true"
+          [(data)]="data"
           [height]="height"
           [width]="width"
           class="network-sketch"

@@ -1,50 +1,42 @@
-<div id="controller" [style.width]="_simulationControllerService.options.width" [style.background-color]="_simulationControllerService.options.color">
-  <div style="position:relative;">
+<div id="controller" style="position:relative;">
+  <ng-container [ngSwitch]="mode">
 
-    <ng-container [ngSwitch]="mode">
-
-      <ng-container *ngSwitchCase="'network'">
-        <app-network-controller
-          (appChange)="onAppChange($event)"
-          (simulationChange)="onSimulationChange($event)"
-          [data]="data"
-        ></app-network-controller>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'simulation'">
-        <div style="margin-top:4px;">
-          <!-- <div style="display:float; width:100%; height:40px; font-size:14px">
-            <mat-form-field class="label" floatLabel="never">
-              <input matInput style="margin-left:10px;" type="text" class="formControl" [(ngModel)]="data.name" />
-              <button mat-icon-button *ngIf="data.name" matSuffix aria-label="Clear" (click)="data.name=''" class="button no-print">
-                <fa-icon icon="times" style="font-size:11px"></fa-icon>
-              </button>
-            </mat-form-field>
-          </div> -->
-
-          <app-kernel-controller
-            (kernelChange)="onSimulationChange($event)"
-            [data]="data"
-            class="kernel"
-          ></app-kernel-controller>
-
-          <app-simulation-controller
-            (simulationChange)="onSimulationChange($event)"
-            [data]="data"
-            class="simulation"
-          ></app-simulation-controller>
-        </div>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'visualization'">
-        <app-visualization-controller [data]="data" [records]="records"></app-visualization-controller>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'stats'">
-        <app-simulation-stats [data]="data" [records]="records"></app-simulation-stats>
-      </ng-container>
-
+    <ng-container *ngSwitchCase="'network'">
+      <app-network-controller
+        (appChange)="onAppChange($event)"
+        (dataChange)="onDataChange($event)"
+        [(data)]="data"
+      ></app-network-controller>
     </ng-container>
-  </div>
 
+    <ng-container *ngSwitchCase="'simulation'">
+      <app-kernel-controller
+        (dataChange)="onDataChange($event)"
+        [(data)]="data"
+        class="kernel"
+      ></app-kernel-controller>
+
+      <app-simulation-controller
+        (dataChange)="onDataChange($event)"
+        [(data)]="data"
+        class="simulation"
+      ></app-simulation-controller>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'plot'">
+      <app-plot-controller></app-plot-controller>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'animation'">
+      <app-animation-controller></app-animation-controller>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'stats'">
+      <app-simulation-stats
+        [data]="data"
+        [records]="records"
+      ></app-simulation-stats>
+    </ng-container>
+
+  </ng-container>
 </div>

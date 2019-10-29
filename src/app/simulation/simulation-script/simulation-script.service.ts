@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { FormatService } from '../../services/format/format.service';
 
+import { SimCollection } from '../../classes/simCollection';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +19,13 @@ export class SimulationScriptService {
     private _formatService: FormatService,
   ) { }
 
-  nodeVariable(model) {
+  nodeVariable(model: string): string {
     var modelName = model.split('-');
     var modelPrefix = this.modelLabel[modelName[0]];
     return modelPrefix + modelName[1];
   }
 
-  kernel(kernel) {
+  kernel(kernel: any): string {
     var str = '';
     str += 'nest.ResetKernel()\n';
     str += 'nest.SetKernelStatus({\n';
@@ -32,7 +34,7 @@ export class SimulationScriptService {
     return str + '\n'
   }
 
-  copyModel(existing, newModel, params=null) {
+  copyModel(existing: string, newModel: string, params: any = null): string {
     var str = '';
     str += 'nest.CopyModel("' + existing + '", "' + newModel + '"';
     var paramsList = [];
@@ -53,12 +55,12 @@ export class SimulationScriptService {
     return str + '\n';
   }
 
-  create(model, n = 1) {
+  create(model: string, n: number = 1): string {
     var str = this.nodeVariable(model) + ' = nest.Create("' + model + '", ' + n + ')';
     return str + '\n';
   }
 
-  connect(pre, post, connSpec = null, synSpec = null) {
+  connect(pre: SimCollection, post: SimCollection, connSpec: any = null, synSpec: any = null): string {
     var str = '';
     if (['multimeter', 'voltmeter'].includes(post.model)) {
       post = [pre, pre = post][0];
@@ -87,15 +89,15 @@ export class SimulationScriptService {
     return str + '\n'
   }
 
-  simulate(time) {
+  simulate(time: string): string {
     var str = '\n# Simulation\n';
     str += 'nest.Simulate(' + parseFloat(time).toFixed(1) + ')\n'
     return str + '\n'
   }
 
-  getStatus(rec, key) {
+  getStatus(rec: any, key: string): string {
     var str = '\n# Get data\n';
-    str += this.nodeVariable(rec.model) + '_events = nest.GetStatus(' + this.nodeVariable(rec.model) + ', "'+ key +'")[0]'
+    str += this.nodeVariable(rec.model) + '_events = nest.GetStatus(' + this.nodeVariable(rec.model) + ', "' + key + '")[0]'
     return str + '\n'
   }
 

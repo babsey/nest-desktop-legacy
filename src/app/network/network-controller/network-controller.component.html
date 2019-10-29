@@ -1,15 +1,3 @@
-<mat-menu #networkMenu="matMenu" class="menu network-menu" overlapTrigger="true">
-  <mat-nav-list dense class="flex">
-    <mat-list-item (click)="'resetParameters()'" class="navButton" matTooltip="Reset parameters">
-      <fa-icon icon="eraser"></fa-icon>
-    </mat-list-item>
-
-    <mat-list-item (click)="_networkControllerService.selection=!_networkControllerService.selection" [class.active]="_networkControllerService.selection" class="navButton" matTooltip="View selection for parameters">
-      <fa-icon icon="edit"></fa-icon>
-    </mat-list-item>
-  </mat-nav-list>
-</mat-menu>
-
 <nav mat-tab-nav-bar>
   <a mat-tab-link (click)="selectElementType(null)" [active]="isSelected(null)" class="tab-nav"> All </a>
   <a mat-tab-link (click)="selectElementType('stimulator')" [active]="isSelected('stimulator')" class="tab-nav"> Stimulator </a>
@@ -18,25 +6,24 @@
 </nav>
 
 <ng-container *ngIf="data">
-  <div style="height:calc(100vh - 82px); overflow-y: auto">
-    <ng-container [ngSwitch]="_networkControllerService.selection">
+  <div style="height:calc(100vh - 73px); overflow-y: auto">
+    <ng-container *ngFor="let node of data.app.nodes">
+      <app-node-controller
+        (dataChange)="onDataChange($event)"
+        (nodeChange)="onNodeChange($event)"
+        [node]="node"
+        [(data)]="data"
+        [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'"
+      ></app-node-controller>
+    </ng-container>
 
-      <ng-container *ngFor="let node of data.app.nodes">
-
-        <ng-container *ngSwitchCase="false">
-          <app-node-controller (nodeChange)="onAppChange($event)" (collectionChange)="onSimulationChange($event)" [idx]="node.idx" [data]="data" [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'" class="node"></app-node-controller>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="true">
-          <app-node-selection (nodeChange)="onAppChange($event)" (collectionChange)="onSimulationChange($event)" [idx]="node.idx" [data]="data" [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'" class="node"></app-node-selection>
-        </ng-container>
-
-      </ng-container>
-
-      <ng-container *ngFor="let link of data.app.links">
-        <app-link-controller (linkChange)="onAppChange($event)" (connectomeChange)="onSimulationChange($event)" [idx]="link.idx" [data]="data" [style.display]="isSelectedPre(link) ? '': 'None'" class="link"></app-link-controller>
-      </ng-container>
-
+    <ng-container *ngFor="let link of data.app.links">
+      <app-link-controller
+        (dataChange)="onDataChange($event)"
+        [link]="link"
+        [(data)]="data"
+        [style.display]="isSelectedPre(link) ? '': 'None'"
+      ></app-link-controller>
     </ng-container>
   </div>
 </ng-container>

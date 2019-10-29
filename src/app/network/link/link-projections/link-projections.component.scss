@@ -1,0 +1,17 @@
+mat-list,
+mat-nav-list {
+  padding: 0 !important;
+
+  mat-list-item {
+    height: 40px;
+    line-height: 40px;
+  }
+
+  mat-list-item:hover {
+    background-color: rgba(0,0,0,0.04);
+  }
+}
+
+mat-selection-list {
+  padding: 0 !important;
+}

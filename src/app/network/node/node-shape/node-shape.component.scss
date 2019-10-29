@@ -1,0 +1,19 @@
+.node {
+  fill: white;
+  stroke-dashoffset: 7.85;
+  cursor: pointer;
+}
+
+.node:hover {
+  // fill: rgba(0,0,0,0.12);
+}
+
+.label {
+  pointer-events: none;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.square {
+  // shape-rendering: crispedges;
+}

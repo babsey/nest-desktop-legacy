@@ -21,11 +21,11 @@ export class LogComponent implements OnInit {
   ngOnInit() {
   }
 
-  setTime(time) {
+  setTime(time: Date): void {
     this._logService.time = time;
   }
 
-  isTime(time) {
+  isTime(time: Date): boolean {
     return this._logService.time == time
   }
 

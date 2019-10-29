@@ -12,10 +12,12 @@
 
 .background {
   display: flex;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  height: 100%;
+  width: 100%;
+
+  figure {
+    margin: 0;
+  }
 }
 
 router-outlet {
@@ -45,7 +47,10 @@ router-outlet {
 }
 
 .quote {
-  font-size: 28px;
+  font-family: mono;
+  margin: 20px;
+  display: flex;
+  font-size: 24px;
   line-height: 1.2em;
   font-style: italic;
   text-align: right;
@@ -53,4 +58,20 @@ router-outlet {
 
 .author {
   float: right;
+}
+
+.mouse-right-click {
+  position: fixed;
+  background-color: white;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+
+  img {
+    pointer-events: none;
+  }
+}
+
+.mouse-right-click:hover {
+  display: none;
 }

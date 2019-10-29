@@ -21,7 +21,7 @@ export class ConfigService {
   ) {
   }
 
-  init(name = null, files = null) {
+  init(name = null, files = null): void {
     this.name = name || this.name;
     this.files = files || this.files;
     this.status.ready = false;
@@ -34,7 +34,7 @@ export class ConfigService {
     }
   }
 
-  load() {
+  load(): void {
     var url = '/assets/config/' + this.name + '/';
     var configs = this.files.map(file => this.http.get(url + file + '.json'));
     forkJoin(configs).subscribe(configs => {
@@ -47,19 +47,19 @@ export class ConfigService {
     })
   }
 
-  save() {
+  save(): void {
     let configJSON = JSON.stringify(this.config);
     localStorage.setItem(this.name, configJSON);
   }
 
-  checkVersions() {
+  checkVersions(): void {
     var appVersion = environment.VERSION.split('.');
     var configVersion = this.config.version.split('.');
     this.status.valid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
     this.status.ready = true;
   }
 
-  reset() {
+  reset(): void {
     localStorage.removeItem(this.name)
     this.init()
   }

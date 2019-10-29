@@ -21,7 +21,7 @@ export class NestServerConfigService {
     private http: HttpClient,
   ) { }
 
-  init() {
+  init(): void {
     this.status.ready = false;
     var configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
@@ -32,7 +32,7 @@ export class NestServerConfigService {
     }
   }
 
-  load() {
+  load(): void {
     this.http.get('/assets/config/nest-server/nest-server.json')
       .subscribe(config => {
         this.config = config;
@@ -42,17 +42,17 @@ export class NestServerConfigService {
     })
   }
 
-  save() {
+  save(): void {
     let configJSON = JSON.stringify(this.config);
     localStorage.setItem(STORAGE_NAME, configJSON);
   }
 
-  reset() {
+  reset(): void {
     localStorage.removeItem(STORAGE_NAME)
     this.init()
   }
 
-  isValid() {
+  isValid(): void {
     var appVersion = environment.VERSION.split('.');
     var configVersion = this.config.version.split('.');
     var versionValid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];

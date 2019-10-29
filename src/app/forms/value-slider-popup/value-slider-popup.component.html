@@ -1,44 +1,57 @@
-<mat-menu #paramMenu="matMenu" class="param-menu">
-  <button mat-menu-item (click)="setDefaultValue()">Set default value: {{ options.value }} {{ options.unit }}</button>
-  <button mat-menu-item *ngIf="model" (click)="openConfigDialog()">Configure</button>
-</mat-menu>
-
-<mat-menu #sliderMenu="matMenu" class="slider-menu" overlapTrigger="true" xPosition="before">
-  <span class="slider-container" (click)="$event.stopPropagation();">
-    <span class="slider-header flex">
+<mat-menu #sliderMenu="matMenu" class="slider-menu node-menu" overlapTrigger="true" xPosition="before">
+  <div class="slider-container" (click)="$event.stopPropagation();">
+    <div class="slider-header flex">
       <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
       <span class="flex-spacer"></span>
       <span style="display:flex">
-        <input cdkFocusInitial class="slider-input" type="number" [(ngModel)]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
-        <mat-nav-list style="padding:0;display:flex;">
-          <mat-list-item class="param-menu-button" [matMenuTriggerFor]="paramMenu">
-            <span class="param-unit">{{ options.unit }}</span>
-            <fa-icon class="param-menu-button-icon" icon="ellipsis-v"></fa-icon>
-          </mat-list-item>
-        </mat-nav-list>
+        <input (change)="onChange($event)"
+          [(ngModel)]="value"
+          [defaultValue]="options.value"
+          [max]="options.max"
+          [min]="options.min"
+          [step]="options.step"
+          class="slider-input"
+          type="number"
+        >
+        <span class="param-unit">{{ options.unit }}</span>
       </span>
-    </span>
+    </div>
 
     <span>
-      <mat-slider class="slider" [value]="value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)" (input)="value=$event.value"></mat-slider>
+      <mat-slider
+        (change)="onChange($event)"
+        (input)="value=$event.value"
+        [max]="options.max"
+        [min]="options.min"
+        [step]="options.step"
+        [value]="value"
+        class="slider"
+        ></mat-slider>
     </span>
 
-    <span class="flex" style="font-size:10px; margin:0 10px; width: calc(100% - 20px)">
-      <span (click)="openConfigDialog()" style="cursor:pointer">{{ options.min }}</span>
+    <span class="flex" style="font-size:10px; margin:0 8px; width: calc(100% - 16px)">
+      <span>{{ options.min }}</span>
       <span class="flex-spacer"></span>
-      <span (click)="openConfigDialog()" style="cursor:pointer">{{ options.max }}</span>
+      <span>{{ options.max }}</span>
     </span>
-  </span>
+  </div>
 </mat-menu>
 
 <span class="param-container flex" [matMenuTriggerFor]="sliderMenu">
-  <span class="param-label ellipsis" matTooltip="{{ options.label | capitalize }}" matTooltipPosition="before">{{ options.label | capitalize }}</span>
+  <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
   <span class="flex-spacer"></span>
-  <span *ngIf="value!=undefined">
-    {{ value }}
+  <span class="param-value">
+    <ng-container [ngSwitch]="value">
+      <ng-container *ngSwitchCase="undefined">
+        <span style="color:rgba(0,0,0,0.24)">
+          {{ options.value }}
+        </span>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        {{ value }}
+      </ng-container>
+    </ng-container>
   </span>
-  <span *ngIf="value==undefined" style="color:rgba(0,0,0,0.24)">
-    {{ options.value }}
-  </span>
+
   <span class="param-unit">{{ options.unit }}</span>
 </span>

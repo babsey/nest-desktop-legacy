@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { PouchDBService } from './pouchdb/pouchdb.service';
 
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +15,7 @@ export class DBService {
     this.db = _pouchDBService;
   }
 
-  init(name, config) {
+  init(name: string, config: any): any {
     return this.db.init(name, config);
   }
 

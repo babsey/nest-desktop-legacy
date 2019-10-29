@@ -1,28 +1,27 @@
-<mat-menu #valueMenu="matMenu" class="value-menu">
-  <button mat-menu-item matTooltip="Default value: {{ options.value }}"  matTooltipPosition="before" (click)="setDefaultValue()">
-    <span>Set default value</span>
-  </button>
-  <button mat-menu-item *ngIf="model" matTooltip="Config" matTooltipPosition="before" (click)="openConfigDialog()">
-    <span>Configure</span>
-  </button>
-</mat-menu>
-
-<div class="slider-container" matTooltip="{{ id }}" matTooltipPosition="before">
+<div class="slider-container">
   <span class="slider-header">
-    {{ options.label }}
-    <span *ngIf="options.unit">({{options.unit}})</span>
+    {{ options.label | capitalize }}
+    <span *ngIf="options.unit"> ({{ options.unit }})</span>
   </span>
 
   <div class="slider-content">
-    <mat-slider [thumbLabel]="thumbLabel" class="slider" [ngModel]="idx" min="0" [max]="options.ticks.length-1" step="1" tickInterval="1" [displayWith]="displayWith(options.ticks)" (change)="onChange($event.value)"></mat-slider>
-    <mat-form-field class="slider-input" floatLabel="never">
-      <input matInput [ngModel]="value" readonly [placeholder]="options.value">
-    </mat-form-field>
+    <mat-slider
+      class="slider"
+      [ngModel]="idx"
+      min="0"
+      [max]="options.ticks.length-1"
+      step="1"
+      tickInterval="1"
+      [displayWith]="displayWith(options.ticks)"
+      (change)="onChange($event)"
+    ></mat-slider>
 
-    <span style="width:20px; height:20px; line-height:40px; margin-right:-10px">
-      <button mat-icon-button [matMenuTriggerFor]="valueMenu" class="button" style="width:20px; height:20px !important;line-height:20px">
-        <fa-icon icon="ellipsis-v"></fa-icon>
-      </button>
-    </span>
+    <mat-form-field class="slider-input" floatLabel="never">
+      <input matInput readonly
+        [ngModel]="value"
+        [placeholder]="options.value"
+        tabindex="-1"
+        >
+    </mat-form-field>
   </div>
 </div>

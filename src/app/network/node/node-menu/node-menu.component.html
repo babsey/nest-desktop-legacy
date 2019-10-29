@@ -1,0 +1,57 @@
+<mat-toolbar
+  [style.background-color]="color()"
+  color="primary"
+  class="node-menu-toolbar ellipsis">
+  {{ configModel.label | capitalize }}
+</mat-toolbar>
+
+<div style="border-left: 4px solid black;" [style.border-color]="color()">
+
+  <button mat-menu-item class="menu-item">
+    <fa-icon class="menu-icon" [style.color]="color()" icon="paint-brush"></fa-icon>
+    <mcc-color-picker [selectedColor]="color()" (selected)="selectColor($event)" class="color-picker" hideEmptyUsedColors>
+      <mcc-color-picker-collection [colors]="colors" hideEmpty="true"></mcc-color-picker-collection>
+    </mcc-color-picker>
+    Colorize node
+  </button>
+
+  <button mat-menu-item class="menu-item" [matMenuTriggerFor]="levelMenu">
+    <fa-icon class="menu-icon" icon="eye"></fa-icon> Set level
+  </button>
+
+  <ng-container [ngSwitch]="isSpatial()">
+    <ng-container *ngSwitchCase="false">
+      <button mat-menu-item class="menu-item" (click)="setSpatial()">
+        <fa-icon class="menu-icon" icon="braille"></fa-icon> Set spatial
+      </button>
+    </ng-container>
+    <ng-container *ngSwitchCase="true">
+      <button mat-menu-item class="menu-item" (click)="unsetSpatial()">
+        <fa-icon class="menu-icon" icon="braille"></fa-icon> Unset spatial
+      </button>
+    </ng-container>
+  </ng-container>
+
+  <button mat-menu-item class="menu-item" (click)="resetParameters()">
+    <fa-icon class="menu-icon" icon="eraser"></fa-icon> Reset parameters
+  </button>
+
+  <button mat-menu-item class="menu-item" (click)="deleteNode()">
+    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete node
+  </button>
+</div>
+
+<mat-menu #levelMenu="matMenu" class="context-menu">
+  <button mat-menu-item class="menu-item" (click)="setLevel(1)">
+    <span>Rookie</span>
+  </button>
+  <button mat-menu-item class="menu-item" (click)="setLevel(2)">
+    <span>Beginner</span>
+  </button>
+  <button mat-menu-item class="menu-item" (click)="setLevel(3)">
+    <span>Advanced</span>
+  </button>
+  <button mat-menu-item class="menu-item" (click)="setLevel(4)">
+    <span>Expert</span>
+  </button>
+</mat-menu>

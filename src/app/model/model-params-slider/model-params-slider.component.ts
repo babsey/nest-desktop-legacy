@@ -18,7 +18,7 @@ export class ModelParamsSliderComponent implements OnInit, OnChanges {
   ngOnChanges() {
   }
 
-  save() {
+  save(): void {
   }
 
 }

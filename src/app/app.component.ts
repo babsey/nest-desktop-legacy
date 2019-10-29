@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { NavigationService } from './navigation/navigation.service';
 import { AppConfigService } from './config/app-config/app-config.service';
+import { AppService } from './app.service';
+
 
 import * as math from 'mathjs';
 
@@ -25,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private media: MediaMatcher,
     public _appConfigService: AppConfigService,
+    public _appService: AppService,
     public _navigationService: NavigationService,
     public router: Router,
   ) {
@@ -41,21 +44,25 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  onReady(event) {
-    this.ready = event;
+  onReady(ready: boolean): void {
+    this.ready = ready;
   }
 
-  navigationWidth() {
+  navigationWidth(): string {
     return this._navigationService.sidenavShortView ? '40px' : '260px';
   }
 
-  toggleNavigationOpened() {
+  toggleNavigationOpened(): void {
     this.buttonDisplay = '0.2';
     this._navigationService.sidenavShortView = !this._navigationService.sidenavShortView
   }
 
-  isNavigationOpened() {
+  isNavigationOpened(): boolean {
     return !this._navigationService.sidenavShortView && this._navigationService.sidenavOpened;
+  }
+
+  advanced(): boolean {
+    return this._appConfigService.config.app['advanced'];
   }
 
 }

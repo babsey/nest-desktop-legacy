@@ -1,18 +1,18 @@
-<mat-menu #configMenu="matMenu" class="dense">
+<mat-menu #configMenu="matMenu" class="context-menu">
   <button mat-menu-item (click)="resetConfigs()">
     <fa-icon class="menu-icon" icon="undo"></fa-icon>
     Reset configurations
   </button>
 </mat-menu>
 
-<mat-menu #databaseMenu="matMenu" class="dense">
+<mat-menu #databaseMenu="matMenu" class="context-menu">
   <button mat-menu-item (click)="resetDatabases()">
     <fa-icon class="menu-icon" icon="undo"></fa-icon>
     Reset databases
   </button>
 </mat-menu>
 
-<mat-menu #serverMenu="matMenu" class="dense">
+<mat-menu #serverMenu="matMenu" class="context-menu">
   <button mat-menu-item (click)="checkServer()">
     <fa-icon class="menu-icon" icon="search"></fa-icon>
     Check server

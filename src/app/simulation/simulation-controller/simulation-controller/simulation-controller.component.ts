@@ -13,7 +13,7 @@ import { Data } from '../../../classes/data';
 })
 export class SimulationControllerComponent implements OnInit {
   @Input() data: Data;
-  @Output() simulationChange: EventEmitter<any> = new EventEmitter();
+  @Output() dataChange: EventEmitter<any> = new EventEmitter();
   public options: any;
 
   constructor(
@@ -25,20 +25,19 @@ export class SimulationControllerComponent implements OnInit {
   ngOnInit() {
   }
 
-  params() {
+  params(): any {
     return this._simulationConfigService.config.controller.simulation.params;
   }
 
-  onChange(id, value) {
-    this.data.simulation[id] = value;
+  onChange(value: any, id: string): void {
     if (id == 'random_seed') {
       this._simulationRunService.config['autoRandomSeed'] = false;
       this._simulationRunService.saveConfig()
     }
-    this.simulationChange.emit(this.data)
+    this.dataChange.emit(this.data)
   }
 
-  onSelectionChange(event) {
+  onSelectionChange(event: any): void {
     this._simulationRunService.config[event.option.value] = event.option.selected;
     this._simulationRunService.saveConfig()
   }

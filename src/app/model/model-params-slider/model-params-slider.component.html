@@ -14,7 +14,10 @@
   </mat-list-item>
 
   <mat-list-item *ngFor="let param of model.params" class="param">
-    <app-input-popup [view]="param.input" [model]="model.id" [id]="param.id" [options]="param" style="width:100%"></app-input-popup>
+    <app-value-slider-inline
+      [(value)]="param.value"
+      [options]="param"
+    ></app-value-slider-inline>
   </mat-list-item>
 
 </mat-list>

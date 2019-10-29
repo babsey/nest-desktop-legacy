@@ -1,0 +1,46 @@
+<mat-menu #nodeMenu="matMenu"class="context-menu node-menu">
+  <app-node-menu
+    [(data)]="data"
+    [node]="node"
+    (dataChange)="dataChange.emit($event)"
+    (nodeChange)="nodeChange.emit($event)"
+  ></app-node-menu>
+</mat-menu>
+
+<div style="visibility: hidden; position: fixed"
+  [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y"
+  [matMenuTriggerFor]="nodeMenu"
+></div>
+
+<span
+  [class.dark-theme]="advanced()"
+  (contextmenu)="onContextMenu($event)"
+  (mouseout)="onMouseOut($event)"
+  (mouseover)="onMouseOver($event)"
+  >
+  <mat-toolbar color="primary" class="node-toolbar" [style.background-color]="advanced() ? '' : color()">
+    <span class="node-shape-container">
+      <svg width="40" height="40">
+        <g app-node-shape
+          (click)="selectNode(node)"
+          [color]="color()"
+          [elementType]="collection().element_type"
+          [idx]="node.idx"
+          [spatial]="isSpatial()"
+          transform="translate(20,20)"
+        ></g>
+      </svg>
+    </span>
+
+    <mat-select
+        (selectionChange)="selectModel($event)"
+        [(ngModel)]="simModel().existing"
+        [disabled]="disabled"
+      >
+      <ng-container *ngFor="let model of models">
+        <mat-option [value]="model.value">{{ model.label | capitalize }}</mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-toolbar>
+</span>

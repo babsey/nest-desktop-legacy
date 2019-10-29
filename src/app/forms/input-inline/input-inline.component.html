@@ -1,0 +1,30 @@
+<ng-container [ngSwitch]="view">
+  <ng-container *ngSwitchCase="'valueInput'">
+    <app-value-input-inline
+      [(value)]="value"
+      [options]="options"
+      class="list-item"
+    ></app-value-input-inline>
+  </ng-container>
+  <ng-container *ngSwitchCase="'arrayInput'">
+    <app-array-input-inline
+      [(value)]="value"
+      [options]="options"
+      class="list-item"
+    ></app-array-input-inline>
+  </ng-container>
+  <ng-container *ngSwitchCase="'valueSlider'">
+    <app-value-slider-inline
+      [(value)]="value"
+      [options]="options"
+      class="list-item"
+    ></app-value-slider-inline>
+  </ng-container>
+  <ng-container *ngSwitchCase="'tickSlider'">
+    <app-ticks-slider-inline
+      [(value)]="value"
+      [options]="options"
+      class="list-item"
+    ></app-ticks-slider-inline>
+  </ng-container>
+</ng-container>

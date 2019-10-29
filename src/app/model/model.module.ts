@@ -11,6 +11,7 @@ import { AppPipesModule } from '../pipes/pipes.module';
 
 import { ModelComponent } from './model.component';
 import { ModelConfigComponent } from './model-config/model-config.component';
+import { ModelConfigDialogComponent } from './model-config-dialog/model-config-dialog.component';
 import { ModelDocumentationComponent } from './model-documentation/model-documentation.component';
 import { ModelListComponent } from './model-list/model-list.component';
 import { ModelParamsListComponent } from './model-params-list/model-params-list.component';
@@ -22,6 +23,7 @@ import { ModelParamsSliderComponent } from './model-params-slider/model-params-s
   declarations: [
     ModelComponent,
     ModelConfigComponent,
+    ModelConfigDialogComponent,
     ModelDocumentationComponent,
     ModelListComponent,
     ModelParamsListComponent,
@@ -31,6 +33,7 @@ import { ModelParamsSliderComponent } from './model-params-slider/model-params-s
   exports: [
     ModelComponent,
     ModelConfigComponent,
+    ModelConfigDialogComponent,
     ModelDocumentationComponent,
     ModelListComponent,
     ModelParamsListComponent,
@@ -49,6 +52,9 @@ import { ModelParamsSliderComponent } from './model-params-slider/model-params-s
     ReactiveFormsModule,
   ],
   providers: [
-  ]
+  ],
+  entryComponents: [
+    ModelConfigDialogComponent,
+  ],
 })
 export class ModelModule { }

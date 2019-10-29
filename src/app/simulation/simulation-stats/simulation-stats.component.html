@@ -9,15 +9,30 @@
 <ng-container [ngSwitch]="selectedModel">
 
   <ng-container *ngSwitchCase="'spike_detector'">
-    <app-spike-stats [records]="records" [idx]="selectedIdx"></app-spike-stats>
+    <app-spike-stats
+      [color]="colorSelected()"
+      [idx]="selectedIdx"
+      [records]="records"
+      ></app-spike-stats>
   </ng-container>
 
   <ng-container *ngSwitchCase="'multimeter'">
-    <app-analog-stats [records]="records" [idx]="selectedIdx" [recordFrom]="recordFrom" [selectedRecord]="selectedRecord"></app-analog-stats>
+    <app-analog-stats
+      [color]="colorSelected()"
+      [idx]="selectedIdx"
+      [records]="records"
+      [recordFrom]="recordFrom"
+      [selectedRecord]="selectedRecord"
+    ></app-analog-stats>
   </ng-container>
 
   <ng-container *ngSwitchCase="'voltmeter'">
-    <app-analog-stats [records]="records" [idx]="selectedIdx" [selectedRecord]="'V_m'"></app-analog-stats>
+    <app-analog-stats
+      [color]="colorSelected()"
+      [idx]="selectedIdx"
+      [records]="records"
+      [selectedRecord]="'V_m'"
+    ></app-analog-stats>
   </ng-container>
 
   <ng-container *ngSwitchDefault>
@@ -37,7 +52,7 @@
             <span>
               <svg width="40" height="40">
                 <g app-node-shape
-                  [color]="_colorService.node(record.recorder)"
+                  [color]="color(record.recorder.idx)"
                   [elementType]="'recorder'"
                   [idx]="record.recorder.idx"
                   transform="translate(20,20)"

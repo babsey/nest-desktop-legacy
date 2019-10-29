@@ -8,8 +8,8 @@ import { SimulationProtocolService } from '../simulation/services/simulation-pro
 import { SimulationRunService } from '../simulation/services/simulation-run.service';
 import { SimulationService } from '../simulation/services/simulation.service';
 
-
 import { Data } from '../classes/data';
+
 
 @Component({
   selector: 'app-simulation-navigation',
@@ -30,10 +30,10 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     private _networkSketchService: NetworkSketchService,
     private _simulationProtocolService: SimulationProtocolService,
     private _simulationRunService: SimulationRunService,
-    private _simulationService: SimulationService,
     private router: Router,
     public _dataService: DataService,
     public _navigationService: NavigationService,
+    public _simulationService: SimulationService,
   ) {
     this.fileReader.addEventListener("load", e => {
       var result = JSON.parse(e['target']['result']);
@@ -43,7 +43,6 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._dataService.initData()
     this.update()
     this.subscription = this._simulationProtocolService.change.subscribe(() => this.update())
   }
@@ -52,7 +51,7 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe()
   }
 
-  update() {
+  update(): void {
     this._simulationService.list().then(simulations => {
       if (simulations != undefined && simulations.length != 0) {
         simulations.map(simulation => simulation.source = 'simulation')
@@ -63,18 +62,26 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
           protocols.map(protocol => protocol.source = 'protocol')
           this.simulations = this.simulations.concat(protocols);
         }
-        this.simulations = this.simulations.sort(this._dataService.sortByDate('updatedAt'));
+        this.simulations = this.simulations.sort(this.sortByDate('updatedAt'));
         this.filter();
       })
     })
   }
 
-  search(query: string) {
+  sortByDate(key: string): any {
+    return (a: any, b: any) => {
+      var dateB: any = new Date(b[key]);
+      var dateA: any = new Date(a[key]);
+      return dateB - dateA;
+    }
+  }
+
+  search(query: string): void {
     this.searchTerm = query;
     this.filter();
   }
 
-  filter() {
+  filter(): void {
     // https://stackblitz.com/edit/angular-material-mat-select-filter
     this.filteredSimulations = this.simulations;
     if (this.searchTerm) {
@@ -88,20 +95,20 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     }
   }
 
-  downloadProtocols(protocols) {
+  downloadProtocols(protocols: Data[]): void {
     this._simulationProtocolService.download(protocols);
   }
 
-  downloadAllProtocols() {
+  downloadAllProtocols(): void {
     var protocols = this.filteredSimulations.filter(simulation => simulation['source'] == 'protocol');
     this.downloadProtocols(protocols);
   }
 
-  openUploadDialog() {
+  openUploadDialog(): void {
     this.file.nativeElement.click();
   }
 
-  clearProtocols() {
+  clearProtocols(): void {
     this._simulationProtocolService.db.destroy().then(response => {
       this._simulationProtocolService.init()
       this.update()
@@ -110,13 +117,13 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     });
   }
 
-  navigate(simulation) {
-    this.id = simulation._id;
-    var url = 'simulation/' + this.id;
+  navigate(id: string): void {
+    this.id = id;
+    var url = 'simulation/' + id;
     this.router.navigate([{ outlets: { primary: url } }])
   }
 
-  deleteProtocols(protocols) {
+  deleteProtocols(protocols: string[]): void {
     this._simulationProtocolService.deleteBulk(protocols)
       .then(() => {
         setTimeout(() => {
@@ -126,34 +133,30 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
       });
   }
 
-  newNetwork() {
-    this._networkSketchService.options.drawing = true;
+  newNetwork(): void {
     this.selectionList = false;
-    this._dataService.mode = 'edit';
+    this._simulationService.mode = 'edit';
     this.router.navigate([{ outlets: { primary: 'simulation' } }])
   }
 
-  edit() {
-    this._networkSketchService.options.drawing = true;
+  edit(): void {
     this.selectionList = false;
-    this._dataService.mode = 'edit';
+    this._simulationService.mode = 'edit';
     // var url = 'network/' + this._dataService['data']._id;
     // this.router.navigate([{ outlets: { primary: url } }])
   }
 
-  details() {
-    this._networkSketchService.options.drawing = false;
+  details(): void {
     this.selectionList = false;
-    this._dataService.mode = 'details';
+    this._simulationService.mode = 'details';
   }
 
-  run() {
-    this._networkSketchService.options.drawing = false;
+  run(): void {
     this.selectionList = false;
-    this._dataService.mode = 'run';
+    this._simulationService.mode = 'run';
   }
 
-  onSelection(event) {
+  onSelect(event: any): void {
     switch (event.mode) {
       case 'delete':
         this.deleteProtocols(event.selected);
@@ -163,12 +166,14 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
         this.downloadProtocols(protocols);
         this.selectionList = false;
         break;
+      case 'navigate':
+        this.navigate(event.id)
       default:
         this.selectionList = false;
     }
   }
 
-  onFileAdded() {
+  onFileAdded(): void {
     this.fileReader.readAsText(this.file.nativeElement.files[0]);
   }
 

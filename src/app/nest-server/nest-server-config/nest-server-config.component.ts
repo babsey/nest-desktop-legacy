@@ -22,7 +22,7 @@ export class NestServerConfigComponent implements OnInit {
     this.host = this._nestServerService.url();
   }
 
-  save() {
+  save(): void {
     this._nestServerConfigService.save()
     this.host = this._nestServerService.url();
     this._nestServerService.check()

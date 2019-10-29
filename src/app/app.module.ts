@@ -22,15 +22,20 @@ import { SimulationModule } from './simulation/simulation.module';
 import { SimulationNavigationModule } from './simulation-navigation/simulation-navigation.module';
 import { VisualizationModule } from './visualization/visualization.module';
 
+
 // components
 import { AppComponent } from './app.component';
 import { LoadingComponent } from './loading/loading.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { TestsuiteComponent } from './testsuite/testsuite.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoadingComponent,
+    PageNotFoundComponent,
+    TestsuiteComponent,
   ],
   imports: [
     // NoopAnimationsModule,
@@ -55,7 +60,9 @@ import { LoadingComponent } from './loading/loading.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(private library: FaIconLibrary) {
+  constructor(
+    private library: FaIconLibrary,
+  ) {
     library.addIconPacks(fas);
   }
- }
+}

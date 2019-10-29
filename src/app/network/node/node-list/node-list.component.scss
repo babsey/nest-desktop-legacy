@@ -1,0 +1,17 @@
+.node-list {
+  border-left: 4px solid black;
+  width: calc(100% - 4px);
+
+  mat-list {
+    padding: 0 !important;
+
+    mat-list-item {
+      height: 24px !important;
+
+      .unit {
+        text-align: right;
+        width: 20px;
+      }
+    }
+  }
+}

@@ -17,7 +17,7 @@ export class ModelConfigComponent implements OnInit {
   ngOnInit() {
   }
 
-  save() {
+  save(): void {
     this._modelConfigService.save()
   }
 

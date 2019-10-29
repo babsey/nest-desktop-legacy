@@ -53,7 +53,7 @@ export class LoadingComponent implements OnInit {
     }
   }
 
-  initConfig() {
+  initConfig(): void {
     this._nestServerConfigService.init()
     this._appConfigService.init()
     this._modelConfigService.init()
@@ -62,7 +62,7 @@ export class LoadingComponent implements OnInit {
     this._visualizationConfigService.init()
   }
 
-  isConfigReady() {
+  isConfigReady(): boolean {
     return (
       this._nestServerConfigService.status.ready &&
       this._appConfigService.status.ready &&
@@ -73,11 +73,11 @@ export class LoadingComponent implements OnInit {
     )
   }
 
-  checkServer() {
+  checkServer(): void {
     this._nestServerService.check()
   }
 
-  initDatabase() {
+  initDatabase(): void {
     if (!this.isConfigReady() || this.dbInit) return
     this.dbInit = true;
     this._modelService.init()
@@ -85,7 +85,7 @@ export class LoadingComponent implements OnInit {
     this._simulationProtocolService.init()
   }
 
-  isDatabaseReady() {
+  isDatabaseReady(): boolean {
     return (
       this._modelService.status.ready &&
       this._simulationService.status.ready &&
@@ -93,15 +93,15 @@ export class LoadingComponent implements OnInit {
     )
   }
 
-  isReady() {
+  isReady(): boolean {
     return this.isConfigReady() && this.isDatabaseReady()
   }
 
-  isSimulatorReady() {
+  isSimulatorReady(): boolean {
     return this._nestServerService.status.response && this._nestServerService.status.simulator.ready;
   }
 
-  resetConfigs() {
+  resetConfigs(): void {
     this._nestServerConfigService.reset()
     this._appConfigService.reset()
     this._modelConfigService.reset()
@@ -110,7 +110,7 @@ export class LoadingComponent implements OnInit {
     this._visualizationConfigService.reset()
   }
 
-  resetDatabases() {
+  resetDatabases(): void {
     this._modelService.reset()
     this._simulationService.reset()
     this._simulationProtocolService.reset()

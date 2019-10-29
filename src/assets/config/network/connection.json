@@ -7,7 +7,6 @@
   }, {
     "rule": "fixed_indegree",
     "label": "fixed indegree",
-    "level": 2,
     "params": [{
       "id": "indegree",
       "label": "indegree",
@@ -20,7 +19,6 @@
   }, {
     "rule": "fixed_outdegree",
     "label": "fixed outdegree",
-    "level": 2,
     "params": [{
       "id": "outdegree",
       "label": "outdegree",
@@ -33,7 +31,6 @@
   }, {
     "rule": "fixed_total_number",
     "label": "fixed total number",
-    "level": 2,
     "params": [{
       "id": "N",
       "label": "N",
@@ -50,7 +47,6 @@
   }, {
     "rule": "pairwise_bernoulli",
     "label": "pairwise Bernoulli",
-    "level": 2,
     "params": [{
       "id": "p",
       "label": "p",

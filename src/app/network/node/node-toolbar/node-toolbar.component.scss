@@ -1,0 +1,12 @@
+.node-toolbar {
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  font-weight: bold;
+
+  .node-shape-container {
+    display: inherit;
+    margin-left: -8px;
+    margin-right: 8px;
+  }
+}

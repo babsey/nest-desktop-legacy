@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { AppConfigService } from '../../config/app-config/app-config.service';
 
@@ -11,6 +11,7 @@ import { Data } from '../../classes/data';
 })
 export class SimulationDetailsComponent implements OnInit {
   @Input() data: Data;
+  @Output() dataChange: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private _appConfigService: AppConfigService,
@@ -19,8 +20,12 @@ export class SimulationDetailsComponent implements OnInit {
   ngOnInit() {
   }
 
-  advanced() {
+  advanced(): boolean {
     return this._appConfigService.config['app'].advanced;
+  }
+
+  onDataChange(data: Data): void {
+    this.dataChange.emit(this.data)
   }
 
 }

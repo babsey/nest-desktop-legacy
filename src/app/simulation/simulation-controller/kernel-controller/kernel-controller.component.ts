@@ -12,7 +12,7 @@ import { Data } from '../../../classes/data';
 })
 export class KernelControllerComponent implements OnInit {
   @Input() data: Data;
-  @Output() kernelChange: EventEmitter<any> = new EventEmitter();
+  @Output() dataChange: EventEmitter<any> = new EventEmitter();
   public options: any;
 
   constructor(
@@ -23,13 +23,12 @@ export class KernelControllerComponent implements OnInit {
   ngOnInit() {
   }
 
-  params() {
+  params(): any {
     return this._simulationConfigService.config.controller.kernel.params;
   }
 
-  onChange(id, value) {
-    this.data.simulation.kernel[id] = value;
-    this.kernelChange.emit(this.data)
+  onChange(value: any): void {
+    this.dataChange.emit(this.data)
   }
 
 }

@@ -7,7 +7,7 @@ export class FormatService {
 
   constructor() { }
 
-  format(val) {
+  format(val: any): any {
     if (Number.isInteger(val)) {
       return parseFloat(val).toFixed(1)
     } else if (Array.isArray(val)) {

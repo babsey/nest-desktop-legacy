@@ -9,12 +9,12 @@ export class LogService {
 
   constructor() { }
 
-  reset() {
+  reset(): void {
     this.time = new Date();
     this.logs = [[this.time, 'client', 'Start log']]
   }
 
-  log(message) {
+  log(message: string): void {
     this.logs.push([new Date(), 'client', message])
   }
 

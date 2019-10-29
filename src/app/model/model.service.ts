@@ -73,7 +73,7 @@ export class ModelService {
     })
   }
 
-  fromFiles(files) {
+  fromFiles(files: string[]): void {
     var modelFiles = files.map(file => this.http.get('/assets/models/' + file + '.json'))
     forkJoin(modelFiles).subscribe(models => {
       models.map(model => {
@@ -84,7 +84,7 @@ export class ModelService {
     })
   }
 
-  list(elementType = null, sort = true) {
+  list(elementType: string = null, sort: boolean = true): any[] {
     var models = Object.keys(this.models);
     if (elementType) {
       models = models.filter(id => {
@@ -98,7 +98,7 @@ export class ModelService {
     return models
   }
 
-  requestModelDefaults(model) {
+  requestModelDefaults(model: string): void {
     var urlRoot = this._nestServerService.url();
     var data = {
       'model': model,
@@ -114,30 +114,30 @@ export class ModelService {
     }, 500)
   }
 
-  selectModel(model) {
+  selectModel(model: string): void {
     this.selectedModel = model;
     this.enabledModel = this.hasModel(model);
     this.requestModelDefaults(model);
   }
 
-  hasModel(model = null) {
+  hasModel(model: string = null): boolean {
     model = model || this.selectedModel;
     return this.list().includes(model);
   }
 
-  config(model = null) {
+  config(model: string = null): any {
     return this.models[model || this.selectedModel];
   }
 
-  count() {
+  count(): any {
     return this._dbService.db.count(this.db)
   }
 
-  save(config) {
+  save(config: any): any {
     return this._dbService.db.create(this.db, config)
   }
 
-  load() {
+  load(): void {
     return this._dbService.db.count(this.db).then(count => {
       if (count == 0) {
         this.init()
@@ -148,24 +148,24 @@ export class ModelService {
     })
   }
 
-  delete(id) {
+  delete(id: string): any {
     return this._dbService.db.delete(this.db, id)
   }
 
-  reset() {
+  reset(): void {
     this.db.destroy().then(() => {
       this.init()
     })
   }
 
-  initVersion() {
+  initVersion(): void {
     this._dbService.db.getVersion(this.db)
       .catch(() => this._dbService.db.setVersion(this.db, environment.VERSION)
         .then(version => this.version = version)
       ).then(version => this.version = version)
   }
 
-  isValid(count) {
+  isValid(count: number): void {
     if (count == 0) {
       this.status.valid = true;
     } else {

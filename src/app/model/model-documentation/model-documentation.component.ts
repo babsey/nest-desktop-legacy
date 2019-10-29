@@ -27,7 +27,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
     this.requestModelDoc()
   }
 
-  requestModelDoc() {
+  requestModelDoc(): void {
     var urlRoot = this._nestServerService.url();
 
     var data = {

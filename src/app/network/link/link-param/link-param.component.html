@@ -1,0 +1,50 @@
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu"
+    >
+</div>
+
+<mat-menu #contextMenu="matMenu" class="context-menu">
+  <mat-toolbar class="ellipsis">{{ options.label | capitalize }}</mat-toolbar>
+
+  <button mat-menu-item (click)="setDefaultValue()">
+    <fa-icon class="menu-icon" icon="eraser"></fa-icon> Set default value: {{ options.value }}
+  </button>
+  <button mat-menu-item (click)="setRandom()" *ngIf="random">
+    <fa-icon class="menu-icon" icon="dice"></fa-icon> Set random mode
+  </button>
+  <!-- <ng-container *ngIf="model">
+    <button mat-menu-item (click)="openConfigDialog()">
+      <fa-icon class="menu-icon" icon="sliders-h"></fa-icon> Configure sliders
+    </button>
+    <button mat-menu-item (click)="hideParam(options.id)">
+      <fa-icon class="menu-icon" icon="eye-slash"></fa-icon> Hide parameter
+    </button>
+  </ng-container> -->
+</mat-menu>
+
+<span
+  (contextmenu)="onContextMenu($event)"
+  (mouseout)="onMouseOut($event)"
+  (mouseover)="onMouseOver($event)"
+  style="width:100%"
+  >
+  <ng-container [ngSwitch]="isNumber()">
+    <ng-container *ngSwitchCase="true">
+      <app-value-slider-inline
+        (valueChange)="onValueChange($event)"
+        [value]="value"
+        [options]="options"
+      ></app-value-slider-inline>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="false">
+      <app-param-random
+        (valueChange)="onValueChange($event)"
+        [value]="value"
+        [options]="options"
+      ></app-param-random>
+    </ng-container>
+  </ng-container>
+</span>

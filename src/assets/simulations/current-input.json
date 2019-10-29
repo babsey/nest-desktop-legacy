@@ -76,7 +76,7 @@
       "recorder-2": {
         "existing": "voltmeter",
         "params": {
-          "interval": 0.1
+          "interval": 1
         }
       }
     },

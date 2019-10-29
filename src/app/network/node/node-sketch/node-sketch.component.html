@@ -1,0 +1,11 @@
+<svg:g app-node-shape
+  (click)="onClick($event)"
+  [radius]="radius()"
+  [color]="color"
+  [elementType]="collection.element_type"
+  [idx]="node.idx"
+  [selected]="selected == node"
+  [spatial]="isSpatial()"
+  [attr.transform]="'translate('+ node.position['x'] + ',' + node.position['y'] + ')'"
+  class="node"
+></svg:g>

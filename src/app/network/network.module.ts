@@ -11,14 +11,21 @@ PlotlyModule.plotlyjs = PlotlyJS;
 import { AppFormsModule } from '../forms/forms.module';
 import { AppPipesModule } from '../pipes/pipes.module';
 import { MaterialModule } from '../modules/material.module';
+import { ModelModule } from '../model/model.module';
 
 import { BackgroundSketchComponent } from './network-sketch/background-sketch/background-sketch.component';
-import { LinkControllerComponent } from './network-controller/link-controller/link-controller.component';
-import { LinkListComponent } from './network-list/link-list/link-list.component';
-import { LinkMaskComponent } from './link-mask/link-mask.component';
-import { LinkSelectionComponent } from './network-selection/link-selection/link-selection.component';
-import { LinkSketchComponent } from './link-sketch/link-sketch.component';
-import { LinksSketchComponent } from './network-sketch/links-sketch/links-sketch.component';
+
+import { LinkControllerComponent } from './link/link-controller/link-controller.component';
+import { LinkListComponent } from './link/link-list/link-list.component';
+import { LinkMenuComponent } from './link/link-menu/link-menu.component';
+import { LinkMaskComponent } from './link/link-mask/link-mask.component';
+import { LinkParamComponent } from './link/link-param/link-param.component';
+import { LinkProjectionsComponent } from './link/link-projections/link-projections.component';
+import { LinkSelectionComponent } from './link/link-selection/link-selection.component';
+import { LinkSketchComponent } from './link/link-sketch/link-sketch.component';
+import { LinkToolbarComponent } from './link/link-toolbar/link-toolbar.component';
+
+import { NetworkClearDialogComponent } from './network-clear-dialog/network-clear-dialog.component';
 import { NetworkComponent } from './network.component';
 import { NetworkConfigComponent } from './network-config/network-config.component';
 import { NetworkControllerComponent } from './network-controller/network-controller.component';
@@ -26,62 +33,84 @@ import { NetworkListComponent } from './network-list/network-list.component';
 import { NetworkSelectionComponent } from './network-selection/network-selection.component';
 import { NetworkSketchComponent } from './network-sketch/network-sketch.component';
 import { NetworkSketchService } from './network-sketch/network-sketch.service';
+import { NetworkSketchControllerComponent } from './network-sketch-controller/network-sketch-controller.component';
 import { NetworkSketchSheetComponent } from './network-sketch-sheet/network-sketch-sheet.component';
-import { NodeControllerComponent } from './network-controller/node-controller/node-controller.component';
-import { NodeListComponent } from './network-list/node-list/node-list.component';
-import { NodeSelectionComponent } from './network-selection/node-selection/node-selection.component';
-import { NodeShapeComponent } from './node-shape/node-shape.component';
-import { NodeSpatialComponent } from './node-spatial/node-spatial.component';
-import { NodesSketchComponent } from './network-sketch/nodes-sketch/nodes-sketch.component';
+
+import { NodeControllerComponent } from './node/node-controller/node-controller.component';
+import { NodeListComponent } from './node/node-list/node-list.component';
+import { NodeMenuComponent } from './node/node-menu/node-menu.component';
+import { NodeParamComponent } from './node/node-param/node-param.component';
+import { NodeSelectionComponent } from './node/node-selection/node-selection.component';
+import { NodeShapeComponent } from './node/node-shape/node-shape.component';
+import { NodeSketchComponent } from './node/node-sketch/node-sketch.component';
+import { NodeSpatialComponent } from './node/node-spatial/node-spatial.component';
+import { NodeToolbarComponent } from './node/node-toolbar/node-toolbar.component';
 
 
 @NgModule({
   declarations: [
     BackgroundSketchComponent,
-    NetworkSketchSheetComponent,
     LinkControllerComponent,
-    LinkMaskComponent,
-    LinkSelectionComponent,
+    LinkMenuComponent,
     LinkListComponent,
-    LinksSketchComponent,
+    LinkMaskComponent,
+    LinkParamComponent,
+    LinkProjectionsComponent,
+    LinkSelectionComponent,
     LinkSketchComponent,
+    LinkToolbarComponent,
+    NetworkClearDialogComponent,
     NetworkComponent,
     NetworkConfigComponent,
     NetworkControllerComponent,
     NetworkListComponent,
     NetworkSelectionComponent,
     NetworkSketchComponent,
+    NetworkSketchControllerComponent,
+    NetworkSketchSheetComponent,
     NodeControllerComponent,
+    NodeListComponent,
+    NodeMenuComponent,
+    NodeParamComponent,
     NodeSelectionComponent,
     NodeShapeComponent,
-    NodeListComponent,
+    NodeSketchComponent,
     NodeSpatialComponent,
-    NodesSketchComponent,
+    NodeToolbarComponent,
   ],
   entryComponents: [
+    NetworkClearDialogComponent,
     NetworkSketchSheetComponent,
   ],
   exports: [
     BackgroundSketchComponent,
-    NetworkSketchSheetComponent,
     LinkControllerComponent,
-    LinkMaskComponent,
-    LinkSelectionComponent,
+    LinkMenuComponent,
     LinkListComponent,
-    LinksSketchComponent,
+    LinkMaskComponent,
+    LinkParamComponent,
+    LinkProjectionsComponent,
+    LinkSelectionComponent,
     LinkSketchComponent,
+    LinkToolbarComponent,
+    NetworkClearDialogComponent,
     NetworkComponent,
     NetworkConfigComponent,
     NetworkControllerComponent,
     NetworkListComponent,
     NetworkSelectionComponent,
     NetworkSketchComponent,
+    NetworkSketchSheetComponent,
+    NetworkSketchControllerComponent,
     NodeControllerComponent,
-    NodeSelectionComponent,
-    NodeSpatialComponent,
-    NodeShapeComponent,
     NodeListComponent,
-    NodesSketchComponent,
+    NodeMenuComponent,
+    NodeParamComponent,
+    NodeSelectionComponent,
+    NodeShapeComponent,
+    NodeSketchComponent,
+    NodeSpatialComponent,
+    NodeToolbarComponent,
   ],
   imports: [
     AppFormsModule,
@@ -93,10 +122,11 @@ import { NodesSketchComponent } from './network-sketch/nodes-sketch/nodes-sketch
     MccColorPickerModule.forRoot({
       used_colors: []
     }),
+    ModelModule,
     PlotlyModule,
   ],
   providers: [
     NetworkSketchService,
-  ]
+  ],
 })
 export class NetworkModule { }

@@ -1,0 +1,72 @@
+<div class="selection link-selection"
+  [style.display]="linkDisplay()"
+  [style.border-left-color]="color('pre')"
+  [style.border-right-color]="color('post')"
+  >
+
+  <app-link-toolbar
+    [(data)]="data"
+    [link]="link"
+    (dataChange)="onDataChange($event)"
+  ></app-link-toolbar>
+
+  <mat-selection-list dense [(ngModel)]="link.display" class="selection-menu" (click)="dataChange.emit(data)">
+
+    <!-- <ng-container *ngIf="isBothSpatial()">
+      <mat-list-option value="connection_type">
+        <span class="flex">
+          <span class="ellipsis">Connection type</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option value="kernel">
+        <span class="flex">
+          <span class="ellipsis">Kernel</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option value="number_of_connections">
+        <span class="flex">
+          <span class="ellipsis">Number of connections</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option value="mask">
+        <span class="flex">
+          <span class="ellipsis">Mask</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option value="weights">
+        <span class="flex">
+          <span class="ellipsis">Weights</span>
+          <span class="flex-spacer"></span>
+          <span>pA</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option value="delays">
+        <span class="flex">
+          <span class="ellipsis">Delays</span>
+          <span class="flex-spacer"></span>
+          <span>ms</span>
+        </span>
+      </mat-list-option>
+    </ng-container> -->
+
+    <!-- <ng-container *ngIf=!isBothSpatial()>
+
+      <ng-container *ngFor="let syn of slider.synapse">
+        <mat-list-option [value]="'syn_spec.' + syn.id">
+          <span class="flex">
+            <span class="ellipsis">{{ syn.label | capitalize }}</span>
+            <span class="flex-spacer"></span>
+            <span class="unit">{{ syn.unit }}</span>
+          </span>
+        </mat-list-option>
+      </ng-container>
+
+    </ng-container> -->
+  </mat-selection-list>
+
+</div>

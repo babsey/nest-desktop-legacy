@@ -1,14 +1,7 @@
-.sidenavItem {
-  display: flex !important;
-}
-
-.searchField {
-  position: fixed;
-  left: 41px;
-  background-color: white;
-  display: none;
-}
-
-.searchItem:hover .searchField {
-  display: block;
+.searchItem {
+  .icon {
+    height: 48px;
+    line-height: 48px;
+    width: 20px;
+  }
 }

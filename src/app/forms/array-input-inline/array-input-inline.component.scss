@@ -1,0 +1,16 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+  z-index: 1000;
+
+  textarea {
+    height: 16px;
+    background-color: white;
+    padding: 0 5px;
+    width: calc(100% - 10px);
+  }
+}

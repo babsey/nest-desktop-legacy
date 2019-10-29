@@ -9,11 +9,11 @@ export class MathService {
 
   constructor() { }
 
-  fill(value, size) {
+  fill(value: number, size: number): number[] {
     return Array.from({ length: size }, () => value);
   }
 
-  range(start, end = null, step = null) {
+  range(start: number, end: number = null, step: number = null): number[] {
     if (!end) {
       return Array.from({ length: start }, (val, index) => index);
     } if (!step) {
@@ -23,29 +23,42 @@ export class MathService {
     }
   }
 
-  linspace(start, end, size) {
+  linspace(start: number, end: number, size: number): number[] {
     var step = (end - start) / (size - 1);
     return this.range(start, end + step, step)
   }
 
-  randomInt(min, max) {
+  randomInt(min: number, max: number): number {
     var range = max - min + 1;
     return Math.floor(Math.random() * range) + min;
   }
 
-  randomUniformInt(start, end, size) {
+  randomUniformInt(start: number, end: number, size: number): number[] {
     return Array.from({ length: size }, () => this.randomInt(start, end));
   }
 
-  randomUniformFloat(min, max, size) {
+  randomUniformFloat(min: number, max: number, size: number): number[] {
     return Array.from({ length: size }, () => d3.randomUniform(min, max)());
   }
 
-  randomNormal(mu, sigma, size) {
+  randomNormal(mu: number, sigma: number, size: number): number[] {
     return Array.from({ length: size }, () => d3.randomNormal(mu, sigma)());
   }
 
-  onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
+  onlyUnique(values: number[], index: number, self): boolean {
+    return self.indexOf(values) === index;
   }
+
+  extent(values: number[]): number[] {
+    return d3.extent(values)
+  }
+
+  mean(values: number[]): number {
+    return d3.mean(values)
+  }
+
+  deviation(values: number[]): number {
+    return d3.mean(values)
+  }
+
 }

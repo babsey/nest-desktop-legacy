@@ -7,8 +7,11 @@ import { environment } from '../../../environments/environment';
 import { DataService } from '../../services/data/data.service';
 import { DBService } from '../../services/db/db.service';
 import { NavigationService } from '../../navigation/navigation.service';
+import { NetworkService } from '../../network/services/network.service';
 import { SimulationConfigService } from '../simulation-config/simulation-config.service';
 import { SimulationProtocolService } from './simulation-protocol.service';
+
+import { Data } from '../../classes/data';
 
 
 @Injectable({
@@ -20,20 +23,21 @@ export class SimulationService {
     ready: false,
     valid: false,
   };
-  public mode: string = 'view';
+  public mode: string = 'details';
   public version: string;
 
   constructor(
     private _dataService: DataService,
     private _dbService: DBService,
     private _navigationService: NavigationService,
+    private _networkService: NetworkService,
     private _simulationConfigService: SimulationConfigService,
     private _simulationProtocolService: SimulationProtocolService,
     private http: HttpClient,
   ) {
   }
 
-  init() {
+  init(): void {
     this.status.ready = false;
     this._simulationProtocolService.status.ready = false;
     var config = this._simulationConfigService.config['db']['simulation'];
@@ -46,11 +50,17 @@ export class SimulationService {
     })
   }
 
-  loadSimulations() {
+  loadSimulations(): any {
     return this.count().then(count => {
       this.isValid(count);
       if (count == 0) {
-        var files = ['current-input', 'spike-input', 'spike-trains'];
+        var files = [
+          'spatial-spike-activity',
+          'spatial-neurons', 
+          'spike-activity',
+          'spike-input',
+          'current-input',
+        ];
         return this.fromFiles(files)
       } else {
         return this.list().then(simulations => {
@@ -61,13 +71,14 @@ export class SimulationService {
     })
   }
 
-  fromFiles(filenames) {
+  fromFiles(filenames: string[]): Data[] {
     var simulations = [];
     var files = filenames.map(filename => this.http.get('/assets/simulations/' + filename + '.json'))
     forkJoin(files).subscribe(simulations => {
       simulations.map(simulation => {
         simulation['version'] = environment.VERSION;
         let simulation_cleaned = this._dataService.clean(simulation);
+        this._networkService.validate(simulation_cleaned);
         simulations.push(simulation_cleaned);
         this._dbService.db.create(this.db, simulation_cleaned)
       })
@@ -75,28 +86,29 @@ export class SimulationService {
     return simulations;
   }
 
-  count() {
+  count(): any {
     return this._dbService.db.count(this.db)
   }
 
-  list() {
+  list(): any {
     return this._dbService.db.list(this.db)
   }
 
-  load(id) {
+  load(id: string): any {
     // console.log('Load simulation')
     return this._dbService.db.read(this.db, id).then(doc => {
       return doc.error ? this._simulationProtocolService.load(id) : doc;
     })
   }
 
-  hashList() {
+  hashList(): any {
     return this.list().then(docs => docs.map(row => row.hash))
   }
 
-  save(data) {
+  save(data: Data): void {
     // console.log('Save simulation')
     let data_cleaned = this._dataService.clean(data);
+    this._networkService.validate(data_cleaned);
     return this.count().then(count => {
       if (count == 0) {
         return this._dbService.db.create(this.db, data_cleaned)
@@ -117,20 +129,20 @@ export class SimulationService {
     })
   }
 
-  reset() {
+  reset(): void {
     this.db.destroy().then(() => {
       this.init()
     })
   }
 
-  initVersion() {
+  initVersion(): void {
     this._dbService.db.getVersion(this.db)
       .catch(() => this._dbService.db.setVersion(this.db, environment.VERSION)
         .then(version => this.version = version)
       ).then(version => this.version = version)
   }
 
-  isValid(count) {
+  isValid(count: number): void {
     if (count == 0) {
       this.status.valid = true;
     } else {

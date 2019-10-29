@@ -43,6 +43,11 @@ fa-icon {
 
 .light-theme {
   @include angular-material-theme($light-theme);
+
+  .mat-slider-thumb {
+    background-color: white !important;
+    border: 2px solid black;
+  }
 }
 
 .dark-theme {

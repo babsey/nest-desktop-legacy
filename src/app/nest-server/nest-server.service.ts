@@ -28,7 +28,7 @@ export class NestServerService {
     private _nestServerConfigService: NestServerConfigService,
   ) { }
 
-  url() {
+  url(): string {
     var config = this._nestServerConfigService.config;
     var host = config['host'] || window.location.host.split(':')[0] || 'localhost';
     var url = 'http://' + host;
@@ -38,7 +38,7 @@ export class NestServerService {
     return url;
   }
 
-  check() {
+  check(): void {
     // console.log('Check')
     var url = this.url();
     this.http.get(url)

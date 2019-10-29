@@ -19,11 +19,12 @@ export class ModelParamsListComponent implements OnInit {
   ngOnInit() {
   }
 
-  hasParam(id) {
+  hasParam(id: string): boolean {
     if (this._modelService.hasModel(this.model)) {
       var config = this._modelService.config(this.model);
-      return config.params.filter(param => param.id == id).length > 0
+      return config.params.filter(param => param.id == id).length > 0;
     }
+    return false
   }
 
 }

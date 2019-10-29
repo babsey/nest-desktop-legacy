@@ -11,22 +11,26 @@ import { HelpListComponent } from '../help/help-list/help-list.component';
 import { ConfigListComponent } from '../config/config-list/config-list.component';
 import { ModelListComponent } from '../model/model-list/model-list.component';
 import { SimulationNavigationComponent } from '../simulation-navigation/simulation-navigation.component';
+import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
+import { TestsuiteComponent } from '../testsuite/testsuite.component';
 
 
 const appRoutes: Routes = [
-  { path: '',   redirectTo: '/(nav:simulation)', pathMatch: 'full' },
-  { path: 'config', component: ConfigListComponent, outlet: 'nav'},
+  { path: '', redirectTo: '/(nav:simulation)', pathMatch: 'full' },
+  { path: 'config', component: ConfigListComponent, outlet: 'nav' },
   { path: 'config/:config', component: ConfigComponent },
-  { path: 'help', component: HelpListComponent , outlet: 'nav'},
+  { path: 'help', component: HelpListComponent, outlet: 'nav' },
   { path: 'help/:help', component: HelpComponent },
-  { path: 'model', component: ModelListComponent , outlet: 'nav'},
+  { path: 'model', component: ModelListComponent, outlet: 'nav' },
   { path: 'model/:model', component: ModelComponent },
   { path: 'network', component: NetworkComponent },
   { path: 'network/:id', component: NetworkComponent },
-  { path: 'simulation', component: SimulationNavigationComponent, outlet: 'nav'},
+  { path: 'simulation', component: SimulationNavigationComponent, outlet: 'nav' },
   { path: 'simulation', component: SimulationComponent },
   { path: 'simulation/:id', component: SimulationComponent },
   { path: 'simulation/:id/run', component: SimulationComponent },
+  { path: 'testsuite', component: TestsuiteComponent },
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

@@ -1,0 +1,35 @@
+.node-selection {
+  border-left: 4px solid black;
+  width: calc(100% - 4px);
+
+  mat-nav-list {
+    padding: 0;
+
+    mat-list-item {
+      height: 32px;
+      line-height: 32px;
+    }
+  }
+
+  mat-list {
+    padding: 0;
+
+    mat-list-item {
+      height: 40px;
+      line-height: 40px;
+    }
+
+    mat-list-item:hover {
+      background-color: rgba(0,0,0,0.04);
+    }
+  }
+
+  mat-selection-list {
+    padding: 0;
+
+    mat-list-option {
+      height: 32px;
+      line-height: 32px;
+    }
+  }
+}

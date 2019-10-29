@@ -3,12 +3,6 @@ body {
   font-family: Roboto, Arial, sans-serif;
   margin: 0;
 }
-@media print {
-  .no-print,
-  .no-print * {
-    display: none !important;
-  }
-}
 
 .flex {
   display: flex !important;
@@ -19,10 +13,6 @@ body {
   }
 }
 
-.form-field {
-  width: 100%;
-}
-
 .dense {
   font-size: 12px !important;
 
@@ -31,11 +21,63 @@ body {
   }
 }
 
+.mat-select-panel {
+  max-height: 100% !important;
+}
+//
+// Buttons
+//
+
+.app-button {
+  margin: 2px !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  font-size: 12px !important;
+
+  .mat-button-wrapper {
+    padding: 0 !important;
+  }
+}
+
+.button-toolbar {
+  .mat-icon-button {
+    opacity: .25;
+  }
+
+  .mat-mini-fab {
+    opacity: 1;
+  }
+}
+
+.button-toolbar:hover {
+  .mat-icon-button {
+    opacity: .75;
+  }
+
+  .mat-mini-fab {
+    opacity: 1;
+  }
+}
+
 .navbar {
   height: 40px !important;
 
   .spacer {
     flex: 1 1 auto;
+  }
+
+  .mat-icon-button,
+  .mat-mini-fab {
+    margin: 2px;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 12px;
+
+    .mat-button-wrapper {
+      padding: 0;
+    }
   }
 }
 
@@ -67,21 +109,72 @@ mat-divider.style-fix {
   }
 }
 
-.menu-icon {
-  display: inline-block;
-  width: 20px;
-}
-
 .list-icon {
   display: inline-block;
   width: 30px;
 }
 
-.node-shape {
-  width: 56px;
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  .mat-list-item-content {
+.disabled,
+.disabled:hover {
+  opacity: 0.38 !important;
+  pointer-events: none;
+}
+//
+// Input and slider forms
+//
+
+.form-field {
+  width: 100%;
+}
+
+input {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+}
+
+.slider {
+  margin: 0 8px;
+  width: calc(100% - 16px);
+}
+//
+// Menu
+//
+//
+// Context menu
+//
+
+.context-menu {
+  min-height: 0 !important;
+
+  .mat-menu-content {
     padding: 0 !important;
+    font-size: 11px;
+
+    mat-toolbar {
+      height: 32px;
+      line-height: 32px;
+      font-size: 14px;
+    }
+
+    .mat-menu-item {
+      height: 32px !important;
+      line-height: 32px;
+
+      .menu-icon {
+        display: inline-block;
+        width: 24px;
+      }
+    }
   }
 }
 
@@ -93,93 +186,38 @@ mat-divider.style-fix {
     width: 100%;
     height: 100%;
     opacity: 0;
+
     .btn-picker {
       width: 100% !important;
       height: 100% !important;
     }
   }
 }
-
-
-.controller .input,
-.controller .slider {
-  width: 100%;
-}
-
-.ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-// .active,
-// .active:focus,
-// .active:hover {
-//   background-color: #3366ff !important;
-//   color: white !important;
-// }
-
-.right-aligned-header > .mat-content {
-  justify-content: space-between;
-}
-
-.right-aligned-header > .mat-content > mat-panel-description,
-.right-aligned-header > .mat-content > mat-panel-title {
-  flex: 0 0 auto;
-}
-
-.mat-slider-thumb,
-.mat-slider-track-fill {
-  border: 2px solid #333;
-}
-
-.mat-slider-thumb-label {
-  border: 1px solid #333;
-}
+//
+// Network
+//
 
 .mat-bottom-sheet-container {
   padding: 1px;
   box-shadow: none !important;
 }
 
-input {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+.node-shape {
+  width: 56px;
 
-.readonly-wrapper {
-  pointer-events: none;
-}
-
-.mat-menu-panel {
-  min-height: 0 !important;
+  .mat-list-item-content {
+    padding: 0 !important;
+  }
 }
 
 .links .mat-list-item-content,
 .nodes .mat-list-item-content {
   padding: 0 10px !important;
 }
+//
+// Plotly
+//
 
-.controller .mat-list {
-  padding: 0 8px;
-
-  .mat-list-item-content {
-    padding: 0 8px !important;
-  }
-
-  .mat-list-option .mat-list-text {
-    padding-right: 5px !important;
-  }
-}
-
-.disabled,
-.disabled:hover {
-  opacity: 0.38 !important;
-  pointer-events: none;
-}
-
-app-select {
-  width: 100% !important;
-
-  .select {
-    width: 100%;
-  }
+.modebar {
+  right: 42px !important;
 }

@@ -9,12 +9,14 @@ import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 import { PlotlyModule } from 'angular-plotly.js';
 PlotlyModule.plotlyjs = PlotlyJS;
 
+import { ArrayInputInlineComponent } from './array-input-inline/array-input-inline.component';
 import { ArrayInputPopupComponent } from './array-input-popup/array-input-popup.component';
+import { InputInlineComponent } from './input-inline/input-inline.component';
 import { InputPopupComponent } from './input-popup/input-popup.component';
-import { ParamSliderPopupComponent } from './param-slider-popup/param-slider-popup.component';
+import { ParamRandomComponent } from './param-random/param-random.component';
 import { SelectComponent } from './select/select.component';
-import { SelectOptgroupComponent } from './select-optgroup/select-optgroup.component';
 import { SelectFilterComponent } from './select-filter/select-filter.component';
+import { SelectOptgroupComponent } from './select-optgroup/select-optgroup.component';
 import { TicksSliderInlineComponent } from './ticks-slider-inline/ticks-slider-inline.component';
 import { TicksSliderPopupComponent } from './ticks-slider-popup/ticks-slider-popup.component';
 import { ValueInputInlineComponent } from './value-input-inline/value-input-inline.component';
@@ -23,8 +25,7 @@ import { ValueSliderInlineComponent } from './value-slider-inline/value-slider-i
 import { ValueSliderPopupComponent } from './value-slider-popup/value-slider-popup.component';
 
 import { ArrayGeneratorDialogComponent } from './array-generator-dialog/array-generator-dialog.component';
-import { FormsConfigDialogComponent } from './forms-config-dialog/forms-config-dialog.component';
-import { ParamConfigComponent } from './param-config/param-config.component';
+
 
 @NgModule({
   imports: [
@@ -38,30 +39,31 @@ import { ParamConfigComponent } from './param-config/param-config.component';
   ],
   declarations: [
     ArrayGeneratorDialogComponent,
+    ArrayInputInlineComponent,
     ArrayInputPopupComponent,
-    FormsConfigDialogComponent,
+    InputInlineComponent,
     InputPopupComponent,
-    ParamSliderPopupComponent,
+    ParamRandomComponent,
     SelectComponent,
-    SelectOptgroupComponent,
     SelectFilterComponent,
+    SelectOptgroupComponent,
     TicksSliderInlineComponent,
     TicksSliderPopupComponent,
     ValueInputInlineComponent,
     ValueInputPopupComponent,
     ValueSliderInlineComponent,
     ValueSliderPopupComponent,
-    ParamConfigComponent,
   ],
   exports: [
     ArrayGeneratorDialogComponent,
+    ArrayInputInlineComponent,
     ArrayInputPopupComponent,
-    FormsConfigDialogComponent,
+    InputInlineComponent,
     InputPopupComponent,
-    ParamSliderPopupComponent,
+    ParamRandomComponent,
     SelectComponent,
-    SelectOptgroupComponent,
     SelectFilterComponent,
+    SelectOptgroupComponent,
     TicksSliderInlineComponent,
     TicksSliderPopupComponent,
     ValueInputInlineComponent,
@@ -71,7 +73,6 @@ import { ParamConfigComponent } from './param-config/param-config.component';
   ],
   entryComponents: [
     ArrayGeneratorDialogComponent,
-    FormsConfigDialogComponent,
   ],
 })
 export class AppFormsModule { }

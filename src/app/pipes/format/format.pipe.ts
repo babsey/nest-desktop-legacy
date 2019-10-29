@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FormatPipe implements PipeTransform {
 
-  transform(value: any, args?: any): any {
+  transform(value: any): number {
     return value % 1 == 0 ? value : value.toFixed(1);
   }
 

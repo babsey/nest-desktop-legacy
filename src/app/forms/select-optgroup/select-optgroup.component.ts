@@ -19,7 +19,7 @@ export class SelectOptgroupComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSelectionChange() {
+  onSelectionChange(): void {
     this.selectedChange.emit(this.selected);
   }
 }

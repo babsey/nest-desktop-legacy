@@ -25,11 +25,11 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
   }
 
-  toggleSidenav() {
+  toggleSidenav(): void {
     this._navigationService.sidenavOpened = !this._navigationService.sidenavOpened;
   }
 
-  openSidenav() {
+  openSidenav(): void {
     this._navigationService.sidenavOpened = true;
   }
 }

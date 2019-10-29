@@ -1,0 +1,11 @@
+<!-- <mat-toolbar [style.background-image]="backgroundImage()"></mat-toolbar> -->
+
+<div style="border-left: 4px solid black; border-right: 4px solid black" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+  <button mat-menu-item class="menu-item" (click)="resetParameters()">
+    <fa-icon class="menu-icon" icon="eraser"></fa-icon> Reset parameters
+  </button>
+
+  <button mat-menu-item class="menu-item" (click)="deleteLink()">
+    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete link
+  </button>
+</div>

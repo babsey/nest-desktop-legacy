@@ -34,14 +34,14 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.update()
-    this.subscription = this._modelService.update.subscribe(() => this.update())
+    this.subscription = this._modelService.update.subscribe((): void => this.update())
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe()
   }
 
-  update() {
+  update(): void {
     this.enabledModels = this._modelService.list();
     this.requestModels().subscribe(data => {
       this.availableModels = data['response']['data'];
@@ -49,12 +49,12 @@ export class ModelListComponent implements OnInit, OnDestroy {
     })
   }
 
-  requestModels() {
+  requestModels(): any {
     var urlRoot = this._nestServerService.url();
     return this.http.get(urlRoot + '/api/nest/Models')
   }
 
-  filterModelsByType() {
+  filterModelsByType(): void {
     if (this.elementType != 'all') {
       let result: string[] = [];
       for (let model of this.filteredModels) {
@@ -84,7 +84,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterModelsBySearch() {
+  filterModelsBySearch(): void {
     var searchTerm = this.searchTerm;
     if (searchTerm) {
       let result: string[] = [];
@@ -97,41 +97,41 @@ export class ModelListComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterModels() {
+  filterModels(): void {
     this.enabledModels = this._modelService.list();
     this.filteredModels = this.view == 'available' ? this.availableModels : this.enabledModels;
     this.filterModelsByType()
     this.filterModelsBySearch()
   }
 
-  search(query: string) {
+  search(query: string): void {
     this.searchTerm = query;
     this.filterModels()
   }
 
-  viewModels(view) {
+  viewModels(view: string): void {
     this.view = view;
     this.filterModels()
   }
 
-  selectElementType(elementType: string) {
+  selectElementType(elementType: string): void {
     this.elementType = elementType;
     this.filterModels()
   }
 
-  isSelected(model) {
+  isSelected(model: any): boolean {
     return this._modelService.selectedModel == model;
   }
 
-  isEnabled(model) {
+  isEnabled(model: any): boolean {
     return this._modelService.hasModel(model);
   }
 
-  resetModelConfigs() {
+  resetModelConfigs(): void {
     this._modelService.reset()
   }
 
-  shortLabel(label) {
+  shortLabel(label: string): string {
     return label.split('_').map(d => d[0]).join('')
   }
 

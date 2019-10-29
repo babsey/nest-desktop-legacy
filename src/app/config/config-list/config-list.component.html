@@ -20,9 +20,6 @@
       </mat-toolbar>
 
       <mat-nav-list dense class="navlist config-theme" style="padding:0">
-        <mat-list-item (click)="navigate('nest-server')" [class.active]="isActive('nest-server')">
-          <fa-icon class="list-icon" icon="server"></fa-icon> NEST Server
-        </mat-list-item>
         <mat-list-item (click)="navigate('application')" [class.active]="isActive('app')">
           <fa-icon class="list-icon" icon="clipboard-check"></fa-icon> Application
         </mat-list-item>
@@ -37,6 +34,9 @@
         </mat-list-item>
         <mat-list-item (click)="navigate('visualization')" [class.active]="isActive('visualization')">
           <fa-icon class="list-icon" icon="chart-line"></fa-icon> Visualization
+        </mat-list-item>
+        <mat-list-item (click)="navigate('nest-server')" [class.active]="isActive('nest-server')">
+          <fa-icon class="list-icon" icon="server"></fa-icon> NEST Server
         </mat-list-item>
       </mat-nav-list>
 

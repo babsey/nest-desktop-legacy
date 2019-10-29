@@ -1,0 +1,10 @@
+<mat-form-field>
+  <textarea matInput
+    (change)="onChange($event)"
+    (mouseover)="active=true"
+    (mouseout)="active=false"
+    [value]="stringify(value)"
+    placeholder="{{ options.label | capitalize }}"
+    [style.height]="active ? '200px' : '16px'"
+  ></textarea>
+</mat-form-field>

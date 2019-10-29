@@ -1,7 +1,14 @@
-<!-- <app-layer-activity-animation></app-layer-activity-animation> -->
+<ng-container [ngSwitch]="_visualizationService.mode">
+  <ng-container *ngSwitchCase="'plot'">
+    <app-plot-records [data]="data" [records]="records"></app-plot-records>
+  </ng-container>
 
-<app-three-scatter
-  [data]="data"
-  [frames]="frames"
-  [layout]="layout"
-  ></app-three-scatter>
+  <ng-container *ngSwitchCase="'animation'">
+    <ng-container *ngIf="_animationControllerService.hasAnalogData(); else spike">
+      <app-animation-analog [records]="records"></app-animation-analog>
+    </ng-container>
+    <ng-template #spike>
+      <app-animation-spike [records]="records"></app-animation-spike>
+    </ng-template>
+  </ng-container>
+</ng-container>

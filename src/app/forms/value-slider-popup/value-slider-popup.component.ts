@@ -1,9 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
-import { MatDialog } from '@angular/material';
-
-import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-dialog.component';
-
 
 @Component({
   selector: 'app-value-slider-popup',
@@ -11,36 +7,17 @@ import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-
   styleUrls: ['./value-slider-popup.component.scss']
 })
 export class ValueSliderPopupComponent implements OnInit {
-  @Input() model: string;
   @Input() options: any;
   @Input() value: number;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(
-    private dialog: MatDialog,
-  ) {
+  constructor() {
   }
 
   ngOnInit() {
   }
 
-  onChange(event) {
+  onChange(event: any): void {
     this.valueChange.emit(this.value);
-  }
-
-  setDefaultValue() {
-    this.value = Number(this.options.value);
-    this.valueChange.emit(this.value);
-  }
-
-  openConfigDialog() {
-    if (this.options.id && this.model) {
-      this.dialog.open(FormsConfigDialogComponent, {
-        data: {
-          id: this.options.id,
-          model: this.model,
-        }
-      });
-    }
   }
 }

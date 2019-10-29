@@ -1,0 +1,59 @@
+:host {
+  // margin: 0 -16px;
+  // width: calc(100% + 32px);
+}
+
+.param-container {
+  display: flex;
+  // padding: 0 16px;
+}
+
+.param-container .mat-list-item {
+  height: 24px !important;
+  line-height: 24px;
+}
+
+.param-container .param-unit {
+  text-align: right;
+  width: 24px;
+}
+
+::ng-deep .param-menu .mat-menu-item {
+  height: 24px !important;
+  line-height: 24px;
+}
+
+::ng-deep .param-slider-menu {
+  width: auto;
+  max-width: none;
+  /* height: 500px; */
+}
+
+::ng-deep .param-slider-menu {
+  min-width: 300px;
+}
+
+::ng-deep .param-slider-menu .mat-menu-content {
+  overflow-y: hidden;
+}
+
+::ng-deep .param-slider-menu .slider-container {
+  position: relative;
+  width: 100%;
+}
+
+::ng-deep .param-slider-menu .navButton {
+  font-size: 12px;
+  height: 32px !important;
+  line-height: 32px;
+  width: 32px !important;
+  text-align: center;
+}
+
+::ng-deep .param-slider-menu .navButton .mat-list-item-content {
+  padding: 0 !important;
+}
+
+::ng-deep .param-slider-menu .navButton fa-icon {
+  min-width: 32px;
+}

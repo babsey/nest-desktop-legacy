@@ -1,12 +1,14 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
 import { ColorService } from '../../network/services/color.service';
 
-
 import { Data } from '../../classes/data';
+import { AppNode } from '../../classes/appNode';
+import { Record } from '../../classes/record';
+
 
 @Component({
   selector: 'app-simulation-stats',
@@ -15,20 +17,34 @@ import { Data } from '../../classes/data';
 })
 export class SimulationStatsComponent implements OnInit {
   @Input() data: Data;
-  @Input() records: any[];
+  @Input() records: Record[];
   public selectedIdx: number;
   public selectedModel: string;
   public recordFrom: string[] = ['V_m'];
   public selectedRecord: string = 'V_m';
 
   constructor(
-    public _colorService: ColorService,
+    private _colorService: ColorService,
   ) { }
 
   ngOnInit() {
   }
 
-  select(record) {
+  node(idx: number): AppNode {
+    return this.data.app.nodes[idx];
+  }
+
+  color(idx: number): string {
+    return this._colorService.node(this.node(idx));
+  }
+
+  colorSelected(): string {
+    if (this.selectedIdx == undefined) return 'black'
+    var record = this.records[this.selectedIdx];
+    return this.color(record.recorder.idx);
+  }
+
+  select(record: Record): void {
     this.selectedIdx = record.idx;
     this.selectedModel = record.recorder.model;
     if (this.selectedModel == 'multimeter') {
@@ -43,7 +59,7 @@ export class SimulationStatsComponent implements OnInit {
     }
   }
 
-  unselect() {
+  unselect(): void {
     this.selectedIdx = undefined;
     this.selectedModel = undefined;
     this.recordFrom = ['V_m'];

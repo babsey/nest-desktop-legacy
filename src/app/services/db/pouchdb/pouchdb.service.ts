@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as PouchDB from 'pouchdb/dist/pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert/dist/pouchdb.upsert';
 
+import { Data } from '../../../classes/data';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class PouchDBService {
   constructor(
   ) { }
 
-  init(name, config) {
+  init(name: string, config: any): any {
     let host = config.host || config.port ? config.host || 'localhost' : ''
     let port = config.host || config.port ? config.port || '5984' : ''
     let dbname = config.name || name;
@@ -22,13 +23,13 @@ export class PouchDBService {
     return new PouchDB(url + dbname, options);
   }
 
-  count(db) {
+  count(db: any): any {
     return db.allDocs()
       .then(result => result.total_rows)
       .catch(err => err);
   }
 
-  list(db) {
+  list(db: any): any {
     return db.allDocs({ include_docs: true })
       .then(result => result.rows.map(row => row.doc))
       .catch(err => err);
@@ -36,7 +37,7 @@ export class PouchDBService {
 
   // CRUD - Create, Read, Update, Delete
 
-  create(db, data) {
+  create(db: any, data: any): any {
     data['createdAt'] = new Date();
     data['updatedAt'] = new Date();
     return db.post(data)
@@ -44,13 +45,13 @@ export class PouchDBService {
       .catch(err => err);
   }
 
-  read(db, id) {
+  read(db: any, id: string): any {
     return db.get(id)
       .then(doc => doc)
       .catch(err => err);
   }
 
-  update(db, data) {
+  update(db: any, data: Data): any {
     return db.get(data['_id'])
       .then(doc => {
         let keys = Object.keys(data);
@@ -63,12 +64,12 @@ export class PouchDBService {
       .catch(err => err);
   }
 
-  delete(db, id) {
+  delete(db: any, id: string): any {
     return db.get(id)
       .then(doc => db.remove(doc));
   }
 
-  deleteBulk(db, ids) {
+  deleteBulk(db: any, ids: string[]): any {
     return this.list(db).then(docs => {
       docs.filter(doc => ids.includes(doc._id)).map(doc => doc._deleted = true)
       return db.bulkDocs(docs)
@@ -77,14 +78,14 @@ export class PouchDBService {
 
   // Version
 
-  setVersion(db, version) {
+  setVersion(db: any, version: string): any {
     return db.put({
       _id: '_local/version',
       version: version,
     }).then(() => this.getVersion(db));
   }
 
-  getVersion(db) {
+  getVersion(db: any): any {
     return db.get('_local/version').then(doc => doc['version']);
   }
 

@@ -1,19 +1,62 @@
-<mde-popover #simulationDetails="mdePopover" mdeFocusTrapEnabled="false" mdePopoverPositionX="before" mdePopoverOffsetX="261" mdePopoverPositionY="below" mdePopoverOffsetY="0">
-  <ng-container *ngIf="simulation">
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="simulationMenu"
+    >
+</div>
+
+<mat-menu #simulationMenu="matMenu" class="context-menu">
+  <!-- <mat-toolbar class="ellipsis">{{ selected.name }}</mat-toolbar> -->
+  <mat-checkbox class="mat-menu-item menu-item" (click)="viewPopup=!viewPopup">
+    View
+  </mat-checkbox>
+  <button mat-menu-item class="menu-item" (click)="downloadSimulation()">
+    <fa-icon class="menu-icon" icon="download"></fa-icon> Download
+  </button>
+  <button mat-menu-item class="menu-item" (click)="deleteSimulation()" [disabled]="disabled()">
+    <fa-icon class="menu-icon" icon="trash"></fa-icon> Delete
+  </button>
+</mat-menu>
+
+<mde-popover
+  #simulationDetails="mdePopover"
+  mdeFocusTrapEnabled="false"
+  mdePopoverPositionX="before"
+  mdePopoverOffsetX="261"
+  mdePopoverPositionY="below"
+  mdePopoverOffsetY="0">
+  <ng-container *ngIf="selected && viewPopup">
     <mat-card style="width:600px">
-      <app-network-sketch [data]="simulation" width="600" height="200"></app-network-sketch>
-      <app-network-list [data]="simulation" [selective]="false"></app-network-list>
+      <app-network-sketch
+        [data]="selected"
+        [eventTrigger]="false"
+        width="600"
+        height="200"
+        ></app-network-sketch>
+      <app-network-list
+        [data]="selected"
+        [selective]="false"
+      ></app-network-list>
     </mat-card>
   </ng-container>
 </mde-popover>
 
-<mat-nav-list dense [mdePopoverTriggerFor]="simulationDetails" mdePopoverTriggerOn="none" #simulationTarget="mdePopoverTrigger" (mouseleave)="simulationTarget.closePopover()" style="padding:0">
+<mat-nav-list dense
+  (mouseleave)="simulationTarget.closePopover()"
+  [mdePopoverTriggerFor]="simulationDetails"
+  #simulationTarget="mdePopoverTrigger"
+  mdePopoverTriggerOn="none"
+  style="padding:0"
+  >
   <ng-container *ngFor="let simulation of simulations">
-    <a mat-list-item
+    <mat-list-item
+      (contextmenu)="onContextMenu($event, simulation)"
       (mouseover)="view(simulation, simulationTarget)"
+      (mouseout)="onMouseOut($event)"
       [routerLink]="['/simulation/', simulation._id]"
       class="simulation"
-      routerLinkActive="active">
+      routerLinkActive="active"
+      >
       <span class="flex">
         {{ simulation.name }}
         <div class="flex-spacer"></div>
@@ -23,6 +66,6 @@
           </span>
         </ng-container>
       </span>
-      </a>
+      </mat-list-item>
   </ng-container>
 </mat-nav-list>

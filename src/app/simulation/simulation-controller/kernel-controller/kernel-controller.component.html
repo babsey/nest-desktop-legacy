@@ -5,11 +5,9 @@
     </mat-list-item>
     <mat-list-item *ngFor="let param of params()">
       <app-ticks-slider-inline
-        (valueChange)="onChange(param.id, $event)"
-        [id]="param.id"
+        (valueChange)="onChange($event)"
         [options]="param"
-        [value]="data.simulation.kernel[param.id] || param.value"
-        class="slider"
+        [(value)]="data.simulation.kernel[param.id]"
       ></app-ticks-slider-inline>
     </mat-list-item>
   </mat-list>

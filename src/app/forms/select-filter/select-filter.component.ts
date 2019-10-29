@@ -22,7 +22,7 @@ export class SelectFilterComponent implements OnInit {
     this.filteredOptions = this.options;
   }
 
-  search(query: string) {
+  search(query: string): void {
     let result: string[] = [];
     for (let option of this.options) {
       if (option.label.toLowerCase().indexOf(query.toLowerCase()) > -1) {
@@ -32,7 +32,7 @@ export class SelectFilterComponent implements OnInit {
     this.filteredOptions = result;
   }
 
-  onSelectionChange() {
+  onSelectionChange(): void {
     this.selectedChange.emit(this.selected);
   }
 }

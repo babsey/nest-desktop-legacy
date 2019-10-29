@@ -1,14 +1,47 @@
-<span class="navigation">
-  <span class="dark-theme" routerLinkActive="active">
-    <button mat-icon-button color="primary" (click)="toggleSidenav()"><fa-icon icon="bars"></fa-icon></button>
+<div class="navigation button-toolbar">
+  <button
+    mat-icon-button
+    color="primary"
+    (click)="toggleSidenav()"
+  ><fa-icon icon="bars"></fa-icon>
+  </button>
+  <span class="simulation-theme" routerLinkActive="active">
+    <button mat-icon-button
+      (click)="openSidenav()"
+      [routerLink]="[{ outlets: { nav: ['simulation'] } }]"
+      class="app-button"
+      color="primary"
+      matTooltip="Simulation"
+      matTooltipPosition="after"
+      routerLinkActive="mat-mini-fab"
+      >
+      <fa-icon icon="brain"></fa-icon>
+    </button>
   </span>
-  <span class="navigation-button simulation-theme" routerLinkActive="active">
-    <button mat-icon-button color="primary" [routerLink]="[{ outlets: { nav: ['simulation'] } }]" (click)="openSidenav()" matTooltip="Simulation" matTooltipPosition="after"><fa-icon icon="brain"></fa-icon></button>
+  <span class="model-theme" routerLinkActive="active">
+    <button mat-icon-button
+      (click)="openSidenav()"
+      [routerLink]="[{ outlets: { nav: ['model'] } }]"
+      class="app-button"
+      color="primary"
+      matTooltip="Model"
+      matTooltipPosition="after"
+      routerLinkActive="mat-mini-fab"
+      >
+      <fa-icon icon="square-root-alt"></fa-icon>
+    </button>
   </span>
-  <span class="navigation-button model-theme" routerLinkActive="active">
-    <button mat-icon-button color="primary" [routerLink]="[{ outlets: { nav: ['model'] } }]" (click)="openSidenav()" matTooltip="Model" matTooltipPosition="after"><fa-icon icon="square-root-alt"></fa-icon></button>
-  </span>
-  <span class="navigation-button config-theme" routerLinkActive="active">
-    <button mat-icon-button color="primary" [routerLink]="[{ outlets: { nav: ['config'] } }]" (click)="openSidenav()" matTooltip="Configuration" matTooltipPosition="after"><fa-icon icon="cog"></fa-icon></button>
-  </span>
-</span>
+  <span class="config-theme" routerLinkActive="active">
+    <button mat-icon-button
+      (click)="openSidenav()"
+      [routerLink]="[{ outlets: { nav: ['config'] } }]"
+      class="app-button"
+      color="primary"
+      matTooltip="Configuration"
+      matTooltipPosition="after"
+      routerLinkActive="mat-mini-fab"
+      >
+       <fa-icon icon="cog"></fa-icon>
+     </button>
+   </span>
+</div>

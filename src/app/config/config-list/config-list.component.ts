@@ -19,12 +19,12 @@ export class ConfigListComponent implements OnInit {
   ngOnInit() {
   }
 
-  navigate(path) {
+  navigate(path: string): void {
     this.router.navigate([{outlets: {primary: 'config/' + path, nav: 'config'}}]);
     this.configClick.emit()
   }
 
-  isActive(path) {
+  isActive(path: string): boolean {
     return this.router.url.includes('/config/' + path)
   }
 

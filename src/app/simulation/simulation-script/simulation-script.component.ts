@@ -61,7 +61,7 @@ export class SimulationScriptComponent implements OnInit, OnChanges {
     this.simulationScript = simulationScript;
   }
 
-  copyScript() {
+  copyScript(): void {
     let selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';

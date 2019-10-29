@@ -1,0 +1,21 @@
+<div class="node-list"
+  [style.border-color]="color()">
+
+  <app-node-toolbar
+    [(data)]="data"
+    [node]="node"
+  ></app-node-toolbar>
+
+  <mat-list dense>
+    <ng-container *ngFor="let param of modelConfig.params">
+      <mat-list-item [style.display]="paramDisplay(param.id) ? '' : 'none'">
+        <span class="flex">
+          <span class="ellipsis">{{ param.label | capitalize }}</span>
+          <span class="flex-spacer"></span>
+          <span class="ellipsis">{{ _formatService.format(model.params[param.id] || param.value) }}</span>
+          <span class="unit">{{ param.unit }}</span>
+        </span>
+      </mat-list-item>
+    </ng-container>
+  </mat-list>
+</div>

@@ -28,15 +28,15 @@ export class GeneratorService {
     randomNormal: ['mu', 'sigma', 'size'],
   }
 
-  view(param) {
+  constructor(
+    private _mathService: MathService,
+  ) { }
+
+  view(param: string): boolean {
     return this.inputs[this.options.type].includes(param)
   }
 
-  constructor(
-    private _mathService: MathService,
-  ) {}
-
-  generate(d) {
+  generate(d: any): number[] {
     var array: any[];
     if (d.type == 'fill') {
       array = this._mathService.fill(parseFloat(d.value), parseInt(d.size))

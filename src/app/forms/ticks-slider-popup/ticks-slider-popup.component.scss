@@ -8,10 +8,6 @@
   line-height: 24px;
 }
 
-::ng-deep .param-container .param .mat-list-item-content {
-  padding: 0 !important;
-}
-
 .param-container .param-label {
   width: 100%;
 }
@@ -19,6 +15,10 @@
 .param-container .param-unit {
   text-align: right;
   width: 24px;
+}
+
+::ng-deep .param-container .param .mat-list-item-content {
+  padding: 0 !important;
 }
 
 ::ng-deep .param-menu .mat-menu-item {
@@ -79,11 +79,6 @@
 
 ::ng-deep .slider-menu .slider-container:hover .slider-header .param-menu-button-icon {
   display: block;
-}
-
-
-::ng-deep .slider-menu .slider-container .slider {
-  width: 100%;
 }
 
 ::ng-deep .slider-menu .slider-container .slider-ticklabels {

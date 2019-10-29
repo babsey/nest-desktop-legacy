@@ -1,0 +1,90 @@
+<svg:defs>
+  <svg:marker
+    id="hillock{{link.idx}}"
+    viewBox="0 0 5 3"
+    refX=3.5
+    refY=1.5
+    markerWidth=5
+    markerHeight=3
+    orient="auto"
+    >
+    <svg:path
+      [style.fill]="color"
+      d="M0.5,0L5,1.5L0,2.5"
+    ></svg:path>
+  </svg:marker>
+
+  <svg:marker
+    id="terminus{{link.idx}}"
+    viewBox="0 0 5 5"
+    refX=1
+    refY=2.5
+    markerWidth=5
+    markerHeight=5
+    orient="auto"
+    >
+    <ng-container [ngSwitch]="synWeight() > 0">
+      <ng-container *ngSwitchCase="true">
+        <svg:path
+          [style.fill]="color"
+          d="M3.5,0L0,2.5L5,4.5"
+        ></svg:path>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="false">
+        <svg:circle
+          [style.fill]="color"
+          r=2
+          transform="translate(2.5,2.5)"
+        ></svg:circle>
+      </ng-container>
+    </ng-container>
+  </svg:marker>
+
+  <svg:marker
+    id="exc{{link.idx}}"
+    [attr.refX]="nodeRadius() + 1.5"
+    refY=1
+    markerWidth=3
+    markerHeight=2
+    orient="auto">
+    <svg:path
+      [style.fill]="color"
+      d="M0,0L0,1.5L3,1"
+    ></svg:path>
+  </svg:marker>
+
+  <svg:marker
+    id="inh{{link.idx}}"
+    [attr.refX]="nodeRadius() + 2"
+    refY=2
+    markerWidth=4
+    markerHeight=4
+    orient="auto">
+    <svg:circle
+      [style.fill]="color"
+      r=1
+      transform="translate(2,2)"
+    ></svg:circle>
+  </svg:marker>
+</svg:defs>
+
+<svg:path
+  (click)="onClick($event)"
+  [attr.d]="drawPath()"
+  class="link"
+  style="stroke: white; stroke-linecap:round"
+  [style.stroke-width.px]="linkWidth() * 3"
+  [style.marker-end]="'url(#' + (synWeight() > 0 ? 'exc' : 'inh') + link.idx + ')'"
+  [style.opacity]="(distance() < linkMaxDistance()) || isNodeFocused() || isNodeSelected() || isLinkFocused() || isLinkSelected() ? 1 : terminusOpacity()"
+></svg:path>
+
+<svg:path
+  [attr.d]="drawPath()"
+  [style.stroke]="color"
+  [style.stroke-dasharray]="selected == link ? '10, 5' : ''"
+  style="pointer-events: none"
+  [style.stroke-width.px]="linkWidth()"
+  class="link"
+  [style.opacity]="(distance() < linkMaxDistance()) || isNodeFocused() || isNodeSelected() || isLinkFocused() || isLinkSelected() ? 1 : linkOpacity()"
+></svg:path>

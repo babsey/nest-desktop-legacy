@@ -1,25 +1,32 @@
-#simulation {
+:host {
   height: 100vh;
+}
 
-  #controller,
-  #selection {
-    width: 338px;
-  }
+.title {
+  height: 48px;
+  line-height: 48px;
+  margin-top: -23px;
+  width: 100%;
 
-  .title {
-    height: 48px;
-    line-height: 48px;
-    margin-top: -23px;
+  mat-form-field {
     width: 100%;
-
-    mat-form-field {
-      width: 100%;
-      font-weight: 500;
-    }
+    font-weight: 500;
   }
+}
 
-  .visualization-content {
-    height: 100vh;
-    overflow: hidden;
-  }
+.button-toolbar {
+  position: absolute;
+  top: 40px;
+  right: 338px;
+  width: 36px;
+  z-index: 1000;
+}
+
+#controller {
+  width: 338px;
+}
+
+.visualization-content {
+  height: 100vh;
+  overflow: hidden;
 }

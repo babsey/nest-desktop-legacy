@@ -1,19 +1,9 @@
-<mat-menu #valueMenu="matMenu" class="value-menu">
-  <button mat-menu-item *ngIf="options.value" matTooltip="Default value: {{ options.value }}" matTooltipPosition="before" (click)="setDefaultValue()">Set default value</button>
-  <button mat-menu-item *ngIf="model" (click)="openConfigDialog()">Configure</button>
-</mat-menu>
-
 <mat-menu #inputMenu="matMenu" class="input-menu" overlapTrigger="true">
   <span class="input-container" (click)="$event.stopPropagation();">
     <div class="input-header flex">
       <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
       <span class="flex-spacer"></span>
-      <mat-nav-list style="padding:0;display:flex;">
-        <mat-list-item class="param-menu-button" [matMenuTriggerFor]="valueMenu">
-          <span class="param-unit">{{ options.unit }}</span>
-          <fa-icon class="param-menu-button-icon" icon="ellipsis-v"></fa-icon>
-        </mat-list-item>
-      </mat-nav-list>
+      <span class="param-unit">{{ options.unit }}</span>
     </div>
 
     <mat-form-field style="width:calc(100% - 10px); font-size:12px; padding: 0 5px">

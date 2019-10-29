@@ -29,11 +29,11 @@ export class ModelComponent implements OnInit {
     }
   }
 
-  advanced() {
+  advanced(): boolean {
     return this._appConfigService.config['app'].advanced;
   }
 
-  addModel() {
+  addModel(): void {
     var model = this._modelService.selectedModel;
     var config = {
       id: model,
@@ -45,13 +45,13 @@ export class ModelComponent implements OnInit {
     // this._modelService.save(config)
   }
 
-  removeModel() {
+  removeModel(): void {
     var model = this._modelService.selectedModel;
     delete this._modelService.models[model]
     // this._modelService.delete(this.model)
   }
 
-  changeModel(event) {
+  changeModel(event: any): void {
     if (event.checked) {
       this.addModel();
     } else {

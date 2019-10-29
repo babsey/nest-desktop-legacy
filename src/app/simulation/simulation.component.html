@@ -1,78 +1,237 @@
-<span id="simulation">
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="simulationMenu"
+    >
+</div>
+
+<mat-menu #simulationMenu="matMenu" class="context-menu">
+  <mat-toolbar class="ellipsis">Simulation</mat-toolbar>
+
+  <button mat-menu-item (click)="configSimulation()">
+    <fa-icon icon="cog"></fa-icon> Configure simulation
+  </button>
+
+  <mat-selection-list dense style="padding:0" (selectionChange)="onSelectionChange($event)" (click)="$event.stopPropagation()">
+    <mat-list-option
+      [selected]="_simulationRunService.config['autoRandomSeed']"
+      value="autoRandomSeed"
+      class="mat-menu-item">
+      <span>Randomize seed</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="_simulationRunService.config['runAfterChange']"
+      value="runAfterChange"
+      class="mat-menu-item">
+      <span>Simulate after change</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="_simulationRunService.config['runAfterLoad']"
+      value="runAfterLoad"
+      class="mat-menu-item">
+      <span>Simulate after load</span>
+    </mat-list-option>
+  </mat-selection-list>
+
+</mat-menu>
+
+<ng-container *ngIf="data.hasOwnProperty('app'); else loading">
   <span class="simulation-theme">
-    <mat-toolbar class="navbar content" color="primary">
-      <ng-container *ngIf="data">
+    <mat-toolbar class="navbar content flex" color="primary">
+      <!-- <ng-container *ngIf="data"> -->
         <span class="title">
           <mat-form-field floatLabel="never">
-            <input matInput type="text" class="formControl" [(ngModel)]="data.name" [disabled]="this._dataService.mode!='edit'" placeholder="Name of the simulation"/>
-            <span *ngIf="this._dataService.mode=='edit'" matSuffix>
-              <button mat-icon-button aria-label="Clear" (click)="data.name=''" class="button no-print">
+            <input matInput type="text" class="formControl" [(ngModel)]="data.name" [disabled]="this._simulationService.mode!='edit'" placeholder="Name of the simulation"/>
+            <span *ngIf="this._simulationService.mode=='edit'" matSuffix>
+              <button mat-icon-button aria-label="Clear" (click)="data.name=''" class="button">
                 <fa-icon icon="times" [style.display]="data.name ? '' : 'none'"></fa-icon>
               </button>
             </span>
           </mat-form-field>
         </span>
-        <span class="spacer"></span>
-        <ng-container *ngIf="_dataService.mode=='run'">
-          <button mat-icon-button (click)="toggleBottomSheet()" [class.active]="isBottomSheetOpened()">
-            <fa-icon icon="shapes" rotate="90"></fa-icon>
-          </button>
-  			  <mat-divider class="style-fix" [vertical]="true"></mat-divider>
-          <button mat-icon-button (click)="mode='network'" [class.active]="mode=='network'" matTooltip="Network configurations">
-            <fa-icon icon="bezier-curve"></fa-icon>
-          </button>
-          <button mat-icon-button (click)="mode='simulation'" [class.active]="mode=='simulation'" matTooltip="Simulation configurations">
-            <fa-icon icon="cogs"></fa-icon>
-          </button>
-          <button mat-icon-button (click)="mode='visualization'" [class.active]="mode=='visualization'" matTooltip="Chart configurations">
+        <span class="flex-spacer"></span>
+        <ng-container *ngIf="_simulationService.mode=='run'">
+          <button
+            (click)="selectVisualizationModus('plot')"
+            [class.mat-icon-button]="_visualizationService.mode!='plot'"
+            [class.mat-mini-fab]="_visualizationService.mode=='plot'"
+            matTooltip="Plot"
+            >
             <fa-icon icon="chart-line"></fa-icon>
           </button>
-          <button mat-icon-button (click)="mode='stats'" [class.active]="mode=='stats'" matTooltip="Simulation stats">
-            <fa-icon icon="poll"></fa-icon>
+          <button
+            [disabled]="!_visualizationService.hasPositions"
+            (click)="selectVisualizationModus('animation')"
+            [class.mat-icon-button]="_visualizationService.mode!='animation'"
+            [class.mat-mini-fab]="_visualizationService.mode=='animation'"
+            matTooltip="Animation"
+            >
+            <fa-icon icon="braille"></fa-icon>
+          </button>
+          <mat-divider class="style-fix" [vertical]="true"></mat-divider>
+          <button
+            (click)="toggleBottomSheet()"
+            [class.mat-icon-button]="!isBottomSheetOpened()"
+            [class.mat-mini-fab]="isBottomSheetOpened()"
+            matTooltip="network sketch"
+            >
+            <fa-icon icon="shapes" rotate="90"></fa-icon>
           </button>
         </ng-container>
-			  <mat-divider class="style-fix" [vertical]="true"></mat-divider>
+        <mat-divider class="style-fix" [vertical]="true"></mat-divider>
         <button mat-icon-button (click)="save()" matTooltip="Save the current network">
           <fa-icon icon="save"></fa-icon>
         </button>
-        <button mat-icon-button (click)="details()" [class.active]="_dataService.mode=='details'">
+        <button
+          (click)="details()"
+          [class.mat-icon-button]="_simulationService.mode!='details'"
+          [class.mat-mini-fab]="_simulationService.mode=='details'"
+          >
           <fa-icon icon="eye"></fa-icon>
         </button>
-        <button mat-icon-button (click)="edit()" [class.active]="_dataService.mode=='edit'">
+        <button
+          (click)="edit()"
+          [class.mat-icon-button]="_simulationService.mode!='edit'"
+          [class.mat-mini-fab]="_simulationService.mode=='edit'"
+          >
           <fa-icon icon="pen"></fa-icon>
         </button>
-        <button mat-icon-button (click)="run()" [class.active]="_dataService.mode=='run'">
-          <fa-icon icon="play"></fa-icon>
+        <button
+          (click)="run(true)"
+          (contextmenu)="onContextMenu($event)"
+          (mouseout)="onMouseOut($event)"
+          (mouseover)="onMouseOver($event)"
+          [class.mat-accent]="_simulationRunService.running"
+          [class.mat-icon-button]="_simulationService.mode!='run'"
+          [class.mat-mini-fab]="_simulationService.mode=='run'"
+          class="mat-button-base"
+          >
+          <span class="mat-button-wrapper">
+            <ng-container [ngSwitch]="_simulationRunService.running">
+              <ng-container *ngSwitchCase="true">
+                <fa-icon icon="spinner"
+                  class="fa-lg fa-pulse"
+                  style="display:inline-block"></fa-icon>
+              </ng-container>
+              <ng-container *ngSwitchCase="false">
+                <fa-icon icon="play"></fa-icon>
+              </ng-container>
+            </ng-container>
+          </span>
         </button>
-        <!-- <button mat-icon-button>
-          <fa-icon icon="ellipsis-v"></fa-icon>
-        </button> -->
-      </ng-container>
+      <!-- </ng-container> -->
     </mat-toolbar>
   </span>
 
-  <ng-container [ngSwitch]="_dataService.mode">
+  <ng-container [ngSwitch]="_simulationService.mode">
     <ng-container *ngSwitchCase="'details'">
-      <app-simulation-details [data]="data"></app-simulation-details>
+      <app-simulation-details [(data)]="data" (dataChange)="onDataChange($event)"></app-simulation-details>
     </ng-container>
 
     <ng-container *ngSwitchCase="'edit'">
-      <app-network [data]="data" (networkChange)="onNetworkChange($event)"></app-network>
+      <app-network [(data)]="data" (dataChange)="onDataChange($event)"></app-network>
     </ng-container>
 
     <ng-container *ngSwitchCase="'run'">
+      <div class="button-toolbar">
+        <button
+          (click)="selectControllerMode('network')"
+          [class.mat-icon-button]="_simulationControllerService.mode!='network'"
+          [class.mat-mini-fab]="_simulationControllerService.mode=='network'"
+          matTooltip="Network configurations"
+          matTooltipPosition="before"
+          class="app-button"
+          >
+          <fa-icon icon="project-diagram"></fa-icon>
+        </button>
+        <button
+          (click)="selectControllerMode('simulation')"
+          [class.mat-icon-button]="_simulationControllerService.mode!='simulation'"
+          [class.mat-mini-fab]="_simulationControllerService.mode=='simulation'"
+          matTooltip="Simulation configurations"
+          matTooltipPosition="before"
+          class="app-button"
+          >
+          <fa-icon icon="cog"></fa-icon>
+        </button>
+        <button *ngIf="_visualizationService.mode=='plot'"
+          (click)="selectControllerMode('plot')"
+          [class.mat-icon-button]="_simulationControllerService.mode!='plot'"
+          [class.mat-mini-fab]="_simulationControllerService.mode=='plot'"
+          matTooltip="Chart controller"
+          matTooltipPosition="before"
+          class="app-button"
+          >
+          <fa-icon icon="chart-line"></fa-icon>
+        </button>
+        <button *ngIf="_visualizationService.mode=='animation'"
+          (click)="selectControllerMode('animation')"
+          [class.mat-icon-button]="_simulationControllerService.mode!='animation'"
+          [class.mat-mini-fab]="_simulationControllerService.mode=='animation'"
+          matTooltip="Animation controller"
+          matTooltipPosition="before"
+          class="app-button"
+          >
+          <fa-icon icon="braille"></fa-icon>
+        </button>
+        <button
+          (click)="selectControllerMode('stats')"
+          [class.mat-icon-button]="_simulationControllerService.mode!='stats'"
+          [class.mat-mini-fab]="_simulationControllerService.mode=='stats'"
+          matTooltip="Simulation stats"
+          matTooltipPosition="before"
+          class="app-button"
+          >
+          <fa-icon icon="poll"></fa-icon>
+        </button>
+      </div>
+
       <mat-sidenav-container style="height:calc(100vh - 40px)">
-        <mat-sidenav disableClose="true" id="controller" mode="side" opened="true" position="end" role="region" style="height:100vh">
-          <app-controller [mode]="mode" [data]="data" [records]="records" (simulationChange)="onSimulationChange($event)" (appChange)="onAppChange($event)"></app-controller>
+        <mat-sidenav
+          disableClose="true"
+          id="controller"
+          mode="side"
+          opened="true"
+          position="end"
+          role="region"
+          style="height:100vh"
+          >
+          <app-controller
+            (appChange)="onAppChange($event)"
+            (dataChange)="onDataChange($event)"
+            [(data)]="data"
+            [mode]="_simulationControllerService.mode"
+            [records]="records"
+          ></app-controller>
         </mat-sidenav>
 
         <mat-sidenav-content class="visualization-content">
-          <ng-container *ngIf="records.length > 0 && data != undefined">
-            <app-records-visualization [data]="data" [records]="records"></app-records-visualization>
+          <ng-container *ngIf="records.length > 0 && data != undefined; else noRecords">
+            <app-visualization
+              [data]="data"
+              [records]="records"
+            ></app-visualization>
           </ng-container>
+
+          <ng-template #noRecords>
+              <div style="height:100%" class="flex">
+                <span style="margin:auto">
+                  <span style="margin-left: 8px">No records found.</span>
+                </span>
+              </div>
+          </ng-template>
         </mat-sidenav-content>
 
       </mat-sidenav-container>
     </ng-container>
   </ng-container>
-</span>
+</ng-container>
+
+<ng-template #loading>
+  <div style="height:100%" class="flex">
+    <span style="margin:auto">
+      <fa-icon icon="compact-disc" class="fa-lg fa-spin" style="display:inline-block"></fa-icon>
+      <span style="margin-left: 8px">Data is loading.</span>
+    </span>
+  </div>
+</ng-template>

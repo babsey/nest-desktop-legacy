@@ -11,34 +11,20 @@
   </mat-sidenav>
 
   <mat-sidenav-content #content>
-
-    <!-- <div
-      (mouseleave)="buttonDisplay='0.2'"
-      (mousemove)="buttonDisplay='1'"
-      class="navButton"
-    ></div> -->
-
-    <!-- <button mat-fab type="button" class="buttonLeft no-print"
-      [style.top]="(content.elementRef.nativeElement.clientHeight / 2) + 'px'"
-      [style.opacity]="buttonDisplay"
-      (click)="toggleNavigationOpened()"
-      (mousemove)="buttonDisplay='1'"
-      (mouseleave)="buttonDisplay='0.2'"
-      >
-      <fa-icon *ngIf="!isNavigationOpened()" icon="chevron-right"></fa-icon>
-      <fa-icon *ngIf="isNavigationOpened()" icon="chevron-left"></fa-icon>
-    </button> -->
-
     <ng-container [ngSwitch]="ready">
       <ng-container *ngSwitchCase="false">
         <span class="background" [style.display]="_appConfigService.config.app.loading ? '' : 'None'">
-          <img src="/assets/img/spike_transmission_carlos.png" width="700px" style="margin:50px" />
-
-          <div style="margin:20px">
-            <pre class="quote">"Ah! My poor brain is racked and crazed, my spirit and senses amazed!"</pre>
-            <div class="author">Johann Wolfgang Von Goethe (from Faust, 1808)</div>
+          <div style="margin:auto">
+            <figure>
+              <img src="/assets/img/spike-transmission-carlos.png" />
+            </figure>
           </div>
         </span>
+
+        <div style="position:absolute; bottom: 20px; right: 20px; background: rgb(250,250,250)">
+          <div class="quote">"Ah! My poor brain is racked and crazed, my spirit and senses amazed!"</div>
+          <div class="author">Johann Wolfgang Von Goethe (from Faust, 1808)</div>
+        </div>
       </ng-container>
       <ng-container *ngSwitchCase="true">
         <app-navigation id="navigation-button"></app-navigation>
@@ -48,3 +34,7 @@
   </mat-sidenav-content>
 
 </mat-sidenav-container>
+
+<div class="mouse-right-click" [style.display]="_appService.rightClick && !advanced() ? '' : 'none'">
+  <img src="/assets/img/mouse-right-click.png" width="48px"/>
+</div>

@@ -2,9 +2,13 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
 
-import { NestServerService } from '../../nest-server/nest-server.service';
+import { AnimationControllerService } from '../../visualization/animation/animation-controller/animation-controller.service';
 import { DataService } from '../../services/data/data.service';
 import { LogService } from '../../log/log.service';
+import { NestServerService } from '../../nest-server/nest-server.service';
+
+import { Data } from '../../classes/data';
+
 
 var STORAGE_NAME = 'simulation-config';
 
@@ -14,16 +18,18 @@ var STORAGE_NAME = 'simulation-config';
 export class SimulationRunService {
   private snackBarRef: any;
   public config: Object = {
-    autoSimulation: true,
+    runAfterLoad: true,
+    runAfterChange: true,
     autoRandomSeed: false,
   }
   public running: boolean = false;
   public simulated: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private _nestServerService: NestServerService,
+    private _animationControllerService: AnimationControllerService,
     private _dataService: DataService,
     private _logService: LogService,
+    private _nestServerService: NestServerService,
     private http: HttpClient,
     private snackBar: MatSnackBar,
   ) {
@@ -35,15 +41,15 @@ export class SimulationRunService {
     }
   }
 
-  saveConfig() {
+  saveConfig(): void {
     let configJSON = JSON.stringify(this.config);
     localStorage.setItem(STORAGE_NAME, configJSON);
   }
 
-  run(data, force = false) {
+  run(data: Data, force: boolean = false): void {
     if (this.running) return
     // console.log('Run simulation')
-    if (!(force || this.config['autoSimulation'])) return
+    if (!(force || this.config['runAfterChange'])) return
 
     var urlRoot = this._nestServerService.url();
     this._logService.reset()
@@ -66,12 +72,11 @@ export class SimulationRunService {
           duration: 5000
         });
       } else {
-        this._logService.logs = this._logService.logs.concat(res['data'].logs || []);
-        this._logService.log('Response from server')
         if (this.snackBarRef) {
           this.snackBarRef.dismiss();
         }
-        this._logService.log('Update record data')
+        this._logService.logs = this._logService.logs.concat(res['data'].logs || []);
+        this._logService.log('Response from server')
         this.simulated.emit(res['data'])
       }
     },

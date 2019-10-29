@@ -19,14 +19,13 @@ export class AppConfigComponent implements OnInit {
     this._appConfigService.init()
   }
 
-  onSelectionChange(event) {
+  onSelectionChange(event: any): void {
     this._appConfigService.config.app[event.option.value] = event.option.selected;
     this._appConfigService.save()
   }
 
-  onChange(event) {
+  onChange(event: any): void {
     this._appConfigService.save()
   }
-
 
 }

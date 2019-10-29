@@ -3,9 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import { GeneratorService } from '../../services/generator/generator.service';
-
 import { ArrayGeneratorDialogComponent } from '../array-generator-dialog/array-generator-dialog.component';
-import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-dialog.component';
 
 
 @Component({
@@ -14,7 +12,6 @@ import { FormsConfigDialogComponent } from '../forms-config-dialog/forms-config-
   styleUrls: ['./array-input-popup.component.scss']
 })
 export class ArrayInputPopupComponent implements OnInit {
-  @Input() model: string;
   @Input() options: any;
   @Input() value: any;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
@@ -28,11 +25,11 @@ export class ArrayInputPopupComponent implements OnInit {
     // console.log('Init array input')
   }
 
-  stringify(value) {
+  stringify(value: any): string {
     return JSON.stringify(value || []);
   }
 
-  onChange(valueJSON) {
+  onChange(valueJSON: string): void {
     // console.log('Change value of array input')
     var value = JSON.parse(valueJSON) || [];
     this.valueChange.emit(value);
@@ -51,17 +48,6 @@ export class ArrayInputPopupComponent implements OnInit {
         this.valueChange.emit(this.value)
       }
     });
-  }
-
-  openConfigDialog() {
-    if (this.options.id && this.model) {
-      this.dialog.open(FormsConfigDialogComponent, {
-        data: {
-          id: this.options.id,
-          model: this.model,
-        }
-      });
-    }
   }
 
 }

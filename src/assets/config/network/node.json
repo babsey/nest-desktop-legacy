@@ -3,10 +3,9 @@
   "npop": {
     "id": "n",
     "label": "population size",
-    "level": 1,
     "value": 1,
     "input": "valueSlider",
-    "max": 100,
+    "max": 1000,
     "min": 1,
     "step": 1
   }

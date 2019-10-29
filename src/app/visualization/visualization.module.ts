@@ -12,33 +12,39 @@ import { AppFormsModule } from '../forms/forms.module';
 import { AppPipesModule } from '../pipes/pipes.module';
 import { MaterialModule } from '../modules/material.module';
 
-import { AnimationControllerComponent } from './visualization-controller/animation-controller/animation-controller.component';
-import { ChartControllerComponent } from './visualization-controller/chart-controller/chart-controller.component';
-import { RecordsVisualizationComponent } from './records-visualization/records-visualization.component';
-import { ThreeScatterComponent } from './three-scatter/three-scatter.component';
+import { AnimationAnalogComponent } from './animation/animation-analog/animation-analog.component';
+import { AnimationControllerComponent } from './animation/animation-controller/animation-controller.component';
+import { AnimationSpikeComponent } from './animation/animation-spike/animation-spike.component';
+import { AnimationColormapComponent } from './animation/animation-colormap/animation-colormap.component';
+import { PlotControllerComponent } from './plot/plot-controller/plot-controller.component';
+import { PlotRecordsComponent } from './plot/plot-records/plot-records.component';
+import { ThreeScatterComponent } from './animation/three-scatter/three-scatter.component';
 import { VisualizationComponent } from './visualization.component';
 import { VisualizationConfigComponent } from './visualization-config/visualization-config.component';
-import { VisualizationControllerComponent } from './visualization-controller/visualization-controller.component';
 
 
 @NgModule({
   declarations: [
+    AnimationAnalogComponent,
+    AnimationColormapComponent,
     AnimationControllerComponent,
-    ChartControllerComponent,
-    RecordsVisualizationComponent,
+    AnimationSpikeComponent,
+    PlotControllerComponent,
+    PlotRecordsComponent,
     ThreeScatterComponent,
     VisualizationComponent,
     VisualizationConfigComponent,
-    VisualizationControllerComponent,
   ],
   exports: [
+    AnimationAnalogComponent,
+    AnimationColormapComponent,
     AnimationControllerComponent,
-    ChartControllerComponent,
-    RecordsVisualizationComponent,
+    AnimationSpikeComponent,
+    PlotControllerComponent,
+    PlotRecordsComponent,
     ThreeScatterComponent,
     VisualizationComponent,
     VisualizationConfigComponent,
-    VisualizationControllerComponent,
   ],
   imports: [
     AppFormsModule,

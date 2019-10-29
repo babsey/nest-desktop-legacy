@@ -5,10 +5,9 @@
     </mat-list-item>
     <mat-list-item *ngFor="let param of params()">
       <app-value-slider-inline
-        (valueChange)="onChange(param.id, $event)"
+        (valueChange)="onChange($event, param.id)"
         [options]="param"
-        [value]="data.simulation[param.id] || param.value"
-        class="slider"
+        [(value)]="data.simulation[param.id]"
       ></app-value-slider-inline>
     </mat-list-item>
   </mat-list>
@@ -17,8 +16,11 @@
     <mat-list-option [selected]="_simulationRunService.config['autoRandomSeed']" value="autoRandomSeed">
       <span>Randomize seed</span>
     </mat-list-option>
-    <mat-list-option [selected]="_simulationRunService.config['autoSimulation']" value="autoSimulation">
+    <mat-list-option [selected]="_simulationRunService.config['runAfterChange']" value="runAfterChange">
       <span>Simulate after change</span>
+    </mat-list-option>
+    <mat-list-option [selected]="_simulationRunService.config['runAfterLoad']" value="runAfterLoad">
+      <span>Simulate after load</span>
     </mat-list-option>
   </mat-selection-list>
 </span>

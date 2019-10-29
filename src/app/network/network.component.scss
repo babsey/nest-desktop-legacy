@@ -18,14 +18,11 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.12)
 }
 
-::ng-deep .selection .mat-list {
-  padding: 0 8px;
-}
-
-::ng-deep .selection .mat-list-item-content {
-  padding: 0 8px !important;
-}
-
-::ng-deep .selection .mat-list-option .mat-list-text {
-  padding-right: 5px !important;
+.button-toolbar {
+  position: absolute;
+  top: 40px;
+  right: 338px;
+  width: 36px;
+  height: calc(100% - 40px);
+  z-index: 1000;
 }

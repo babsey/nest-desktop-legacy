@@ -9,26 +9,25 @@ export class PositionService {
 
   constructor() { }
 
-  range(min, max, size) {
+  range(min: number, max: number, size: number): number[] {
     var step = (max - min) / size / 2;
     return math.range(min, max, step)['_data'].filter((v, i) => i % 2 == 1)
   }
 
-  round(val) {
+  round(val: number): number {
     return Math.floor(val * 100) / 100;
   }
 
-  freePositions(collection) {
-    var center = collection.spatial.center || [0, 0];
-    var extent = collection.spatial.extent || [1, 1];
+  freePositions(n:number = 1, spatial: any): number[][] {
+    var center = spatial['center'] || [0, 0];
+    var extent = spatial['extent'] || [1, 1];
     var minX = center[0] - extent[0] / 2;
     var maxX = center[0] + extent[0] / 2;
     var minY = center[1] - extent[1] / 2;
     var maxY = center[1] + extent[1] / 2;
-    var length = collection.n || 1;
     // console.log(center,extent,minX,maxX,minY,maxY,length)
 
-    var positions = Array.from({ length: length }, () => {
+    var positions = Array.from({ length: n }, () => {
       var x = math.random(minX, maxX);
       var y = math.random(minY, maxY);
       return [this.round(x), this.round(y)];
@@ -36,15 +35,15 @@ export class PositionService {
     return positions;
   }
 
-  gridPositions(collection) {
-    var center = collection.spatial.center || [0, 0];
-    var extent = collection.spatial.extent || [1, 1];
+  gridPositions(spatial: any): number[][] {
+    var center = spatial['center'] || [0, 0];
+    var extent = spatial['extent'] || [1, 1];
     var minX = center[0] - extent[0] / 2;
     var maxX = center[0] + extent[0] / 2;
     var minY = center[1] - extent[1] / 2;
     var maxY = center[1] + extent[1] / 2;
-    var rows = collection.spatial['rows'] || 1;
-    var columns = collection.spatial['columns'] || 1;
+    var rows = spatial['rows'] || 1;
+    var columns = spatial['columns'] || 1;
     // console.log(center,extent,minX,maxX,minY,maxY,rows,columns)
 
     var X = this.range(minX, maxX, rows);

@@ -4,7 +4,11 @@
       <span style="width:50%; padding: 0 4px">
         <ng-container *ngFor="let node of data.app.nodes">
           <ng-container *ngIf="nodeDisplay(node)">
-            <app-node-list [data]="data" [idx]="node.idx" [selective]="paramSelective"></app-node-list>
+            <app-node-list
+              [(data)]="data"
+              [node]="node"
+              [selective]="paramSelective"
+            ></app-node-list>
           </ng-container>
         </ng-container>
       </span>
@@ -12,7 +16,11 @@
       <span style="width:50%; padding: 0 4px">
         <ng-container *ngFor="let link of data.app.links">
           <ng-container *ngIf="linkDisplay(link)">
-            <app-link-list [data]="data" [idx]="link.idx" [selective]="paramSelective"></app-link-list>
+            <app-link-list
+              [(data)]="data"
+              [link]="link"
+              [selective]="paramSelective"
+            ></app-link-list>
           </ng-container>
         </ng-container>
       </span>

@@ -1,32 +1,35 @@
-<mat-menu #valueMenu="matMenu" class="value-menu">
-  <button mat-menu-item matTooltip="Default value: {{ options.value }}" matTooltipPosition="before" (click)="setDefaultValue()">
-    <span>Set default value</span>
-  </button>
-  <button mat-menu-item *ngIf="model" matTooltip="Config" matTooltipPosition="before" (click)="openConfigDialog()">
-    <span>Configure</span>
-  </button>
-</mat-menu>
+<div class="slider-container">
 
-<div class="slider-container" matTooltip="{{ id }}" matTooltipPosition="before">
-
-  <span class="slider-header">
-    {{ options.label }}
-    <span *ngIf="options.unit">({{ options.unit }})</span>
+  <span class="slider-header ellipsis">
+    <span class="ellipsis">{{ options.label | capitalize }}</span>
+    <span *ngIf="options.unit"> ({{ options.unit }})</span>
   </span>
 
   <div class="slider-content">
     <span class="flex">
-      <mat-slider thumbLabel class="slider" [ngModel]="value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
-      </mat-slider>
-      <mat-form-field class="slider-input" floatLabel="never">
-        <input matInput type="number" [ngModel]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
+      <mat-slider
+        (change)="onChange($event)"
+        (input)="value=$event.value"
+        [max]="options.max"
+        [min]="options.min"
+        [(ngModel)]="value"
+        [step]="options.step"
+      ></mat-slider>
+
+      <mat-form-field class="slider-form-field" floatLabel="never">
+        <input matInput
+          (change)="onChange($event)"
+          [defaultValue]="options.value"
+          [max]="options.max"
+          [min]="options.min"
+          [(ngModel)]="value"
+          [placeholder]="options.value"
+          [step]="options.step"
+          type="number"
+          tabindex="-1"
+        >
       </mat-form-field>
 
-      <span style="width:20px; height:20px; line-height:40px; margin-right:-10px">
-        <button mat-icon-button [matMenuTriggerFor]="valueMenu" class="button" style="width:20px; height:20px !important;line-height:20px">
-          <fa-icon icon="ellipsis-v"></fa-icon>
-        </button>
-      </span>
     </span>
   </div>
 

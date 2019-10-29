@@ -1,7 +1,15 @@
-<mat-menu #configMenu="matMenu" class="dense">
+<mat-menu #configMenu="matMenu" class="context-menu">
   <button mat-menu-item (click)="reset()">
-    <fa-icon icon="undo" style="margin-right:10px"></fa-icon>
-    Reset configuration
+    <fa-icon class="menu-icon"  icon="undo"></fa-icon>
+    Reset configurations
+  </button>
+  <button mat-menu-item (click)="download()">
+    <fa-icon class="menu-icon"  icon="download"></fa-icon>
+    Download configurations
+  </button>
+  <button mat-menu-item (click)="upload()">
+    <fa-icon class="menu-icon" icon="upload"></fa-icon>
+    Upload configurations
   </button>
 </mat-menu>
 

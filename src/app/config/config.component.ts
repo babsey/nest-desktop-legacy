@@ -28,8 +28,13 @@ export class ConfigComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe()
   }
 
-  reset() {
-    
+  reset(): void {
+  }
+
+  download(): void {
+  }
+
+  upload(): void {
   }
 
 }

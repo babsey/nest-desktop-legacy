@@ -19,18 +19,18 @@ export class NetworkConfigComponent implements OnInit {
   ngOnInit() {
   }
 
-  onChange(event) {
+  onChange(event: any): void {
     this._networkConfigService.config.app[event.option.value] = event.option.selected;
     this._networkConfigService.save()
   }
 
-  selectColor(idx, color) {
+  selectColor(idx: number, color: string): void {
     this._networkConfigService.config.color.scheme = '';
     this._networkConfigService.config.color.cycle[idx] = color;
     this._networkConfigService.save()
   }
 
-  selectScheme(event) {
+  selectScheme(event: any): void {
     this._networkConfigService.config.color.cycle = Array.apply([], this._colorService.schemes[event.value]);
     this._networkConfigService.save()
   }

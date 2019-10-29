@@ -1,0 +1,48 @@
+<div class="node-selection"
+  [style.display]="nodeDisplay()"
+  [style.border-color]="color()"
+  >
+
+  <app-node-toolbar
+    [(data)]="data"
+    [node]="node"
+  ></app-node-toolbar>
+
+  <ng-container *ngIf="!isRecorder()">
+    <ng-container *ngIf="!isSpatial()">
+      <mat-list dense>
+        <mat-list-item style="height:40px;line-height:40px">
+          <app-node-param
+            (valueChange)="onValueChange($event)"
+            [(value)]="collection.n"
+            [options]="_networkConfigService.config['node'].npop"
+            view="valueSlider"
+          ></app-node-param>
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+
+    <ng-container *ngIf="isSpatial()">
+      <mat-nav-list dense>
+        <mat-list-item>
+          <app-node-spatial [node]="node" [collection]="collection"></app-node-spatial>
+        </mat-list-item>
+      </mat-nav-list>
+    </ng-container>
+  </ng-container>
+
+  <mat-selection-list dense
+    (click)="dataChange.emit(data)"
+    [(ngModel)]="data.app.models[collection.model].display"
+    >
+    <ng-container *ngFor="let param of configModel.params">
+      <mat-list-option [value]="param.id">
+        <span class="flex">
+          <span class="ellipsis">{{ param.label | capitalize }}</span>
+          <span class="flex-spacer"></span>
+          <span class="unit">{{ param.unit }}</span>
+        </span>
+      </mat-list-option>
+    </ng-container>
+  </mat-selection-list>
+</div>

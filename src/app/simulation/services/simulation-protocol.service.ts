@@ -7,6 +7,9 @@ import { DataService } from '../../services/data/data.service';
 import { DBService } from '../../services/db/db.service';
 import { NavigationService } from '../../navigation/navigation.service';
 import { SimulationConfigService } from '../simulation-config/simulation-config.service';
+import { NetworkService } from '../../network/services/network.service';
+
+import { Data } from '../../classes/data';
 
 
 @Injectable({
@@ -25,44 +28,46 @@ export class SimulationProtocolService {
     private _dataService: DataService,
     private _dbService: DBService,
     private _navigationService: NavigationService,
+    private _networkService: NetworkService,
     private _simulationConfigService: SimulationConfigService,
     private snackBar: MatSnackBar,
   ) {
   }
 
-  init() {
+  init(): void {
     var config = this._simulationConfigService.config['db']['protocol'];
     this.db = this._dbService.init('protocol', config);
     this.initVersion()
   }
 
-  loadSimulations() {
+  loadSimulations(): any {
     return this.list().then(simulations => {
       simulations.map(simulation => simulation['source'] = 'protocol')
       return simulations;
     })
   }
 
-  count() {
+  count(): any {
     return this._dbService.db.count(this.db);
   }
 
-  list() {
+  list(): any {
     return this._dbService.db.list(this.db);
   }
 
-  load(id) {
+  load(id: string): any {
     // console.log('Load protocol')
     return this._dbService.db.read(this.db, id)
   }
 
-  hashList() {
+  hashList(): any {
     return this.list().then(docs => docs.map(row => row.hash));
   }
 
-  save(data, reload = false) {
+  save(data: Data, reload: boolean = false): void {
     // console.log('Save protocol')
     let data_cleaned = this._dataService.clean(data);
+    this._networkService.validate(data_cleaned);
     this.count().then(count => {
       if (count == 0) {
         if ('_id' in data_cleaned) {
@@ -105,6 +110,7 @@ export class SimulationProtocolService {
                   })
                 } else {
                   data['_id'] = res.id;
+                  
                   this.change.emit()
                 }
               })
@@ -114,21 +120,21 @@ export class SimulationProtocolService {
     })
   }
 
-  delete(id) {
+  delete(id: string): any {
     return this._dbService.db.delete(this.db, id);
   }
 
-  deleteBulk(ids) {
+  deleteBulk(ids: string[]): any {
     return this._dbService.db.deleteBulk(this.db, ids);
   }
 
-  reset() {
+  reset(): void {
     this.db.destroy().then(() => {
       this.init()
     })
   }
 
-  download(data) {
+  download(data: Data[]): void {
     delete data['_rev'];
     data.forEach(d => d['_rev'] = undefined)
     var dataJSON = JSON.stringify(data);
@@ -142,7 +148,7 @@ export class SimulationProtocolService {
     document.body.removeChild(element);
   }
 
-  upload(data) {
+  upload(data: Data[]): void {
     var config = this._simulationConfigService.config.db.protocol;
     config['host'] = "";
     config['port'] = "";
@@ -159,14 +165,14 @@ export class SimulationProtocolService {
     });
   }
 
-  initVersion() {
+  initVersion(): void {
     this._dbService.db.getVersion(this.db)
       .catch(() => this._dbService.db.setVersion(this.db, environment.VERSION)
         .then(version => this.version = version)
       ).then(version => this.version = version)
   }
 
-  isValid(count) {
+  isValid(count: number): void {
     if (count == 0) {
       this.status.valid = true;
     } else {

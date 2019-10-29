@@ -2,8 +2,9 @@ import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angu
 
 import { NetworkService } from '../services/network.service';
 
-
 import { Data } from '../../classes/data';
+import { AppLink } from '../../classes/appLink';
+import { SimCollection } from '../../classes/simCollection';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { Data } from '../../classes/data';
 })
 export class NetworkSelectionComponent implements OnInit, OnChanges {
   @Input() data: Data;
-  @Output() selectionChange: EventEmitter<any> = new EventEmitter();
+  @Output() dataChange: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private _networkService: NetworkService,
@@ -27,26 +28,22 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
     // console.log('Change network selection')
   }
 
-  collection(idx) {
+  collection(idx: number): SimCollection {
     return this.data.simulation.collections[idx];
   }
 
-  selectElementType(elementType) {
+  selectElementType(elementType: string): void {
     this._networkService.selectElementType(elementType)
   }
 
-  isSelected(elementType) {
+  isSelected(elementType: string): boolean {
     return this._networkService.elementType == null || this._networkService.elementType == elementType;
   }
 
-  isSelectedPre(link) {
+  isSelectedPre(link: AppLink): boolean {
     var connectome = this.data.simulation.connectomes[link.idx];
     var collection = this.data.simulation.collections[connectome.pre];
     return this.isSelected(collection.element_type)
-  }
-
-  onSelectionChange(data) {
-    this.selectionChange.emit(data)
   }
 
 }

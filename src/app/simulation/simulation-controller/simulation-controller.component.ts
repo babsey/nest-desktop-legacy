@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
-import { SimulationControllerService } from './simulation-controller.service';
 import { SimulationProtocolService } from '../services/simulation-protocol.service';
 import { SimulationRunService } from '../services/simulation-run.service';
+import { VisualizationService } from '../../visualization/visualization.service';
 
 import { Data } from '../../classes/data';
+import { Record } from '../../classes/record';
 
 @Component({
   selector: 'app-controller',
@@ -13,27 +14,26 @@ import { Data } from '../../classes/data';
 })
 export class ControllerComponent implements OnInit {
   @Input() data: Data;
-  @Input() records: any[];
+  @Input() records: Record[];
   @Input() mode: string = 'network';
-  @Output() simulationChange: EventEmitter<any> = new EventEmitter();
+  @Output() dataChange: EventEmitter<any> = new EventEmitter();
   @Output() appChange: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private _simulationProtocolService: SimulationProtocolService,
-    public _simulationControllerService: SimulationControllerService,
     public _simulationRunService: SimulationRunService,
+    public _visualizationService: VisualizationService,
   ) { }
 
   ngOnInit() {
   }
 
-  onSimulationChange(data) {
-    this.data._id = '';
-    this.data.simulation = data.simulation;
-    this.simulationChange.emit(this.data)
+  onDataChange(data: Data): void {
+    // console.log('Simulation controller on data change')
+    this.dataChange.emit(this.data)
   }
 
-  onAppChange(data) {
+  onAppChange(app: any): void {
     // this.data.app = data.app;
     this.appChange.emit(this.data);
   }

@@ -1,14 +1,23 @@
 <ng-container *ngIf="_networkConfigService.status.ready">
   <mat-list class="content config">
     <h3 mat-subheader>
-      Default color cycle of nodes
+      Node
     </h3>
 
     <mat-list-item>
-      <div class="flex">
+      <app-value-slider-inline
+        [options]="_networkConfigService.config.sketch.node.radius"
+        [(value)]="_networkConfigService.config.sketch.node.radius.value"
+        (valueChange)="_networkConfigService.save()"
+      ></app-value-slider-inline>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="flex" style="height:48px; line-height:48px">
+        <span style="position:absolute;top:-16px">Default colors</span>
         <span style="line-height:65px; vertical-align:middle">
           <ng-container *ngFor="let color of _networkConfigService.config.color.cycle; let idx = index">
-            <span [style.border-color]="color" style="border-width: 1.5px; border-radius: 15px; position:relative; line-height:normal; margin: 5px">
+            <span [style.border-color]="color" style="border-width: 1.5px; border-radius: 15px; position:relative; line-height:normal; margin: 2px">
               <span style="pointer-events:none; position:absolute; left:0px; top:-7px; text-align:center; vertical-align:middle; width:25px; line-height:25px;"></span>
               <mcc-color-picker [selectedColor]="color" (selected)="selectColor(idx, $event)" class="color" hideTransparentUsedColors hideEmptyUsedColors></mcc-color-picker>
             </span>

@@ -2,14 +2,23 @@
   <mat-sidenav-content class="network-content" style="height:calc(100vh - 40px)">
 
     <span style="width:600px; display:block" class="content">
-      <app-network-sketch [data]="data" width="600" height="200" [editable]="false"></app-network-sketch>
+      <app-network-sketch
+        (dataChange)="onDataChange($event)"
+        [(data)]="data"
+        width="600"
+        height="200"
+      ></app-network-sketch>
     </span>
 
     <ng-container *ngIf="data">
 
       <ng-container [ngSwitch]="advanced()">
         <ng-container *ngSwitchCase="false">
-          <app-network-list [data]="data" [paramSelective]="false" style="width:100%"></app-network-list>
+          <app-network-list
+            (dataChange)="onDataChange($event)"
+            [(data)]="data"
+            [paramSelective]="false"
+          ></app-network-list>
         </ng-container>
 
         <ng-container *ngSwitchCase="true">
@@ -18,7 +27,11 @@
             <mat-tab-group class="maxWidth">
 
               <mat-tab label="Network">
-                <app-network-list [data]="data" [paramSelective]="false" style="width:100%"></app-network-list>
+                <app-network-list
+                  [(data)]="data"
+                  [paramSelective]="false"
+                  (dataChange)="onDataChange($event)
+                "></app-network-list>
               </mat-tab>
 
               <mat-tab label="Description">

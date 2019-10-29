@@ -23,11 +23,11 @@ export class SimulationShortListComponent implements OnInit {
     // console.log('Simulation short list')
   }
 
-  shortLabel(label) {
+  shortLabel(label: string): string {
     return label.slice(0, 5)
   }
 
-  view(simulation, ref: MdePopoverTrigger) {
+  view(simulation: Data, ref: MdePopoverTrigger): void {
     if (this.popover) {
       this.simulation = simulation;
       ref.openPopover();

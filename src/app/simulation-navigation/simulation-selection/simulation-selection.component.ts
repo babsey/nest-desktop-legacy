@@ -21,7 +21,7 @@ export class SimulationSelectionComponent implements OnInit {
     // console.log('Simulation selection')
   }
 
-  selectionSubmit(mode) {
-    this.select.emit({mode:mode, selected: this.selected})
+  selectionSubmit(mode: string): void {
+    this.select.emit({ mode: mode, selected: this.selected })
   }
 }

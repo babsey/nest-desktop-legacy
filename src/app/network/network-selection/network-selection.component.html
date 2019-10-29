@@ -6,13 +6,21 @@
 </nav>
 
 <ng-container *ngIf="data.app">
-  <div style="height:calc(100vh - 82px); overflow-y: auto">
+  <div style="height:calc(100vh - 73px); overflow-y: auto">
     <ng-container *ngFor="let node of data.app.nodes">
-      <app-node-selection (nodeChange)="onSelectionChange($event)" [data]="data" [idx]="node.idx" [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'" ></app-node-selection>
+      <app-node-selection
+        [(data)]="data"
+        [node]="node"
+        [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'"
+      ></app-node-selection>
     </ng-container>
 
     <ng-container *ngFor="let link of data.app.links">
-      <app-link-selection (linkChange)="onSelectionChange($event)" [data]="data" [idx]="link.idx" [style.display]="isSelectedPre(link) ? '': 'None'" ></app-link-selection>
+      <app-link-selection
+        [(data)]="data"
+        [link]="link"
+        [style.display]="isSelectedPre(link) ? '': 'None'"
+      ></app-link-selection>
     </ng-container>
   </div>
 </ng-container>

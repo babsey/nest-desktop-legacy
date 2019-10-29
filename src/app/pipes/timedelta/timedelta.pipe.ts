@@ -5,14 +5,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TimedeltaPipe implements PipeTransform {
 
-  transform(value: any, time: any): any {
+  transform(value: any, time: any): string {
     var value: any = new Date(value);
     var time: any = new Date(time);
     var milliseconds = (value - time);
     var dt = Math.abs(milliseconds);
 
-    var timedelta;
-    var timeunit;
+    var timedelta: number;
+    var timeunit: string;
 
     if (dt > 3600000) {
       timedelta = Math.floor(dt / 3600000);

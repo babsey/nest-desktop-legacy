@@ -13,7 +13,8 @@ var STORAGE_NAME = 'app-config';
 export class AppConfigService {
   public config: any = {
     app: {
-      showLoading: false
+      showLoading: false,
+      advanced: false,
     }
   };
   public status: any = {
@@ -23,7 +24,8 @@ export class AppConfigService {
   private files: string[] = [
     'app',
     'groups',
-    'user'
+    'user',
+    'random',
   ];
 
   constructor(
@@ -31,7 +33,7 @@ export class AppConfigService {
   ) {
   }
 
-  init() {
+  init(): void {
     this.status.ready = false;
     let configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
@@ -42,7 +44,7 @@ export class AppConfigService {
     }
   }
 
-  fromFiles(files) {
+  fromFiles(files: string[]): void {
     var configFiles = files.map(file => this.http.get('/assets/config/app/' + file + '.json'));
     forkJoin(configFiles).subscribe(configs => {
       configs.map((config, idx) => {
@@ -54,17 +56,17 @@ export class AppConfigService {
     })
   }
 
-  save() {
+  save(): void {
     let configJSON = JSON.stringify(this.config);
     localStorage.setItem(STORAGE_NAME, configJSON);
   }
 
-  reset() {
+  reset(): void {
     localStorage.removeItem(STORAGE_NAME)
     this.init()
   }
 
-  isValid() {
+  isValid(): void {
     var appVersion = environment.VERSION.split('.');
     var configVersion = this.config.version.split('.');
     var versionValid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];

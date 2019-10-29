@@ -19,14 +19,15 @@ export class ModelParamsSelectionListComponent implements OnInit {
   ngOnInit() {
   }
 
-  hasParam(id) {
+  hasParam(id: string): boolean {
     if (this._modelService.hasModel(this.model)) {
       var config = this._modelService.config(this.model);
-      return config.params.filter(param => param.id == id).length > 0
+      return config.params.filter(param => param.id == id).length > 0;
     }
+    return false
   }
 
-  addParam(id, value) {
+  addParam(id: string, value: any): void {
     var param = {
       id: id,
       label: id,
@@ -45,12 +46,12 @@ export class ModelParamsSelectionListComponent implements OnInit {
     config.params.sort((a, b) => a.id - b.id)
   }
 
-  removeParam(id) {
+  removeParam(id: string): void {
     var config = this._modelService.config(this.model);
     config.params = config.params.filter(param => param.id != id);
   }
 
-  changeParam(event) {
+  changeParam(event: any): void {
     var option = event.option.value;
     if (event.option.selected) {
       this.addParam(option.id, option.value)

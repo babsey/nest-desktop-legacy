@@ -12,27 +12,27 @@ export class SimulationControllerService {
     editing: false,
   };
   public selected: any = null;
+  public mode: string = 'network';
 
   constructor(
     private _simulationConfigService: SimulationConfigService,
   ) {
   }
 
-  display(level) {
-    var value = level <= this._simulationConfigService.config.level;
-    return value
+  display(level: number): boolean {
+    return level <= this._simulationConfigService.config.level;
   }
 
-  edit(mode = null) {
+  edit(mode: string = null): void {
     this.options.editing = (mode != null) ? mode : !this.options.editing;
   }
 
-  openBottomSheet() {
+  openBottomSheet(): void {
     this._simulationConfigService.config.bottomSheetOpened = true;
     this._simulationConfigService.save()
   }
 
-  closeBottomSheet() {
+  closeBottomSheet(): void {
     this._simulationConfigService.config.bottomSheetOpened = false;
     this._simulationConfigService.save()
   }

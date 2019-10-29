@@ -2,37 +2,33 @@
   <ng-container *ngSwitchCase="'valueInput'">
     <app-value-input-popup
       [value]="value"
-      [model]="model"
       [options]="options"
       (valueChange)="onValueChange($event)"
-      class="input"
+      class="list-item"
     ></app-value-input-popup>
   </ng-container>
   <ng-container *ngSwitchCase="'arrayInput'">
     <app-array-input-popup
       [value]="value"
-      [model]="model"
       [options]="options"
       (valueChange)="onValueChange($event)"
-      class="input"
+      class="list-item"
     ></app-array-input-popup>
   </ng-container>
   <ng-container *ngSwitchCase="'valueSlider'">
     <app-value-slider-popup
       [value]="value"
-      [model]="model"
       [options]="options"
       (valueChange)="onValueChange($event)"
-      class="slider"
+      class="list-item"
     ></app-value-slider-popup>
   </ng-container>
   <ng-container *ngSwitchCase="'tickSlider'">
     <app-ticks-slider-popup
       [value]="value"
-      [model]="model"
       [options]="options"
       (valueChange)="onValueChange($event)"
-      class="slider"
+      class="list-item"
     ></app-ticks-slider-popup>
   </ng-container>
 </ng-container>

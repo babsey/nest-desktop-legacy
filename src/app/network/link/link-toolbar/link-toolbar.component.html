@@ -1,0 +1,58 @@
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="linkMenu">
+</div>
+
+<mat-menu #linkMenu="matMenu" class="context-menu link-menu">
+  <app-link-menu [(data)]="data" [link]="link" (dataChange)="dataChange.emit($event)"></app-link-menu>
+</mat-menu>
+
+<span
+  [class.dark-theme]="advanced()"
+  (contextmenu)="onContextMenu($event)"
+  (mouseout)="onMouseOut($event)"
+  (mouseover)="onMouseOver($event)">
+  <mat-toolbar
+    [style.background-image]="backgroundImage()"
+    class="link-toolbar"
+    color="primary">
+
+    <button mat-button (click)="selectNode(connectome.pre)" style="width:33.3%;">
+      <svg width="40" height="40">
+        <g app-node-shape
+          [color]="color('pre')"
+          [elementType]="collection(connectome.pre).element_type"
+          [idx]="connectome.pre"
+          [spatial]="isSpatial(connectome.pre)"
+          transform="translate(20,20)"
+          style="pointer-events:none"
+        ></g>
+      </svg>
+    </button>
+
+    <button mat-button (click)="selectLink()" style="width:33.3%; height: 40px">
+      <fa-icon
+        [style.color]="color_weight()"
+        class="material-icons arrow"
+        icon="long-arrow-alt-right"
+        style="width:100%; font-size: 24px"
+      ></fa-icon>
+    </button>
+
+    <button mat-button (click)="selectNode(connectome.post)" style="width:33.3%;">
+        <svg width="40" height="40">
+          <g app-node-shape
+            (click)="selectNode(connectome.post)"
+            [color]="color('post')"
+            [elementType]="collection(connectome.post).element_type"
+            [idx]="connectome.post"
+            [spatial]="isSpatial(connectome.post)"
+            transform="translate(20,20)"
+            style="pointer-events:none"
+          ></g>
+        </svg>
+    </button>
+
+  </mat-toolbar>
+</span>

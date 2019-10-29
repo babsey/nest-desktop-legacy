@@ -1,11 +1,5 @@
-<mat-toolbar color="primary" style="height:40px; padding-left:60px; opacity:0.8" [style.background-color]="_colorService.node(node)">
-  <span class="flex" style="height:40px; line-height:40px">
-    Statistics of Spikes
-    <span class="flex-spacer"></span>
-    <button mat-icon-button disabled>
-      <fa-icon icon="ellipsis-v"></fa-icon>
-    </button>
-  </span>
+<mat-toolbar color="primary" style="height:40px; padding-left:60px; opacity:0.8" [style.background-color]="color">
+  Statistics of Spikes
 </mat-toolbar>
 
 <div style="overflow:auto" [style.height.px]="height()">

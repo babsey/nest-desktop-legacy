@@ -8,6 +8,7 @@ import { NetworkService } from '../../services/network.service';
 import { NetworkSketchService } from '../network-sketch.service';
 
 import { Data } from '../../../classes/data';
+import { AppNode } from '../../../classes/appNode';
 
 
 @Component({
@@ -19,9 +20,9 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() data: Data;
   @Input() width: number = 600;
   @Input() height: number = 400;
-  @Output() nodeChange: EventEmitter<any> = new EventEmitter();
+  @Output() dataChange: EventEmitter<any> = new EventEmitter();
+  private host: any;
   private selector: any;
-  private dragline: any;
   private subscription: any;
   private sourceNode: any;
 
@@ -32,28 +33,24 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
     private _networkSketchService: NetworkSketchService,
     private elementRef: ElementRef,
   ) {
+    this.host = d3.select(elementRef.nativeElement.parentElement);
     this.selector = d3.select(elementRef.nativeElement);
   }
 
   ngOnInit() {
     this.init()
-    this.subscription = this._networkSketchService.update.subscribe(() => this.update())
-    this.update()
+    this.resize()
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe()
+    // this.subscription.unsubscribe()
   }
 
   ngOnChanges() {
-    this.update()
+    this.resize()
   }
 
-  selected() {
-    return this._networkService.selected.node;
-  }
-
-  init() {
+  init(): void {
     // if (this.data == undefined) return
     // console.log('Sketch background init')
     var _this = this;
@@ -65,75 +62,50 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
       .attr('width', this.width)
       .attr('height', this.height);
 
-    this.dragline = this.selector.append('svg:path')
-      .attr('class', 'link dragline')
-      .style('pointer-events', 'none')
-      .attr('d', 'M0,0L0,0');
-
     background.on('mousemove', function() {
-        var colors = _this._colorService.colors();
-        var selected = _this._networkService.selected.node;
+        var selectedNode = _this._networkService.selected.node;
         _this._networkSketchService.focused.node = null;
         _this._networkSketchService.focused.link = null;
 
-        if (selected && _this._networkSketchService.options.drawing) {
+        if (selectedNode) {
           var point = d3.mouse(this);
           var target = {
             x: point[0],
             y: point[1],
           };
-          _this.dragline
-            .attr('d', _this._networkSketchService.drawPath(selected.position, target))
-            .style('fill', 'none')
-            .style('stroke', () => colors[selected.idx % colors.length])
-            .style('stroke-width', '2.5px')
-            .style('marker-start', () => 'url(#hillock_' + colors[selected.idx % colors.length] + ')')
-            .style('marker-end', () => 'url(#exc_' + colors[selected.idx % colors.length] + ')');
+
+          var color = _this._colorService.node(selectedNode);
+          _this._networkSketchService.dragLine(selectedNode.position, target, color);
         }
       })
-      .on('click', function() {
-        // console.log('Click background')
+      .on('click', () => this.reset())
+      .on('contextmenu', function() {
+        d3.event.preventDefault();
+        _this.reset();
+
+        if ( _this._networkService.selected.node ||  _this._networkService.selected.link) return
+
         var data = _this.data;
-        if (data == undefined) return
-        _this.selector.selectAll('.select').remove();
-
-        var selectedNode = _this._networkService.selected.node;
-        if (selectedNode) {
-          _this._networkService.resetMouseVars()
-          _this.resetDragLine()
-          _this.nodeChange.emit(_this.data)
-          return
-        }
-
-        var selectedLink = _this._networkService.selected.link;
-        if (selectedLink) {
-          _this._networkService.resetMouseVars()
-          _this.nodeChange.emit(_this.data)
-          return
-        }
-
-        if (!_this._networkSketchService.options.drawing) {
-          _this._networkSketchService.options.show = false;
-          return
-        }
-
         var point = d3.mouse(this);
-        var select = _this.selector.append('svg:g')
-          .attr('class', 'select')
+        var selectPanel = _this.host.select('.select-panel')
           .attr('transform', 'translate(' + point[0] + ',' + point[1] + ')');
 
-        var tooltip = select.append('svg:text')
-          .attr('class', 'tooltip')
-          .attr('transform', 'translate(0, -45)')
-          .style('visibility', 'hidden');
+        var tooltip = selectPanel.select('.tooltip');
+        // var tooltip = select.append('svg:text')
+        //   .attr('class', 'tooltip')
+        //   .attr('transform', 'translate(0, -45)')
+        //   .style('visibility', 'hidden');
 
-        select.append('svg:circle')
-          .attr('r', 16)
+        selectPanel.append('svg:circle')
+          .attr('class', 'select')
           .attr('fill', 'white')
-          .on('click', () => {
-            _this._networkService.selected.node = null;
-            _this.selector.selectAll('.select').remove()
-          })
+          .attr('fill-opacity', '0.8')
+          .attr('r', 16)
+          .on('click', () => _this.reset())
+          .on('contextmenu', () => {
+            d3.event.preventDefault();
+            _this.reset();
+          });
 
         var arcFrame = d3.arc()
           .innerRadius(16)
@@ -141,20 +113,21 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
 
         var colors = _this._colorService.colors();
         elementTypes.forEach((d, i) => {
-          select.append('svg:path').attr('class', d)
+          selectPanel.append('svg:path').attr('class', "select " +d)
             .datum({
               startAngle: Math.PI * i * 2 / 3,
               endAngle: Math.PI * (i + 1) * 2 / 3,
             })
             .style('fill', 'white')
+            .attr('fill-opacity', '0.8')
             .style('stroke', () => colors[data.app.nodes.length % colors.length])
             .style('stroke-width', 2.5)
             .attr('d', arcFrame)
             .on('mouseover', function() {
-              tooltip.text(d)
-                .style('visibility', 'visible');
+              tooltip.style('visibility', 'visible')
+                .select('.label').text(d);
 
-              if (!selectedNode || d != 'stimulator') {
+              if (!_this._networkService.selected.node || d != 'stimulator') {
                 d3.select(this).style('fill', () => colors[data.app.nodes.length % colors.length])
               }
             })
@@ -163,17 +136,16 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
               d3.select(this).style('fill', 'white');
             })
             .on('mouseup', () => {
-              _this.selector.selectAll('.select').remove();
-              _this._networkService.resetMouseVars()
+              _this.reset();
               _this.create(d, point)
               // console.log('Node change')
-              _this.nodeChange.emit(_this.data)
+              _this.dataChange.emit(_this.data)
             });
 
           var f = (i * 2 / 3) + (1 / 3);
-          select.append('svg:text')
-            .attr('class', 'label')
-            .attr('fill', (selectedNode && d == 'stimulator') ? '#cccccc' : 'black')
+          selectPanel.append('svg:text')
+            .attr('class', 'select label')
+            .attr('fill', (_this._networkService.selected.node && d == 'stimulator') ? '#cccccc' : 'black')
             .attr('dx', Math.sin(Math.PI * f) * 28)
             .attr('dy', -Math.cos(Math.PI * f) * 28 + 5)
             .text(d.slice(0, 1).toUpperCase());
@@ -181,55 +153,25 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
       })
   }
 
-  create(elementType, point) {
-    var modelDefaults = {
-      stimulator: 'dc_generator',
-      neuron: 'iaf_psc_alpha',
-      recorder: 'voltmeter',
-    };
-
-    var idx = this.data.app.nodes.length;
-    var newModel = elementType + '-' + idx;
-    this.data.app.models[newModel] = {};
-    this.data.simulation.models[newModel] = {
-      existing: modelDefaults[elementType],
-      params: {},
-    };
-    var newNode = {
-      idx: idx,
-      position: { 'x': point[0], 'y': point[1] }
-    };
-    this.data.app.nodes.push(newNode);
-    var newCollection = {
-      element_type: elementType,
-      model: newModel,
-    }
-    this.data.simulation.collections.push(newCollection);
-    this.data['hash'] = this._dataService.hash(this.data['simulation']);
+  create(elementType: string, point: number[]): void {
+    this._networkService.create(this.data, elementType, point);
+    this.data['hash'] = this._dataService.hash(this.data);
+    this.dataChange.emit(this.data);
   }
 
-  update() {
-    if (this.data == undefined) return
+  selected(): AppNode {
+    return this._networkService.selected.node;
+  }
+
+  resize(): void {
     this.selector.select('rect.background')
       .attr('width', this.width)
       .attr('height', this.height);
-
-    if (this._networkService.selected.node == null) {
-      this.resetDragLine()
-    }
-
-    if (!this._networkSketchService.options.drawing) {
-      this.selector.selectAll('.select').remove();
-    }
-
   }
 
-  resetDragLine() {
-    if (this.dragline) {
-      this.dragline.attr('d', 'M0,0L0,0')
-      .style('marker-start', '')
-      .style('marker-end', '');
-    }
+  reset(): void {
+    this._networkService.resetSelection()
+    this._networkSketchService.reset();
   }
 
 }

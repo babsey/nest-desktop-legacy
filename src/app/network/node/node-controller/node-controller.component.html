@@ -1,0 +1,71 @@
+<div class="controller node-controller"
+  [style.border-color]="color()"
+  [style.display]="nodeDisplay()"
+  >
+
+  <app-node-toolbar
+    [(data)]="data"
+    [(node)]="node"
+    (dataChange)="onDataChange($event)"
+    (nodeChange)="onNodeChange($event)"
+    ></app-node-toolbar>
+
+  <ng-container *ngIf="!isRecorder()">
+    <ng-container *ngIf="!isSpatial()">
+      <mat-list dense>
+        <mat-list-item [style.display]="paramDisplay(node, 'n') ? '' : 'None'" >
+          <app-node-param
+            (valueChange)="onValueChange($event)"
+            [(value)]="collection.n"
+            [options]="_networkConfigService.config['node'].npop"
+            view="valueSlider"
+          ></app-node-param>
+        </mat-list-item>
+      </mat-list>
+      </ng-container>
+
+      <ng-container *ngIf="isSpatial()">
+        <mat-nav-list dense>
+          <mat-list-item>
+            <app-node-spatial
+              [(node)]="node"
+              [(collection)]="collection"
+              (nodeChange)="onNodeChange($event)"
+              (collectionChange)="onCollectionChange($event)"
+            ></app-node-spatial>
+          </mat-list-item>
+        </mat-nav-list>
+      </ng-container>
+  </ng-container>
+
+  <mat-list dense>
+    <ng-container *ngIf="!linkedNode">
+      <ng-container *ngFor="let param of configModel.params">
+        <mat-list-item [style.display]="paramDisplay(data.app.models[model], param.id) ? '' : 'None'" >
+          <app-node-param
+            (paramHide)="onParamHide($event)"
+            (valueChange)="onValueChange($event)"
+            [(value)]="data.simulation.models[model].params[param.id]"
+            [model]="data.simulation.models[model].existing"
+            [options]="param"
+            [view]="param.input"
+          ></app-node-param>
+        </mat-list-item>
+      </ng-container>
+    </ng-container>
+  </mat-list>
+
+  <mat-list dense>
+    <mat-list-item [style.display]="data.simulation.models[model].existing == 'multimeter' ? '' : 'None'" >
+      <mat-form-field style="width:100%">
+        <mat-label>Record from</mat-label>
+        <mat-select multiple [(ngModel)]="record_from" (selectionChange)="onRecordChange()">
+          <ng-container *ngFor="let recordable of recordables">
+            <mat-option [value]="recordable">{{ recordable }}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </mat-list-item>
+  </mat-list>
+
+</div>
