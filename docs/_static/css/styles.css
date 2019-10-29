@@ -1,0 +1,64 @@
+/* Create three equal columns that floats next to each other */
+.row {
+  height: 350px;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+  height: 100%;
+  text-align: justify;
+}
+
+.column:hover div {
+  color: white;
+}
+
+.usage div {
+  border: 2px solid #93b5ad;
+}
+
+.usage:hover div {
+  background-color: #93b5ad;
+}
+
+.deployment div {
+  border: 2px solid #be6442;
+}
+
+.deployment:hover div {
+  background-color: #be6442;
+}
+
+.development div {
+  border: 2px solid #ce934a;
+}
+
+.development:hover div {
+  background-color: #ce934a;
+}
+
+.column div {
+  padding: 5px;
+  height: 100%;
+  position: relative;
+  color: rgb(64, 64, 64);
+}
+
+.column img {
+  height: 100px;
+  padding: 5px;
+}
+
+.column .whoami {
+  position: absolute;
+  bottom: 5px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
