@@ -1,6 +1,6 @@
 {
-  "name": "Spike trains",
-  "description": "The simulation shows spike activities of a set of 100 neurons as response to massive incoming spikes",
+  "name": "Spike activity",
+  "description": "The simulation shows spike activity of 100 neurons as response to massive incoming spikes",
   "app": {
     "models": {
       "stimulator-0": {
