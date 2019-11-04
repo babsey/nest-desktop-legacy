@@ -1,4 +1,3 @@
-===========
 Past events
 ===========
 
@@ -29,8 +28,9 @@ Past events
 
 2016
 
-* December - NEST Desktop was born.
+* December - NEST Desktop was born in Freiburg.
 
-.. [BCF] Bernstein Center Freiburg, Faculty of Biology, University of Freiburg, Freiburg, Germany
-.. [INM-6] Institute of Neuroscience and Medicine (INM-6) Jülich Research Centre, Jülich, Germany
-.. [HCI] Department IV - Computer Science, Human-Computer Interaction, University of Trier, Trier, Germany
+
+:BCF: Bernstein Center Freiburg, Faculty of Biology, University of Freiburg, Freiburg, Germany
+:INM-6: Institute of Neuroscience and Medicine (INM-6) Jülich Research Centre, Jülich, Germany
+:HCI: Department IV - Computer Science, Human-Computer Interaction, University of Trier, Trier, Germany

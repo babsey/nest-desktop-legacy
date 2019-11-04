@@ -1,4 +1,3 @@
-========
 Contents
 ========
 
@@ -11,29 +10,32 @@ Contents
    history
 
 .. toctree::
-   :maxdepth: 2
    :caption: User Documentation
 
-   usage/index
-   usage/first-steps
-   usage/hbp
+   user/index
+   user/quick-start-video
+   user/guide
+   user/faq
+   user/faq-gifs
+   user/use-hbp
 
 .. toctree::
-   :maxdepth: 2
    :caption: Deployer Documentation
 
-   deployment/index
-   deployment/quickstart
-   deployment/quickstart-docker
-   deployment/deploy-hbp
-   deployment/installing
-   deployment/commands
+   deployer/index
+   deployer/deploy-host
+   deployer/deploy-docker
+   deployer/installing
+   deployer/commands
+   deployer/deploy-hbp
 
 
 .. toctree::
-   :maxdepth: 2
    :caption: Developer Documentation
 
-   development/index
-   development/singularity
-   development/package
+   developer/index
+   developer/preparation
+   developer/source-code
+   developer/package
+   developer/readthedocs
+   developer/sources

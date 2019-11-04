@@ -1,12 +1,20 @@
-======================================
-How to deploy it on HBP infrastructure
-======================================
+How to **deploy** it on HBP infrastructure
+==========================================
 
-NEST Desktop is a frontend application for performing simulations with NEST.
+NEST Desktop and NEST Server is serving on the infrastructure of HBP.
+Here, the documentation shows how to deploy NEST Desktop from docker hub in OpenShift system.
 
-Requirements
- - oc Client Tools (https://www.okd.io/download.html#oc-platforms)
+HBP provides two infrastructure of OpenShift. I recommend to use apps-dev.hbp.eu for the development/testing.
 
+
+Requirement
+-----------
+
+ - OC Client Tools (https://www.okd.io/download.html#oc-platforms)
+
+
+Step to deploy
+--------------
 
 You can copy command line from webconsole of https://openshift-dev.hbp.eu.
 
@@ -28,11 +36,11 @@ Create an project/Switch to project:
 
    oc project nest-desktop
 
-Deploy from docker hub and create service:
+Deploy image from docker hub and create service:
 
 .. code-block:: bash
 
-   oc new-app babsey/nest-desktop:latest
+   oc new-app babsey/nest-desktop
 
 Create config map to find NEST Server:
 
@@ -46,8 +54,9 @@ Mount the volume of NEST Server config to NEST Desktop:
 
    oc set volume dc/nest-desktop --add --name=nest-desktop-volume --configmap-name=nest-server-config --mount-path=/usr/local/lib/python3.6/dist-packages/nest_desktop/app/assets/config/nest-server
 
+
 Further usage
-^^^^^^^^^^^^^
+-------------
 
 Change the number of pods in a deployment:
 
@@ -65,11 +74,22 @@ Monitor log of a pod (Get pod name: :code:`oc get pod`):
 Authentication and redirecting
 ------------------------------
 
-oc delete is,dc,svc,route,configMap hbp-auth
-oc new-app hbp-auth.yaml
-oc new-app babsey/hbp-auth
-oc set env --from=configmap/hbp-auth dc/hbp-auth
-oc expose svc/hbp-auth --port=8080 --hostname=nest-desktop.apps-dev.hbp.eu
+To access to NEST Desktop on HBP infrastructure, an authentication of HBP membership is requested.
+Here are the steps how to setup authentication and redirecting to NEST Desktop properly.
+
+.. code-block:: bash
+
+   oc delete is,dc,svc,route,configMap hbp-auth
+   oc new-app hbp-auth.yaml
+   oc new-app babsey/hbp-auth
+   oc set env --from=configmap/hbp-auth dc/hbp-auth
+   oc expose svc/hbp-auth --port=8080 --hostname=nest-desktop.apps-dev.hbp.eu
+
+
+Ready for production
+--------------------
+If NEST Desktop is ready for the production, meaning to deploy on apps.hbp.eu.
+Perform all steps same as in Development (apps-dev.hbp.eu).
 
 
 Maintenance

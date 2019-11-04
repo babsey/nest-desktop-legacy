@@ -1,4 +1,3 @@
-============
 NEST Desktop
 ============
 
@@ -28,8 +27,8 @@ The documentation is organized in three sections addressing to the interest of r
 .. raw:: html
 
     <div class="row">
-      <div class="column usage">
-        <a href="usage/index.html">
+      <div class="column user">
+        <a href="user/index.html">
           <div>
             <img src="_static/font-awesome/user.svg">
             <h2>The User</h2>
@@ -42,8 +41,8 @@ The documentation is organized in three sections addressing to the interest of r
         </a>
       </div>
 
-      <div class="column deployment">
-        <a href="deployment/index.html">
+      <div class="column deployer">
+        <a href="deployer/index.html">
           <div>
             <img src="_static/font-awesome/user-cog.svg">
             <h2>The Deployer</h2>
@@ -55,8 +54,8 @@ The documentation is organized in three sections addressing to the interest of r
         </a>
       </div>
 
-      <div class="column development">
-        <a href="development/index.html">
+      <div class="column developer">
+        <a href="developer/index.html">
           <div>
             <img src="_static/font-awesome/user-edit.svg">
             <h2>The Developer</h2>
@@ -68,26 +67,3 @@ The documentation is organized in three sections addressing to the interest of r
         </a>
       </div>
     </div>
-
-|
-
-Usage
-^^^^^
-This is the user guide, providing more detail on how to use NEST Desktop.
-
-* :doc:`How to *use* NEST Desktop <usage/index>`
-* :doc:`First steps <usage/first-steps>`
-* :doc:`How to use it on HBP resources <usage/hbp>`
-
-Deployment
-^^^^^^^^^^
-This is the deployer guide, providing more detail on how to deploy NEST Desktop on system.
-
-:doc:`How to *deploy* NEST Desktop <deployment/index>`
-
-
-Development
-^^^^^^^^^^^
-This is the developer guide, providing more detail on how to contribute to NEST Desktop.
-
-:doc:`How to *develop* NEST Desktop <development/index>`

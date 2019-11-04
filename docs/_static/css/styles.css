@@ -15,27 +15,27 @@
   color: white;
 }
 
-.usage div {
+.user div {
   border: 2px solid #93b5ad;
 }
 
-.usage:hover div {
+.user:hover div {
   background-color: #93b5ad;
 }
 
-.deployment div {
+.deployer div {
   border: 2px solid #be6442;
 }
 
-.deployment:hover div {
+.deployer:hover div {
   background-color: #be6442;
 }
 
-.development div {
+.developer div {
   border: 2px solid #ce934a;
 }
 
-.development:hover div {
+.developer:hover div {
   background-color: #ce934a;
 }
 
