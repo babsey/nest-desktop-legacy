@@ -28,10 +28,24 @@ export class NestServerService {
     private _nestServerConfigService: NestServerConfigService,
   ) { }
 
+  init(): void {
+    this.status = {
+      server: {
+        response: false,
+        ready: false,
+        valid: false,
+      },
+      simulator: {
+        ready: false,
+        valid: false,
+      }
+    };
+  }
+
   url(): string {
     var config = this._nestServerConfigService.config;
     var host = config['host'] || window.location.host.split(':')[0] || 'localhost';
-    var url = 'http://' + host;
+    var url = (config['secure'] ? 'https://' : 'http://') + host;
     if (config['port']) {
       url = url + ':' + config['port'];
     }
@@ -40,6 +54,7 @@ export class NestServerService {
 
   check(): void {
     // console.log('Check')
+    this.init();
     var url = this.url();
     this.http.get(url)
       .pipe(

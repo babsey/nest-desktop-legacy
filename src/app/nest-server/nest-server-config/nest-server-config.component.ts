@@ -27,4 +27,9 @@ export class NestServerConfigComponent implements OnInit {
     this.host = this._nestServerService.url();
     this._nestServerService.check()
   }
+
+  onSelectionChange(event: any): void {
+    this._nestServerConfigService.config[event.option.value] = event.option.selected;
+    this.save()
+  }
 }
