@@ -52,10 +52,10 @@
         <span class="flex-spacer"></span>
         <ng-container *ngIf="_simulationService.mode=='run'">
           <button
-            (click)="selectVisualizationModus('plot')"
-            [class.mat-icon-button]="_visualizationService.mode!='plot'"
-            [class.mat-mini-fab]="_visualizationService.mode=='plot'"
-            matTooltip="Plot"
+            (click)="selectVisualizationModus('chart')"
+            [class.mat-icon-button]="_visualizationService.mode!='chart'"
+            [class.mat-mini-fab]="_visualizationService.mode=='chart'"
+            matTooltip="Chart"
             >
             <fa-icon icon="chart-line"></fa-icon>
           </button>
@@ -154,10 +154,10 @@
           >
           <fa-icon icon="cog"></fa-icon>
         </button>
-        <button *ngIf="_visualizationService.mode=='plot'"
-          (click)="selectControllerMode('plot')"
-          [class.mat-icon-button]="_simulationControllerService.mode!='plot'"
-          [class.mat-mini-fab]="_simulationControllerService.mode=='plot'"
+        <button *ngIf="_visualizationService.mode=='chart'"
+          (click)="selectControllerMode('chart')"
+          [class.mat-icon-button]="_simulationControllerService.mode!='chart'"
+          [class.mat-mini-fab]="_simulationControllerService.mode=='chart'"
           matTooltip="Chart controller"
           matTooltipPosition="before"
           class="app-button"

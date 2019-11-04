@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { MathService } from '../../../services/math/math.service';
 import { ColorService } from '../../../network/services/color.service';
-import { PlotRecordsService } from './plot-records.service';
+import { ChartRecordsService } from './chart-records.service';
 import { VisualizationService } from '../../visualization.service';
 
 import { Data } from '../../../classes/data';
@@ -11,11 +11,11 @@ import { Record } from '../../../classes/record';
 
 
 @Component({
-  selector: 'app-plot-records',
-  templateUrl: './plot-records.component.html',
-  styleUrls: ['./plot-records.component.scss']
+  selector: 'app-chart-records',
+  templateUrl: './chart-records.component.html',
+  styleUrls: ['./chart-records.component.scss']
 })
-export class PlotRecordsComponent implements OnInit, OnDestroy {
+export class ChartRecordsComponent implements OnInit, OnDestroy {
   @Input() data: Data;
   @Input() records: Record[];
   public _data: any[] = [];
@@ -35,7 +35,7 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
 
   constructor(
     private _mathService: MathService,
-    public _plotRecordsService: PlotRecordsService,
+    public _chartRecordsService: ChartRecordsService,
     public _visualizationService: VisualizationService,
     public _colorService: ColorService,
   ) {
@@ -88,8 +88,8 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
     var records = this.records;
     if (records.length == 0) return
 
-    var barmode = this._plotRecordsService.barmode;
-    var barnorm = this._plotRecordsService.barnorm;
+    var barmode = this._chartRecordsService.barmode;
+    var barnorm = this._chartRecordsService.barnorm;
     if (this.hasSpikeData() && this.hasAnalogData()) {
       this.layout['yaxis'] = {
         // title: 'Firing rate [Hz]',
@@ -170,7 +170,7 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
 
     var start: number = 0.;
     var end: number = this.data.app.kernel['time'];
-    var size: number = this._plotRecordsService.binsize;
+    var size: number = this._chartRecordsService.binsize;
     var node = this.data.app.nodes[record.recorder.idx];
     var color: string = this._colorService.node(node);
 
@@ -179,8 +179,8 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
     record.config['showlegend'] = this.records.length > 1;
     record.config['legendgroup'] = 'spike' + idx;
 
-    var scatterData = this._plotRecordsService.scatter(record.idx, x, y, color, label, record.config);
-    var histData = this._plotRecordsService.histogram(record.idx, x, start, end, size, color, record.config)
+    var scatterData = this._chartRecordsService.scatter(record.idx, x, y, color, label, record.config);
+    var histData = this._chartRecordsService.histogram(record.idx, x, start, end, size, color, record.config)
     this._data.push(scatterData);
     this._data.push(histData);
 
@@ -197,7 +197,7 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
       var y: any[] = [Vth, Vth];
 
       var config = { hoverinfo: 'none', visible: 'legendonly', 'line.dash': 'dash' };
-      var plot_Vth = this._plotRecordsService.plot(record.idx, x, y, 'black', 'V_m threshold', config);
+      var plot_Vth = this._chartRecordsService.plot(record.idx, x, y, 'black', 'V_m threshold', config);
       this._data.push(plot_Vth)
     }
 
@@ -227,7 +227,7 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
     if (data.length == 1) {
       var label = record_from + ' of ' + (recorder.idx + 1);
       var config0 = { hoverinfo: 'full', showlegend: true };
-      var plot = this._plotRecordsService.plot(recorder.idx, data[0].x, data[0].y, color, label, config0, yaxis);
+      var plot = this._chartRecordsService.plot(recorder.idx, data[0].x, data[0].y, color, label, config0, yaxis);
       this._data.push(plot)
     } else if (data.length > 1) {
 
@@ -244,7 +244,7 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
 
       var label = record_from + ' average';
       var config1 = {};
-      var plot = this._plotRecordsService.plot(recorder.idx, x, y, color, label, config1, yaxis);
+      var plot = this._chartRecordsService.plot(recorder.idx, x, y, color, label, config1, yaxis);
       this._data.push(plot)
 
       data.slice(0, 1).map(d => {
@@ -254,7 +254,7 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
           hoverinfo: 'none',
           opacity: 0.5,
         }
-        var plot = this._plotRecordsService.plot(recorder.idx, d.x, d.y, color, label, config2, yaxis);
+        var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config2, yaxis);
         this._data.push(plot)
       })
 
@@ -265,7 +265,7 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
           hoverinfo: 'none',
           opacity: 0.3,
         }
-        var plot = this._plotRecordsService.plot(recorder.idx, d.x, d.y, color, label, config3, yaxis);
+        var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config3, yaxis);
         this._data.push(plot)
       })
 
@@ -276,7 +276,7 @@ export class PlotRecordsComponent implements OnInit, OnDestroy {
           hoverinfo: 'none',
           opacity: 0.1,
         }
-        var plot = this._plotRecordsService.plot(recorder.idx, d.x, d.y, color, label, config4, yaxis);
+        var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config4, yaxis);
         this._data.push(plot)
       })
 

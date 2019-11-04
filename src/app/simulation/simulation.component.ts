@@ -113,12 +113,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
     this._visualizationService.time = resData.kernel.time;
     this._visualizationService.checkPositions(this.records);
-    this._visualizationService.mode = this.data.app.visualization || 'plot';
+    this._visualizationService.mode = this.data.app.visualization || 'chart';
     this._visualizationService.update.emit()
   }
 
   save(): void {
-    this.data.app.visualization = this._visualizationService.mode || 'plot';
+    this.data.app.visualization = this._visualizationService.mode || 'chart';
     this._simulationProtocolService.save(this.data)
   }
 
@@ -149,10 +149,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
     if (this._visualizationService.mode == mode) {
       this._simulationControllerService.mode = mode
     } else {
-      if (this._simulationControllerService.mode == 'plot') {
+      if (this._simulationControllerService.mode == 'chart') {
         this._simulationControllerService.mode = 'animation';
       } else if (this._simulationControllerService.mode == 'animation') {
-        this._simulationControllerService.mode = 'plot';
+        this._simulationControllerService.mode = 'chart';
       }
     }
     this._visualizationService.mode = mode;

@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 @Injectable({
   providedIn: 'root'
 })
-export class PlotRecordsService {
+export class ChartRecordsService {
   public binsize: any = 10.;
   public barmode: string = 'overlay';
   public barnorm: string = '';

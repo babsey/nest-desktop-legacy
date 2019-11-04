@@ -17,7 +17,7 @@ export class VisualizationConfigService {
     valid: false,
   };
   private files: string[] = [
-    'plot'
+    'chart'
   ];
 
   constructor(

@@ -16,8 +16,8 @@ import { AnimationAnalogComponent } from './animation/animation-analog/animation
 import { AnimationControllerComponent } from './animation/animation-controller/animation-controller.component';
 import { AnimationSpikeComponent } from './animation/animation-spike/animation-spike.component';
 import { AnimationColormapComponent } from './animation/animation-colormap/animation-colormap.component';
-import { PlotControllerComponent } from './plot/plot-controller/plot-controller.component';
-import { PlotRecordsComponent } from './plot/plot-records/plot-records.component';
+import { ChartControllerComponent } from './chart/chart-controller/chart-controller.component';
+import { ChartRecordsComponent } from './chart/chart-records/chart-records.component';
 import { ThreeScatterComponent } from './animation/three-scatter/three-scatter.component';
 import { VisualizationComponent } from './visualization.component';
 import { VisualizationConfigComponent } from './visualization-config/visualization-config.component';
@@ -29,8 +29,8 @@ import { VisualizationConfigComponent } from './visualization-config/visualizati
     AnimationColormapComponent,
     AnimationControllerComponent,
     AnimationSpikeComponent,
-    PlotControllerComponent,
-    PlotRecordsComponent,
+    ChartControllerComponent,
+    ChartRecordsComponent,
     ThreeScatterComponent,
     VisualizationComponent,
     VisualizationConfigComponent,
@@ -40,8 +40,8 @@ import { VisualizationConfigComponent } from './visualization-config/visualizati
     AnimationColormapComponent,
     AnimationControllerComponent,
     AnimationSpikeComponent,
-    PlotControllerComponent,
-    PlotRecordsComponent,
+    ChartControllerComponent,
+    ChartRecordsComponent,
     ThreeScatterComponent,
     VisualizationComponent,
     VisualizationConfigComponent,

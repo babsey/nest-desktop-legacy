@@ -1,6 +1,6 @@
 <ng-container [ngSwitch]="_visualizationService.mode">
-  <ng-container *ngSwitchCase="'plot'">
-    <app-plot-records [data]="data" [records]="records"></app-plot-records>
+  <ng-container *ngSwitchCase="'chart'">
+    <app-chart-records [data]="data" [records]="records"></app-chart-records>
   </ng-container>
 
   <ng-container *ngSwitchCase="'animation'">

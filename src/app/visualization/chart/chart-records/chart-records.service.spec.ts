@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PlotRecordsService } from './plot-records.service';
+import { ChartRecordsService } from './chart-records.service';
 
-describe('PlotRecordsService', () => {
+describe('ChartRecordsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: PlotRecordsService = TestBed.get(PlotRecordsService);
+    const service: ChartRecordsService = TestBed.get(ChartRecordsService);
     expect(service).toBeTruthy();
   });
 });

@@ -26,12 +26,12 @@ export class AnimationControllerService {
   };
   private colorScales: any = {
     'spectral': d3.interpolateSpectral,
-    'turbo': d3.interpolateTurbo,
+    // 'turbo': d3.interpolateTurbo,
     'viridis': d3.interpolateViridis,
     'inferno': d3.interpolateInferno,
     'magma': d3.interpolateMagma,
     'plasma': d3.interpolatePlasma,
-    'cividis': d3.interpolateCividis,
+    // 'cividis': d3.interpolateCividis,
     'warm': d3.interpolateWarm,
     'cool': d3.interpolateCool,
     'cubehelix': d3.interpolateCubehelixDefault,

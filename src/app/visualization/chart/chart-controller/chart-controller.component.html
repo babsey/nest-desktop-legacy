@@ -7,8 +7,8 @@
     <app-select
       (selectedChange)="onBarmodeChange($event)"
       [matTooltip]="'Barmode'"
-      [options]="_visualizationConfigService.config.plot.controller.barmodes"
-      [(selected)]="_plotRecordsService.barmode"
+      [options]="_visualizationConfigService.config.chart.controller.barmodes"
+      [(selected)]="_chartRecordsService.barmode"
       matTooltipPosition="before"
     ></app-select>
   </mat-list-item>
@@ -17,8 +17,8 @@
     <app-select
       (selectedChange)="onBarnormChange($event)"
       [matTooltip]="'Barnorm'"
-      [options]="_visualizationConfigService.config.plot.controller.barnorms"
-      [(selected)]="_plotRecordsService.barnorm"
+      [options]="_visualizationConfigService.config.chart.controller.barnorms"
+      [(selected)]="_chartRecordsService.barnorm"
       matTooltipPosition="before"
     ></app-select>
   </mat-list-item>
@@ -27,8 +27,8 @@
     <app-ticks-slider-inline
       (valueChange)="onBinSizeChange($event)"
       [matTooltip]="'Bin size'"
-      [options]="_visualizationConfigService.config.plot.controller.binsize"
-      [(value)]="_plotRecordsService.binsize"
+      [options]="_visualizationConfigService.config.chart.controller.binsize"
+      [(value)]="_chartRecordsService.binsize"
       style="width:100%"
     ></app-ticks-slider-inline>
   </mat-list-item>

@@ -11,12 +11,12 @@ import { AnimationControllerService } from '../animation-controller/animation-co
 export class AnimationColormapComponent implements OnInit {
   public scales: string[] = [
     'spectral',
-    'turbo',
+    // 'turbo',
     'viridis',
     'inferno',
     'magma',
     'plasma',
-    'cividis',
+    // 'cividis',
     'warm',
     'cool',
     'cubehelix'

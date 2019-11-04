@@ -7,7 +7,7 @@ import { Record } from '../classes/record';
   providedIn: 'root'
 })
 export class VisualizationService {
-  public mode: string = 'plot';
+  public mode: string = 'chart';
   public hasPositions: boolean = false;
   public update: EventEmitter<any> = new EventEmitter();
   public time: number = 1000;
@@ -22,6 +22,6 @@ export class VisualizationService {
     } else {
       this.hasPositions = false;
     }
-    this.mode = this.hasPositions ? this.mode : 'plot';
+    this.mode = this.hasPositions ? this.mode : 'chart';
   }
 }
