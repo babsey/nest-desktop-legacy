@@ -13,7 +13,7 @@ Contents
    :caption: User Documentation
 
    user/index
-   user/quick-start-video
+   user/quick-start-videos
    user/guide
    user/faq
    user/faq-gifs

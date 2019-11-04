@@ -5,6 +5,10 @@ Frequency asked questions
 Application
 -----------
 
+Where can I find configurations?
+  You find configurations by clicking on the cog icon right to navigation side bar.
+  The configurations are stored as 'localStorage' of the browser.
+
 How can I change configurations?
   You can change configurations in the configuration section
   by clicking on cog icon next to navigation side bar.
@@ -12,9 +16,6 @@ How can I change configurations?
 How can I reset configurations?
   In the loading page you can click on menu icon of the configuration section to open menu.
   One of the menu item is to reset configurations.
-
-Where can I find configurations?
-  The configurations are stored as 'localStorage' of the browser.
 
 How can I reset databases?
   In the loading page you can click on menu icon of the database section to open menu.
@@ -65,8 +66,11 @@ How can I create node?
 How can I create link / connect nodes?
   In network sketch you can select a node as a source node, move the mouse towards target node and then click the target node.
 
+How can I keep selected node to connect other nodes?
+  Hold pressing 'CTRL' before connecting nodes.
+
 How can I (un)select node / link?
-  In network sketch you can click on node or link to select it.
+  When a node or link is selected you can press 'ESC' to unselect it or in network sketch you can click on node or link to select it.
   Click on background area of the network sketch or on the selected in the network controller unselect node or link.
   An other method to (un)select is to click on node shape or link toolbar in the network controller on the right side.
 
@@ -75,7 +79,8 @@ How can I colorize nodes?
   by clicking the right mouse button on node shape in network sketch or node toolbar in the controller.
 
 Where can I find network configuration?
-  In the configuration section you find a subsection network.
+  You find a 'bezier-curve' button towards network configuration in the network editor.
+  Alternatively, you find a network configuration in the configuration section.
 
 How can I change the color cycle of nodes?
   In the network configuration you find the way to change the color cycle.

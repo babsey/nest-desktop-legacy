@@ -1,4 +1,4 @@
-How to **use** it on HBP resources
+How to use it on HBP resources
 ==================================
 
 
