@@ -1,5 +1,6 @@
 How to develop NEST Desktop
-===============================
+===========================
+
 
 This is the developer guide, providing more detail on how to develop NEST Desktop.
 

@@ -1,5 +1,6 @@
-How to **deploy** it on HBP infrastructure
-==========================================
+How to deploy it on HBP infrastructure
+======================================
+
 
 NEST Desktop and NEST Server is serving on the infrastructure of HBP.
 Here, the documentation shows how to deploy NEST Desktop from docker hub in OpenShift system.

@@ -1,6 +1,7 @@
 Abstract
 ========
 
+
 **NEST Desktop: A web-based GUI for NEST Simulator**
 
 Sebastian Spreizer :sup:`1,2`, Stefan Rotter :sup:`1`, Benjamin Weyers :sup:`3`, Hans E Plesser :sup:`4`, Markus Diesmann :sup:`2`

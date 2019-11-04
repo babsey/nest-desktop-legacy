@@ -1,5 +1,5 @@
 How to use it on HBP resources
-==================================
+==============================
 
 
 NEST Desktop is integrated in infrastructure of Human Brain Project (HBP).

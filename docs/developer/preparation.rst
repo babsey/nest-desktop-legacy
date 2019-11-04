@@ -1,6 +1,7 @@
 Preparation
 ===========
 
+
 NEST Desktop is written in HTML5 but compiled by Angular, a web framework written in TypeScript.
 For Angular you need to install nodeJS (+npm).
 

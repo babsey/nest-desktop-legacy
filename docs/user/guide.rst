@@ -1,6 +1,7 @@
 NEST Desktop User Guide
 =======================
 
+
 This is a guide how you can orientate in the interface of NEST Desktop.
 NEST Desktop is serving as an interactive Graphical User Interface on web browser.
 

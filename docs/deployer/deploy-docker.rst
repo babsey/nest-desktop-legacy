@@ -1,6 +1,6 @@
-=======================
-Quickstart using Docker
-=======================
+Deploy NEST Desktop using Docker
+================================
+
 
 Docker is a virtualization software packaging applications and its dependencies in a virtual container that can run on any Linux server.
 It is available for a variety of operating systems, e.g. Linux, Mac and Windows. For more information `here <https://www.docker.com/resources/what-container>`__.
@@ -34,7 +34,7 @@ NEST Desktop and NEST Server are now serving at http://localhost:8000 and http:/
 
 .. rubric:: Arguments
 
-You can find help text of docker arguments by :code:`docker run --help`. 
+You can find help text of docker arguments by :code:`docker run --help`.
 
 +----+-------------------------------------------+
 | -p | Publish a container's port(s) to the host |

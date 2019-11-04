@@ -1,6 +1,7 @@
 NEST Desktop
 ============
 
+
 .. image:: _static/img/nest-desktop-logo.png
    :scale: 50 %
    :alt: alternate text

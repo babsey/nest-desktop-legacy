@@ -1,5 +1,6 @@
 How to deploy NEST Desktop
-==============================
+==========================
+
 
 This is the deployer guide, providing more detail on how to deploy NEST Desktop on system.
 

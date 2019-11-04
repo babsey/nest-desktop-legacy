@@ -1,11 +1,11 @@
-==========
-Quickstart
-==========
+Deploy on host
+==============
+
 
 Installation
 ------------
 
-NEST Desktop and NEST Server require NEST Simulator supporting only in Linux systems.
+Both NEST Desktop and NEST Server require NEST Simulator supporting only in Linux systems.
 
 .. note::
 

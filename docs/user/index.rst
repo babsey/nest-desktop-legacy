@@ -1,5 +1,6 @@
-How to **use** NEST Desktop
-===========================
+How to use NEST Desktop
+=======================
+
 
 This is the user documentation, providing more detail on how to use NEST Desktop.
 
