@@ -15,5 +15,6 @@ objects:
     nest-server.json: |-
       {
         "host": "nest-desktop.apps-dev.hbp.eu/server",
-        "port": ""
+        "port": "",
+        "secure": true
       }

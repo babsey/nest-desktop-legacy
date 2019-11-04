@@ -2,18 +2,19 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: nest-server-config
+  name: nest-desktop
 labels:
-  template: nest-server-config
+  template: nest-desktop
   app: nest-desktop
 objects:
 - kind: ConfigMap
   apiVersion: v1
   metadata:
-    name: nest-server-config
+    name: nest-desktop
   data:
     nest-server.json: |-
       {
-        "host": "nest-server.apps-dev.hbp.eu",
-        "port": ""
+        "host": "nest-desktop.apps.hbp.eu/server",
+        "port": "",
+        "secure": true
       }
