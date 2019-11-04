@@ -1,5 +1,5 @@
-Deploy on host
-==============
+Deploy on host machine
+======================
 
 
 Installation

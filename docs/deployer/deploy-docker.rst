@@ -1,5 +1,5 @@
-Deploy NEST Desktop using Docker
-================================
+Deploy NEST Desktop using Docker engine
+=======================================
 
 
 Docker is a virtualization software packaging applications and its dependencies in a virtual container that can run on any Linux server.

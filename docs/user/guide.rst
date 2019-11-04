@@ -43,6 +43,17 @@ and if provided in the controller panel.
    an icon of mouse-right-button-click appears in left bottom of the page.
 
 
+Model
+-----
+
+The model module shows in the navigation pnael a list of node and synapse models. Nodes are stimulator, neuron or recorder.
+Once you select a model, the main container renders the documentation as well as a list of parameters with default values.
+
+In the advanced mode, you can manage the models or configure the input panel of individual parameters. It will store into the database.
+In the input configuration you can define the type of the input, the label, the default value and the unit of the parameter.
+Additionally, if value slider is selected, minimum, maximum and steps values for slider range.
+
+
 Network
 -------
 This section guides you to the network, a composition of node and link elements.
@@ -75,7 +86,6 @@ The right controller shows a network selection of created nodes.
 'Selected' parameter will be visible for the parameterization in the simulation mode.
 
 You can switch to sketch configuration by clicking on 'bezier-curve' button left to the controller panel.
-
 
 
 Simulation
@@ -127,28 +137,16 @@ by clicking on stacked buttons left to the controller panel
 Visualization
 -------------
 
-Plot
-^^^^
-The plotting of the recordings is rendered by the library "Plotly". The plotting interface has dragging and zooming handlers.
-You can download the snapshot of the plotting
+Chart
+^^^^^
+The chart of the recordings is rendered by the library "Plotly".
+The chart interface has dragging and zooming handlers.
+You can download the snapshot of the chart.
 
 
 Animation
 ^^^^^^^^^
 The animation of the recordings with positions of recorded neurons is rendered by the three.js.
-
-
-Model
------
-
-The model module shows in the navigation pnael a list of node and synapse models. Nodes are stimulator, neuron or recorder.
-Once you select a model, the main container renders the documentation as well as a list of parameters with default values.
-
-In the advanced mode, you can manage the models or configure the input panel of individual parameters. It will store into the database.
-In the input configuration you can define the type of the input, the label, the default value and the unit of the parameter.
-Additionally, if value slider is selected, minimum, maximum and steps values for slider range.
-
-
 
 
 Configuration
