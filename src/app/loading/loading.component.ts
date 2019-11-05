@@ -41,7 +41,7 @@ export class LoadingComponent implements OnInit {
 
   ngOnInit() {
     this.initConfig()
-    setTimeout(() => this.checkServer(), 100)
+    setTimeout(() => this.checkServer(), 200)
   }
 
   ngDoCheck() {

@@ -149,6 +149,18 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this._simulationService.mode = 'run';
   }
 
+  hasRecords(): boolean {
+    return this.records.length > 0;
+  }
+
+  download(): void {
+    var data = this._dataService.clean(this.data);
+    if (this.hasRecords()) {
+      data['records'] = this.records;
+    }
+    this._simulationProtocolService.download([data])
+  }
+
   selectVisualizationModus(mode: string): void {
     if (this._visualizationService.mode == mode) {
       this._simulationControllerService.mode = mode
