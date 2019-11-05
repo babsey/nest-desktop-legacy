@@ -31,10 +31,15 @@ Next you will see the main page of NEST Desktop with the same concept of the lay
 
 NEST Desktop provides three root modules (Simulation, Model, Configuration) and
 a module can be selected by clicking on stacked, colored buttons right adjacent to navigation panel.
-The navigation will be rendered according to the selected module.
 
+Navigation
+^^^^^^^^^^
+The navigation will be rendered according to the selected module.
 The navigation contains, top a section header with the name of the module and icons for the menu,
 and bottom a section content with a list of items.
+
+Content and controller
+^^^^^^^^^^^^^^^^^^^^^^
 By clicking on an item in the navigation triggers loading the content in the main container
 and if provided in the controller panel.
 
