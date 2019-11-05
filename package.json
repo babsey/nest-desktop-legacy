@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -35,13 +35,13 @@
     "material-community-components": "^5.0.1",
     "mathjs": "^6.2.3",
     "object-hash": "^2.0.0",
-    "plotly.js": "^1.51.0",
+    "plotly.js": "^1.51.1",
     "pouchdb": "^7.1.1",
     "pouchdb-upsert": "^2.2.0",
     "rxjs": "^6.5.3",
     "stats.js": "^0.17.0",
     "three": "^0.108.0",
-    "three-orbitcontrols": "^2.108.1",
+    "three-orbitcontrols": "^2.110.1",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.9.1"
