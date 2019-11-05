@@ -110,7 +110,6 @@ export class SimulationProtocolService {
                   })
                 } else {
                   data['_id'] = res.id;
-                  
                   this.change.emit()
                 }
               })
@@ -135,8 +134,11 @@ export class SimulationProtocolService {
   }
 
   download(data: Data[]): void {
-    delete data['_rev'];
-    data.forEach(d => d['_rev'] = undefined)
+    if (data.hasOwnProperty('_rev')) {
+      delete data['_rev'];
+    } else {
+      data.forEach(d => d['_rev'] = undefined);
+    }
     var dataJSON = JSON.stringify(data);
     var element = document.createElement('a');
     element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(dataJSON));

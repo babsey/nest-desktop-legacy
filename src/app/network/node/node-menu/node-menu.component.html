@@ -39,6 +39,12 @@
   <button mat-menu-item class="menu-item" (click)="deleteNode()">
     <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete node
   </button>
+
+  <ng-container *ngIf="isRecorder()">
+    <button mat-menu-item class="menu-item" (click)="downloadEvents()" [disabled]="!hasRecords()">
+      <fa-icon class="menu-icon" icon="download"></fa-icon> Download events
+    </button>
+  </ng-container>
 </div>
 
 <mat-menu #levelMenu="matMenu" class="context-menu">

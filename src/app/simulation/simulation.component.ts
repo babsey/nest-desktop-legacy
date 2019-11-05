@@ -12,6 +12,7 @@ import { NetworkService } from '../network/services/network.service';
 import { VisualizationService } from '../visualization/visualization.service';
 import { SimulationControllerService } from './simulation-controller/simulation-controller.service';
 import { SimulationProtocolService } from './services/simulation-protocol.service';
+import { SimulationEventService } from './services/simulation-event.service';
 import { SimulationRunService } from './services/simulation-run.service';
 import { SimulationService } from './services/simulation.service';
 
@@ -37,6 +38,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     private _colorService: ColorService,
     private _dataService: DataService,
     private _networkService: NetworkService,
+    private _simulationEventService: SimulationEventService,
     private _simulationProtocolService: SimulationProtocolService,
     private bottomSheet: MatBottomSheet,
     private route: ActivatedRoute,
@@ -51,7 +53,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // console.log('Init simulation')
     this.route.params.subscribe(params => this.init(params['id']));
-    this._simulationRunService.simulated.subscribe(data => this.update(data))
+    this._simulationRunService.simulated.subscribe(resData => this.update(resData))
   }
 
   ngOnDestroy() {
@@ -61,6 +63,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
   init(id: string): void {
     this.data = {}
     this.records = [];
+    this._simulationEventService.records = [];
     if (id) {
       this._simulationService.load(id).then(doc => {
         this.data = this._dataService.clean(doc);
@@ -111,6 +114,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
       record.recorder['color'] = this._colorService.node(this.data.app.nodes[record.recorder.idx]);
     })
 
+    this._simulationEventService.records = this.records;
     this._visualizationService.time = resData.kernel.time;
     this._visualizationService.checkPositions(this.records);
     this._visualizationService.mode = this.data.app.visualization || 'chart';

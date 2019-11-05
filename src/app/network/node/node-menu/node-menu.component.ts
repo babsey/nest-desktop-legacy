@@ -5,10 +5,12 @@ import { ModelService } from '../../../model/model.service';
 import { NetworkService } from '../../services/network.service';
 import { NetworkSketchService } from '../../network-sketch/network-sketch.service';
 import { PositionService } from '../../services/position.service';
+import { SimulationEventService } from '../../../simulation/services/simulation-event.service';
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
 import { SimCollection } from '../../../classes/simCollection';
+
 
 @Component({
   selector: 'app-node-menu',
@@ -36,6 +38,7 @@ export class NodeMenuComponent implements OnInit, OnChanges {
     private _networkService: NetworkService,
     private _networkSketchService: NetworkSketchService,
     private _positionService: PositionService,
+    private _simulationEventService: SimulationEventService,
   ) { }
 
   ngOnInit() {
@@ -132,6 +135,18 @@ export class NodeMenuComponent implements OnInit, OnChanges {
     this._networkService.resetSelection();
     this._networkSketchService.reset();
     this.dataChange.emit(this.data)
+  }
+
+  isRecorder(): boolean {
+    return this.data.simulation.collections[this.node.idx].element_type == 'recorder';
+  }
+
+  hasRecords(): boolean {
+    return this._simulationEventService.records.length > 0;
+  }
+
+  downloadEvents(): void {
+    this._simulationEventService.download(this.data, this.node)
   }
 
 }
