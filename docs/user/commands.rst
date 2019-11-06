@@ -1,5 +1,6 @@
-Commands guide
-==============
+API of the commands
+===================
+
 
 nest-desktop
 ------------

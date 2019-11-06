@@ -1,13 +1,16 @@
-Frequency asked questions
-=========================
+Frequenlty asked questions
+==========================
 
+.. contents:: On this page , you'll find questions to
+   :local:
+   :depth: 2
 
 Application
 -----------
 
 Where can I find configurations?
   You find configurations by clicking on the cog icon right to navigation side bar.
-  The configurations are stored as 'localStorage' of the browser.
+  The configurations are stored as 'local storage' of the browser.
 
 How can I change configurations?
   You can change configurations in the configuration section
@@ -22,14 +25,7 @@ How can I reset databases?
   One of the menu item is to reset databases.
 
 Where can I find the database?
-  The databases are stored as 'IndexDB' of the browser.
-
-How can I check NEST Server?
-  In the loading page you can click on menu icon of the server section to open menu.
-  One of the menu item is to check NEST Server.
-
-How can I change the URL of the NEST Server?
-  In the configuration of the NEST Server you find the form fields for the URL of the NEST Server.
+  The databases are stored as 'Indexed DB' of the browser.
 
 How can I disable loading page?
   In the configuration of the application you find the option to disable loading page.
@@ -40,9 +36,22 @@ How can I activate automatic start?
 How can I switch to advanced view?
   In the configuration of the application you find an option to switch to advanced view.
 
+NEST Server
+-----------
+
+How can I check NEST Server?
+  In the loading page you can click on menu icon of the server section to open menu.
+  One of the menu item is to check NEST Server.
+
+How can I change the URL of the NEST Server?
+  In the configuration of the NEST Server you find the form fields for the URL of the NEST Server.
+
 
 Model
 -----
+
+What is terminology of this model?
+  This model includes neuron, synapse and device models.
 
 How can I read the documentation of a model?
   In the model section you find a list of models on the left side navigation.
@@ -56,6 +65,14 @@ How can I get default values of a model?
 
 Network
 -------
+
+Where can I find network controller?
+  You find network controller by clicking on top icon ('project diagram') left to controller.
+  Node and link controller are part of the network controller.
+
+Where can I find network configuration?
+  You find a 'bezier-curve' button towards network configuration in the network editor.
+  Alternatively, you find a network configuration in the configuration section.
 
 How can I empty network?
   In network sketch you find bottom left a trash button that empties the network.
@@ -78,10 +95,6 @@ How can I colorize nodes?
   You find the method to color in the context menu of the node
   by clicking the right mouse button on node shape in network sketch or node toolbar in the controller.
 
-Where can I find network configuration?
-  You find a 'bezier-curve' button towards network configuration in the network editor.
-  Alternatively, you find a network configuration in the configuration section.
-
 How can I change the color cycle of nodes?
   In the network configuration you find the way to change the color cycle.
 
@@ -100,10 +113,6 @@ How can I reset all parameter value?
 How can I reset a parameter value?
   In the context menu of a parameter (by clicking right button on a parameter) you find the method to reset parameter.
   It also shows the default value of the parameter.
-
-Where can I find network controller?
-  You find network controller by clicking on top icon ('project diagram') left to controller.
-  Node and link controller are part of the network controller.
 
 How can I set inhibitory connectome?
   You can set weights to negative value in the link controller.
@@ -136,6 +145,10 @@ How can I generate array?
 Simulation
 ----------
 
+Where can I find simulation controller?
+  The simulation controller appears by clicking on the cog icon left to controller side bar.
+  The kernel controller is a part of the simulation controller.
+
 How can I start simulation?
   Click on the play button in top right to go to simulation play,
   then click the play button again to start simulation.
@@ -151,10 +164,6 @@ How can I activate simulation after load?
 
 How can I activate seed randomization?
   In the context menu of the play button (by clicking on right button) you find an option to activate seed randomization.
-
-Where can I find simulation controller?
-  The simulation controller appears by clicking on the cog icon left to controller side bar.
-  The kernel controller is a part of the simulation controller.
 
 How can I modify kernel of NEST Simulator?
   In the simulation controller you find a kernel section for the NEST Simulator.
@@ -204,6 +213,9 @@ How can I delete specific protocols?
 How can I download a protocol?
   In the context menu of the protocols (by clicking on mouse right button on a protocol) you find this method to delete corresponding protocol.
 
+How can I download simulation with records?
+  In the context menu of the simulation (on play icon) you find a menu item to download data and records of the current simulation.
+
 How can I download specific protocols?
   In the menu of the simulation in the top navigation you find an method to select protocols.
   Then select several protocols and then at the end you find the action to download them.
@@ -213,7 +225,6 @@ How can I download all protocols?
 
 How can I upload protocols?
   In the menu of the simulation in the top navigation you find an method to upload protocols from a file.
-
 
 Chart
 -----

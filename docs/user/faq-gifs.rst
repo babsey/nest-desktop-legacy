@@ -1,5 +1,5 @@
-Frequency asked questions in gifs
-=================================
+Frequently asked questions in gifs
+==================================
 
 
 Select or make a new

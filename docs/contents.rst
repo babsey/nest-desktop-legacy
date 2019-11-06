@@ -2,19 +2,23 @@ Contents
 ========
 
 .. toctree::
-   :titlesonly:
 
    index
-   introduction
-   abstract
-   history
+
+.. toctree::
+   :caption: About NEST Desktop
+
+   about/abstract
+   about/events
 
 .. toctree::
    :caption: User Documentation
 
    user/index
-   user/quick-start-videos
-   user/guide
+   user/quick-start
+   user/setup
+   user/usage
+   user/commands
    user/faq
    user/faq-gifs
    user/use-hbp
@@ -23,10 +27,7 @@ Contents
    :caption: Deployer Documentation
 
    deployer/index
-   deployer/deploy-host
    deployer/deploy-docker
-   deployer/installing
-   deployer/commands
    deployer/deploy-hbp
 
 
