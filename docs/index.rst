@@ -25,19 +25,6 @@ It's so great that you want to use NEST Desktop.
 
 ||||
 
-Future events
--------------
-
-:26 - 28 November 2019: Tutorial/Talk on HPAC Training, Heidelberg, Germany.
-:February 2020: BSc course "Simple Neuron Models" at BCF, Freiburg, Germany.
-:May 2020: MSc course "Biophysics of Neurons and Networks" at BCF, Freiburg, Germany.
-:April 2020: Meeting at BCF, Freiburg, Germany.
-:June 2020: NEST Conference at NMBU, As, Norway.
-
-Please send me any upcoming event concerning NEST Desktop.
-
-||||
-
 How the documentation is organized
 ----------------------------------
 
@@ -86,3 +73,16 @@ The documentation is organized into three sections. Select the appropriate secti
         </a>
       </div>
     </div>
+
+||||
+
+Future events
+-------------
+
+:26 - 28 November '19: Tutorial/Talk on HPAC Training, Heidelberg, Germany.
+:February '20: BSc course "Simple Neuron Models" at BCF, Freiburg, Germany.
+:May '20: MSc course "Biophysics of Neurons and Networks" at BCF, Freiburg, Germany.
+:April '20: Meeting at BCF, Freiburg, Germany.
+:June '20: NEST Conference at NMBU, As, Norway.
+
+Please send me any upcoming event concerning NEST Desktop.

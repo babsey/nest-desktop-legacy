@@ -7,6 +7,6 @@ This is the deployer guide, providing more detail on how to deploy NEST Desktop 
 * :doc:`Deploy NEST Desktop with Docker engine <deploy-docker>`
 
 
-Human Brain Project
+**Infrastructure**
 
-* :doc:`Deploy NEST Desktop on HBP resources <deploy-hbp>`
+* :doc:`Deploy NEST Desktop on Human Brain Project resources <deploy-hbp>`

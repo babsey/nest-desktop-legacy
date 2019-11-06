@@ -1,4 +1,4 @@
-Frequenlty asked questions
+Frequently asked questions
 ==========================
 
 .. contents:: On this page , you'll find questions to

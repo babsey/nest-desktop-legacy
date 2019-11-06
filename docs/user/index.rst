@@ -12,9 +12,8 @@ This is the user documentation, providing more detail on how to use NEST Desktop
 * :doc:`Detailed guide how to use NEST Desktop <usage>`
 * :doc:`API of commands <commands>`
 * :doc:`Frequently asked questions (FAQ) <faq>`
-* :doc:`Frequently asked questions (FAQ) in GIFS <faq-gifs>`
 
 
-Infrastructure
+**Infrastructure**
 
 * :doc:`Use NEST Desktop on the Human Brain Project (HBP) resources <use-hbp>`
