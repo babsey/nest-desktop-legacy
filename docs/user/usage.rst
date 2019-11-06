@@ -58,8 +58,11 @@ and if provided in the controller panel.
 
 
 
-The Model Module
-----------------
+|fa-square-root-alt|   The Model Module
+---------------------------------------
+
+.. |fa-square-root-alt| image:: ../_static/font-awesome/square-root-alt.svg
+   :width: 20px
 
 The model module includes the description and the management of the neuron, device and synapse models.
 
@@ -75,7 +78,7 @@ Additionally, you can adjust the configuration for the slider of the model param
 The Network Module
 ------------------
 
-The network module is where you can create and modify networks.
+The network module as a part of the simulation module is where you can create and modify networks.
 
 Network editor
 ^^^^^^^^^^^^^^
@@ -117,8 +120,11 @@ It is a list of nodes and links in which you are able to change the parameter va
 It appears together with records visualization in the simulation play.
 
 
-The Simulation Module
----------------------
+|fa-brain| The Simulation Module
+--------------------------------
+
+.. |fa-brain| image:: ../_static/font-awesome/brain.svg
+   :width: 20px
 
 In the simulation module, a list of simulations and if provided protocols are displayed in the navigation panel.
 You can manage (add/delete/download/upload) protocols in the menu by clicking on the 3 vertical dots icon in the navigation header.
@@ -185,21 +191,30 @@ Once it is activated and after a successful simulation, you can see the logging 
 The Visualization Module
 ------------------------
 
-Chart
-^^^^^
+|fa-chart-line| Chart
+^^^^^^^^^^^^^^^^^^^^^
+
+.. |fa-chart-line| image:: ../_static/font-awesome/chart-line.svg
+   :width: 16px
 
 The chart of the recordings is rendered by the library `Plotly.js`.
 The chart interface has dragging and zooming handlers.
 You can download a snapshot of the current chart by clicking on the camera icon in the top mode panel.
 
-Animation
-^^^^^^^^^
+|fa-braille| Animation
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. |fa-braille| image:: ../_static/font-awesome/braille.svg
+   :width: 16px
 
 The animation of the recordings with positions of recorded neurons is rendered by the `three.js`.
 
 
-Configuration
--------------
+|fa-cog| Configuration
+----------------------
+
+.. |fa-cog| image:: ../_static/font-awesome/cog.svg
+   :width: 16px
 
 The configuration module is a collection of various configuration of several components.
 Once you modified a configuration, it will saves as JSON in local storage of the web browser.

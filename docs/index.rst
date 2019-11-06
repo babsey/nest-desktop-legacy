@@ -76,13 +76,18 @@ The documentation is organized into three sections. Select the appropriate secti
 
 ||||
 
-Future events
--------------
+Upcoming events
+---------------
 
-:26 - 28 November '19: Tutorial/Talk on HPAC Training, Heidelberg, Germany.
-:February '20: BSc course "Simple Neuron Models" at BCF, Freiburg, Germany.
-:May '20: MSc course "Biophysics of Neurons and Networks" at BCF, Freiburg, Germany.
-:April '20: Meeting at BCF, Freiburg, Germany.
-:June '20: NEST Conference at NMBU, As, Norway.
+**2019**
+
+:26 - 28 November: Tutorial/Talk on HPAC Training, Heidelberg, Germany.
+
+**2020**
+
+:February: BSc course "Simple Neuron Models" at BCF, Freiburg, Germany.
+:May: MSc course "Biophysics of Neurons and Networks" at BCF, Freiburg, Germany.
+:April: Meeting at BCF, Freiburg, Germany.
+:June: NEST Conference at NMBU, As, Norway.
 
 Please send me any upcoming event concerning NEST Desktop.
