@@ -16,7 +16,7 @@ RUN chown nest:nest /home/nest/entrypoint.sh && \
 COPY package.json /tmp/
 
 # install nest-desktop and nest-server
-RUN pip3 install nest-desktop==2.1.* --upgrade
+RUN pip3 install nest-desktop==2.2.* --upgrade
 
 EXPOSE 5000 8000
 WORKDIR /home/nest
