@@ -75,7 +75,7 @@ export class SimulationRunService {
         if (this.snackBarRef) {
           this.snackBarRef.dismiss();
         }
-        this._logService.logs = this._logService.logs.concat(res['data'].logs || []);
+        this._logService.logs = this._logService.logs.concat(res['logs'] || []);
         this._logService.log('Response from server')
         this.simulated.emit(res['data'])
       }

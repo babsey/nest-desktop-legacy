@@ -1,13 +1,15 @@
-<mat-nav-list dense *ngIf="(_appConfigService.config['app'].log && router.url.includes('simulate'))" class="logs">
-  <mat-list-item *ngFor="let log of _logService.logs" (click)="setTime(log[0])" class="log" [class.active]="isTime(log[0])">
-    <a matLine style="display:flex">
-      <span style="margin-right: 5px;" [ngSwitch]="log[1]">
-        <fa-icon *ngSwitchCase="'server'" icon="server"></fa-icon>
-        <fa-icon *ngSwitchCase="'client'" icon="desktop"></fa-icon>
-      </span>
-      <span>{{ log[2] }}</span>
-      <div class="flex-spacer"></div>
-      <span>{{ log[0] | timedelta : _logService.time }}</span>
-    </a>
-  </mat-list-item>
+<mat-nav-list dense class="logs">
+  <ng-container *ngFor="let log of _logService.logs">
+    <mat-list-item (click)="setTime(log[0])" class="log" [class.active]="isTime(log[0])">
+      <a matLine class="flex">
+        <span style="margin-right: 5px;" [ngSwitch]="log[1]">
+          <fa-icon *ngSwitchCase="'server'" icon="server"></fa-icon>
+          <fa-icon *ngSwitchCase="'client'" icon="desktop"></fa-icon>
+        </span>
+        <span>{{ log[2] }}</span>
+        <div class="flex-spacer"></div>
+        <span>{{ log[0] | timedelta : _logService.time }}</span>
+      </a>
+    </mat-list-item>
+  </ng-container>
 </mat-nav-list>

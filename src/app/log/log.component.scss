@@ -9,6 +9,10 @@
   padding: 0;
 }
 
+.mat-list-item.active {
+  background-color: #93b5ad !important;
+}
+
 ::ng-deep .logs:hover {
   height: 400px;
 }
