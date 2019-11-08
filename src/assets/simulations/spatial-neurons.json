@@ -200,8 +200,8 @@
       "n": 1
     }],
     "connectomes": [{
-      "pre": 0,
-      "post": 1,
+      "source": 0,
+      "target": 1,
       "syn_spec": {
         "weight": 10,
         "model": "static_synapse",
@@ -211,8 +211,8 @@
         "rule": "all_to_all"
       }
     }, {
-      "pre": 2,
-      "post": 1,
+      "source": 2,
+      "target": 1,
       "conn_spec": {
         "rule": "all_to_all"
       },

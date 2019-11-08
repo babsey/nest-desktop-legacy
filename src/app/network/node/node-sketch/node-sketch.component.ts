@@ -20,13 +20,14 @@ import { SimConnectome } from '../../../classes/simConnectome';
   styleUrls: ['./node-sketch.component.scss'],
 })
 export class NodeSketchComponent implements OnInit {
-  @Input() data: Data;
-  @Input() node: AppNode;
-  @Input() width: number;
-  @Input() height: number;
   @Input() color: string;
+  @Input() data: Data;
   @Input() dragable: boolean;
+  @Input() eventTrigger: boolean = true;
+  @Input() height: number;
+  @Input() node: AppNode;
   @Input() selected: AppNode;
+  @Input() width: number;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
   private selector: any;
   public collection: SimCollection;
@@ -61,6 +62,10 @@ export class NodeSketchComponent implements OnInit {
     return this._networkSketchService.focused.node == this.node ? radius + 3 : radius;
   }
 
+  strokeWidth(): number {
+    return this._networkConfigService.config.sketch.node.strokeWidth.value;
+  }
+
   connect(): void {
     this._networkService.connect(this.data, this.selected, this.node);
     this.data['hash'] = this._dataService.hash(this.data);
@@ -69,7 +74,7 @@ export class NodeSketchComponent implements OnInit {
 
   onClick(event: MouseEvent): void {
     // console.log('Click node')
-    if (this.selected && this._networkSketchService.focused.node) {
+    if (this.eventTrigger && this.selected && this._networkSketchService.focused.node) {
       this.connect();
       if (this._networkSketchService.keyDown == '17') return
       this._networkService.resetSelection();

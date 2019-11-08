@@ -1,25 +1,58 @@
 <div class="controller link-controller"
-  [style.border-left-color]="color('pre')"
-  [style.border-right-color]="color('post')"
+  [style.border-left-color]="color('source')"
+  [style.border-right-color]="color('target')"
   [style.display]="linkDisplay()"
   >
 
   <app-link-toolbar [(data)]="data" [link]="link"></app-link-toolbar>
 
   <ng-container [ngSwitch]="hasProjections()">
+    <ng-container *ngSwitchCase="true">
+      <app-link-projections
+        (connectomeChange)="onConnectomeChange($event)"
+        [(connectome)]="connectome"
+        [link]="link"
+        ></app-link-projections>
+    </ng-container>
+
     <ng-container *ngSwitchCase="false">
-      <ng-container *ngIf="!connectSpikeDetector()">
+
+      <ng-container *ngIf="connectome.hasOwnProperty('pre')">
         <mat-list dense>
           <mat-list-item>
-            <app-select
-              (selectedChange)="onRuleSelect($event)"
-              [(selected)]="connectome.conn_spec.rule"
-              [options]="connRules"
-            ></app-select>
+            <app-array-input-popup
+              [(value)]="connectome['pre']"
+              [options]="preOptions"
+              style="width:100%"
+            ></app-array-input-popup>
           </mat-list-item>
         </mat-list>
+      </ng-container>
 
+      <ng-container *ngIf="connectome.hasOwnProperty('post')">
         <mat-list dense>
+          <mat-list-item>
+            <app-array-input-popup
+              [(value)]="connectome['post']"
+              [options]="postOptions"
+              style="width:100%"
+            ></app-array-input-popup>
+          </mat-list-item>
+        </mat-list>
+      </ng-container>
+
+      <ng-container *ngIf="!connectSpikeDetector()">
+        <mat-list dense>
+          <ng-container *ngIf="!connectome.hasOwnProperty('pre') && !connectome.hasOwnProperty('post')">
+            <mat-list-item>
+              <app-select
+                (selectedChange)="onRuleSelect($event)"
+                [(selected)]="connectome.conn_spec.rule"
+                [options]="connRules"
+              ></app-select>
+            </mat-list-item>
+          </ng-container>
+
           <ng-container *ngFor="let conn of slider.connection">
             <mat-list-item
               [style.display]="paramDisplay('conn_spec.' + conn.id) ? '' : 'none'">
@@ -61,13 +94,6 @@
       </ng-container>
     </ng-container>
 
-    <ng-container *ngSwitchCase="true">
-      <app-link-projections
-        (connectomeChange)="onConnectomeChange($event)"
-        [(connectome)]="connectome"
-        [link]="link"
-        ></app-link-projections>
-    </ng-container>
   </ng-container>
 
 </div>

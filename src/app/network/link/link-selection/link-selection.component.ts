@@ -85,11 +85,11 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
   }
 
   source(): AppNode {
-    return this.data.app.nodes[this.connectome.pre];
+    return this.data.app.nodes[this.connectome.source];
   }
 
   target(): AppNode {
-    return this.data.app.nodes[this.connectome.post];
+    return this.data.app.nodes[this.connectome.target];
   }
 
   selectedConnRule(): string {
@@ -116,9 +116,9 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
 
   isBothSpatial(): boolean {
     var collections = this.data.simulation.collections;
-    var pre = collections[this.connectome.pre];
-    var post = collections[this.connectome.post];
-    return pre.hasOwnProperty('spatial') && post.hasOwnProperty('spatial');
+    var source = collections[this.connectome.source];
+    var target = collections[this.connectome.target];
+    return source.hasOwnProperty('spatial') && target.hasOwnProperty('spatial');
   }
 
   onDataChange(data: Data): void {

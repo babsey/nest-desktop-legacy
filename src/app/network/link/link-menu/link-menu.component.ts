@@ -25,6 +25,11 @@ export class LinkMenuComponent implements OnInit {
   ngOnInit() {
   }
 
+  hasConnectomeProperty(key: string): boolean {
+    let connectome = this.data.simulation.connectomes[this.link.idx];
+    return connectome.hasOwnProperty(key);
+  }
+
   color(node: string): string {
     if (!this.link) return 'black';
     let nodes = this.data.app.nodes;
@@ -36,15 +41,15 @@ export class LinkMenuComponent implements OnInit {
   backgroundImage(): string {
     if (!this.link) return
     var bg = '#fafafa';
-    var pre = this.color('pre');
-    var post = this.color('post');
-    var gradient = ['150deg', pre, pre, bg, bg, post, post].join(', ');
+    var source = this.color('source');
+    var target = this.color('target');
+    var gradient = ['150deg', source, source, bg, bg, target, target].join(', ');
     return 'linear-gradient(' + gradient + ')';
   }
 
   resetParameters(): void {
     let connectome = this.data.simulation.connectomes[this.link.idx];
-    if (connectome.hasOwnProperty('projections')) {
+    if (this.hasConnectomeProperty('projections')) {
       var projections = this.connectome.projections;
       projections.weights = 1;
       projections.delays = 1;
@@ -53,12 +58,36 @@ export class LinkMenuComponent implements OnInit {
       delete projections.number_of_connections;
       delete projections.mask;
     } else {
+      delete connectome['pre'];
+      delete connectome['post'];
       connectome.conn_spec.rule = 'all_to_all';
       connectome.syn_spec.model = 'static_synapse';
       connectome.syn_spec.weight = 1;
       connectome.syn_spec.delay = 1;
     }
     this.dataChange.emit(this.data)
+  }
+
+  customSources(): void {
+    let connectome = this.data.simulation.connectomes[this.link.idx];
+    connectome.conn_spec.rule = 'all_to_all';
+    connectome['pre'] = [];
+  }
+
+  allSources(): void {
+    let connectome = this.data.simulation.connectomes[this.link.idx];
+    delete connectome['pre'];
+  }
+
+  customTargets(): void {
+    let connectome = this.data.simulation.connectomes[this.link.idx];
+    connectome.conn_spec.rule = 'all_to_all';
+    connectome['post'] = [];
+  }
+
+  allTargets(): void {
+    let connectome = this.data.simulation.connectomes[this.link.idx];
+    delete connectome['post'];
   }
 
   deleteLink(): void {

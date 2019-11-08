@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
-import { MathService } from '../../../services/math/math.service';
-import { ColorService } from '../../../network/services/color.service';
-import { VisualizationService } from '../../visualization.service';
 import { AnimationControllerService } from '../animation-controller/animation-controller.service';
+import { ColorService } from '../../../network/services/color.service';
+import { LogService } from '../../../log/log.service';
+import { MathService } from '../../../services/math/math.service';
+import { VisualizationService } from '../../visualization.service';
 
 import { Record } from '../../../classes/record';
 
@@ -22,6 +23,7 @@ export class AnimationSpikeComponent implements OnInit, OnDestroy {
 
   constructor(
     private _mathService: MathService,
+    private _logService: LogService,
     private _visualizationService: VisualizationService,
     private _animationControllerService: AnimationControllerService,
     public _colorService: ColorService,
@@ -56,6 +58,7 @@ export class AnimationSpikeComponent implements OnInit, OnDestroy {
 
     var spikeRecords = this.records.filter(record => record.recorder.model == 'spike_detector');
     if (spikeRecords.length == 0) return
+    this._logService.log('Prepare frames');
 
     spikeRecords.map(record =>  this.plotSpikeData(record));
     this._animationControllerService.frames.length = this.frames.length;

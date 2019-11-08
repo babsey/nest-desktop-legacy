@@ -93,7 +93,7 @@ export class NodeControllerComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.data.simulation.models.hasOwnProperty(this.model)) return
     var model = this.data.simulation.models[this.model];
     if (model.existing != 'multimeter') return
-    let recordedNeurons = this.data.simulation.connectomes.filter(connectome => connectome.pre == this.node.idx)
+    let recordedNeurons = this.data.simulation.connectomes.filter(connectome => connectome.source == this.node.idx)
     if (recordedNeurons.length > 0) {
       var collections = this.data.simulation.collections;
       let recordedNeuron = collections[recordedNeurons[0].post];

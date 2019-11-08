@@ -1,47 +1,44 @@
-<div class="navigation button-toolbar">
+<div class="navigation">
   <button
     mat-icon-button
     color="primary"
     (click)="toggleSidenav()"
   ><fa-icon icon="bars"></fa-icon>
   </button>
-  <span class="simulation-theme" routerLinkActive="active">
+  <div class="simulation-theme module-button">
     <button mat-icon-button
       (click)="openSidenav()"
       [routerLink]="[{ outlets: { nav: ['simulation'] } }]"
-      class="app-button"
       color="primary"
-      matTooltip="Simulation"
+      matTooltip="Open an existing or create a new simulation."
       matTooltipPosition="after"
-      routerLinkActive="mat-mini-fab"
+      routerLinkActive="mat-fab"
       >
       <fa-icon icon="brain"></fa-icon>
     </button>
-  </span>
-  <span class="model-theme" routerLinkActive="active">
+  </div>
+  <div class="model-theme module-button">
     <button mat-icon-button
       (click)="openSidenav()"
       [routerLink]="[{ outlets: { nav: ['model'] } }]"
-      class="app-button"
       color="primary"
-      matTooltip="Model"
+      matTooltip="List of models"
       matTooltipPosition="after"
-      routerLinkActive="mat-mini-fab"
+      routerLinkActive="mat-fab"
       >
       <fa-icon icon="square-root-alt"></fa-icon>
     </button>
-  </span>
-  <span class="config-theme" routerLinkActive="active">
+  </div>
+  <div class="config-theme module-button">
     <button mat-icon-button
       (click)="openSidenav()"
       [routerLink]="[{ outlets: { nav: ['config'] } }]"
-      class="app-button"
       color="primary"
       matTooltip="Configuration"
       matTooltipPosition="after"
-      routerLinkActive="mat-mini-fab"
+      routerLinkActive="mat-fab"
       >
        <fa-icon icon="cog"></fa-icon>
      </button>
-   </span>
+   </div>
 </div>

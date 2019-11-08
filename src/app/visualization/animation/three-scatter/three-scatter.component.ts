@@ -7,6 +7,7 @@ import * as OrbitControls from 'three-orbitcontrols';
 import * as STATS from 'stats.js';
 
 import { AnimationControllerService } from '../animation-controller/animation-controller.service';
+import { LogService } from '../../../log/log.service';
 import { VisualizationService } from '../../visualization.service';
 
 
@@ -34,6 +35,7 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
 
   constructor(
     private _animationControllerService: AnimationControllerService,
+    private _logService: LogService,
     private _visualizationService: VisualizationService,
     private element: ElementRef,
   ) { }
@@ -62,6 +64,7 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
 
   init(): void {
     // console.log('Init three scatter')
+    this._logService.log('Render scene');
     this._animationControllerService.frames.length = this.frames.length;
 
     this.scene = new THREE.Scene();
@@ -94,6 +97,7 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
     this.geometry = new THREE.SphereGeometry(.002);
     this.data.map(d => this.dataUpdate(d))
 
+    this._logService.log('Start animation');
     this.animate()
   }
 

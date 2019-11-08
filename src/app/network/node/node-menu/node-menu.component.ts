@@ -119,15 +119,15 @@ export class NodeMenuComponent implements OnInit, OnChanges {
 
     var links = this.data.app.links.filter(link => {
       var connectome = this.data.simulation.connectomes[link.idx];
-      return connectome.pre != this.node.idx && connectome.post != this.node.idx;
+      return connectome.source != this.node.idx && connectome.target != this.node.idx;
     });
     if (links.length != this.data.simulation.connectomes.length) {
       links.forEach((link, idx) => link.idx = idx)
       this.data.app.links = links;
-      var connectomes = this.data.simulation.connectomes.filter(connectome => connectome.pre != this.node.idx && connectome.post != this.node.idx);
+      var connectomes = this.data.simulation.connectomes.filter(connectome => connectome.source != this.node.idx && connectome.target != this.node.idx);
       connectomes.forEach(connectome => {
-        connectome.pre = connectome.pre > this.node.idx ? connectome.pre - 1 : connectome.pre;
-        connectome.post = connectome.post > this.node.idx ? connectome.post - 1 : connectome.post;
+        connectome.source = connectome.source > this.node.idx ? connectome.source - 1 : connectome.source;
+        connectome.target = connectome.target > this.node.idx ? connectome.target - 1 : connectome.target;
       })
       this.data.simulation.connectomes = connectomes;
     }

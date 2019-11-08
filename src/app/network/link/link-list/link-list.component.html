@@ -1,6 +1,6 @@
 <div class="link-list"
-  [style.border-left-color]="color('pre')"
-  [style.border-right-color]="color('post')"
+  [style.border-left-color]="color('source')"
+  [style.border-right-color]="color('target')"
   >
 
   <app-link-toolbar
@@ -11,7 +11,7 @@
 
   <mat-list dense>
     <ng-container *ngIf="connectome.hasOwnProperty('projections'); else nonSpatial">
-      <mat-list-item class="list-item" [style.display]="paramDisplay('connection_type') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('connection_type') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
           <span>Connection type</span>
           <span class="flex-spacer"></span>
@@ -19,7 +19,7 @@
         </span>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('kernel') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('kernel') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
           <span>Kernel</span>
           <span class="flex-spacer"></span>
@@ -27,7 +27,7 @@
         </span>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('number_of_connections') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('number_of_connections') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
           <span>Number of connections</span>
           <span class="flex-spacer"></span>
@@ -35,7 +35,7 @@
         </span>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('weights') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('weights') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
           <span>Weights</span>
           <span class="flex-spacer"></span>
@@ -44,7 +44,7 @@
         </span>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('delays') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('delays') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
           <span>Delays</span>
           <span class="flex-spacer"></span>
@@ -55,7 +55,7 @@
     </ng-container>
 
     <ng-template #nonSpatial>
-      <mat-list-item class="list-item" [style.display]="paramDisplay('conn_spec.rule') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('conn_spec.rule') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
           <span>Connection rule</span>
           <span class="flex-spacer"></span>
@@ -63,7 +63,7 @@
         </span>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.model') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.model') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
           <span>Synapse model</span>
           <span class="flex-spacer"></span>
@@ -71,7 +71,7 @@
         </span>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.weight') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.weight') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <div class="flex">
           <span>Synapse weight</span>
           <span class="flex-spacer"></span>
@@ -80,7 +80,7 @@
         </div>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.delay') ? '' : 'none'" [style.border-left-color]="color('pre')" [style.border-right-color]="color('post')">
+      <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.delay') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <div class="flex">
           <span>Synapse delay</span>
           <span class="flex-spacer"></span>

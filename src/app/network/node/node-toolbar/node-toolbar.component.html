@@ -21,14 +21,17 @@
   >
   <mat-toolbar color="primary" class="node-toolbar" [style.background-color]="advanced() ? '' : color()">
     <span class="node-shape-container">
-      <svg width="40" height="40">
+      <svg width="64" height="64" style="margin-top:12px">
         <g app-node-shape
           (click)="selectNode(node)"
           [color]="color()"
           [elementType]="collection().element_type"
           [idx]="node.idx"
           [spatial]="isSpatial()"
-          transform="translate(20,20)"
+          transform="translate(32,32)"
+          radius="20"
+          strokeWidth="4"
+          labelSize="16"
         ></g>
       </svg>
     </span>

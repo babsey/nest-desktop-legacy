@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
-import { MathService } from '../../../services/math/math.service';
-import { ColorService } from '../../../network/services/color.service';
 import { ChartRecordsService } from './chart-records.service';
+import { ColorService } from '../../../network/services/color.service';
+import { MathService } from '../../../services/math/math.service';
+import { LogService } from '../../../log/log.service';
 import { VisualizationService } from '../../visualization.service';
 
 import { Data } from '../../../classes/data';
@@ -34,6 +35,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
   private labels: string = 'abcdefghijklmnopqrstuvwxyz';
 
   constructor(
+    private _logService: LogService,
     private _mathService: MathService,
     public _chartRecordsService: ChartRecordsService,
     public _visualizationService: VisualizationService,
@@ -87,6 +89,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     this._data = [];
     var records = this.records;
     if (records.length == 0) return
+    this._logService.log('Update charts');
 
     var barmode = this._chartRecordsService.barmode;
     var barnorm = this._chartRecordsService.barnorm;
@@ -162,6 +165,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         }
       }
     })
+    this._logService.log('Render charts');
   }
 
   plotSpikeData(record: Record): void {
@@ -211,8 +215,8 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     }
 
     var neurons = this.data.simulation.connectomes
-      .filter(d => d.pre == recorder.idx)
-      .map(d => this.data.simulation.collections[d.post]);
+      .filter(d => d.source == recorder.idx)
+      .map(d => this.data.simulation.collections[d.target]);
 
     var senders = record['senders'];
     var data = senders.map(sender => { return { x: [], y: [] } });
@@ -298,14 +302,14 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     if (idx) {
       var node = this.data.app.nodes[idx];
       var connectomes = this.data.simulation.connectomes.filter(connectome => {
-        var post = collections[connectome.post];
-        return connectome.pre == idx && post.element_type == 'stimulator'
+        var target = collections[connectome.target];
+        return connectome.source == idx && target.element_type == 'stimulator'
       })
     } else {
       var connectomes = this.data.simulation.connectomes.filter(connectome => {
-        var pre = collections[connectome.pre];
-        var post = collections[connectome.post];
-        return pre.element_type == 'recorder' && post.element_type == 'stimulator';
+        var source = collections[connectome.source];
+        var target = collections[connectome.target];
+        return source.element_type == 'recorder' && target.element_type == 'stimulator';
       })
     }
     return connectomes.length > 0;

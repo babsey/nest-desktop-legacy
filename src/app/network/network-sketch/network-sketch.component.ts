@@ -114,7 +114,7 @@ export class NetworkSketchComponent implements OnInit {
   colorLink(link: AppLink): string {
     var nodes = this.data.app.nodes;
     var connectome = this.data.simulation.connectomes[link.idx];
-    return this._colorService.node(nodes[connectome.pre]);
+    return this._colorService.node(nodes[connectome.source]);
   }
 
   onDataChange(data: Data): void {
@@ -124,6 +124,7 @@ export class NetworkSketchComponent implements OnInit {
   }
 
   onSVGEnter(event: MouseEvent): void {
+    if (!this.eventTrigger) return
     this._appService.rightClick = true;
   }
 
@@ -136,7 +137,7 @@ export class NetworkSketchComponent implements OnInit {
     this._networkSketchService.focused.link = null;
     this._networkSketchService.focused.node = node;
     var nodeSelected = this._networkService.selected.node;
-    if (nodeSelected) {
+    if (this.eventTrigger && nodeSelected) {
       var color = this._colorService.node(nodeSelected);
       this._networkSketchService.dragLine(nodeSelected.position, node.position, color, true)
     }
@@ -156,6 +157,7 @@ export class NetworkSketchComponent implements OnInit {
   }
 
   onContextMenu(event: MouseEvent, node: AppNode, link: AppLink): void {
+    if (!this.eventTrigger) return
     event.preventDefault();
     this._networkService.resetSelection();
     this._networkSketchService.reset();

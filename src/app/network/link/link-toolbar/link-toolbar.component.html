@@ -18,15 +18,18 @@
     class="link-toolbar"
     color="primary">
 
-    <button mat-button (click)="selectNode(connectome.pre)" style="width:33.3%;">
-      <svg width="40" height="40">
+    <button mat-button (click)="selectNode(connectome.source)" style="width:33.3%;; height:40px">
+      <svg width="64" height="64" style="margin-top:-6px">
         <g app-node-shape
-          [color]="color('pre')"
-          [elementType]="collection(connectome.pre).element_type"
-          [idx]="connectome.pre"
-          [spatial]="isSpatial(connectome.pre)"
-          transform="translate(20,20)"
+          [color]="color('source')"
+          [elementType]="collection(connectome.source).element_type"
+          [idx]="connectome.source"
+          [spatial]="isSpatial(connectome.source)"
           style="pointer-events:none"
+          transform="translate(32,32)"
+          radius="20"
+          strokeWidth="4"
+          labelSize="16"
         ></g>
       </svg>
     </button>
@@ -40,16 +43,19 @@
       ></fa-icon>
     </button>
 
-    <button mat-button (click)="selectNode(connectome.post)" style="width:33.3%;">
-        <svg width="40" height="40">
+    <button mat-button (click)="selectNode(connectome.target)" style="width:33.3%; height:40px">
+        <svg width="64" height="64" style="margin-top:-6px">
           <g app-node-shape
-            (click)="selectNode(connectome.post)"
-            [color]="color('post')"
-            [elementType]="collection(connectome.post).element_type"
-            [idx]="connectome.post"
-            [spatial]="isSpatial(connectome.post)"
-            transform="translate(20,20)"
+            (click)="selectNode(connectome.target)"
+            [color]="color('target')"
+            [elementType]="collection(connectome.target).element_type"
+            [idx]="connectome.target"
+            [spatial]="isSpatial(connectome.target)"
             style="pointer-events:none"
+            transform="translate(32,32)"
+            radius="20"
+            strokeWidth="4"
+            labelSize="16"
           ></g>
         </svg>
     </button>

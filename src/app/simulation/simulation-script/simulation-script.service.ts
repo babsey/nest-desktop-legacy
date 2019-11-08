@@ -60,12 +60,12 @@ export class SimulationScriptService {
     return str + '\n';
   }
 
-  connect(pre: SimCollection, post: SimCollection, connSpec: any = null, synSpec: any = null): string {
+  connect(source: SimCollection, target: SimCollection, connSpec: any = null, synSpec: any = null): string {
     var str = '';
-    if (['multimeter', 'voltmeter'].includes(post.model)) {
-      post = [pre, pre = post][0];
+    if (['multimeter', 'voltmeter'].includes(target.model)) {
+      target = [source, source = target][0];
     }
-    str += 'nest.Connect(' + this.nodeVariable(pre.model) + ', ' + this.nodeVariable(post.model);
+    str += 'nest.Connect(' + this.nodeVariable(source.model) + ', ' + this.nodeVariable(target.model);
     if (connSpec) {
       if (connSpec.rule != 'all_to_all') {
         str += ', conn_spec="' + connSpec.rule + '"';

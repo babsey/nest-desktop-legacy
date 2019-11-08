@@ -52,9 +52,9 @@ export class LinkToolbarComponent implements OnInit {
 
   backgroundImage(): string {
     var bg = '#fafafa';
-    var pre = this.color('pre');
-    var post = this.color('post');
-    var gradient = ['150deg', pre, pre, bg, bg, post, post].join(', ');
+    var source = this.color('source');
+    var target = this.color('target');
+    var gradient = ['150deg', source, source, bg, bg, target, target].join(', ');
     return this.advanced() ? '' : 'linear-gradient(' + gradient + ')';
   }
 
@@ -72,11 +72,11 @@ export class LinkToolbarComponent implements OnInit {
   }
 
   source(): AppNode {
-    return this.data.app.nodes[this.connectome.pre];
+    return this.data.app.nodes[this.connectome.source];
   }
 
   target(): AppNode {
-    return this.data.app.nodes[this.connectome.post];
+    return this.data.app.nodes[this.connectome.target];
   }
 
   isSpatial(idx: number): boolean {

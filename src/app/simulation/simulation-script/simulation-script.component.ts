@@ -46,9 +46,9 @@ export class SimulationScriptComponent implements OnInit, OnChanges {
 
     simulationScript += '\n\n# Connect collections\n';
     simulation.connectomes.map(connectome => {
-      var pre = simulation.collections[connectome.pre];
-      var post = simulation.collections[connectome.post];
-      simulationScript += this._simulationScriptService.connect(pre, post);
+      var source = simulation.collections[connectome.source];
+      var target = simulation.collections[connectome.target];
+      simulationScript += this._simulationScriptService.connect(source, target);
     })
 
     simulationScript += '\n';

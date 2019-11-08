@@ -28,40 +28,70 @@ body {
 // Buttons
 //
 
-.app-button {
-  margin: 2px !important;
-  width: 32px !important;
-  height: 32px !important;
-  line-height: 32px !important;
-  font-size: 12px !important;
+.navigation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  overflow: hidden;
+  padding: 0 8px 12px 0;
 
-  .mat-button-wrapper {
-    padding: 0 !important;
+  .module-button {
+    padding: 1px !important;
+
+    button {
+      height: 64px !important;
+      width: 96px !important;
+      margin-left: -56px;
+      padding-left: 48px;
+
+      fa-icon {
+        font-size: 18px;
+      }
+    }
   }
 }
 
 .button-toolbar {
-  .mat-icon-button {
-    opacity: .25;
+  position: absolute;
+  top: 40px;
+  right: 337px;
+  width: 40px;
+  overflow: hidden;
+  z-index: 1000;
+  padding: 0 0 12px 8px;
+
+  button {
+    width: 96px !important;
+    height: 64px !important;
+
+    .mat-button-wrapper {
+      display: inline-block;
+
+      fa-icon {
+        margin-left: -48px;
+      }
+    }
   }
 
-  .mat-mini-fab {
+  .mat-icon-button {
+    opacity: 0.25;
+  }
+
+  .mat-fab {
     opacity: 1;
   }
 }
 
 .button-toolbar:hover {
   .mat-icon-button {
-    opacity: .75;
-  }
-
-  .mat-mini-fab {
-    opacity: 1;
+    opacity: 0.75;
   }
 }
 
 .navbar {
   height: 40px !important;
+  overflow: hidden;
 
   .spacer {
     flex: 1 1 auto;
@@ -69,11 +99,9 @@ body {
 
   .mat-icon-button,
   .mat-mini-fab {
-    margin: 2px;
-    width: 32px;
-    height: 32px;
-    line-height: 32px;
-    font-size: 12px;
+    width: 64px;
+    height: 64px;
+    font-size: 16px;
 
     .mat-button-wrapper {
       padding: 0;

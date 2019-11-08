@@ -13,6 +13,8 @@ export class NodeShapeComponent implements OnInit {
   @Input() selected: boolean = false;
   @Input() spatial: boolean = false;
   @Input() radius: number = 15;
+  @Input() strokeWidth: number = 2.5;
+  @Input() labelSize: number = 12;
   private labels: string = 'abcdefghijklmnopqrstuvwxyz';
 
   constructor(
@@ -42,8 +44,8 @@ export class NodeShapeComponent implements OnInit {
   }
 
   layer(): string {
-    var a = this.radius + 3;
-    var b = this.radius - 3;
+    var a = Number(this.radius) + 4;
+    var b = Number(this.radius) - 4;
     var points = [[a,0].join(','), [0,b].join(','), [-a,0].join(','), [0,-b].join(',')].join(' ');
     return points;
   }

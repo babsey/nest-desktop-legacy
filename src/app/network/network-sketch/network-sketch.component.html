@@ -36,8 +36,9 @@
 
     <g app-background-sketch
       [(data)]="data"
-      [width]="(width-10)"
+      [eventTrigger]="eventTrigger"
       [height]="(height-12)"
+      [width]="(width-10)"
       transform="translate(1,1)"
     ></g>
 
@@ -45,8 +46,8 @@
       <g app-link-sketch
         (click)="onLinkClick($event)"
         (contextmenu)="onContextMenu($event, null, link)"
-        (mouseenter)="onLinkEnter($event, link)"
         (dataChange)="onDataChange($event)"
+        (mouseenter)="onLinkEnter($event, link)"
         [(data)]="data"
         [color]="colorLink(link)"
         [link]="link"
@@ -73,11 +74,12 @@
       <g app-node-sketch
         (click)="onNodeClick($event)"
         (contextmenu)="onContextMenu($event, node, null)"
-        (mouseenter)="onNodeEnter($event, node)"
         (dataChange)="onDataChange($event)"
+        (mouseenter)="onNodeEnter($event, node)"
         [(data)]="data"
         [color]="colorNode(node)"
         [dragable]="eventTrigger"
+        [eventTrigger]="eventTrigger"
         [height]="(height-12)"
         [node]="node"
         [selected]="selectedNode()"

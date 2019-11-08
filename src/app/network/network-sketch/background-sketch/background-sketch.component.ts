@@ -20,6 +20,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() data: Data;
   @Input() width: number = 600;
   @Input() height: number = 400;
+  @Input() eventTrigger: boolean = true;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
   private host: any;
   private selector: any;
@@ -67,7 +68,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
         _this._networkSketchService.focused.node = null;
         _this._networkSketchService.focused.link = null;
 
-        if (selectedNode) {
+        if (selectedNode && _this.eventTrigger) {
           var point = d3.mouse(this);
           var target = {
             x: point[0],
@@ -80,10 +81,12 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
       })
       .on('click', () => this.reset())
       .on('contextmenu', function() {
+        if (!_this.eventTrigger) return
         d3.event.preventDefault();
         _this.reset();
 
-        if ( _this._networkService.selected.node ||  _this._networkService.selected.link) return
+        if ( !_this.eventTrigger ) return
+        if ( _this._networkService.selected.node || _this._networkService.selected.link) return
 
         var data = _this.data;
         var point = d3.mouse(this);

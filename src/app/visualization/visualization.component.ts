@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { AnimationControllerService } from './animation/animation-controller/animation-controller.service'
-import { VisualizationService } from './visualization.service'
+import { LogService } from '../log/log.service';
+import { VisualizationService } from './visualization.service';
 
 import { Data } from '../classes/data';
 import { Record } from '../classes/record';
@@ -18,6 +19,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
   private subscription: any;
 
   constructor(
+    private _logService: LogService,
     public _animationControllerService: AnimationControllerService,
     public _visualizationService: VisualizationService,
   ) {
@@ -33,6 +35,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
+    this._logService.log('Update visualization');
     // console.log('Visualization update')
     if (this._visualizationService.mode == 'animation') {
       var sources = [].concat(this.records.map(record =>

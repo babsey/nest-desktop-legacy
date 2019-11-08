@@ -31,10 +31,16 @@
         <router-outlet></router-outlet>
       </ng-container>
     </ng-container>
+
   </mat-sidenav-content>
 
 </mat-sidenav-container>
 
-<div class="mouse-right-click" [style.display]="_appService.rightClick && !advanced() ? '' : 'none'">
-  <img src="/assets/img/mouse-right-click.png" width="48px"/>
+<div
+  [style.display]="_appService.rightClick && !advanced() ? '' : 'none'"
+  class="mouse-right-click dark-theme"
+  >
+  <button mat-mini-fab>
+    <img src="/assets/img/mouse-right-click.png" width="32px"/>
+  </button>
 </div>

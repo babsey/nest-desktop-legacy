@@ -53,15 +53,15 @@ export class LinkSketchComponent implements OnInit {
   drawPath(): string {
     var connectome = this.data.simulation.connectomes[this.link.idx];
     var nodes = this.data.app.nodes;
-    return this._networkSketchService.drawPath(nodes[connectome.pre].position, nodes[connectome.post].position, true)
+    return this._networkSketchService.drawPath(nodes[connectome.source].position, nodes[connectome.target].position, true)
   }
 
   distance(): number {
     var connectome = this.data.simulation.connectomes[this.link.idx];
-    if (connectome.pre == connectome.post) {return this._networkConfigService.config.sketch.link.maxDistance.value};
+    if (connectome.source == connectome.target) {return this._networkConfigService.config.sketch.link.maxDistance.value};
     var nodes = this.data.app.nodes;
-    var source = nodes[connectome.pre].position;
-    var target = nodes[connectome.post].position;
+    var source = nodes[connectome.source].position;
+    var target = nodes[connectome.target].position;
     var x1 = source.x,
       y1 = source.y,
       x2 = target.x,
@@ -96,7 +96,7 @@ export class LinkSketchComponent implements OnInit {
     var node = this._networkSketchService.focused.node;
     if (!node) return false;
     var connectome = this.data.simulation.connectomes[this.link.idx];
-    return node.idx == connectome.pre;
+    return node.idx == connectome.source;
   }
 
   isLinkFocused(): boolean {
@@ -109,7 +109,7 @@ export class LinkSketchComponent implements OnInit {
     var node = this._networkService.selected.node;
     if (!node) return false;
     var connectome = this.data.simulation.connectomes[this.link.idx];
-    return node.idx == connectome.pre;
+    return node.idx == connectome.source;
   }
 
   isLinkSelected(): boolean {

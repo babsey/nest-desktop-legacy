@@ -33,6 +33,14 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   public slider: any = {};
   public synModel: any;
   public synModels: any[] = [];
+  public preOptions: any = {
+    label: 'Sources',
+    value: []
+  };
+  public postOptions: any = {
+    label: 'Targets',
+    value: []
+  };
 
   constructor(
     private _appConfigService: AppConfigService,
@@ -100,22 +108,22 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   }
 
   source(): AppNode {
-    return this.data.app.nodes[this.connectome.pre];
+    return this.data.app.nodes[this.connectome.source];
   }
 
   target(): AppNode {
-    return this.data.app.nodes[this.connectome.post];
+    return this.data.app.nodes[this.connectome.target];
   }
 
   connectRecorder(): boolean {
-    var pre = this.collections[this.connectome.pre];
-    var post = this.collections[this.connectome.post];
-    return pre.element_type == 'recorder' || post.element_type == 'recorder';
+    var source = this.collections[this.connectome.source];
+    var target = this.collections[this.connectome.target];
+    return source.element_type == 'recorder' || target.element_type == 'recorder';
   }
 
   connectSpikeDetector(): boolean {
-    var post = this.collections[this.connectome.post];
-    var model = this.data.simulation.models[post.model];
+    var target = this.collections[this.connectome.target];
+    var model = this.data.simulation.models[target.model];
     return model.existing == 'spike_detector';
   }
 

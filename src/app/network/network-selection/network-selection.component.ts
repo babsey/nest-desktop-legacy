@@ -40,9 +40,9 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
     return this._networkService.elementType == null || this._networkService.elementType == elementType;
   }
 
-  isSelectedPre(link: AppLink): boolean {
+  isSelectedSource(link: AppLink): boolean {
     var connectome = this.data.simulation.connectomes[link.idx];
-    var collection = this.data.simulation.collections[connectome.pre];
+    var collection = this.data.simulation.collections[connectome.source];
     return this.isSelected(collection.element_type)
   }
 

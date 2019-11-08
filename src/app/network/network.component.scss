@@ -17,12 +17,3 @@
   display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12)
 }
-
-.button-toolbar {
-  position: absolute;
-  top: 40px;
-  right: 338px;
-  width: 36px;
-  height: calc(100% - 40px);
-  z-index: 1000;
-}

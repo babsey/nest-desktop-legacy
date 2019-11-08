@@ -25,6 +25,7 @@ export class NetworkService {
     recorder: 'voltmeter',
   };
   public recorderChanged: boolean = false;
+  public quickView: boolean = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -37,7 +38,7 @@ export class NetworkService {
       if (!withLink) return false
       var links = data.app.links.filter(link => {
         var connectome = data.simulation.connectomes[link.idx];
-        return connectome.pre == node.idx || connectome.post == node.idx;
+        return connectome.source == node.idx || connectome.target == node.idx;
       })
       var selected = links.filter(link => this.selected.link == link);
       return selected.length > 0;
@@ -50,7 +51,7 @@ export class NetworkService {
       return this.selected.link == link;
     } else if (this.selected.node) {
       var connectome = data.simulation.connectomes[link.idx];
-      var node = data.app.nodes[connectome.pre];
+      var node = data.app.nodes[connectome.source];
       return this.selected.node == node;
     }
     return unselected;
@@ -80,14 +81,14 @@ export class NetworkService {
   }
 
   isBothSpatial(connectome: SimConnectome, collections: SimCollection[]): boolean {
-    var pre = collections[connectome.pre];
-    var post = collections[connectome.post];
-    return pre.hasOwnProperty('spatial') && post.hasOwnProperty('spatial');
+    var source = collections[connectome.source];
+    var target = collections[connectome.target];
+    return source.hasOwnProperty('spatial') && target.hasOwnProperty('spatial');
   }
 
   getPositionsForRecord(data: Data, record: Record): number[][] {
-    var node = record.recorder.model == 'spike_detector' ? 'pre' : 'post';
-    var recorder = record.recorder.model == 'spike_detector' ? 'post' : 'pre';
+    var node = record.recorder.model == 'spike_detector' ? 'source' : 'target';
+    var recorder = record.recorder.model == 'spike_detector' ? 'target' : 'source';
     var nodes = data.simulation.connectomes
       .filter(connectome => connectome[recorder] == record.recorder.idx)
       .filter(connectome => data.app.nodes[connectome[node]].hasOwnProperty('positions'))
@@ -137,7 +138,7 @@ export class NetworkService {
   connect(data: Data, source: AppNode, target: AppNode): void {
     var connectomes = data.simulation.connectomes;
     var checkLinks = data.app.links.filter(link => (
-      connectomes[link.idx].pre == source.idx && connectomes[link.idx].post == target.idx));
+      connectomes[link.idx].source == source.idx && connectomes[link.idx].target == target.idx));
     if (checkLinks.length == 0) {
       this.addConnectome(data, source, target);
       this.addLink(data);
@@ -153,8 +154,8 @@ export class NetworkService {
 
   addConnectome(data: Data, source: AppNode, target: AppNode): void {
     data.simulation.connectomes.push({
-      pre: source.idx,
-      post: target.idx,
+      source: source.idx,
+      target: target.idx,
     })
   }
 
@@ -208,17 +209,17 @@ export class NetworkService {
         delete connectome['projections']
       }
 
-      if (connectome.pre == connectome.post) return
-      var preCollection = collections[connectome.pre];
-      var postCollection = collections[connectome.post];
-      var preModel = models[preCollection.model].existing;
-      var postModel = models[postCollection.model].existing;
+      if (connectome.source == connectome.target) return
+      var sourceCollection = collections[connectome.source];
+      var targetCollection = collections[connectome.target];
+      var sourceModel = models[sourceCollection.model].existing;
+      var targetModel = models[targetCollection.model].existing;
       if (
-        // postCollection.element_type == 'stimulator' ||
-        preModel == 'spike_detector' ||
-        ['voltmeter', 'multimeter'].includes(postModel)
+        // targetCollection.element_type == 'stimulator' ||
+        sourceModel == 'spike_detector' ||
+        ['voltmeter', 'multimeter'].includes(targetModel)
       ) {
-        connectome.post = [connectome.pre, connectome.pre = connectome.post][0];
+        connectome.target = [connectome.source, connectome.source = connectome.target][0];
         validated = true;
       }
     })
