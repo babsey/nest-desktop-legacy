@@ -183,6 +183,14 @@ export class SimulationComponent implements OnInit, OnDestroy {
     return this.bottomSheet._openedBottomSheetRef != null;
   }
 
+  toggleQuickView(): void {
+    this._networkService.quickView = !this._networkService.quickView;
+  }
+
+  isQuickViewOpened(): boolean {
+    return this._networkService.quickView;
+  }
+
   closeBottomSheet(): void {
     this.bottomSheet.dismiss()
   }

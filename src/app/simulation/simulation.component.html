@@ -62,8 +62,8 @@
           <button
             (click)="selectVisualizationModus('chart')"
             [class.mat-icon-button]="_visualizationService.mode!='chart'"
-            [class.mat-mini-fab]="_visualizationService.mode=='chart'"
-            matTooltip="Chart"
+            [class.mat-fab]="_visualizationService.mode=='chart'"
+            matTooltip="View chart"
             >
             <fa-icon icon="chart-line"></fa-icon>
           </button>
@@ -71,17 +71,25 @@
             [disabled]="!_visualizationService.hasPositions"
             (click)="selectVisualizationModus('animation')"
             [class.mat-icon-button]="_visualizationService.mode!='animation'"
-            [class.mat-mini-fab]="_visualizationService.mode=='animation'"
-            matTooltip="Animation"
+            [class.mat-fab]="_visualizationService.mode=='animation'"
+            matTooltip="View animation"
             >
             <fa-icon icon="braille"></fa-icon>
           </button>
           <mat-divider class="style-fix" [vertical]="true"></mat-divider>
-          <button
+          <!-- <button
             (click)="toggleBottomSheet()"
             [class.mat-icon-button]="!isBottomSheetOpened()"
-            [class.mat-mini-fab]="isBottomSheetOpened()"
-            matTooltip="network sketch"
+            [class.mat-fab]="isBottomSheetOpened()"
+            matTooltip="Quick view network sketch"
+            >
+            <fa-icon icon="shapes" rotate="90"></fa-icon>
+          </button> -->
+          <button
+            (click)="toggleQuickView()"
+            [class.mat-icon-button]="!isQuickViewOpened()"
+            [class.mat-fab]="isQuickViewOpened()"
+            matTooltip="Quick view network sketch"
             >
             <fa-icon icon="shapes" rotate="90"></fa-icon>
           </button>
@@ -93,14 +101,16 @@
         <button
           (click)="details()"
           [class.mat-icon-button]="_simulationService.mode!='details'"
-          [class.mat-mini-fab]="_simulationService.mode=='details'"
+          [class.mat-fab]="_simulationService.mode=='details'"
+          matTooltip="View node and connection details"
           >
           <fa-icon icon="eye"></fa-icon>
         </button>
         <button
           (click)="edit()"
           [class.mat-icon-button]="_simulationService.mode!='edit'"
-          [class.mat-mini-fab]="_simulationService.mode=='edit'"
+          [class.mat-fab]="_simulationService.mode=='edit'"
+          matTooltip="Modify network"
           >
           <fa-icon icon="pen"></fa-icon>
         </button>
@@ -109,9 +119,9 @@
           (contextmenu)="onContextMenu($event)"
           (mouseout)="onMouseOut($event)"
           (mouseover)="onMouseOver($event)"
-          [class.mat-accent]="_simulationRunService.running"
           [class.mat-icon-button]="_simulationService.mode!='run'"
-          [class.mat-mini-fab]="_simulationService.mode=='run'"
+          [class.mat-fab]="_simulationService.mode=='run'"
+          [matTooltip]="_simulationService.mode=='run' ? 'Simulate': 'Simulation playground'"
           class="mat-button-base"
           >
           <span class="mat-button-wrapper">
@@ -123,6 +133,8 @@
               </ng-container>
               <ng-container *ngSwitchCase="false">
                 <fa-icon icon="play"></fa-icon>
+                <div *ngIf="_simulationService.mode=='run'"
+                  style="font-size:9px; position: absolute; left: 0; bottom: 2px; width: 100%">Simulate</div>
               </ng-container>
             </ng-container>
           </span>
@@ -142,50 +154,45 @@
 
     <ng-container *ngSwitchCase="'run'">
       <div class="button-toolbar">
-        <button
+        <button mat-icon-button
           (click)="selectControllerMode('network')"
-          [class.mat-icon-button]="_simulationControllerService.mode!='network'"
-          [class.mat-mini-fab]="_simulationControllerService.mode=='network'"
+          [class.mat-fab]="_simulationControllerService.mode=='network'"
           matTooltip="Network configurations"
           matTooltipPosition="before"
           class="app-button"
           >
           <fa-icon icon="project-diagram"></fa-icon>
         </button>
-        <button
+        <button mat-icon-button
           (click)="selectControllerMode('simulation')"
-          [class.mat-icon-button]="_simulationControllerService.mode!='simulation'"
-          [class.mat-mini-fab]="_simulationControllerService.mode=='simulation'"
+          [class.mat-fab]="_simulationControllerService.mode=='simulation'"
           matTooltip="Simulation configurations"
           matTooltipPosition="before"
           class="app-button"
           >
           <fa-icon icon="cog"></fa-icon>
         </button>
-        <button *ngIf="_visualizationService.mode=='chart'"
+        <button mat-icon-button *ngIf="_visualizationService.mode=='chart'"
           (click)="selectControllerMode('chart')"
-          [class.mat-icon-button]="_simulationControllerService.mode!='chart'"
-          [class.mat-mini-fab]="_simulationControllerService.mode=='chart'"
+          [class.mat-fab]="_simulationControllerService.mode=='chart'"
           matTooltip="Chart controller"
           matTooltipPosition="before"
           class="app-button"
           >
           <fa-icon icon="chart-line"></fa-icon>
         </button>
-        <button *ngIf="_visualizationService.mode=='animation'"
+        <button mat-icon-button *ngIf="_visualizationService.mode=='animation'"
           (click)="selectControllerMode('animation')"
-          [class.mat-icon-button]="_simulationControllerService.mode!='animation'"
-          [class.mat-mini-fab]="_simulationControllerService.mode=='animation'"
+          [class.mat-fab]="_simulationControllerService.mode=='animation'"
           matTooltip="Animation controller"
           matTooltipPosition="before"
           class="app-button"
           >
           <fa-icon icon="braille"></fa-icon>
         </button>
-        <button
+        <button mat-icon-button
           (click)="selectControllerMode('stats')"
-          [class.mat-icon-button]="_simulationControllerService.mode!='stats'"
-          [class.mat-mini-fab]="_simulationControllerService.mode=='stats'"
+          [class.mat-fab]="_simulationControllerService.mode=='stats'"
           matTooltip="Simulation stats"
           matTooltipPosition="before"
           class="app-button"
@@ -194,43 +201,57 @@
         </button>
       </div>
 
-      <mat-sidenav-container style="height:calc(100vh - 40px)">
-        <mat-sidenav
-          disableClose="true"
-          id="controller"
-          mode="side"
-          opened="true"
-          position="end"
-          role="region"
-          style="height:100vh"
-          >
-          <app-controller
-            (appChange)="onAppChange($event)"
-            (dataChange)="onDataChange($event)"
-            [(data)]="data"
-            [mode]="_simulationControllerService.mode"
-            [records]="records"
-          ></app-controller>
-        </mat-sidenav>
-
-        <mat-sidenav-content class="visualization-content">
-          <ng-container *ngIf="records.length > 0 && data != undefined; else noRecords">
-            <app-visualization
-              [data]="data"
+      <span class="simulation">
+        <mat-sidenav-container style="height:calc(100vh - 40px)">
+          <mat-sidenav
+            disableClose="true"
+            id="controller"
+            mode="side"
+            opened="true"
+            position="end"
+            role="region"
+            style="height:100vh"
+            >
+            <app-controller
+              (appChange)="onAppChange($event)"
+              (dataChange)="onDataChange($event)"
+              [(data)]="data"
+              [mode]="_simulationControllerService.mode"
               [records]="records"
-            ></app-visualization>
-          </ng-container>
+            ></app-controller>
+          </mat-sidenav>
 
-          <ng-template #noRecords>
+          <mat-sidenav-content class="visualization-content">
+            <ng-container *ngIf="records.length > 0 && data != undefined; else noRecords">
+              <app-visualization
+                [data]="data"
+                [records]="records"
+              ></app-visualization>
+            </ng-container>
+
+            <ng-template #noRecords>
               <div style="height:100%" class="flex">
                 <span style="margin:auto">
                   <span style="margin-left: 8px">No record found. Please simulate.</span>
                 </span>
               </div>
-          </ng-template>
-        </mat-sidenav-content>
+            </ng-template>
 
-      </mat-sidenav-container>
+          </mat-sidenav-content>
+        </mat-sidenav-container>
+
+        <ng-container *ngIf="isQuickViewOpened()">
+          <mat-card cdkDrag cdkDragBoundary=".simulation"
+            style="cursor:pointer; width:540px; height:200px; position:absolute; bottom: 0; z-index:1000; left:calc(50% - 150px - 270px)"
+            >
+            <button mat-icon-button (click)="toggleQuickView()" style="position:absolute; right:20px; top:20px; z-index:1000">
+              <fa-icon icon="times"></fa-icon>
+            </button>
+            <app-network-sketch [(data)]="data" width="540" height="200" [eventTrigger]="false"></app-network-sketch>
+          </mat-card>
+        </ng-container>
+
+      </span>
     </ng-container>
   </ng-container>
 </ng-container>
