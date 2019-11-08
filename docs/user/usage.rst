@@ -31,20 +31,16 @@ Next you will see the main page of NEST Desktop with the same concept of the lay
 :Center: Main container for the content
 :Right sidebar: Controller and configurations, if provided.
 
-Navigation
-^^^^^^^^^^
+|fa-bars| Navigation
+^^^^^^^^^^^^^^^^^^^^
 
 NEST Desktop provides three root modules (Simulation, Model, Configuration) and
 a module can be selected by clicking on stacked, colored buttons right adjacent to navigation panel.
 
-.. raw:: html
-
-   <embed>
-     <img src="../_static/img/gif/navigation.gif">
-   </embed>
+|gif-navigation|
 
 The navigation will be rendered according to the selected module.
-The navigation contains, top a navigation header with the name of the module and, if provided, a ``3 vertical dots icon`` for the menu,
+The navigation contains, top a navigation header with the name of the module and, if provided, a |fa-ellipsis-v| for the menu,
 and bottom a section content with a list of items.
 
 Content and controller
@@ -57,12 +53,8 @@ and if provided in the controller panel.
    an icon of mouse-right-button-click appears in left bottom of the page.
 
 
-
-|fa-square-root-alt|   The Model Module
----------------------------------------
-
-.. |fa-square-root-alt| image:: ../_static/font-awesome/square-root-alt.svg
-   :width: 20px
+|fa-square-root-alt| The Model Module
+-------------------------------------
 
 The model module includes the description and the management of the neuron, device and synapse models.
 
@@ -80,8 +72,8 @@ The Network Module
 
 The network module as a part of the simulation module is where you can create and modify networks.
 
-Network editor
-^^^^^^^^^^^^^^
+|fa-pen| Network editor
+^^^^^^^^^^^^^^^^^^^^^^^
 
 When the view mode is set to 'edit', you will see a stretched area of the network sketch for the drawings.
 The right controller shows a network selection of created nodes.
@@ -89,8 +81,8 @@ The right controller shows a network selection of created nodes.
 
 You can switch to sketch configuration by clicking on 'bezier-curve' button left to the controller panel.
 
-Network sketch
-^^^^^^^^^^^^^^
+|fa-shapes| Network sketch
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. raw:: html
 
@@ -123,9 +115,6 @@ It appears together with records visualization in the simulation play.
 |fa-brain| The Simulation Module
 --------------------------------
 
-.. |fa-brain| image:: ../_static/font-awesome/brain.svg
-   :width: 20px
-
 In the simulation module, a list of simulations and if provided protocols are displayed in the navigation panel.
 You can manage (add/delete/download/upload) protocols in the menu by clicking on the 3 vertical dots icon in the navigation header.
 
@@ -147,8 +136,8 @@ These icons switch views of the main container. NEST Desktop offers view mode ac
 :pen icon: Modify the network and visibility of the node parameters.
 :play icon: Modify the parameter values and visualize the results of the simulation.
 
-Simulation details
-^^^^^^^^^^^^^^^^^^
+|fa-eye| Simulation details
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the view mode is set to 'details', you will find top, a network sketch and bottom, a list of nodes and links.
 To improve the affiliation of the nodes and links, each node is labeled by a character and a color.
@@ -157,8 +146,8 @@ Each node and link panel starts with a colored header and, if provided, a list o
 You can manage elements (nodes and links) by clicking the right mouse button on the shape
 in the sketch area or in the colored header. The context menu shows the a list of options that can be executed.
 
-Simulation playground
-^^^^^^^^^^^^^^^^^^^^^
+|fa-play| Simulation playground
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When the view mode is set to 'play', you will see a controller of nodes and links with parameters.
 However, the main container remains empty because it does not find records. It is now ready to simulate and
@@ -194,9 +183,6 @@ The Visualization Module
 |fa-chart-line| Chart
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. |fa-chart-line| image:: ../_static/font-awesome/chart-line.svg
-   :width: 16px
-
 The chart of the recordings is rendered by the library `Plotly.js`.
 The chart interface has dragging and zooming handlers.
 You can download a snapshot of the current chart by clicking on the camera icon in the top mode panel.
@@ -204,17 +190,58 @@ You can download a snapshot of the current chart by clicking on the camera icon 
 |fa-braille| Animation
 ^^^^^^^^^^^^^^^^^^^^^^
 
-.. |fa-braille| image:: ../_static/font-awesome/braille.svg
-   :width: 16px
-
 The animation of the recordings with positions of recorded neurons is rendered by the `three.js`.
 
 
-|fa-cog| Configuration
-----------------------
-
-.. |fa-cog| image:: ../_static/font-awesome/cog.svg
-   :width: 16px
+|fa-cog| The Configuration Module
+---------------------------------
 
 The configuration module is a collection of various configuration of several components.
 Once you modified a configuration, it will saves as JSON in local storage of the web browser.
+
+
+.. |gif-navigation| image:: ../_static/img/gif/navigation.gif
+
+.. |fa-bars| image:: ../_static/font-awesome/bars.svg
+   :width: 16px
+   :alt:
+
+.. |fa-braille| image:: ../_static/font-awesome/braille.svg
+   :width: 16px
+   :alt:
+
+.. |fa-brain| image:: ../_static/font-awesome/brain.svg
+   :width: 20px
+   :alt:
+
+.. |fa-chart-line| image:: ../_static/font-awesome/chart-line.svg
+   :width: 16px
+   :alt:
+
+.. |fa-cog| image:: ../_static/font-awesome/cog.svg
+   :width: 16px
+   :alt:
+
+.. |fa-ellipsis-v| image:: ../_static/font-awesome/ellipsis-v.svg
+   :width: 8px
+   :alt:
+
+.. |fa-eye| image:: ../_static/font-awesome/eye.svg
+   :width: 16px
+   :alt:
+
+.. |fa-pen| image:: ../_static/font-awesome/pen.svg
+   :width: 16px
+   :alt:
+
+.. |fa-play| image:: ../_static/font-awesome/play.svg
+   :width: 16px
+   :alt:
+
+.. |fa-shapes| image:: ../_static/font-awesome/shapes.svg
+   :width: 16px
+   :alt:
+
+.. |fa-square-root-alt| image:: ../_static/font-awesome/square-root-alt.svg
+   :width: 20px
+   :alt:
