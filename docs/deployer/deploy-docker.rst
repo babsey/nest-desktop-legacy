@@ -6,6 +6,12 @@ Docker is a virtualization software packaging applications and its dependencies 
 It is available for a variety of operating systems, e.g. Linux, Mac and Windows. For more information `here <https://www.docker.com/resources/what-container>`__.
 
 
+Requirements
+------------
+
+* Docker engine
+
+
 Installation
 ------------
 The `image <https://hub.docker.com/r/babsey/nest-desktop>`__ from docker hub contains all required software (NEST Desktop, NEST Server and NEST Simulator)

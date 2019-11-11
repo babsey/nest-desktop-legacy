@@ -1,0 +1,19 @@
+{
+	"builders": [{
+	  	"type": "openstack",
+	  	"ssh_username": "ubuntu",
+  		"image_name": "nest-desktop",
+			"source_image": "",
+  		"flavor": "m1.small",
+			"networks": ""
+	}],
+	"provisioners": [
+	{
+		"type": "shell",
+		"inline": "sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ansible"
+	},
+	{
+		"type": "ansible",
+		"playbook_file": "{{ template_dir }}/ansible-roles/setup-nest-desktop.yml"
+	}]
+}

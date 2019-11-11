@@ -1,0 +1,15 @@
+---
+- name:            NEST Desktop | Pull docker image {{ nest_desktop_image }}
+  shell:           "docker pull {{ nest_desktop_image }}"
+
+- name:            NEST Desktop | Create systemd unit file
+  template:
+    src:           nest-desktop.service.j2
+    dest:          /etc/systemd/system/nest-desktop.service
+    mode:          644
+
+- name:            NEST Desktop | Activate nest-desktop.service on boot
+  systemd:
+    name:          nest-desktop
+    enabled:       yes
+    daemon-reload: yes

@@ -1,0 +1,3 @@
+---
+- include: tasks/install-docker.yml
+- include: tasks/install-nest-desktop.yml

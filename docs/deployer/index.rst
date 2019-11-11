@@ -10,3 +10,4 @@ This is the deployer guide, providing more detail on how to deploy NEST Desktop 
 **Infrastructure**
 
 * :doc:`Deploy NEST Desktop on Human Brain Project resources <deploy-hbp>`
+* :doc:`Deploy NEST Desktop on bwCloud resources <deploy-bwCloud>`

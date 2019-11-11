@@ -1,0 +1,7 @@
+---
+- hosts:        "all"
+  gather_facts: yes
+  pre_tasks:
+    - setup:
+  roles:
+    - { role: "setup-nest-desktop" , become: yes}

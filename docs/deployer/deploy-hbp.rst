@@ -1,23 +1,25 @@
-How to deploy it on HBP infrastructure
-======================================
+How to deploy it on HBP resources
+=================================
 
 
-NEST Desktop and NEST Server is serving on the infrastructure of HBP.
-Here, the documentation shows how to deploy NEST Desktop from docker hub in OpenShift system.
+The documentation shows how to deploy NEST Desktop from docker hub on HBP resources.
+HBP provides two OpenShift infrastructures:
+* https://openshift-dev.hbp.eu, designed for the development.
+* https://openshift-dev.hbp.eu, designed for the production.
 
-HBP provides two infrastructure of OpenShift. I recommend to use apps-dev.hbp.eu for the development/testing.
-
-
-Requirement
------------
-
- - OC Client Tools (https://www.okd.io/download.html#oc-platforms)
+Before you push NEST Desktop on HBP resources, I strongly recommend to use the development one.
 
 
-Step to deploy
---------------
+Requirements
+------------
 
-You can copy command line from webconsole of https://openshift-dev.hbp.eu.
+* OC Client Tools (https://www.okd.io/download.html#oc-platforms)
+
+
+Step to deploy (in development)
+-------------------------------
+
+You can copy command line from the web console of https://openshift-dev.hbp.eu.
 
 Login to openshift-dev.hbp.eu:
 
@@ -31,39 +33,24 @@ Get status of current project:
 
    oc status
 
-Create an project/Switch to project:
+You find a configuration and a bash files for setting up NEST Desktop on HBP.
+Execute the bash script and in the end it shows the IP needed for HBP authentication (see below):
 
 .. code-block:: bash
 
-   oc project nest-desktop
-
-Deploy image from docker hub and create service:
-
-.. code-block:: bash
-
-   oc new-app babsey/nest-desktop
-
-Create config map to find NEST Server:
-
-.. code-block:: bash
-
-   oc new-app hbp/config/nest-server.yaml
-
-Mount the volume of NEST Server config to NEST Desktop:
-
-.. code-block:: bash
-
-   oc set volume dc/nest-desktop --add --name=nest-desktop-volume --configmap-name=nest-server-config --mount-path=/usr/local/lib/python3.6/dist-packages/nest_desktop/app/assets/config/nest-server
+   cd infrastructure/openshift-dev.hbp.eu
+   bash setup-nest-desktop.sh
 
 
 Further usage
--------------
+^^^^^^^^^^^^^
 
-Change the number of pods in a deployment:
+Scaling up the replicas (pods or nodes):
 
 .. code-block:: bash
 
    oc scale --replicas=2 dc nest-desktop
+
 
 Monitor log of a pod (Get pod name: :code:`oc get pod`):
 
@@ -72,35 +59,42 @@ Monitor log of a pod (Get pod name: :code:`oc get pod`):
    oc exec <pod> -- nest-server log
 
 
-Authentication and redirecting
-------------------------------
+HBP Authentication and redirecting
+----------------------------------
 
 To access to NEST Desktop on HBP infrastructure, an authentication of HBP membership is requested.
+You find the codes on https://github.com/babsey/hbp-auth.
+
+
 Here are the steps how to setup authentication and redirecting to NEST Desktop properly.
+Before you have to modify the environment for HBP authentication,
+i.e. OIDC_CLIENT_ID, OIDC_CLIENT_SECRET and CLUSTER_IP of NEST Desktop
+(which is printed after setting up NEST Desktop).
 
 .. code-block:: bash
 
-   oc delete is,dc,svc,route,configMap hbp-auth
-   oc new-app hbp-auth.yaml
-   oc new-app babsey/hbp-auth
-   oc set env --from=configmap/hbp-auth dc/hbp-auth
-   oc expose svc/hbp-auth --port=8080 --hostname=nest-desktop.apps-dev.hbp.eu
+   cd projects/nest-desktop-dev
+   bash setup-nest-desktop-hbp-auth.sh
 
 
-Ready for production
---------------------
+
+Deploy Production
+-----------------
+
 If NEST Desktop is ready for the production, meaning to deploy on apps.hbp.eu.
 Perform all steps same as in Development (apps-dev.hbp.eu).
 
 
 Maintenance
 -----------
+
 tba
 
 
 Acknowledgements
 ----------------
-Thanks for integrating NEST Desktop on HBP infrastructure:
+
+Thanks for the help to integrate NEST Desktop on HBP resources:
 * Alberto Madonna (Concepting)
 * Collin MCMurtrie (Contacting)
 * Fabrice Gaillard (Concepting of user authentication)

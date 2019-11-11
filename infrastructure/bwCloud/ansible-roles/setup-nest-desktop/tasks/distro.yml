@@ -1,0 +1,10 @@
+---
+- set_fact:
+    pkgnames:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+  when:
+      - ansible_distribution == "Ubuntu"

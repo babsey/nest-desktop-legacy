@@ -20,7 +20,6 @@ Contents
    user/usage
    user/commands
    user/faq
-   user/faq-gifs
    user/use-hbp
 
 .. toctree::
@@ -29,6 +28,7 @@ Contents
    deployer/index
    deployer/deploy-docker
    deployer/deploy-hbp
+   deployer/deploy-bwCloud
 
 
 .. toctree::
