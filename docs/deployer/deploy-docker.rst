@@ -1,9 +1,16 @@
-Deploy NEST Desktop using Docker engine
-=======================================
+Deploy NEST Desktop in **Docker**
+=================================
 
+
+.. image:: ../_static/img/cloud-server-docker-NEST.png
+   :width: 240px
+   :alt: Docker NEST
+
+|
 
 Docker is a virtualization software packaging applications and its dependencies in a virtual container that can run on any Linux server.
-It is available for a variety of operating systems, e.g. Linux, Mac and Windows. For more information `here <https://www.docker.com/resources/what-container>`__.
+It is available for a variety of the operating systems, e.g. Linux, Mac and Windows.
+For more information follow the link `here <https://www.docker.com/resources/what-container>`__.
 
 
 Requirements
@@ -14,7 +21,9 @@ Requirements
 
 Installation
 ------------
-The `image <https://hub.docker.com/r/babsey/nest-desktop>`__ from docker hub contains all required software (NEST Desktop, NEST Server and NEST Simulator)
+
+The image from docker hub contains all required software (NEST Desktop, NEST Server and NEST Simulator).
+For more information, follow the link `here <https://hub.docker.com/r/babsey/nest-desktop>`__.
 
 .. code-block:: bash
 
@@ -30,7 +39,7 @@ Start docker container with arguments.
 
    docker run -i -p 5000:5000 -p 8000:8000 -t babsey/nest-desktop
 
-NEST Desktop and NEST Server are now serving at http://localhost:8000 and http://localhost:5000, respectively.
+NEST Desktop and NEST Server are now serving at ``http://localhost:8000`` and ``http://localhost:5000``, respectively.
 
 .. note::
 
@@ -49,3 +58,9 @@ You can find help text of docker arguments by :code:`docker run --help`.
 +----+-------------------------------------------+
 | -t | Allocate a pseudo-TTY                     |
 +----+-------------------------------------------+
+
+Acknowledgements
+----------------
+
+Thanks for the help:
+  * Steffen Graber (Docker hub for NEST Simulator)

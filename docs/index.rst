@@ -2,9 +2,9 @@ NEST Desktop
 ============
 
 
-.. image:: _static/img/nest-desktop-logo.png
+.. image:: _static/img/logo/nest-desktop-logo.png
    :scale: 50 %
-   :alt: alternate text
+   :alt: NEST Desktop
    :align: left
 
 |
@@ -32,11 +32,11 @@ The documentation is organized into three sections. Select the appropriate secti
 
 .. raw:: html
 
-    <div class="row">
+    <div class="doc">
       <div class="column user">
         <a href="user/index.html">
           <div>
-            <img src="_static/font-awesome/user.svg">
+            <img src="_static/img/font-awesome/user.svg">
             <h2>The User</h2>
             <p>
               ... learns how to build networks, parameterize nodes and links,
@@ -50,7 +50,7 @@ The documentation is organized into three sections. Select the appropriate secti
       <div class="column deployer">
         <a href="deployer/index.html">
           <div>
-            <img src="_static/font-awesome/user-cog.svg">
+            <img src="_static/img/font-awesome/user-cog.svg">
             <h2>The Deployer</h2>
             <p>
               ... learns how to set up NEST Desktop on a machine via the Python Package, Docker or Singularity installation.
@@ -63,7 +63,7 @@ The documentation is organized into three sections. Select the appropriate secti
       <div class="column developer">
         <a href="developer/index.html">
           <div>
-            <img src="_static/font-awesome/user-edit.svg">
+            <img src="_static/img/font-awesome/user-edit.svg">
             <h2>The Developer</h2>
             <p>
               ... learns the source code architecture of NEST Desktop and how to contribute code or enhancements to the project.

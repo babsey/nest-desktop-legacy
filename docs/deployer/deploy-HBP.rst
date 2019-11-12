@@ -1,13 +1,20 @@
-How to deploy it on HBP resources
-=================================
+Deploy NEST Desktop on **HBP**
+==============================
 
+.. image:: ../_static/img/logo/HBP_logo.png
+   :width: 320px
+   :alt: Human Brain Project
 
-The documentation shows how to deploy NEST Desktop from docker hub on HBP resources.
-HBP provides two OpenShift infrastructures:
-* https://openshift-dev.hbp.eu, designed for the development.
-* https://openshift-dev.hbp.eu, designed for the production.
+|
 
-Before you push NEST Desktop on HBP resources, I strongly recommend to use the development one.
+The documentation shows how to deploy NEST Desktop from docker hub on *HBP* resources.
+
+HBP provides two OpenShift infrastructures
+  * https://openshift-dev.hbp.eu for the development.
+  * https://openshift.hbp.eu for the production.
+
+.. Note::
+   I strongly recommend to use the development page before you push NEST Desktop on ``https://openshift.hbp.eu``.
 
 
 Requirements
@@ -19,7 +26,7 @@ Requirements
 Step to deploy (in development)
 -------------------------------
 
-You can copy command line from the web console of https://openshift-dev.hbp.eu.
+You can copy command line from the web console of ``https://openshift-dev.hbp.eu``.
 
 Login to openshift-dev.hbp.eu:
 
@@ -33,8 +40,8 @@ Get status of current project:
 
    oc status
 
-You find a configuration and a bash files for setting up NEST Desktop on HBP.
-Execute the bash script and in the end it shows the IP needed for HBP authentication (see below):
+You find a configuration and a bash files for setting up NEST Desktop on *HBP*.
+Execute the bash script and in the end it shows the IP needed for *HBP* authentication (see below):
 
 .. code-block:: bash
 
@@ -62,12 +69,12 @@ Monitor log of a pod (Get pod name: :code:`oc get pod`):
 HBP Authentication and redirecting
 ----------------------------------
 
-To access to NEST Desktop on HBP infrastructure, an authentication of HBP membership is requested.
+To access to NEST Desktop on HBP infrastructure, an authentication of *HBP* membership is requested.
 You find the codes on https://github.com/babsey/hbp-auth.
 
 
 Here are the steps how to setup authentication and redirecting to NEST Desktop properly.
-Before you have to modify the environment for HBP authentication,
+Before you have to modify the environment for *HBP* authentication,
 i.e. OIDC_CLIENT_ID, OIDC_CLIENT_SECRET and CLUSTER_IP of NEST Desktop
 (which is printed after setting up NEST Desktop).
 
@@ -95,9 +102,8 @@ Acknowledgements
 ----------------
 
 Thanks for the help to integrate NEST Desktop on HBP resources:
-* Alberto Madonna (Concepting)
-* Collin MCMurtrie (Contacting)
-* Fabrice Gaillard (Concepting of user authentication)
-* Jonathan Villemaire-Krajden (Concepting)
-* Martin Jochen Eppler (Contacting)
-* Steffen Graber (Providing Docker image of NEST)
+  * Alberto Madonna (Concepting)
+  * Collin McMurtrie (Contacting)
+  * Fabrice Gaillard (Concepting of user authentication)
+  * Jonathan Villemaire-Krajden (Concepting)
+  * Martin Jochen Eppler (Contacting)

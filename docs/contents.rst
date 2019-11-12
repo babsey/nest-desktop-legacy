@@ -15,19 +15,19 @@ Contents
    :caption: User Documentation
 
    user/index
-   user/quick-start
+   user/quickstart
    user/setup
    user/usage
-   user/commands
+   user/command-API
    user/faq
-   user/use-hbp
+   user/use-HBP
 
 .. toctree::
    :caption: Deployer Documentation
 
    deployer/index
    deployer/deploy-docker
-   deployer/deploy-hbp
+   deployer/deploy-HBP
    deployer/deploy-bwCloud
 
 

@@ -1,11 +1,18 @@
-How to deploy it on bwCloud resources
-=====================================
+Deploy NEST Desktop on **bwCloud**
+==================================
 
-The documentation shows how to deploy NEST Desktop from docker hub on bwCloud resources.
-"bwCloud" is a cloud assigned for university in Baden-Württemberg and provides a OpenStack infrastructure
+
+.. image:: ../_static/img/logo/bwcloud_logo_blau_weiss_little.svg
+   :width: 240px
+   :alt: bwCloud
+
+|
+
+The guide provides step-by-step documentation on how to deploy NEST Desktop on bwCloud resources.
+The *bwCloud* is a cloud assigned for the universities in Baden-Württemberg, Germany.
 For more information, follow the link:  https://www.bw-cloud.org/.
 
-OpenStack is an open source platform that uses pooled virtual resources to build and manage clouds.
+The *bwCloud* is running on OpenStack, an open source platform using pooled virtual resources to build and manage clouds.
 For more information, please follow the link: https://www.redhat.com/en/topics/openstack.
 
 
@@ -30,7 +37,7 @@ Deploy NEST Desktop
 
 3. Modify the configurations (i.e. source image and networks for the builder) in ``infrastructure/bwCloud/nest-desktop.json``.
 
-4. Build an image on bwCloud
+4. Build an image on *bwCloud*
 
 .. code-block:: bash
 
@@ -41,9 +48,9 @@ Deploy NEST Desktop
 Acknowledgements
 ----------------
 
-Thanks for the help to integrate NEST Desktop on bwCloud:
-* Bernd Wiebelt
-* Jonathan Bauer
-* Michael Janczyk
-* Manuel Messner
-* Christopher Ill
+Thanks for the help to integrate NEST Desktop on *bwCloud*:
+  * Bernd Wiebelt
+  * Jonathan Bauer
+  * Michael Janczyk
+  * Manuel Messner
+  * Christopher Ill

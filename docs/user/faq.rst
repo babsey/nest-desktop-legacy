@@ -1,24 +1,25 @@
 Frequently asked questions
 ==========================
 
-.. contents:: On this page , you'll find questions to
+
+.. contents:: On this page, you'll find questions to
    :local:
    :depth: 2
 
-Application
------------
+|fa-caret-right| Application
+-----------------------------
 
-Where can I find configurations?
-  You find configurations by clicking on the cog icon right to navigation side bar.
-  The configurations are stored as 'local storage' of the browser.
+Where can I find settings?
+  You find settings by clicking on the cog icon right to navigation side bar.
+  The settings are stored as 'local storage' of the browser.
 
-How can I change configurations?
-  You can change configurations in the configuration section
+How can I change settings?
+  You can change settings in the settings section
   by clicking on cog icon next to navigation side bar.
 
-How can I reset configurations?
-  In the loading page you can click on menu icon of the configuration section to open menu.
-  One of the menu item is to reset configurations.
+How can I reset settings?
+  In the loading page you can click on menu icon of the settings section to open menu.
+  One of the menu item is to reset settings.
 
 How can I reset databases?
   In the loading page you can click on menu icon of the database section to open menu.
@@ -28,27 +29,27 @@ Where can I find the database?
   The databases are stored as 'Indexed DB' of the browser.
 
 How can I disable loading page?
-  In the configuration of the application you find the option to disable loading page.
+  In the settings of the application you find the option to disable loading page.
 
 How can I activate automatic start?
-  In the configuration of the application you find the option to activate automatic start.
+  In the settings of the application you find the option to activate automatic start.
 
 How can I switch to advanced view?
-  In the configuration of the application you find an option to switch to advanced view.
+  In the settings of the application you find an option to switch to advanced view.
 
-NEST Server
------------
+|fa-caret-right| NEST Server
+-----------------------------
 
 How can I check NEST Server?
   In the loading page you can click on menu icon of the server section to open menu.
   One of the menu item is to check NEST Server.
 
 How can I change the URL of the NEST Server?
-  In the configuration of the NEST Server you find the form fields for the URL of the NEST Server.
+  In the settings of the NEST Server you find the form fields for the URL of the NEST Server.
 
 
-Model
------
+|fa-caret-right| Model
+-----------------------
 
 What is terminology of this model?
   This model includes neuron, synapse and device models.
@@ -63,16 +64,16 @@ How can I get default values of a model?
   The default values appear as a list on the right side bar.
 
 
-Network
--------
+|fa-caret-right| Network
+-------------------------
 
 Where can I find network controller?
   You find network controller by clicking on top icon ('project diagram') left to controller.
   Node and link controller are part of the network controller.
 
-Where can I find network configuration?
-  You find a 'bezier-curve' button towards network configuration in the network editor.
-  Alternatively, you find a network configuration in the configuration section.
+Where can I find network settings?
+  You find a 'bezier-curve' button towards network settings in the network editor.
+  Alternatively, you find a network settings in the settings section.
 
 How can I empty network?
   In network sketch you find bottom left a trash button that empties the network.
@@ -96,7 +97,7 @@ How can I colorize nodes?
   by clicking the right mouse button on node shape in network sketch or node toolbar in the controller.
 
 How can I change the color cycle of nodes?
-  In the network configuration you find the way to change the color cycle.
+  In the network settings you find the way to change the color cycle.
 
 How can I delete node/link?
   You find this method in the context menu of the node or link
@@ -135,15 +136,15 @@ How can I add positions?
   In the positions panel you find a text area of the positions, you can add custom positions.
 
 How can I modify the slider?
-  In the context menu of the parameter, you find a method to alter slider configuration.
+  In the context menu of the parameter, you find a method to alter slider settings.
 
 How can I generate array?
   In the context menu of the array parameters (e.g. spike times of spike generator) you find the method to generate array.
   It opens a dialog for array generation.
 
 
-Simulation
-----------
+|fa-caret-right| Simulation
+----------------------------
 
 Where can I find simulation controller?
   The simulation controller appears by clicking on the cog icon left to controller side bar.
@@ -193,8 +194,8 @@ How can I find data for the app in JSON format?
   In one tab of the simulation details you find data for the app.
 
 
-Protocol
---------
+|fa-caret-right| Protocol
+--------------------------
 
 How can I save protocol?
   In the top left of the page you find a floppy disc icon to save protocol.
@@ -226,8 +227,8 @@ How can I download all protocols?
 How can I upload protocols?
   In the menu of the simulation in the top navigation you find an method to upload protocols from a file.
 
-Chart
------
+|fa-caret-right| Chart
+-----------------------
 
 Where can I find chart controller?
   You find animation controller by clicking on the 'chart' icon in the stacked menu left to controller.
@@ -257,8 +258,8 @@ How can I hide/show dots/lines?
   Click on the legend to alter the visibility of the dots/lines.
 
 
-Animation
----------
+|fa-caret-right| Animation
+--------------------------
 
 Where can I find animation controller?
   You find animation controller by clicking on the 'braille' icon.
@@ -284,3 +285,9 @@ How can I rotate camera?
 
 How can I activate camera motion?
   In the animation controller you can increase the speed of the camera motion.
+
+
+.. |fa-caret-right| image:: ../_static/img/font-awesome/caret-right.svg
+   :width: 10px
+   :alt:
+   :target: #

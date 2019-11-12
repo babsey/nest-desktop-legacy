@@ -1,16 +1,52 @@
-Detailed Setup Guide
-====================
+Setup Guide
+===========
 
 
-This guide provides various options how to install NEST Desktop.
+This guide provides a detailed documentation on how to install NEST Desktop.
 
-.. contents::
-   :local:
-   :depth: 1
+You can read the installation instructions by clicking one of these logos below:
 
+.. raw:: html
+
+    <div class="setup">
+      <div class="column">
+        <a href="#via-python-package">
+          <div>
+            <img src="../_static/img/logo/pypi-logo.svg">
+            <h2>Python Package</h2>
+          </div>
+        </a>
+      </div>
+
+      <div class="column">
+        <a href="#via-docker">
+          <div>
+            <img src="../_static/img/logo/Moby-logo.png">
+            <h2>Docker</h2>
+          </div>
+        </a>
+      </div>
+
+      <div class="column">
+        <a href="#via-singularity">
+          <div>
+            <img src="../_static/img/logo/singularity-logo.svg">
+            <h2>Singularity</h2>
+          </div>
+        </a>
+      </div>
+    </div>
+
+||||
 
 Via Python Package
 ------------------
+
+.. image:: ../_static/img/logo/pypi-logo.svg
+   :width: 240px
+   :target: #via-python-package
+
+|
 
 1. Both NEST Desktop and NEST Server require NEST Simulator supporting only in Linux systems.
 
@@ -36,7 +72,7 @@ Start NEST Server:
 
    nest-server start
 
-NEST Server is now serving at http://localhost:5000.
+NEST Server is now serving at ``http://localhost:5000``.
 
 4. Start NEST Desktop (in other terminal session):
 
@@ -44,13 +80,19 @@ NEST Server is now serving at http://localhost:5000.
 
    nest-desktop start
 
-NEST Desktop is now serving at http://localhost:8000.
+NEST Desktop is now serving at ``http://localhost:8000``.
 
-For more information read the full commands docs :doc:`here <commands>`.
+For more information read the full documentation of command API :doc:`here <command-API>`.
 
 
 Via Docker
 ----------
+
+.. image:: ../_static/img/logo/Moby-logo.png
+   :width: 240px
+   :target: #via-docker
+
+|
 
 Docker is a virtualization software packaging applications and its dependencies in a virtual container that can run on any Linux server.
 It is available for a variety of operating systems, e.g. Linux, Mac and Windows. For more information `here <https://www.docker.com/resources/what-container>`__.
@@ -68,12 +110,13 @@ It is available for a variety of operating systems, e.g. Linux, Mac and Windows.
 
    docker run -i -p 5000:5000 -p 8000:8000 -t babsey/nest-desktop
 
-NEST Desktop and NEST Server are now serving at http://localhost:8000 and http://localhost:5000, respectively.
-
 .. note::
 
    In Docker container NEST Desktop is serving at port 8000 and NEST Server at port 5000.
    So, we need to bind ports (5000 and 8000) of host and container.
+
+NEST Desktop and NEST Server are now serving at ``http://localhost:8000`` and ``http://localhost:5000``, respectively.
+
 
 .. rubric:: Arguments
 
@@ -90,6 +133,12 @@ You can find help text of docker arguments by :code:`docker run --help`.
 
 Via Singularity
 ---------------
+
+.. image:: ../_static/img/logo/singularity-logo.svg
+   :width: 240px
+   :target: #via-singularity
+
+|
 
 Singularity is an application container for Linux systems.
 For more information read the full documentation
@@ -119,4 +168,4 @@ For more information read the full documentation
 
    singularity run nest-desktop.sif
 
-NEST Desktop and NEST Server are now serving at http://localhost:8000 and http://localhost:5000, respectively.
+NEST Desktop and NEST Server are now serving at ``http://localhost:8000`` and ``http://localhost:5000``, respectively.

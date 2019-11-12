@@ -2,6 +2,12 @@ Python Package Index (PyPI)
 ===========================
 
 
+.. image:: ../_static/img/logo/pypi-logo-large.svg
+   :width: 240px
+   :alt: Docker NEST
+
+|
+
 To build and deploy NEST Desktop on PyPi is a cruical step for the development.
 With it, Docker hub can update NEST Desktop and NEST Server in babsey/nest-desktop image.
 
