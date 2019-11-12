@@ -19,25 +19,19 @@ Options for :code:`nest-desktop`
 
    nest-desktop <command> -h <host> -p <port>
 
+
 .. rubric:: Commands
 
-+---------+------------------------+
-| status  | Status of NEST Desktop |
-+---------+------------------------+
-| start   | Start NEST Desktop     |
-+---------+------------------------+
-| stop    | Stop NEST Desktop      |
-+---------+------------------------+
-| restart | Stop then start        |
-+---------+------------------------+
+:status: Status of NEST Desktop
+:start: Start NEST Desktop
+:stop: Stop NEST Desktop
+:restart: Stop then start
+
 
 .. rubric:: Arguments
 
-+----+---------------------------+
-| -h | Host (Default: 127.0.0.1) |
-+----+---------------------------+
-| -p | Port (Default: 8000)      |
-+----+---------------------------+
+:-h: Host (Default: 127.0.0.1)
+:-p: Port (Default: 8000)
 
 
 |fa-terminal-sm| nest-server
@@ -55,31 +49,22 @@ Options for :code:`nest-server`
 
    nest-server <command> [-d] [-h <HOST>] [-p <PORT>] [-u <UID>]
 
+
 .. rubric:: Commands
 
-+---------+-----------------------+
-| log     | Monitor NEST Server   |
-+---------+-----------------------+
-| status  | Status of NEST Server |
-+---------+-----------------------+
-| start   | Start NEST Server     |
-+---------+-----------------------+
-| stop    | Stop NEST Server      |
-+---------+-----------------------+
-| restart | Stop then start       |
-+---------+-----------------------+
+:log: Monitor NEST Server
+:status: Status of NEST Server
+:start: Start NEST Server
+:stop: Stop NEST Server
+:restart: Stop then start
+
 
 .. rubric:: Arguments
 
-+----+---------------------------+
-| -d | Demonize the process      |
-+----+---------------------------+
-| -h | Host (Default: 127.0.0.1) |
-+----+---------------------------+
-| -p | Port (Default: 5000)      |
-+----+---------------------------+
-| -u | User ID                   |
-+----+---------------------------+
+:-d: Demonize the process
+:-h: Host (Default: 127.0.0.1)
+:-p: Port (Default: 5000)
+:-u: User ID
 
 
 .. |fa-terminal| image:: ../_static/img/font-awesome/terminal.svg
