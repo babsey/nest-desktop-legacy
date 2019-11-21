@@ -4,6 +4,10 @@ body {
   margin: 0;
 }
 
+app-root {
+  display: flex;
+}
+
 .flex {
   display: flex !important;
   width: 100%;
@@ -29,49 +33,31 @@ body {
 //
 
 .navigation {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 40px;
-  overflow: hidden;
-  padding: 0 8px 12px 0;
 
-  .module-button {
-    padding: 1px !important;
+  button {
+    // border-right: 1px solid rgba(0,0,0,0.12);
+    border-radius: 0;
+    height: 64px;
 
-    button {
-      height: 64px !important;
-      width: 96px !important;
-      margin-left: -56px;
-      padding-left: 48px;
-
-      fa-icon {
-        font-size: 18px;
-      }
+    fa-icon {
+      font-size: 18px;
     }
   }
 }
 
 .button-toolbar {
-  position: absolute;
-  top: 40px;
-  right: 337px;
+  // position: absolute;
+  // top: 40px;
+  // right: 337px;
   width: 40px;
   overflow: hidden;
   z-index: 1000;
-  padding: 0 0 12px 8px;
+  // padding: 0 0 12px 8px;
 
   button {
-    width: 96px !important;
-    height: 64px !important;
-
-    .mat-button-wrapper {
-      display: inline-block;
-
-      fa-icon {
-        margin-left: -48px;
-      }
-    }
+    border-radius: 0;
+    height: 64px;
   }
 
   .mat-icon-button {
@@ -97,14 +83,33 @@ body {
     flex: 1 1 auto;
   }
 
-  .mat-icon-button,
-  .mat-mini-fab {
+  button {
+    border-radius: 0;
     width: 64px;
-    height: 64px;
-    font-size: 16px;
+    height: 40px;
+    font-size: 14px;
+    display: flex;
 
-    .mat-button-wrapper {
-      padding: 0;
+    span {
+      width: 100%;
+      margin: auto;
+    }
+
+    .fa-stack-2x {
+      color: black !important;
+      left: 16px;
+    }
+  }
+
+  button.active {
+    background-color: white;
+
+    .fa-stack-1x {
+      color: black !important;
+    }
+
+    .fa-stack-2x {
+      color: tomato !important;
     }
   }
 }
@@ -113,10 +118,6 @@ mat-divider.style-fix {
   height: 32px;
   margin-left: 4px;
   margin-right: 4px;
-}
-
-.content {
-  padding-left: 40px !important;
 }
 
 .config {
@@ -241,11 +242,4 @@ input {
 .links .mat-list-item-content,
 .nodes .mat-list-item-content {
   padding: 0 10px !important;
-}
-//
-// Plotly
-//
-
-.modebar {
-  right: 42px !important;
 }

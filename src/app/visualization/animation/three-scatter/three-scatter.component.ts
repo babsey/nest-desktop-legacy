@@ -54,7 +54,9 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // console.log('Three scatter on destroy')
+    this._animationControllerService.stop();
     cancelAnimationFrame(this.requestID);
+    this.canvas.parentNode.removeChild(this.canvas);
     this.subscription.unsubscribe()
   }
 

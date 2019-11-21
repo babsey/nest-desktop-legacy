@@ -16,7 +16,12 @@
     </div>
 
     <mat-form-field style="width:calc(100% - 10px); height: auto; font-size:12px; padding: 0 5px">
-      <textarea matInput class="input" cdkTextareaAutosize [value]="stringify(value)" (change)="onChange($event.target.value)" style="height:auto; overflow:hidden;"></textarea>
+      <textarea matInput cdkTextareaAutosize
+        (change)="onChange($event.target.value)"
+        [value]="stringify(value)"
+        class="input"
+        style="height:auto; overflow:hidden;"
+        ></textarea>
     </mat-form-field>
   </span>
 </mat-menu>

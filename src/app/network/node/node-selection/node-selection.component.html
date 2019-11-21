@@ -5,6 +5,7 @@
 
   <app-node-toolbar
     [(data)]="data"
+    (dataChange)="onDataChange($event)"
     [node]="node"
   ></app-node-toolbar>
 

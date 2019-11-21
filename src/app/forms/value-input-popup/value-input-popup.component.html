@@ -7,7 +7,17 @@
     </div>
 
     <mat-form-field style="width:calc(100% - 10px); font-size:12px; padding: 0 5px">
-      <input class="input" type="number" [(ngModel)]="value" [defaultValue]="options.value" [placeholder]="options.value" [min]="options.min" [max]="options.max" [step]="options.step" (change)="onChange($event)">
+      <input
+        (change)="onChange($event)"
+        [(ngModel)]="value"
+        [defaultValue]="options.value"
+        [max]="options.max"
+        [min]="options.min"
+        [placeholder]="options.value"
+        [step]="options.step"
+        class="input"
+        type="number"
+      >
     </mat-form-field>
   </span>
 

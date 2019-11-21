@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { DataService } from '../services/data/data.service';
@@ -23,7 +23,6 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
   public searchTerm: string = '';
   public selectionList: boolean = false;
   public simulations: Data[];
-  public id: string;
   public fileReader = new FileReader();
 
   constructor(
@@ -35,8 +34,8 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     public _navigationService: NavigationService,
     public _simulationService: SimulationService,
   ) {
-    this.fileReader.addEventListener("load", e => {
-      var result = JSON.parse(e['target']['result']);
+    this.fileReader.addEventListener("load", event => {
+      var result = JSON.parse(event['target']['result']);
       var protocols = result.hasOwnProperty("_id") ? [result] : result;
       this._simulationProtocolService.upload(protocols);
     });
@@ -118,9 +117,8 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
   }
 
   navigate(id: string): void {
-    this.id = id;
     var url = 'simulation/' + id;
-    this.router.navigate([{ outlets: { primary: url } }])
+    this.router.navigate([{ outlets: { primary: url } }]);
   }
 
   deleteProtocols(protocols: string[]): void {
@@ -134,16 +132,14 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
   }
 
   newNetwork(): void {
-    this.selectionList = false;
-    this._simulationService.mode = 'edit';
-    this.router.navigate([{ outlets: { primary: 'simulation' } }])
+    this._simulationService.data = this._dataService.newData();
+    this.edit()
+    // this.router.navigate([{ outlets: { primary: 'simulation' } }])
   }
 
   edit(): void {
     this.selectionList = false;
     this._simulationService.mode = 'edit';
-    // var url = 'network/' + this._dataService['data']._id;
-    // this.router.navigate([{ outlets: { primary: url } }])
   }
 
   details(): void {
@@ -151,9 +147,30 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     this._simulationService.mode = 'details';
   }
 
+  showSaveButton() {
+    return !(this._simulationService.data._id || this.simulations.includes(this._simulationService.data))
+  }
+
+  save(): void {
+    this._simulationProtocolService.save(this._simulationService.data)
+  }
+
   run(): void {
     this.selectionList = false;
     this._simulationService.mode = 'run';
+  }
+
+  displaySaveButton(): boolean {
+    return this._simulationService.data.name != '' && this._simulationService.data._id == '';
+  }
+
+  clearSimulationName(): void {
+    this._simulationService.data.name = '';
+    this._simulationService.data._id = '';
+  }
+
+  onChange(event: any): void {
+    this._simulationService.data._id = '';
   }
 
   onSelect(event: any): void {

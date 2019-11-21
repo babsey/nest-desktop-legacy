@@ -34,7 +34,7 @@
 
       <span class="flex">
         <h3 mat-subheader>
-          <fa-icon class="list-icon" icon="cog"></fa-icon> Configurations
+          <fa-icon class="list-icon" icon="wrench"></fa-icon> Configurations
         </h3>
         <span class="flex-spacer"></span>
         <button mat-icon-button [matMenuTriggerFor]="configMenu">
@@ -231,7 +231,10 @@
     <span class="flex">
       <span class="flex-spacer"></span>
       <span style="margin:10px">
-        <button mat-raised-button (click)="buttonClick.emit()" [disabled]="!isReady()">
+        <button mat-raised-button
+          (click)="readyChange.emit(true)"
+          [disabled]="!isReady()"
+          >
           <span *ngIf="!isReady()">Loading</span>
           <span *ngIf="isReady()">Start</span>
         </button>
@@ -239,5 +242,4 @@
     </span>
   </span>
 
-  <app-config-list (configClick)="buttonClick.emit()"></app-config-list>
 </span>

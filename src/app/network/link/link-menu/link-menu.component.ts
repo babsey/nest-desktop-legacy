@@ -58,8 +58,8 @@ export class LinkMenuComponent implements OnInit {
       delete projections.number_of_connections;
       delete projections.mask;
     } else {
-      delete connectome['pre'];
-      delete connectome['post'];
+      delete connectome['src_idx'];
+      delete connectome['tgt_idx'];
       connectome.conn_spec.rule = 'all_to_all';
       connectome.syn_spec.model = 'static_synapse';
       connectome.syn_spec.weight = 1;
@@ -71,23 +71,23 @@ export class LinkMenuComponent implements OnInit {
   customSources(): void {
     let connectome = this.data.simulation.connectomes[this.link.idx];
     connectome.conn_spec.rule = 'all_to_all';
-    connectome['pre'] = [];
+    connectome['src_idx'] = [];
   }
 
   allSources(): void {
     let connectome = this.data.simulation.connectomes[this.link.idx];
-    delete connectome['pre'];
+    delete connectome['src_idx'];
   }
 
   customTargets(): void {
     let connectome = this.data.simulation.connectomes[this.link.idx];
     connectome.conn_spec.rule = 'all_to_all';
-    connectome['post'] = [];
+    connectome['tgt_idx'] = [];
   }
 
   allTargets(): void {
     let connectome = this.data.simulation.connectomes[this.link.idx];
-    delete connectome['post'];
+    delete connectome['tgt_idx'];
   }
 
   deleteLink(): void {

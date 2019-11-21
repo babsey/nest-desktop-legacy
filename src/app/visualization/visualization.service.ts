@@ -22,6 +22,6 @@ export class VisualizationService {
     } else {
       this.hasPositions = false;
     }
-    this.mode = this.hasPositions ? this.mode : 'chart';
+    this.mode = this.hasPositions ? 'animation' : 'chart';
   }
 }

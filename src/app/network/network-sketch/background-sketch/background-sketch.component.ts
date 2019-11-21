@@ -157,6 +157,7 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   create(elementType: string, point: number[]): void {
+    // console.log('Create node')
     this._networkService.create(this.data, elementType, point);
     this.data['hash'] = this._dataService.hash(this.data);
     this.dataChange.emit(this.data);

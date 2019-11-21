@@ -1,39 +1,20 @@
 <span class="network">
-  <div class="button-toolbar">
-    <button mat-icon-button
-      (click)="mode='selection'"
-      [class.mat-fab]="mode=='selection'"
-      matTooltip="Network selection"
-      matTooltipPosition="before"
-      class="app-button"
-      >
-      <fa-icon icon="check-square"></fa-icon>
-    </button>
-    <button mat-icon-button
-      (click)="mode='sketch'"
-      [class.mat-fab]="mode=='sketch'"
-      matTooltip="Sketch configurations"
-      matTooltipPosition="before"
-      class="app-button"
-      >
-      <fa-icon icon="bezier-curve"></fa-icon>
-    </button>
-  </div>
-
-  <mat-sidenav-container class="network-container">
+  <mat-sidenav-container class="network-container" hasBackdrop="false">
     <mat-sidenav
+      (openedChange)="triggerResize()"
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [(opened)]="_simulationService.sidenavOpened"
       class="network-sidenav controller"
-      disableClose="true"
-      mode="side"
-      opened="true"
       position="end"
-      role="region">
+      role="region"
+      >
 
       <ng-container [ngSwitch]="mode">
 
         <ng-container *ngSwitchCase="'selection'">
           <app-network-selection
             [(data)]="data"
+            (dataChange)="onDataChange($event)"
           ></app-network-selection>
         </ng-container>
 
@@ -47,6 +28,7 @@
     <mat-sidenav-content #content class="network-content content">
       <ng-container *ngIf="data != undefined">
         <app-network-sketch
+          (dataChange)="onDataChange($event)"
           [(data)]="data"
           [height]="height"
           [width]="width"
@@ -55,4 +37,30 @@
       </ng-container>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
+  <div class="button-toolbar">
+    <button mat-icon-button
+      (click)="toggleSidenav()"
+      style="height:40px">
+      <fa-icon [icon]="this._simulationService.sidenavOpened ? 'chevron-right' : 'chevron-left'"></fa-icon>
+    </button>
+    <button mat-icon-button
+      (click)="selectController('selection')"
+      [class.mat-fab]="mode=='selection'"
+      matTooltip="Network selection"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="tasks"></fa-icon>
+    </button>
+    <button mat-icon-button
+      (click)="selectController('sketch')"
+      [class.mat-fab]="mode=='sketch'"
+      matTooltip="Sketch settings"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="bezier-curve"></fa-icon>
+    </button>
+  </div>
 </span>

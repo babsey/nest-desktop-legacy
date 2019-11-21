@@ -1,6 +1,7 @@
 <mat-menu #modelsMenu="matMenu" class="context-menu">
   <button mat-menu-item (click)="_modelService.reset()">
-    <fa-icon class="menu-icon" icon="eraser"></fa-icon>Reset models
+    <fa-icon class="menu-icon" icon="undo"></fa-icon>
+    Reset models
   </button>
 </mat-menu>
 
@@ -52,7 +53,7 @@
     </span>
 
     <span *ngSwitchCase="false">
-      <mat-toolbar class="navbar" color="primary">
+      <mat-toolbar class="navbar" color="primary" style="padding:0">
         Model
         <span class="spacer"></span>
         <button mat-icon-button [matMenuTriggerFor]="modelsMenu">

@@ -10,6 +10,7 @@
     <ng-container *ngFor="let node of data.app.nodes">
       <app-node-selection
         [(data)]="data"
+        (dataChange)="onDataChange($event)"
         [node]="node"
         [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'"
       ></app-node-selection>

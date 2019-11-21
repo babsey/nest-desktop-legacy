@@ -6,9 +6,13 @@
 </div>
 
 <mat-menu #simulationMenu="matMenu" class="context-menu">
-  <!-- <mat-toolbar class="ellipsis">{{ selected.name }}</mat-toolbar> -->
-  <mat-checkbox class="mat-menu-item menu-item" (click)="viewPopup=!viewPopup">
-    View
+  <!-- <mat-toolbar class="ellipsis">{{ focused.name }}</mat-toolbar> -->
+  <mat-checkbox
+    (change)="toggleQuickView($event)"
+    [checked]="quickview"
+    class="mat-menu-item menu-item"
+    >
+    Quickview
   </mat-checkbox>
   <button mat-menu-item class="menu-item" (click)="downloadSimulation()">
     <fa-icon class="menu-icon" icon="download"></fa-icon> Download
@@ -25,16 +29,16 @@
   mdePopoverOffsetX="261"
   mdePopoverPositionY="below"
   mdePopoverOffsetY="0">
-  <ng-container *ngIf="selected && viewPopup">
+  <ng-container *ngIf="focused && quickview">
     <mat-card style="width:600px">
       <app-network-sketch
-        [data]="selected"
+        [data]="focused"
         [eventTrigger]="false"
         width="600"
         height="200"
         ></app-network-sketch>
       <app-network-list
-        [data]="selected"
+        [data]="focused"
         [selective]="false"
       ></app-network-list>
     </mat-card>
@@ -53,9 +57,9 @@
       (contextmenu)="onContextMenu($event, simulation)"
       (mouseover)="view(simulation, simulationTarget)"
       (mouseout)="onMouseOut($event)"
-      [routerLink]="['/simulation/', simulation._id]"
+      (click)="onClick(simulation)"
       class="simulation"
-      routerLinkActive="active"
+      [class.active]="selected(simulation)"
       >
       <span class="flex">
         {{ simulation.name }}

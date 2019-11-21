@@ -16,6 +16,7 @@ import { VisualizationModule } from '../visualization/visualization.module';
 import { SimulationComponent } from './simulation.component';
 import { SimulationConfigComponent } from './simulation-config/simulation-config.component';
 import { SimulationDetailsComponent } from './simulation-details/simulation-details.component';
+import { SimulationPlaygroundComponent } from './simulation-playground/simulation-playground.component';
 import { SimulationScriptComponent } from './simulation-script/simulation-script.component';
 import { SimulationStatsComponent } from './simulation-stats/simulation-stats.component';
 
@@ -39,6 +40,7 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     SimulationConfigComponent,
     SimulationControllerComponent,
     SimulationDetailsComponent,
+    SimulationPlaygroundComponent,
     SimulationScriptComponent,
     SimulationStatsComponent,
     SpikeStatsComponent,
@@ -51,6 +53,7 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     SimulationConfigComponent,
     SimulationControllerComponent,
     SimulationDetailsComponent,
+    SimulationPlaygroundComponent,
     SimulationScriptComponent,
     SimulationStatsComponent,
   ],

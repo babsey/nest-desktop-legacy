@@ -16,28 +16,32 @@ export class TimesincePipe implements PipeTransform {
 
     var timesince: number;
     var timeunit: string;
-    
+
     if (seconds > 31622400) {
       timesince = Math.floor(seconds / 31622400);
       timeunit = 'year';
+      timeunit += (timesince == 1 ? '' : 's');
     } else if (seconds > 2635200) {
       timesince = Math.floor(seconds / 2635200);
       timeunit = 'month';
+      timeunit += (timesince == 1 ? '' : 's');
     } else if (seconds > 86400) {
       timesince = Math.floor(seconds / 86400);
       timeunit = 'day';
+      timeunit += (timesince == 1 ? '' : 's');
     } else if (seconds > 3600) {
       timesince = Math.floor(seconds / 3600);
       timeunit = 'hour';
+      timeunit += (timesince == 1 ? '' : 's');
     } else if (seconds > 60) {
       timesince = Math.floor(seconds / 60);
-      timeunit = 'minute';
+      timeunit = 'min';
     } else {
       timesince = seconds;
-      timeunit = 'second';
+      timeunit = 'sec';
     }
 
-    return timesince + ' ' + timeunit + (timesince == 1 ? '' : 's') + ' ago';
+    return timesince + ' ' + timeunit + ' ago';
   }
 
 }

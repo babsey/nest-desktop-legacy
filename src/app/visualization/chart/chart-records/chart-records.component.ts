@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 
 import { ChartRecordsService } from './chart-records.service';
 import { ColorService } from '../../../network/services/color.service';
@@ -19,7 +19,8 @@ import { Record } from '../../../classes/record';
 export class ChartRecordsComponent implements OnInit, OnDestroy {
   @Input() data: Data;
   @Input() records: Record[];
-  public _data: any[] = [];
+  @ViewChild('plot', { static: true }) plotRef: ElementRef;
+  public plotlyData: any[] = [];
   public frames: any[] = [];
   public layout: any = {
     title: 'No data found',
@@ -50,7 +51,12 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.plot.parentNode.removeChild(this.plot);
     this.subscription.unsubscribe()
+  }
+
+  private get plot(): HTMLCanvasElement {
+    return this.plotRef['plotEl'].nativeElement;
   }
 
   init(): void {
@@ -86,7 +92,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
   update(): void {
     // console.log('Update records visualization')
-    this._data = [];
+    this.plotlyData = [];
     var records = this.records;
     if (records.length == 0) return
     this._logService.log('Update charts');
@@ -178,15 +184,15 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     var node = this.data.app.nodes[record.recorder.idx];
     var color: string = this._colorService.node(node);
 
-    var idx = this._data.length;
+    var idx = this.plotlyData.length;
     var label = this.labels[node.idx];
     record.config['showlegend'] = this.records.length > 1;
     record.config['legendgroup'] = 'spike' + idx;
 
     var scatterData = this._chartRecordsService.scatter(record.idx, x, y, color, label, record.config);
     var histData = this._chartRecordsService.histogram(record.idx, x, start, end, size, color, record.config)
-    this._data.push(scatterData);
-    this._data.push(histData);
+    this.plotlyData.push(scatterData);
+    this.plotlyData.push(histData);
 
     var range = this._mathService.extent(record.global_ids);
     this.layout.yaxis2['range'] = [range[0] - 1, range[1] + 1];
@@ -202,7 +208,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
       var config = { hoverinfo: 'none', visible: 'legendonly', 'line.dash': 'dash' };
       var plot_Vth = this._chartRecordsService.plot(record.idx, x, y, 'black', 'V_m threshold', config);
-      this._data.push(plot_Vth)
+      this.plotlyData.push(plot_Vth)
     }
 
     var recorder = record.recorder;
@@ -210,8 +216,8 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     var color: string = this._colorService.node(node);
 
     if (record_from == 'V_m') {
-      this._data[0]['showlegend'] = true;
-      this._data[0]['visible'] = this.threshold;
+      this.plotlyData[0]['showlegend'] = true;
+      this.plotlyData[0]['visible'] = this.threshold;
     }
 
     var neurons = this.data.simulation.connectomes
@@ -232,7 +238,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       var label = record_from + ' of ' + (recorder.idx + 1);
       var config0 = { hoverinfo: 'full', showlegend: true };
       var plot = this._chartRecordsService.plot(recorder.idx, data[0].x, data[0].y, color, label, config0, yaxis);
-      this._data.push(plot)
+      this.plotlyData.push(plot)
     } else if (data.length > 1) {
 
       var x: any[] = data[0].x;
@@ -249,7 +255,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       var label = record_from + ' average';
       var config1 = {};
       var plot = this._chartRecordsService.plot(recorder.idx, x, y, color, label, config1, yaxis);
-      this._data.push(plot)
+      this.plotlyData.push(plot)
 
       data.slice(0, 1).map(d => {
         var label = record_from + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']';
@@ -259,7 +265,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
           opacity: 0.5,
         }
         var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config2, yaxis);
-        this._data.push(plot)
+        this.plotlyData.push(plot)
       })
 
       data.slice(1, 3).map(d => {
@@ -270,7 +276,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
           opacity: 0.3,
         }
         var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config3, yaxis);
-        this._data.push(plot)
+        this.plotlyData.push(plot)
       })
 
       data.slice(3, 20).map(d => {
@@ -281,7 +287,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
           opacity: 0.1,
         }
         var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config4, yaxis);
-        this._data.push(plot)
+        this.plotlyData.push(plot)
       })
 
     }
@@ -328,7 +334,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event: any): void {
-    var histograms = this._data.filter(d => d.type == 'histogram' && d.source == 'x');
+    var histograms = this.plotlyData.filter(d => d.type == 'histogram' && d.source == 'x');
     histograms.forEach(h => {
       var x = this.records[h.idx].events.times;
       var points = event.points.filter(p => p.data.idx == h.idx);

@@ -33,12 +33,12 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   public slider: any = {};
   public synModel: any;
   public synModels: any[] = [];
-  public preOptions: any = {
-    label: 'Sources',
+  public srcIdxOptions: any = {
+    label: 'Source Indices',
     value: []
   };
-  public postOptions: any = {
-    label: 'Targets',
+  public tgtIdxOptions: any = {
+    label: 'Target Indices',
     value: []
   };
 

@@ -1,8 +1,25 @@
+<app-navigation
+  id="navigation-button"
+  [(ready)]="ready"
+  >
+</app-navigation>
+
 <mat-sidenav-container id="container" autosize>
-  <mat-sidenav id="navigation" [(opened)]="_navigationService.sidenavOpened" [mode]="mobileQuery.matches ? 'over' : 'side'" [style.width]="navigationWidth()" role="region" position="start" autoFocus="false">
+  <mat-sidenav
+    id="navigation"
+    (openedChange)="triggerResize()"
+    [mode]="mobileQuery.matches ? 'over' : 'side'"
+    [(opened)]="_navigationService.sidenavOpened"
+    role="region"
+    position="start"
+    autoFocus="false">
     <ng-container [ngSwitch]="ready">
       <ng-container *ngSwitchCase="false">
-        <app-loading (buttonClick)="ready=true" [(ready)]="ready" [style.display]="_appConfigService.config.app.loading ? '' : 'None'"></app-loading>
+        <app-loading
+        (buttonClick)="ready=true"
+        [(ready)]="ready"
+        [style.display]="_appConfigService.config.app.loading ? '' : 'None'"
+        ></app-loading>
       </ng-container>
       <ng-container *ngSwitchCase="true">
         <router-outlet name="nav"></router-outlet>
@@ -16,7 +33,7 @@
         <span class="background" [style.display]="_appConfigService.config.app.loading ? '' : 'None'">
           <div style="margin:auto">
             <figure>
-              <img src="/assets/img/spike-transmission-carlos.png" />
+              <img width="720" src="/assets/img/spike-transmission-carlos.png" />
             </figure>
           </div>
         </span>
@@ -27,7 +44,7 @@
         </div>
       </ng-container>
       <ng-container *ngSwitchCase="true">
-        <app-navigation id="navigation-button"></app-navigation>
+        <!-- <app-navigation id="navigation-button"></app-navigation> -->
         <router-outlet></router-outlet>
       </ng-container>
     </ng-container>

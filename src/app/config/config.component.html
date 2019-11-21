@@ -1,23 +1,6 @@
-<mat-menu #configMenu="matMenu" class="context-menu">
-  <button mat-menu-item (click)="reset()">
-    <fa-icon class="menu-icon"  icon="undo"></fa-icon>
-    Reset configurations
-  </button>
-  <!-- <button mat-menu-item (click)="download()">
-    <fa-icon class="menu-icon"  icon="download"></fa-icon>
-    Download configurations
-  </button>
-  <button mat-menu-item (click)="upload()">
-    <fa-icon class="menu-icon" icon="upload"></fa-icon>
-    Upload configurations
-  </button> -->
-</mat-menu>
-
 <span class="config-theme">
-  <mat-toolbar class="navbar content" color="primary">
+  <mat-toolbar class="navbar" color="primary">
     {{ routeConfig.replace('-', ' ') | capitalize }}
-    <span class="spacer"></span>
-    <button mat-icon-button [matMenuTriggerFor]="configMenu"><fa-icon icon="ellipsis-v"></fa-icon></button>
   </mat-toolbar>
 </span>
 

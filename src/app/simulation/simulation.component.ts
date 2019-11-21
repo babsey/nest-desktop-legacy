@@ -2,8 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatBottomSheet, MatMenuTrigger } from '@angular/material';
 
-import { NetworkSketchSheetComponent } from '../network/network-sketch-sheet/network-sketch-sheet.component';
-
 import { AnimationControllerService } from '../visualization/animation/animation-controller/animation-controller.service';
 import { AppService } from '../app.service';
 import { ColorService } from '../network/services/color.service';
@@ -26,8 +24,6 @@ import { Record } from '../classes/record';
   styleUrls: ['./simulation.component.scss']
 })
 export class SimulationComponent implements OnInit, OnDestroy {
-  public data: any = {};
-  public records: Record[] = [];
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -38,12 +34,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
     private _colorService: ColorService,
     private _dataService: DataService,
     private _networkService: NetworkService,
-    private _simulationEventService: SimulationEventService,
     private _simulationProtocolService: SimulationProtocolService,
     private bottomSheet: MatBottomSheet,
     private route: ActivatedRoute,
     private router: Router,
     public _simulationControllerService: SimulationControllerService,
+    public _simulationEventService: SimulationEventService,
     public _simulationRunService: SimulationRunService,
     public _simulationService: SimulationService,
     public _visualizationService: VisualizationService,
@@ -53,7 +49,6 @@ export class SimulationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // console.log('Init simulation')
     this.route.params.subscribe(params => this.init(params['id']));
-    this._simulationRunService.simulated.subscribe(resData => this.update(resData))
   }
 
   ngOnDestroy() {
@@ -61,171 +56,54 @@ export class SimulationComponent implements OnInit, OnDestroy {
   }
 
   init(id: string): void {
-    this.data = {}
-    this.records = [];
+    this._simulationService.dataLoaded = false;
     this._simulationEventService.records = [];
     if (id) {
       this._simulationService.load(id).then(doc => {
-        this.data = this._dataService.clean(doc);
-        this._networkService.validate(this.data);
-        this._networkService.update.emit(this.data);
+        this._simulationService.data = this._dataService.clean(doc);
+        this._networkService.validate(this._simulationService.data);
+        this._networkService.update.emit(this._simulationService.data);
+        this._simulationService.dataLoaded = true;
         if (this.router.url.includes('run')) {
-          this._simulationService.mode = 'run';
+          this._simulationService.mode = 'playground';
         }
-        if (this._simulationService.mode == 'run' && this._simulationRunService.config['runAfterLoad']) {
+        if (this._simulationService.mode == 'playground' && this._simulationRunService.config['runAfterLoad']) {
           this.run(true)
         }
       })
     } else {
-      this.data = this._dataService.newData();
+      this._simulationService.data = this._dataService.newData();
       this._simulationService.mode = 'edit';
+      this._simulationService.dataLoaded = true;
     }
-  }
-
-  update(resData: any): void {
-    // Update kernel time
-    this.data.app.kernel.time = resData.kernel.time;
-
-    // Update global ids, record_from, positions
-    resData.collections.map((collection, idx) => {
-      this.data.app.nodes[idx]['global_ids'] = collection.global_ids;
-      let params = this.data.simulation.models[collection.model].params;
-      if (params.hasOwnProperty('record_from')) {
-        this.data.app.nodes[idx]['record_from'] = params.record_from;
-      }
-      if (collection.hasOwnProperty('spatial')) {
-        this.data.app.nodes[idx]['positions'] = collection.spatial.positions;
-      }
-    })
-
-    // Update records
-    resData.records.map((rec, i) => {
-      if (i < this.records.length) {
-        var record = this.records[i];
-        record['events'] = rec.events;
-        record['global_ids'] = rec.global_ids;
-        record['senders'] = rec.senders;
-      } else {
-        rec['config'] = {};
-        this.records.push(rec);
-        var record = this.records[this.records.length - 1];
-      }
-      record['positions'] = this._networkService.getPositionsForRecord(this.data, rec);
-      record.recorder['color'] = this._colorService.node(this.data.app.nodes[record.recorder.idx]);
-    })
-
-    this._simulationEventService.records = this.records;
-    this._visualizationService.time = resData.kernel.time;
-    this._visualizationService.checkPositions(this.records);
-    this._visualizationService.mode = this.data.app.visualization || 'chart';
-    this._visualizationService.update.emit()
-  }
-
-  save(): void {
-    this.data.app.visualization = this._visualizationService.mode || 'chart';
-    this._simulationProtocolService.save(this.data)
-  }
-
-  edit(): void {
-    this._simulationService.mode = 'edit';
-    this.bottomSheet.dismiss()
-  }
-
-  details(): void {
-    this._simulationService.mode = 'details';
-    this.bottomSheet.dismiss()
   }
 
   run(force: boolean = false): void {
-    this._animationControllerService.stop();
-    if (this._networkService.recorderChanged) {
-      this.records = [];
-      this._networkService.recorderChanged = false;
-    }
-    this._networkService.validate(this.data);
-    if (this._simulationService.mode == 'run') {
-      this._simulationRunService.run(this.data, force)
-    }
-    this._simulationService.mode = 'run';
+    this._simulationService.mode = 'playground';
+    this._networkService.validate(this._simulationService.data);
+    this._simulationRunService.run(this._simulationService.data, force)
   }
 
   hasRecords(): boolean {
-    return this.records.length > 0;
+    return this._simulationEventService.records.length > 0;
   }
 
   download(): void {
-    var data = this._dataService.clean(this.data);
-    if (this.hasRecords()) {
-      data['records'] = this.records;
+    var data = this._dataService.clean(this._simulationService.data);
+    if (this._simulationEventService.records.length > 0) {
+      data['records'] = this._simulationEventService.records;
     }
     this._simulationProtocolService.download([data])
   }
 
-  selectVisualizationModus(mode: string): void {
-    if (this._visualizationService.mode == mode) {
-      this._simulationControllerService.mode = mode
-    } else {
-      if (this._simulationControllerService.mode == 'chart') {
-        this._simulationControllerService.mode = 'animation';
-      } else if (this._simulationControllerService.mode == 'animation') {
-        this._simulationControllerService.mode = 'chart';
-      }
-    }
-    this._visualizationService.mode = mode;
-    this._visualizationService.update.emit()
-  }
-
-  selectControllerMode(mode: string): void {
-    this._simulationControllerService.mode = mode;
-  }
-
-  isBottomSheetOpened(): boolean {
-    return this.bottomSheet._openedBottomSheetRef != null;
-  }
-
-  toggleQuickView(): void {
-    this._networkService.quickView = !this._networkService.quickView;
-  }
-
-  isQuickViewOpened(): boolean {
-    return this._networkService.quickView;
-  }
-
-  closeBottomSheet(): void {
-    this.bottomSheet.dismiss()
-  }
-
-  openBottomSheet(): void {
-    this.bottomSheet.open(NetworkSketchSheetComponent, {
-      data: this.data,
-      autoFocus: false,
-      hasBackdrop: false,
-      disableClose: true,
-    });
-  }
-
-  toggleBottomSheet(): void {
-    if (this.isBottomSheetOpened()) {
-      this.closeBottomSheet()
-    } else {
-      this.openBottomSheet()
-    }
-  }
-
   configSimulation(): void {
-    this._simulationService.mode = 'run';
+    this._simulationService.mode = 'playground';
     this._simulationControllerService.mode = 'simulation';
   }
 
   onDataChange(data: Data): void {
     // console.log('Simulation on data change')
-    this.data._id = '';
-    setTimeout(() => this.run(), 1)
-  }
-
-  onAppChange(records: Record[]): void {
-    // console.log('On app change')
-    this._visualizationService.update.emit()
+    this._simulationService.data._id = '';
   }
 
   onSelectionChange(event: any): void {

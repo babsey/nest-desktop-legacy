@@ -1,9 +1,9 @@
-<plotly-plot
+<plotly-plot #plot
   (legendDoubleClick)="onLegendDoubleClick($event)"
   (legendClick)="onLegendClick($event)"
   (selected)="onSelect($event)"
   [config]="config"
-  [data]="_data"
+  [data]="plotlyData"
   [layout]="layout"
   [style]="style"
   [useResizeHandler]="true">

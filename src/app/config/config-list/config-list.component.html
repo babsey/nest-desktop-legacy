@@ -1,3 +1,18 @@
+<mat-menu #settingMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="reset()">
+    <fa-icon class="menu-icon" icon="undo"></fa-icon>
+    Reset all settings
+  </button>
+  <!-- <button mat-menu-item (click)="download()">
+    <fa-icon class="menu-icon"  icon="download"></fa-icon>
+    Download settings
+  </button>
+  <button mat-menu-item (click)="upload()">
+    <fa-icon class="menu-icon" icon="upload"></fa-icon>
+    Upload settings
+  </button> -->
+</mat-menu>
+
 <span>
   <ng-container [ngSwitch]="_navigationService.sidenavShortView">
 
@@ -13,10 +28,12 @@
     </span>
 
     <span *ngSwitchCase="false">
-      <mat-toolbar class="navbar" color="primary">
-        Configuration
+      <mat-toolbar class="navbar" color="primary" style="padding:0">
+        Setting
         <span class="spacer"></span>
-        <button mat-icon-button disabled><fa-icon icon="ellipsis-v"></fa-icon></button>
+        <button mat-icon-button [matMenuTriggerFor]="settingMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
       </mat-toolbar>
 
       <mat-nav-list dense class="navlist config-theme" style="padding:0">

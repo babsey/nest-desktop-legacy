@@ -1,12 +1,13 @@
 #container {
   height: 100vh;
+  width: calc(100% - 40px);
+}
+
+#navigation {
+  width: 260px
 }
 
 #navigation-button {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 1000;
   width: 40px;
 }
 
@@ -71,7 +72,6 @@ router-outlet {
     pointer-events: none;
   }
 }
-
 // .mouse-right-click:hover {
 //   display: none;
 // }

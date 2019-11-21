@@ -90,8 +90,8 @@ export class NodeSketchComponent implements OnInit {
       .on('drag', node => {
         this._networkService.resetSelection();
         this._networkSketchService.reset();
-        if (d3.event.x < r || d3.event.x > this.width - r) return
-        if (d3.event.y < r || d3.event.y > this.height - r) return
+        if (d3.event.x < r || d3.event.x > this.width - r - 1) return
+        if (d3.event.y < r || d3.event.y > this.height - r - 1) return
         node['position'].x = d3.event.x;
         node['position'].y = d3.event.y;
       }

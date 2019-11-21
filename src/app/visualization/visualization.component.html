@@ -1,3 +1,26 @@
+<span style="position:absolute;z-index:1000" *ngIf="_visualizationService.hasPositions">
+  <button mat-icon-button
+    (click)="selectVisualizationModus('chart')"
+    [class.active]="_visualizationService.mode=='chart'"
+    matTooltip="View chart"
+    style="border-radius:0"
+    >
+    <span>
+      <fa-icon icon="chart-line"></fa-icon>
+    </span>
+  </button>
+  <button mat-icon-button
+    (click)="selectVisualizationModus('animation')"
+    [class.active]="_visualizationService.mode=='animation'"
+    matTooltip="View animation"
+    style="border-radius:0"
+    >
+    <span>
+      <fa-icon icon="braille"></fa-icon>
+    </span>
+  </button>
+</span>
+
 <ng-container [ngSwitch]="_visualizationService.mode">
   <ng-container *ngSwitchCase="'chart'">
     <app-chart-records [data]="data" [records]="records"></app-chart-records>

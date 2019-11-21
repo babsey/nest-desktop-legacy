@@ -1,5 +1,5 @@
 <ng-container *ngIf="_appConfigService.status.ready">
-  <mat-selection-list class="content config" (selectionChange)="onSelectionChange($event)">
+  <mat-selection-list class="config" (selectionChange)="onSelectionChange($event)" style="padding:0">
     <mat-list-option [selected]="_appConfigService.config['app'].loading" value="loading">Show loading page</mat-list-option>
     <mat-list-option [selected]="_appConfigService.config['app'].autoStart" value="autoStart" [disabled]="!_appConfigService.config['app'].loading">Auto start</mat-list-option>
     <mat-list-option [selected]="_appConfigService.config['app'].log" value="log">Log</mat-list-option>

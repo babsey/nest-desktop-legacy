@@ -2,8 +2,9 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core(); // https://www.sessions.edu/color-calculator/
+@include mat-core();
 
+// https://www.sessions.edu/color-calculator/
 $appSchemeCategory: (
   100: #F7F7F7,
   200: #93B5AD,

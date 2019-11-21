@@ -18,13 +18,16 @@ import { Data } from '../../classes/data';
   providedIn: 'root'
 })
 export class SimulationService {
+  public data: Data;
+  public dataLoaded: boolean = false;
   public db: any;
+  public mode: string = 'details';
+  public sidenavOpened: boolean = false;
+  public version: string;
   public status: any = {
     ready: false,
     valid: false,
   };
-  public mode: string = 'details';
-  public version: string;
 
   constructor(
     private _dataService: DataService,
@@ -35,6 +38,7 @@ export class SimulationService {
     private _simulationProtocolService: SimulationProtocolService,
     private http: HttpClient,
   ) {
+    this.data = this._dataService.newData();
   }
 
   init(): void {
@@ -56,7 +60,7 @@ export class SimulationService {
       if (count == 0) {
         var files = [
           'spatial-spike-activity',
-          'spatial-neurons', 
+          'spatial-neurons',
           'spike-activity',
           'spike-input',
           'current-input',

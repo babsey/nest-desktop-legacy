@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { AnimationControllerService } from './animation/animation-controller/animation-controller.service'
 import { LogService } from '../log/log.service';
+import { SimulationControllerService } from '../simulation/simulation-controller/simulation-controller.service';
 import { VisualizationService } from './visualization.service';
 
 import { Data } from '../classes/data';
@@ -20,6 +21,7 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   constructor(
     private _logService: LogService,
+    private _simulationControllerService: SimulationControllerService,
     public _animationControllerService: AnimationControllerService,
     public _visualizationService: VisualizationService,
   ) {
@@ -66,6 +68,21 @@ export class VisualizationComponent implements OnInit, OnDestroy {
 
   onlyUnique(values: any[], index: number, self): boolean {
     return self.indexOf(values) === index;
+  }
+
+  selectVisualizationModus(mode: string): void {
+    // if (this._visualizationService.mode == mode) {
+    //   this._simulationControllerService.mode = mode
+    // } else {
+    //   if (this._simulationControllerService.mode == 'chart') {
+    //     this._simulationControllerService.mode = 'animation';
+    //   } else if (this._simulationControllerService.mode == 'animation') {
+    //     this._simulationControllerService.mode = 'chart';
+    //   }
+    // }
+    this._simulationControllerService.mode = mode
+    this._visualizationService.mode = mode;
+    this._visualizationService.update.emit()
   }
 
 }

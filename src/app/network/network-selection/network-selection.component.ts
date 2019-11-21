@@ -46,4 +46,8 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
     return this.isSelected(collection.element_type)
   }
 
+  onDataChange(data) {
+    this.dataChange.emit(this.data);
+  }
+
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AppConfigService } from '../config/app-config/app-config.service';
 import { ModelConfigService } from '../model/model-config/model-config.service';
@@ -37,6 +38,7 @@ export class LoadingComponent implements OnInit {
     public _simulationProtocolService: SimulationProtocolService,
     public _simulationService: SimulationService,
     public _visualizationConfigService: VisualizationConfigService,
+    public router: Router,
   ) { }
 
   ngOnInit() {

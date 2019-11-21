@@ -35,6 +35,7 @@
     class="network-sketch">
 
     <g app-background-sketch
+      (dataChange)="onDataChange($event)"
       [(data)]="data"
       [eventTrigger]="eventTrigger"
       [height]="(height-12)"

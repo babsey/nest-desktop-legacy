@@ -96,7 +96,7 @@ export class NodeControllerComponent implements OnInit, OnChanges, OnDestroy {
     let recordedNeurons = this.data.simulation.connectomes.filter(connectome => connectome.source == this.node.idx)
     if (recordedNeurons.length > 0) {
       var collections = this.data.simulation.collections;
-      let recordedNeuron = collections[recordedNeurons[0].post];
+      let recordedNeuron = collections[recordedNeurons[0]['target']];
       this.recordables = this._modelService.config(this.data.simulation.models[recordedNeuron.model].existing).recordables || [];
       if (model.params.hasOwnProperty('record_from')) {
         this.record_from = model.params['record_from'];

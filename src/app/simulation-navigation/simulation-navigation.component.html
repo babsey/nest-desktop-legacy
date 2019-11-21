@@ -1,10 +1,6 @@
 <input #file type="file" style="display:none" (change)="onFileAdded()"/>
 
 <mat-menu #simulationMenu="matMenu" class="context-menu">
-  <button mat-menu-item (click)="newNetwork()">
-    <fa-icon class="menu-icon" icon="plus"></fa-icon>
-    New network
-  </button>
   <button mat-menu-item (click)="selectionList=!selectionList" [class.active]="selectionList">
     <fa-icon class="menu-icon" icon="edit"></fa-icon>
     Select protocols
@@ -38,7 +34,14 @@
           <fa-icon class="icon" icon="search"></fa-icon>
           <span class="searchField">
             <mat-form-field floatLabel="never" style="margin:0 5px">
-              <input matInput [value]="searchTerm" type="text" class="formControl" placeholder="Search simulation" (keyup)="search($event.target.value)" autocomplete="off" />
+              <input matInput
+                (keyup)="search($event.target.value)"
+                [value]="searchTerm"
+                autocomplete="off"
+                class="formControl"
+                placeholder="Search simulation"
+                type="text"
+              />
             </mat-form-field>
           </span>
         </mat-list-item>
@@ -46,19 +49,77 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="false">
-      <mat-toolbar class="navbar" color="primary">
+      <mat-toolbar class="navbar" color="primary" style="padding: 0">
         Simulation
         <span class="spacer"></span>
-        <button mat-icon-button [matMenuTriggerFor]="simulationMenu"><fa-icon icon="ellipsis-v"></fa-icon></button>
+        <button mat-icon-button [matMenuTriggerFor]="simulationMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
       </mat-toolbar>
 
+      <mat-nav-list dense style="padding:0">
+        <mat-list-item (click)="newNetwork()">
+          <fa-icon class="list-icon" icon="plus"></fa-icon>
+          New network
+        </mat-list-item>
+      </mat-nav-list>
+
       <mat-list dense style="padding:0">
+        <mat-list-item>
+          <mat-form-field floatLabel="never" style="width:100%; height:40px">
+            <input matInput
+              (change)="onChange($event)"
+              (keyup)="onChange($event)"
+              [(ngModel)]="_simulationService.data.name"
+              class="formControl"
+              placeholder="Name of the simulation"
+              type="text"
+            />
+            <span matSuffix>
+              <button mat-icon-button
+                (click)="clearSimulationName()"
+                [style.display]="_simulationService.data.name ? '' : 'none'"
+                aria-label="Clear"
+                class="button"
+                >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </span>
+          </mat-form-field>
+          <button mat-icon-button
+            class="list-icon"
+            (click)="save()"
+            matTooltip="Save the current network"
+            [style.display]="displaySaveButton() ? 'inline-block' : 'none'"
+            >
+            <fa-icon icon="save" class="fa-lg"></fa-icon>
+          </button>
+        </mat-list-item>
+
+        <h3 mat-subheader>List of saved simulations</h3>
+
         <mat-list-item class="simulation">
           <span matLine class="flex searchItem">
             <fa-icon class="icon" icon="search"></fa-icon>
             <span style="flex-grow:1">
               <mat-form-field floatLabel="never" style="width:100%">
-                <input matInput type="text" class="formControl" placeholder="Search simulation" (keyup)="search($event.target.value)" autocomplete="off" />
+                <input matInput
+                  (keyup)="search($event.target.value)"
+                  autocomplete="off"
+                  class="formControl"
+                  placeholder="Search simulation"
+                  type="text"
+                />
+                <span matSuffix>
+                  <button mat-icon-button
+                    (click)="search('')"
+                    [style.display]="searchTerm ? '' : 'none'"
+                    aria-label="Clear"
+                    class="button"
+                    >
+                    <fa-icon icon="times"></fa-icon>
+                  </button>
+                </span>
               </mat-form-field>
             </span>
           </span>
@@ -76,7 +137,6 @@
         <ng-container *ngSwitchCase="false">
           <app-simulation-list
             (select)="onSelect($event)"
-            [popover]="_simulationService.mode=='run'"
             [simulations]="filteredSimulations"
             class="simulation-theme"
             ></app-simulation-list>

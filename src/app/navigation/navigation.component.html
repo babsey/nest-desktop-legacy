@@ -1,44 +1,49 @@
 <div class="navigation">
-  <button
-    mat-icon-button
-    color="primary"
-    (click)="toggleSidenav()"
-  ><fa-icon icon="bars"></fa-icon>
-  </button>
-  <div class="simulation-theme module-button">
+  <mat-toolbar style="padding:0; height:40px" color="primary">
     <button mat-icon-button
-      (click)="openSidenav()"
-      [routerLink]="[{ outlets: { nav: ['simulation'] } }]"
-      color="primary"
-      matTooltip="Open an existing or create a new simulation."
-      matTooltipPosition="after"
-      routerLinkActive="mat-fab"
-      >
-      <fa-icon icon="brain"></fa-icon>
+      (click)="toggleSidenav()"
+      style="height:40px">
+      <fa-icon [icon]="this._navigationService.sidenavOpened ? 'chevron-left' : 'chevron-right'"></fa-icon>
     </button>
-  </div>
-  <div class="model-theme module-button">
-    <button mat-icon-button
-      (click)="openSidenav()"
-      [routerLink]="[{ outlets: { nav: ['model'] } }]"
-      color="primary"
-      matTooltip="List of models"
-      matTooltipPosition="after"
-      routerLinkActive="mat-fab"
-      >
-      <fa-icon icon="square-root-alt"></fa-icon>
-    </button>
-  </div>
-  <div class="config-theme module-button">
-    <button mat-icon-button
-      (click)="openSidenav()"
-      [routerLink]="[{ outlets: { nav: ['config'] } }]"
-      color="primary"
-      matTooltip="Configuration"
-      matTooltipPosition="after"
-      routerLinkActive="mat-fab"
-      >
-       <fa-icon icon="cog"></fa-icon>
-     </button>
+  </mat-toolbar>
+  <div style="border-right: 1px solid rgba(0,0,0,0.12);">
+    <div class="simulation-theme">
+      <button mat-icon-button
+        (click)="onClick($event, 'simulation')"
+        [routerLink]="[{ outlets: { nav: ['simulation'] } }]"
+        color="primary"
+        matTooltip="Open an existing or create a new simulation."
+        matTooltipPosition="after"
+        routerLinkActive="mat-mini-fab"
+        [disabled]="!ready"
+        >
+        <fa-icon icon="brain"></fa-icon>
+      </button>
+    </div>
+    <div class="model-theme">
+      <button mat-icon-button
+        (click)="onClick($event, 'model')"
+        [routerLink]="[{ outlets: { nav: ['model'] } }]"
+        color="primary"
+        matTooltip="List of models"
+        matTooltipPosition="after"
+        routerLinkActive="mat-mini-fab"
+        [disabled]="!ready"
+        >
+        <fa-icon icon="square-root-alt"></fa-icon>
+      </button>
+    </div>
+    <div class="config-theme">
+      <button mat-icon-button
+        (click)="onClick($event, 'config')"
+        [routerLink]="[{ outlets: { nav: ['config'] } }]"
+        color="primary"
+        matTooltip="List of setting"
+        matTooltipPosition="after"
+        routerLinkActive="mat-mini-fab"
+        >
+         <fa-icon icon="wrench"></fa-icon>
+       </button>
+     </div>
    </div>
 </div>

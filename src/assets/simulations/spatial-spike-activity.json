@@ -39,8 +39,7 @@
     }],
     "kernel": {
       "time": 0
-    },
-    "visualization": "animation"
+    }
   },
   "simulation": {
     "kernel": {

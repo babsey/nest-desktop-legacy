@@ -17,24 +17,24 @@
 
     <ng-container *ngSwitchCase="false">
 
-      <ng-container *ngIf="connectome.hasOwnProperty('pre')">
+      <ng-container *ngIf="connectome.hasOwnProperty('src_idx')">
         <mat-list dense>
           <mat-list-item>
             <app-array-input-popup
-              [(value)]="connectome['pre']"
-              [options]="preOptions"
+              [(value)]="connectome['src_idx']"
+              [options]="srcIdxOptions"
               style="width:100%"
             ></app-array-input-popup>
           </mat-list-item>
         </mat-list>
       </ng-container>
 
-      <ng-container *ngIf="connectome.hasOwnProperty('post')">
+      <ng-container *ngIf="connectome.hasOwnProperty('tgt_idx')">
         <mat-list dense>
           <mat-list-item>
             <app-array-input-popup
-              [(value)]="connectome['post']"
-              [options]="postOptions"
+              [(value)]="connectome['tgt_idx']"
+              [options]="tgtIdxOptions"
               style="width:100%"
             ></app-array-input-popup>
           </mat-list-item>
@@ -43,7 +43,7 @@
 
       <ng-container *ngIf="!connectSpikeDetector()">
         <mat-list dense>
-          <ng-container *ngIf="!connectome.hasOwnProperty('pre') && !connectome.hasOwnProperty('post')">
+          <ng-container *ngIf="!connectome.hasOwnProperty('src_idx') && !connectome.hasOwnProperty('tgt_idx')">
             <mat-list-item>
               <app-select
                 (selectedChange)="onRuleSelect($event)"
