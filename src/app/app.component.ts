@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
   resolveAuthOpenidcSession(): void {
     var myCookie = this.getCookie("mod_auth_openidc_session");
     if (myCookie == null) {
-      window.location.reload;
+      window.location.reload();
     }
   }
 
