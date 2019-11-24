@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  getCookie(name) {
+  getCookie(name: string): string {
     var cookie = document.cookie;
     var prefix = name + "=";
     var begin = cookie.indexOf("; " + prefix);
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
     return decodeURI(cookie.substring(begin + prefix.length, end));
   }
 
-  resolveAuthOpenidcSession() {
+  resolveAuthOpenidcSession(): void {
     var myCookie = this.getCookie("mod_auth_openidc_session");
     if (myCookie == null) {
       window.location.reload;
