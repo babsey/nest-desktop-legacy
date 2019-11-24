@@ -26,6 +26,8 @@ Requirements
 Step to deploy (in development)
 -------------------------------
 
+First configure OpenID Connect client for NEST Desktop `here <https://collab.humanbrainproject.eu/#/collab/54/nav/1051>`__.
+
 You can copy command line from the web console of ``https://openshift-dev.hbp.eu``.
 
 Login to openshift-dev.hbp.eu:
@@ -77,6 +79,7 @@ Here are the steps how to setup authentication and redirecting to NEST Desktop p
 Before you have to modify the environment for *HBP* authentication,
 i.e. OIDC_CLIENT_ID, OIDC_CLIENT_SECRET and CLUSTER_IP of NEST Desktop
 (which is printed after setting up NEST Desktop).
+
 
 .. code-block:: bash
 
