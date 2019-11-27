@@ -8,6 +8,11 @@
     document.write('<base href="' + document.location + '" />');
   </script>
 
+  <!-- https://stackoverflow.com/questions/53232382/how-to-disable-caching-with-httpclient-get-in-angular-6/53233187 -->
+  <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0">
+  <meta http-equiv="expires" content="0">
+  <meta http-equiv="pragma" content="no-cache">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
