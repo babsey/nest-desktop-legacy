@@ -16,7 +16,9 @@
         <mat-list-item [style.display]="paramDisplay(node, 'n') ? '' : 'None'" >
           <app-node-param
             (valueChange)="onValueChange($event)"
+            [(node)]="node"
             [(value)]="collection.n"
+            [data]="data"
             [options]="_networkConfigService.config['node'].npop"
             view="valueSlider"
           ></app-node-param>
@@ -28,10 +30,10 @@
         <mat-nav-list dense>
           <mat-list-item>
             <app-node-spatial
-              [(node)]="node"
-              [(collection)]="collection"
-              (nodeChange)="onNodeChange($event)"
               (collectionChange)="onCollectionChange($event)"
+              (nodeChange)="onNodeChange($event)"
+              [(collection)]="collection"
+              [(node)]="node"
             ></app-node-spatial>
           </mat-list-item>
         </mat-nav-list>
@@ -45,7 +47,9 @@
           <app-node-param
             (paramHide)="onParamHide($event)"
             (valueChange)="onValueChange($event)"
+            [(node)]="node"
             [(value)]="data.simulation.models[model].params[param.id]"
+            [data]="data"
             [model]="data.simulation.models[model].existing"
             [options]="param"
             [view]="param.input"

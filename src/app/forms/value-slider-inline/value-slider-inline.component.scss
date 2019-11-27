@@ -12,11 +12,12 @@
   height: 40px;
 
   .slider-header {
-    width: 100%;
     position: absolute;
     white-space: nowrap;
-    top: -12px;
     pointer-events: none;
+    height: 16px;
+    line-height: 16px;
+    top: 2px;
   }
 
   .slider-content {

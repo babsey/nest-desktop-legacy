@@ -34,44 +34,17 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (window.location.href.includes('.hbp.eu')) {
-      this.resolveAuthOpenidcSession()
-    }
   }
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  getCookie(name: string): string {
-    var cookie = document.cookie;
-    var prefix = name + "=";
-    var begin = cookie.indexOf("; " + prefix);
-    if (begin == -1) {
-      begin = cookie.indexOf(prefix);
-      if (begin != 0) return null;
-    }
-    else {
-      begin += 2;
-      var end = document.cookie.indexOf(";", begin);
-      if (end == -1) {
-        end = cookie.length;
-      }
-    }
-    // because unescape has been deprecated, replaced with decodeURI
-    //return unescape(dc.substring(begin + prefix.length, end));
-    return decodeURI(cookie.substring(begin + prefix.length, end));
-  }
-
-  resolveAuthOpenidcSession(): void {
-    var myCookie = this.getCookie("mod_auth_openidc_session");
-    if (myCookie == null) {
-      window.location.reload();
-    }
-  }
-
-  onReady(ready: boolean): void {
+  onReadyChange(ready: boolean): void {
     this.ready = ready;
+    if (!ready) {
+      alert('Oops, something went wrong. Please reload the page.')
+    }
   }
 
   advanced(): boolean {

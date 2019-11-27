@@ -7,6 +7,9 @@ import { ModelConfigDialogComponent } from '../../../model/model-config-dialog/m
 import { GeneratorService } from '../../../services/generator/generator.service';
 import { ArrayGeneratorDialogComponent } from '../../../forms/array-generator-dialog/array-generator-dialog.component';
 
+import { Data } from '../../../classes/data';
+import { AppNode } from '../../../classes/appNode';
+
 
 @Component({
   selector: 'app-node-param',
@@ -14,7 +17,9 @@ import { ArrayGeneratorDialogComponent } from '../../../forms/array-generator-di
   styleUrls: ['./node-param.component.scss']
 })
 export class NodeParamComponent implements OnInit {
+  @Input() data: Data;
   @Input() model: string;
+  @Input() node: AppNode;
   @Input() options: any;
   @Input() value: any;
   @Input() view: string;
@@ -65,8 +70,25 @@ export class NodeParamComponent implements OnInit {
     });
   }
 
+  addFactor(): void {
+    if (!this.node.hasOwnProperty('params')) {
+      this.node['params'] = {};
+    }
+
+    this.node['params'][this.options.id] = {
+      factors: ['g'],
+    }
+    this.data.app['factors'] = [
+      {id: 'g', value: 10, options: {value: 10, min: 0, max: 100, label: ' g'}}
+    ]
+  }
+
   hideParam(param: string): void {
     this.paramHide.emit(param)
+  }
+
+  getFactorValue(factor: string): any {
+    return this.data.app.factors.find(f => f.id == factor).value
   }
 
   onValueChange(value: any): void {
@@ -91,6 +113,10 @@ export class NodeParamComponent implements OnInit {
     this.contextMenuPosition.x = event.clientX + 'px';
     this.contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();
+  }
+
+  onFactorClick(factor) {
+    alert(factor)
   }
 
 }

@@ -51,7 +51,9 @@ export class LoadingComponent implements OnInit {
 
     if (this.isReady()) {
       var autoStart = this._appConfigService.config.app.loading ? this._appConfigService.config.app.autoStart : true;
-      setTimeout(() => this.readyChange.emit(autoStart), 100)
+      if (autoStart)  {
+        setTimeout(() => this.readyChange.emit(autoStart), 100)
+      }
     }
   }
 

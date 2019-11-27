@@ -62,6 +62,27 @@ export class SimulationRunService {
 
     this._logService.log('Clean and hash data');
     var data_cleaned = this._dataService.clean(data);
+
+    data.app.nodes.map(node => {
+      var collection = data_cleaned.simulation.collections[node.idx];
+      var simModel = data_cleaned.simulation.models[collection.model];
+      console.log(node.idx, collection, simModel)
+      if (node.hasOwnProperty('params')) {
+        Object.keys(node.params).map(paramKey => {
+          var param = node.params[paramKey];
+          if (param.hasOwnProperty('factors')) {
+            param.factors.map(factor => {
+              var fac = data.app.factors.find(f => f.id == factor);
+
+              if (fac && simModel.params.hasOwnProperty(paramKey) ) {
+                simModel.params[paramKey] = simModel.params[paramKey] * fac.value;
+              }
+            })
+          }
+        })
+      }
+    })
+
     this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     this._logService.log('Request to server');
     this.running = true;

@@ -4,3 +4,14 @@
   line-height: 40px;
   width: 100%;
 }
+
+.mat-chip-list {
+  position: absolute;
+  right: 70px;
+
+  .mat-chip {
+    font-size: 10px;
+    min-height: 20px;
+    z-index: 10;
+  }
+}

@@ -15,7 +15,9 @@
         <mat-list-item style="height:40px;line-height:40px">
           <app-node-param
             (valueChange)="onValueChange($event)"
+            [(node)]="node"
             [(value)]="collection.n"
+            [data]="data"
             [options]="_networkConfigService.config['node'].npop"
             view="valueSlider"
           ></app-node-param>

@@ -19,6 +19,9 @@ export class NetworkControllerComponent implements OnInit {
   @Input() data: Data;
   @Output() appChange: EventEmitter<any> = new EventEmitter();
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
+  public options: any = {
+    min: 0, max: 100, label: 'test',
+  };
 
   constructor(
     private _networkService: NetworkService,
@@ -48,6 +51,10 @@ export class NetworkControllerComponent implements OnInit {
     var connectome = this.data.simulation.connectomes[link.idx];
     var collection = this.data.simulation.collections[connectome.source];
     return this.isSelected(collection.element_type)
+  }
+
+  onValueChange(value: number): void {
+    this.dataChange.emit(this.data)
   }
 
   onNodeChange(node: AppNode): void {

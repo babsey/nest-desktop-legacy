@@ -1,6 +1,7 @@
 <app-navigation
-  id="navigation-button"
+  (readyChange)="onReadyChange($event)"
   [(ready)]="ready"
+  id="navigation-button"
   >
 </app-navigation>
 
@@ -17,6 +18,7 @@
       <ng-container *ngSwitchCase="false">
         <app-loading
         (buttonClick)="ready=true"
+        (readyChange)="onReadyChange($event)"
         [(ready)]="ready"
         [style.display]="_appConfigService.config.app.loading ? '' : 'None'"
         ></app-loading>

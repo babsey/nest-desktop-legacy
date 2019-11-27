@@ -5,6 +5,8 @@ import { MatDialog, MatMenuTrigger } from '@angular/material';
 import { ModelConfigDialogComponent } from '../../../model/model-config-dialog/model-config-dialog.component';
 import { AppService } from '../../../app.service';
 
+import { AppLink } from '../../../classes/appLink';
+
 
 @Component({
   selector: 'app-link-param',
@@ -12,6 +14,7 @@ import { AppService } from '../../../app.service';
   styleUrls: ['./link-param.component.scss']
 })
 export class LinkParamComponent implements OnInit {
+  @Input() link: AppLink;
   @Input() random: boolean = true;
   @Input() options: any;
   @Input() value: any;
@@ -33,12 +36,26 @@ export class LinkParamComponent implements OnInit {
     this.valueChange.emit(this.value);
   }
 
+  addFactor(): void {
+    if (!this.link.hasOwnProperty('params')) {
+      this.link['params'] = {};
+    }
+
+    this.link['params'][this.options.id] = {
+      factors: ['g'],
+    }
+  }
+
   setRandom(): void {
     this.value = { parametertype: 'constant', specs: { value: this.value } };
   }
 
   isNumber(): boolean {
     return typeof this.value == 'number';
+  }
+
+  onFactorClick(factor) {
+    alert(factor)
   }
 
   onValueChange(value: any): void {

@@ -25,5 +25,24 @@
         [style.display]="isSelectedSource(link) ? '': 'None'"
       ></app-link-controller>
     </ng-container>
+
+
+    <ng-container *ngIf="data.app.hasOwnProperty('factors')">
+      <mat-divider></mat-divider>
+      <mat-list dense>
+        <h3 mat-subheader>Factor</h3>
+
+          <ng-container *ngFor="let factor of data.app['factors']">
+            <mat-list-item>
+              <app-value-slider-inline
+                (valueChange)="onValueChange($event)"
+                [(value)]="factor.value"
+                [options]="factor.options"
+                class="list-item"
+              ></app-value-slider-inline>
+            </mat-list-item>
+          </ng-container>
+      </mat-list>
+    </ng-container>
   </div>
 </ng-container>

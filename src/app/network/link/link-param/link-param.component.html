@@ -14,6 +14,9 @@
   <button mat-menu-item (click)="setRandom()" *ngIf="random">
     <fa-icon class="menu-icon" icon="dice"></fa-icon> Set random mode
   </button>
+  <button mat-menu-item (click)="addFactor()">
+    <fa-icon class="menu-icon" icon="times"></fa-icon> Add variable
+  </button>
   <!-- <ng-container *ngIf="model">
     <button mat-menu-item (click)="openConfigDialog()">
       <fa-icon class="menu-icon" icon="sliders-h"></fa-icon> Configure sliders
@@ -32,6 +35,15 @@
   >
   <ng-container [ngSwitch]="isNumber()">
     <ng-container *ngSwitchCase="true">
+      <ng-container *ngIf="link.hasOwnProperty('params')">
+        <mat-chip-list>
+          <ng-container *ngIf="link.params.hasOwnProperty(options.id)">
+            <ng-container *ngFor="let factor of link.params[options.id]['factors']">
+              <mat-chip title="{{factor}}" (click)="onFactorClick(factor)">{{ factor }}</mat-chip>
+            </ng-container>
+          </ng-container>
+        </mat-chip-list>
+      </ng-container>
       <app-value-slider-inline
         (valueChange)="onValueChange($event)"
         [value]="value"
