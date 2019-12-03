@@ -47,31 +47,14 @@ app-root {
 }
 
 .button-toolbar {
-  // position: absolute;
-  // top: 40px;
-  // right: 337px;
   width: 40px;
   overflow: hidden;
   z-index: 1000;
-  // padding: 0 0 12px 8px;
 
   button {
     border-radius: 0;
     height: 64px;
-  }
-
-  .mat-icon-button {
-    opacity: 0.25;
-  }
-
-  .mat-fab {
-    opacity: 1;
-  }
-}
-
-.button-toolbar:hover {
-  .mat-icon-button {
-    opacity: 0.75;
+    color: 0.87;
   }
 }
 

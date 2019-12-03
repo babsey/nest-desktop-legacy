@@ -46,7 +46,7 @@
     </button>
     <button mat-icon-button
       (click)="selectController('selection')"
-      [class.mat-fab]="mode=='selection'"
+      [class.mat-fab]="_simulationService.sidenavOpened && mode=='selection'"
       matTooltip="Network selection"
       matTooltipPosition="before"
       class="app-button"
@@ -55,7 +55,7 @@
     </button>
     <button mat-icon-button
       (click)="selectController('sketch')"
-      [class.mat-fab]="mode=='sketch'"
+      [class.mat-fab]="_simulationService.sidenavOpened && mode=='sketch'"
       matTooltip="Sketch settings"
       matTooltipPosition="before"
       class="app-button"

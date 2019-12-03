@@ -42,11 +42,11 @@
     <button mat-icon-button
       (click)="toggleSidenav()"
       style="height:40px">
-      <fa-icon [icon]="this._simulationService.sidenavOpened ? 'chevron-right' : 'chevron-left'"></fa-icon>
+      <fa-icon [icon]="_simulationService.sidenavOpened ? 'chevron-right' : 'chevron-left'"></fa-icon>
     </button>
     <button mat-icon-button
       (click)="selectControllerMode('network')"
-      [class.mat-fab]="_simulationControllerService.mode=='network'"
+      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='network'"
       matTooltip="Network settings"
       matTooltipPosition="before"
       class="app-button"
@@ -55,7 +55,7 @@
     </button>
     <button mat-icon-button
       (click)="selectControllerMode('simulation')"
-      [class.mat-fab]="_simulationControllerService.mode=='simulation'"
+      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='simulation'"
       matTooltip="Simulation settings"
       matTooltipPosition="before"
       class="app-button"
@@ -68,7 +68,7 @@
     </button>
     <button mat-icon-button *ngIf="_visualizationService.mode=='chart'"
       (click)="selectControllerMode('chart')"
-      [class.mat-fab]="_simulationControllerService.mode=='chart'"
+      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='chart'"
       matTooltip="Chart settings"
       matTooltipPosition="before"
       class="app-button"
@@ -80,7 +80,7 @@
     </button>
     <button mat-icon-button *ngIf="_visualizationService.mode=='animation'"
       (click)="selectControllerMode('animation')"
-      [class.mat-fab]="_simulationControllerService.mode=='animation'"
+      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='animation'"
       matTooltip="Animation settings"
       matTooltipPosition="before"
       class="app-button"
@@ -93,7 +93,7 @@
     </button>
     <button mat-icon-button
       (click)="selectControllerMode('stats')"
-      [class.mat-fab]="_simulationControllerService.mode=='stats'"
+      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='stats'"
       matTooltip="Simulation stats"
       matTooltipPosition="before"
       class="app-button"
