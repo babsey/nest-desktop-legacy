@@ -71,7 +71,7 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this.connectome = this.connectomes[this.link.idx];
 
     if (!this.hasProjections()) {
-      this.validate()
+      this._networkService.cleanConnectome(this.connectome)
       var connectionConfig = this._networkConfigService.config.connection;
       this.connRules = connectionConfig.specs.map(spec => { return { value: spec.rule, label: spec.label } });
       var connRule = this.connectome.hasOwnProperty('conn_spec') ? this.connectome.conn_spec.rule || 'all_to_all' : 'all_to_all';
@@ -82,23 +82,6 @@ export class LinkControllerComponent implements OnInit, OnChanges {
       var synModel = this.connectome.hasOwnProperty('syn_spec') ? this.connectome.syn_spec.model || 'static_synapse' : 'static_synapse';
       this.synModel = this._modelService.config(synModel);
       this.slider.synapse = this.synModel['params'] || [];
-    }
-  }
-
-  validate(): void {
-    if (this.connectome.conn_spec == undefined) {
-      this.connectome.conn_spec = { rule: 'all_to_all' };
-    } else if (typeof this.connectome.conn_spec == 'string') {
-      this.connectome.conn_spec = { rule: this.connectome.conn_spec }
-    }
-    if (this.connectome.syn_spec == undefined) {
-      this.connectome.syn_spec = { model: 'static_synapse', weight: 1, delay: 1 };
-    } else if (typeof this.connectome.syn_spec == 'string') {
-      this.connectome.syn_spec = { model: this.connectome.syn_spec, weight: 1, delay: 1 };
-    } else if (typeof this.connectome.syn_spec == 'object') {
-      this.connectome.syn_spec['model'] = this.connectome.syn_spec['model'] || 'static_synapse';
-      this.connectome.syn_spec['weight'] = this.connectome.syn_spec['weight'] != undefined ? this.connectome.syn_spec['weight'] : 1.;
-      this.connectome.syn_spec['delay'] = this.connectome.syn_spec['delay'] || 1.;
     }
   }
 

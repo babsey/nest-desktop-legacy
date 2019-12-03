@@ -31,6 +31,7 @@ export class NodeMenuComponent implements OnInit, OnChanges {
   public model: string;
   public models: any[] = [];
   public nodes: AppNode[] = [];
+  public isRecorder: boolean = false;
 
   constructor(
     private _colorService: ColorService,
@@ -59,6 +60,7 @@ export class NodeMenuComponent implements OnInit, OnChanges {
     this.models = models.map(model => { return { value: model, label: this._modelService.config(model).label } });
     var simModel = this.data.simulation.models[this.model];
     this.configModel = this._modelService.config(simModel.existing);
+    this.isRecorder = this.data.simulation.collections[this.node.idx].element_type == 'recorder';
   }
 
   color(): string {
@@ -71,6 +73,7 @@ export class NodeMenuComponent implements OnInit, OnChanges {
     } else {
       this.node['color'] = color;
     }
+    this._networkService.cleanRecColor(this.data)
     this.nodeChange.emit(this.node)
   }
 
@@ -113,32 +116,11 @@ export class NodeMenuComponent implements OnInit, OnChanges {
   }
 
   deleteNode(): void {
-    this.data.app.nodes = this.data.app.nodes.filter((node, idx) => idx != this.node.idx);
-    this.data.simulation.collections = this.data.simulation.collections.filter((node, idx) => idx != this.node.idx);
-    this.data.app.nodes.forEach((node, idx) => node.idx = idx)
-
-    var links = this.data.app.links.filter(link => {
-      var connectome = this.data.simulation.connectomes[link.idx];
-      return connectome.source != this.node.idx && connectome.target != this.node.idx;
-    });
-    if (links.length != this.data.simulation.connectomes.length) {
-      links.forEach((link, idx) => link.idx = idx)
-      this.data.app.links = links;
-      var connectomes = this.data.simulation.connectomes.filter(connectome => connectome.source != this.node.idx && connectome.target != this.node.idx);
-      connectomes.forEach(connectome => {
-        connectome.source = connectome.source > this.node.idx ? connectome.source - 1 : connectome.source;
-        connectome.target = connectome.target > this.node.idx ? connectome.target - 1 : connectome.target;
-      })
-      this.data.simulation.connectomes = connectomes;
-    }
-
     this._networkService.resetSelection();
     this._networkSketchService.reset();
+    this._networkService.deleteNode(this.data, this.node);
+    this._networkService.clean(this.data);
     this.dataChange.emit(this.data)
-  }
-
-  isRecorder(): boolean {
-    return this.data.simulation.collections[this.node.idx].element_type == 'recorder';
   }
 
   hasRecords(): boolean {

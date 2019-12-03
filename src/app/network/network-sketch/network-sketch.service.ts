@@ -18,6 +18,7 @@ export class NetworkSketchService {
     link: null,
   }
   public keyDown: string = '';
+  public connect: boolean = false;
 
   constructor(
     public _networkConfigService: NetworkConfigService,

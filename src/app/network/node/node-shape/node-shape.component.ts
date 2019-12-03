@@ -7,12 +7,13 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./node-shape.component.scss']
 })
 export class NodeShapeComponent implements OnInit {
-  @Input() color: string = 'black';
   @Input() elementType: string = 'neuron';
   @Input() idx: any;
+  @Input() fillColor: string = 'white';
   @Input() selected: boolean = false;
   @Input() spatial: boolean = false;
   @Input() radius: number = 15;
+  @Input() strokeColor: string = 'black';
   @Input() strokeWidth: number = 2.5;
   @Input() labelSize: number = 12;
   private labels: string = 'abcdefghijklmnopqrstuvwxyz';

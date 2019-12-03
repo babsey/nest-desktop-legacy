@@ -58,7 +58,7 @@ export class MathService {
   }
 
   deviation(values: number[]): number {
-    return d3.mean(values)
+    return d3.deviation(values)
   }
 
 }

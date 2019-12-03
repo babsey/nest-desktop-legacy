@@ -4,7 +4,8 @@
       <svg:polygon
         class="node"
         [attr.points]="layer()"
-        [style.stroke]="color"
+        [style.fill]="fillColor"
+        [style.stroke]="strokeColor"
         [style.stroke-dasharray]="selected ? '7.85' : ''"
         [style.stroke-width.px]="strokeWidth"
         ></svg:polygon>
@@ -16,7 +17,8 @@
           <svg:circle
             class="node circle"
             [attr.r]="radius"
-            [style.stroke]="color"
+            [style.fill]="fillColor"
+            [style.stroke]="strokeColor"
             [style.stroke-dasharray]="selected ? '7.85' : ''"
             [style.stroke-width.px]="strokeWidth"
           ></svg:circle>
@@ -26,7 +28,8 @@
           <svg:polygon
             class="node triangle"
             [attr.points]="triangle()"
-            [style.stroke]="color"
+            [style.fill]="fillColor"
+            [style.stroke]="strokeColor"
             [style.stroke-dasharray]="selected ? '7.85' : ''"
             [style.stroke-width.px]="strokeWidth"
           ></svg:polygon>
@@ -36,7 +39,8 @@
           <svg:polygon
             class="node square"
             [attr.points]="square()"
-            [style.stroke]="color"
+            [style.fill]="fillColor"
+            [style.stroke]="strokeColor"
             [style.stroke-dasharray]="selected ? '7.85' : ''"
             [style.stroke-width.px]="strokeWidth"
           ></svg:polygon>

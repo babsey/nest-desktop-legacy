@@ -1,6 +1,12 @@
 <input #file type="file" style="display:none" (change)="onFileAdded()"/>
 
 <mat-menu #simulationMenu="matMenu" class="context-menu">
+  <mat-checkbox
+    [(ngModel)]="quickview"
+    class="mat-menu-item menu-item"
+    >
+    Popup protocol quickview
+  </mat-checkbox>
   <button mat-menu-item (click)="selectionList=!selectionList" [class.active]="selectionList">
     <fa-icon class="menu-icon" icon="edit"></fa-icon>
     Select protocols
@@ -137,6 +143,7 @@
         <ng-container *ngSwitchCase="false">
           <app-simulation-list
             (select)="onSelect($event)"
+            [quickview]="quickview"
             [simulations]="filteredSimulations"
             class="simulation-theme"
             ></app-simulation-list>

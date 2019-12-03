@@ -24,6 +24,7 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
   public selectionList: boolean = false;
   public simulations: Data[];
   public fileReader = new FileReader();
+  public quickview: boolean = false;
 
   constructor(
     private _networkSketchService: NetworkSketchService,

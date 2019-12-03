@@ -28,13 +28,21 @@
       (valueChange)="onValueChange($event)"
     ></app-value-slider-inline>
   </mat-list-item>
-  
+
   <mat-list-item>
     <app-value-slider-inline
       [options]="_networkConfigService.config.sketch.node.strokeWidth"
       [(value)]="_networkConfigService.config.sketch.node.strokeWidth.value"
       (valueChange)="onValueChange($event)"
     ></app-value-slider-inline>
+  </mat-list-item>
+
+  <mat-list-item>
+    <mat-checkbox
+      [(ngModel)]="_networkConfigService.config.color.autoColorRec"
+      >
+      Auto colorize recorder
+    </mat-checkbox>
   </mat-list-item>
 
   <mat-list-item mat-subheader>

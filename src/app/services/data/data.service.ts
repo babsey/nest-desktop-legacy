@@ -46,13 +46,9 @@ export class DataService {
     // console.log('Clean data')
     var newData = JSON.parse(JSON.stringify(data))
     this.deleteGlobalIds(newData);
-    this.validate(newData);
-    newData['hash'] = this.hash(newData);
+    this.cleanKernel(newData);
+    this.hash(newData);
     return newData;
-  }
-
-  hash(data: Data): string {
-    return objectHash(data.simulation);
   }
 
   deleteGlobalIds(data: Data): void {
@@ -63,30 +59,15 @@ export class DataService {
     })
   }
 
-  validate(data: Data): void {
-    this.validateKernel(data)
-    this.validateModels(data)
-  }
-
-  validateKernel(data: Data): void {
+  cleanKernel(data: Data): void {
     data.app['kernel'] = { time: 0 };
     if (!data.simulation.kernel.hasOwnProperty('resolution')) {
       data.simulation.kernel['resolution'] = 0.1;
     }
   }
 
-  validateModels(data: Data): void {
-    var simModels = data.simulation.models;
-    var appModels = data.app.models;
-    data.simulation.models = {};
-    data.app.models = {};
-    data.app.nodes.forEach(node => {
-      var collection = data.simulation.collections[node.idx];
-      var newName = collection.element_type + '-' + node.idx;
-      data.simulation.models[newName] = simModels[collection.model];
-      collection['model'] = newName;
-      data.app.models[newName] = appModels[collection.model];
-    })
+  hash(data: Data): void {
+    data['hash'] = objectHash(data.simulation);
   }
 
 }

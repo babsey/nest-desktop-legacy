@@ -3,7 +3,6 @@ import { Component, OnInit, Input, ElementRef, OnDestroy, OnChanges, Output, Eve
 import * as d3 from 'd3';
 
 import { ColorService } from '../../services/color.service';
-import { DataService } from '../../../services/data/data.service';
 import { NetworkService } from '../../services/network.service';
 import { NetworkSketchService } from '../network-sketch.service';
 
@@ -29,7 +28,6 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private _colorService: ColorService,
-    private _dataService: DataService,
     private _networkService: NetworkService,
     private _networkSketchService: NetworkSketchService,
     private elementRef: ElementRef,
@@ -159,7 +157,6 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
   create(elementType: string, point: number[]): void {
     // console.log('Create node')
     this._networkService.create(this.data, elementType, point);
-    this.data['hash'] = this._dataService.hash(this.data);
     this.dataChange.emit(this.data);
   }
 

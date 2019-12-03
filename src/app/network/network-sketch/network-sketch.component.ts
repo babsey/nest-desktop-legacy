@@ -72,7 +72,7 @@ export class NetworkSketchComponent implements OnInit {
     if (this.data == undefined) return
     // console.log('History')
     var data_cleaned = this._dataService.clean(this.data);
-    this._networkService.validate(data_cleaned);
+    this._networkService.clean(data_cleaned);
     if (this.idx < (this.dataStack.length - 1)) {
       this.dataStack = this.dataStack.slice(0, this.idx + 1);
     }
@@ -83,14 +83,14 @@ export class NetworkSketchComponent implements OnInit {
   undo(): void {
     this.idx = (this.idx == 0) ? 0 : this.idx - 1;
     this.data = this._dataService.clean(this.dataStack[this.idx]);
-    this._networkService.validate(this.data);
+    this._networkService.clean(this.data);
     this.dataChange.emit(this.data)
   }
 
   redo(): void {
     this.idx = (this.idx == this.dataStack.length - 1) ? this.dataStack.length - 1 : this.idx + 1;
     this.data = this._dataService.clean(this.dataStack[this.idx]);
-    this._networkService.validate(this.data);
+    this._networkService.clean(this.data);
     this.dataChange.emit(this.data)
   }
 
@@ -105,10 +105,6 @@ export class NetworkSketchComponent implements OnInit {
         this.dataChange.emit(this.data)
       }
     });
-  }
-
-  colorNode(node: AppNode): string {
-    return this._colorService.node(node);
   }
 
   colorLink(link: AppLink): string {
@@ -139,7 +135,8 @@ export class NetworkSketchComponent implements OnInit {
     var nodeSelected = this._networkService.selected.node;
     if (this.eventTrigger && nodeSelected) {
       var color = this._colorService.node(nodeSelected);
-      this._networkSketchService.dragLine(nodeSelected.position, node.position, color, true)
+      this._networkSketchService.connect = true;
+      this._networkSketchService.dragLine(nodeSelected.position, node.position, color, true);
     }
   }
 

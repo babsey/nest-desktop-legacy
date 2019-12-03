@@ -21,7 +21,7 @@
     <button mat-button (click)="selectNode(connectome.source)" style="width:33.3%;; height:40px">
       <svg width="64" height="64" style="margin-top:-6px">
         <g app-node-shape
-          [color]="color('source')"
+          [strokeColor]="color('source')"
           [elementType]="collection(connectome.source).element_type"
           [idx]="connectome.source"
           [spatial]="isSpatial(connectome.source)"
@@ -47,7 +47,7 @@
         <svg width="64" height="64" style="margin-top:-6px">
           <g app-node-shape
             (click)="selectNode(connectome.target)"
-            [color]="color('target')"
+            [strokeColor]="color('target')"
             [elementType]="collection(connectome.target).element_type"
             [idx]="connectome.target"
             [spatial]="isSpatial(connectome.target)"

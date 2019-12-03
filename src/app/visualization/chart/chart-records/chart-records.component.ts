@@ -171,6 +171,10 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         }
       }
     })
+    if (this.layout.yaxis2.hasOwnProperty('range')) {
+      this.layout.yaxis2.range[0] -= 1;
+      this.layout.yaxis2.range[1] += 1;
+    }
     this._logService.log('Render charts');
   }
 
@@ -194,8 +198,13 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     this.plotlyData.push(scatterData);
     this.plotlyData.push(histData);
 
-    var range = this._mathService.extent(record.global_ids);
-    this.layout.yaxis2['range'] = [range[0] - 1, range[1] + 1];
+    var global_ids: number[];
+    if (this.layout.yaxis2.hasOwnProperty('range')) {
+      global_ids = this.layout.yaxis2['range'].concat(record['global_ids']);
+    } else {
+      global_ids = record['global_ids'];
+    }
+    this.layout.yaxis2['range'] = this._mathService.extent(global_ids);
   }
 
   plotAnalogData(record: Record, record_from: string = 'V_m'): void {

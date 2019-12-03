@@ -82,7 +82,7 @@ export class SimulationService {
       simulations.map(simulation => {
         simulation['version'] = environment.VERSION;
         let simulation_cleaned = this._dataService.clean(simulation);
-        this._networkService.validate(simulation_cleaned);
+        this._networkService.clean(simulation_cleaned);
         simulations.push(simulation_cleaned);
         this._dbService.db.create(this.db, simulation_cleaned)
       })
@@ -112,7 +112,7 @@ export class SimulationService {
   save(data: Data): void {
     // console.log('Save simulation')
     let data_cleaned = this._dataService.clean(data);
-    this._networkService.validate(data_cleaned);
+    this._networkService.clean(data_cleaned);
     return this.count().then(count => {
       if (count == 0) {
         return this._dbService.db.create(this.db, data_cleaned)

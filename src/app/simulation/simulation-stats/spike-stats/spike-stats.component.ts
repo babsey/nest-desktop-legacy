@@ -51,7 +51,7 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
     });
     var stats: SpikeStatsElement[] = record.global_ids.map(id => {
       var isi = this.isi(times[id]);
-      var isi_mean = isi.length > 0 ? this._mathService.mean(isi) : 0;
+      var isi_mean = isi.length > 1 ? this._mathService.mean(isi) : 0;
       var isi_std = isi.length > 1 ? this._mathService.deviation(isi) : 0;
       return {
         id: id,

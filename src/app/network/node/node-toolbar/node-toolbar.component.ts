@@ -99,7 +99,7 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     if (this.collection().element_type == 'recorder') {
       this._networkService.recorderChanged = true;
     }
-    this._networkService.validate(this.data, false)
+    this._networkService.clean(this.data, false)
     this.dataChange.emit(this.data)
   }
 

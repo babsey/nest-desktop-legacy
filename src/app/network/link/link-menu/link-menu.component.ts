@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { ColorService } from '../../services/color.service';
+import { NetworkService } from '../../services/network.service';
 
 import { Data } from '../../../classes/data';
 import { AppLink } from '../../../classes/appLink';
@@ -20,9 +21,11 @@ export class LinkMenuComponent implements OnInit {
 
   constructor(
     private _colorService: ColorService,
+    private _networkService: NetworkService,
   ) { }
 
   ngOnInit() {
+
   }
 
   hasConnectomeProperty(key: string): boolean {
@@ -49,7 +52,7 @@ export class LinkMenuComponent implements OnInit {
 
   resetParameters(): void {
     let connectome = this.data.simulation.connectomes[this.link.idx];
-    if (this.hasConnectomeProperty('projections')) {
+    if (connectome.hasOwnProperty('projections')) {
       var projections = this.connectome.projections;
       projections.weights = 1;
       projections.delays = 1;
@@ -91,9 +94,8 @@ export class LinkMenuComponent implements OnInit {
   }
 
   deleteLink(): void {
-    this.data.simulation.connectomes = this.data.simulation.connectomes.filter((connectome, idx) => idx != this.link.idx);
-    this.data.app.links = this.data.app.links.filter(link => link.idx != this.link.idx);
-    this.data.app.links.forEach((link, idx) => link.idx = idx)
+    this._networkService.deleteLink(this.data, this.link);
+    this._networkService.clean(this.data);
     this.dataChange.emit(this.data)
   }
 

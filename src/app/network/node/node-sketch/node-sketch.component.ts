@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@ang
 
 import * as d3 from 'd3';
 
-import { DataService } from '../../../services/data/data.service';
+import { ColorService } from '../../services/color.service';
 import { NetworkService } from '../../services/network.service';
 import { NetworkConfigService } from '../../network-config/network-config.service';
 import { NetworkSketchService } from '../../network-sketch/network-sketch.service';
@@ -20,7 +20,6 @@ import { SimConnectome } from '../../../classes/simConnectome';
   styleUrls: ['./node-sketch.component.scss'],
 })
 export class NodeSketchComponent implements OnInit {
-  @Input() color: string;
   @Input() data: Data;
   @Input() dragable: boolean;
   @Input() eventTrigger: boolean = true;
@@ -33,7 +32,7 @@ export class NodeSketchComponent implements OnInit {
   public collection: SimCollection;
 
   constructor(
-    private _dataService: DataService,
+    private _colorService: ColorService,
     private _networkService: NetworkService,
     private _networkConfigService: NetworkConfigService,
     private _networkSketchService: NetworkSketchService,
@@ -66,21 +65,31 @@ export class NodeSketchComponent implements OnInit {
     return this._networkConfigService.config.sketch.node.strokeWidth.value;
   }
 
+  strokeColor(): string {
+    return this._colorService.node(this.node);
+  }
+
+  fillColor(): string {
+    // var color = this._colorService.node(this.node);
+    // return d3.color(color).brighter(1.2);
+    return 'white';
+  }
+
   connect(): void {
     this._networkService.connect(this.data, this.selected, this.node);
-    this.data['hash'] = this._dataService.hash(this.data);
     this.dataChange.emit(this.data);
   }
 
   onClick(event: MouseEvent): void {
     // console.log('Click node')
-    if (this.eventTrigger && this.selected && this._networkSketchService.focused.node) {
+    if (this.eventTrigger && this.selected && this._networkSketchService.focused.node && this._networkSketchService.connect) {
       this.connect();
       if (this._networkSketchService.keyDown == '17') return
       this._networkService.resetSelection();
     } else {
       this._networkService.selectNode(this.node);
     }
+    this._networkSketchService.connect = false;
   }
 
   dragHandler(): any {

@@ -61,7 +61,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     if (id) {
       this._simulationService.load(id).then(doc => {
         this._simulationService.data = this._dataService.clean(doc);
-        this._networkService.validate(this._simulationService.data);
+        this._networkService.clean(this._simulationService.data);
         this._networkService.update.emit(this._simulationService.data);
         this._simulationService.dataLoaded = true;
         if (this.router.url.includes('run')) {
@@ -80,7 +80,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   run(force: boolean = false): void {
     this._simulationService.mode = 'playground';
-    this._networkService.validate(this._simulationService.data);
+    this._networkService.clean(this._simulationService.data);
     this._simulationRunService.run(this._simulationService.data, force)
   }
 

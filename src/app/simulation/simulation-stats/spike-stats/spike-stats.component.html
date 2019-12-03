@@ -15,7 +15,7 @@
     <!-- Count Column -->
     <ng-container matColumnDef="count">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Count </th>
-      <td mat-cell *matCellDef="let element"> {{element.count}} </td>
+      <td mat-cell *matCellDef="let element"> {{ element.count }} </td>
       <td mat-footer-cell *matFooterCellDef> &Sigma; = {{ sum('count') }} </td>
     </ng-container>
 

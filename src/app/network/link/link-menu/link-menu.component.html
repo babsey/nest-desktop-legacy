@@ -7,29 +7,31 @@
     <fa-icon class="menu-icon" icon="eraser"></fa-icon> Reset parameters
   </button>
 
-  <ng-container [ngSwitch]="hasConnectomeProperty('src_idx')">
-    <ng-container *ngSwitchCase="true">
-      <button mat-menu-item class="menu-item" (click)="allSources()">
-        <fa-icon class="menu-icon" icon="random"></fa-icon> Set all sources
-      </button>
+  <ng-container *ngIf="data.simulation.connectomes[link.idx]">
+    <ng-container [ngSwitch]="data.simulation.connectomes[link.idx].hasOwnProperty('src_idx')">
+      <ng-container *ngSwitchCase="true">
+        <button mat-menu-item class="menu-item" (click)="allSources()">
+          <fa-icon class="menu-icon" icon="random"></fa-icon> Set all sources
+        </button>
+      </ng-container>
+      <ng-container *ngSwitchCase="false">
+        <button mat-menu-item class="menu-item" (click)="customSources()">
+          <fa-icon class="menu-icon" icon="random"></fa-icon> Set custom sources
+        </button>
+      </ng-container>
     </ng-container>
-    <ng-container *ngSwitchCase="false">
-      <button mat-menu-item class="menu-item" (click)="customSources()">
-        <fa-icon class="menu-icon" icon="random"></fa-icon> Set custom sources
-      </button>
-    </ng-container>
-  </ng-container>
 
-  <ng-container [ngSwitch]="hasConnectomeProperty('tgt_idx')">
-    <ng-container *ngSwitchCase="true">
-      <button mat-menu-item class="menu-item" (click)="allTargets()">
-        <fa-icon class="menu-icon" icon="random"></fa-icon> Set all targets
-      </button>
-    </ng-container>
-    <ng-container *ngSwitchCase="false">
-      <button mat-menu-item class="menu-item" (click)="customTargets()">
-        <fa-icon class="menu-icon" icon="random"></fa-icon> Set custom targets
-      </button>
+    <ng-container [ngSwitch]="data.simulation.connectomes[link.idx].hasOwnProperty('tgt_idx')">
+      <ng-container *ngSwitchCase="true">
+        <button mat-menu-item class="menu-item" (click)="allTargets()">
+          <fa-icon class="menu-icon" icon="random"></fa-icon> Set all targets
+        </button>
+      </ng-container>
+      <ng-container *ngSwitchCase="false">
+        <button mat-menu-item class="menu-item" (click)="customTargets()">
+          <fa-icon class="menu-icon" icon="random"></fa-icon> Set custom targets
+        </button>
+      </ng-container>
     </ng-container>
   </ng-container>
 

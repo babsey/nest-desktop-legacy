@@ -14,10 +14,10 @@ import { Data } from '../../classes/data';
   styleUrls: ['./simulation-list.component.scss']
 })
 export class SimulationListComponent implements OnInit {
+  @Input() quickview: boolean = false;
   @Input() simulations: Data[];
   @Output() select: EventEmitter<any> = new EventEmitter();
   public focused: Data;
-  public quickview: boolean = false;
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -54,10 +54,6 @@ export class SimulationListComponent implements OnInit {
 
   downloadSimulation(): void {
     this.select.emit({ mode: 'download', selected: [this.focused['_id']] })
-  }
-
-  toggleQuickView(event: MouseEvent): void {
-    this.quickview = !this.quickview;
   }
 
   onMouseOut(event: MouseEvent): void {

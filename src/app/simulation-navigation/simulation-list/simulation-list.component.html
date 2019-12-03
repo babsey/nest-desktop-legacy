@@ -7,13 +7,6 @@
 
 <mat-menu #simulationMenu="matMenu" class="context-menu">
   <!-- <mat-toolbar class="ellipsis">{{ focused.name }}</mat-toolbar> -->
-  <mat-checkbox
-    (change)="toggleQuickView($event)"
-    [checked]="quickview"
-    class="mat-menu-item menu-item"
-    >
-    Quickview
-  </mat-checkbox>
   <button mat-menu-item class="menu-item" (click)="downloadSimulation()">
     <fa-icon class="menu-icon" icon="download"></fa-icon> Download
   </button>

@@ -66,7 +66,6 @@ export class SimulationRunService {
     data.app.nodes.map(node => {
       var collection = data_cleaned.simulation.collections[node.idx];
       var simModel = data_cleaned.simulation.models[collection.model];
-      console.log(node.idx, collection, simModel)
       if (node.hasOwnProperty('params')) {
         Object.keys(node.params).map(paramKey => {
           var param = node.params[paramKey];
@@ -103,8 +102,12 @@ export class SimulationRunService {
     },
       error => {
         this.running = false;
+        if (this.snackBarRef) {
+          this.snackBarRef.dismiss();
+        }
         console.log(error['error'])
-        this.snackBarRef = this.snackBar.open('Simulation failed. NEST Server not found. Please check the configuration.', 'Ok');
+        alert('Oops, something went wrong with NEST Server.')
+        // this.snackBarRef = this.snackBar.open('Simulation failed. NEST Server not found. Please check the configuration.', 'Ok');
       }
     )
   }

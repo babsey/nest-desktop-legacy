@@ -67,7 +67,7 @@ export class SimulationProtocolService {
   save(data: Data, reload: boolean = false): void {
     // console.log('Save protocol')
     let data_cleaned = this._dataService.clean(data);
-    this._networkService.validate(data_cleaned);
+    this._networkService.clean(data_cleaned);
     this.count().then(count => {
       if (count == 0) {
         if ('_id' in data_cleaned) {

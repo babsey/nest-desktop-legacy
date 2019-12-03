@@ -105,7 +105,7 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
       this.records = [];
       this._networkService.recorderChanged = false;
     }
-    this._networkService.validate(this.data);
+    this._networkService.clean(this.data);
     this._simulationRunService.run(this.data, force)
   }
 
