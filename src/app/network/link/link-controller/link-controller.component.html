@@ -57,10 +57,11 @@
             <mat-list-item
               [style.display]="paramDisplay('conn_spec.' + conn.id) ? '' : 'none'">
               <app-link-param
-                [random]="false"
                 (valueChange)="onValueChange($event)"
                 [(value)]="connectome.conn_spec[conn.id]"
+                [link]="link"
                 [options]="conn"
+                [random]="false"
               ></app-link-param>
             </mat-list-item>
           </ng-container>
@@ -83,11 +84,11 @@
             <mat-list-item
               [style.display]="paramDisplay('syn_spec.' + syn.id) ? '' : 'none'">
               <app-link-param
-                [link]="link"
-                [random]="false"
                 (valueChange)="onValueChange($event)"
                 [(value)]="connectome.syn_spec[syn.id]"
+                [link]="link"
                 [options]="syn"
+                [random]="false"
               ></app-link-param>
             </mat-list-item>
           </ng-container>

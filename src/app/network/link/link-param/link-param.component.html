@@ -39,23 +39,23 @@
         <mat-chip-list>
           <ng-container *ngIf="link.params.hasOwnProperty(options.id)">
             <ng-container *ngFor="let factor of link.params[options.id]['factors']">
-              <mat-chip title="{{factor}}" (click)="onFactorClick(factor)">{{ factor }}</mat-chip>
+              <mat-chip title="{{ factor }}" (click)="onFactorClick(factor)">{{ factor }}</mat-chip>
             </ng-container>
           </ng-container>
         </mat-chip-list>
       </ng-container>
       <app-value-slider-inline
         (valueChange)="onValueChange($event)"
-        [value]="value"
         [options]="options"
+        [value]="value"
       ></app-value-slider-inline>
     </ng-container>
 
     <ng-container *ngSwitchCase="false">
       <app-param-random
         (valueChange)="onValueChange($event)"
-        [value]="value"
         [options]="options"
+        [value]="value"
       ></app-param-random>
     </ng-container>
   </ng-container>
