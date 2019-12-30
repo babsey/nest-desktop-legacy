@@ -78,6 +78,10 @@ export class NestServerService {
           var simulatorVersion = this.status.server['version'].split('.');
           this.status.simulator.valid = appVersion[0] == simulatorVersion[0];
         }
+      }, error => {
+        if (error['ok'] == false && error['url'] == "https://services.humanbrainproject.eu/oidc/login") {
+          window.location.reload()  // TODO: not a permament solution
+        }
       })
   }
 }
