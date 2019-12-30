@@ -15,7 +15,7 @@
         <span class="flex">
           <span>Connection type</span>
           <span class="flex-spacer"></span>
-          <span>{{ connectome.projections.connection_type }}</span>
+          <span>{{ connectome.projections.connection_type | capitalize }}</span>
         </span>
       </mat-list-item>
 
@@ -23,21 +23,21 @@
         <span class="flex">
           <span>Kernel</span>
           <span class="flex-spacer"></span>
-          <span>{{ connectome.projections.kernel }}</span>
+          <span>{{ connectome.projections.kernel.parametertype | capitalize }}</span>
         </span>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('number_of_connections') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
+      <!-- <mat-list-item class="list-item" [style.display]="paramDisplay('number_of_connections') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
           <span>Number of connections</span>
           <span class="flex-spacer"></span>
           <span>{{ connectome.projections.number_of_connections }}</span>
         </span>
-      </mat-list-item>
+      </mat-list-item> -->
 
       <mat-list-item class="list-item" [style.display]="paramDisplay('weights') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
-          <span>Weights</span>
+          <span>Synaptic weight</span>
           <span class="flex-spacer"></span>
           <span>{{ synWeights() }}</span>
           <span class="unit">pA</span>
@@ -46,7 +46,7 @@
 
       <mat-list-item class="list-item" [style.display]="paramDisplay('delays') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
-          <span>Delays</span>
+          <span>Synaptic delay</span>
           <span class="flex-spacer"></span>
           <span>{{ synDelays() }}</span>
           <span class="unit">ms</span>
@@ -65,7 +65,7 @@
 
       <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.model') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <span class="flex">
-          <span>Synapse model</span>
+          <span>Synaptic model</span>
           <span class="flex-spacer"></span>
           <span>{{ synModel() }}</span>
         </span>
@@ -73,7 +73,7 @@
 
       <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.weight') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <div class="flex">
-          <span>Synapse weight</span>
+          <span>Synaptic weight</span>
           <span class="flex-spacer"></span>
           <span>{{ synWeight() }}</span>
           <span class="unit">pA</span>
@@ -82,7 +82,7 @@
 
       <mat-list-item class="list-item" [style.display]="paramDisplay('syn_spec.delay') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
         <div class="flex">
-          <span>Synapse delay</span>
+          <span>Synaptic delay</span>
           <span class="flex-spacer"></span>
           <span>{{ synDelay() }}</span>
           <span class="unit">ms</span>

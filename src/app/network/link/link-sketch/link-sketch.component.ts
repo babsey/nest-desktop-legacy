@@ -52,16 +52,16 @@ export class LinkSketchComponent implements OnInit {
 
   drawPath(): string {
     var connectome = this.data.simulation.connectomes[this.link.idx];
-    var nodes = this.data.app.nodes;
-    return this._networkSketchService.drawPath(nodes[connectome.source].position, nodes[connectome.target].position, true)
+    var source = this.data.app.nodes[connectome.source].position;
+    var target = this.data.app.nodes[connectome.target].position;
+    return this._networkSketchService.drawPath(source, target, true)
   }
 
   distance(): number {
     var connectome = this.data.simulation.connectomes[this.link.idx];
     if (connectome.source == connectome.target) {return this._networkConfigService.config.sketch.link.maxDistance.value};
-    var nodes = this.data.app.nodes;
-    var source = nodes[connectome.source].position;
-    var target = nodes[connectome.target].position;
+    var source = this.data.app.nodes[connectome.source].position;
+    var target = this.data.app.nodes[connectome.target].position;
     var x1 = source.x,
       y1 = source.y,
       x2 = target.x,

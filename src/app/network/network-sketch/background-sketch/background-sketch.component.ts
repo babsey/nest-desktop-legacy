@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, OnDestroy, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, OnChanges, Output, EventEmitter } from '@angular/core';
 
 import * as d3 from 'd3';
 
@@ -15,7 +15,7 @@ import { AppNode } from '../../../classes/appNode';
   template: '',
   styleUrls: ['./background-sketch.component.scss'],
 })
-export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
+export class BackgroundSketchComponent implements OnInit, OnChanges {
   @Input() data: Data;
   @Input() width: number = 600;
   @Input() height: number = 400;
@@ -23,7 +23,6 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
   private host: any;
   private selector: any;
-  private subscription: any;
   private sourceNode: any;
 
   constructor(
@@ -39,10 +38,6 @@ export class BackgroundSketchComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
     this.init()
     this.resize()
-  }
-
-  ngOnDestroy() {
-    // this.subscription.unsubscribe()
   }
 
   ngOnChanges() {

@@ -1,4 +1,9 @@
-<mat-menu #spatialMenu="matMenu" class="spatial-menu" overlapTrigger="true" xPosition="before">
+<mat-menu
+  #spatialMenu="matMenu"
+  class="spatial-menu"
+  overlapTrigger="true"
+  xPosition="before"
+  >
   <span class="flex" (click)="$event.stopPropagation();">
 
     <ng-container *ngIf="showPlot">

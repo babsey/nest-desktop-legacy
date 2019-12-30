@@ -47,6 +47,7 @@
     <app-link-param
       (valueChange)="onValueChange($event)"
       [(value)]="connectome.projections.delays"
+      [link]="link"
       [options]="config.delays"
     ></app-link-param>
   </mat-list-item>

@@ -69,6 +69,7 @@
   </svg:marker>
 </svg:defs>
 
+<!-- critical point: to many calling of drawPath(), distance() -->
 <svg:path
   (click)="onClick($event)"
   [attr.d]="drawPath()"

@@ -124,6 +124,9 @@ export class LinkListComponent implements OnInit {
     if (!this.connectome.projections.hasOwnProperty('weights')) {
       return this._formatService.format(1)
     }
+    if (!this.connectome.projections.weights.hasOwnProperty('parametertype')) {
+      return this._formatService.format(this.connectome.projections.weights)
+    }
     if (this.connectome.projections.weights.parametertype == 'constant') {
       return this._formatService.format(this.connectome.projections.weights.specs.value)
     }
@@ -134,8 +137,11 @@ export class LinkListComponent implements OnInit {
     if (!this.connectome.projections.hasOwnProperty('delays')) {
       return this._formatService.format(1)
     }
+    if (!this.connectome.projections.delays.hasOwnProperty('parametertype')) {
+      return this._formatService.format(this.connectome.projections.delays)
+    }
     if (this.connectome.projections.delays.parametertype == 'constant') {
-      return this._formatService.format(this.connectome.projections.weights.specs.value)
+      return this._formatService.format(this.connectome.projections.delays.specs.value)
     }
     return this.connectome.projections.delays.parametertype
   }

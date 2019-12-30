@@ -16,6 +16,7 @@ export class NetworkListComponent implements OnInit {
   @Input() data: Data;
   @Input() selective: boolean = true;
   @Input() paramSelective: boolean = true;
+  @Input() columns: boolean = false;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
 
   constructor(

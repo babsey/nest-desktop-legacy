@@ -1,6 +1,6 @@
 <span class="network">
   <ng-container *ngIf="data.app">
-    <span class="flex">
+    <span [attr.class]="columns ? 'flex': ''">
       <span style="width:50%; padding: 0 4px">
         <ng-container *ngFor="let node of data.app.nodes">
           <ng-container *ngIf="nodeDisplay(node)">
