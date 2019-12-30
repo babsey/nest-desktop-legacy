@@ -29,6 +29,7 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
   @Output() recordsChange: EventEmitter<any> = new EventEmitter();
   public mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
+  private subscription: any;
 
   constructor(
     private _animationControllerService: AnimationControllerService,
@@ -50,26 +51,35 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // console.log('Init simulation playgound')
-    this._simulationRunService.simulated.subscribe(resData => this.update(resData))
+    this.subscription = this._simulationRunService.simulated.subscribe(resData => this.update(resData))
   }
 
   ngOnDestroy() {
+    // console.log('Destroy simulation playgound')
+    this.subscription.unsubscribe()
     this.bottomSheet.dismiss()
   }
 
   update(resData: any): void {
     // Update kernel time
+    // console.log(this.data._id)
     this.data.app.kernel.time = resData.kernel.time;
 
     // Update global ids, record_from, positions
     resData.collections.map((collection, idx) => {
-      this.data.app.nodes[idx]['global_ids'] = collection.global_ids;
+      var node = this.data.app.nodes[idx];
+      if (node == undefined) return
+      node['global_ids'] = collection.global_ids;
       let params = this.data.simulation.models[collection.model].params;
       if (params.hasOwnProperty('record_from')) {
-        this.data.app.nodes[idx]['record_from'] = params.record_from;
+        node['record_from'] = params.record_from;
+      } else {
+        delete node['record_from']
       }
       if (collection.hasOwnProperty('spatial')) {
-        this.data.app.nodes[idx]['positions'] = collection.spatial.positions;
+        node['positions'] = collection.spatial.positions;
+      } else {
+        delete node['positions']
       }
     })
 

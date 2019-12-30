@@ -45,7 +45,7 @@
 
 <ng-container *ngIf="_simulationService.dataLoaded; else loading">
   <span class="simulation-theme">
-    <mat-toolbar class="navbar flex" color="primary" style="padding:0">
+    <mat-toolbar class="navbar flex no-print" color="primary" style="padding:0">
       <button mat-icon-button
         (click)="_simulationService.mode='details'"
         [class.active]="_simulationService.mode=='details'"

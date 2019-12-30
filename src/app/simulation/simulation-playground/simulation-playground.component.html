@@ -1,5 +1,8 @@
 <span class="simulation">
-  <mat-sidenav-container style="height:calc(100vh - 40px); width: calc(100% - 40px)" hasBackdrop="false">
+  <mat-sidenav-container
+    hasBackdrop="false"
+    style="height:calc(100vh - 40px); width: calc(100% - 40px)"
+    >
     <mat-sidenav
       (openedChange)="triggerResize()"
       [mode]="mobileQuery.matches ? 'over' : 'side'"
@@ -14,7 +17,14 @@
         [(data)]="data"
         [mode]="_simulationControllerService.mode"
         [records]="records"
+        class="no-print"
       ></app-controller>
+
+      <app-network-list
+        [data]="data"
+        class="print"
+        style="display:none"
+      ></app-network-list>
     </mat-sidenav>
 
     <mat-sidenav-content
@@ -38,7 +48,7 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 
-  <div class="flex button-toolbar" style="flex-direction: column">
+  <div class="flex button-toolbar no-print" style="flex-direction: column">
     <button mat-icon-button
       (click)="toggleSidenav()"
       style="height:40px">
