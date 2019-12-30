@@ -1,19 +1,22 @@
 <app-navigation
   (readyChange)="onReadyChange($event)"
   [(ready)]="ready"
+  class="no-print"
   id="navigation-button"
   >
 </app-navigation>
 
 <mat-sidenav-container id="container" autosize>
   <mat-sidenav
-    id="navigation"
     (openedChange)="triggerResize()"
-    [mode]="mobileQuery.matches ? 'over' : 'side'"
     [(opened)]="_navigationService.sidenavOpened"
-    role="region"
+    [mode]="mobileQuery.matches ? 'over' : 'side'"
+    autoFocus="false"
+    class="no-print"
+    id="navigation"
     position="start"
-    autoFocus="false">
+    role="region"
+    >
     <ng-container [ngSwitch]="ready">
       <ng-container *ngSwitchCase="false">
         <app-loading
