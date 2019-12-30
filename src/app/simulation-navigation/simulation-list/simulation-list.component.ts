@@ -38,8 +38,9 @@ export class SimulationListComponent implements OnInit {
   }
 
   view(simulation: Data, ref: MdePopoverTrigger): void {
+    if (!this.quickview) return
     this._appService.rightClick = true
-    this.focused = simulation;
+    // this.focused = simulation;
     ref.openPopover();
   }
 

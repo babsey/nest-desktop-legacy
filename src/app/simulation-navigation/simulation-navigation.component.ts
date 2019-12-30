@@ -133,14 +133,8 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
   }
 
   newNetwork(): void {
-    this._simulationService.data = this._dataService.newData();
-    this.edit()
-    // this.router.navigate([{ outlets: { primary: 'simulation' } }])
-  }
-
-  edit(): void {
     this.selectionList = false;
-    this._simulationService.mode = 'edit';
+    this.navigate('')
   }
 
   details(): void {
