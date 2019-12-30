@@ -4,6 +4,18 @@ body {
   margin: 0;
 }
 
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
+  .print,
+  .no-print {
+    display: block !important;
+  }
+}
+
 app-root {
   display: flex;
 }
