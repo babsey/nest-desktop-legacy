@@ -1,4 +1,8 @@
-<span style="position:absolute;z-index:1000" *ngIf="_visualizationService.hasPositions">
+<span
+  *ngIf="_visualizationService.hasPositions"
+  class="no-print"
+  style="position:absolute;z-index:1000" 
+  >
   <button mat-icon-button
     (click)="selectVisualizationModus('chart')"
     [class.active]="_visualizationService.mode=='chart'"

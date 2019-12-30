@@ -64,13 +64,13 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     this.config = {
       scrollZoom: true,
       editable: true,
-      displayModeBar: true,
+      // displayModeBar: true,
       displaylogo: false,
       responsive: true,
-      showLink: true,
+      // showLink: true,
       toImageButtonOptions: {
         format: 'svg', // one of png, svg, jpeg, webp
-        filename: 'newplot',
+        filename: 'nest_desktop-' + this.data.name,
         width: 1280,
         height: 1024,
         scale: 1, // Multiply title/legend/axis/canvas sizes by this factor
@@ -97,8 +97,8 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     if (records.length == 0) return
     this._logService.log('Update charts');
 
-    var barmode = this._chartRecordsService.barmode;
-    var barnorm = this._chartRecordsService.barnorm;
+    var barmode = this._chartRecordsService['barmode'];
+    var barnorm = this._chartRecordsService['barnorm'];
     if (this.hasSpikeData() && this.hasAnalogData()) {
       this.layout['yaxis'] = {
         // title: 'Firing rate [Hz]',
@@ -111,9 +111,8 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       }
       var y3Title = 'Membrane potentials [mV]'
       if (this.hasInputData()) {
-        this.layout['yaxis3'] = {
-          title: y3Title,
-          domain: [.51, .84],
+        this.layout['yaxis2'] = {
+          domain: [.21, .84],
         }
         this.layout['yaxis4'] = {
           title: 'Current [pA]',
@@ -154,6 +153,9 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         title: 'Neuron ID',
         domain: [0.22, 1],
       }
+    }
+
+    if (this.hasSpikeData()) {
       this.layout['barmode'] = barmode;
       this.layout['barnorm'] = barnorm;
     }
@@ -171,9 +173,11 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         }
       }
     })
-    if (this.layout.yaxis2.hasOwnProperty('range')) {
-      this.layout.yaxis2.range[0] -= 1;
-      this.layout.yaxis2.range[1] += 1;
+    if (this.layout.hasOwnProperty('yaxis2')) {
+      if (this.layout.yaxis2.hasOwnProperty('range')) {
+        this.layout.yaxis2.range[0] -= 1;
+        this.layout.yaxis2.range[1] += 1;
+      }
     }
     this._logService.log('Render charts');
   }
