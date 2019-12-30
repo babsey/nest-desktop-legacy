@@ -64,21 +64,26 @@ export class NestServerService {
         })
       )
       .subscribe(res => {
+        console.log('res', res)
+        if (res['ok'] == false && res['url'] == "https://services.humanbrainproject.eu/oidc/login") {
+          window.location.reload()  // TODO: not a permament solution
+        }
         this.status.server.response = true;
         var appVersion = environment.VERSION.split('.');
-        if ('server' in res) {
+        if (res.hasOwnProperty('server')) {
           this.status.server.ready = true;
           this.status.server['version'] = res['server']['version'];
           var serverVersion = this.status.server['version'].split('.');
           this.status.server.valid = appVersion[0] == serverVersion[0] && appVersion[1] == serverVersion[1];
         }
-        if ('simulator' in res) {
+        if (res.hasOwnProperty('simulator')) {
           this.status.simulator.ready = true;
           this.status.simulator['version'] = res['simulator']['version'];
           var simulatorVersion = this.status.server['version'].split('.');
           this.status.simulator.valid = appVersion[0] == simulatorVersion[0];
         }
       }, error => {
+        console.log('error', error)
         if (error['ok'] == false && error['url'] == "https://services.humanbrainproject.eu/oidc/login") {
           window.location.reload()  // TODO: not a permament solution
         }
