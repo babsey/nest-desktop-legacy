@@ -17,18 +17,18 @@ import { TestsuiteComponent } from '../testsuite/testsuite.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/(nav:simulation)', pathMatch: 'full' },
-  { path: 'config', component: ConfigListComponent, outlet: 'nav' },
-  { path: 'config/:config', component: ConfigComponent },
+  { path: 'config', component: ConfigListComponent, outlet: 'nav', data: { animation: 'config' } },
+  { path: 'config/:config', component: ConfigComponent, data: { animation: 'config' } },
   { path: 'help', component: HelpListComponent, outlet: 'nav' },
   { path: 'help/:help', component: HelpComponent },
-  { path: 'model', component: ModelListComponent, outlet: 'nav' },
-  { path: 'model/:model', component: ModelComponent },
-  { path: 'network', component: NetworkComponent },
-  { path: 'network/:id', component: NetworkComponent },
-  { path: 'simulation', component: SimulationNavigationComponent, outlet: 'nav' },
-  { path: 'simulation', component: SimulationComponent },
-  { path: 'simulation/:id', component: SimulationComponent },
-  { path: 'simulation/:id/run', component: SimulationComponent },
+  { path: 'model', component: ModelListComponent, outlet: 'nav', data: { animation: 'model' } },
+  { path: 'model/:model', component: ModelComponent, data: { animation: 'model' } },
+  { path: 'network', component: NetworkComponent, data: { animation: 'network' } },
+  { path: 'network/:id', component: NetworkComponent, data: { animation: 'network' } },
+  { path: 'simulation', component: SimulationNavigationComponent, outlet: 'nav', data: { animation: 'simulation' } },
+  { path: 'simulation', component: SimulationComponent, data: { animation: 'simulation' } },
+  { path: 'simulation/:id', component: SimulationComponent, data: { animation: 'simulation' } },
+  { path: 'simulation/:id/run', component: SimulationComponent, data: { animation: 'simulation' } },
   { path: 'testsuite', component: TestsuiteComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
@@ -39,7 +39,7 @@ const appRoutes: Routes = [
       appRoutes,
       {
         useHash: true,
-        enableTracing: false  // <-- debugging purposes only
+        enableTracing: false,  // <-- debugging purposes only
       }
     )
   ],

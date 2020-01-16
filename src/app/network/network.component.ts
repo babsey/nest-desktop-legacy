@@ -9,11 +9,14 @@ import { SimulationProtocolService } from '../simulation/services/simulation-pro
 
 import { Data } from '../classes/data';
 
+import { enterAnimation } from '../animations/enter-animation';
+
 
 @Component({
   selector: 'app-network',
   templateUrl: './network.component.html',
-  styleUrls: ['./network.component.scss']
+  styleUrls: ['./network.component.scss'],
+  animations: [ enterAnimation ],
 })
 export class NetworkComponent implements OnInit, AfterViewInit {
   @Input() data: Data;

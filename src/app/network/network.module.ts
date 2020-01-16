@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MccColorPickerModule } from 'material-community-components';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 import { PlotlyModule } from 'angular-plotly.js';
@@ -115,6 +116,7 @@ import { NodeToolbarComponent } from './node/node-toolbar/node-toolbar.component
   imports: [
     AppFormsModule,
     AppPipesModule,
+    BrowserAnimationsModule,
     CommonModule,
     FontAwesomeModule,
     FormsModule,

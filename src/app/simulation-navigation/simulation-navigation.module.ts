@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MdePopoverModule } from '@material-extended/mde';
@@ -36,6 +37,7 @@ import { SimulationShortListComponent } from './simulation-short-list/simulation
     AppFormsModule,
     AppPipesModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     CommonModule,
     FontAwesomeModule,
     FormsModule,

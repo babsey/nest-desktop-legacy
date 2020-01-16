@@ -77,6 +77,7 @@
               (change)="onChange($event)"
               (keyup)="onChange($event)"
               [(ngModel)]="_simulationService.data.name"
+              [disabled]="!_simulationService.dataLoaded"
               class="formControl"
               placeholder="Name of the simulation"
               type="text"
@@ -92,6 +93,7 @@
               </button>
             </span>
           </mat-form-field>
+
           <button mat-icon-button
             class="list-icon"
             (click)="save()"
@@ -172,3 +174,12 @@
 
   <app-log></app-log>
 </span>
+
+
+<ng-template #empty>
+  <input matInput
+    class="formControl"
+    placeholder="Name of the simulation"
+    type="text"
+  />
+</ng-template>

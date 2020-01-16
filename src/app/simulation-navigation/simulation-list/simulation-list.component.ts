@@ -7,11 +7,14 @@ import { SimulationService } from '../../simulation/services/simulation.service'
 
 import { Data } from '../../classes/data';
 
+import { listAnimation } from '../../animations/list-animation';
+
 
 @Component({
   selector: 'app-simulation-list',
   templateUrl: './simulation-list.component.html',
-  styleUrls: ['./simulation-list.component.scss']
+  styleUrls: ['./simulation-list.component.scss'],
+  animations: [ listAnimation ],
 })
 export class SimulationListComponent implements OnInit {
   @Input() quickview: boolean = false;

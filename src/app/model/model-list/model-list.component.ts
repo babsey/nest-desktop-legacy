@@ -5,11 +5,14 @@ import { NestServerService } from '../../nest-server/nest-server.service';
 import { NavigationService } from '../../navigation/navigation.service';
 import { ModelService } from '../model.service';
 
+import { listAnimation } from '../../animations/list-animation';
+
 
 @Component({
   selector: 'app-model-list',
   templateUrl: './model-list.component.html',
-  styleUrls: ['./model-list.component.scss']
+  styleUrls: ['./model-list.component.scss'],
+  animations: [ listAnimation ]
 })
 export class ModelListComponent implements OnInit, OnDestroy {
   private subscription: any;

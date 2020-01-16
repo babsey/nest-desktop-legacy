@@ -6,7 +6,7 @@
       <fa-icon [icon]="this._navigationService.sidenavOpened ? 'chevron-left' : 'chevron-right'"></fa-icon>
     </button>
   </mat-toolbar>
-  <div style="border-right: 1px solid rgba(0,0,0,0.12);">
+  <div style="border-right: 1px solid rgba(0,0,0,0.12);z-index:1000; background-color: white;">
     <div class="simulation-theme">
       <button mat-icon-button
         (click)="onClick($event, 'simulation')"

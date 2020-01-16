@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AppConfigService } from '../config/app-config/app-config.service';
 import { ModelService } from './model.service';
 import { NavigationService } from '../navigation/navigation.service';
 
+import { enterAnimation } from '../animations/enter-animation';
+
 
 @Component({
   selector: 'app-model',
   templateUrl: './model.component.html',
-  styleUrls: ['./model.component.scss']
+  styleUrls: ['./model.component.scss'],
+  animations: [ enterAnimation ],
 })
-export class ModelComponent implements OnInit {
+export class ModelComponent implements OnInit, OnDestroy {
   public enabled: boolean = false;
 
   constructor(
@@ -27,6 +30,10 @@ export class ModelComponent implements OnInit {
     if (model) {
       this._modelService.selectModel(model);
     }
+  }
+
+  ngOnDestroy() {
+    this._modelService.selectedModel = '';
   }
 
   advanced(): boolean {

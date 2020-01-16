@@ -2,7 +2,9 @@
   <ng-container *ngIf="_modelService.selectedModel">
     <span class="model-theme">
       <mat-toolbar class="navbar" color="primary">
-        {{ _modelService.selectedModel }}
+        <span [@enterAnimation]>
+          {{ _modelService.selectedModel }}
+        </span>
         <span class="spacer"></span>
         <ng-container *ngIf="advanced()">
           <button mat-icon-button (click)="_modelService.params='list'" [class.active]="_modelService.params=='list'" matTooltip="Parameter list"><fa-icon icon="list"></fa-icon></button>
@@ -30,7 +32,9 @@
       </mat-sidenav>
 
       <mat-sidenav-content>
-        <app-model-documentation *ngIf="_modelService.selectedModel" [model]="_modelService.selectedModel" style="width:100%"></app-model-documentation>
+        <ng-container *ngIf="_modelService.selectedModel">
+          <app-model-documentation [model]="_modelService.selectedModel" style="width:100%"></app-model-documentation>
+        </ng-container>
       </mat-sidenav-content>
 
     </mat-sidenav-container>

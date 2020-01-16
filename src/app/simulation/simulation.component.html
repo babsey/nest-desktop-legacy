@@ -43,67 +43,67 @@
 
 </mat-menu>
 
-<ng-container *ngIf="_simulationService.dataLoaded; else loading">
-  <span class="simulation-theme">
-    <mat-toolbar class="navbar flex no-print" color="primary" style="padding:0">
-      <button mat-icon-button
-        (click)="_simulationService.mode='details'"
-        [class.active]="_simulationService.mode=='details'"
-        matTooltip="View node and connection details"
-        >
-        <span class="fa-stack">
-          <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
-          <fa-icon icon="eye" class="fa-stack-2x fa-inverse"></fa-icon>
-        </span>
-      </button>
-      <button mat-icon-button
-        (click)="_simulationService.mode='edit'"
-        [class.active]="_simulationService.mode=='edit'"
-        matTooltip="Modify network"
-        >
-        <span class="fa-stack">
-          <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
-          <fa-icon icon="pen" class="fa-stack-2x fa-inverse"></fa-icon>
-        </span>
-      </button>
-      <button mat-icon-button
-        (click)="_simulationService.mode='playground'"
-        [class.active]="_simulationService.mode=='playground'"
-        matTooltip="Simulation playground"
-        >
-        <span class="fa-stack">
-          <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
-          <fa-icon icon="play" class="fa-stack-2x fa-inverse"></fa-icon>
-        </span>
-      </button>
-        <span class="title">
-          {{ _simulationService.data.name }}
-        </span>
-        <span class="flex-spacer"></span>
-        <ng-container *ngIf="_simulationService.mode=='playground'">
-        </ng-container>
-        <button mat-icon-button
-          (click)="run(true)"
-          (contextmenu)="onContextMenu($event)"
-          (mouseout)="onMouseOut($event)"
-          (mouseover)="onMouseOver($event)"
-          [disabled]="_simulationRunService.running"
-          matTooltip="Simulate"
-          style="width:128px"
-          >
-          <span style="width:128px; display:block">
-            <fa-icon
-              icon="cog"
-              class="fa-spin fa-lg"
-              style="height:40px;line-height:42px"
-              [style.display]="_simulationRunService.running ? 'inline-block': ''"
-              ></fa-icon>
-              Simulate
-          </span>
-        </button>
-    </mat-toolbar>
-  </span>
+<span class="simulation-theme">
+  <mat-toolbar class="navbar flex no-print" color="primary" style="padding:0">
+    <button mat-icon-button
+      (click)="_simulationService.mode='details'"
+      [class.active]="_simulationService.mode=='details'"
+      matTooltip="View node and connection details"
+      >
+      <span class="fa-stack">
+        <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+        <fa-icon icon="eye" class="fa-stack-2x fa-inverse"></fa-icon>
+      </span>
+    </button>
+    <button mat-icon-button
+      (click)="_simulationService.mode='edit'"
+      [class.active]="_simulationService.mode=='edit'"
+      matTooltip="Modify network"
+      >
+      <span class="fa-stack">
+        <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+        <fa-icon icon="pen" class="fa-stack-2x fa-inverse"></fa-icon>
+      </span>
+    </button>
+    <button mat-icon-button
+      (click)="_simulationService.mode='playground'"
+      [class.active]="_simulationService.mode=='playground'"
+      matTooltip="Simulation playground"
+      >
+      <span class="fa-stack">
+        <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+        <fa-icon icon="play" class="fa-stack-2x fa-inverse"></fa-icon>
+      </span>
+    </button>
+    <ng-container *ngIf="_simulationService.dataLoaded">
+      <span class="title" [@enterAnimation]>
+        {{ _simulationService.data.name }}
+      </span>
+    </ng-container>
+    <span class="flex-spacer"></span>
+    <button mat-icon-button
+      (click)="run(true)"
+      (contextmenu)="onContextMenu($event)"
+      (mouseout)="onMouseOut($event)"
+      (mouseover)="onMouseOver($event)"
+      [disabled]="_simulationRunService.running || !_simulationService.dataLoaded"
+      matTooltip="Simulate"
+      style="width:128px"
+      >
+      <span style="width:128px; display:block">
+        <fa-icon
+          icon="cog"
+          class="fa-spin fa-lg"
+          style="height:40px;line-height:42px"
+          [style.display]="_simulationRunService.running ? 'inline-block': ''"
+          ></fa-icon>
+          Simulate
+      </span>
+    </button>
+  </mat-toolbar>
+</span>
 
+<ng-container *ngIf="_simulationService.dataLoaded; else loading">
   <ng-container [ngSwitch]="_simulationService.mode">
     <ng-container *ngSwitchCase="'details'">
       <app-simulation-details
@@ -130,7 +130,7 @@
 </ng-container>
 
 <ng-template #loading>
-  <div style="height:100%" class="flex">
+  <div style="height: calc(100% - 40px)" class="flex">
     <span style="margin:auto">
       <fa-icon icon="compact-disc" class="fa-lg fa-spin" style="display:inline-block"></fa-icon>
       <span style="margin-left: 8px">Data is loading.</span>

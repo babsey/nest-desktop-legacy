@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppFormsModule } from '../forms/forms.module';
 import { AppPipesModule } from '../pipes/pipes.module';
@@ -61,6 +62,7 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     AppFormsModule,
     AppPipesModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     CommonModule,
     FontAwesomeModule,
     FormsModule,

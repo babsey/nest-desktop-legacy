@@ -17,11 +17,14 @@ import { SimulationService } from './services/simulation.service';
 import { Data } from '../classes/data';
 import { Record } from '../classes/record';
 
+import { enterAnimation } from '../animations/enter-animation';
+
 
 @Component({
   selector: 'app-simulation',
   templateUrl: './simulation.component.html',
-  styleUrls: ['./simulation.component.scss']
+  styleUrls: ['./simulation.component.scss'],
+  animations: [ enterAnimation ],
 })
 export class SimulationComponent implements OnInit, OnDestroy {
 

@@ -45,24 +45,26 @@
   mdePopoverTriggerOn="none"
   style="padding:0"
   >
-  <ng-container *ngFor="let simulation of simulations">
-    <mat-list-item
-      (contextmenu)="onContextMenu($event, simulation)"
-      (mouseover)="view(simulation, simulationTarget)"
-      (mouseout)="onMouseOut($event)"
-      (click)="onClick(simulation)"
-      class="simulation"
-      [class.active]="selected(simulation)"
-      >
-      <span class="flex">
-        {{ simulation.name }}
-        <div class="flex-spacer"></div>
-        <ng-container *ngIf="simulation.updatedAt">
-          <span class="timesince">
-            {{ simulation.updatedAt | timesince }}
-          </span>
-        </ng-container>
-      </span>
-      </mat-list-item>
-  </ng-container>
+  <span [@listAnimation]="simulations.length">
+    <ng-container *ngFor="let simulation of simulations">
+      <mat-list-item
+        (contextmenu)="onContextMenu($event, simulation)"
+        (mouseover)="view(simulation, simulationTarget)"
+        (mouseout)="onMouseOut($event)"
+        (click)="onClick(simulation)"
+        class="simulation"
+        [class.active]="selected(simulation)"
+        >
+        <span class="flex">
+          {{ simulation.name }}
+          <div class="flex-spacer"></div>
+          <ng-container *ngIf="simulation.updatedAt">
+            <span class="timesince">
+              {{ simulation.updatedAt | timesince }}
+            </span>
+          </ng-container>
+        </span>
+        </mat-list-item>
+    </ng-container>
+  </span>
 </mat-nav-list>

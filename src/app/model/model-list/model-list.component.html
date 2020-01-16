@@ -86,11 +86,13 @@
       </mat-list>
 
       <mat-nav-list dense class="model-theme model" style="padding:0">
-        <ng-container *ngFor="let model of filteredModels">
-          <mat-list-item (click)="_modelService.selectModel(model)" routerLink="/model/{{model}}" [class.active]="isSelected(model)" [class.enabled]="isEnabled(model)" class="model">
-            {{ model }}
-          </mat-list-item>
-        </ng-container>
+        <span [@listAnimation]="filteredModels.length">
+          <ng-container *ngFor="let model of filteredModels">
+            <mat-list-item (click)="_modelService.selectModel(model)" routerLink="/model/{{model}}" [class.active]="isSelected(model)" [class.enabled]="isEnabled(model)" class="model">
+              {{ model }}
+            </mat-list-item>
+          </ng-container>
+        </span>
       </mat-nav-list>
 
     </span>

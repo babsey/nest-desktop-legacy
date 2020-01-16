@@ -1,4 +1,4 @@
-<span class="network">
+<span class="network" [@enterAnimation]>
   <mat-sidenav-container class="network-container" hasBackdrop="false">
     <mat-sidenav
       (openedChange)="triggerResize()"
@@ -26,7 +26,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content #content class="network-content content">
-      <ng-container *ngIf="data != undefined">
+      <ng-container *ngIf="data != undefined" [@enterAnimation]>
         <app-network-sketch
           (dataChange)="onDataChange($event)"
           [(data)]="data"

@@ -11,11 +11,16 @@ import { AppNode } from '../../../classes/appNode';
 import { SimCollection } from '../../../classes/simCollection';
 import { SimModel } from '../../../classes/simModel';
 
+import { listAnimation } from '../../../animations/list-animation';
+
 
 @Component({
   selector: 'app-node-list',
   templateUrl: './node-list.component.html',
-  styleUrls: ['./node-list.component.scss']
+  styleUrls: ['./node-list.component.scss'],
+  animations: [
+    listAnimation
+  ]
 })
 export class NodeListComponent implements OnInit, OnChanges {
   @Input() data: Data;

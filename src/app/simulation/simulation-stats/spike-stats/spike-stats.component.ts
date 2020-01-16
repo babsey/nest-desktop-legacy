@@ -24,6 +24,8 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
   @Input() records: Record[] = [];
   @Input() idx: number;
   @Input() color: string;
+  private stats: SpikeStatsElement[];
+  private times: any;
 
   public displayedColumns: string[] = ['id', 'count', 'isi_mean', 'isi_std', 'cv_isi'];
   public dataSource: MatTableDataSource<any>;
@@ -44,24 +46,24 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
 
   update(): void {
     var record = this.records[this.idx];
-    const times = Object.create(null);
-    record.global_ids.forEach(id => times[id] = [])
+    this.times = Object.create(null);
+    record.global_ids.forEach(id => this.times[id] = [])
     record.events.senders.forEach((sender, idx) => {
-      times[sender].push(record.events.times[idx]);
+      this.times[sender].push(record.events.times[idx]);
     });
-    var stats: SpikeStatsElement[] = record.global_ids.map(id => {
-      var isi = this.isi(times[id]);
+    this.stats = record.global_ids.map(id => {
+      var isi = this.isi(this.times[id]);
       var isi_mean = isi.length > 1 ? this._mathService.mean(isi) : 0;
       var isi_std = isi.length > 1 ? this._mathService.deviation(isi) : 0;
       return {
         id: id,
-        count: times[id].length,
+        count: this.times[id].length,
         isi_mean: isi_mean,
         isi_std: isi_std,
         cv_isi: isi_mean > 0 ? isi_std / isi_mean : 0,
       }
     })
-    this.dataSource = new MatTableDataSource(stats);
+    this.dataSource = new MatTableDataSource(this.stats);
     this.dataSource.sort = this.sort;
   }
 
@@ -87,6 +89,15 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
   mean(element: string): number {
     var data = this.dataSource.filteredData;
     return data.map(t => t[element]).reduce((acc, value) => acc + value, 0) / data.length;
+  }
+
+  onCellClicked(element) {
+
+    console.log(this.times[element.id])
+  }
+
+  onRowHover(row) {
+    console.log(row)
   }
 
 }

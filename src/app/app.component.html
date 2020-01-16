@@ -27,7 +27,9 @@
         ></app-loading>
       </ng-container>
       <ng-container *ngSwitchCase="true">
-        <router-outlet name="nav"></router-outlet>
+        <div>
+          <router-outlet #navOutlet="outlet" name="nav"></router-outlet>
+        </div>
       </ng-container>
     </ng-container>
   </mat-sidenav>
@@ -50,7 +52,9 @@
       </ng-container>
       <ng-container *ngSwitchCase="true">
         <!-- <app-navigation id="navigation-button"></app-navigation> -->
-        <router-outlet></router-outlet>
+        <span [@routeAnimations]="prepareRoute(outlet)">
+          <router-outlet #outlet="outlet"></router-outlet>
+        </span>
       </ng-container>
     </ng-container>
 

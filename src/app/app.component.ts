@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
 
 import { NavigationService } from './navigation/navigation.service';
 import { AppConfigService } from './config/app-config/app-config.service';
 import { AppService } from './app.service';
+import { routeNavAnimation, routeAnimation } from './animations/route-animation';
 
 
 import * as math from 'mathjs';
@@ -12,7 +13,11 @@ import * as math from 'mathjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    routeNavAnimation,
+    routeAnimation,
+  ]
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('content', { static: false }) content: ElementRef;
@@ -49,6 +54,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   advanced(): boolean {
     return this._appConfigService.config.app['advanced'];
+  }
+
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
   triggerResize(): void {

@@ -10,16 +10,19 @@ import { SimulationService } from '../simulation/services/simulation.service';
 
 import { Data } from '../classes/data';
 
+import { enterAnimation } from '../animations/enter-animation';
+
 
 @Component({
   selector: 'app-simulation-navigation',
   templateUrl: './simulation-navigation.component.html',
-  styleUrls: ['./simulation-navigation.component.scss']
+  styleUrls: ['./simulation-navigation.component.scss'],
+  animations: [ enterAnimation ],
 })
 export class SimulationNavigationComponent implements OnInit, OnDestroy {
   @ViewChild('file', { static: false }) file;
   private subscription: any;
-  public filteredSimulations: Data[];
+  public filteredSimulations: Data[] = [];
   public searchTerm: string = '';
   public selectionList: boolean = false;
   public simulations: Data[];

@@ -36,7 +36,7 @@
         </button>
       </mat-toolbar>
 
-      <mat-nav-list dense class="navlist config-theme" style="padding:0">
+      <mat-nav-list dense class="navlist config-theme" style="padding:0" [@enterAnimation]>
         <mat-list-item (click)="navigate('application')" [class.active]="isActive('app')">
           <fa-icon class="list-icon" icon="clipboard-check"></fa-icon> Application
         </mat-list-item>

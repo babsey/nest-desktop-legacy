@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppFormsModule } from '../forms/forms.module';
 import { AppRoutingModule } from '../modules/app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MaterialModule } from '../modules/material.module';
 import { AppPipesModule } from '../pipes/pipes.module';
@@ -44,6 +45,7 @@ import { ModelParamsSliderComponent } from './model-params-slider/model-params-s
     AppPipesModule,
     AppRoutingModule,
     AppFormsModule,
+    BrowserAnimationsModule,
     CommonModule,
     FontAwesomeModule,
     FormsModule,

@@ -1,3 +1,18 @@
-<pre class="model-doc content">
+<span [@listAnimation]="blocks.length">
+  <ng-container *ngFor="let block of blocks">
+    <mat-card>
+      <mat-card-subtitle *ngIf="block.hasOwnProperty('title')">
+      {{ block.title }}
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <pre [innerHtml]="block.content"></pre>
+      </mat-card-content>
+
+    </mat-card>
+  </ng-container>
+</span>
+
+<!-- <pre class="model-doc content">
   {{ helptext }}
-</pre>
+</pre> -->

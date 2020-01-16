@@ -2,10 +2,16 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { ModelService } from '../model.service';
 
+import { listAnimation } from '../../animations/list-animation';
+
+
 @Component({
   selector: 'app-model-params-list',
   templateUrl: './model-params-list.component.html',
-  styleUrls: ['./model-params-list.component.scss']
+  styleUrls: ['./model-params-list.component.scss'],
+  animations: [
+    listAnimation
+  ]
 })
 export class ModelParamsListComponent implements OnInit {
   @Input() model: string = '';

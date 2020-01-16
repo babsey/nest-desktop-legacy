@@ -9,11 +9,15 @@ import { NetworkConfigService } from '../../network/network-config/network-confi
 import { SimulationConfigService } from '../../simulation/simulation-config/simulation-config.service';
 import { VisualizationConfigService } from '../../visualization/visualization-config/visualization-config.service';
 
+import { enterAnimation } from '../../animations/enter-animation';
+
+
 
 @Component({
   selector: 'app-config-list',
   templateUrl: './config-list.component.html',
-  styleUrls: ['./config-list.component.scss']
+  styleUrls: ['./config-list.component.scss'],
+  animations: [ enterAnimation ]
 })
 export class ConfigListComponent implements OnInit {
   @Output() configClick: EventEmitter<any> = new EventEmitter();

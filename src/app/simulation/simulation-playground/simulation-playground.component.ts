@@ -16,11 +16,14 @@ import { SimulationService } from '../services/simulation.service';
 import { Data } from '../../classes/data';
 import { Record } from '../../classes/record';
 
+import { enterAnimation } from '../../animations/enter-animation';
+
 
 @Component({
   selector: 'app-simulation-playground',
   templateUrl: './simulation-playground.component.html',
-  styleUrls: ['./simulation-playground.component.scss']
+  styleUrls: ['./simulation-playground.component.scss'],
+  animations: [ enterAnimation ],
 })
 export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
   @Input() data: Data;
@@ -145,14 +148,14 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
   }
 
   onDataChange(data: Data): void {
-    console.log('Simulation on data change')
+    // console.log('Simulation on data change')
     this.dataChange.emit(this.data)
     setTimeout(() => this.run(), 1)
   }
 
   onAppChange(records: Record[]): void {
     // console.log('On app change')
-    this._visualizationService.update.emit()
+    this._visualizationService.init.emit()
   }
 
 }

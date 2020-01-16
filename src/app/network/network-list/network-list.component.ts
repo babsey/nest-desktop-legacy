@@ -6,11 +6,16 @@ import { Data } from '../../classes/data';
 import { AppNode } from '../../classes/appNode';
 import { AppLink } from '../../classes/appLink';
 
+import { listAnimation } from '../../animations/list-animation';
+
 
 @Component({
   selector: 'app-network-list',
   templateUrl: './network-list.component.html',
-  styleUrls: ['./network-list.component.scss']
+  styleUrls: ['./network-list.component.scss'],
+  animations: [
+    listAnimation
+  ]
 })
 export class NetworkListComponent implements OnInit {
   @Input() data: Data;

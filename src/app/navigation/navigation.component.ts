@@ -40,7 +40,9 @@ export class NavigationComponent implements OnInit {
     var url = window.location.href;
     if (this.ready) {
       var isActivated = url.includes(('nav:' + mode));
-      this._navigationService.sidenavOpened = !isActivated || !this._navigationService.sidenavOpened;
+      setTimeout(() => {
+        this._navigationService.sidenavOpened = !isActivated || !this._navigationService.sidenavOpened;
+      }, 10)
     }
     if (mode == 'simulation') {
       if (this._simulationService.data) {
