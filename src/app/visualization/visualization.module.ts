@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AngularSplitModule } from 'angular-split';
+
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -18,9 +21,11 @@ import { AnimationSpikeComponent } from './animation/animation-spike/animation-s
 import { AnimationColormapComponent } from './animation/animation-colormap/animation-colormap.component';
 import { ChartControllerComponent } from './chart/chart-controller/chart-controller.component';
 import { ChartRecordsComponent } from './chart/chart-records/chart-records.component';
+import { ChartSplitControllerComponent } from './chart/chart-split-controller/chart-split-controller.component';
 import { ThreeScatterComponent } from './animation/three-scatter/three-scatter.component';
 import { VisualizationComponent } from './visualization.component';
 import { VisualizationConfigComponent } from './visualization-config/visualization-config.component';
+
 
 
 @NgModule({
@@ -31,6 +36,7 @@ import { VisualizationConfigComponent } from './visualization-config/visualizati
     AnimationSpikeComponent,
     ChartControllerComponent,
     ChartRecordsComponent,
+    ChartSplitControllerComponent,
     ThreeScatterComponent,
     VisualizationComponent,
     VisualizationConfigComponent,
@@ -42,14 +48,17 @@ import { VisualizationConfigComponent } from './visualization-config/visualizati
     AnimationSpikeComponent,
     ChartControllerComponent,
     ChartRecordsComponent,
+    ChartSplitControllerComponent,
     ThreeScatterComponent,
     VisualizationComponent,
     VisualizationConfigComponent,
   ],
   imports: [
+    AngularSplitModule.forRoot(),
     AppFormsModule,
     AppPipesModule,
     CommonModule,
+    DragDropModule,
     FontAwesomeModule,
     FormsModule,
     MaterialModule,

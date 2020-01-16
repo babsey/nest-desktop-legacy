@@ -9,6 +9,7 @@ import { Record } from '../classes/record';
 export class VisualizationService {
   public mode: string = 'chart';
   public hasPositions: boolean = false;
+  public init: EventEmitter<any> = new EventEmitter();
   public update: EventEmitter<any> = new EventEmitter();
   public time: number = 1000;
 

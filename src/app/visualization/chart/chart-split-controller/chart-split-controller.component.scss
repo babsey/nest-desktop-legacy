@@ -1,0 +1,19 @@
+.panelResizer {
+  // background-color: green;
+  display: inline-block;
+  height: calc(100% - 220px);
+  left: 80px;
+  position: absolute;
+  top: 100px;
+  width: 35px;
+  z-index: 1;
+  pointer-events: none;
+
+  as-split-area {
+    // background-color: red;
+  }
+
+  ::ng-deep .as-split-gutter {
+    pointer-events: all;
+  }
+}

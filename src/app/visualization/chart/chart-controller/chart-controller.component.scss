@@ -1,0 +1,8 @@
+.cdk-drag {
+  transition: transform 300ms ease;
+}
+
+.cdk-drag-handle {
+  padding-right: 10px;
+  cursor: move;
+}

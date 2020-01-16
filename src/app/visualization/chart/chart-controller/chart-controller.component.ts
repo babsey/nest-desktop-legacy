@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 
 import { ChartRecordsService } from '../chart-records/chart-records.service';
 import { VisualizationConfigService } from '../../visualization-config/visualization-config.service';
@@ -20,6 +22,29 @@ export class ChartControllerComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  drop(event: CdkDragDrop<string[]>): void {
+    moveItemInArray(this._chartRecordsService.panelOrder, event.previousIndex, event.currentIndex);
+    this._chartRecordsService.panelOrder.map((p,i) => {
+      var yaxisIdx = (this._chartRecordsService.panelOrder.length - i);
+      this._chartRecordsService.panel[p]['yaxis'] = yaxisIdx;
+    })
+    var panelSelected = this._chartRecordsService.panelSelected;
+    this._chartRecordsService.panelSelected = [];
+    setTimeout(() => {
+      this._chartRecordsService.panelSelected = panelSelected;
+      setTimeout(() => this._visualizationService.update.emit(), 100)
+    }, 1);
+
+  }
+
+  onNgModelChange(event): void {
+    this._chartRecordsService.panelSelected = [];
+    setTimeout(() => {
+      this._chartRecordsService.panelSelected = event;
+      setTimeout(() => this._visualizationService.init.emit(), 100)
+    }, 1);
   }
 
   onBinSizeChange(value: number): void {

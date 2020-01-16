@@ -1,36 +1,52 @@
 <mat-list dense>
-  <mat-list-item mat-subheader>
-    Histogram
-  </mat-list-item>
 
-  <mat-list-item >
-    <app-select
-      (selectedChange)="onBarmodeChange($event)"
-      [matTooltip]="'Barmode'"
-      [options]="_visualizationConfigService.config.chart.controller.barmodes"
-      [(selected)]="_chartRecordsService.barmode"
-      matTooltipPosition="before"
-    ></app-select>
-  </mat-list-item>
+  <mat-selection-list cdkDropList
+    (cdkDropListDropped)="drop($event)"
+    (ngModelChange)="onNgModelChange($event)"
+    [ngModel]="_chartRecordsService.panelSelected"
+    >
+    <ng-container *ngFor="let panel of _chartRecordsService.panelOrder">
+      <mat-list-option cdkDrag [value]="panel">
+        {{ panel | titlecase }}
+        <p *cdkDragPreview></p>
+      </mat-list-option>
+    </ng-container>
+  </mat-selection-list>
 
-  <mat-list-item >
-    <app-select
-      (selectedChange)="onBarnormChange($event)"
-      [matTooltip]="'Barnorm'"
-      [options]="_visualizationConfigService.config.chart.controller.barnorms"
-      [(selected)]="_chartRecordsService.barnorm"
-      matTooltipPosition="before"
-    ></app-select>
-  </mat-list-item>
+  <ng-container *ngIf="_chartRecordsService.panelSelected.includes('histogram')">
+    <mat-list-item mat-subheader>
+      Histogram
+    </mat-list-item>
 
-  <mat-list-item>
-    <app-ticks-slider-inline
-      (valueChange)="onBinSizeChange($event)"
-      [matTooltip]="'Bin size'"
-      [options]="_visualizationConfigService.config.chart.controller.binsize"
-      [(value)]="_chartRecordsService.binsize"
-      style="width:100%"
-    ></app-ticks-slider-inline>
-  </mat-list-item>
+    <mat-list-item >
+      <app-select
+        (selectedChange)="onBarmodeChange($event)"
+        [matTooltip]="'Barmode'"
+        [options]="_visualizationConfigService.config.chart.controller.barmodes"
+        [(selected)]="_chartRecordsService.barmode"
+        matTooltipPosition="before"
+      ></app-select>
+    </mat-list-item>
+
+    <mat-list-item >
+      <app-select
+        (selectedChange)="onBarnormChange($event)"
+        [matTooltip]="'Barnorm'"
+        [options]="_visualizationConfigService.config.chart.controller.barnorms"
+        [(selected)]="_chartRecordsService.barnorm"
+        matTooltipPosition="before"
+      ></app-select>
+    </mat-list-item>
+
+    <mat-list-item>
+      <app-ticks-slider-inline
+        (valueChange)="onBinSizeChange($event)"
+        [matTooltip]="'Bin size'"
+        [options]="_visualizationConfigService.config.chart.controller.binsize"
+        [(value)]="_chartRecordsService.binsize"
+        style="width:100%"
+      ></app-ticks-slider-inline>
+    </mat-list-item>
+  </ng-container>
 
 </mat-list>

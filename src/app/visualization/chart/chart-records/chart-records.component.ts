@@ -32,8 +32,10 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     height: 'calc(100vh - 40px)',
   }
   private threshold: any = 'legendonly';
-  private subscription: any;
+  private subscriptionUpdate: any;
+  private subscriptionInit: any;
   private labels: string = 'abcdefghijklmnopqrstuvwxyz';
+  public sizes: number[] = [80, 20];
 
   constructor(
     private _logService: LogService,
@@ -46,13 +48,27 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // console.log('Record visualization on init')
-    this.subscription = this._visualizationService.update.subscribe(() => this.update())
+    this._chartRecordsService.panelSelected = [];
+    if (this.hasInputData()) {
+      this._chartRecordsService.panelSelected.push('input')
+    }
+    if (this.hasAnalogData()) {
+      this._chartRecordsService.panelSelected.push('analog')
+    }
+    if (this.hasSpikeData()) {
+      this._chartRecordsService.panelSelected.push('spike')
+      this._chartRecordsService.panelSelected.push('histogram')
+    }
+
+    this.subscriptionInit = this._visualizationService.init.subscribe(() => this.init())
+    this.subscriptionUpdate = this._visualizationService.update.subscribe(() => this.update())
     this.init()
   }
 
   ngOnDestroy() {
     this.plot.parentNode.removeChild(this.plot);
-    this.subscription.unsubscribe()
+    this.subscriptionInit.unsubscribe()
+    this.subscriptionUpdate.unsubscribe()
   }
 
   private get plot(): HTMLCanvasElement {
@@ -77,6 +93,14 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       },
     };
 
+    this.initLayout()
+    this.update()
+  }
+
+  initLayout(): void {
+    this._chartRecordsService.panelInit()
+    this._chartRecordsService.setPanelSizes()
+
     this.layout = {
       title: {
         text: this.data.name,
@@ -85,9 +109,11 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       },
       xaxis: {
         title: 'Time [ms]',
-      }
+        showgrid: true,
+        zeroline: true,
+      },
     };
-    this.update()
+
   }
 
   update(): void {
@@ -96,70 +122,8 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     var records = this.records;
     if (records.length == 0) return
     this._logService.log('Update charts');
-
-    var barmode = this._chartRecordsService['barmode'];
-    var barnorm = this._chartRecordsService['barnorm'];
-    if (this.hasSpikeData() && this.hasAnalogData()) {
-      this.layout['yaxis'] = {
-        // title: 'Firing rate [Hz]',
-        title: 'Spike count',
-        domain: [0, 0.19],
-      }
-      this.layout['yaxis2'] = {
-        title: 'Neuron ID',
-        domain: [0.21, .49],
-      }
-      var y3Title = 'Membrane potentials [mV]'
-      if (this.hasInputData()) {
-        this.layout['yaxis2'] = {
-          domain: [.21, .84],
-        }
-        this.layout['yaxis4'] = {
-          title: 'Current [pA]',
-          zeroline: false,
-          domain: [.86, 1],
-        }
-      } else {
-        this.layout['yaxis3'] = {
-          title: y3Title,
-          domain: [.51, 1],
-        }
-      }
-    } else if (this.hasAnalogData()) {
-      var y3Title = 'Membrane potential [mV]'
-      if (this.hasInputData()) {
-        this.layout['yaxis3'] = {
-          title: y3Title,
-          domain: [0, .66],
-        }
-        this.layout['yaxis4'] = {
-          zeroline: false,
-          title: 'Current [pA]',
-          domain: [.7, 1],
-        }
-      } else {
-        this.layout['yaxis3'] = {
-          title: y3Title,
-          domain: [0, 1],
-        }
-      }
-    } else if (this.hasSpikeData()) {
-      this.layout['yaxis'] = {
-        // title: 'Firing rate [Hz]',
-        title: 'Spike count',
-        domain: [0, 0.2],
-      }
-      this.layout['yaxis2'] = {
-        title: 'Neuron ID',
-        domain: [0.22, 1],
-      }
-    }
-
-    if (this.hasSpikeData()) {
-      this.layout['barmode'] = barmode;
-      this.layout['barnorm'] = barnorm;
-    }
-
+    this._chartRecordsService.panel.analog.threshold = false;
+    this.updateLayout()
     records.map(record => {
       if (record.recorder.model == 'spike_detector') {
         this.plotSpikeData(record)
@@ -173,13 +137,50 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         }
       }
     })
-    if (this.layout.hasOwnProperty('yaxis2')) {
-      if (this.layout.yaxis2.hasOwnProperty('range')) {
-        this.layout.yaxis2.range[0] -= 1;
-        this.layout.yaxis2.range[1] += 1;
-      }
-    }
+
+    // var panel = this._chartRecordsService.panel['spike'];
+    // var yaxis = 'yaxis' + (panel.yaxis == 1 ? '' : panel.yaxis);
+    // if (this.layout.hasOwnProperty(yaxis)) {
+    //   if (this.layout[yaxis].hasOwnProperty('range')) {
+    //     this.layout[yaxis].range[0] -= 1;
+    //     this.layout[yaxis].range[1] += 1;
+    //   }
+    // }
+
     this._logService.log('Render charts');
+  }
+
+  updateLayout(): void {
+    var sizes = this._chartRecordsService.panelOrder
+      .filter(pp => this._chartRecordsService.panelSelected.includes(pp))
+      .map(p => (this._chartRecordsService.panel[p].size / 100));
+    sizes.reverse()
+    const cumulativeSum = (sum => value => sum += value)(0);
+    var sizesCumSum = sizes.map(cumulativeSum);
+    var domains = sizesCumSum.map((s, i) => {
+      var start = (i == 0) ? 0 : (sizesCumSum[i - 1] + 0.02);
+      var end = (i == sizesCumSum.length - 1) ? 1 : (s - 0.02);
+      return [start, end]
+    })
+    domains.reverse()
+
+    this._chartRecordsService.panelOrder
+      .filter(pp => this._chartRecordsService.panelSelected.includes(pp))
+      .map((p, i) => {
+        var panel = this._chartRecordsService.panel[p];
+        var domain = domains[i];
+        var yaxis = 'yaxis' + (panel.yaxis == 1 ? '' : panel.yaxis);
+        this.layout[yaxis] = {
+          title: panel.ylabel,
+          domain: domain,
+          // zeroline: this._chartRecordsService.panelSelected.length == 1 || panel.yaxis == 1,
+        }
+      })
+
+    if (this._chartRecordsService.panelSelected.includes('histogram')) {
+      this.layout['barmode'] = this._chartRecordsService['barmode'];
+      this.layout['barnorm'] = this._chartRecordsService['barnorm'];
+    }
   }
 
   plotSpikeData(record: Record): void {
@@ -194,44 +195,54 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
     var idx = this.plotlyData.length;
     var label = this.labels[node.idx];
-    record.config['showlegend'] = this.records.length > 1;
+    record.config['showlegend'] = false;
     record.config['legendgroup'] = 'spike' + idx;
 
-    var scatterData = this._chartRecordsService.scatter(record.idx, x, y, color, label, record.config);
-    var histData = this._chartRecordsService.histogram(record.idx, x, start, end, size, color, record.config)
-    this.plotlyData.push(scatterData);
-    this.plotlyData.push(histData);
+    if (this._chartRecordsService.panelSelected.includes('spike') && this._chartRecordsService.panel['spike'].size > 2) {
+      var panelSpike = this._chartRecordsService.panel['spike'];
+      var scatterData = this._chartRecordsService.scatter(record.idx, x, y, color, label, record.config, 'y' + panelSpike.yaxis);
+      this.plotlyData.push(scatterData);
 
-    var global_ids: number[];
-    if (this.layout.yaxis2.hasOwnProperty('range')) {
-      global_ids = this.layout.yaxis2['range'].concat(record['global_ids']);
-    } else {
-      global_ids = record['global_ids'];
+      var yaxis = 'yaxis' + (panelSpike.yaxis == 1 ? '' : panelSpike.yaxis);
+      var global_ids: number[];
+      if (this.layout[yaxis].hasOwnProperty('range')) {
+        global_ids = this.layout[yaxis]['range'].concat(record['global_ids']);
+      } else {
+        global_ids = record['global_ids'];
+      }
+      this.layout[yaxis]['range'] = this._mathService.extent(global_ids);
     }
-    this.layout.yaxis2['range'] = this._mathService.extent(global_ids);
+
+    if (this._chartRecordsService.panelSelected.includes('histogram') && this._chartRecordsService.panel['histogram'].size > 2) {
+      var panelHist = this._chartRecordsService.panel['histogram'];
+      var histData = this._chartRecordsService.histogram(record.idx, x, start, end, size, color, record.config, 'y' + panelHist.yaxis);
+      this.plotlyData.push(histData);
+    }
+
   }
 
   plotAnalogData(record: Record, record_from: string = 'V_m'): void {
-    if (record_from == 'V_m') {
+    var recorder = record.recorder;
+    var panelSource = this.hasInputData(recorder.idx) ? 'input' : 'analog';
+    var panel = this._chartRecordsService.panel[panelSource];
+    if (panel.size <= 2) return
+    var yaxis = 'y' + panel.yaxis;
+
+    if (record_from == 'V_m' && !panel.threshold) {
       var time = this.data.app.kernel['time'] || 1000;
       var Vth = -55;
-
       var x: any[] = [0, time];
       var y: any[] = [Vth, Vth];
-
       var config = { hoverinfo: 'none', visible: 'legendonly', 'line.dash': 'dash' };
-      var plot_Vth = this._chartRecordsService.plot(record.idx, x, y, 'black', 'V_m threshold', config);
+      var plot_Vth = this._chartRecordsService.plot(record.idx, x, y, 'black', 'V_m threshold', config, yaxis);
+      plot_Vth['showlegend'] = true;
+      plot_Vth['visible'] = this._chartRecordsService.threshold;
+      panel['threshold'] = true;
       this.plotlyData.push(plot_Vth)
     }
 
-    var recorder = record.recorder;
     var node = this.data.app.nodes[recorder.idx];
     var color: string = this._colorService.node(node);
-
-    if (record_from == 'V_m') {
-      this.plotlyData[0]['showlegend'] = true;
-      this.plotlyData[0]['visible'] = this.threshold;
-    }
 
     var neurons = this.data.simulation.connectomes
       .filter(d => d.source == recorder.idx)
@@ -246,7 +257,6 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       data[senderIdx].y.push(record.events[record_from][idx])
     })
 
-    var yaxis = this.hasInputData(recorder.idx) ? 'y4' : 'y3';
     if (data.length == 1) {
       var label = record_from + ' of ' + (recorder.idx + 1);
       var config0 = { hoverinfo: 'full', showlegend: true };
@@ -336,10 +346,12 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
   onLegendClick(event: any): void {
     setTimeout(() => {
+      this._chartRecordsService.threshold = event.data[0].visible;
       var idx = event.curveNumber;
       var data = event.data[idx];
       this.records[data.idx].config['visible'] = data['visible'];
-    }, 1000)
+  }, 1000)
+
   }
 
   onLegendDoubleClick(event: any): void {
