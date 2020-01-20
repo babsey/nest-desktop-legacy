@@ -23,6 +23,10 @@ export class VisualizationService {
     } else {
       this.hasPositions = false;
     }
-    this.mode = this.hasPositions ? 'animation' : 'chart';
+    if (this.mode == undefined) {
+      this.mode = this.hasPositions ? 'animation' : 'chart';
+    } else if (!this.hasPositions) {
+      this.mode = 'chart';
+    }
   }
 }
