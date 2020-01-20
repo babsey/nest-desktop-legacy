@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "2.2.12",
+  "version": "2.2.13",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -54,10 +54,10 @@
     "@angular/language-service": "^8.2.14",
     "@types/d3": "^5.7.2",
     "@types/hammerjs": "^2.0.36",
-    "@types/jasmine": "^3.5.0",
+    "@types/jasmine": "^3.5.1",
     "@types/jasminewd2": "^2.0.8",
     "@types/mathjs": "^6.0.3",
-    "@types/node": "^13.1.7",
+    "@types/node": "^13.1.8",
     "@types/plotly.js": "^1.44.24",
     "@types/pouchdb": "^6.4.0",
     "@types/stats.js": "^0.17.0",
