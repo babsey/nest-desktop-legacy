@@ -9,23 +9,27 @@
 </mat-list>
 
 <mat-list dense>
-  <mat-list-item *ngIf="connectome.projections.hasOwnProperty('kernel')">
-    <app-link-param
-      (valueChange)="onValueChange($event)"
-      [(value)]="connectome.projections.kernel"
-      [link]="link"
-      [options]="config.kernel"
-    ></app-link-param>
-  </mat-list-item>
+  <ng-container *ngIf="connectome.projections.hasOwnProperty('kernel')">
+    <mat-list-item>
+      <app-link-param
+        (valueChange)="onValueChange($event)"
+        [(value)]="connectome.projections.kernel"
+        [link]="link"
+        [options]="config.kernel"
+      ></app-link-param>
+    </mat-list-item>
+  </ng-container>
 
-  <mat-list-item *ngIf="connectome.projections.hasOwnProperty('number_of_connections')">
-    <app-link-param
-      (valueChange)="onValueChange($event)"
-      [(value)]="connectome.projections.number_of_connections"
-      [link]="link"
-      [options]="config.number_of_connections"
-    ></app-link-param>
-  </mat-list-item>
+  <ng-container *ngIf="connectome.projections.hasOwnProperty('number_of_connections')">
+    <mat-list-item>
+      <app-link-param
+        (valueChange)="onValueChange($event)"
+        [(value)]="connectome.projections.number_of_connections"
+        [link]="link"
+        [options]="config.number_of_connections"
+      ></app-link-param>
+    </mat-list-item>
+  </ng-container>
 
   <mat-list-item>
     <app-link-mask
@@ -34,23 +38,27 @@
     ></app-link-mask>
   </mat-list-item>
 
-  <mat-list-item>
-    <app-link-param
-      (valueChange)="onValueChange($event)"
-      [(value)]="connectome.projections.weights"
-      [link]="link"
-      [options]="config.weights"
-    ></app-link-param>
-  </mat-list-item>
+  <ng-container *ngIf="connectome.projections.hasOwnProperty('weights')">
+    <mat-list-item>
+      <app-link-param
+        (valueChange)="onValueChange($event)"
+        [(value)]="connectome.projections.weights"
+        [link]="link"
+        [options]="config.weights"
+      ></app-link-param>
+    </mat-list-item>
+  </ng-container>
 
-  <mat-list-item>
-    <app-link-param
-      (valueChange)="onValueChange($event)"
-      [(value)]="connectome.projections.delays"
-      [link]="link"
-      [options]="config.delays"
-    ></app-link-param>
-  </mat-list-item>
+  <ng-container *ngIf="connectome.projections.hasOwnProperty('delays')">
+    <mat-list-item>
+      <app-link-param
+        (valueChange)="onValueChange($event)"
+        [(value)]="connectome.projections.delays"
+        [link]="link"
+        [options]="config.delays"
+      ></app-link-param>
+    </mat-list-item>
+  </ng-container>
 
 </mat-list>
 

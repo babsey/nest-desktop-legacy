@@ -19,39 +19,47 @@
         </span>
       </mat-list-item>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('kernel') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
-        <span class="flex">
-          <span>Kernel</span>
-          <span class="flex-spacer"></span>
-          <span>{{ connectome.projections.kernel.parametertype | capitalize }}</span>
-        </span>
-      </mat-list-item>
+      <ng-container *ngIf="connectome.projections.hasOwnProperty('kernel')">
+        <mat-list-item class="list-item" [style.display]="paramDisplay('kernel') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
+          <span class="flex">
+            <span>Kernel</span>
+            <span class="flex-spacer"></span>
+            <span>{{ connectome.projections.kernel.parametertype | capitalize }}</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
 
-      <!-- <mat-list-item class="list-item" [style.display]="paramDisplay('number_of_connections') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
-        <span class="flex">
-          <span>Number of connections</span>
-          <span class="flex-spacer"></span>
-          <span>{{ connectome.projections.number_of_connections }}</span>
-        </span>
-      </mat-list-item> -->
+      <ng-container *ngIf="connectome.projections.hasOwnProperty('number_of_connections')">
+        <mat-list-item class="list-item" [style.display]="paramDisplay('number_of_connections') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
+          <span class="flex">
+            <span>Number of connections</span>
+            <span class="flex-spacer"></span>
+            <span>{{ connectome.projections.number_of_connections }}</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('weights') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
-        <span class="flex">
-          <span>Synaptic weight</span>
-          <span class="flex-spacer"></span>
-          <span>{{ synWeights() }}</span>
-          <span class="unit">pA</span>
-        </span>
-      </mat-list-item>
+      <ng-container *ngIf="connectome.projections.hasOwnProperty('weights')">
+        <mat-list-item class="list-item" [style.display]="paramDisplay('weights') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
+          <span class="flex">
+            <span>Synaptic weight</span>
+            <span class="flex-spacer"></span>
+            <span>{{ synWeights() }}</span>
+            <span class="unit">pA</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
 
-      <mat-list-item class="list-item" [style.display]="paramDisplay('delays') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
-        <span class="flex">
-          <span>Synaptic delay</span>
-          <span class="flex-spacer"></span>
-          <span>{{ synDelays() }}</span>
-          <span class="unit">ms</span>
-        </span>
-      </mat-list-item>
+      <ng-container *ngIf="connectome.projections.hasOwnProperty('delays')">
+        <mat-list-item class="list-item" [style.display]="paramDisplay('delays') ? '' : 'none'" [style.border-left-color]="color('source')" [style.border-right-color]="color('target')">
+          <span class="flex">
+            <span>Synaptic delay</span>
+            <span class="flex-spacer"></span>
+            <span>{{ synDelays() }}</span>
+            <span class="unit">ms</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
     </ng-container>
 
     <ng-template #nonSpatial>
