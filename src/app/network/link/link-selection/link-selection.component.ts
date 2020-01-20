@@ -43,11 +43,11 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
     private _networkService: NetworkService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // this.update()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     // console.log('Update link selection')
     this.update()
   }

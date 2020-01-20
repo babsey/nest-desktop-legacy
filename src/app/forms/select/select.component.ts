@@ -16,7 +16,7 @@ export class SelectComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   onSelectionChange(): void {

@@ -46,7 +46,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Record visualization on init')
     this._chartRecordsService.panelSelected = [];
     if (this.hasInputData()) {
@@ -65,7 +65,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     this.init()
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.plot.parentNode.removeChild(this.plot);
     this.subscriptionInit.unsubscribe()
     this.subscriptionUpdate.unsubscribe()

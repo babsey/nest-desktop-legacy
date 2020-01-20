@@ -35,7 +35,7 @@ export class LinkListComponent implements OnInit {
     public _formatService: FormatService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.update()
   }
 

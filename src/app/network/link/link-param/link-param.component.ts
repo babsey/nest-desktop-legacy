@@ -28,7 +28,7 @@ export class LinkParamComponent implements OnInit {
     private dialog: MatDialog,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   setDefaultValue(): void {
@@ -54,8 +54,8 @@ export class LinkParamComponent implements OnInit {
     return typeof this.value == 'number';
   }
 
-  onFactorClick(factor) {
-    alert(factor)
+  onFactorClick(factor): void {
+    console.log(factor)
   }
 
   onValueChange(value: any): void {

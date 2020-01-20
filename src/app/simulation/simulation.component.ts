@@ -49,12 +49,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init simulation')
     this.route.params.subscribe(params => this.init(params['id']));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.bottomSheet.dismiss()
   }
 

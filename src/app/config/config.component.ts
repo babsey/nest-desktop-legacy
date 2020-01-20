@@ -16,7 +16,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscription = this.route.params.subscribe(params => {
       if ('config' in params) {
         this.routeConfig = params['config'];
@@ -24,7 +24,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
 

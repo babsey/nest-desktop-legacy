@@ -42,7 +42,7 @@ export class LinkToolbarComponent implements OnInit {
     private _networkService: NetworkService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.connectome = this.data.simulation.connectomes[this.link.idx];
   }
 

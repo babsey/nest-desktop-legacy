@@ -28,7 +28,7 @@ export class NetworkControllerComponent implements OnInit {
     private _networkControllerService: NetworkControllerService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   collection(idx: number): SimCollection {

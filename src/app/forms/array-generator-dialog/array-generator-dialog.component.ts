@@ -17,7 +17,7 @@ export class ArrayGeneratorDialogComponent implements OnInit {
     public _generatorService: GeneratorService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   onNoClick(): void {

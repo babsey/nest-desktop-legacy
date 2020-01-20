@@ -42,11 +42,11 @@ export class NodeMenuComponent implements OnInit, OnChanges {
     private _simulationEventService: SimulationEventService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.update()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.update()
   }
 

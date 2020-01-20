@@ -32,13 +32,13 @@ export class AnimationAnalogComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Record visualization on init')
     this.subscription = this._visualizationService.update.subscribe(() => this.update())
     this.init()
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
 
@@ -84,8 +84,8 @@ export class AnimationAnalogComponent implements OnInit, OnDestroy {
     var z: number[] = [];
     record.events.senders.map((sender, i) => {
       var pos = positions[global_ids.indexOf(sender)];
-      z.push(pos[0])
-      y.push(pos[1])
+      z.push(pos[1])
+      y.push(pos[0])
     })
     this.scatterFrames(x, y, z, sourceData);
   }

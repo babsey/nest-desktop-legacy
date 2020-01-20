@@ -42,12 +42,12 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init node selection')
     this.update()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     // console.log('Update node selection')
     this.update()
   }

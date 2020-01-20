@@ -27,11 +27,11 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
     private http: HttpClient,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // this.requestModelDoc()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.requestModelDoc()
   }
 

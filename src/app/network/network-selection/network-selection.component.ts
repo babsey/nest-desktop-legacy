@@ -20,11 +20,11 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
     private _networkService: NetworkService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init network selection')
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     // console.log('Change network selection')
   }
 
@@ -46,7 +46,7 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
     return this.isSelected(collection.element_type)
   }
 
-  onDataChange(data) {
+  onDataChange(data): void {
     this.dataChange.emit(this.data);
   }
 

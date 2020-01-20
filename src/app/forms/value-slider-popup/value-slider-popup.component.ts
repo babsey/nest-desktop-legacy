@@ -14,7 +14,7 @@ export class ValueSliderPopupComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   onChange(event: any): void {

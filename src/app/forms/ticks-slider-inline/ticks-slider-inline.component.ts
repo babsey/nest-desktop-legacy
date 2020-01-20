@@ -15,10 +15,10 @@ export class TicksSliderInlineComponent implements OnInit, OnChanges {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.idx = this.options.ticks.indexOf(this.value);
   }
 

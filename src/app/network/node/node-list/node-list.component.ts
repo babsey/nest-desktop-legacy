@@ -39,11 +39,11 @@ export class NodeListComponent implements OnInit, OnChanges {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.update()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     // console.log('Update node list')
     this.update()
   }

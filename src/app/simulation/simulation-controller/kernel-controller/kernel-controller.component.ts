@@ -20,7 +20,7 @@ export class KernelControllerComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   params(): any {

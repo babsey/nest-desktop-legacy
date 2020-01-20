@@ -18,7 +18,7 @@ export class SelectFilterComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.filteredOptions = this.options;
   }
 

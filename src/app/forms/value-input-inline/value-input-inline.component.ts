@@ -14,7 +14,7 @@ export class ValueInputInlineComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   onChange(value: any): void {

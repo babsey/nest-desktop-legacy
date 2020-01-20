@@ -31,7 +31,7 @@ export class SimulationListComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Simulation list')
   }
 

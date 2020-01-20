@@ -17,7 +17,7 @@ export class SimulationSelectionComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Simulation selection')
   }
 

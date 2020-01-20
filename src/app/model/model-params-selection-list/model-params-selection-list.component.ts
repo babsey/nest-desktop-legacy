@@ -16,7 +16,7 @@ export class ModelParamsSelectionListComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   hasParam(id: string): boolean {

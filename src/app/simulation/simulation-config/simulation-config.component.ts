@@ -14,7 +14,7 @@ export class SimulationConfigComponent implements OnInit {
     public _simulationConfigService: SimulationConfigService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   save(): void {

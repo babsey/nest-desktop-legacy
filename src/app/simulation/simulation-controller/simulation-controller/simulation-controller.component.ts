@@ -22,7 +22,7 @@ export class SimulationControllerComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   params(): any {

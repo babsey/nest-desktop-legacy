@@ -39,11 +39,11 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     public _colorService: ColorService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadModels()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.loadModels()
   }
 

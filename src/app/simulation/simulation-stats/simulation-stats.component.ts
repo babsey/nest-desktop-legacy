@@ -27,7 +27,7 @@ export class SimulationStatsComponent implements OnInit {
     private _colorService: ColorService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   node(idx: number): AppNode {

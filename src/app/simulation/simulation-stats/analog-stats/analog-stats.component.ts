@@ -34,11 +34,11 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
     private _mathService: MathService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.update()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.update()
   }
 

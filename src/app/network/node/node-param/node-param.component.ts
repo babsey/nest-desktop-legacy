@@ -36,7 +36,7 @@ export class NodeParamComponent implements OnInit {
     private dialog: MatDialog,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   setDefaultValue(): void {

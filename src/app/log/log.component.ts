@@ -18,7 +18,7 @@ export class LogComponent implements OnInit {
     public router: Router,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   setTime(time: Date): void {

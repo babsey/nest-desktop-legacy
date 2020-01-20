@@ -46,7 +46,7 @@ export class NetworkSketchComponent implements OnInit {
     this.selector = d3.select(elementRef.nativeElement);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init network sketch')
     this.history()
     d3.select('body').on('keyup', () => {

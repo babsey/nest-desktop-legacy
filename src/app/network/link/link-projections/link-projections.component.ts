@@ -21,7 +21,7 @@ export class LinkProjectionsComponent implements OnInit {
     private _networkConfigService: NetworkConfigService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.config = this._networkConfigService.config.projections;
   }
 

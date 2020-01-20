@@ -25,7 +25,7 @@ export class ControllerComponent implements OnInit {
     public _visualizationService: VisualizationService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   onDataChange(data: Data): void {

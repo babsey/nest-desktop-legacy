@@ -16,7 +16,7 @@ export class NetworkSketchControllerComponent implements OnInit {
     public _networkConfigService: NetworkConfigService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   selectScheme(event: any): void {

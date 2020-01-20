@@ -21,7 +21,7 @@ export class NodeShapeComponent implements OnInit {
   constructor(
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   label(): string {

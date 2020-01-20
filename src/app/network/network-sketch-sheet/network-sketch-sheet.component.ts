@@ -22,14 +22,14 @@ export class NetworkSketchSheetComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscription = this._networkService.update.subscribe((data: Data) => {
       this.data = data;
       this._changeDetectorRef.markForCheck()
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 

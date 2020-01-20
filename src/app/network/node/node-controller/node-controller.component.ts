@@ -44,17 +44,17 @@ export class NodeControllerComponent implements OnInit, OnChanges, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init node controller')
     this.subscription = this._networkService.update.subscribe((data: Data) => this.updateRecordFrom())
     this.update()
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     // console.log('Update node controller')
     this.update()
   }

@@ -36,7 +36,7 @@ export class LinkSketchComponent implements OnInit {
     this.selector = d3.select(elementRef.nativeElement);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   onClick(event: MouseEvent): void {

@@ -17,7 +17,7 @@ export class NestServerConfigComponent implements OnInit {
     public _nestServerService: NestServerService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._nestServerConfigService.init()
     this.host = this._nestServerService.url();
   }

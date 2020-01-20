@@ -17,7 +17,7 @@ export class ChartSplitControllerComponent implements OnInit {
     public _visualizationService: VisualizationService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   dragEnd(event): void {

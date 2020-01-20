@@ -18,10 +18,10 @@ export class SimulationScriptComponent implements OnInit, OnChanges {
     public _simulationScriptService: SimulationScriptService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (!this.data.hasOwnProperty('simulation')) return
     var simulation = this.data.simulation;
 

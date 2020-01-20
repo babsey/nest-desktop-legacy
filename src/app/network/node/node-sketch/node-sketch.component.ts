@@ -41,7 +41,7 @@ export class NodeSketchComponent implements OnInit {
     this.selector = d3.select(elementRef.nativeElement);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.node == undefined) return
     var node = this.selector.selectAll("g.node").data([this.node]); // UPDATE
     if (this.dragable) {

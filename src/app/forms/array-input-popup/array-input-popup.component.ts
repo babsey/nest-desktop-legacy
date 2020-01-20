@@ -21,7 +21,7 @@ export class ArrayInputPopupComponent implements OnInit {
     private dialog: MatDialog,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init array input')
   }
 

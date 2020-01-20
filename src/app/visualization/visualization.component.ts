@@ -27,12 +27,12 @@ export class VisualizationComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscription = this._visualizationService.update.subscribe(() => this.update());
     this.update()
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
 

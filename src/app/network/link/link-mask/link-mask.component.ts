@@ -35,7 +35,7 @@ export class LinkMaskComponent implements OnInit {
     public _networkConfigService: NetworkConfigService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.layout['xaxis'] = { range: [-.55, .55] }
     this.layout['yaxis'] = { range: [-.55, .55] }
     this.selectMaskConfig();

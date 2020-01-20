@@ -19,7 +19,7 @@ export class ModelConfigDialogComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log(this.data)
     var configModel = this._modelService.models[this.data.model];
     var params = configModel['params'].find(param => param.id == this.data.param);

@@ -24,7 +24,7 @@ export class ModelComponent implements OnInit, OnDestroy {
     public _modelService: ModelService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     let paramMap = this.route.snapshot.paramMap;
     let model = paramMap.get('model');
     if (model) {
@@ -32,7 +32,7 @@ export class ModelComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this._modelService.selectedModel = '';
   }
 

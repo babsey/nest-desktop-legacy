@@ -35,12 +35,12 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
     this.selector = d3.select(elementRef.nativeElement);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.init()
     this.resize()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.resize()
   }
 

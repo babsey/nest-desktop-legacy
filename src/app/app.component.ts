@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
     return this._appConfigService.config.app['advanced'];
   }
 
-  prepareRoute(outlet: RouterOutlet) {
+  prepareRoute(outlet: RouterOutlet): void {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 

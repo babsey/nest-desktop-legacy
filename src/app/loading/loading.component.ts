@@ -41,12 +41,12 @@ export class LoadingComponent implements OnInit {
     public router: Router,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initConfig()
     setTimeout(() => this.checkServer(), 200)
   }
 
-  ngDoCheck() {
+  ngDoCheck(): void {
     this.initDatabase()
 
     if (this.isReady()) {

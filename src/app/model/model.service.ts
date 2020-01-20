@@ -38,7 +38,7 @@ export class ModelService {
   ) {
   }
 
-  init() {
+  init(): void {
     this.status.ready = false;
     var config = this._modelConfigService.config['db'];
     this.db = this._dbService.init('model', config);

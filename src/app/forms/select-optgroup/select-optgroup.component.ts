@@ -16,7 +16,7 @@ export class SelectOptgroupComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   onSelectionChange(): void {

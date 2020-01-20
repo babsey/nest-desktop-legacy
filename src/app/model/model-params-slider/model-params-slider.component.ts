@@ -12,10 +12,10 @@ export class ModelParamsSliderComponent implements OnInit, OnChanges {
   constructor(
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
   }
 
   save(): void {

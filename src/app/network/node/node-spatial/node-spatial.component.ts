@@ -27,7 +27,7 @@ export class NodeSpatialComponent implements OnInit {
     private _positionService: PositionService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   plot(): void {

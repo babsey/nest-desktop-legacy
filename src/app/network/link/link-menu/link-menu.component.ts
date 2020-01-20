@@ -24,7 +24,7 @@ export class LinkMenuComponent implements OnInit {
     private _networkService: NetworkService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
   }
 

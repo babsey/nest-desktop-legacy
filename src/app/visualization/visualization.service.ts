@@ -7,7 +7,7 @@ import { Record } from '../classes/record';
   providedIn: 'root'
 })
 export class VisualizationService {
-  public mode: string = 'chart';
+  public mode: string;
   public hasPositions: boolean = false;
   public init: EventEmitter<any> = new EventEmitter();
   public update: EventEmitter<any> = new EventEmitter();

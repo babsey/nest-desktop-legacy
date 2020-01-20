@@ -51,11 +51,11 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     public _networkConfigService: NetworkConfigService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.update()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     // this.update()
   }
 

@@ -26,7 +26,7 @@ export class ChartRecordsService {
     this.panelInit()
   }
 
-  panelInit() {
+  panelInit(): void {
     this.panel = {
     'input': {
       'size': 0,
@@ -52,7 +52,7 @@ export class ChartRecordsService {
   }
   }
 
-  setPanelSizes() {
+  setPanelSizes(): void {
     var numPanels = this.panelSelected.length;
     this.panelOrder.map(p => {
       this.panel[p].size = 0;

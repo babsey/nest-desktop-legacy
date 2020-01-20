@@ -28,7 +28,7 @@ export class NetworkListComponent implements OnInit {
     private _networkService: NetworkService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init network list')
   }
 

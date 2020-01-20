@@ -35,12 +35,12 @@ export class ModelListComponent implements OnInit, OnDestroy {
     public _navigationService: NavigationService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.update()
     this.subscription = this._modelService.update.subscribe((): void => this.update())
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
 

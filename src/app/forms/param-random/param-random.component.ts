@@ -58,7 +58,7 @@ export class ParamRandomComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     if (this.isObject(this.value)) {
       this.selectedParameterType = this.findParameterType(this.value.parametertype);

@@ -52,12 +52,12 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init simulation playgound')
     this.subscription = this._simulationRunService.simulated.subscribe(resData => this.update(resData))
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // console.log('Destroy simulation playgound')
     this.subscription.unsubscribe()
     this.bottomSheet.dismiss()

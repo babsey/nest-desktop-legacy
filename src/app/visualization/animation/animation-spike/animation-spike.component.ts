@@ -30,13 +30,13 @@ export class AnimationSpikeComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Record visualization on init')
     this.subscription = this._visualizationService.update.subscribe(() => this.update())
     this.init()
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
 

@@ -21,7 +21,7 @@ export class ChartControllerComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   drop(event: CdkDragDrop<string[]>): void {

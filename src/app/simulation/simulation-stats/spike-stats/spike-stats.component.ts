@@ -36,11 +36,11 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
     private _mathService: MathService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.update()
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.update()
   }
 
@@ -91,12 +91,11 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
     return data.map(t => t[element]).reduce((acc, value) => acc + value, 0) / data.length;
   }
 
-  onCellClicked(element) {
-
+  onCellClicked(element): void {
     console.log(this.times[element.id])
   }
 
-  onRowHover(row) {
+  onRowHover(row): void {
     console.log(row)
   }
 

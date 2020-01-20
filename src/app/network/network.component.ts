@@ -43,7 +43,7 @@ export class NetworkComponent implements OnInit, AfterViewInit {
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // console.log('Init network')
   }
 

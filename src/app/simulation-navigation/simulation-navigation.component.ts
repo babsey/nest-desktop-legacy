@@ -45,12 +45,12 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.update()
     this.subscription = this._simulationProtocolService.change.subscribe(() => this.update())
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
 

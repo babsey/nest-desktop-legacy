@@ -15,7 +15,7 @@ export class AppConfigComponent implements OnInit {
     public _appConfigService: AppConfigService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._appConfigService.init()
   }
 

@@ -16,7 +16,7 @@ export class InputInlineComponent implements OnInit {
   constructor(
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }
