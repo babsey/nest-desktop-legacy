@@ -12,7 +12,7 @@ From: ubuntu:18.04
   curl -sL https://deb.nodesource.com/setup_12.x | bash -
   apt update && apt install -y nodejs
 
-  npm install -g npm
+  npm install -g npm yarn
 
 %environment
   export PATH=$PATH:$HOME/.local/bin

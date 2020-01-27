@@ -11,13 +11,13 @@ Install node modules for NEST Desktop source code:
 
    npm install
 
-Check if any node module are outdated:
+Check if any node package is outdated:
 
 .. code-block:: bash
 
    npm out
 
-Check if any node module are outdated:
+Update node package:
 
 .. code-block:: bash
 
@@ -28,6 +28,34 @@ Serve Angular Live Development Server serving at http://localhost:4200
 .. code-block:: bash
 
    npm start
+
+
+Usage of yarn
+-------------
+
+Install node modules for NEST Desktop source code:
+
+.. code-block:: bash
+
+   yarn install
+
+Check if any node package are outdated:
+
+.. code-block:: bash
+
+   yarn outdated
+
+Upgrade outdated packages:
+
+.. code-block:: bash
+
+   yarn upgrade
+
+Serve Angular Live Development Server serving at http://localhost:4200
+
+.. code-block:: bash
+
+   yarn start
 
 
 Setup

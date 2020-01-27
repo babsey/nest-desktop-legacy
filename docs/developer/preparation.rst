@@ -3,7 +3,7 @@ Preparation
 
 
 NEST Desktop is written in HTML5 but compiled by Angular, a web framework written in TypeScript.
-For Angular you need to install nodeJS (+npm).
+For Angular you need to install nodeJS (+ yarn).
 
 I have prepared Singularity recipe that build an environment with required packages for the develompment.
 You can find the definition file in singularity/nest-desktop-dev.def for building Singularity container.
@@ -11,7 +11,7 @@ You can find the definition file in singularity/nest-desktop-dev.def for buildin
 Requirements
  * Python 3.4 or higher
  * NEST Server, NEST Simulator (Test app)
- * nodeJS, npm  (Build app)
+ * nodeJS, npm, yarn (Build app)
  * setuptools, wheel, twine (for PyPI)
  * sphinx, sphinx rth theme (for Readthedocs)
 

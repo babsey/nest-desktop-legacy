@@ -21,11 +21,11 @@ The Python Package Index **nest-desktop** includes an executive command :code:`n
 
 First update the version of nest-desktop in :code:`src/packages.json` and in :code:`nest_desktop/__init__.py`.
 
-Then generate app package using npm. It builds the folder :code:`nest_desktop/app`:
+Then generate app package using yarn. It builds the folder :code:`nest_desktop/app`:
 
 .. code-block:: bash
 
-   npm run build
+   yarn run build
 
 Next, remove the folders:
 
