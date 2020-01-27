@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "2.2.13",
+  "version": "2.2.14",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -41,11 +41,11 @@
     "pouchdb-upsert": "^2.2.0",
     "rxjs": "^6.5.4",
     "stats.js": "^0.17.0",
-    "three": "^0.108.0",
-    "three-orbitcontrols": "^2.110.3",
+    "three": "~0.109.0",
+    "three-orbitcontrols": "~2.108.1",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
-    "zone.js": "~0.9.1"
+    "zone.js": "^0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.803.23",
@@ -56,22 +56,23 @@
     "@types/hammerjs": "^2.0.36",
     "@types/jasmine": "^3.5.1",
     "@types/jasminewd2": "^2.0.8",
-    "@types/mathjs": "^6.0.3",
-    "@types/node": "^13.1.8",
+    "@types/mathjs": "^6.0.4",
+    "@types/node": "^13.5.0",
+    "@types/offscreencanvas": "^2019.6.1",
     "@types/plotly.js": "^1.44.24",
     "@types/pouchdb": "^6.4.0",
     "@types/stats.js": "^0.17.0",
     "codelyzer": "^5.2.1",
     "jasmine-core": "^3.5.0",
-    "jasmine-spec-reporter": "~4.2.1",
+    "jasmine-spec-reporter": "^4.2.1",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage-istanbul-reporter": "^2.1.1",
     "karma-jasmine": "^3.1.0",
     "karma-jasmine-html-reporter": "^1.5.1",
-    "protractor": "~5.4.0",
+    "protractor": "^5.4.0",
     "ts-node": "^8.6.2",
     "tslint": "^5.20.1",
-    "typescript": "~3.4.5"
+    "typescript": "~3.5.3"
   }
 }
