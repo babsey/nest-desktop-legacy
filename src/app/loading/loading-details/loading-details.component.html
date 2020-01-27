@@ -1,0 +1,188 @@
+<mat-menu #configMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="_loadingService.resetConfigs()">
+    <fa-icon class="menu-icon" icon="undo"></fa-icon>
+    Reset configurations
+  </button>
+</mat-menu>
+
+<mat-menu #databaseMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="_loadingService.resetDatabases()">
+    <fa-icon class="menu-icon" icon="undo"></fa-icon>
+    Reset databases
+  </button>
+</mat-menu>
+
+<mat-menu #serverMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="_loadingService.checkServer()">
+    <fa-icon class="menu-icon" icon="search"></fa-icon>
+    Check server
+  </button>
+</mat-menu>
+
+<span [@enterAnimation] class="loading">
+
+  <span class="nest-theme nest">
+    <mat-toolbar class="flex" color="primary">
+      NEST Desktop
+      <span class="flex-spacer"></span>
+      <span class="dense">{{ version }}</span>
+    </mat-toolbar>
+  </span>
+
+  <span>
+    <mat-list role="list" dense>
+
+      <span class="flex">
+        <h3 mat-subheader>
+          <fa-icon class="list-icon" icon="wrench"></fa-icon> Configurations
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="configMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Nest Server
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _nestServerConfigService.config.version }}
+            <app-validation-check [status]="_nestServerConfigService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Application
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _appConfigService.config.version }}
+            <app-validation-check [status]="_appConfigService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Model
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _modelConfigService.config.version }}
+            <app-validation-check [status]="_modelConfigService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Network
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _networkConfigService.config.version }}
+            <app-validation-check [status]="_networkConfigService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Simulation
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _simulationConfigService.config.version }}
+            <app-validation-check [status]="_simulationConfigService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Visualization
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _visualizationConfigService.config.version }}
+            <app-validation-check [status]="_visualizationConfigService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <span class="flex">
+        <h3 mat-subheader>
+          <fa-icon class="list-icon" icon="database"></fa-icon> Databases
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="databaseMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Model
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _modelService.version }}
+            <app-validation-check [status]="_modelService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Simulation
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _simulationService.version }}
+            <app-validation-check [status]="_simulationService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Protocol
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _simulationProtocolService.version }}
+            <app-validation-check [status]="_simulationProtocolService.status"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <span class="flex">
+        <h3 mat-subheader>
+        <fa-icon class="list-icon" icon="server"></fa-icon> NEST
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="serverMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Server
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _nestServerService.status.server.version }}
+            <app-response-check [response]="_nestServerService.status.server.response" [status]="_nestServerService.status.server"></app-response-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Simulator
+          <span class="flex-spacer"></span>
+          <span>
+            {{ _nestServerService.status.simulator.version }}
+            <app-response-check [response]="_nestServerService.status.server.response" [status]="_nestServerService.status.simulator"></app-response-check>
+          </span>
+        </span>
+      </mat-list-item>
+    </mat-list>
+
+  </span>
+
+</span>

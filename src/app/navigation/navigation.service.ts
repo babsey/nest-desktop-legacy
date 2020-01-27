@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class NavigationService {
   public sidenavShortView: boolean = false;
-  public sidenavOpened: boolean = true;
+  public sidenavOpened: boolean = false;
 
   constructor(
   ) { }

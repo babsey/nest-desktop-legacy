@@ -5,14 +5,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MccColorPickerModule } from 'material-community-components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { AppPipesModule } from '../pipes/pipes.module';
 import { AppRoutingModule } from '../modules/app-routing.module';
 import { MaterialModule } from '../modules/material.module';
+
 import { ModelModule } from '../model/model.module';
 import { NestServerModule } from '../nest-server/nest-server.module';
 import { NetworkModule } from '../network/network.module';
 import { SimulationModule } from '../simulation/simulation.module';
 import { VisualizationModule } from '../visualization/visualization.module';
-import { AppPipesModule } from '../pipes/pipes.module';
 
 import { AppConfigComponent } from './app-config/app-config.component';
 import { ConfigComponent } from './config.component';

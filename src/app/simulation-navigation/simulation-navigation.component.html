@@ -77,7 +77,6 @@
               (change)="onChange($event)"
               (keyup)="onChange($event)"
               [(ngModel)]="_simulationService.data.name"
-              [disabled]="!_simulationService.dataLoaded"
               class="formControl"
               placeholder="Name of the simulation"
               type="text"

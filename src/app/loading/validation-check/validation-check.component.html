@@ -1,0 +1,7 @@
+<fa-icon
+  [icon]="icon()"
+  [spin]="!status.ready"
+  [class.orange]="status.ready && !status.valid"
+  [class.green]="status.ready && status.valid "
+  >
+</fa-icon>

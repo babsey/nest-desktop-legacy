@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, HostListene
 
 import * as d3 from 'd3';
 import * as THREE from 'three';
-import * as OrbitControls from 'three-orbitcontrols';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import * as STATS from 'stats.js';
 

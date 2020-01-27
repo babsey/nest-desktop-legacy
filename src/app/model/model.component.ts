@@ -33,7 +33,7 @@ export class ModelComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._modelService.selectedModel = '';
+    // this._modelService.selectedModel = '';
   }
 
   advanced(): boolean {

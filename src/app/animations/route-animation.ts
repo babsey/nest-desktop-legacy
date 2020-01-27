@@ -21,7 +21,7 @@ export const routeNavAnimation =
 export const routeAnimation =
   trigger('routeAnimations', [
     transition('* <=> *', [
-      query(':enter, :leave', style({ position: 'fixed', height: '100%', width: '100%' }), { optional: true }),
+      query(':enter, :leave', style({ position: 'fixed', height: '100%', width: 'calc(100% - 40px)' }), { optional: true }),
       group([
         query(':enter', [
           style({ transform: 'translateY(0px)', opacity: 0 }),

@@ -1,0 +1,23 @@
+.loading {
+
+  .mat-subheader {
+    button {
+      font-size: 11px;
+      height: 32px;
+      width: 32px;
+      line-height: 32px;
+    }
+  }
+
+  mat-list-item {
+    height: 18px;
+  }
+}
+
+.nest {
+  mat-toolbar {
+    width: 250px;
+    margin: 5px;
+    border-radius: 10px 10px 10px 0;
+  }
+}

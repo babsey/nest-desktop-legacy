@@ -7,64 +7,14 @@
   width: 260px
 }
 
-#navigation-button {
-  width: 40px;
-}
-
-.background {
-  display: flex;
-  height: 100%;
-  width: 100%;
-
-  figure {
-    margin: 0;
-  }
-}
-
 router-outlet {
   height: 100%;
 }
 
-.buttonLeft {
-  left: -20px;
-  padding-left: 15px;
-  position: absolute;
-  z-index: 1000;
-  height: 40px;
-  width: 40px;
-  line-height: 40px !important;
-
-  .mat-button-wrapper {
-    padding: 0 !important;
-  }
-}
-
-.navButton {
-  position: absolute;
-  left: 0;
-  width: 4px;
-  height: 100vh;
-  z-index: 1000;
-}
-
-.quote {
-  font-family: mono;
-  margin: 20px;
-  display: flex;
-  font-size: 24px;
-  line-height: 1.2em;
-  font-style: italic;
-  text-align: right;
-}
-
-.author {
-  float: right;
-}
-
 .mouse-right-click {
   position: fixed;
-  bottom: 4px;
-  left: 4px;
+  bottom: 2px;
+  left: 1px;
   z-index: 1000;
 
   img {
@@ -72,6 +22,3 @@ router-outlet {
     pointer-events: none;
   }
 }
-// .mouse-right-click:hover {
-//   display: none;
-// }

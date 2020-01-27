@@ -7,16 +7,20 @@ import { ConfigComponent } from '../config/config.component';
 import { SimulationComponent } from '../simulation/simulation.component';
 import { NetworkComponent } from '../network/network.component';
 
-import { HelpListComponent } from '../help/help-list/help-list.component';
 import { ConfigListComponent } from '../config/config-list/config-list.component';
+import { HelpListComponent } from '../help/help-list/help-list.component';
+import { LoadingDetailsComponent } from '../loading/loading-details/loading-details.component';
 import { ModelListComponent } from '../model/model-list/model-list.component';
-import { SimulationNavigationComponent } from '../simulation-navigation/simulation-navigation.component';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
+import { SimulationNavigationComponent } from '../simulation-navigation/simulation-navigation.component';
+import { StartpageComponent } from '../startpage/startpage.component';
 import { TestsuiteComponent } from '../testsuite/testsuite.component';
 
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/(nav:simulation)', pathMatch: 'full' },
+  // { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', component: StartpageComponent },
+  { path: 'app', component: LoadingDetailsComponent, outlet: 'nav', data: { animation: 'home' } },
   { path: 'config', component: ConfigListComponent, outlet: 'nav', data: { animation: 'config' } },
   { path: 'config/:config', component: ConfigComponent, data: { animation: 'config' } },
   { path: 'help', component: HelpListComponent, outlet: 'nav' },

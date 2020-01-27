@@ -11,7 +11,9 @@ var STORAGE_NAME = 'nest-server-config';
   providedIn: 'root'
 })
 export class NestServerConfigService {
-  public config: any = {};
+  public config: any = {
+    version: null,
+  };
   public status: any = {
     ready: false,
     valid: false,

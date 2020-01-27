@@ -1,72 +1,40 @@
 <app-navigation
-  (readyChange)="onReadyChange($event)"
-  [(ready)]="ready"
   class="no-print"
   id="navigation-button"
   >
 </app-navigation>
 
-<mat-sidenav-container id="container" autosize>
-  <mat-sidenav
-    (openedChange)="triggerResize()"
-    [(opened)]="_navigationService.sidenavOpened"
-    [mode]="mobileQuery.matches ? 'over' : 'side'"
-    autoFocus="false"
-    class="no-print"
-    id="navigation"
-    position="start"
-    role="region"
-    >
-    <ng-container [ngSwitch]="ready">
-      <ng-container *ngSwitchCase="false">
-        <app-loading
-        (buttonClick)="ready=true"
-        (readyChange)="onReadyChange($event)"
-        [(ready)]="ready"
-        [style.display]="_appConfigService.config.app.loading ? '' : 'None'"
-        ></app-loading>
+<ng-container *ngIf="_loadingService.loaded.database">
+  <mat-sidenav-container id="container" autosize>
+    <mat-sidenav
+      (openedChange)="triggerResize()"
+      [(opened)]="_navigationService.sidenavOpened"
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      autoFocus="false"
+      class="no-print"
+      id="navigation"
+      position="start"
+      role="region"
+      >
+      <ng-container *ngIf="_navigationService.sidenavOpened">
+        <router-outlet #navOutlet="outlet" name="nav"></router-outlet>
       </ng-container>
-      <ng-container *ngSwitchCase="true">
-        <div>
-          <router-outlet #navOutlet="outlet" name="nav"></router-outlet>
-        </div>
-      </ng-container>
-    </ng-container>
-  </mat-sidenav>
+    </mat-sidenav>
 
-  <mat-sidenav-content #content>
-    <ng-container [ngSwitch]="ready">
-      <ng-container *ngSwitchCase="false">
-        <span class="background" [style.display]="_appConfigService.config.app.loading ? '' : 'None'">
-          <div style="margin:auto">
-            <figure>
-              <img width="720" src="/assets/img/spike-transmission-carlos.png" />
-            </figure>
-          </div>
-        </span>
+    <mat-sidenav-content #content>
+      <span [@routeAnimations]="prepareRoute(outlet)">
+        <router-outlet #outlet="outlet"></router-outlet>
+      </span>
+    </mat-sidenav-content>
 
-        <div style="position:absolute; bottom: 20px; right: 20px; background: rgb(250,250,250)">
-          <div class="quote">"Ah! My poor brain is racked and crazed, my spirit and senses amazed!"</div>
-          <div class="author">Johann Wolfgang Von Goethe (from Faust, 1808)</div>
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchCase="true">
-        <!-- <app-navigation id="navigation-button"></app-navigation> -->
-        <span [@routeAnimations]="prepareRoute(outlet)">
-          <router-outlet #outlet="outlet"></router-outlet>
-        </span>
-      </ng-container>
-    </ng-container>
-
-  </mat-sidenav-content>
-
-</mat-sidenav-container>
+  </mat-sidenav-container>
+</ng-container>
 
 <div
   [style.display]="_appService.rightClick && !advanced() ? '' : 'none'"
   class="mouse-right-click dark-theme"
   >
-  <button mat-mini-fab>
+  <button mat-mini-fab color="primary">
     <img src="/assets/img/mouse-right-click.png" width="32px"/>
   </button>
 </div>

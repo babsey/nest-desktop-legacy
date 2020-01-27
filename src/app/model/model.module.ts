@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AppFormsModule } from '../forms/forms.module';
-import { AppRoutingModule } from '../modules/app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MaterialModule } from '../modules/material.module';
+import { AppFormsModule } from '../forms/forms.module';
 import { AppPipesModule } from '../pipes/pipes.module';
+import { AppRoutingModule } from '../modules/app-routing.module';
+import { MaterialModule } from '../modules/material.module';
+
 
 import { ModelComponent } from './model.component';
 import { ModelConfigComponent } from './model-config/model-config.component';
