@@ -39,8 +39,10 @@ export class LoadingService {
 
   init(): void {
     setTimeout(() => this.initConfig(), 10)
-    setTimeout(() => this.initDatabase(), 100)
-    setTimeout(() => this.checkServer(), 200)
+    setTimeout(() => {
+      this.checkServer()
+      this.initDatabase()
+    }, 200)
   }
 
   initConfig(): void {
