@@ -10,7 +10,7 @@ To install sphinx and readthedocs theme via  :code:`pip`:
 
 .. code-block:: bash
 
-   pip3 install sphinx sphinx_rtd_theme
+   python3 -m pip install sphinx sphinx_rtd_theme
 
 Local building
 --------------

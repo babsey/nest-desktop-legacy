@@ -2,34 +2,6 @@ Source code
 ===========
 
 
-Usage of npm
-------------
-
-Install node modules for NEST Desktop source code:
-
-.. code-block:: bash
-
-   npm install
-
-Check if any node package is outdated:
-
-.. code-block:: bash
-
-   npm out
-
-Update node package:
-
-.. code-block:: bash
-
-   npm up
-
-Serve Angular Live Development Server serving at http://localhost:4200
-
-.. code-block:: bash
-
-   npm start
-
-
 Usage of yarn
 -------------
 
@@ -58,6 +30,34 @@ Serve Angular Live Development Server serving at http://localhost:4200
    yarn start
 
 
+Usage of npm
+------------
+
+Install node modules for NEST Desktop source code:
+
+.. code-block:: bash
+
+   npm install
+
+Check if any node package is outdated:
+
+.. code-block:: bash
+
+   npm out
+
+Update node package:
+
+.. code-block:: bash
+
+   npm up
+
+Serve Angular Live Development Server serving at http://localhost:4200
+
+.. code-block:: bash
+
+   npm start
+
+
 Setup
 -----
 
@@ -66,7 +66,7 @@ Best method is to install it in user home using :code:`pip install --user`.
 
 .. code-block:: bash
 
-   pip3 install --user --no-deps -e nest-desktop
+   python3 -m pip install --user --no-deps -e nest-desktop
 
 
 Getting started
