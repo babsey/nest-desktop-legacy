@@ -131,11 +131,28 @@ Each node and link panel starts with a colored header and, if provided, a list o
 |fa-brain| The Simulation Module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+
 In the simulation module, a list of simulations and if provided protocols are displayed in the navigation panel.
-You can manage (add/delete/download/upload) protocols in the menu by clicking on the 3 vertical dots icon in the navigation header.
+
+The Simulation menu
+~~~~~~~~~~~~~~~~~~~
+
+.. image:: ../_static/img/gif/simulation-menu.gif
+  :scale: 100%
+  :align: left
+
+Clicking on the 3 vertical dots icon ( |fa-ellipsis-v| ) in the navigation header opens the simulation menu.
+
+In the simulation menu you can manage protocols.
+For delete or download specific protocol, click on `select protocols` item.
+To upload protocols from file, select `upload protocols` item.
+To delete all protocol, it will clear Protocol database.
 
 .. note::
-   Simulations cannot be deleted because they are integrated in the application.
+   Some simulations cannot be deleted because they are integrated in the application.
+
+|
+|
 
 Once you select a simulation/protocol, it will load from the database and ready for the simulation.
 In the main container you will see the colored header toolbar and icons.
