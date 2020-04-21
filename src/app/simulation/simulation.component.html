@@ -46,19 +46,9 @@
 <span class="simulation-theme">
   <mat-toolbar class="navbar flex no-print" color="primary" style="padding:0">
     <button mat-icon-button
-      (click)="_simulationService.mode='details'"
-      [class.active]="_simulationService.mode=='details'"
-      matTooltip="View node and connection details"
-      >
-      <span class="fa-stack">
-        <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
-        <fa-icon icon="eye" class="fa-stack-2x fa-inverse"></fa-icon>
-      </span>
-    </button>
-    <button mat-icon-button
       (click)="_simulationService.mode='edit'"
       [class.active]="_simulationService.mode=='edit'"
-      matTooltip="Modify network"
+      matTooltip="Construct network"
       >
       <span class="fa-stack">
         <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
@@ -68,11 +58,21 @@
     <button mat-icon-button
       (click)="_simulationService.mode='playground'"
       [class.active]="_simulationService.mode=='playground'"
-      matTooltip="Simulation playground"
+      matTooltip="Analyze activity"
       >
       <span class="fa-stack">
         <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
         <fa-icon icon="play" class="fa-stack-2x fa-inverse"></fa-icon>
+      </span>
+    </button>
+    <button mat-icon-button
+      (click)="_simulationService.mode='details'"
+      [class.active]="_simulationService.mode=='details'"
+      matTooltip="View network summary"
+      >
+      <span class="fa-stack">
+        <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+        <fa-icon icon="eye" class="fa-stack-2x fa-inverse"></fa-icon>
       </span>
     </button>
     <ng-container *ngIf="_simulationService.dataLoaded">

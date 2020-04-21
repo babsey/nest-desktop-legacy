@@ -35,8 +35,10 @@ Contents
    :caption: Developer Documentation
 
    developer/index
+   developer/interface-concept
    developer/preparation
    developer/source-code
    developer/package
    developer/readthedocs
+   developer/semantic-version
    developer/sources
