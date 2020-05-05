@@ -18,8 +18,8 @@
           <app-network-list
             (dataChange)="onDataChange($event)"
             [(data)]="data"
-            [paramSelective]="false"
             [columns]="true"
+            [paramSelective]="true"
           ></app-network-list>
         </ng-container>
 
@@ -30,10 +30,11 @@
 
               <mat-tab label="Network">
                 <app-network-list
+                  (dataChange)="onDataChange($event)"
                   [(data)]="data"
-                  [paramSelective]="false"
-                  (dataChange)="onDataChange($event)
-                "></app-network-list>
+                  [columns]="true"
+                  [paramSelective]="true"
+                ></app-network-list>
               </mat-tab>
 
               <mat-tab label="Description">
