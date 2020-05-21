@@ -1,7 +1,7 @@
 FROM nestsim/nest:2.18.0
 LABEL maintainer="Sebastian Spreizer <spreizer@web.de>"
 
-RUN apt-get update && apt-get install -y python3-pip
+RUN apt-get update && apt-get install -y build-essential python3-dev python3-pip
 
 # add user 'nest'
 RUN adduser --disabled-login --gecos 'NEST' --home /home/nest nest && \
