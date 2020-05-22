@@ -38,16 +38,19 @@ export class LoadingService {
   ) { }
 
   init(): void {
-    setTimeout(() => this.initConfig(), 10)
-    setTimeout(() => {
-      this.checkServer()
-      this.initDatabase()
-    }, 200)
+    this.initConfig()
+    const checkingConfigLoaded = setInterval(() => {
+      if (this.isConfigReady()) {
+        this.checkServer()
+        this.initDatabase()
+        clearInterval(checkingConfigLoaded)
+      }
+    }, 100)
   }
 
   initConfig(): void {
     if (this.loaded.config) return
-    console.log('Initialize config')
+    // console.log('Initialize config')
     this._nestServerConfigService.init()
     this._appConfigService.init()
     this._modelConfigService.init()
@@ -58,6 +61,7 @@ export class LoadingService {
   }
 
   isConfigReady(): boolean {
+    // console.log('Check config is ready')
     return (
       this._nestServerConfigService.status.ready &&
       this._appConfigService.status.ready &&

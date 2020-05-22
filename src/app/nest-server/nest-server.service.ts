@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { timeout, catchError } from 'rxjs/operators';
+import { timeout, catchError, first } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 
 import { NestServerConfigService } from './nest-server-config/nest-server-config.service';
@@ -53,40 +53,92 @@ export class NestServerService {
   }
 
   check(): void {
-    // console.log('Check')
+    console.log('Check server')
     this.init();
-    var url = this.url();
-    this.http.get(url)
-      .pipe(
-        timeout(1000), catchError(e => {
-          this.status.server.response = true;
-          return of(e);
-        })
-      )
-      .subscribe(res => {
-        console.log('res', res)
-        if (res['ok'] == false && res['url'] == "https://services.humanbrainproject.eu/oidc/login") {
-          window.location.reload()  // TODO: not a permament solution
-        }
-        this.status.server.response = true;
-        var appVersion = environment.VERSION.split('.');
-        if (res.hasOwnProperty('server')) {
-          this.status.server.ready = true;
-          this.status.server['version'] = res['server']['version'];
-          var serverVersion = this.status.server['version'].split('.');
-          this.status.server.valid = appVersion[0] == serverVersion[0] && appVersion[1] == serverVersion[1];
-        }
-        if (res.hasOwnProperty('simulator')) {
-          this.status.simulator.ready = true;
-          this.status.simulator['version'] = res['simulator']['version'];
-          var simulatorVersion = this.status.server['version'].split('.');
-          this.status.simulator.valid = appVersion[0] == simulatorVersion[0];
-        }
-      }, error => {
-        console.log('error', error)
-        if (error['ok'] == false && error['url'] == "https://services.humanbrainproject.eu/oidc/login") {
-          window.location.reload()  // TODO: not a permament solution
-        }
-      })
+    if (this._nestServerConfigService.config.host) {
+      this.ping(this.url()).then(resp => {
+        this.oidcLoginFailed(resp)
+        this.checkVersion(resp['body'])
+      }).catch(error => this.oidcLoginFailed(error))
+    } else {
+      this.seekServer()
+    }
   }
+
+  ping(url) {
+    return new Promise((resolve, reject) => {
+      this.http.get(url, {
+        observe: 'response',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, content-type',
+          'Access-Control-Allow-Methods': 'GET',
+        }
+      }).pipe(first())
+        .subscribe(resp => {
+          this.status.server.response = true;
+          resp.status === 200 ? resolve(resp) : reject(resp)
+        }, error => {
+          this.status.server.response = true;
+          reject(error)
+        })
+    })
+  }
+
+  seekServer(): void {
+    const hostname = window.location.hostname || 'localhost';
+    const hosts = [
+      'server.' + hostname,
+      hostname + '/server',
+      hostname + ':5000'
+    ]
+    const protocols = ['https:', 'http:']
+    protocols.forEach(protocol => {
+      hosts.forEach(host => {
+        this.ping(protocol + '//' + host)
+          .then(resp => {
+            this.updateSetting(resp)
+            this.checkVersion(resp['body'])
+          }).catch(error => { })
+      })
+    })
+  }
+
+  checkVersion(info): void {
+    if (info === undefined) return
+    console.log('Fetch info', info)
+    var appVersion = environment.VERSION.split('.');
+    if (info.hasOwnProperty('server')) {
+      this.status.server.ready = true;
+      this.status.server['version'] = info['server']['version'];
+      var serverVersion = this.status.server['version'].split('.');
+      this.status.server.valid = appVersion[0] == serverVersion[0] && appVersion[1] == serverVersion[1];
+    }
+    if (info.hasOwnProperty('simulator')) {
+      this.status.simulator.ready = true;
+      this.status.simulator['version'] = info['simulator']['version'];
+      var simulatorVersion = this.status.server['version'].split('.');
+      this.status.simulator.valid = appVersion[0] == simulatorVersion[0];
+    }
+    console.log(this.status)
+  }
+
+  updateSetting(resp): void {
+    console.log(resp.url)
+    var config = this._nestServerConfigService.config;
+    var host = resp.url.split('//')[1];
+    var hostname = host.split(':')[0]
+    config['host'] = host.split(':')[0];
+    config['secure'] = resp.url.startsWith('https:');
+    config['port'] = resp.url.includes(':5000') ? '5000' : '';
+    this._nestServerConfigService.save()
+  }
+
+  oidcLoginFailed(resp): void {
+    if (resp['ok'] == false && resp['url'] == "https://services.humanbrainproject.eu/oidc/login") {
+      window.location.reload()  // TODO: not a permament solution
+    }
+  }
+
 }

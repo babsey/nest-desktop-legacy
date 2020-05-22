@@ -1,5 +1,6 @@
 {
+  "manual": false,
   "host": "",
-  "port": "5000",
+  "port": "",
   "secure": false
 }

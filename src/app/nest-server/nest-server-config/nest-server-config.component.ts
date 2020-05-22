@@ -10,7 +10,6 @@ import { NestServerService } from '../nest-server.service';
   styleUrls: ['./nest-server-config.component.scss']
 })
 export class NestServerConfigComponent implements OnInit {
-  public host: string;
 
   constructor(
     public _nestServerConfigService: NestServerConfigService,
@@ -19,12 +18,16 @@ export class NestServerConfigComponent implements OnInit {
 
   ngOnInit(): void {
     this._nestServerConfigService.init()
-    this.host = this._nestServerService.url();
   }
 
   save(): void {
     this._nestServerConfigService.save()
-    this.host = this._nestServerService.url();
+    this._nestServerService.check()
+  }
+
+  searchServer(): void {
+    this._nestServerConfigService.config['manual'] = false;
+    this._nestServerConfigService.config['host'] = '';
     this._nestServerService.check()
   }
 

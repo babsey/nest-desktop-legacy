@@ -1,5 +1,30 @@
-<div class="content">
-  <mat-list class="config">
+<div class="content config">
+
+  <mat-nav-list>
+    <mat-list-item (click)="searchServer()">
+      Search NEST Server
+    </mat-list-item>
+    <mat-list-item>
+      <span class="flex">
+        <span>Ping Server: {{ _nestServerService.url() }}</span>
+        <span class="flex-spacer"></span>
+        <span style="margin: 0 8px">
+          <mat-chip-list dense>
+            <mat-chip selected="true" *ngIf="!_nestServerService.status.server.ready">Server is not running</mat-chip>
+            <mat-chip selected="true" *ngIf="_nestServerService.status.server.ready">Server {{ _nestServerService.status.server.version }}</mat-chip>
+            <mat-chip selected="true" *ngIf="_nestServerService.status.simulator.ready">Simulator {{ _nestServerService.status.simulator.version }}</mat-chip>
+          </mat-chip-list>
+        </span>
+      </span>
+    </mat-list-item>
+  </mat-nav-list>
+
+  <mat-selection-list (selectionChange)="onSelectionChange($event)">
+    <mat-list-option [selected]="_nestServerConfigService.config['manual']" value="manual">Manual setting</mat-list-option>
+    <mat-list-option *ngIf="_nestServerConfigService.config['manual']" [selected]="_nestServerConfigService.config['secure']" value="secure">Secure communication</mat-list-option>
+  </mat-selection-list>
+
+  <mat-list *ngIf="_nestServerConfigService.config['manual']">
     <mat-list-item>
       <mat-form-field class="form-field">
         <input matInput placeholder="Host" name="host" [(ngModel)]="_nestServerConfigService.config['host']" (change)="save()">
@@ -13,18 +38,4 @@
     </mat-list-item>
   </mat-list>
 
-  <mat-selection-list class="config" (selectionChange)="onSelectionChange($event)">
-    <mat-list-option [selected]="_nestServerConfigService.config['secure']" value="secure">Secure communication</mat-list-option>
-  </mat-selection-list>
-
-  <div class="flex">
-    <span>{{ host }}</span>
-    <span style="margin: 0 8px">
-      <mat-chip-list>
-        <mat-chip selected="true" *ngIf="!_nestServerService.status.server.ready">Server is not running</mat-chip>
-        <mat-chip selected="true" *ngIf="_nestServerService.status.server.ready">Server {{ _nestServerService.status.server.version }}</mat-chip>
-        <mat-chip selected="true" *ngIf="_nestServerService.status.simulator.ready">Simulator {{ _nestServerService.status.simulator.version }}</mat-chip>
-      </mat-chip-list>
-    </span>
-  </div>
 </div>
