@@ -1,5 +1,33 @@
-Frequently asked questions
-==========================
+Troubleshooting
+===============
+
+Having trouble getting something working? Got a question that the rest of our docs can’t answer?
+Maybe we can help with some answers to commonly asked questions and troublesome spots.
+
+
+Error messages
+--------------
+
+Server not found
+^^^^^^^^^^^^^^^^
+
+This error has two possible sources:
+ - NEST Desktop has wrong URL of the server. See FAQ for :ref:`NEST Server`.
+ - The server is down. Enter the url of the NEST Server, e.g. ``localhost:5000`` in web browser.
+   For advanced users: Check in terminal whether NEST Server is running (``curl localhost:5000``).
+
+
+Internal server error
+^^^^^^^^^^^^^^^^^^^^^
+
+NEST Simulator produces value error, e.g. `The value cannot be negative.`.
+
+|
+|
+|
+
+Frequently asked questions (FAQ)
+--------------------------------
 
 
 .. contents:: On this page, you'll find questions to
@@ -7,7 +35,7 @@ Frequently asked questions
    :depth: 2
 
 |fa-caret-right| Application
------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Where can I find settings?
   You find settings by clicking on the cog icon right to navigation side bar.
@@ -37,8 +65,11 @@ How can I activate automatic start?
 How can I switch to advanced view?
   In the settings of the application you find an option to switch to advanced view.
 
+
+  .. _NEST Server:
+
 |fa-caret-right| NEST Server
------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 How can I check NEST Server?
   In the loading page you can click on menu icon of the server section to open menu.
@@ -49,7 +80,7 @@ How can I change the URL of the NEST Server?
 
 
 |fa-caret-right| Model
------------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 What is terminology of this model?
   This model includes neuron, synapse and device models.
@@ -65,7 +96,7 @@ How can I get default values of a model?
 
 
 |fa-caret-right| Network
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Where can I find network controller?
   You find network controller by clicking on top icon ('project diagram') left to controller.
@@ -144,7 +175,7 @@ How can I generate array?
 
 
 |fa-caret-right| Simulation
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Where can I find simulation controller?
   The simulation controller appears by clicking on the cog icon left to controller side bar.
@@ -195,7 +226,7 @@ How can I find data for the app in JSON format?
 
 
 |fa-caret-right| Protocol
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 How can I save protocol?
   In the top left of the page you find a floppy disc icon to save protocol.
@@ -228,7 +259,7 @@ How can I upload protocols?
   In the menu of the simulation in the top navigation you find an method to upload protocols from a file.
 
 |fa-caret-right| Chart
------------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 Where can I find chart controller?
   You find animation controller by clicking on the 'chart' icon in the stacked menu left to controller.
@@ -259,7 +290,7 @@ How can I hide/show dots/lines?
 
 
 |fa-caret-right| Animation
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Where can I find animation controller?
   You find animation controller by clicking on the 'braille' icon.

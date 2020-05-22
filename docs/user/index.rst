@@ -14,8 +14,7 @@ This is the user documentation, providing more detail on how to use NEST Desktop
 * :doc:`How to setup NEST Desktop <setup>`
 * :doc:`How to use NEST Desktop <usage>`
 * :doc:`Command API <command-API>`
-* :doc:`Frequently asked questions (FAQ) <faq>`
-
+* :doc:`Troubleshooting <troubleshooting>`
 
 ||||
 

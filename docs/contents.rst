@@ -19,7 +19,7 @@ Contents
    user/setup
    user/usage
    user/command-API
-   user/faq
+   user/troubleshooting
    user/use-HBP
 
 .. toctree::
