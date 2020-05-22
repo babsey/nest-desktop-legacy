@@ -101,7 +101,7 @@ export class SimulationRunService {
       if (typeof err['error'] == 'string') {
         this.error(err['error'], err['statusText'])
       } else {
-        this.error('NEST Server not found.')
+        this.error('Server not found.')
       }
     })
   }
