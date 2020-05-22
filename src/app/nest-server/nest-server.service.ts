@@ -53,7 +53,7 @@ export class NestServerService {
   }
 
   check(): void {
-    console.log('Check server')
+    // console.log('Check server')
     this.init();
     if (this._nestServerConfigService.config.host) {
       this.ping(this.url()).then(resp => {

@@ -78,7 +78,7 @@ export class LoadingService {
 
   initDatabase(): void {
     if (this.loaded.database) return
-    console.log('Initialize database')
+    // console.log('Initialize database')
     this._modelService.init()
     this._simulationService.init()
     this._simulationProtocolService.init()
