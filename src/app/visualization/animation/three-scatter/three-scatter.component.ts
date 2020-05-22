@@ -9,6 +9,7 @@ import * as STATS from 'stats.js';
 import { AnimationControllerService } from '../animation-controller/animation-controller.service';
 import { LogService } from '../../../log/log.service';
 import { VisualizationService } from '../../visualization.service';
+import { MathService } from '../../../services/math/math.service';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
   constructor(
     private _animationControllerService: AnimationControllerService,
     private _logService: LogService,
+    private _mathService: MathService,
     private _visualizationService: VisualizationService,
     private element: ElementRef,
   ) { }
@@ -246,7 +248,7 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
     var position = this._animationControllerService.camera.position;
     camera.rotation.theta += camera.rotation.speed;
     camera.rotation.theta = camera.rotation.theta % 360;
-    var thetaRad = THREE.Math.degToRad(camera.rotation.theta)
+    var thetaRad = this._mathService.degToRad(camera.rotation.theta)
     position.y = camera.distance / 2 * Math.sin(thetaRad);
     position.z = camera.distance * Math.sin(thetaRad / 2);
     this.camera.lookAt(this.scene.position);

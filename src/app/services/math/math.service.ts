@@ -61,4 +61,11 @@ export class MathService {
     return d3.deviation(values)
   }
 
+  radToDeg(rad) {
+    return rad * (180 / Math.PI);
+  }
+
+  degToRad(deg) {
+    return deg * (Math.PI / 180);
+  }
 }

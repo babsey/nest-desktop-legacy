@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatBottomSheet, MatMenuTrigger } from '@angular/material';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 import { AnimationControllerService } from '../visualization/animation/animation-controller/animation-controller.service';
 import { AppService } from '../app.service';

@@ -1,6 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { ToastrService } from 'ngx-toastr';
 
 import { AnimationControllerService } from '../../visualization/animation/animation-controller/animation-controller.service';
 import { DataService } from '../../services/data/data.service';
@@ -32,6 +34,7 @@ export class SimulationRunService {
     private _nestServerService: NestServerService,
     private http: HttpClient,
     private snackBar: MatSnackBar,
+    private toastr: ToastrService,
   ) {
     let configJSON = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
@@ -73,7 +76,7 @@ export class SimulationRunService {
             param.factors.map(factor => {
               var fac = data.app.factors.find(f => f.id == factor);
 
-              if (fac && simModel.params.hasOwnProperty(paramKey) ) {
+              if (fac && simModel.params.hasOwnProperty(paramKey)) {
                 simModel.params[paramKey] = simModel.params[paramKey] * fac.value;
               }
             })
@@ -85,30 +88,37 @@ export class SimulationRunService {
     this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     this._logService.log('Request to server');
     this.running = true;
-    this.http.post(urlRoot + '/script/simulation/run', data_cleaned.simulation).subscribe(res => {
+    this.http.post(urlRoot + '/script/simulation/run', data_cleaned.simulation, { observe: 'response' }).subscribe(resp => {
       this.running = false;
-      if ('error' in res) {
-        this.snackBarRef = this.snackBar.open(res['error']['name'] + ': ' + res['error']['message'], null, {
-          duration: 5000
-        });
+      if (this.snackBarRef) {
+        this.snackBarRef.dismiss();
+      }
+      this._logService.logs = this._logService.logs.concat(resp['body']['logs'] || []);
+      this._logService.log('Response from server')
+      this.simulated.emit(resp['body']['data'])
+    }, err => {
+      console.log(err)
+      if (typeof err['error'] == 'string') {
+        this.error(err['error'], err['statusText'])
       } else {
-        if (this.snackBarRef) {
-          this.snackBarRef.dismiss();
-        }
-        this._logService.logs = this._logService.logs.concat(res['logs'] || []);
-        this._logService.log('Response from server')
-        this.simulated.emit(res['data'])
+        this.error('NEST Server not found.')
       }
-    },
-      error => {
-        this.running = false;
-        if (this.snackBarRef) {
-          this.snackBarRef.dismiss();
-        }
-        console.log(error['error'])
-        alert('Oops, something went wrong with NEST Server.')
-        // this.snackBarRef = this.snackBar.open('Simulation failed. NEST Server not found. Please check the configuration.', 'Ok');
-      }
-    )
+    })
+  }
+
+  error(message: string, title: string = null): void {
+    this.running = false;
+    if (this.snackBarRef) {
+      this.snackBarRef.dismiss();
+    }
+    var url = 'https://nest-desktop.readthedocs.io/en/master/user/troubleshooting.html#error-messages';
+    var url = 'file:///home/spreizer/Projects/nest-desktop-v2/docs/_build/html/user/troubleshooting.html#error-messages';
+    var link = '<br><br><a target="_blank" href="' + url + '">See documentation for details.</a>';
+    this.toastr.error(message + link, title, {
+      enableHtml: true,
+      progressBar: true,
+      timeOut: 5000,
+      extendedTimeOut: 3000,
+    });
   }
 }

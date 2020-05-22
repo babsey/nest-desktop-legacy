@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 import * as math from 'mathjs';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { DistributionService } from '../../services/distribution/distribution.service';
 import { AppConfigService } from '../../config/app-config/app-config.service';

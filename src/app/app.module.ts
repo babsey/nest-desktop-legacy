@@ -9,6 +9,7 @@ import { MccColorPickerModule } from 'material-community-components';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { ToastrModule } from 'ngx-toastr';
 
 // modules
 import { AppRoutingModule } from './modules/app-routing.module';
@@ -65,6 +66,7 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
     NetworkModule,
     SimulationModule,
     SimulationNavigationModule,
+    ToastrModule.forRoot(),
     VisualizationModule,
     MccColorPickerModule.forRoot({
       used_colors: []

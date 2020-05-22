@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, ElementRef, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatDialog, MatMenuTrigger } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
+
 import * as d3 from 'd3';
 
 import { AppService } from '../../app.service';

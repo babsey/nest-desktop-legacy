@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { MatBottomSheet } from '@angular/material';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MediaMatcher } from '@angular/cdk/layout';
 
 import { NetworkSketchSheetComponent } from '../../network/network-sketch-sheet/network-sketch-sheet.component';

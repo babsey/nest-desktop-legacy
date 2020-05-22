@@ -39,7 +39,7 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     public _simulationService: SimulationService,
   ) {
     this.fileReader.addEventListener("load", event => {
-      var result = JSON.parse(event['target']['result']);
+      var result = JSON.parse(event['target']['result'] as string);
       var protocols = result.hasOwnProperty("_id") ? [result] : result;
       this._simulationProtocolService.upload(protocols);
     });

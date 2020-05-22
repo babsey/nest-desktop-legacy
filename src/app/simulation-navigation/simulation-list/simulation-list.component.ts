@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatBottomSheet, MatMenuTrigger } from '@angular/material';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatMenuTrigger } from '@angular/material/menu';
+
 import { MdePopoverTrigger } from '@material-extended/mde';
 
 import { AppService } from '../../app.service';

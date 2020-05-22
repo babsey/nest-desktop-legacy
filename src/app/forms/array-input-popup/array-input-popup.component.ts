@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { GeneratorService } from '../../services/generator/generator.service';
 import { ArrayGeneratorDialogComponent } from '../array-generator-dialog/array-generator-dialog.component';
