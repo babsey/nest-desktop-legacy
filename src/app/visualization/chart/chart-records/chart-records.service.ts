@@ -161,7 +161,7 @@ export class ChartRecordsService {
         color: color,
         line: {
           color: 'white',
-          width: 1,
+          width: (end - start) / size > 100 ? 0 : 1,
         }
       },
       yaxis: yaxis,
