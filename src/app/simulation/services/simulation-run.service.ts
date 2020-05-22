@@ -112,7 +112,6 @@ export class SimulationRunService {
       this.snackBarRef.dismiss();
     }
     var url = 'https://nest-desktop.readthedocs.io/en/master/user/troubleshooting.html#error-messages';
-    var url = 'file:///home/spreizer/Projects/nest-desktop-v2/docs/_build/html/user/troubleshooting.html#error-messages';
     var link = '<br><br><a target="_blank" href="' + url + '">See documentation for details.</a>';
     this.toastr.error(message + link, title, {
       enableHtml: true,
