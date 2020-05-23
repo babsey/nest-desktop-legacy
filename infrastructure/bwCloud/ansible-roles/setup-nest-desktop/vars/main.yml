@@ -1,3 +1,3 @@
 # NEST Desktop
-nest_desktop_version: latest
+nest_desktop_version: master
 nest_desktop_image:   babsey/nest-desktop:{{ nest_desktop_version }}
