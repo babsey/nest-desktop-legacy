@@ -1,5 +1,5 @@
 ---
-- include: tasks/distro.yml
+- include:        tasks/distro.yml
 
 - name:           Docker | Add Docker GPG key
   apt_key:        url=https://download.docker.com/linux/ubuntu/gpg

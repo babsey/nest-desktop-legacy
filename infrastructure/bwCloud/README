@@ -1,0 +1,25 @@
+How to build an image on bwCloud using ansible
+
+
+#### Preparation
+
+```
+sudo singularity build bwCloud-packer.sif ./singularity/bwCloud-packer.def
+singularity shell bwCloud-packer.sif
+```
+
+
+#### Build an image
+
+Download OpenStack RC File (in top right menu on bwCloud website)
+```
+source Project_<username>-openrc.sh
+ -> enter password
+```
+
+Modify image_name, source_image and networks in nest-desktop.json
+
+Start build an image for NEST Desktop
+```
+packer build nest-desktop.json
+```

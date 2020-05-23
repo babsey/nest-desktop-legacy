@@ -1,0 +1,21 @@
+Bootstrap: docker
+From: ubuntu:16.04
+
+%labels
+  AUTHOR Sebastian Spreizer <spreizer@web.de>
+
+%post
+  apt update && apt install -y python python-setuptools wget python-pip unzip
+  pip install pycrypto Jinja2 paramiko
+
+  cd /opt/
+  wget https://releases.ansible.com/ansible/ansible-2.9.9.tar.gz
+  tar -zxf ansible-2.9.9.tar.gz
+  cd ansible-2.9.9
+  python setup.py install
+  ansible --version
+
+  cd /opt/
+  wget https://releases.hashicorp.com/packer/1.5.6/packer_1.5.6_linux_amd64.zip
+  unzip packer_1.5.6_linux_amd64.zip
+  ln -s /opt/packer /usr/local/bin/packer

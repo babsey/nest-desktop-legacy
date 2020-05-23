@@ -1,3 +1,4 @@
 ---
 - include: tasks/install-docker.yml
 - include: tasks/install-nest-desktop.yml
+- include: tasks/install-apache2.yml

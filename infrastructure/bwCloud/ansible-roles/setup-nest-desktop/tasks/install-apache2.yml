@@ -1,0 +1,31 @@
+---
+- include:        tasks/distro.yml
+
+- name:           Apache | Install Apache
+  apt:
+    name:         apache2
+    state:        latest
+    update_cache: yes
+
+- name:           Apache | Set Apache config for virtual host
+  template:
+    src:          vhost.conf
+    dest:         /etc/apache2/sites-enabled/000-default.conf
+    mode:         644
+
+- name:           Apache | Password
+  template:
+    src:          .htpasswd
+    dest:         /etc/apache2/.htpasswd
+    mode:         644
+
+- name:           Apache | Enable proxy
+  shell:          "a2enmod proxy"
+
+- name:           Apache | Enable proxy in http
+  shell:          "a2enmod proxy_http"
+
+- name:           Apache | Restart Apache webserver
+  service:
+    name:         apache2
+    state:        restarted
