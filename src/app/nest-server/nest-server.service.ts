@@ -87,27 +87,26 @@ export class NestServerService {
   }
 
   seekServer(): void {
+    const protocol = window.location.protocol;
     const hostname = window.location.hostname || 'localhost';
     const hosts = [
       'server.' + hostname,
       hostname + '/server',
       hostname + ':5000'
     ]
-    const protocols = ['https:', 'http:']
-    protocols.forEach(protocol => {
-      hosts.forEach(host => {
-        this.ping(protocol + '//' + host)
-          .then(resp => {
-            this.updateSetting(resp)
-            this.checkVersion(resp['body'])
-          }).catch(error => { })
-      })
+    hosts.forEach(host => {
+      this.ping(protocol + '//' + host)
+        .then(resp => {
+          this.updateSetting(resp)
+          this.checkVersion(resp['body'])
+        }).catch(error => { })
     })
+
   }
 
   checkVersion(info): void {
     if (info === undefined) return
-    console.log('Fetch info', info)
+    // console.log('Fetch info', info)
     var appVersion = environment.VERSION.split('.');
     if (info.hasOwnProperty('server')) {
       this.status.server.ready = true;
@@ -121,11 +120,9 @@ export class NestServerService {
       var simulatorVersion = this.status.server['version'].split('.');
       this.status.simulator.valid = appVersion[0] == simulatorVersion[0];
     }
-    console.log(this.status)
   }
 
   updateSetting(resp): void {
-    console.log(resp.url)
     var config = this._nestServerConfigService.config;
     var host = resp.url.split('//')[1];
     var hostname = host.split(':')[0]
