@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Sensible data of server
+*-apache2oidc.yaml
+
 # compiled output
 /dist
 /tmp
