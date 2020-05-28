@@ -1,0 +1,10 @@
+[Unit]
+Description=NEST Desktop
+Requires=network.target
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/docker run -d -p 8000:8000 -p 5000:5000 -t babsey/nest-desktop
+
+[Install]
+WantedBy=network.target

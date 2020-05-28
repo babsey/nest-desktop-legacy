@@ -1,0 +1,61 @@
+
+## Deploy NEST Desktop on server
+
+### Preparation
+
+Install docker and Apache
+```
+apt install docker-ce apache2
+```
+
+Pull docker image of NEST Desktop
+```
+docker pull babsey/nest-desktop
+```
+
+Service to start docker container on startup
+```
+cp nest-desktop.service /etc/systemd/system
+systemctl enable nest-desktop.service
+```
+
+Enable proxy to NEST Desktop (Port: 8000) and NEST Server (Port: 5000)
+```
+a2enmod proxy
+a2enmod proxy_http
+```
+
+Generate user with password
+```
+htpasswd -c .htpasswd <user>
+cp .htpasswd /etc/apache2/.htpasswd
+```
+
+Option 1: Setup insecure HTTP
+```
+cp vhost.conf /etc/apache2/sites-enabled/000-default.conf
+```
+
+Option 2: Setup secure HTTPS
+```
+# Enable auto-redirect to https and ssl for HTTPS
+a2enmod rewrite
+a2enmod ssl
+cp httpd.conf /etc/apache2/sites-enabled/000-default.conf
+
+# Make ssl key and certificate for HTTPS
+mkdir /etc/apache2/ssl
+openssl req -x509 -nodes \
+  -days 365 \
+  -newkey rsa:2048 \
+  -keyout /etc/apache2/ssl/nest-desktop.key \
+  -out /etc/apache2/ssl/nest-desktop.crt \
+  -subj "/C=/ST=/L=/O=/OU=/CN="
+```
+
+
+### Start services
+```
+service apache2 restart
+systemctl start nest-desktop.service
+```
