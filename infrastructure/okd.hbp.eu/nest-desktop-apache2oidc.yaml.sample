@@ -1,0 +1,19 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: nest-desktop-apache2oidc
+labels:
+  template: nest-desktop-apache2oidc
+  app: nest-desktop-apache2oidc
+objects:
+- kind: ConfigMap
+  apiVersion: v1
+  metadata:
+    name: nest-desktop-apache2oidc
+  data:
+    SERVER_NAME: nest-desktop.apps.hbp.eu
+    OIDC_CLIENT_ID:
+    OIDC_CLIENT_SECRET:
+    OIDC_REDIRECT_URI: https://nest-desktop.apps.hbp.eu/redirect_uri
+    OIDC_CRYPTO_PASSPHRASE: 
