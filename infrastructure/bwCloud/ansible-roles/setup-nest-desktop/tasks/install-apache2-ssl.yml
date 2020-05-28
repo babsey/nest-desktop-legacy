@@ -1,0 +1,43 @@
+---
+- include:        tasks/distro.yml
+
+- name:           Apache | Install Apache
+  apt:
+    name:         apache2
+    state:        latest
+    update_cache: yes
+
+- name:           Apache | Set virtual host for https
+  template:
+    src:          apache2/httpd.conf
+    dest:         /etc/apache2/sites-enabled/000-default.conf
+    mode:         644
+
+- name:           Apache | Password
+  template:
+    src:          apache2/.htpasswd
+    dest:         /etc/apache2/.htpasswd
+    mode:         644
+
+- name:           Apache | Create SSL folder
+  shell:          "mkdir /etc/apache2/ssl"
+
+- name:           Apache | Generate SSL key and certificate
+  shell:          'openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/nest-desktop.key -out /etc/apache2/ssl/nest-desktop.crt -subj "/C=GE/ST=bw/L=Freiburg/O=University of Freiburg/OU=Bernstein Center Freiburg/CN=fr.bw-cloud-instance.org"'
+
+- name:           Apache | Enable module rewrite
+  shell:          "a2enmod rewrite"
+
+- name:           Apache | Enable module ssl
+  shell:          "a2enmod ssl"
+
+- name:           Apache | Enable module proxy
+  shell:          "a2enmod proxy"
+
+- name:           Apache | Enable module proxy in http
+  shell:          "a2enmod proxy_http"
+
+- name:           Apache | Restart Apache webserver
+  service:
+    name:         apache2
+    state:        restarted

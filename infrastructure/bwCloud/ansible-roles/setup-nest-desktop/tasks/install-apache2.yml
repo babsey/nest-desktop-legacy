@@ -7,15 +7,15 @@
     state:        latest
     update_cache: yes
 
-- name:           Apache | Set Apache config for virtual host
+- name:           Apache | Set virtual host
   template:
-    src:          vhost.conf
+    src:          apache2/vhost.conf
     dest:         /etc/apache2/sites-enabled/000-default.conf
     mode:         644
 
 - name:           Apache | Password
   template:
-    src:          .htpasswd
+    src:          apache2/.htpasswd
     dest:         /etc/apache2/.htpasswd
     mode:         644
 
