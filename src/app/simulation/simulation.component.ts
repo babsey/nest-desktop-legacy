@@ -69,21 +69,21 @@ export class SimulationComponent implements OnInit, OnDestroy {
         this._networkService.update.emit(this._simulationService.data);
         this._simulationService.dataLoaded = true;
         if (this.router.url.includes('run')) {
-          this._simulationService.mode = 'playground';
+          this._simulationService.mode = 'activityExplorer';
         }
-        if (this._simulationService.mode == 'playground' && this._simulationRunService.config['runAfterLoad']) {
+        if (this._simulationService.mode == 'activityExplorer' && this._simulationRunService.config['runAfterLoad']) {
           this.run(true)
         }
       })
     } else {
       this._simulationService.data = this._dataService.newData();
-      this._simulationService.mode = 'edit';
+      this._simulationService.mode = 'networkEditor';
       this._simulationService.dataLoaded = true;
     }
   }
 
   run(force: boolean = false): void {
-    this._simulationService.mode = 'playground';
+    this._simulationService.mode = 'activityExplorer';
     this._networkService.clean(this._simulationService.data);
     this._simulationRunService.run(this._simulationService.data, force)
   }
@@ -101,7 +101,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
   }
 
   configSimulation(): void {
-    this._simulationService.mode = 'playground';
+    this._simulationService.mode = 'activityExplorer';
     this._simulationControllerService.mode = 'simulation';
   }
 

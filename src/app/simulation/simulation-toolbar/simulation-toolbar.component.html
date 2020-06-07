@@ -1,0 +1,124 @@
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="simulationMenu"
+    >
+</div>
+
+<mat-menu #simulationMenu="matMenu" class="context-menu">
+  <mat-toolbar class="ellipsis">Simulation</mat-toolbar>
+
+  <button mat-menu-item (click)="configSimulation()">
+    <fa-icon icon="cog"></fa-icon> Configure simulation
+  </button>
+
+  <mat-selection-list dense
+    (click)="$event.stopPropagation()"
+    (selectionChange)="onSelectionChange($event)"
+    style="padding:0"
+    >
+    <mat-list-option
+      [selected]="_simulationRunService.config['showSnackBar']"
+      value="showSnackBar"
+      class="mat-menu-item">
+      <span>Show simulation message</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="_simulationRunService.config['autoRandomSeed']"
+      value="autoRandomSeed"
+      class="mat-menu-item">
+      <span>Randomize seed</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="_simulationRunService.config['runAfterChange']"
+      value="runAfterChange"
+      class="mat-menu-item">
+      <span>Simulate after change</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="_simulationRunService.config['runAfterLoad']"
+      value="runAfterLoad"
+      class="mat-menu-item">
+      <span>Simulate after load</span>
+    </mat-list-option>
+  </mat-selection-list>
+
+  <mat-nav-list dense style="padding:0">
+    <mat-list-item class="mat-menu-item" (click)="download()">
+      <fa-icon class="menu-icon" icon="download"></fa-icon>
+      <span *ngIf="!hasRecords()"> Download data</span>
+      <span *ngIf="hasRecords()"> Download data and records</span>
+    </mat-list-item>
+  </mat-nav-list>
+
+</mat-menu>
+
+<span class="simulation-theme">
+  <mat-toolbar class="navbar flex" color="primary" style="padding:0">
+    <span class="no-print">
+      <span class="flex" style="width: 200px">
+        <button mat-icon-button
+          (click)="selectMode('networkEditor')"
+          [class.active]="_simulationService.mode=='networkEditor'"
+          matTooltip="Construct network"
+          >
+          <span class="fa-stack">
+            <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+            <fa-icon icon="pen" class="fa-stack-2x fa-inverse"></fa-icon>
+          </span>
+        </button>
+        <button mat-icon-button
+          (click)="selectMode('activityExplorer')"
+          [class.active]="_simulationService.mode=='activityExplorer'"
+          matTooltip="Explore activity"
+          >
+          <span class="fa-stack">
+            <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+            <fa-icon icon="play" class="fa-stack-2x fa-inverse"></fa-icon>
+          </span>
+        </button>
+        <button mat-icon-button
+          (click)="selectMode('labBook')"
+          [class.active]="_simulationService.mode=='labBook'"
+          matTooltip="View network summary"
+          >
+          <span class="fa-stack">
+            <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+            <fa-icon icon="eye" class="fa-stack-2x fa-inverse"></fa-icon>
+          </span>
+        </button>
+      </span>
+    </span>
+
+    <ng-container *ngIf="_simulationService.dataLoaded">
+      <span class="title" [@enterAnimation]>
+        {{ _simulationService.data.name }}
+      </span>
+    </ng-container>
+    <span class="flex-spacer"></span>
+
+    <mat-form-field style="font-size:12px; width:60px; display: none">
+      <mat-select [(value)]="_simulationRunService.mode">
+        <mat-option value="object">Object</mat-option>
+        <mat-option value="script">Script</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-icon-button
+      (click)="run(true)"
+      (contextmenu)="onContextMenu($event)"
+      (mouseout)="onMouseOut($event)"
+      (mouseover)="onMouseOver($event)"
+      [disabled]="_simulationRunService.running || !_simulationService.dataLoaded"
+      matTooltip="Simulate"
+      class="no-print"
+      style="width:128px"
+      >
+      <fa-icon
+        icon="play"
+        style="margin:0 8px"
+        ></fa-icon>
+        Simulate
+    </button>
+  </mat-toolbar>
+</span>

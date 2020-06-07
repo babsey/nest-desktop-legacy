@@ -19,6 +19,7 @@ import { SimulationConfigComponent } from './simulation-config/simulation-config
 import { SimulationDetailsComponent } from './simulation-details/simulation-details.component';
 import { SimulationPlaygroundComponent } from './simulation-playground/simulation-playground.component';
 import { SimulationScriptComponent } from './simulation-script/simulation-script.component';
+import { SimulationToolbarComponent } from './simulation-toolbar/simulation-toolbar.component';
 import { SimulationStatsComponent } from './simulation-stats/simulation-stats.component';
 
 import { ControllerComponent } from './simulation-controller/simulation-controller.component';
@@ -44,6 +45,7 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     SimulationPlaygroundComponent,
     SimulationScriptComponent,
     SimulationStatsComponent,
+    SimulationToolbarComponent,
     SpikeStatsComponent,
     AnalogStatsComponent,
   ],
@@ -57,6 +59,7 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     SimulationPlaygroundComponent,
     SimulationScriptComponent,
     SimulationStatsComponent,
+    SimulationToolbarComponent,
   ],
   imports: [
     AppFormsModule,
