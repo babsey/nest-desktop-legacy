@@ -42,7 +42,7 @@
     "pouchdb-upsert": "^2.2.0",
     "rxjs": "^6.5.4",
     "stats.js": "^0.17.0",
-    "three": "^0.116.1",
+    "three": "0.117.1",
     "three-orbitcontrols": "^2.110.3",
     "tslib": "^1.13.0",
     "web-animations-js": "^2.3.2",
