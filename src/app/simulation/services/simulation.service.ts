@@ -22,7 +22,7 @@ export class SimulationService {
   public dataLoaded: boolean = false;
   public db: any;
   public mode: string = 'networkEditor';
-  public sidenavMode = 'simulation';
+  public sidenavMode: string = 'simulation';
   public sidenavOpened: boolean = false;
   public version: string;
   public status: any = {
