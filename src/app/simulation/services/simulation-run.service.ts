@@ -85,7 +85,10 @@ export class SimulationRunService {
       }
     })
 
-    this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
+
+    if (this.config['showSnackBar']) {
+      this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
+    }
     this._logService.log('Request to server');
     this.running = true;
     this.http.post(urlRoot + '/script/simulation/run', data_cleaned.simulation, { observe: 'response' }).subscribe(resp => {

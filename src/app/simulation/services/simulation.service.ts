@@ -21,7 +21,8 @@ export class SimulationService {
   public data: Data;
   public dataLoaded: boolean = false;
   public db: any;
-  public mode: string = 'details';
+  public mode: string = 'networkEditor';
+  public sidenavMode: string = 'simulation';
   public sidenavOpened: boolean = false;
   public version: string;
   public status: any = {

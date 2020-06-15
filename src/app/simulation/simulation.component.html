@@ -1,123 +1,27 @@
-<div style="visibility: hidden; position: fixed"
-    [style.left]="contextMenuPosition.x"
-    [style.top]="contextMenuPosition.y"
-    [matMenuTriggerFor]="simulationMenu"
-    >
-</div>
-
-<mat-menu #simulationMenu="matMenu" class="context-menu">
-  <mat-toolbar class="ellipsis">Simulation</mat-toolbar>
-
-  <button mat-menu-item (click)="configSimulation()">
-    <fa-icon icon="cog"></fa-icon> Configure simulation
-  </button>
-
-  <mat-selection-list dense style="padding:0" (selectionChange)="onSelectionChange($event)" (click)="$event.stopPropagation()">
-    <mat-list-option
-      [selected]="_simulationRunService.config['autoRandomSeed']"
-      value="autoRandomSeed"
-      class="mat-menu-item">
-      <span>Randomize seed</span>
-    </mat-list-option>
-    <mat-list-option
-      [selected]="_simulationRunService.config['runAfterChange']"
-      value="runAfterChange"
-      class="mat-menu-item">
-      <span>Simulate after change</span>
-    </mat-list-option>
-    <mat-list-option
-      [selected]="_simulationRunService.config['runAfterLoad']"
-      value="runAfterLoad"
-      class="mat-menu-item">
-      <span>Simulate after load</span>
-    </mat-list-option>
-  </mat-selection-list>
-
-  <mat-nav-list dense style="padding:0">
-    <mat-list-item class="mat-menu-item" (click)="download()">
-      <fa-icon class="menu-icon" icon="download"></fa-icon>
-      <span *ngIf="!hasRecords()"> Download data</span>
-      <span *ngIf="hasRecords()"> Download data and records</span>
-    </mat-list-item>
-  </mat-nav-list>
-
-</mat-menu>
-
-<span class="simulation-theme">
-  <mat-toolbar class="navbar flex no-print" color="primary" style="padding:0">
-    <button mat-icon-button
-      (click)="_simulationService.mode='edit'"
-      [class.active]="_simulationService.mode=='edit'"
-      matTooltip="Construct network"
-      >
-      <span class="fa-stack">
-        <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
-        <fa-icon icon="pen" class="fa-stack-2x fa-inverse"></fa-icon>
-      </span>
-    </button>
-    <button mat-icon-button
-      (click)="_simulationService.mode='playground'"
-      [class.active]="_simulationService.mode=='playground'"
-      matTooltip="Analyze activity"
-      >
-      <span class="fa-stack">
-        <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
-        <fa-icon icon="play" class="fa-stack-2x fa-inverse"></fa-icon>
-      </span>
-    </button>
-    <button mat-icon-button
-      (click)="_simulationService.mode='details'"
-      [class.active]="_simulationService.mode=='details'"
-      matTooltip="View network summary"
-      >
-      <span class="fa-stack">
-        <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
-        <fa-icon icon="eye" class="fa-stack-2x fa-inverse"></fa-icon>
-      </span>
-    </button>
-    <ng-container *ngIf="_simulationService.dataLoaded">
-      <span class="title" [@enterAnimation]>
-        {{ _simulationService.data.name }}
-      </span>
-    </ng-container>
-    <span class="flex-spacer"></span>
-    <button mat-icon-button
-      (click)="run(true)"
-      (contextmenu)="onContextMenu($event)"
-      (mouseout)="onMouseOut($event)"
-      (mouseover)="onMouseOver($event)"
-      [disabled]="_simulationRunService.running || !_simulationService.dataLoaded"
-      matTooltip="Simulate"
-      style="width:128px"
-      >
-      <fa-icon icon="play"></fa-icon>
-      Simulate
-    </button>
-  </mat-toolbar>
-</span>
+<app-simulation-toolbar></app-simulation-toolbar>
 
 <ng-container *ngIf="_simulationService.dataLoaded; else loading">
   <ng-container [ngSwitch]="_simulationService.mode">
-    <ng-container *ngSwitchCase="'details'">
-      <app-simulation-details
-        [(data)]="_simulationService.data"
-        (dataChange)="onDataChange($event)"
-      ></app-simulation-details>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'edit'">
+    <ng-container *ngSwitchCase="'networkEditor'">
       <app-network
         [(data)]="_simulationService.data"
         (dataChange)="onDataChange($event)"
       ></app-network>
     </ng-container>
 
-    <ng-container *ngSwitchCase="'playground'">
+    <ng-container *ngSwitchCase="'activityExplorer'">
       <app-simulation-playground
         [(data)]="_simulationService.data"
         [(records)]="_simulationEventService.records"
         (dataChange)="onDataChange($event)"
       ></app-simulation-playground>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'labBook'">
+      <app-simulation-details
+        [(data)]="_simulationService.data"
+        (dataChange)="onDataChange($event)"
+      ></app-simulation-details>
     </ng-container>
   </ng-container>
 </ng-container>
