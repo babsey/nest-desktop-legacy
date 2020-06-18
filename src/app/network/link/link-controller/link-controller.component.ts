@@ -56,7 +56,7 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    // this.update()
+    this.update()
   }
 
   advanced(): boolean {

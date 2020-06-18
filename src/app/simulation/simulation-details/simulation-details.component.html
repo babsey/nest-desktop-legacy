@@ -1,72 +1,56 @@
-<mat-sidenav-container class="network-container" [@enterAnimation]>
-  <mat-sidenav-content class="network-content" style="height:calc(100vh - 40px)">
+<ng-container *ngIf="data">
 
-    <span style="width:600px; display:block" class="content">
-      <app-network-sketch
+  <ng-container [ngSwitch]="advanced()">
+    <ng-container *ngSwitchCase="false">
+      <app-network-list
         (dataChange)="onDataChange($event)"
         [(data)]="data"
-        [eventTrigger]="false"
-        width="600"
-        height="200"
-      ></app-network-sketch>
-    </span>
-
-    <ng-container *ngIf="data">
-
-      <ng-container [ngSwitch]="advanced()">
-        <ng-container *ngSwitchCase="false">
-          <app-network-list
-            (dataChange)="onDataChange($event)"
-            [(data)]="data"
-            [columns]="true"
-            [paramSelective]="true"
-          ></app-network-list>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="true">
-          <span style="position:relative; display: block; width: 100%; height: 100%">
-
-            <mat-tab-group class="maxWidth">
-
-              <mat-tab label="Network">
-                <app-network-list
-                  (dataChange)="onDataChange($event)"
-                  [(data)]="data"
-                  [columns]="true"
-                  [paramSelective]="true"
-                ></app-network-list>
-              </mat-tab>
-
-              <mat-tab label="Description">
-                <div style="padding:20px">{{ data.description }}</div>
-              </mat-tab>
-
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <fa-icon icon="code" style="margin-right:5px"></fa-icon> Python script
-                </ng-template>
-                <app-simulation-script [data]="data"></app-simulation-script>
-              </mat-tab>
-
-              <mat-tab label="Data for simulator">
-                <pre style="margin: 5px">{{ data.simulation | json }}</pre>
-              </mat-tab>
-
-              <mat-tab label="Data for app">
-                <pre style="margin: 5px">{{ data.app | json }}</pre>
-              </mat-tab>
-
-              <!-- <mat-tab label="Comment">
-                <mat-form-field style="width:100%" floatLabel="never">
-                  <textarea matInput cdkTextareaAutosize placeholder='Leave a comment'></textarea>
-                </mat-form-field>
-              </mat-tab> -->
-
-            </mat-tab-group>
-          </span>
-        </ng-container>
-      </ng-container>
+        [columns]="true"
+        [paramSelective]="true"
+      ></app-network-list>
     </ng-container>
 
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    <ng-container *ngSwitchCase="true">
+      <span style="position:relative; display: block; width: 100%; height: 100%">
+
+        <mat-tab-group class="maxWidth">
+
+          <mat-tab label="Network">
+            <app-network-list
+              (dataChange)="onDataChange($event)"
+              [(data)]="data"
+              [columns]="true"
+              [paramSelective]="true"
+            ></app-network-list>
+          </mat-tab>
+
+          <mat-tab label="Description">
+            <div style="padding:20px">{{ data.description }}</div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <fa-icon icon="code" style="margin-right:5px"></fa-icon> Python script
+            </ng-template>
+            <app-simulation-script [data]="data"></app-simulation-script>
+          </mat-tab>
+
+          <mat-tab label="Data for simulator">
+            <pre style="margin: 5px">{{ data.simulation | json }}</pre>
+          </mat-tab>
+
+          <mat-tab label="Data for app">
+            <pre style="margin: 5px">{{ data.app | json }}</pre>
+          </mat-tab>
+
+          <!-- <mat-tab label="Comment">
+            <mat-form-field style="width:100%" floatLabel="never">
+              <textarea matInput cdkTextareaAutosize placeholder='Leave a comment'></textarea>
+            </mat-form-field>
+          </mat-tab> -->
+
+        </mat-tab-group>
+      </span>
+    </ng-container>
+  </ng-container>
+</ng-container>

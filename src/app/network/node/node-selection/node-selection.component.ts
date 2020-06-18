@@ -101,6 +101,10 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
     this.dataChange.emit(this.data)
   }
 
+  onNodeChange(node: AppNode): void {
+    this.nodeChange.emit(this.node)
+  }
+
   onValueChange(value: any): void {
     // console.log('Change input value in node selection')
     this.dataChange.emit(this.data)

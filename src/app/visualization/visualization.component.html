@@ -25,17 +25,19 @@
   </button>
 </span>
 
-<ng-container [ngSwitch]="_visualizationService.mode">
-  <ng-container *ngSwitchCase="'chart'">
-    <app-chart-records [data]="data" [records]="records"></app-chart-records>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="'animation'">
-    <ng-container *ngIf="_animationControllerService.hasAnalogData(); else spike">
-      <app-animation-analog [records]="records"></app-animation-analog>
+<div style="overflow:hidden; height:calc(100vh - 40px)">
+  <ng-container [ngSwitch]="_visualizationService.mode">
+    <ng-container *ngSwitchCase="'chart'">
+      <app-chart-records [data]="data" [records]="records"></app-chart-records>
     </ng-container>
-    <ng-template #spike>
-      <app-animation-spike [records]="records"></app-animation-spike>
-    </ng-template>
+
+    <ng-container *ngSwitchCase="'animation'">
+      <ng-container *ngIf="_animationControllerService.hasAnalogData(); else spike">
+        <app-animation-analog [records]="records"></app-animation-analog>
+      </ng-container>
+      <ng-template #spike>
+        <app-animation-spike [records]="records"></app-animation-spike>
+      </ng-template>
+    </ng-container>
   </ng-container>
-</ng-container>
+</div>

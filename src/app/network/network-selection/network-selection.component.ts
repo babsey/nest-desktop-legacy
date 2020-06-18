@@ -2,8 +2,9 @@ import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angu
 
 import { NetworkService } from '../services/network.service';
 
-import { Data } from '../../classes/data';
+import { AppNode } from '../../classes/appNode';
 import { AppLink } from '../../classes/appLink';
+import { Data } from '../../classes/data';
 import { SimCollection } from '../../classes/simCollection';
 
 
@@ -14,6 +15,7 @@ import { SimCollection } from '../../classes/simCollection';
 })
 export class NetworkSelectionComponent implements OnInit, OnChanges {
   @Input() data: Data;
+  @Output() appChange: EventEmitter<any> = new EventEmitter();
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -32,10 +34,6 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
     return this.data.simulation.collections[idx];
   }
 
-  selectElementType(elementType: string): void {
-    this._networkService.selectElementType(elementType)
-  }
-
   isSelected(elementType: string): boolean {
     return this._networkService.elementType == null || this._networkService.elementType == elementType;
   }
@@ -48,6 +46,10 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
 
   onDataChange(data): void {
     this.dataChange.emit(this.data);
+  }
+
+  onNodeChange(node: AppNode): void {
+    this.appChange.emit(this.data.app)
   }
 
 }

@@ -19,8 +19,11 @@ import { SimulationConfigComponent } from './simulation-config/simulation-config
 import { SimulationDetailsComponent } from './simulation-details/simulation-details.component';
 import { SimulationPlaygroundComponent } from './simulation-playground/simulation-playground.component';
 import { SimulationScriptComponent } from './simulation-script/simulation-script.component';
-import { SimulationToolbarComponent } from './simulation-toolbar/simulation-toolbar.component';
 import { SimulationStatsComponent } from './simulation-stats/simulation-stats.component';
+import { SimulationSidenavComponent } from './simulation-sidenav/simulation-sidenav.component';
+import { SimulationSidenavContentComponent } from './simulation-sidenav-content/simulation-sidenav-content.component';
+import { SimulationSidenavTabsComponent } from './simulation-sidenav-tabs/simulation-sidenav-tabs.component';
+import { SimulationToolbarComponent } from './simulation-toolbar/simulation-toolbar.component';
 
 import { ControllerComponent } from './simulation-controller/simulation-controller.component';
 import { KernelControllerComponent } from './simulation-controller/kernel-controller/kernel-controller.component';
@@ -43,7 +46,9 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     SimulationControllerComponent,
     SimulationDetailsComponent,
     SimulationPlaygroundComponent,
-    SimulationScriptComponent,
+    SimulationScriptComponent,    SimulationSidenavComponent,
+    SimulationSidenavContentComponent,
+    SimulationSidenavTabsComponent,
     SimulationStatsComponent,
     SimulationToolbarComponent,
     SpikeStatsComponent,
@@ -57,7 +62,9 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     SimulationControllerComponent,
     SimulationDetailsComponent,
     SimulationPlaygroundComponent,
-    SimulationScriptComponent,
+    SimulationScriptComponent,    SimulationSidenavComponent,
+    SimulationSidenavContentComponent,
+    SimulationSidenavTabsComponent,
     SimulationStatsComponent,
     SimulationToolbarComponent,
   ],

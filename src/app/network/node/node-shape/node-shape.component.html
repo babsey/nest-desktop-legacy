@@ -9,7 +9,7 @@
         [style.stroke-dasharray]="selected ? '7.85' : ''"
         [style.stroke-width.px]="strokeWidth"
         ></svg:polygon>
-      <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label() }}</svg:text>
+      <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label }}</svg:text>
     </ng-container>
     <ng-container *ngSwitchCase="false">
       <ng-container [ngSwitch]="elementType">
@@ -22,7 +22,7 @@
             [style.stroke-dasharray]="selected ? '7.85' : ''"
             [style.stroke-width.px]="strokeWidth"
           ></svg:circle>
-          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label() }}</svg:text>
+          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label }}</svg:text>
         </ng-container>
         <ng-container *ngSwitchCase="'stimulator'">
           <svg:polygon
@@ -33,7 +33,7 @@
             [style.stroke-dasharray]="selected ? '7.85' : ''"
             [style.stroke-width.px]="strokeWidth"
           ></svg:polygon>
-          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label() }}</svg:text>
+          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label }}</svg:text>
         </ng-container>
         <ng-container *ngSwitchCase="'recorder'">
           <svg:polygon
@@ -44,7 +44,7 @@
             [style.stroke-dasharray]="selected ? '7.85' : ''"
             [style.stroke-width.px]="strokeWidth"
           ></svg:polygon>
-          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label() }}</svg:text>
+          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label }}</svg:text>
         </ng-container>
       </ng-container>
     </ng-container>

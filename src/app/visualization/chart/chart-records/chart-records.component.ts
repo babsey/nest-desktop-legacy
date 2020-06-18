@@ -34,7 +34,6 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
   private threshold: any = 'legendonly';
   private subscriptionUpdate: any;
   private subscriptionInit: any;
-  private labels: string = 'abcdefghijklmnopqrstuvwxyz';
   public sizes: number[] = [80, 20];
 
   constructor(
@@ -84,13 +83,15 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       displaylogo: false,
       responsive: true,
       // showLink: true,
-      toImageButtonOptions: {
-        format: 'svg', // one of png, svg, jpeg, webp
-        filename: 'nest_desktop-' + this.data.name,
-        width: 1280,
-        height: 1024,
-        scale: 1, // Multiply title/legend/axis/canvas sizes by this factor
-      },
+      toImageButtonOptions: this._chartRecordsService.toImageButtonOptions,
+      modeBarButtons: [
+        // "zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", "resetScale2d", "hoverClosestCartesian", "hoverCompareCartesian", "zoom3d", "pan3d", "resetCameraDefault3d", "resetCameraLastSave3d", "hoverClosest3d", "orbitRotation", "tableRotation", "zoomInGeo", "zoomOutGeo", "resetGeo", "hoverClosestGeo", "toImage", "sendDataToCloud", "hoverClosestGl2d", "hoverClosestPie", "toggleHover", "resetViews", "toggleSpikelines", "resetViewMapbox"
+        // [this._chartRecordsService.imageButtonOptions, "toImage"],
+        ['toImage'],
+        ['zoom2d', 'pan2d', 'select2d', 'lasso2d'],
+        ['zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d'],
+        ['toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian']
+      ]
     };
 
     this.initLayout()
@@ -130,8 +131,9 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       } else {
         var node = this.data.app.nodes[record.recorder.idx];
         if (node == undefined) return
-        if (node.hasOwnProperty('record_from')) {
-          node.record_from.map(record_from => this.plotAnalogData(record, record_from))
+        var model = this.data.simulation.models[this.data.simulation.collections[record.recorder.idx].model]
+        if (model.params.hasOwnProperty('record_from')) {
+          model.params.record_from.map(recordFrom => this.plotAnalogData(record, recordFrom))
         } else {
           this.plotAnalogData(record)
         }
@@ -194,13 +196,18 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     var color: string = this._colorService.node(node);
 
     var idx = this.plotlyData.length;
-    var label = this.labels[node.idx];
-    record.config['showlegend'] = false;
-    record.config['legendgroup'] = 'spike' + idx;
+    var label = this.data.simulation.collections[idx].model.split('-')[1];
+
+    if (!record.config.hasOwnProperty('spike')) {
+      record.config['spike'] = {
+        showlegend: false,
+        legendgroup:  'spike' + idx,
+      }
+    }
 
     if (this._chartRecordsService.panelSelected.includes('spike') && this._chartRecordsService.panel['spike'].size > 2) {
       var panelSpike = this._chartRecordsService.panel['spike'];
-      var scatterData = this._chartRecordsService.scatter(record.idx, x, y, color, label, record.config, 'y' + panelSpike.yaxis);
+      var scatterData = this._chartRecordsService.scatter(record.idx, x, y, color, label, record.config['spike'], 'y' + panelSpike.yaxis);
       this.plotlyData.push(scatterData);
 
       var yaxis = 'yaxis' + (panelSpike.yaxis == 1 ? '' : panelSpike.yaxis);
@@ -228,21 +235,34 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     if (panel.size <= 2) return
     var yaxis = 'y' + panel.yaxis;
 
-    if (record_from == 'V_m' && !panel.threshold) {
+    var color: string = this._colorService.node(this.data.app.nodes[recorder.idx]);
+    var connectomes = this.data.simulation.connectomes.filter(d => d.source == recorder.idx);
+    var node = this.data.simulation.collections[connectomes[0].target];
+    var model = this.data.simulation.models[node.model];
+
+    if (record_from == 'V_m' && model.params.hasOwnProperty('V_th')) {
       var time = this.data.app.kernel['time'] || 1000;
-      var Vth = -55;
+      var Vth = model.params['V_th'] || -55.;
       var x: any[] = [0, time];
       var y: any[] = [Vth, Vth];
-      var config = { hoverinfo: 'none', visible: 'legendonly', 'line.dash': 'dash' };
-      var plot_Vth = this._chartRecordsService.plot(record.idx, x, y, 'black', 'V_m threshold', config, yaxis);
-      plot_Vth['showlegend'] = true;
-      plot_Vth['visible'] = this._chartRecordsService.threshold;
-      panel['threshold'] = true;
+      var idx = 'V_th'
+      if (!record.config.hasOwnProperty(idx)) {
+        record.config[idx] = {
+          idx: idx,
+          name: 'Spike threshold',
+          hoverinfo: 'none',
+          'line.dash': 'dot',
+          visible: 'legendonly',
+          'line.width': 2,
+          opacity: .5,
+          color: color,
+          record_from: record_from,
+        };
+      }
+      record.config[idx].color = color;
+      var plot_Vth = this._chartRecordsService.plot(record.idx, x, y, record.config[idx], yaxis);
       this.plotlyData.push(plot_Vth)
     }
-
-    var node = this.data.app.nodes[recorder.idx];
-    var color: string = this._colorService.node(node);
 
     var neurons = this.data.simulation.connectomes
       .filter(d => d.source == recorder.idx)
@@ -258,11 +278,63 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     })
 
     if (data.length == 1) {
-      var label = record_from + ' of ' + (recorder.idx + 1);
-      var config0 = { hoverinfo: 'full', showlegend: true };
-      var plot = this._chartRecordsService.plot(recorder.idx, data[0].x, data[0].y, color, label, config0, yaxis);
+      var d = data[0];
+      var idx = record_from;
+      if (!record.config.hasOwnProperty(idx)) {
+        record.config[idx] = {
+          idx: idx,
+          showlegend: true,
+          visible: true,
+          name: record_from + ' of ' + senders[0],
+          color: color,
+          record_from: record_from,
+        };
+      }
+      record.config[idx].color = color;
+      var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[idx], yaxis);
       this.plotlyData.push(plot)
+
     } else if (data.length > 1) {
+
+      var legendgroup = record.idx + '_' + record_from + '_group';
+      var d = data[0];
+      var idx = record_from + '_first';
+      if (!record.config.hasOwnProperty(idx)) {
+        record.config[idx] = {
+          'line.width': 1,
+          color: color,
+          hoverinfo: 'none',
+          idx: idx,
+          legendgroup: legendgroup,
+          name: record_from + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']',
+          opacity: 0.5,
+          record_from: record_from,
+        };
+      }
+      record.config[idx].color = color;
+      var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[idx], yaxis);
+      this.plotlyData.push(plot)
+
+      var idx = record_from + '_group';
+      if (!record.config.hasOwnProperty(idx)) {
+        record.config[idx] = {
+          'line.width': 1,
+          color: color,
+          hoverinfo: 'none',
+          idx: idx,
+          legendgroup: legendgroup,
+          name: record_from + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']',
+          opacity: 0.3,
+          record_from: record_from,
+          showlegend: false,
+        };
+      }
+      record.config[idx].color = color;
+      data.map((d, i) => {
+        var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[idx], yaxis);
+        this.plotlyData.push(plot)
+      })
+
 
       var x: any[] = data[0].x;
       var y: any[] = x.map((d, i) => {
@@ -275,43 +347,34 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         return avg
       })
 
-      var label = record_from + ' average';
-      var config1 = {};
-      var plot = this._chartRecordsService.plot(recorder.idx, x, y, color, label, config1, yaxis);
+      var idx = record_from + '_avg_bg';
+      if (!record.config.hasOwnProperty(idx)) {
+        record.config[idx] = {
+          hoverinfo: 'none',
+          idx: idx,
+          'line.width': 4,
+          color: 'white',
+          legendgroup: legendgroup,
+          showlegend: false,
+          yaxis: yaxis,
+        };
+      }
+      var plot = this._chartRecordsService.plot(record.idx, x, y, record.config[idx], yaxis);
       this.plotlyData.push(plot)
 
-      data.slice(0, 1).map(d => {
-        var label = record_from + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']';
-        var config2 = {
-          legendgroup: record_from + (record.idx + 1),
-          hoverinfo: 'none',
-          opacity: 0.5,
-        }
-        var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config2, yaxis);
-        this.plotlyData.push(plot)
-      })
+      var idx = record_from + '_avg';
+      if (!record.config.hasOwnProperty(idx)) {
+        record.config[idx] = {
+          idx: idx,
+          color: color,
+          name: record_from + ' average',
+          yaxis: yaxis,
+        };
+      }
+      record.config[idx].color = color;
+      var plot = this._chartRecordsService.plot(record.idx, x, y, record.config[idx], yaxis);
+      this.plotlyData.push(plot)
 
-      data.slice(1, 3).map(d => {
-        var config3 = {
-          legendgroup: record_from + (record.idx + 1),
-          showlegend: false,
-          hoverinfo: 'none',
-          opacity: 0.3,
-        }
-        var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config3, yaxis);
-        this.plotlyData.push(plot)
-      })
-
-      data.slice(3, 20).map(d => {
-        var config4 = {
-          legendgroup: record_from + (record.idx + 1),
-          showlegend: false,
-          hoverinfo: 'none',
-          opacity: 0.1,
-        }
-        var plot = this._chartRecordsService.plot(recorder.idx, d.x, d.y, color, label, config4, yaxis);
-        this.plotlyData.push(plot)
-      })
 
     }
   }
@@ -346,11 +409,12 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
   onLegendClick(event: any): void {
     setTimeout(() => {
-      this._chartRecordsService.threshold = event.data[0].visible;
-      var idx = event.curveNumber;
-      var data = event.data[idx];
-      this.records[data.idx].config['visible'] = data['visible'];
-  }, 1000)
+      var data = event.data[event.curveNumber];
+      var record = this.records[data._source.recordIdx]
+      var config = record.config[data._source.plotConfigIdx];
+      config['visible'] = data.visible;
+      console.log(data, config)
+    }, 1000)
 
   }
 

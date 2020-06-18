@@ -3,7 +3,7 @@ export class Record {
   events: any;
   global_ids: number[];
   recorder: any;
-  senders: number[];
+  senders: any[];
   config?: any;
   positions: number[][];
 }

@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 import * as d3 from 'd3';
+import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 
 
 @Injectable({
@@ -11,12 +12,27 @@ export class ChartRecordsService {
   public barmode: string = 'overlay';
   public barnorm: string = '';
   private config: any = {};
-  private labels: string = 'abcdefghijklmnopqrstuvwxyz';
   public panel: any = {};
   public panelSelected: string[] = [];
   public panelOrder: string[] = ['input', 'analog', 'spike', 'histogram'];
-  public threshold: any = 'legendonly';
+  public threshold: any = {
+    value: -55,
+    visible: 'legendonly',
+  };
+  public toImageButtonOptions: any = {
+    format: 'svg', // one of png, svg, jpeg, webp
+    width: 800,
+    height: 600,
+    scale: 1, // Multiply title/legend/axis/canvas sizes by this factor
+  };
+  public imageButtonOptions: any = {
+      name: 'image_settings',
+      title: 'Edit image settings',
+      icon: PlotlyJS.Icons.pencil,
+      click: function(gd) {
 
+      }
+  };
 
   constructor() {
     let configJSON = localStorage.getItem('network-config');
@@ -28,28 +44,28 @@ export class ChartRecordsService {
 
   panelInit(): void {
     this.panel = {
-    'input': {
-      'size': 0,
-      'ylabel': 'Current [pA]',
-      'yaxis': 4,
-    },
-    'analog': {
-      'size': 0,
-      'ylabel': 'Membrane potential [mV]',
-      'yaxis': 3,
-      'threshold': false,
-    },
-    'spike': {
-      'size': 0,
-      'ylabel': 'Neuron ID',
-      'yaxis': 2,
-    },
-    'histogram': {
-      'size': 0,
-      'ylabel': 'Spike count',
-      'yaxis': 1,
+      'input': {
+        'size': 0,
+        'ylabel': 'Current [pA]',
+        'yaxis': 4,
+      },
+      'analog': {
+        'size': 0,
+        'ylabel': 'Membrane potential [mV]',
+        'yaxis': 3,
+        'threshold': false,
+      },
+      'spike': {
+        'size': 0,
+        'ylabel': 'Neuron ID',
+        'yaxis': 2,
+      },
+      'histogram': {
+        'size': 0,
+        'ylabel': 'Spike count',
+        'yaxis': 1,
+      }
     }
-  }
   }
 
   setPanelSizes(): void {
@@ -77,21 +93,25 @@ export class ChartRecordsService {
     this.panelSelected.map((p, i) => this.panel[p].size = Math.round(sizes[i] / totalSize * 100));
   }
 
-  plot(idx: number, x: number[], y: number[], color: string, name: string = '', config: any = {}, yaxis: string = 'y3'): any {
+  plot(idx: number, x: number[], y: number[], config: any = {}, yaxis: string ='y3'): any {
     return {
       mode: 'lines',
       type: 'scattergl',
-      idx: idx,
       x: x,
       y: y,
+      _source: {
+        recordIdx: idx,
+        plotConfigIdx: config['idx'],
+      },
       legendgroup: config['legendgroup'] || '',
       hoverinfo: config['hoverinfo'] || 'all',
       showlegend: config['showlegend'] != undefined ? config['showlegend'] : true,
       opacity: config['opacity'] || 1.,
-      name: name,
+      visible: config['visible'] || true,
+      name: config['name'],
       line: {
-        width: 1.5,
-        color: color,
+        width: config['line.width'] || 1.5,
+        color: config['color'] || 'black',
         dash: config['line.dash'] || 'none',
       },
       yaxis: yaxis,
@@ -105,7 +125,7 @@ export class ChartRecordsService {
       idx: idx,
       x: x,
       y: y,
-      name: name,
+      name: config['name'],
       legendgroup: 'spikes' + idx,
       hoverinfo: config.hasOwnProperty('hoverinfo') ? config['hoverinfo'] : 'x',
       visible: config.hasOwnProperty('visible') ? config['visible'] : true,
@@ -113,7 +133,7 @@ export class ChartRecordsService {
       opacity: config.hasOwnProperty('opacity') ? config['opacity'] : 1.,
       marker: {
         size: 5,
-        color: color,
+        color: color || 'black',
       },
       yaxis: yaxis,
     }

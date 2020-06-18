@@ -1,0 +1,27 @@
+#controller {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
+
+  .controller-content {
+
+    app-network-controller,
+    app-network-list,
+    app-network-selection,
+    app-network-sketch-controller,
+    app-simulation-controller,
+    app-chart-controller,
+    app-animation-controller,
+    app-simulation-stats {
+      width: 320px;
+      display: block;
+    }
+
+    app-simulation-script,
+    app-simulation-raw-data {
+      width: 600px;
+      display: block;
+    }
+  }
+
+}

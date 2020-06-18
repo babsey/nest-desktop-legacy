@@ -105,7 +105,7 @@
     "step": 0.1
   }, {
     "id": "tau_syn_ex",
-    "label": "rise time of the excitatory synaptic alpha function",
+    "label": "time constant of excitatory synapse",
     "level": 4,
     "unit": "ms",
     "value": 0.2,
@@ -115,7 +115,7 @@
     "step": 0.1
   }, {
     "id": "tau_syn_in",
-    "label": "rise time of the inhibitory synaptic alpha function",
+    "label": "time constant of inhibitory synapse",
     "level": 4,
     "unit": "ms",
     "value": 2,

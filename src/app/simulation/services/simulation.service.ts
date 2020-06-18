@@ -19,6 +19,7 @@ import { Data } from '../../classes/data';
 })
 export class SimulationService {
   public data: Data;
+  public script: string;
   public dataLoaded: boolean = false;
   public db: any;
   public mode: string = 'networkEditor';

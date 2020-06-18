@@ -5,6 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ToastrService } from 'ngx-toastr';
 
 import { AnimationControllerService } from '../../visualization/animation/animation-controller/animation-controller.service';
+import { SimulationScriptService } from '../simulation-script/simulation-script.service';
+import { SimulationService } from '../services/simulation.service';
 import { DataService } from '../../services/data/data.service';
 import { LogService } from '../../log/log.service';
 import { NestServerService } from '../../nest-server/nest-server.service';
@@ -26,9 +28,12 @@ export class SimulationRunService {
   }
   public running: boolean = false;
   public simulated: EventEmitter<any> = new EventEmitter();
+  public mode: string = 'object';
 
   constructor(
     private _animationControllerService: AnimationControllerService,
+    private _simulationScriptService: SimulationScriptService,
+    private _simulationService: SimulationService,
     private _dataService: DataService,
     private _logService: LogService,
     private _nestServerService: NestServerService,
@@ -89,24 +94,47 @@ export class SimulationRunService {
     if (this.config['showSnackBar']) {
       this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     }
-    this._logService.log('Request to server');
+
+    (this.mode == 'object') ? this.run_object(data_cleaned) : this.run_script(data_cleaned);
+  }
+
+  run_object(data: Data): void {
+    const urlRoot: string = this._nestServerService.url();
+    this._logService.log('Object request to server');
     this.running = true;
-    this.http.post(urlRoot + '/script/simulation/run', data_cleaned.simulation, { observe: 'response' }).subscribe(resp => {
-      this.running = false;
+    this.http.post(urlRoot + '/script/simulation/run', data.simulation)
+      .subscribe(data => this.response(data), err => this.error(err['error']))
+  }
+
+  run_script(data: Data): void {
+    const urlRoot: string = this._nestServerService.url();
+    this._logService.log('Script request to server');
+    let script: string = this._simulationService.script;
+    script += this._simulationScriptService.getData(this._simulationService.data.simulation);
+    this.running = true;
+    this.http.post(urlRoot + '/exec', { source: script, return: 'response' })
+      .subscribe(data => this.response(data), err => this.error(err['error']))
+  }
+
+  response(resp): void {
+    this.running = false;
+    if (resp['status'] == 'error') {
+      const error = resp['error'];
+      this.error(error['message'], error['title'])
+    } else {
       if (this.snackBarRef) {
         this.snackBarRef.dismiss();
       }
-      this._logService.logs = this._logService.logs.concat(resp['body']['logs'] || []);
+      this._logService.logs = this._logService.logs.concat(resp['logs'] || []);
       this._logService.log('Response from server')
-      this.simulated.emit(resp['body']['data'])
-    }, err => {
-      console.log(err)
-      if (typeof err['error'] == 'string') {
-        this.error(err['error'], err['statusText'])
-      } else {
-        this.error('Server not found.')
+      if (resp['stdout']) {
+        // console.log(resp['stdout'])
+        this.snackBarRef = this.snackBar.open(resp['stdout'], null, {
+        duration: 5000
+        });
       }
-    })
+      this.simulated.emit(resp['data'])
+    }
   }
 
   error(message: string, title: string = null): void {

@@ -46,8 +46,9 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   update(): void {
     this.enabledModels = this._modelService.list();
-    this.requestModels().subscribe(data => {
-      this.availableModels = data['response']['data'];
+    this.requestModels().subscribe(resp => {
+      console.log(resp)
+      this.availableModels = resp;
       this.filterModels()
     })
   }

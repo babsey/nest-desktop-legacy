@@ -47,6 +47,10 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     this.loadModels()
   }
 
+  label(): string {
+    return this.collection().model.split('-')[1]
+  }
+
   loadModels(): void {
     if (!this.node) return
     var models = this._modelService.list(this.collection().element_type);
@@ -95,7 +99,7 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     simModel['existing'] = event.value;
     simModel.params = {};
     appModel.display = [];
-    this.setLevel(4)
+    // this.setLevel(4)
     if (this.collection().element_type == 'recorder') {
       this._networkService.recorderChanged = true;
     }

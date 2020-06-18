@@ -1,0 +1,13 @@
+.copy-button {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  z-index: 10;
+}
+
+.textarea {
+  border: none;
+  padding: 5px;
+  resize: none;
+  width: calc(100% - 10px);
+}

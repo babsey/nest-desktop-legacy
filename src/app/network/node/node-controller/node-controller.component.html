@@ -4,10 +4,11 @@
   >
 
   <app-node-toolbar
-    [(data)]="data"
-    [(node)]="node"
     (dataChange)="onDataChange($event)"
     (nodeChange)="onNodeChange($event)"
+    [(data)]="data"
+    [(node)]="node"
+    [disabled]="true"
     ></app-node-toolbar>
 
   <ng-container *ngIf="!isRecorder()">

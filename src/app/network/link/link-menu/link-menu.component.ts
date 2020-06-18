@@ -63,7 +63,8 @@ export class LinkMenuComponent implements OnInit {
     } else {
       delete connectome['src_idx'];
       delete connectome['tgt_idx'];
-      connectome.conn_spec.rule = 'all_to_all';
+      console.log(connectome)
+      connectome.conn_spec = {rule: 'all_to_all'};
       connectome.syn_spec.model = 'static_synapse';
       connectome.syn_spec.weight = 1;
       connectome.syn_spec.delay = 1;

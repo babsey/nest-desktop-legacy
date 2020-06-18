@@ -31,6 +31,7 @@ export class NetworkService {
   };
   public recorderChanged: boolean = false;
   public quickView: boolean = false;
+  private abc = 'abcdefghijklmnopqrstuvwxyz123456789';
 
   constructor(
     private _colorService: ColorService,
@@ -115,8 +116,7 @@ export class NetworkService {
   }
 
   addModel(data: Data, elementType: string): void {
-    var idx = data.app.nodes.length;
-    var newModel = elementType + '-' + idx;
+    var newModel = elementType + '-' + this.abc[data.app.nodes.length];
     data.app.models[newModel] = {
       display: [],
     };
@@ -135,9 +135,8 @@ export class NetworkService {
   }
 
   addCollection(data: Data, elementType: string): void {
-    var idx = data.simulation.collections.length;
     data.simulation.collections.push({
-      model: elementType + '-' + idx,
+      model: elementType + '-' + this.abc[data.simulation.collections.length],
       element_type: elementType,
       n: 1,
       params: {},
@@ -290,14 +289,17 @@ export class NetworkService {
   }
 
   cleanRecColor(data: Data): void {
-    var recorders = data.app.nodes.filter(node => data.simulation.collections[node.idx].element_type == 'recorder');
+    var recorders = data.app.nodes.filter(recNode => data.simulation.collections[recNode.idx].element_type == 'recorder');
     recorders.map(recorder => {
       var links = data.simulation.connectomes.filter(link => (link.source == recorder.idx || link.target == recorder.idx));
       if (links.length == 1) {
         var link = links[0];
         var nodeIdx = link.source != recorder.idx ? link.source : link.target;
         var node = data.app.nodes[nodeIdx];
-        data.app.nodes[recorder.idx].color = node['color'] || this._colorService.node(node);
+        var recNode = data.app.nodes[recorder.idx];
+        if (!recNode.hasOwnProperty('color')) {
+          data.app.nodes[recorder.idx].color = node['color'] || this._colorService.node(node);
+        }
       } else {
         delete data.app.nodes[recorder.idx].color
       }
@@ -311,10 +313,10 @@ export class NetworkService {
     data.app.models = {};
     data.app.nodes.forEach(node => {
       var collection = data.simulation.collections[node.idx];
-      var newName = collection.element_type + '-' + node.idx;
+      var newName = collection.element_type + '-' + this.abc[node.idx];
       data.simulation.models[newName] = simModels[collection.model];
-      collection['model'] = newName;
       data.app.models[newName] = appModels[collection.model];
+      collection['model'] = newName;
     })
   }
 

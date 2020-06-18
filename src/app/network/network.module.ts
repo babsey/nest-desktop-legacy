@@ -37,6 +37,7 @@ import { NetworkSketchService } from './network-sketch/network-sketch.service';
 import { NetworkSketchControllerComponent } from './network-sketch-controller/network-sketch-controller.component';
 import { NetworkSketchSheetComponent } from './network-sketch-sheet/network-sketch-sheet.component';
 
+import { NetworkNavbarComponent } from './network-navbar/network-navbar.component';
 import { NodeControllerComponent } from './node/node-controller/node-controller.component';
 import { NodeListComponent } from './node/node-list/node-list.component';
 import { NodeMenuComponent } from './node/node-menu/node-menu.component';
@@ -65,6 +66,7 @@ import { NodeToolbarComponent } from './node/node-toolbar/node-toolbar.component
     NetworkConfigComponent,
     NetworkControllerComponent,
     NetworkListComponent,
+    NetworkNavbarComponent,
     NetworkSelectionComponent,
     NetworkSketchComponent,
     NetworkSketchControllerComponent,
@@ -99,6 +101,7 @@ import { NodeToolbarComponent } from './node/node-toolbar/node-toolbar.component
     NetworkConfigComponent,
     NetworkControllerComponent,
     NetworkListComponent,
+    NetworkNavbarComponent,
     NetworkSelectionComponent,
     NetworkSketchComponent,
     NetworkSketchSheetComponent,

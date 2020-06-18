@@ -54,6 +54,7 @@
                 <g app-node-shape
                   [strokeColor]="color(record.recorder.idx)"
                   [elementType]="'recorder'"
+                  [label]="this.data.simulation.collections[record.recorder.idx].model.split('-')[1]"
                   [idx]="record.recorder.idx"
                   transform="translate(20,20)"
                 ></g>

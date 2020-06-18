@@ -41,19 +41,20 @@
         </mat-list>
       </ng-container>
 
-      <ng-container *ngIf="!connectSpikeDetector()">
-        <mat-list dense>
-          <ng-container *ngIf="!connectome.hasOwnProperty('src_idx') && !connectome.hasOwnProperty('tgt_idx')">
-            <mat-list-item>
-              <app-select
-                (selectedChange)="onRuleSelect($event)"
-                [(selected)]="connectome.conn_spec.rule"
-                [options]="connRules"
-              ></app-select>
-            </mat-list-item>
-          </ng-container>
+      <mat-list dense>
+        <ng-container *ngIf="!connectome.hasOwnProperty('src_idx') && !connectome.hasOwnProperty('tgt_idx')">
+          <mat-list-item>
+            <app-select
+              (selectedChange)="onRuleSelect($event)"
+              [(selected)]="connectome.conn_spec.rule"
+              [options]="connRules"
+              [disabled]="connectSpikeDetector()"
+            ></app-select>
+          </mat-list-item>
+        </ng-container>
 
-          <ng-container *ngFor="let conn of slider.connection">
+        <ng-container *ngFor="let conn of slider.connection">
+          <ng-container *ngIf="connectome.conn_spec.hasOwnProperty(conn.id)">
             <mat-list-item
               [style.display]="paramDisplay('conn_spec.' + conn.id) ? '' : 'none'">
               <app-link-param
@@ -65,8 +66,8 @@
               ></app-link-param>
             </mat-list-item>
           </ng-container>
-        </mat-list>
-      </ng-container>
+        </ng-container>
+      </mat-list>
 
       <ng-container *ngIf="!connectRecorder()">
         <mat-list dense>
@@ -81,16 +82,18 @@
 
         <mat-list dense>
           <ng-container *ngFor="let syn of slider.synapse">
-            <mat-list-item
-              [style.display]="paramDisplay('syn_spec.' + syn.id) ? '' : 'none'">
-              <app-link-param
-                (valueChange)="onValueChange($event)"
-                [(value)]="connectome.syn_spec[syn.id]"
-                [link]="link"
-                [options]="syn"
-                [random]="false"
-              ></app-link-param>
-            </mat-list-item>
+            <ng-container *ngIf="connectome.syn_spec.hasOwnProperty(syn.id)">
+              <mat-list-item
+                [style.display]="paramDisplay('syn_spec.' + syn.id) ? '' : 'none'">
+                <app-link-param
+                  (valueChange)="onValueChange($event)"
+                  [(value)]="connectome.syn_spec[syn.id]"
+                  [link]="link"
+                  [options]="syn"
+                  [random]="false"
+                ></app-link-param>
+              </mat-list-item>
+            </ng-container>
           </ng-container>
         </mat-list>
       </ng-container>

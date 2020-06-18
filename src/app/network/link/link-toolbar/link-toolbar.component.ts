@@ -58,6 +58,10 @@ export class LinkToolbarComponent implements OnInit {
     return this.advanced() ? '' : 'linear-gradient(' + gradient + ')';
   }
 
+  label(idx: number): string {
+    return this.collection(idx).model.split('-')[1]
+  }
+
   collection(idx: number): SimCollection {
     return this.data.simulation.collections[idx];
   }

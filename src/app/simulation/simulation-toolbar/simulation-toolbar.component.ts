@@ -39,7 +39,7 @@ export class SimulationToolbarComponent implements OnInit {
 
   selectMode(mode: string): void {
     this._simulationService.mode = mode;
-    this._simulationService.sidenavOpened = mode != 'networkDetails';
+    this._simulationService.sidenavOpened = mode != 'labBook';
     setTimeout(() => this.triggerResize(), 10)
   }
 

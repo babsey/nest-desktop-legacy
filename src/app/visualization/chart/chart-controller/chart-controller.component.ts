@@ -47,6 +47,11 @@ export class ChartControllerComponent implements OnInit {
     }, 1);
   }
 
+  onThresholdChange(value: number): void {
+    this._chartRecordsService.threshold.value = value;
+    this._visualizationService.update.emit();
+  }
+
   onBinSizeChange(value: number): void {
     this._chartRecordsService.binsize = value;
     this._visualizationService.update.emit();

@@ -13,6 +13,16 @@
     </ng-container>
   </mat-selection-list>
 
+  <ng-container *ngIf="_chartRecordsService.panelSelected.includes('analog')">
+    <!-- <app-value-slider-inline
+      (valueChange)="onThresholdChange($event)"
+      [matTooltip]="'Spike Threshold'"
+      [options]="_visualizationConfigService.config.chart.controller.threshold"
+      [(value)]="_chartRecordsService.threshold.value"
+      style="width:100%"
+    ></app-value-slider-inline> -->
+  </ng-container>
+
   <ng-container *ngIf="_chartRecordsService.panelSelected.includes('histogram')">
     <mat-list-item mat-subheader>
       Histogram

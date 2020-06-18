@@ -51,6 +51,11 @@ export class NodeSketchComponent implements OnInit {
     this.collection = this.data.simulation.collections[this.node.idx];
   }
 
+  label(): string {
+    return this.collection.model.split('-')[1]
+  }
+
+
   isSpatial(): boolean {
     var collection = this.data.simulation.collections[this.node.idx];
     return collection.hasOwnProperty('spatial')
