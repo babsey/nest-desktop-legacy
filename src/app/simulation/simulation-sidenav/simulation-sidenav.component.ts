@@ -30,8 +30,4 @@ export class SimulationSidenavComponent implements OnInit {
     this.appChange.emit(this.data.app)
   }
 
-  height(): number {
-    return window.innerHeight - 40;
-  }
-
 }

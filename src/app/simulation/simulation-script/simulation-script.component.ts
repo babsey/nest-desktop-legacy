@@ -13,7 +13,6 @@ import { Data } from '../../classes/data';
 })
 export class SimulationScriptComponent implements OnInit {
   @Input() disabled: boolean = false;
-  @Input() height: number = 0;
 
   constructor(
     public _simulationScriptService: SimulationScriptService,

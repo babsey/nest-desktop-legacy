@@ -6,13 +6,9 @@
   <fa-icon icon="copy"></fa-icon>
 </button>
 
-<mat-form-field style="width:100%; z-index:1">
-  <mat-label>Script code for NEST</mat-label>
-  <textarea matInput
-    [(ngModel)]="_simulationService.script"
-    [disabled]="disabled"
-    class="textarea"
-    spellcheck="false"
-    [style.height.px]="height - 19.5 - 34"
-  ></textarea>
-</mat-form-field>
+<textarea 
+  [(ngModel)]="_simulationService.script"
+  [disabled]="disabled"
+  class="textarea"
+  spellcheck="false"
+></textarea>
