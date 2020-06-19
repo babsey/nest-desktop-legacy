@@ -289,19 +289,18 @@ export class NetworkService {
   }
 
   cleanRecColor(data: Data): void {
-    var recorders = data.app.nodes.filter(recNode => data.simulation.collections[recNode.idx].element_type == 'recorder');
+    var recorders = data.app.nodes.filter(node => data.simulation.collections[node.idx].element_type == 'recorder');
     recorders.map(recorder => {
       var links = data.simulation.connectomes.filter(link => (link.source == recorder.idx || link.target == recorder.idx));
       if (links.length == 1) {
         var link = links[0];
         var nodeIdx = link.source != recorder.idx ? link.source : link.target;
         var node = data.app.nodes[nodeIdx];
-        var recNode = data.app.nodes[recorder.idx];
-        if (!recNode.hasOwnProperty('color')) {
-          data.app.nodes[recorder.idx].color = node['color'] || this._colorService.node(node);
+        if (!recorder.hasOwnProperty('color')) {
+          recorder['color'] = node.idx; //node['color'] || this._colorService.node(node);
         }
       } else {
-        delete data.app.nodes[recorder.idx].color
+        delete recorder.color
       }
     })
   }

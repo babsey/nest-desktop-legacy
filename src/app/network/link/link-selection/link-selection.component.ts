@@ -56,9 +56,11 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
     return this._appConfigService.config['app'].advanced;
   }
 
-  color(node: string): string {
+  color(src: string): string {
     let nodes = this.data.app.nodes;
-    return this._colorService.node(nodes[this.connectome[node]])
+    var node = nodes[this.connectome[src]];
+    var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
+    return this._colorService.node(node)
   }
 
   update(): void {

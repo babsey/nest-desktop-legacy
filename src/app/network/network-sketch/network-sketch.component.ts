@@ -112,7 +112,9 @@ export class NetworkSketchComponent implements OnInit {
   colorLink(link: AppLink): string {
     var nodes = this.data.app.nodes;
     var connectome = this.data.simulation.connectomes[link.idx];
-    return this._colorService.node(nodes[connectome.source]);
+    var node = nodes[connectome.source];
+    var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
+    return this._colorService.node(node);
   }
 
   onDataChange(data: Data): void {

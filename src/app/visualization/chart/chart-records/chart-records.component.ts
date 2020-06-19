@@ -185,6 +185,13 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     }
   }
 
+  color(idx: number): string {
+    var nodes = this.data.app.nodes;
+    var node = nodes[idx];
+    var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
+    return this._colorService.node(node);
+  }
+
   plotSpikeData(record: Record): void {
     var x: any[] = record.events.times;
     var y: any[] = record.events.senders;
@@ -192,8 +199,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     var start: number = 0.;
     var end: number = this.data.app.kernel['time'];
     var size: number = this._chartRecordsService.binsize;
-    var node = this.data.app.nodes[record.recorder.idx];
-    var color: string = this._colorService.node(node);
+    var color: string = this.color(record.recorder.idx);
 
     var idx = this.plotlyData.length;
     var label = this.data.simulation.collections[idx].model.split('-')[1];
@@ -235,7 +241,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     if (panel.size <= 2) return
     var yaxis = 'y' + panel.yaxis;
 
-    var color: string = this._colorService.node(this.data.app.nodes[recorder.idx]);
+    var color: string = this.color(record.recorder.idx);
     var connectomes = this.data.simulation.connectomes.filter(d => d.source == recorder.idx);
     var node = this.data.simulation.collections[connectomes[0].target];
     var model = this.data.simulation.models[node.model];

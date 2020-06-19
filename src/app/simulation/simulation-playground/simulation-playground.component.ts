@@ -83,7 +83,10 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
           'model': model,
         }
       }
-      var color = this._colorService.node(this.data.app.nodes[record.recorder.idx]);
+      var nodes = this.data.app.nodes;
+      var node = nodes[record.recorder.idx];
+      var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
+      var color = this._colorService.node(node);
       record.recorder['color'] = color;
       record['global_ids'] = rec['global_ids'];
       record['senders'] = [...new Set(rec['events']['senders'])];

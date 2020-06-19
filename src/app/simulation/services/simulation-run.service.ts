@@ -110,7 +110,6 @@ export class SimulationRunService {
     const urlRoot: string = this._nestServerService.url();
     this._logService.log('Script request to server');
     let script: string = this._simulationService.script;
-    script += this._simulationScriptService.getData(this._simulationService.data.simulation);
     this.running = true;
     this.http.post(urlRoot + '/exec', { source: script, return: 'response' })
       .subscribe(data => this.response(data), err => this.error(err['error']))

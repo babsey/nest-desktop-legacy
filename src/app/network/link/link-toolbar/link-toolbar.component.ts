@@ -66,9 +66,11 @@ export class LinkToolbarComponent implements OnInit {
     return this.data.simulation.collections[idx];
   }
 
-  color(node: string): string {
+  color(src: string): string {
     let nodes = this.data.app.nodes;
-    return this._colorService.node(nodes[this.connectome[node]])
+    var node = nodes[this.connectome[src]];
+    var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
+    return this._colorService.node(node)
   }
 
   color_weight(): string {

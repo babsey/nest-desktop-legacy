@@ -64,7 +64,9 @@ export class NodeMenuComponent implements OnInit, OnChanges {
   }
 
   color(): string {
-    return this._colorService.node(this.node);
+    var nodes = this.data.app.nodes;
+    var node = typeof this.node['color'] == 'number' ? nodes[this.node['color']] : this.node;
+    return this._colorService.node(node);
   }
 
   selectColor(color: string): void {
