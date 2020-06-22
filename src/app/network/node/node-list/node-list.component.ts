@@ -53,9 +53,7 @@ export class NodeListComponent implements OnInit, OnChanges {
   }
 
   color(): string {
-    var nodes = this.data.app.nodes
-    var node = typeof this.node['color'] == 'number' ? nodes[this.node['color']] : this.node;
-    return this._colorService.node(node);
+    return this._colorService.node(this.node.idx);
   }
 
   update(): void {
@@ -63,10 +61,6 @@ export class NodeListComponent implements OnInit, OnChanges {
     this.collection = this.data.simulation.collections[this.node.idx];
     this.model = this.data.simulation.models[this.collection.model];
     this.modelConfig = this._modelService.config(this.model.existing);
-  }
-
-  isSpatial(): boolean {
-    return this.collection.hasOwnProperty('spatial');
   }
 
   paramDisplay(param: string): boolean {

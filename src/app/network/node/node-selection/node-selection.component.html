@@ -11,7 +11,7 @@
   ></app-node-toolbar>
 
   <!-- <ng-container *ngIf="!isRecorder()">
-    <ng-container *ngIf="!isSpatial()">
+    <ng-container *ngIf="!collection.isSpatial()">
       <mat-list dense>
         <mat-list-item style="height:40px;line-height:40px">
           <app-node-param
@@ -26,7 +26,7 @@
       </mat-list>
     </ng-container>
 
-    <ng-container *ngIf="isSpatial()">
+    <ng-container *ngIf="collection.isSpatial()">
       <mat-nav-list dense>
         <mat-list-item>
           <app-node-spatial [node]="node" [collection]="collection"></app-node-spatial>

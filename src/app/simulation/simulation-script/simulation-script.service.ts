@@ -217,8 +217,8 @@ export class SimulationScriptService {
     return script + '\n'
   }
 
-  simulate(time: string): string {
-    let script: string = 'nest.Simulate(' + parseFloat(time).toFixed(1) + ')';
+  simulate(time: number): string {
+    let script: string = 'nest.Simulate(' + time.toFixed(1) + ')';
     return script + '\n'
   }
 

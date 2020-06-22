@@ -5,7 +5,11 @@
 </div>
 
 <mat-menu #linkMenu="matMenu" class="context-menu link-menu">
-  <app-link-menu [(data)]="data" [link]="link" (dataChange)="dataChange.emit($event)"></app-link-menu>
+  <app-link-menu
+    (dataChange)="dataChange.emit($event)"
+    [(data)]="data"
+    [link]="link" 
+  ></app-link-menu>
 </mat-menu>
 
 <span

@@ -35,7 +35,7 @@ export class SimulationStatsComponent implements OnInit {
   }
 
   color(idx: number): string {
-    return this._colorService.node(this.node(idx));
+    return this._colorService.node(idx);
   }
 
   colorSelected(): string {

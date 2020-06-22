@@ -65,15 +65,14 @@ export class SimulationRunService {
     if (this.config['autoRandomSeed']) {
       this._logService.log('Randomize seed');
       let seed = Math.random() * 1000;
-      data.simulation['random_seed'] = seed.toFixed(0);
+      data.simulation['random_seed'] = parseInt(seed.toFixed(0));
     }
 
     this._logService.log('Clean and hash data');
-    var data_cleaned = this._dataService.clean(data);
-
+    var clonedData = data.clone();
     data.app.nodes.map(node => {
-      var collection = data_cleaned.simulation.collections[node.idx];
-      var simModel = data_cleaned.simulation.models[collection.model];
+      var collection = clonedData.simulation.collections[node.idx];
+      var simModel = clonedData.simulation.models[collection.model];
       if (node.hasOwnProperty('params')) {
         Object.keys(node.params).map(paramKey => {
           var param = node.params[paramKey];
@@ -95,7 +94,7 @@ export class SimulationRunService {
       this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     }
 
-    (this.mode == 'object') ? this.run_object(data_cleaned) : this.run_script(data_cleaned);
+    (this.mode == 'object') ? this.run_object(clonedData) : this.run_script(clonedData);
   }
 
   run_object(data: Data): void {

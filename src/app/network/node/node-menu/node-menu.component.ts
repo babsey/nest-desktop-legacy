@@ -64,18 +64,12 @@ export class NodeMenuComponent implements OnInit, OnChanges {
   }
 
   color(): string {
-    var nodes = this.data.app.nodes;
-    var node = typeof this.node['color'] == 'number' ? nodes[this.node['color']] : this.node;
-    return this._colorService.node(node);
+    return this._colorService.node(this.node.idx);
   }
 
   selectColor(color: string): void {
-    if (color == 'none') {
-      delete this.node['color'];
-    } else {
-      this.node['color'] = color;
-    }
-    this._networkService.cleanRecColor(this.data)
+    this.node['color'] = color == 'none' ? undefined : color;
+    this.data.clean();
     this.nodeChange.emit(this.node)
   }
 
@@ -98,30 +92,28 @@ export class NodeMenuComponent implements OnInit, OnChanges {
     this.dataChange.emit(this.data)
   }
 
-  isSpatial(): boolean {
-    return this.collection.hasOwnProperty('spatial')
-  }
-
   setSpatial(): void {
-    this.collection['spatial'] = {
+    var positions = this._positionService.freePositions(this.collection.n, this.collection.spatial);
+    this.collection.spatial = {
       'edge_wrap': false,
-      'extent': [1, 1],
-      'center': [0, 0]
+      extent: [1, 1],
+      center: [0, 0],
+      positions: positions,
     };
-    this.collection.spatial.positions = this._positionService.freePositions(this.collection.n, this.collection.spatial);
+    this.data.clean();
     this.dataChange.emit(this.data)
   }
 
   unsetSpatial(): void {
-    delete this.collection['spatial'];
+    this.collection.spatial = {};
+    this.data.clean();
     this.dataChange.emit(this.data)
   }
 
   deleteNode(): void {
     this._networkService.resetSelection();
     this._networkSketchService.reset();
-    this._networkService.deleteNode(this.data, this.node);
-    this._networkService.clean(this.data);
+    this.data.deleteNode(this.node);
     this.dataChange.emit(this.data)
   }
 

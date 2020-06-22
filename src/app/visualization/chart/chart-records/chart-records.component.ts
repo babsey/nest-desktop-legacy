@@ -186,10 +186,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
   }
 
   color(idx: number): string {
-    var nodes = this.data.app.nodes;
-    var node = nodes[idx];
-    var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
-    return this._colorService.node(node);
+    return this._colorService.node(idx);
   }
 
   plotSpikeData(record: Record): void {
@@ -243,6 +240,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
     var color: string = this.color(record.recorder.idx);
     var connectomes = this.data.simulation.connectomes.filter(d => d.source == recorder.idx);
+    if (connectomes.length == 0) return
     var node = this.data.simulation.collections[connectomes[0].target];
     var model = this.data.simulation.models[node.model];
 
@@ -358,7 +356,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         record.config[idx] = {
           hoverinfo: 'none',
           idx: idx,
-          'line.width': 4,
+          'line.width': 8,
           color: 'white',
           legendgroup: legendgroup,
           showlegend: false,

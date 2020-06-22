@@ -49,7 +49,7 @@ export class SimulationToolbarComponent implements OnInit {
 
   run(force: boolean = false): void {
     this._simulationService.mode = 'activityExplorer';
-    this._networkService.clean(this._simulationService.data);
+    this._simulationService.data.clean();
     this._simulationRunService.run(this._simulationService.data, force)
   }
 

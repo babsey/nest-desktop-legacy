@@ -73,26 +73,23 @@ export class NetworkSketchComponent implements OnInit {
   history(): void {
     if (this.data == undefined) return
     // console.log('History')
-    var data_cleaned = this._dataService.clean(this.data);
-    this._networkService.clean(data_cleaned);
+    var dataCloned = this.data.clone();
     if (this.idx < (this.dataStack.length - 1)) {
       this.dataStack = this.dataStack.slice(0, this.idx + 1);
     }
-    this.dataStack.push(data_cleaned);
+    this.dataStack.push(dataCloned);
     this.idx = this.dataStack.length - 1;
   }
 
   undo(): void {
     this.idx = (this.idx == 0) ? 0 : this.idx - 1;
-    this.data = this._dataService.clean(this.dataStack[this.idx]);
-    this._networkService.clean(this.data);
+    this.data = new Data(this.dataStack[this.idx]);
     this.dataChange.emit(this.data)
   }
 
   redo(): void {
     this.idx = (this.idx == this.dataStack.length - 1) ? this.dataStack.length - 1 : this.idx + 1;
-    this.data = this._dataService.clean(this.dataStack[this.idx]);
-    this._networkService.clean(this.data);
+    this.data = new Data(this.dataStack[this.idx]);
     this.dataChange.emit(this.data)
   }
 
@@ -102,7 +99,7 @@ export class NetworkSketchComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.data = this._dataService.newData();
+        this.data = new Data();
         this.history()
         this.dataChange.emit(this.data)
       }
@@ -110,11 +107,8 @@ export class NetworkSketchComponent implements OnInit {
   }
 
   colorLink(link: AppLink): string {
-    var nodes = this.data.app.nodes;
     var connectome = this.data.simulation.connectomes[link.idx];
-    var node = nodes[connectome.source];
-    var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
-    return this._colorService.node(node);
+    return this._colorService.node(connectome.source);
   }
 
   onDataChange(data: Data): void {
@@ -138,7 +132,7 @@ export class NetworkSketchComponent implements OnInit {
     this._networkSketchService.focused.node = node;
     var nodeSelected = this._networkService.selected.node;
     if (this.eventTrigger && nodeSelected) {
-      var color = this._colorService.node(nodeSelected);
+      var color = this._colorService.node(nodeSelected.idx);
       this._networkSketchService.connect = true;
       this._networkSketchService.dragLine(nodeSelected.position, node.position, color, true);
     }

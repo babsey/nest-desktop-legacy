@@ -8,7 +8,7 @@
   </button>
 
   <ng-container *ngIf="data.simulation.connectomes[link.idx]">
-    <ng-container [ngSwitch]="data.simulation.connectomes[link.idx].hasOwnProperty('src_idx')">
+    <ng-container [ngSwitch]="data.simulation.connectomes[link.idx].hasSourceIndices(data)">
       <ng-container *ngSwitchCase="true">
         <button mat-menu-item class="menu-item" (click)="allSources()">
           <fa-icon class="menu-icon" icon="random"></fa-icon> Set all sources
@@ -21,7 +21,7 @@
       </ng-container>
     </ng-container>
 
-    <ng-container [ngSwitch]="data.simulation.connectomes[link.idx].hasOwnProperty('tgt_idx')">
+    <ng-container [ngSwitch]="data.simulation.connectomes[link.idx].hasTargetIndices(data)">
       <ng-container *ngSwitchCase="true">
         <button mat-menu-item class="menu-item" (click)="allTargets()">
           <fa-icon class="menu-icon" icon="random"></fa-icon> Set all targets

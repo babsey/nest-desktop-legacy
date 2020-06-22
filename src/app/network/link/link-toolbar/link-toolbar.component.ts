@@ -67,10 +67,7 @@ export class LinkToolbarComponent implements OnInit {
   }
 
   color(src: string): string {
-    let nodes = this.data.app.nodes;
-    var node = nodes[this.connectome[src]];
-    var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
-    return this._colorService.node(node)
+    return this._colorService.node(this.connectome[src]);
   }
 
   color_weight(): string {
@@ -87,7 +84,7 @@ export class LinkToolbarComponent implements OnInit {
 
   isSpatial(idx: number): boolean {
     var collection = this.collection(idx);
-    return collection.hasOwnProperty('spatial');
+    return collection.isSpatial();
   }
 
   selectNode(idx: number): void {

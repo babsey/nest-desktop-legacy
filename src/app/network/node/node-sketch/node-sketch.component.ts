@@ -55,12 +55,6 @@ export class NodeSketchComponent implements OnInit {
     return this.collection.model.split('-')[1]
   }
 
-
-  isSpatial(): boolean {
-    var collection = this.data.simulation.collections[this.node.idx];
-    return collection.hasOwnProperty('spatial')
-  }
-
   radius(): number {
     var radius = this._networkConfigService.config.sketch.node.radius.value;
     return this._networkSketchService.focused.node == this.node ? radius + 3 : radius;
@@ -71,19 +65,17 @@ export class NodeSketchComponent implements OnInit {
   }
 
   strokeColor(): string {
-    var nodes = this.data.app.nodes;
-    var node = typeof this.node['color'] == 'number' ? nodes[this.node['color']] : this.node;
-    return this._colorService.node(node);
+    return this._colorService.node(this.node.idx);
   }
 
   fillColor(): string {
-    // var color = this._colorService.node(this.node);
+    // var color = this._colorService.node(this.node.idx);
     // return d3.color(color).brighter(1.2);
     return 'white';
   }
 
   connect(): void {
-    this._networkService.connect(this.data, this.selected, this.node);
+    this.data.connectNodes(this.selected, this.node);
     this.dataChange.emit(this.data);
   }
 

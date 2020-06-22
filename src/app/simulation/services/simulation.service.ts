@@ -40,7 +40,7 @@ export class SimulationService {
     private _simulationProtocolService: SimulationProtocolService,
     private http: HttpClient,
   ) {
-    this.data = this._dataService.newData();
+    this.data = new Data();
   }
 
   init(): void {
@@ -81,12 +81,12 @@ export class SimulationService {
     var simulations = [];
     var files = filenames.map(filename => this.http.get('/assets/simulations/' + filename + '.json'))
     forkJoin(files).subscribe(simulations => {
-      simulations.map(simulation => {
-        simulation['version'] = environment.VERSION;
-        let simulation_cleaned = this._dataService.clean(simulation);
-        this._networkService.clean(simulation_cleaned);
-        simulations.push(simulation_cleaned);
-        this._dbService.db.create(this.db, simulation_cleaned)
+      simulations.map(d => {
+        d['version'] = environment.VERSION;
+        let simulation = new Data(d);
+        simulation.cleanModels();
+        simulations.push(simulation);
+        this._dbService.db.create(this.db, simulation)
       })
     })
     return simulations;
@@ -113,20 +113,19 @@ export class SimulationService {
 
   save(data: Data): void {
     // console.log('Save simulation')
-    let data_cleaned = this._dataService.clean(data);
-    this._networkService.clean(data_cleaned);
+    let dataCloned = this.data.clone();
     return this.count().then(count => {
       if (count == 0) {
-        return this._dbService.db.create(this.db, data_cleaned)
+        return this._dbService.db.create(this.db, dataCloned)
           .then(res => {
             data['_id'] = res.id;
           })
       } else {
         this.hashList().then(hash => {
-          if (hash.indexOf(data_cleaned['hash']) != -1) {
-            return this._dbService.db.update(this.db, data_cleaned)
+          if (hash.indexOf(dataCloned['hash']) != -1) {
+            return this._dbService.db.update(this.db, dataCloned)
           } else {
-            return this._dbService.db.create(this.db, data_cleaned).then(res => {
+            return this._dbService.db.create(this.db, dataCloned).then(res => {
               data['_id'] = res.id;
             })
           }

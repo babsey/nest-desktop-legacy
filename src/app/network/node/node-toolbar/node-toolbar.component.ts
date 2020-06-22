@@ -71,13 +71,7 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
   }
 
   color(): string {
-    var nodes = this.data.app.nodes;
-    var node = typeof this.node['color'] == 'number' ? nodes[this.node['color']] : this.node;
-    return this._colorService.node(node);
-  }
-
-  isSpatial(): boolean {
-    return this.collection().hasOwnProperty('spatial');
+    return this._colorService.node(this.node.idx);
   }
 
   selectNode(node: AppNode): void {
@@ -105,7 +99,7 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     if (this.collection().element_type == 'recorder') {
       this._networkService.recorderChanged = true;
     }
-    this._networkService.clean(this.data, false)
+    this.data.clean();
     this.dataChange.emit(this.data)
   }
 

@@ -57,10 +57,7 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
   }
 
   color(src: string): string {
-    let nodes = this.data.app.nodes;
-    var node = nodes[this.connectome[src]];
-    var node = typeof node['color'] == 'number' ? nodes[node['color']] : node;
-    return this._colorService.node(node)
+    return this._colorService.node(this.connectome[src]);
   }
 
   update(): void {
@@ -117,10 +114,7 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
   }
 
   isBothSpatial(): boolean {
-    var collections = this.data.simulation.collections;
-    var source = collections[this.connectome.source];
-    var target = collections[this.connectome.target];
-    return source.hasOwnProperty('spatial') && target.hasOwnProperty('spatial');
+    return this.connectome.isBothSpatial(this.data);
   }
 
   onDataChange(data: Data): void {
@@ -134,7 +128,7 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
   }
 
   onSelectConnRule(rule: string): void {
-    this.connectome.conn_spec = {}
+    this.connectome.conn_spec = {};
     this.connectome.conn_spec.rule = rule;
     this.link.display = ['conn_spec.rule', 'syn_spec.model', 'syn_spec.weight', 'syn_spec.delay'];
     var conn_spec = this._networkConfigService.config.connection.specs.find(conn_spec => conn_spec.rule == rule);
@@ -170,14 +164,4 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
     this.dataChange.emit(this.data)
   }
 
-  onMaskChange(): void {
-    this.dataChange.emit(this.data)
-  }
-
-  onContextMenu(event: MouseEvent): void {
-    event.preventDefault();
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
-    this.contextMenu.openMenu();
-  }
 }

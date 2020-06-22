@@ -64,9 +64,7 @@ export class NodeControllerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   color(): string {
-    var nodes = this.data.app.nodes;
-    var node = typeof this.node['color'] == 'number' ? nodes[this.node['color']] : this.node;
-    return this._colorService.node(node);
+    return this._colorService.node(this.node.idx);
   }
 
   update(): void {
@@ -111,10 +109,6 @@ export class NodeControllerComponent implements OnInit, OnChanges, OnDestroy {
 
   isRecorder(): boolean {
     return this.collection.element_type == 'recorder';
-  }
-
-  isSpatial(): boolean {
-    return this.collection.hasOwnProperty('spatial')
   }
 
   nodeDisplay(): string {
