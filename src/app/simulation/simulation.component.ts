@@ -61,8 +61,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this._simulationEventService.records = [];
     if (id) {
       this._simulationService.load(id).then(doc => {
-        this._simulationService.data = this._dataService.clean(doc);
-        this._networkService.clean(this._simulationService.data);
+        this._simulationService.data = new Data(doc);
         this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
         this._networkService.update.emit(this._simulationService.data);
         this._simulationService.dataLoaded = true;
@@ -71,7 +70,6 @@ export class SimulationComponent implements OnInit, OnDestroy {
         }
       })
     } else {
-      this._simulationService.data = this._dataService.newData();
       this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
       this._simulationService.mode = 'networkEditor';
       this._simulationService.dataLoaded = true;
@@ -85,7 +83,6 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this._simulationEventService.records = [];
       this._networkService.recorderChanged = false;
     }
-    this._networkService.clean(this._simulationService.data);
     this._simulationRunService.run(this._simulationService.data, force)
   }
 

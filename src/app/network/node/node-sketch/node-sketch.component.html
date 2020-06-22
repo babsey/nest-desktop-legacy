@@ -8,7 +8,7 @@
   [idx]="node.idx"
   [label]="label()"
   [selected]="selected == node"
-  [spatial]="isSpatial()"
+  [spatial]="collection.isSpatial()"
   [attr.transform]="'translate('+ node.position['x'] + ',' + node.position['y'] + ')'"
   class="node"
 ></svg:g>

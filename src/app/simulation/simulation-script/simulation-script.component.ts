@@ -28,7 +28,6 @@ export class SimulationScriptComponent implements OnInit {
     selBox.style.left = '0';
     selBox.style.top = '0';
     selBox.style.opacity = '0';
-    // let value: string = this._simulationScriptService.importModules();
     const value = this._simulationService.script;
     selBox.value = value;
     document.body.appendChild(selBox);

@@ -57,7 +57,7 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
   }
 
   color(): string {
-    return this._colorService.node(this.node);
+    return this._colorService.node(this.node.idx);
   }
 
   update(): void {
@@ -89,10 +89,6 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
   paramDisplay(obj: any, param: string): boolean {
     if (obj == undefined) return
     return obj.hasOwnProperty('display') ? obj.display.includes(param) : true;
-  }
-
-  isSpatial(): boolean {
-    return this.collection.hasOwnProperty('spatial')
   }
 
   onDataChange(data: Data): void {

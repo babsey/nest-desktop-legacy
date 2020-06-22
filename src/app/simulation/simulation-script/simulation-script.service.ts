@@ -68,9 +68,9 @@ export class SimulationScriptService {
     script += '# Run simulation\n';
     script += this.simulate(data.simulation.time);
 
-    // script += '\n\n';
-    // script += '# Get events\n';
-    // script += this.getData(data.simulation);
+    script += '\n\n';
+    script += '# Get events\n';
+    script += this.getData(data.simulation);
     return script;
   }
 
@@ -217,8 +217,8 @@ export class SimulationScriptService {
     return script + '\n'
   }
 
-  simulate(time: string): string {
-    let script: string = 'nest.Simulate(' + parseFloat(time).toFixed(1) + ')';
+  simulate(time: number): string {
+    let script: string = 'nest.Simulate(' + time.toFixed(1) + ')';
     return script + '\n'
   }
 

@@ -66,15 +66,14 @@ export class SimulationProtocolService {
 
   save(data: Data, reload: boolean = false): void {
     // console.log('Save protocol')
-    let data_cleaned = this._dataService.clean(data);
-    this._networkService.clean(data_cleaned);
+    let dataCloned = data.clone();
     this.count().then(count => {
       if (count == 0) {
-        if ('_id' in data_cleaned) {
-          delete data_cleaned['_id']
-          delete data_cleaned['_rev']
+        if ('_id' in dataCloned) {
+          delete dataCloned['_id']
+          delete dataCloned['_rev']
         }
-        this._dbService.db.create(this.db, data_cleaned)
+        this._dbService.db.create(this.db, dataCloned)
           .then(res => {
             if (reload) {
               this.load(res.id).then(() => {
@@ -87,8 +86,8 @@ export class SimulationProtocolService {
           })
       } else {
         this.hashList().then(hash => {
-          if (hash.indexOf(data_cleaned['hash']) != -1 && data_cleaned._id) {
-            this._dbService.db.update(this.db, data_cleaned).then(res => {
+          if (hash.indexOf(dataCloned['hash']) != -1 && dataCloned._id) {
+            this._dbService.db.update(this.db, dataCloned).then(res => {
               if (reload) {
                 this.load(res.id).then(() => {
                   this.change.emit()
@@ -98,11 +97,11 @@ export class SimulationProtocolService {
               }
             })
           } else {
-            if ('_id' in data_cleaned) {
-              delete data_cleaned['_id']
-              delete data_cleaned['_rev']
+            if ('_id' in dataCloned) {
+              delete dataCloned['_id']
+              delete dataCloned['_rev']
             }
-            this._dbService.db.create(this.db, data_cleaned)
+            this._dbService.db.create(this.db, dataCloned)
               .then(res => {
                 if (reload) {
                   this.load(res.id).then(() => {

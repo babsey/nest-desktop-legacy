@@ -70,8 +70,9 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this.connectomes = this.data.simulation.connectomes;
     this.connectome = this.connectomes[this.link.idx];
 
-    if (!this.hasProjections()) {
-      this._networkService.cleanConnectome(this.connectome)
+    if (!this.connectome.hasProjections()) {
+      this.data.clean();
+
       var connectionConfig = this._networkConfigService.config.connection;
       this.connRules = connectionConfig.specs.map(spec => { return { value: spec.rule, label: spec.label } });
       var connRule = this.connectome.hasOwnProperty('conn_spec') ? this.connectome.conn_spec.rule || 'all_to_all' : 'all_to_all';
@@ -85,9 +86,8 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     }
   }
 
-  color(node: string): string {
-    let nodes = this.data.app.nodes;
-    return this._colorService.node(nodes[this.connectome[node]]);
+  color(src: string): string {
+    return this._colorService.node(this.connectome[src]);
   }
 
   source(): AppNode {
@@ -115,11 +115,7 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   }
 
   paramDisplay(param: string): boolean {
-    return this.link.hasOwnProperty('display') ? this.link.display.includes(param) : true;
-  }
-
-  hasProjections(): boolean {
-    return this.connectome.hasOwnProperty('projections');
+    return true; //this.link.hasOwnProperty('display') ? this.link.display.includes(param) : true;
   }
 
   onValueChange(value: any): void {

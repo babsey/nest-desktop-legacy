@@ -44,8 +44,8 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
   }
 
   update(response: any): void {
-    // Update kernel time
     // console.log(response)
+    // Update kernel time
     this.data.app.kernel.time = response.kernel['time'];
 
     // // Update global ids, record_from, positions
@@ -83,8 +83,7 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
           'model': model,
         }
       }
-      var color = this._colorService.node(this.data.app.nodes[record.recorder.idx]);
-      record.recorder['color'] = color;
+      record.recorder['color'] =  this._colorService.node(record.recorder.idx);
       record['global_ids'] = rec['global_ids'];
       record['senders'] = [...new Set(rec['events']['senders'])];
       record['senders'].sort((a: number, b: number) => a - b)
