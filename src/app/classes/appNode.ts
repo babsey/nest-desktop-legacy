@@ -32,11 +32,8 @@ export class AppNode {
     if (links.length == 1) {
       var link = links[0];
       var nodeIdx = link.source != this.idx ? link.source : link.target;
-      if (this.color == undefined && this.idx != nodeIdx) {
+      if (typeof this.color != 'string') {
         this.color = nodeIdx;
-      }
-      if (this.color == this.idx) {
-        this.color = undefined;
       }
     } else {
       this.color = undefined;

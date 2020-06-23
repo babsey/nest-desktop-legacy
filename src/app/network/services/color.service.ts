@@ -33,11 +33,9 @@ export class ColorService {
   }
 
   node(idx: number): string {
-    let nodes = this._simulationService.data.app.nodes;
-    let node = nodes[idx];
-    if (node == undefined) return 'grey';
     let colors = this._networkConfigService.config.color.cycle;
-    if (node.color == undefined || node.color == idx) {
+    let node = this._simulationService.data.app.nodes[idx];
+    if (node == undefined || node.color == undefined || node.color == idx) {
       return colors[idx % colors.length];
     } else if (typeof node.color == 'number') {
       return this.node(node.color);

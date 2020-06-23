@@ -21,14 +21,8 @@ export class NetworkService {
   }
   public elementType = null;
   public update: EventEmitter<any> = new EventEmitter();
-  public modelDefaults = {
-    stimulator: 'dc_generator',
-    neuron: 'iaf_psc_alpha',
-    recorder: 'voltmeter',
-  };
   public recorderChanged: boolean = false;
   public quickView: boolean = false;
-  private abc = 'abcdefghijklmnopqrstuvwxyz123456789';
 
   constructor(
     private _networkConfigService: NetworkConfigService,

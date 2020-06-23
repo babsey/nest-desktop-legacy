@@ -268,10 +268,6 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       this.plotlyData.push(plot_Vth)
     }
 
-    var neurons = this.data.simulation.connectomes
-      .filter(d => d.source == recorder.idx)
-      .map(d => this.data.simulation.collections[d.target]);
-
     var senders = record['senders'];
     var data = senders.map(sender => { return { x: [], y: [] } });
     record.events['senders'].forEach((sender, idx) => {
@@ -378,8 +374,6 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       record.config[idx].color = color;
       var plot = this._chartRecordsService.plot(record.idx, x, y, record.config[idx], yaxis);
       this.plotlyData.push(plot)
-
-
     }
   }
 
@@ -419,7 +413,6 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       config['visible'] = data.visible;
       console.log(data, config)
     }, 1000)
-
   }
 
   onLegendDoubleClick(event: any): void {
