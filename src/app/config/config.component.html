@@ -4,11 +4,13 @@
   </mat-toolbar>
 </span>
 
-<ng-container [ngSwitch]="routeConfig">
-  <app-app-config *ngSwitchCase="'application'" class="config"></app-app-config>
-  <app-nest-server-config *ngSwitchCase="'nest-server'" class="config"></app-nest-server-config>
-  <app-model-config *ngSwitchCase="'model'" class="config"></app-model-config>
-  <app-network-config *ngSwitchCase="'network'" class="config"></app-network-config>
-  <app-simulation-config *ngSwitchCase="'simulation'" class="config"></app-simulation-config>
-  <app-visualization-config *ngSwitchCase="'visualization'" class="config"></app-visualization-config>
-</ng-container>
+<div style="width:640px; margin: 8px">
+  <ng-container [ngSwitch]="routeConfig">
+    <app-app-config *ngSwitchCase="'application'" class="config"></app-app-config>
+    <app-nest-server-config *ngSwitchCase="'nest-server'" class="config"></app-nest-server-config>
+    <app-model-config *ngSwitchCase="'model'" class="config"></app-model-config>
+    <app-network-config *ngSwitchCase="'network'" class="config"></app-network-config>
+    <app-simulation-config *ngSwitchCase="'simulation'" class="config"></app-simulation-config>
+    <app-visualization-config *ngSwitchCase="'visualization'" class="config"></app-visualization-config>
+  </ng-container>
+</div>
