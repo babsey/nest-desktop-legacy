@@ -1,5 +1,10 @@
 #model {
+  width: 100%;
+  height: calc(100vh - 40px);
+  position: relative;
+
   mat-sidenav-container {
+    width: calc(100% - 40px);
     height: calc(100vh - 40px);
 
     mat-sidenav {
@@ -16,4 +21,8 @@
       }
     }
   }
+}
+
+::ng-deep .model .mat-drawer-inner-container {
+  overflow-x: hidden;
 }

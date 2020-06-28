@@ -7,17 +7,17 @@
     </span>
   </mat-list-item>
 
-  <span [@listAnimation]="objectKeys(_modelService.defaults).length">
-    <ng-container *ngFor="let param of objectKeys(_modelService.defaults)">
-      <mat-list-item [class.enabled]="hasParam(param)" class="item">
-        <span class="flex">
-          <span>{{ param }}</span>
-          <span class="flex-spacer"></span>
-          <span class="description">
-            {{ _modelService.defaults[param] }}
-          </span>
+  <ng-container *ngFor="let param of objectKeys(_modelService.defaults)">
+    <mat-list-item
+      [class.enabled]="hasParam(param)"
+      class="item">
+      <span class="flex">
+        <span>{{ param }}</span>
+        <span class="flex-spacer"></span>
+        <span class="description">
+          {{ _modelService.defaults[param] }}
         </span>
-      </mat-list-item>
-    </ng-container>
-  </span>
+      </span>
+    </mat-list-item>
+  </ng-container>
 </mat-list>

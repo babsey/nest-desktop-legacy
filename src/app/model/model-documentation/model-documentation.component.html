@@ -1,17 +1,21 @@
-<span [@listAnimation]="blocks.length">
-  <ng-container *ngFor="let block of blocks">
-    <mat-card>
-      <mat-card-subtitle *ngIf="block.hasOwnProperty('title')">
-      {{ block.title }}
-      </mat-card-subtitle>
+<div style="width:100%">
+  <span [@listAnimation]="blocks.length">
+    <ng-container *ngFor="let block of blocks">
+      <!-- <mat-card style="width: calc(100vw - 40px - 320px - 280px - 40px)  !important"> -->
+      <mat-card>
 
-      <mat-card-content>
-        <pre [innerHtml]="block.content"></pre>
-      </mat-card-content>
+        <mat-card-subtitle *ngIf="block.hasOwnProperty('title')">
+        {{ block.title }}
+        </mat-card-subtitle>
 
-    </mat-card>
-  </ng-container>
-</span>
+        <mat-card-content>
+          <pre [innerHtml]="block.content" style="overflow-x:auto"></pre>
+        </mat-card-content>
+
+      </mat-card>
+    </ng-container>
+  </span>
+</div>
 
 <!-- <span *ngIf="helptext" [@enterAnimation]>
   <pre class="model-doc content">

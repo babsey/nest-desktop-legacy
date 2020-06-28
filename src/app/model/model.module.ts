@@ -19,6 +19,9 @@ import { ModelListComponent } from './model-list/model-list.component';
 import { ModelParamsListComponent } from './model-params-list/model-params-list.component';
 import { ModelParamsSelectionListComponent } from './model-params-selection-list/model-params-selection-list.component';
 import { ModelParamsSliderComponent } from './model-params-slider/model-params-slider.component';
+import { ModelParamComponent } from './model-param/model-param.component';
+import { ModelSidenavTabsComponent } from './model-sidenav-tabs/model-sidenav-tabs.component';
+import { ModelToolbarComponent } from './model-toolbar/model-toolbar.component';
 
 
 @NgModule({
@@ -28,9 +31,12 @@ import { ModelParamsSliderComponent } from './model-params-slider/model-params-s
     ModelConfigDialogComponent,
     ModelDocumentationComponent,
     ModelListComponent,
+    ModelParamComponent,
     ModelParamsListComponent,
     ModelParamsSelectionListComponent,
     ModelParamsSliderComponent,
+    ModelSidenavTabsComponent,
+    ModelToolbarComponent,
   ],
   exports: [
     ModelComponent,
@@ -38,9 +44,12 @@ import { ModelParamsSliderComponent } from './model-params-slider/model-params-s
     ModelConfigDialogComponent,
     ModelDocumentationComponent,
     ModelListComponent,
+    ModelParamComponent,
     ModelParamsListComponent,
     ModelParamsSelectionListComponent,
     ModelParamsSliderComponent,
+    ModelSidenavTabsComponent,
+    ModelToolbarComponent,
   ],
   imports: [
     AppPipesModule,
