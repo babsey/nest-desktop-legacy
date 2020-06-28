@@ -152,6 +152,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
   create(elementType: string, point: number[]): void {
     // console.log('Create node')
     this.data.createNode(elementType, point);
+    this._networkService.update.emit(this.data);
     this.dataChange.emit(this.data);
   }
 

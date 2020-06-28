@@ -6,7 +6,6 @@ import * as d3 from 'd3';
 
 import { AppService } from '../../app.service';
 import { ColorService } from '../services/color.service';
-import { DataService } from '../../services/data/data.service';
 import { NetworkService } from '../services/network.service';
 import { NetworkSketchService } from './network-sketch.service';
 
@@ -28,6 +27,7 @@ export class NetworkSketchComponent implements OnInit {
   @Input() height: number = 400;
   @Input() eventTrigger: boolean = true;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
+  @Output() nodeChange: EventEmitter<any> = new EventEmitter();
   private dataStack: Data[] = [];
   private idx: number = 0;
   private selector: any;
@@ -39,7 +39,6 @@ export class NetworkSketchComponent implements OnInit {
   constructor(
     private _appService: AppService,
     private _colorService: ColorService,
-    private _dataService: DataService,
     private _networkService: NetworkService,
     private _networkSketchService: NetworkSketchService,
     private elementRef: ElementRef,

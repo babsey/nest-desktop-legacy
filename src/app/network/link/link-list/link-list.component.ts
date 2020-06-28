@@ -39,10 +39,6 @@ export class LinkListComponent implements OnInit {
     this.update()
   }
 
-  advanced(): boolean {
-    return this._appConfigService.config['app'].advanced;
-  }
-
   update(): void {
     if (this.link == undefined) return
     this.connectome = this.data.simulation.connectomes[this.link.idx];

@@ -2,6 +2,7 @@
   <ng-container *ngIf="contextMenuData.node">
     <app-node-menu
       (dataChange)="dataChange.emit($event)"
+      (nodeChange)="nodeChange.emit($event)"
       [(data)]="data"
       [node]="contextMenuData.node"
       class="node-menu"

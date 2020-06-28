@@ -20,6 +20,15 @@
       </mat-select>
     </mat-form-field>
   </mat-list-item>
+  
+  <mat-list-item>
+    <ng-container *ngFor="let color of _networkConfigService.config.color.cycle; let idx = index">
+    <span [style.border-color]="color" style="border-width: 1.5px; border-radius: 15px; position:relative; line-height:normal; margin: 2px">
+      <span style="pointer-events:none; position:absolute; left:0px; top:-7px; text-align:center; vertical-align:middle; width:25px; line-height:25px;"></span>
+      <mcc-color-picker [selectedColor]="color" (selected)="selectColor(idx, $event)" class="color" hideTransparentUsedColors hideEmptyUsedColors></mcc-color-picker>
+    </span>
+  </ng-container>
+  </mat-list-item>
 
   <mat-list-item>
     <app-value-slider-inline

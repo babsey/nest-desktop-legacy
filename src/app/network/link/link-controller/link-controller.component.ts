@@ -59,10 +59,6 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this.update()
   }
 
-  advanced(): boolean {
-    return this._appConfigService.config['app'].advanced;
-  }
-
   update(): void {
     // console.log('Update link controller')
     if (this.link == undefined) return
@@ -107,6 +103,7 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   connectSpikeDetector(): boolean {
     var target = this.collections[this.connectome.target];
     var model = this.data.simulation.models[target.model];
+    if (model == undefined) return;
     return model.existing == 'spike_detector';
   }
 

@@ -81,6 +81,34 @@ export class NodeMenuComponent implements OnInit, OnChanges {
         model.display.push(param.id)
       }
     })
+    this.updateParams()
+
+    this.nodeChange.emit(this.node);
+  }
+
+  updateParams(): void {
+    var simModel = this.data.simulation.models[this.model];
+    this.configModel.params.forEach(param => {
+      if (!(param.id in simModel.params)) {
+        simModel.params[param.id] = param.value;
+      }
+    })
+    this.updateRecordFrom()
+  }
+
+  updateRecordFrom(): void {
+    if (!this.data.simulation.models.hasOwnProperty(this.model)) return
+    var model = this.data.simulation.models[this.model];
+    if (model.existing != 'multimeter') return
+    let recordedNeurons = this.data.simulation.connectomes.filter(connectome => connectome.source == this.node.idx)
+    if (recordedNeurons.length > 0) {
+      var collections = this.data.simulation.collections;
+      let recordedNeuron = collections[recordedNeurons[0]['target']];
+      var recordables = this._modelService.config(this.data.simulation.models[recordedNeuron.model].existing).recordables || [];
+      if (!model.params.hasOwnProperty('record_from')) {
+        model.params['record_from'] = recordables.includes('V_m') ? ['V_m'] : [];;
+      }
+    }
   }
 
   resetParameters(): void {

@@ -75,7 +75,7 @@ export class NodeSketchComponent implements OnInit {
   }
 
   connect(): void {
-    this.data.connectNodes(this.selected, this.node);
+    this.data.createLink(this.selected, this.node);
     this.dataChange.emit(this.data);
   }
 

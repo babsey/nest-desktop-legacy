@@ -66,10 +66,6 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     return this.data.simulation.models[collection.model];
   }
 
-  advanced(): boolean {
-    return this._appConfigService.config['app'].advanced;
-  }
-
   color(): string {
     return this._colorService.node(this.node.idx);
   }
@@ -93,13 +89,19 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     var appModel = this.data.app.models[this.collection().model];
     var simModel = this.simModel();
     simModel['existing'] = event.value;
-    simModel.params = {};
-    appModel.display = [];
-    // this.setLevel(4)
+    var params = {};
+    let configModel = this._modelService.config(simModel.existing);
+    configModel.params.map(param => params[param.id] = param.value);
+    simModel.params = params;
+    this.setLevel(1)
     if (this.collection().element_type == 'recorder') {
       this._networkService.recorderChanged = true;
     }
+    if (event.value != 'multimeter') {
+      delete this.collection().params['record_from']
+    }
     this.data.clean();
+    this._networkService.update.emit(this.data)
     this.dataChange.emit(this.data)
   }
 

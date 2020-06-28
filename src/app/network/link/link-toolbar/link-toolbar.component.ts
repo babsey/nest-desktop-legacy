@@ -46,16 +46,12 @@ export class LinkToolbarComponent implements OnInit {
     this.connectome = this.data.simulation.connectomes[this.link.idx];
   }
 
-  advanced(): boolean {
-    return this._appConfigService.config['app'].advanced;
-  }
-
   backgroundImage(): string {
     var bg = '#fafafa';
     var source = this.color('source');
     var target = this.color('target');
     var gradient = ['150deg', source, source, bg, bg, target, target].join(', ');
-    return this.advanced() ? '' : 'linear-gradient(' + gradient + ')';
+    return 'linear-gradient(' + gradient + ')';
   }
 
   label(idx: number): string {
