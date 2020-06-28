@@ -29,7 +29,7 @@
 </ng-container>
 
 <div
-  [style.display]="_appService.rightClick && !advanced() ? '' : 'none'"
+  [style.display]="_appService.rightClick ? '' : 'none'"
   class="mouse-right-click dark-theme"
   >
   <button mat-mini-fab color="primary">
