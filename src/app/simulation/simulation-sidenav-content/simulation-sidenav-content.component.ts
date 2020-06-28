@@ -14,6 +14,7 @@ export class SimulationSidenavContentComponent implements OnInit {
   @Input() mode: string;
   @Input() records: Record[];
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
+  @Output() appChange: EventEmitter<any> = new EventEmitter();
   @ViewChild('content', { static: false }) content: ElementRef;
   public width: number = 12;
   public height: number = 12;
@@ -31,6 +32,11 @@ export class SimulationSidenavContentComponent implements OnInit {
   onDataChange(data: Data): void {
     // console.log('Change input value in node selection')
     this.dataChange.emit(this.data)
+  }
+
+  onNodeChange(data: Data): void {
+    // console.log('Change input value in node selection')
+    this.appChange.emit(this.data.app)
   }
 
   @HostListener('window:resize', [])

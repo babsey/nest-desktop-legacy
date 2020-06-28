@@ -14,7 +14,7 @@ export class AppConfigService {
   public config: any = {
     app: {
       showLoading: false,
-      advanced: false,
+      devMode: false,
     }
   };
   public status: any = {

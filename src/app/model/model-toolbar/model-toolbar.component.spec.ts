@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SimulationScriptComponent } from './simulation-script.component';
+import { SimulationToolbarComponent } from './simulation-toolbar.component';
 
-describe('SimulationScriptComponent', () => {
-  let component: SimulationScriptComponent;
-  let fixture: ComponentFixture<SimulationScriptComponent>;
+describe('SimulationToolbarComponent', () => {
+  let component: SimulationToolbarComponent;
+  let fixture: ComponentFixture<SimulationToolbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SimulationScriptComponent ]
+      declarations: [ SimulationToolbarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SimulationScriptComponent);
+    fixture = TestBed.createComponent(SimulationToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -14,12 +14,11 @@
 ></div>
 
 <span
-  [class.dark-theme]="advanced()"
   (contextmenu)="onContextMenu($event)"
   (mouseout)="onMouseOut($event)"
   (mouseover)="onMouseOver($event)"
   >
-  <mat-toolbar color="primary" class="node-toolbar" [style.background-color]="advanced() ? '' : color()">
+  <mat-toolbar color="primary" class="node-toolbar" [style.background-color]="color()">
     <span class="node-shape-container">
       <svg width="64" height="64" style="margin-top:12px">
         <g app-node-shape

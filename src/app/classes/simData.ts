@@ -5,13 +5,12 @@ import { SimModel } from './simModel';
 
 
 export class SimData {
-  kernel: any;
-  models: any;
-  collections: SimCollection[];
-  connectomes: SimConnectome[];
-  time: number;
-  random_seed?: number;
-  abc: string = 'abcdefghijklmnopqrstuvwxyz123456789';
+  public kernel: any;
+  public models: any;
+  public collections: SimCollection[];
+  public connectomes: SimConnectome[];
+  public time: number;
+  public random_seed?: number;
 
   constructor(
     data: any = {},
@@ -24,15 +23,13 @@ export class SimData {
     this.random_seed = parseInt(data.random_seed) || 0;
   }
 
-  addModel(elementType: string): void {
-    var model = elementType + '-' + this.abc[this.collections.length];
+  addModel(model: string, elementType: string): void {
     this.models[model] = new SimModel({
       new: model,
     }, elementType);
   }
 
-  addCollection(elementType: string): void {
-    var model = elementType + '-' + this.abc[this.collections.length];
+  addCollection(model: string, elementType: string): void {
     this.collections.push(new SimCollection({
       model: model,
       element_type: elementType,
@@ -47,8 +44,8 @@ export class SimData {
   }
 
   clean(data: Data): void {
-    this.connectomes.map(connectome => connectome.clean(data))
     this.collections.map(collection => collection.clean())
+    this.connectomes.map(connectome => connectome.clean(data))
   }
 
 }

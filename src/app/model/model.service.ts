@@ -14,6 +14,8 @@ import { DBService } from '../services/db/db.service';
 })
 export class ModelService {
   public db: any;
+  public sidenavMode: string = 'list';
+  public sidenavOpened: boolean = true;
   public params: string = 'list';
   public elementType: string;
   public enabledModel: boolean = false;
@@ -24,7 +26,6 @@ export class ModelService {
     valid: false,
   };
   public update: EventEmitter<any> = new EventEmitter();
-  public url: string = 'view';
   public version: string;
   public defaults: any = {};
   public progress: boolean = false;
@@ -76,11 +77,7 @@ export class ModelService {
   fromFiles(files: string[]): void {
     var modelFiles = files.map(file => this.http.get('/assets/models/' + file + '.json'))
     forkJoin(modelFiles).subscribe(models => {
-      models.map(model => {
-        this.models[model['id']] = model;
-        model['version'] = environment.VERSION;
-        this._dbService.db.create(this.db, model)
-      })
+      models.map(model => this.save(model))
     })
   }
 
@@ -105,7 +102,7 @@ export class ModelService {
     setTimeout(() => {
       this.http.post(urlRoot + '/api/nest/GetDefaults', { model: model })
         .subscribe(resp => {
-          console.log(resp)
+          // console.log(resp)
           this.progress = false;
           this.defaults = resp;
         }, err => {
@@ -115,9 +112,15 @@ export class ModelService {
   }
 
   selectModel(model: string): void {
-    this.selectedModel = model;
-    this.enabledModel = this.hasModel(model);
-    this.requestModelDefaults(model);
+    this.selectedModel = undefined;
+    setTimeout(() => {
+      this.selectedModel = model;
+      this.enabledModel = this.hasModel(model);
+      if (!this.enabledModel) {
+        this.sidenavMode = 'list';
+      }
+      this.requestModelDefaults(model);
+    }, 1)
   }
 
   hasModel(model: string = null): boolean {
@@ -133,8 +136,11 @@ export class ModelService {
     return this._dbService.db.count(this.db)
   }
 
-  save(config: any): any {
-    return this._dbService.db.create(this.db, config)
+  save(config: any = null): any {
+    var model = config || this.models[this.selectedModel];
+    this.models[model.id] = model;
+    model['version'] = environment.VERSION;
+    return this._dbService.db.create(this.db, model)
   }
 
   load(): void {
@@ -174,5 +180,9 @@ export class ModelService {
       this.status.valid = appVersion[0] == dbVersion[0] && appVersion[1] == dbVersion[1];
     }
     this.status.ready = true;
+  }
+
+  label(model: string) {
+    return this.models.hasOwnProperty(model) ? this.models[model].label : model;
   }
 }

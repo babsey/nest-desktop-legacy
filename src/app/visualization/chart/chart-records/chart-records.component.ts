@@ -18,18 +18,21 @@ import { Record } from '../../../classes/record';
 })
 export class ChartRecordsComponent implements OnInit, OnDestroy {
   @Input() data: Data;
+  @Input() layout: any;
+  @Input() kernel: any;
   @Input() records: Record[];
   @ViewChild('plot', { static: true }) plotRef: ElementRef;
-  public plotlyData: any[] = [];
-  public frames: any[] = [];
-  public layout: any = {
-    title: 'No data found',
-  };
-  public config: any = {};
-  public style: any = {
-    position: 'relative',
-    width: '100%',
-    height: 'calc(100vh - 40px)',
+  public graph: any = {
+    data: [],
+    layout: {
+      title: 'No data found'
+    },
+    style: {
+      position: 'relative',
+      width: '100%',
+      height: 'calc(100vh - 40px)',
+    },
+    config: {}
   }
   private threshold: any = 'legendonly';
   private subscriptionUpdate: any;
@@ -76,7 +79,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
   init(): void {
     // console.log('Init records visualization')
-    this.config = {
+    this.graph.config = {
       scrollZoom: true,
       editable: true,
       // displayModeBar: true,
@@ -102,9 +105,9 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     this._chartRecordsService.panelInit()
     this._chartRecordsService.setPanelSizes()
 
-    this.layout = {
+    this.graph.layout = {
       title: {
-        text: this.data.name,
+        text: this.layout['title'] || '',
         xref: 'paper',
         x: 0.05,
       },
@@ -119,33 +122,26 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
   update(): void {
     // console.log('Update records visualization')
-    this.plotlyData = [];
+    this.graph.data = [];
     var records = this.records;
     if (records.length == 0) return
     this._logService.log('Update charts');
-    this._chartRecordsService.panel.analog.threshold = false;
     this.updateLayout()
     records.map(record => {
-      if (record.recorder.model == 'spike_detector') {
+      var recordables = Object.keys(record.events).filter(d => !['times', 'senders'].includes(d));
+      if (this.hasSpikeData(record.idx) && recordables.length == 0) {
         this.plotSpikeData(record)
       } else {
-        var node = this.data.app.nodes[record.recorder.idx];
-        if (node == undefined) return
-        var model = this.data.simulation.models[this.data.simulation.collections[record.recorder.idx].model]
-        if (model.params.hasOwnProperty('record_from')) {
-          model.params.record_from.map(recordFrom => this.plotAnalogData(record, recordFrom))
-        } else {
-          this.plotAnalogData(record)
-        }
+        recordables.map(recordFrom => this.plotAnalogData(record, recordFrom))
       }
     })
 
     // var panel = this._chartRecordsService.panel['spike'];
     // var yaxis = 'yaxis' + (panel.yaxis == 1 ? '' : panel.yaxis);
-    // if (this.layout.hasOwnProperty(yaxis)) {
-    //   if (this.layout[yaxis].hasOwnProperty('range')) {
-    //     this.layout[yaxis].range[0] -= 1;
-    //     this.layout[yaxis].range[1] += 1;
+    // if (this.graph.layout.hasOwnProperty(yaxis)) {
+    //   if (this.graph.layout[yaxis].hasOwnProperty('range')) {
+    //     this.graph.layout[yaxis].range[0] -= 1;
+    //     this.graph.layout[yaxis].range[1] += 1;
     //   }
     // }
 
@@ -172,7 +168,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         var panel = this._chartRecordsService.panel[p];
         var domain = domains[i];
         var yaxis = 'yaxis' + (panel.yaxis == 1 ? '' : panel.yaxis);
-        this.layout[yaxis] = {
+        this.graph.layout[yaxis] = {
           title: panel.ylabel,
           domain: domain,
           // zeroline: this._chartRecordsService.panelSelected.length == 1 || panel.yaxis == 1,
@@ -180,8 +176,8 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
       })
 
     if (this._chartRecordsService.panelSelected.includes('histogram')) {
-      this.layout['barmode'] = this._chartRecordsService['barmode'];
-      this.layout['barnorm'] = this._chartRecordsService['barnorm'];
+      this.graph.layout['barmode'] = this._chartRecordsService['barmode'];
+      this.graph.layout['barnorm'] = this._chartRecordsService['barnorm'];
     }
   }
 
@@ -194,81 +190,74 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
     var y: any[] = record.events.senders;
 
     var start: number = 0.;
-    var end: number = this.data.app.kernel['time'];
+    var end: number = this.kernel.time || 1000.;
     var size: number = this._chartRecordsService.binsize;
     var color: string = this.color(record.recorder.idx);
-
-    var idx = this.plotlyData.length;
-    var label = this.data.simulation.collections[idx].model.split('-')[1];
-
+    var idx = this.graph.data.length;
+    
     if (!record.config.hasOwnProperty('spike')) {
       record.config['spike'] = {
         showlegend: false,
-        legendgroup:  'spike' + idx,
+        legendgroup: 'spike' + idx,
       }
     }
 
     if (this._chartRecordsService.panelSelected.includes('spike') && this._chartRecordsService.panel['spike'].size > 2) {
       var panelSpike = this._chartRecordsService.panel['spike'];
-      var scatterData = this._chartRecordsService.scatter(record.idx, x, y, color, label, record.config['spike'], 'y' + panelSpike.yaxis);
-      this.plotlyData.push(scatterData);
+      var scatterData = this._chartRecordsService.scatter(record.idx, x, y, color, record.config['spike'], 'y' + panelSpike.yaxis);
+      this.graph.data.push(scatterData);
 
       var yaxis = 'yaxis' + (panelSpike.yaxis == 1 ? '' : panelSpike.yaxis);
       var global_ids: number[];
-      if (this.layout[yaxis].hasOwnProperty('range')) {
-        global_ids = this.layout[yaxis]['range'].concat(record['global_ids']);
+      if (this.graph.layout[yaxis].hasOwnProperty('range')) {
+        global_ids = this.graph.layout[yaxis]['range'].concat(record.nodes['global_ids']);
       } else {
-        global_ids = record['global_ids'];
+        global_ids = record.nodes['global_ids'];
       }
-      this.layout[yaxis]['range'] = this._mathService.extent(global_ids);
+      this.graph.layout[yaxis]['range'] = this._mathService.extent(global_ids);
     }
 
     if (this._chartRecordsService.panelSelected.includes('histogram') && this._chartRecordsService.panel['histogram'].size > 2) {
       var panelHist = this._chartRecordsService.panel['histogram'];
       var histData = this._chartRecordsService.histogram(record.idx, x, start, end, size, color, record.config, 'y' + panelHist.yaxis);
-      this.plotlyData.push(histData);
+      this.graph.data.push(histData);
     }
 
   }
 
   plotAnalogData(record: Record, record_from: string = 'V_m'): void {
+    // console.log(record)
     var recorder = record.recorder;
-    var panelSource = this.hasInputData(recorder.idx) ? 'input' : 'analog';
+    var color = this._colorService.node(record.recorder.idx);
+    var panelSource = this.hasInputData(record.idx) ? 'input': 'analog';
     var panel = this._chartRecordsService.panel[panelSource];
     if (panel.size <= 2) return
     var yaxis = 'y' + panel.yaxis;
 
-    var color: string = this.color(record.recorder.idx);
-    var connectomes = this.data.simulation.connectomes.filter(d => d.source == recorder.idx);
-    if (connectomes.length == 0) return
-    var node = this.data.simulation.collections[connectomes[0].target];
-    var model = this.data.simulation.models[node.model];
-
-    if (record_from == 'V_m' && model.params.hasOwnProperty('V_th')) {
-      var time = this.data.app.kernel['time'] || 1000;
-      var Vth = model.params['V_th'] || -55.;
+    if (record_from == 'V_m' && record.nodes.hasOwnProperty('V_th')) {
+      var time = this.kernel['time'] || 1000;
+      var Vth = record.nodes['V_th'][0] || -55.;
       var x: any[] = [0, time];
       var y: any[] = [Vth, Vth];
-      var idx = 'V_th'
-      if (!record.config.hasOwnProperty(idx)) {
-        record.config[idx] = {
-          idx: idx,
+      var curve = 'V_th'
+      if (!record.config.hasOwnProperty(curve)) {
+        record.config[curve] = {
+          curve: curve,
           name: 'Spike threshold',
           hoverinfo: 'none',
           'line.dash': 'dot',
           visible: 'legendonly',
           'line.width': 2,
           opacity: .5,
-          color: color,
           record_from: record_from,
         };
       }
-      record.config[idx].color = color;
-      var plot_Vth = this._chartRecordsService.plot(record.idx, x, y, record.config[idx], yaxis);
-      this.plotlyData.push(plot_Vth)
+      record.config[curve].color = color;
+      var plot_Vth = this._chartRecordsService.plot(record.idx, x, y, record.config[curve], yaxis);
+      this.graph.data.push(plot_Vth)
     }
 
-    var senders = record['senders'];
+    var senders = record.nodes['senders'];
     var data = senders.map(sender => { return { x: [], y: [] } });
     record.events['senders'].forEach((sender, idx) => {
       if (!record.events.hasOwnProperty(record_from)) return
@@ -279,49 +268,46 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
 
     if (data.length == 1) {
       var d = data[0];
-      var idx = record_from;
-      if (!record.config.hasOwnProperty(idx)) {
-        record.config[idx] = {
-          idx: idx,
+      var curve = record_from;
+      if (!record.config.hasOwnProperty(curve)) {
+        record.config[curve] = {
+          curve: curve,
           showlegend: true,
           visible: true,
           name: record_from + ' of ' + senders[0],
-          color: color,
           record_from: record_from,
         };
       }
-      record.config[idx].color = color;
-      var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[idx], yaxis);
-      this.plotlyData.push(plot)
+      record.config[curve].color = color;
+      var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[curve], yaxis);
+      this.graph.data.push(plot)
 
     } else if (data.length > 1) {
 
       var legendgroup = record.idx + '_' + record_from + '_group';
       var d = data[0];
-      var idx = record_from + '_first';
-      if (!record.config.hasOwnProperty(idx)) {
-        record.config[idx] = {
+      var curve = record_from + '_first';
+      if (!record.config.hasOwnProperty(curve)) {
+        record.config[curve] = {
           'line.width': 1,
-          color: color,
           hoverinfo: 'none',
-          idx: idx,
+          curve: curve,
           legendgroup: legendgroup,
           name: record_from + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']',
           opacity: 0.5,
           record_from: record_from,
         };
       }
-      record.config[idx].color = color;
-      var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[idx], yaxis);
-      this.plotlyData.push(plot)
+      record.config[curve].color = color;
+      var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[curve], yaxis);
+      this.graph.data.push(plot)
 
-      var idx = record_from + '_group';
-      if (!record.config.hasOwnProperty(idx)) {
-        record.config[idx] = {
+      var curve = record_from + '_group';
+      if (!record.config.hasOwnProperty(curve)) {
+        record.config[curve] = {
           'line.width': 1,
-          color: color,
           hoverinfo: 'none',
-          idx: idx,
+          curve: curve,
           legendgroup: legendgroup,
           name: record_from + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']',
           opacity: 0.3,
@@ -329,10 +315,10 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
           showlegend: false,
         };
       }
-      record.config[idx].color = color;
+      record.config[curve].color = color;
       data.map((d, i) => {
-        var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[idx], yaxis);
-        this.plotlyData.push(plot)
+        var plot = this._chartRecordsService.plot(record.idx, d.x, d.y, record.config[curve], yaxis);
+        this.graph.data.push(plot)
       })
 
 
@@ -347,11 +333,11 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
         return avg
       })
 
-      var idx = record_from + '_avg_bg';
-      if (!record.config.hasOwnProperty(idx)) {
-        record.config[idx] = {
+      var curve = record_from + '_avg_bg';
+      if (!record.config.hasOwnProperty(curve)) {
+        record.config[curve] = {
           hoverinfo: 'none',
-          idx: idx,
+          curve: curve,
           'line.width': 8,
           color: 'white',
           legendgroup: legendgroup,
@@ -359,59 +345,52 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
           yaxis: yaxis,
         };
       }
-      var plot = this._chartRecordsService.plot(record.idx, x, y, record.config[idx], yaxis);
-      this.plotlyData.push(plot)
+      var plot = this._chartRecordsService.plot(record.idx, x, y, record.config[curve], yaxis);
+      this.graph.data.push(plot)
 
-      var idx = record_from + '_avg';
-      if (!record.config.hasOwnProperty(idx)) {
-        record.config[idx] = {
-          idx: idx,
-          color: color,
+      var curve = record_from + '_avg';
+      if (!record.config.hasOwnProperty(curve)) {
+        record.config[curve] = {
+          curve: curve,
           name: record_from + ' average',
           yaxis: yaxis,
         };
       }
-      record.config[idx].color = color;
-      var plot = this._chartRecordsService.plot(record.idx, x, y, record.config[idx], yaxis);
-      this.plotlyData.push(plot)
+      record.config[curve].color = color;
+      var plot = this._chartRecordsService.plot(record.idx, x, y, record.config[curve], yaxis);
+      this.graph.data.push(plot)
     }
   }
 
-  hasSpikeData(): boolean {
-    var records = this.records.filter(record => record.recorder.model == 'spike_detector');
-    return records.length > 0;
+  hasSpikeData(idx: number = undefined): boolean {
+    if (idx != undefined) {
+      return this.records[idx].recorder.model == 'spike_detector';
+    } else {
+      var records = this.records.filter(record => record.recorder.model == 'spike_detector');
+      return records.length > 0;
+    }
   }
 
   hasAnalogData(): boolean {
-    var records = this.records.filter(record => ['multimeter', 'voltmeter'].includes(record.recorder.model));
+    var records = this.records.filter(record => record.nodes.element_types.includes('neuron') && ['voltmeter', 'multimeter'].includes(record.recorder.model))
     return records.length > 0;
   }
 
-  hasInputData(idx: number = null): boolean {
-    var collections = this.data.simulation.collections;
-    if (idx) {
-      var node = this.data.app.nodes[idx];
-      var connectomes = this.data.simulation.connectomes.filter(connectome => {
-        var target = collections[connectome.target];
-        return connectome.source == idx && target.element_type == 'stimulator'
-      })
+  hasInputData(idx: number = undefined): boolean {
+    if (idx != undefined) {
+      return this.records[idx].nodes.element_types.includes('stimulator');
     } else {
-      var connectomes = this.data.simulation.connectomes.filter(connectome => {
-        var source = collections[connectome.source];
-        var target = collections[connectome.target];
-        return source.element_type == 'recorder' && target.element_type == 'stimulator';
-      })
+      var records = this.records.filter(record => record.nodes.element_types.includes('stimulator'));
+      return records.length > 0;
     }
-    return connectomes.length > 0;
   }
 
   onLegendClick(event: any): void {
     setTimeout(() => {
       var data = event.data[event.curveNumber];
       var record = this.records[data._source.recordIdx]
-      var config = record.config[data._source.plotConfigIdx];
+      var config = record.config[data._source.curve];
       config['visible'] = data.visible;
-      console.log(data, config)
     }, 1000)
   }
 
@@ -420,7 +399,7 @@ export class ChartRecordsComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event: any): void {
-    var histograms = this.plotlyData.filter(d => d.type == 'histogram' && d.source == 'x');
+    var histograms = this.graph.data.filter(d => d.type == 'histogram' && d.source == 'x');
     histograms.forEach(h => {
       var x = this.records[h.idx].events.times;
       var points = event.points.filter(p => p.data.idx == h.idx);

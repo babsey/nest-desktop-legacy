@@ -48,11 +48,11 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
     var record = this.records[this.idx];
     var recordData = record.events[this.selectedRecord];
     const data = Object.create(null);
-    record.global_ids.forEach(id => data[id] = [])
+    record.nodes.global_ids.forEach(id => data[id] = [])
     record.events.senders.forEach((sender, idx) => {
       data[sender].push(recordData[idx]);
     });
-    var stats: AnalogStatsElement[] = record.global_ids.map(id => {
+    var stats: AnalogStatsElement[] = record.nodes.global_ids.map(id => {
       var d = data[id];
       return {
         id: id,

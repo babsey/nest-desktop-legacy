@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 import { AppService } from '../../app.service';
-import { DataService } from '../../services/data/data.service';
 import { NetworkService } from '../../network/services/network.service';
 import { SimulationEventService } from '../services/simulation-event.service';
 import { SimulationProtocolService } from '../services/simulation-protocol.service';
@@ -26,7 +25,6 @@ export class SimulationToolbarComponent implements OnInit {
 
   constructor(
     private _appService: AppService,
-    private _dataService: DataService,
     private _networkService: NetworkService,
     private _simulationEventService: SimulationEventService,
     private _simulationProtocolService: SimulationProtocolService,
@@ -63,7 +61,7 @@ export class SimulationToolbarComponent implements OnInit {
   }
 
   download(): void {
-    const data: Data = this._dataService.clean(this._simulationService.data);
+    const data: Data = this._simulationService.data.clone();
     if (this._simulationEventService.records.length > 0) {
       data['records'] = this._simulationEventService.records;
     }

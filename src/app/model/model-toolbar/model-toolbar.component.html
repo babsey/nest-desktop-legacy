@@ -1,0 +1,27 @@
+<span class="model-theme">
+  <mat-toolbar class="navbar" color="primary" style="padding-right:0">
+    <ng-container *ngIf="_modelService.selectedModel">
+      <span [@enterAnimation] class="flex">
+          <span style="line-height:40px">
+            {{ _modelService.label(_modelService.selectedModel) }}
+          </span>
+        <span class="flex-spacer"></span>
+        <ng-container [ngSwitch]="hasModel()">
+          <ng-container *ngSwitchCase="true">
+            <button mat-icon-button (click)="deleteModel()" class="toolbarButton">
+              Delete
+            </button>
+          </ng-container>
+          <ng-container *ngSwitchCase="false">
+            <button mat-icon-button (click)="addModel()" class="toolbarButton">
+              Add
+            </button>
+          </ng-container>
+        </ng-container>
+        <button mat-icon-button (click)="_modelService.save()" class="toolbarButton">
+          Save
+        </button>
+      </span>
+    </ng-container>
+  </mat-toolbar>
+</span>

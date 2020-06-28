@@ -1,5 +1,5 @@
 ### STAGE 1: Builder ###
-FROM ubuntu:18.04 as nest-builder
+FROM ubuntu:20.04 as nest-builder
 LABEL maintainer="Sebastian Spreizer <spreizer@web.de>"
 
 RUN apt-get update && apt-get install -y \
@@ -11,14 +11,14 @@ RUN apt-get update && apt-get install -y \
     libltdl-dev \
     libncurses5-dev \
     libreadline-dev \
-    python3-all-dev \
+    python3-dev \
     python3-numpy \
     wget
 
 
 # install 'nest simulator'
 WORKDIR /tmp
-RUN VERSION=2.18.0 && \
+RUN VERSION=2.20.0 && \
     wget -O nest-simulator-$VERSION.tar.gz https://github.com/nest/nest-simulator/archive/v$VERSION.tar.gz && \
     tar -zxf nest-simulator-$VERSION.tar.gz && \
     mkdir /tmp/nest-build && cd /tmp/nest-build && \
@@ -28,7 +28,7 @@ RUN VERSION=2.18.0 && \
 
 
 ### STAGE 2: Setup ###
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 LABEL maintainer="Sebastian Spreizer <spreizer@web.de>"
 
 RUN apt-get update && apt-get install -y \
@@ -52,7 +52,7 @@ RUN chown nest:nest /home/nest/entrypoint.sh && \
 COPY package.json /tmp/
 
 # install nest-desktop and nest-server
-RUN pip3 install nest-desktop==2.3.* --upgrade
+RUN pip3 install nest-desktop==2.4.* --upgrade
 
 EXPOSE 5000 8000
 WORKDIR /home/nest

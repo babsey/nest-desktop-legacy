@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { DataService } from '../services/data/data.service';
 import { NavigationService } from '../navigation/navigation.service';
 import { NetworkSketchService } from '../network/network-sketch/network-sketch.service';
 import { SimulationProtocolService } from '../simulation/services/simulation-protocol.service';
@@ -34,7 +33,6 @@ export class SimulationNavigationComponent implements OnInit, OnDestroy {
     private _simulationProtocolService: SimulationProtocolService,
     private _simulationRunService: SimulationRunService,
     private router: Router,
-    public _dataService: DataService,
     public _navigationService: NavigationService,
     public _simulationService: SimulationService,
   ) {

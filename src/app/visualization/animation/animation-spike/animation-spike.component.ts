@@ -66,10 +66,10 @@ export class AnimationSpikeComponent implements OnInit, OnDestroy {
   }
 
   plotSpikeData(record: Record): void {
-    if (!record.hasOwnProperty('positions') || !record.hasOwnProperty('global_ids')) return
-    if (record.positions.length == 0) return
-    var positions = record.positions;
-    var global_ids = record.global_ids;
+    if (!record.nodes.hasOwnProperty('positions') || !record.nodes.hasOwnProperty('global_ids')) return
+    if (record.nodes.positions.length == 0) return
+    var positions = record.nodes.positions;
+    var global_ids = record.nodes.global_ids;
 
     var x: number[] = record.events.times;
     var y: number[] = [];
@@ -79,7 +79,7 @@ export class AnimationSpikeComponent implements OnInit, OnDestroy {
       y.push(pos[0])
       z.push(pos[1])
     })
-    this.scatterFrames(x, y, z, record.recorder.color);
+    this.scatterFrames(x, y, z, record.layout.color);
   }
 
   scatterFrames(x: number[], y: number[], z: number[], color: string): void {

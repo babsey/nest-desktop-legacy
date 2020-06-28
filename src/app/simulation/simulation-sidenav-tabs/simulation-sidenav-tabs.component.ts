@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, Input } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 
+import { AppConfigService } from '../../config/app-config/app-config.service';
 import { NetworkService } from '../../network/services/network.service';
 import { SimulationService } from '../services/simulation.service';
 import { SimulationEventService } from '../services/simulation-event.service';
 import { SimulationRunService } from '../services/simulation-run.service';
-import { SimulationScriptService } from '../simulation-script/simulation-script.service';
+import { SimulationCodeService } from '../simulation-code/simulation-code.service';
 import { VisualizationService } from '../../visualization/visualization.service';
 
 
@@ -19,9 +20,10 @@ export class SimulationSidenavTabsComponent implements OnInit {
   private _mobileQueryListener: () => void;
 
   constructor(
+    private _appConfigService: AppConfigService,
     private _networkService: NetworkService,
     private _simulationRunService: SimulationRunService,
-    private _simulationScriptService: SimulationScriptService,
+    private _simulationCodeService: SimulationCodeService,
     private changeDetectorRef: ChangeDetectorRef,
     private media: MediaMatcher,
     public _simulationService: SimulationService,
@@ -43,10 +45,10 @@ export class SimulationSidenavTabsComponent implements OnInit {
       this._simulationService.sidenavMode = mode;
       this._simulationService.sidenavOpened = true;
     }
-    this._simulationRunService.mode = (mode == 'script' ? 'script' : 'object');
-    if (this._simulationService.sidenavMode == 'script') {
-      this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
+    if (mode == 'codeEditor' && this._simulationService.sidenavOpened == true) {
+      this._simulationService.code = this._simulationCodeService.generate(this._simulationService.data);
     }
+    this._simulationRunService.mode = (mode == 'codeEditor' ? 'code' : 'object');
     setTimeout(() => this.triggerResize(), 500)
   }
 
@@ -64,6 +66,10 @@ export class SimulationSidenavTabsComponent implements OnInit {
 
   isQuickViewOpened(): boolean {
     return this._networkService.quickView;
+  }
+
+  devMode(): boolean {
+    return this._appConfigService.config.app.devMode == true;
   }
 
 }

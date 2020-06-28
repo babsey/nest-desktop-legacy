@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -23,12 +23,15 @@
     "@angular/platform-browser": "^9.1.9",
     "@angular/platform-browser-dynamic": "^9.1.9",
     "@angular/router": "^9.1.9",
+    "@ctrl/ngx-codemirror": "^3.1.3",
     "@fortawesome/angular-fontawesome": "^0.6.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@material-extended/mde": "^3.0.0",
+    "@types/codemirror": "^0.0.96",
     "angular-plotly.js": "^2.0.0",
     "angular-split": "^3.0.2",
+    "codemirror": "^5.55.0",
     "core-js": "^3.6.4",
     "d3": "^5.15.0",
     "hammerjs": "^2.0.8",

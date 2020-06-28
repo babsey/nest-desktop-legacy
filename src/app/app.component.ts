@@ -42,10 +42,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  advanced(): boolean {
-    return this._appConfigService.config.app['advanced'];
-  }
-
   triggerResize(): void {
     if (!this.mobileQuery.matches) {
       window.dispatchEvent(new Event('resize'));

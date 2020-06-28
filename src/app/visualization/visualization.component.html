@@ -1,34 +1,33 @@
 <span
   *ngIf="_visualizationService.hasPositions"
   class="no-print"
-  style="position:absolute;z-index:1000"
+  style="position:absolute;z-index:1000; padding: 8px;"
   >
-  <button mat-icon-button
-    (click)="selectVisualizationModus('chart')"
-    [class.active]="_visualizationService.mode=='chart'"
-    matTooltip="View chart"
-    style="border-radius:0"
-    >
-    <span>
-      <fa-icon icon="chart-line"></fa-icon>
-    </span>
-  </button>
-  <button mat-icon-button
-    (click)="selectVisualizationModus('animation')"
-    [class.active]="_visualizationService.mode=='animation'"
-    matTooltip="View animation"
-    style="border-radius:0"
-    >
-    <span>
-      <fa-icon icon="braille"></fa-icon>
-    </span>
-  </button>
+
+  <mat-button-toggle-group
+    (change)="selectVisualizationModus($event.value)"
+    [value]="_visualizationService.mode"
+    [vertical]="true"
+    ><mat-button-toggle
+      matTooltip="View chart"
+      matTooltipPosition="right"
+      value="chart"
+      ><fa-icon icon="chart-line"></fa-icon>
+    </mat-button-toggle>
+    <mat-button-toggle
+      matTooltip="View animation"
+      matTooltipPosition="right"
+      value="animation"
+      ><fa-icon icon="braille"></fa-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
 </span>
 
 <div style="overflow:hidden; height:calc(100vh - 40px)">
   <ng-container [ngSwitch]="_visualizationService.mode">
     <ng-container *ngSwitchCase="'chart'">
-      <app-chart-records [data]="data" [records]="records"></app-chart-records>
+      <app-chart-records [data]="data" [kernel]="kernel" [layout]="layout" [records]="records"></app-chart-records>
     </ng-container>
 
     <ng-container *ngSwitchCase="'animation'">

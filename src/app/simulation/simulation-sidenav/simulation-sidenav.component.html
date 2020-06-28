@@ -20,10 +20,6 @@
         ></app-network-controller>
       </ng-container>
 
-      <ng-container *ngSwitchCase="'sketchSettings'">
-        <app-network-sketch-controller></app-network-sketch-controller>
-      </ng-container>
-
       <ng-container *ngSwitchCase="'simulation'">
         <app-kernel-controller
         (dataChange)="onDataChange($event)"
@@ -36,6 +32,22 @@
         [(data)]="data"
         class="simulation"
         ></app-simulation-controller>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'codeEditor'">
+          <app-simulation-code-editor
+            style="height: 100%"
+          ></app-simulation-code-editor>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'rawData'">
+          <app-simulation-raw-data
+            style="height: 100%"
+          ></app-simulation-raw-data>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'sketchSettings'">
+        <app-network-sketch-controller></app-network-sketch-controller>
       </ng-container>
 
       <ng-container *ngSwitchCase="'chart'">
@@ -51,20 +63,6 @@
         [data]="data"
         [records]="records"
         ></app-simulation-stats>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'rawData'">
-          <app-simulation-raw-data
-            [data]="data"
-            [records]="records"
-          ></app-simulation-raw-data>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'script'">
-          <app-simulation-script
-            style="height: 100%"
-            [disabled]="false"
-          ></app-simulation-script>
       </ng-container>
 
     </ng-container>

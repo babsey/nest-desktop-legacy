@@ -103,8 +103,6 @@
           </button>
         </mat-list-item>
 
-        <h3 mat-subheader>List of saved simulations</h3>
-
         <mat-list-item class="simulation">
           <span matLine class="flex searchItem">
             <fa-icon class="icon" icon="search"></fa-icon>
@@ -136,40 +134,42 @@
 
   </ng-container>
 
-  <ng-container [ngSwitch]="selectionList" class="simulation-theme">
+  <div style="height: calc(100vh - 160px); overflow: auto">
+    <ng-container [ngSwitch]="selectionList" class="simulation-theme">
 
-    <ng-container *ngSwitchCase="false">
+      <ng-container *ngSwitchCase="false">
 
-      <ng-container [ngSwitch]="_navigationService.sidenavShortView">
-        <ng-container *ngSwitchCase="false">
-          <app-simulation-list
-            (select)="onSelect($event)"
-            [quickview]="quickview"
-            [simulations]="filteredSimulations"
-            class="simulation-theme"
-            ></app-simulation-list>
+        <ng-container [ngSwitch]="_navigationService.sidenavShortView">
+          <ng-container *ngSwitchCase="false">
+            <app-simulation-list
+              (select)="onSelect($event)"
+              [quickview]="quickview"
+              [simulations]="filteredSimulations"
+              class="simulation-theme"
+              ></app-simulation-list>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="true">
+            <app-simulation-short-list
+              (select)="onSelect($event)"
+              [popover]="_simulationService.mode=='run'"
+              [simulations]="filteredSimulations"
+              ></app-simulation-short-list>
+          </ng-container>
         </ng-container>
 
-        <ng-container *ngSwitchCase="true">
-          <app-simulation-short-list
-            (select)="onSelect($event)"
-            [popover]="_simulationService.mode=='run'"
-            [simulations]="filteredSimulations"
-            ></app-simulation-short-list>
-        </ng-container>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="true">
+        <app-simulation-selection
+          (select)="onSelect($event)"
+          [simulations]="filteredSimulations"
+          class="simulation-theme"
+        ></app-simulation-selection>
       </ng-container>
 
     </ng-container>
-
-    <ng-container *ngSwitchCase="true">
-      <app-simulation-selection
-        (select)="onSelect($event)"
-        [simulations]="filteredSimulations"
-        class="simulation-theme"
-      ></app-simulation-selection>
-    </ng-container>
-
-  </ng-container>
+  </div>
 
   <app-log></app-log>
 </span>

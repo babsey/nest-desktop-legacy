@@ -24,6 +24,12 @@ export class NetworkSketchControllerComponent implements OnInit {
     this._networkConfigService.save()
   }
 
+  selectColor(idx: number, color: string): void {
+    this._networkConfigService.config.color.scheme = '';
+    this._networkConfigService.config.color.cycle[idx] = color;
+    this._networkConfigService.save()
+  }
+
   onValueChange(value: any): void {
     this._networkConfigService.save()
   }

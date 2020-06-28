@@ -46,6 +46,10 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
     this.blocks = [];
     setTimeout(() => {
       this.http.post(urlRoot + '/api/nest/help', data).subscribe(resp => {
+        if (resp == undefined) {
+          this.helptext = '';
+          return
+        }
         this.helptext = resp;
         this.progress = false;
         var titles = ['Synopsis', 'Description', 'Parameters', 'Examples', 'Receives', 'Sends', 'Transmits', 'Remarks', 'References', 'Availability', 'Authors', 'Author', 'FirstVersion', 'SeeAlso', 'Source'];
@@ -71,7 +75,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
       },
         error => {
           this.progress = false;
-          this.helptext = JSON.stringify(error['error']);
+          // this.helptext = JSON.stringify(error['error']);
         }
       )
     }, 500)

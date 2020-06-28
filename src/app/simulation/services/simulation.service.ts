@@ -4,7 +4,6 @@ import { forkJoin } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
-import { DataService } from '../../services/data/data.service';
 import { DBService } from '../../services/db/db.service';
 import { NavigationService } from '../../navigation/navigation.service';
 import { NetworkService } from '../../network/services/network.service';
@@ -19,11 +18,11 @@ import { Data } from '../../classes/data';
 })
 export class SimulationService {
   public data: Data;
-  public script: string;
+  public code: string;
   public dataLoaded: boolean = false;
   public db: any;
   public mode: string = 'networkEditor';
-  public sidenavMode: string = 'simulation';
+  public sidenavMode: string = 'networkSelection';
   public sidenavOpened: boolean = false;
   public version: string;
   public status: any = {
@@ -32,7 +31,6 @@ export class SimulationService {
   };
 
   constructor(
-    private _dataService: DataService,
     private _dbService: DBService,
     private _navigationService: NavigationService,
     private _networkService: NetworkService,

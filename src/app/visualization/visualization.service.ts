@@ -18,7 +18,7 @@ export class VisualizationService {
   checkPositions(records: Record[]): void {
     // console.log(records)
     if (records.length > 0) {
-      var recordsWithPositions = records.filter(record => record.positions.length > 0);
+      var recordsWithPositions = records.filter(record => record.nodes.positions.length > 0);
       this.hasPositions = recordsWithPositions.length > 0;
     } else {
       this.hasPositions = false;

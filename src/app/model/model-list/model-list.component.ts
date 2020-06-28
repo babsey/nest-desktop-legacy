@@ -22,11 +22,6 @@ export class ModelListComponent implements OnInit, OnDestroy {
   public elementType: string = 'all';
   public searchTerm: string = '';
   public view: string = 'enabled';
-  public icons: any = {
-    'stimulator': 'sign-in-alt',
-    'neuron': 'circle',
-    'recorder': 'sign-in-alt',
-  };
 
   constructor(
     private http: HttpClient,
@@ -117,11 +112,6 @@ export class ModelListComponent implements OnInit, OnDestroy {
     this.filterModels()
   }
 
-  selectElementType(elementType: string): void {
-    this.elementType = elementType;
-    this.filterModels()
-  }
-
   isSelected(model: any): boolean {
     return this._modelService.selectedModel == model;
   }
@@ -132,6 +122,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   resetModelConfigs(): void {
     this._modelService.reset()
+    setTimeout(() => this.update(), 1000)
   }
 
   shortLabel(label: string): string {

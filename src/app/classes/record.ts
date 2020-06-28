@@ -5,5 +5,7 @@ export class Record {
   recorder: any;
   senders: any[];
   config?: any;
+  layout?: any;
   positions: number[][];
+  nodes: any;
 }

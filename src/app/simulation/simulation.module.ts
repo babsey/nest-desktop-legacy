@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { AppFormsModule } from '../forms/forms.module';
 import { AppPipesModule } from '../pipes/pipes.module';
@@ -15,10 +16,11 @@ import { NetworkModule } from '../network/network.module';
 import { VisualizationModule } from '../visualization/visualization.module';
 
 import { SimulationComponent } from './simulation.component';
+import { SimulationCodeEditorComponent } from './simulation-code/simulation-code-editor.component';
 import { SimulationConfigComponent } from './simulation-config/simulation-config.component';
 import { SimulationDetailsComponent } from './simulation-details/simulation-details.component';
 import { SimulationPlaygroundComponent } from './simulation-playground/simulation-playground.component';
-import { SimulationScriptComponent } from './simulation-script/simulation-script.component';
+import { SimulationRawDataComponent } from './simulation-raw-data/simulation-raw-data.component';
 import { SimulationStatsComponent } from './simulation-stats/simulation-stats.component';
 import { SimulationSidenavComponent } from './simulation-sidenav/simulation-sidenav.component';
 import { SimulationSidenavContentComponent } from './simulation-sidenav-content/simulation-sidenav-content.component';
@@ -42,11 +44,13 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     ControllerComponent,
     KernelControllerComponent,
     SimulationComponent,
+    SimulationCodeEditorComponent,
     SimulationConfigComponent,
     SimulationControllerComponent,
     SimulationDetailsComponent,
     SimulationPlaygroundComponent,
-    SimulationScriptComponent,    SimulationSidenavComponent,
+    SimulationRawDataComponent,
+    SimulationSidenavComponent,
     SimulationSidenavContentComponent,
     SimulationSidenavTabsComponent,
     SimulationStatsComponent,
@@ -58,11 +62,13 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     ControllerComponent,
     KernelControllerComponent,
     SimulationComponent,
+    SimulationCodeEditorComponent,
     SimulationConfigComponent,
     SimulationControllerComponent,
     SimulationDetailsComponent,
     SimulationPlaygroundComponent,
-    SimulationScriptComponent,    SimulationSidenavComponent,
+    SimulationRawDataComponent,
+    SimulationSidenavComponent,
     SimulationSidenavContentComponent,
     SimulationSidenavTabsComponent,
     SimulationStatsComponent,
@@ -73,6 +79,7 @@ import { AnalogStatsComponent } from './simulation-stats/analog-stats/analog-sta
     AppPipesModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    CodemirrorModule,
     CommonModule,
     FontAwesomeModule,
     FormsModule,

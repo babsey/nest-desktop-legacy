@@ -23,6 +23,8 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
   @Input() data: Data;
   @Input() records: Record[] = [];
   private subscription: any;
+  public layout: any = {};
+  public kernel: any = {};
 
   constructor(
     private _colorService: ColorService,
@@ -46,7 +48,15 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
   update(response: any): void {
     // console.log(response)
     // Update kernel time
-    this.data.app.kernel.time = response.kernel['time'];
+
+    this._visualizationService.time = response.kernel['time'];
+    if (this.data) {
+      this.data.app.kernel.time = response.kernel['time'];
+      this.kernel['time'] = response.kernel['time'];
+      this.layout.title = this.data.name;
+
+
+    }
 
     // // Update global ids, record_from, positions
     // resData.nodes.map((simNode, idx) => {
@@ -71,32 +81,55 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
       }
       let record: Record = records[idx];
       record['idx'] = idx;
-      record['events'] = rec['events'];
-      if (rec.hasOwnProperty('recorder')) {
-        record['recorder'] = rec['recorder']
-      } else {
-        const recorderIdx = rec['recorderIdx'];
-        const recorder = this.data.simulation.collections[recorderIdx];
-        const model = this.data.simulation.models[recorder.model].existing;
-        record['recorder'] = {
-          'idx': recorderIdx,
-          'model': model,
+      record['recorder'] = rec['recorder'];
+      record['events'] = rec['events'][0];
+      var senders = [...new Set(record['events']['senders'])];
+      senders.sort((a: number, b: number) => a - b);
+
+      record['nodes'] = {
+        'element_types': this.fetchElementTypes(record.recorder.idx),
+        'global_ids': rec['global_ids'],
+        'positions': rec['positions'] || [],
+        'senders': senders,
+      };
+      var Vth = this.listParams(record.recorder.idx, 'V_th');
+      if (Vth.length > 0) {
+        record.nodes['V_th'] = Vth;
+      }
+
+      const recorder = this.data.simulation.collections[record.recorder.idx];
+      if (recorder) {
+        var model = this.data.simulation.models[recorder.model].existing;
+        record['layout'] = {
+          'label': model.split('-')[1],
+          'color': this._colorService.node(record.recorder.idx),
         }
       }
-      record.recorder['color'] =  this._colorService.node(record.recorder.idx);
-      record['global_ids'] = rec['global_ids'];
-      record['senders'] = [...new Set(rec['events']['senders'])];
-      record['senders'].sort((a: number, b: number) => a - b)
-      record['positions'] = rec['positions'] || [];
+
     })
     this._visualizationService.checkPositions(records);
-    // this.records = records;
 
-    this._visualizationService.time = this.data.app.kernel.time;
     if (['animation', 'chart'].includes(this._simulationService.sidenavMode)) {
       this._simulationService.sidenavMode = this._visualizationService.mode;
     }
     this._visualizationService.update.emit()
+  }
+
+  fetchElementTypes(idx: number): string[] {
+    return this.data.simulation.connectomes.filter(connectome => connectome.source == idx
+    ).map(connectome => this.data.simulation.collections[connectome.target].element_type);
+  }
+
+  listParams(idx: number, key: string = ''): any[] {
+    var collections = this.data.simulation.connectomes.filter(
+      connectome => connectome.source == idx).map(
+        connectome => this.data.simulation.collections[connectome.target]);
+    if (key) {
+      return collections.filter(
+        collection => this.data.app.models[collection.model].display.includes(key)).map(
+          collection => this.data.simulation.models[collection.model].params[key]);
+    }
+    return collections.map(collection => this.data.simulation.models[collection.model].params);
   }
 
 }

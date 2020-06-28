@@ -48,10 +48,6 @@ export class NodeListComponent implements OnInit, OnChanges {
     this.update()
   }
 
-  advanced(): boolean {
-    return this._appConfigService.config['app'].advanced;
-  }
-
   color(): string {
     return this._colorService.node(this.node.idx);
   }
