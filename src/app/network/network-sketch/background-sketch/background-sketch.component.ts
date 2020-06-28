@@ -68,7 +68,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
             y: point[1],
           };
 
-          var color = _this._colorService.node(selectedNode);
+          var color = _this._colorService.node(selectedNode.idx);
           _this._networkSketchService.dragLine(selectedNode.position, target, color);
         }
       })
@@ -151,7 +151,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
 
   create(elementType: string, point: number[]): void {
     // console.log('Create node')
-    this._networkService.create(this.data, elementType, point);
+    this.data.createNode(elementType, point);
     this.dataChange.emit(this.data);
   }
 

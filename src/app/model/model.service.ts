@@ -100,16 +100,16 @@ export class ModelService {
 
   requestModelDefaults(model: string): void {
     var urlRoot = this._nestServerService.url();
-    var data = {
-      'model': model,
-    };
     this.defaults = {};
     this.progress = true;
     setTimeout(() => {
-      this.http.post(urlRoot + '/api/nest/GetDefaults', data)
-        .subscribe(data => {
+      this.http.post(urlRoot + '/api/nest/GetDefaults', { model: model })
+        .subscribe(resp => {
+          console.log(resp)
           this.progress = false;
-          this.defaults = data['response']['data'];
+          this.defaults = resp;
+        }, err => {
+          console.log(err)
         })
     }, 500)
   }

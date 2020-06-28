@@ -1,22 +1,18 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 import { AnimationControllerService } from '../visualization/animation/animation-controller/animation-controller.service';
-import { AppService } from '../app.service';
-import { ColorService } from '../network/services/color.service';
 import { DataService } from '../services/data/data.service';
 import { NetworkService } from '../network/services/network.service';
-import { VisualizationService } from '../visualization/visualization.service';
-import { SimulationControllerService } from './simulation-controller/simulation-controller.service';
-import { SimulationProtocolService } from './services/simulation-protocol.service';
 import { SimulationEventService } from './services/simulation-event.service';
 import { SimulationRunService } from './services/simulation-run.service';
 import { SimulationService } from './services/simulation.service';
+import { SimulationScriptService } from './simulation-script/simulation-script.service';
+import { VisualizationService } from '../visualization/visualization.service';
 
 import { Data } from '../classes/data';
-import { Record } from '../classes/record';
 
 import { enterAnimation } from '../animations/enter-animation';
 
@@ -28,26 +24,27 @@ import { enterAnimation } from '../animations/enter-animation';
   animations: [ enterAnimation ],
 })
 export class SimulationComponent implements OnInit, OnDestroy {
-
-  @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
-  contextMenuPosition = { x: '0px', y: '0px' };
+  public mobileQuery: MediaQueryList;
+  private _mobileQueryListener: () => void;
 
   constructor(
     private _animationControllerService: AnimationControllerService,
-    private _appService: AppService,
-    private _colorService: ColorService,
     private _dataService: DataService,
     private _networkService: NetworkService,
-    private _simulationProtocolService: SimulationProtocolService,
+    private _simulationScriptService: SimulationScriptService,
+    private _visualizationService: VisualizationService,
     private bottomSheet: MatBottomSheet,
+    private changeDetectorRef: ChangeDetectorRef,
+    private media: MediaMatcher,
     private route: ActivatedRoute,
     private router: Router,
-    public _simulationControllerService: SimulationControllerService,
     public _simulationEventService: SimulationEventService,
     public _simulationRunService: SimulationRunService,
     public _simulationService: SimulationService,
-    public _visualizationService: VisualizationService,
   ) {
+    this.mobileQuery = media.matchMedia('(max-width: 1023px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit(): void {
@@ -64,70 +61,75 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this._simulationEventService.records = [];
     if (id) {
       this._simulationService.load(id).then(doc => {
-        this._simulationService.data = this._dataService.clean(doc);
-        this._networkService.clean(this._simulationService.data);
+        this._simulationService.data = new Data(doc);
+        this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
         this._networkService.update.emit(this._simulationService.data);
         this._simulationService.dataLoaded = true;
-        if (this.router.url.includes('run')) {
-          this._simulationService.mode = 'playground';
-        }
-        if (this._simulationService.mode == 'playground' && this._simulationRunService.config['runAfterLoad']) {
+        if (this.router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
           this.run(true)
         }
       })
     } else {
-      this._simulationService.data = this._dataService.newData();
-      this._simulationService.mode = 'edit';
+      this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
+      this._simulationService.mode = 'networkEditor';
       this._simulationService.dataLoaded = true;
     }
   }
 
   run(force: boolean = false): void {
-    this._simulationService.mode = 'playground';
-    this._networkService.clean(this._simulationService.data);
+    this._simulationService.mode = 'activityExplorer';
+    this._animationControllerService.stop();
+    if (this._networkService.recorderChanged) {
+      this._simulationEventService.records = [];
+      this._networkService.recorderChanged = false;
+    }
     this._simulationRunService.run(this._simulationService.data, force)
   }
 
-  hasRecords(): boolean {
-    return this._simulationEventService.records.length > 0;
+  triggerResize(): void {
+    window.dispatchEvent(new Event('resize'));
   }
 
-  download(): void {
-    var data = this._dataService.clean(this._simulationService.data);
-    if (this._simulationEventService.records.length > 0) {
-      data['records'] = this._simulationEventService.records;
+  toggleQuickView(): void {
+    this._networkService.quickView = !this._networkService.quickView;
+  }
+
+  isQuickViewOpened(): boolean {
+    return this._networkService.quickView;
+  }
+
+  onOpenedStart(event: any): void {
+    if (this._simulationService.mode == 'labBook') {
+      this._simulationService.mode = 'networkEditor';
     }
-    this._simulationProtocolService.download([data])
   }
 
-  configSimulation(): void {
-    this._simulationService.mode = 'playground';
-    this._simulationControllerService.mode = 'simulation';
+  onClosedStart(event: any): void {
+    if (this._simulationService.mode == 'networkEditor') {
+      this._simulationService.mode = 'labBook';
+    }
+  }
+
+  onOpenedChange(event: any): void {
+    setTimeout(() => this.triggerResize(), 10)
   }
 
   onDataChange(data: Data): void {
     // console.log('Simulation on data change')
     this._simulationService.data._id = '';
+
+    setTimeout(() => {
+      // this._simulationService.data = this._dataService.clean(this._simulationService.data);
+      this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
+      if (this._simulationService.mode == 'activityExplorer') {
+        this.run()
+      }
+    }, 1)
   }
 
-  onSelectionChange(event: any): void {
-    this._simulationRunService.config[event.option.value] = event.option.selected;
-    this._simulationRunService.saveConfig()
-  }
-
-  onMouseOver(event: MouseEvent): void {
-    this._appService.rightClick = true;
-  }
-
-  onMouseOut(event: MouseEvent): void {
-    this._appService.rightClick = false;
-  }
-
-  onContextMenu(event: MouseEvent): void {
-    event.preventDefault();
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
-    this.contextMenu.openMenu();
+  onAppChange(data: any): void {
+    // console.log('On app change')
+    this._visualizationService.init.emit()
   }
 
 }

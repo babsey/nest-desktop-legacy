@@ -2,7 +2,7 @@
   "id": "hh_psc_alpha",
   "element_type": "neuron",
   "label": "HH psc alpha",
-  "recordables": ["Act_h", "Act_m", "I_syn_ex", "I_syn_in", "Inact_n", "V_m"],
+  "recordables": ["Act_m", "Act_n", "I_syn_ex", "I_syn_in", "Inact_h", "V_m"],
   "params": [{
     "id": "C_m",
     "label": "capacitance of the membrane",

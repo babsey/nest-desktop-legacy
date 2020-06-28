@@ -58,13 +58,16 @@ export class LinkToolbarComponent implements OnInit {
     return this.advanced() ? '' : 'linear-gradient(' + gradient + ')';
   }
 
+  label(idx: number): string {
+    return this.collection(idx).model.split('-')[1]
+  }
+
   collection(idx: number): SimCollection {
     return this.data.simulation.collections[idx];
   }
 
-  color(node: string): string {
-    let nodes = this.data.app.nodes;
-    return this._colorService.node(nodes[this.connectome[node]])
+  color(src: string): string {
+    return this._colorService.node(this.connectome[src]);
   }
 
   color_weight(): string {
@@ -81,7 +84,7 @@ export class LinkToolbarComponent implements OnInit {
 
   isSpatial(idx: number): boolean {
     var collection = this.collection(idx);
-    return collection.hasOwnProperty('spatial');
+    return collection.isSpatial();
   }
 
   selectNode(idx: number): void {

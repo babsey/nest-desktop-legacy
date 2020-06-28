@@ -76,7 +76,7 @@
   class="link"
   style="stroke: white; stroke-linecap:round"
   [style.stroke-width.px]="linkWidth() * 3"
-  [style.marker-end]="'url(#' + (synWeight() > 0 ? 'exc' : 'inh') + link.idx + ')'"
+  [style.marker-end]="markerEnd()"
   [style.opacity]="(distance() < linkMaxDistance()) || isNodeFocused() || isNodeSelected() || isLinkFocused() || isLinkSelected() ? 1 : terminusOpacity()"
 ></svg:path>
 

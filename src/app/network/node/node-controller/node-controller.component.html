@@ -4,14 +4,15 @@
   >
 
   <app-node-toolbar
-    [(data)]="data"
-    [(node)]="node"
     (dataChange)="onDataChange($event)"
     (nodeChange)="onNodeChange($event)"
+    [(data)]="data"
+    [(node)]="node"
+    [disabled]="false"
     ></app-node-toolbar>
 
   <ng-container *ngIf="!isRecorder()">
-    <ng-container *ngIf="!isSpatial()">
+    <ng-container *ngIf="!collection.isSpatial()">
       <mat-list dense>
         <mat-list-item [style.display]="paramDisplay(node, 'n') ? '' : 'None'" >
           <app-node-param
@@ -26,7 +27,7 @@
       </mat-list>
       </ng-container>
 
-      <ng-container *ngIf="isSpatial()">
+      <ng-container *ngIf="collection.isSpatial()">
         <mat-nav-list dense>
           <mat-list-item>
             <app-node-spatial

@@ -47,6 +47,10 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     this.loadModels()
   }
 
+  label(): string {
+    return this.collection().model.split('-')[1]
+  }
+
   loadModels(): void {
     if (!this.node) return
     var models = this._modelService.list(this.collection().element_type);
@@ -67,11 +71,7 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
   }
 
   color(): string {
-    return this._colorService.node(this.node);
-  }
-
-  isSpatial(): boolean {
-    return this.collection().hasOwnProperty('spatial');
+    return this._colorService.node(this.node.idx);
   }
 
   selectNode(node: AppNode): void {
@@ -95,11 +95,11 @@ export class NodeToolbarComponent implements OnInit, OnChanges {
     simModel['existing'] = event.value;
     simModel.params = {};
     appModel.display = [];
-    this.setLevel(4)
+    // this.setLevel(4)
     if (this.collection().element_type == 'recorder') {
       this._networkService.recorderChanged = true;
     }
-    this._networkService.clean(this.data, false)
+    this.data.clean();
     this.dataChange.emit(this.data)
   }
 

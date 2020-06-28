@@ -16,35 +16,9 @@ export class DataService {
   ) {
   }
 
-  newData(): Data {
-    return {
-      _id: '',
-      name: '',
-      description: '',
-      hash: '',
-      createdAt: '',
-      updatedAt: '',
-      user: '',
-      group: '',
-      app: {
-        kernel: { time: 0 },
-        models: {},
-        nodes: [],
-        links: []
-      },
-      simulation: {
-        kernel: {},
-        models: {},
-        collections: [],
-        connectomes: [],
-        time: 1000.0
-      }
-    }
-  }
-
   clean(data: any): Data {
     // console.log('Clean data')
-    var newData = JSON.parse(JSON.stringify(data))
+    var newData = JSON.parse(JSON.stringify(data));
     this.deleteGlobalIds(newData);
     this.cleanKernel(newData);
     this.hash(newData);

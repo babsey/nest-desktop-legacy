@@ -3,6 +3,17 @@
   "resetScale": true,
   "autoScale": true,
   "controller": {
+    "threshold": {
+      "id": "V_th",
+      "label": "spike threshold",
+      "level": 3,
+      "unit": "mV",
+      "value": -55,
+      "input": "valueSlider",
+      "max": 100,
+      "min": -100,
+      "step": 1
+    },
     "barmodes": [{
         "value": "group",
         "label": "Group"

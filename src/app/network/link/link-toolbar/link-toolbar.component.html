@@ -5,7 +5,11 @@
 </div>
 
 <mat-menu #linkMenu="matMenu" class="context-menu link-menu">
-  <app-link-menu [(data)]="data" [link]="link" (dataChange)="dataChange.emit($event)"></app-link-menu>
+  <app-link-menu
+    (dataChange)="dataChange.emit($event)"
+    [(data)]="data"
+    [link]="link" 
+  ></app-link-menu>
 </mat-menu>
 
 <span
@@ -24,6 +28,7 @@
           [strokeColor]="color('source')"
           [elementType]="collection(connectome.source).element_type"
           [idx]="connectome.source"
+          [label]="label(connectome.source)"
           [spatial]="isSpatial(connectome.source)"
           style="pointer-events:none"
           transform="translate(32,32)"
@@ -50,6 +55,7 @@
             [strokeColor]="color('target')"
             [elementType]="collection(connectome.target).element_type"
             [idx]="connectome.target"
+            [label]="label(connectome.target)"
             [spatial]="isSpatial(connectome.target)"
             style="pointer-events:none"
             transform="translate(32,32)"

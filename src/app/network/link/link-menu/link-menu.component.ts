@@ -33,12 +33,9 @@ export class LinkMenuComponent implements OnInit {
     return connectome.hasOwnProperty(key);
   }
 
-  color(node: string): string {
-    if (!this.link) return 'black';
-    let nodes = this.data.app.nodes;
+  color(src: string): string {
     let connectome = this.data.simulation.connectomes[this.link.idx];
-    if (!connectome) return 'black';
-    return this._colorService.node(nodes[connectome[node]])
+    return this._colorService.node(connectome[src]);
   }
 
   backgroundImage(): string {
@@ -63,7 +60,8 @@ export class LinkMenuComponent implements OnInit {
     } else {
       delete connectome['src_idx'];
       delete connectome['tgt_idx'];
-      connectome.conn_spec.rule = 'all_to_all';
+      console.log(connectome)
+      connectome.conn_spec = {rule: 'all_to_all'};
       connectome.syn_spec.model = 'static_synapse';
       connectome.syn_spec.weight = 1;
       connectome.syn_spec.delay = 1;
@@ -94,8 +92,7 @@ export class LinkMenuComponent implements OnInit {
   }
 
   deleteLink(): void {
-    this._networkService.deleteLink(this.data, this.link);
-    this._networkService.clean(this.data);
+    this.data.deleteLink(this.link);
     this.dataChange.emit(this.data)
   }
 

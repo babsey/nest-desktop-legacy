@@ -1,138 +1,16 @@
-<span class="simulation" [@enterAnimation]>
-  <mat-sidenav-container
-    hasBackdrop="false"
-    style="height:calc(100vh - 40px); width: calc(100% - 40px)"
-    >
-    <mat-sidenav
-      (openedChange)="triggerResize()"
-      [mode]="mobileQuery.matches ? 'over' : 'side'"
-      [(opened)]="_simulationService.sidenavOpened"
-      id="controller"
-      position="end"
-      role="region"
-      >
-      <app-controller
-        (appChange)="onAppChange($event)"
-        (dataChange)="onDataChange($event)"
-        [(data)]="data"
-        [mode]="_simulationControllerService.mode"
-        [records]="records"
-        class="no-print"
-      ></app-controller>
+<ng-container *ngIf="records.length > 0 && data != undefined; else noRecords">
+  <app-visualization
+    [data]="data"
+    [records]="records"
+  ></app-visualization>
+</ng-container>
 
-      <app-network-list
-        [data]="data"
-        class="print"
-        style="display:none"
-      ></app-network-list>
-    </mat-sidenav>
-
-    <mat-sidenav-content
-      class="visualization-content"
-      >
-      <ng-container *ngIf="records.length > 0 && data != undefined; else noRecords">
-        <app-visualization
-          [data]="data"
-          [records]="records"
-        ></app-visualization>
-      </ng-container>
-
-      <ng-template #noRecords>
-        <div style="height:100%" class="flex">
-          <span style="margin:auto">
-            <span style="margin-left: 8px">No record found. Please simulate.</span>
-          </span>
-        </div>
-      </ng-template>
-
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-
-  <div class="flex button-toolbar no-print" style="flex-direction: column">
-    <button mat-icon-button
-      (click)="toggleSidenav()"
-      style="height:40px">
-      <fa-icon [icon]="_simulationService.sidenavOpened ? 'chevron-right' : 'chevron-left'"></fa-icon>
-    </button>
-    <button mat-icon-button
-      (click)="selectControllerMode('network')"
-      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='network'"
-      matTooltip="Network settings"
-      matTooltipPosition="before"
-      class="app-button"
-      >
-      <fa-icon icon="project-diagram"></fa-icon>
-    </button>
-    <button mat-icon-button
-      (click)="selectControllerMode('simulation')"
-      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='simulation'"
-      matTooltip="Simulation settings"
-      matTooltipPosition="before"
-      class="app-button"
-      >
-      <!-- <fa-icon icon="wrench"></fa-icon> -->
-      <span class="fa-stack" style="line-height:2em">
-        <fa-icon icon="cog" class="fa-stack-1x"></fa-icon>
-        <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top:11px; left:-14px"></fa-icon>
+<ng-template #noRecords>
+  <div style="height:100%" class="flex">
+    <span style="margin:auto">
+      <span style="margin-left: 8px">
+        No record found. Please simulate.
       </span>
-    </button>
-    <button mat-icon-button *ngIf="_visualizationService.mode=='chart'"
-      (click)="selectControllerMode('chart')"
-      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='chart'"
-      matTooltip="Chart settings"
-      matTooltipPosition="before"
-      class="app-button"
-      >
-      <span class="fa-stack" style="line-height:2em">
-        <fa-icon icon="chart-line" class="fa-stack-1x"></fa-icon>
-        <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top: 11px; left: -14px"></fa-icon>
-      </span>
-    </button>
-    <button mat-icon-button *ngIf="_visualizationService.mode=='animation'"
-      (click)="selectControllerMode('animation')"
-      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='animation'"
-      matTooltip="Animation settings"
-      matTooltipPosition="before"
-      class="app-button"
-      >
-      <!-- <fa-icon icon="braille"></fa-icon> -->
-      <span class="fa-stack" style="line-height:2em">
-        <fa-icon icon="braille" class="fa-stack-1x"></fa-icon>
-        <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top: 11px; left: -14px"></fa-icon>
-      </span>
-    </button>
-    <button mat-icon-button
-      (click)="selectControllerMode('stats')"
-      [class.mat-fab]="_simulationService.sidenavOpened && _simulationControllerService.mode=='stats'"
-      matTooltip="Simulation stats"
-      matTooltipPosition="before"
-      class="app-button"
-      >
-      <fa-icon icon="poll"></fa-icon>
-    </button>
-    <span class="flex-spacer"></span>
-    <button mat-icon-button
-      (click)="toggleQuickView()"
-      [class.active]="isQuickViewOpened()"
-      [style.display]="mobileQuery.matches ? 'none' : ''"
-      matTooltip="Quick view network sketch"
-      matTooltipPosition="before"
-      >
-      <span>
-        <fa-icon icon="shapes" rotate="90"></fa-icon>
-      </span>
-    </button>
+    </span>
   </div>
-
-  <ng-container *ngIf="isQuickViewOpened()">
-    <mat-card cdkDrag cdkDragBoundary=".simulation"
-      style="cursor:pointer; width:540px; height:200px; position:absolute; bottom: 0; z-index:1000; left:calc(50% - 150px - 270px)"
-      >
-      <button mat-icon-button (click)="toggleQuickView()" style="position:absolute; right:20px; top:20px; z-index:1000">
-        <fa-icon icon="times"></fa-icon>
-      </button>
-      <app-network-sketch [(data)]="data" width="540" height="200" [eventTrigger]="false"></app-network-sketch>
-    </mat-card>
-  </ng-container>
-
-</span>
+</ng-template>

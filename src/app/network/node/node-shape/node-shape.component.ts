@@ -9,6 +9,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class NodeShapeComponent implements OnInit {
   @Input() elementType: string = 'neuron';
   @Input() idx: any;
+  @Input() label: string;
   @Input() fillColor: string = 'white';
   @Input() selected: boolean = false;
   @Input() spatial: boolean = false;
@@ -16,17 +17,11 @@ export class NodeShapeComponent implements OnInit {
   @Input() strokeColor: string = 'black';
   @Input() strokeWidth: number = 2.5;
   @Input() labelSize: number = 12;
-  private labels: string = 'abcdefghijklmnopqrstuvwxyz';
 
   constructor(
   ) { }
 
   ngOnInit(): void {
-  }
-
-  label(): string {
-    if (this.idx == undefined) return '';
-    return this.labels[this.idx]
   }
 
   square(): string {

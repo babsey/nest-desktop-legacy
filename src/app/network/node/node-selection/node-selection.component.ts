@@ -57,7 +57,7 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
   }
 
   color(): string {
-    return this._colorService.node(this.node);
+    return this._colorService.node(this.node.idx);
   }
 
   update(): void {
@@ -91,14 +91,14 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
     return obj.hasOwnProperty('display') ? obj.display.includes(param) : true;
   }
 
-  isSpatial(): boolean {
-    return this.collection.hasOwnProperty('spatial')
-  }
-
   onDataChange(data: Data): void {
     // console.log('Change input value in node selection')
     this.update()
     this.dataChange.emit(this.data)
+  }
+
+  onNodeChange(node: AppNode): void {
+    this.nodeChange.emit(this.node)
   }
 
   onValueChange(value: any): void {

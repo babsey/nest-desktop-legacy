@@ -39,10 +39,6 @@ export class NetworkControllerComponent implements OnInit {
     return this.data.simulation.connectomes[idx];
   }
 
-  selectElementType(elementType: string): void {
-    this._networkService.selectElementType(elementType)
-  }
-
   isSelected(elementType: string): boolean {
     return this._networkService.elementType == null || this._networkService.elementType == elementType;
   }

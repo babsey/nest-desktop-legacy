@@ -59,7 +59,10 @@ export class LinkSketchComponent implements OnInit {
 
   distance(): number {
     var connectome = this.data.simulation.connectomes[this.link.idx];
-    if (connectome.source == connectome.target) {return this._networkConfigService.config.sketch.link.maxDistance.value};
+    if (connectome == undefined) return 0;
+    if (connectome.source == connectome.target) {
+      return this._networkConfigService.config.sketch.link.maxDistance.value;
+    };
     var source = this.data.app.nodes[connectome.source].position;
     var target = this.data.app.nodes[connectome.target].position;
     var x1 = source.x,
@@ -70,6 +73,16 @@ export class LinkSketchComponent implements OnInit {
       dy = y2 - y1,
       dr = Math.sqrt(dx * dx + dy * dy);
     return dr
+  }
+
+  markerEnd(): string {
+    if (this.synWeight() > 0) {
+      return 'url(#exc' + this.link.idx + ')'
+    } else if (this.synWeight() < 0) {
+      return 'url(#inh' + this.link.idx + ')'
+    } else {
+      return ""
+    }
   }
 
   nodeRadius(): number {

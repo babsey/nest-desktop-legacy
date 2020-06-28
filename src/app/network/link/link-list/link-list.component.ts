@@ -48,9 +48,8 @@ export class LinkListComponent implements OnInit {
     this.connectome = this.data.simulation.connectomes[this.link.idx];
   }
 
-  color(node: string): string {
-    let nodes = this.data.app.nodes;
-    return this._colorService.node(nodes[this.connectome[node]])
+  color(src: string): string {
+    return this._colorService.node(this.connectome[src]);
   }
 
   collection(idx: number): SimCollection {
@@ -67,7 +66,7 @@ export class LinkListComponent implements OnInit {
 
   isSpatial(idx: number): boolean {
     var collection = this.collection(idx);
-    return collection.hasOwnProperty('spatial');
+    return collection.isSpatial();
   }
 
   selectNode(idx: number): void {

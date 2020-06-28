@@ -22,9 +22,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content #content>
-      <span [@routeAnimations]="prepareRoute(outlet)">
-        <router-outlet #outlet="outlet"></router-outlet>
-      </span>
+      <router-outlet #outlet="outlet"></router-outlet>
     </mat-sidenav-content>
 
   </mat-sidenav-container>

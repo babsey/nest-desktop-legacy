@@ -1,18 +1,11 @@
-<nav mat-tab-nav-bar>
-  <a mat-tab-link (click)="selectElementType(null)" [active]="isSelected(null)" class="tab-nav"> All </a>
-  <a mat-tab-link (click)="selectElementType('stimulator')" [active]="isSelected('stimulator')" class="tab-nav"> Stimulator </a>
-  <a mat-tab-link (click)="selectElementType('neuron')" [active]="isSelected('neuron')" class="tab-nav"> Neuron </a>
-  <a mat-tab-link (click)="selectElementType('recorder')" [active]="isSelected('recorder')" class="tab-nav"> Recorder </a>
-</nav>
-
 <ng-container *ngIf="data">
   <div style="height:calc(100vh - 73px); overflow-y: auto">
     <ng-container *ngFor="let node of data.app.nodes">
       <app-node-controller
         (dataChange)="onDataChange($event)"
         (nodeChange)="onNodeChange($event)"
-        [node]="node"
         [(data)]="data"
+        [node]="node"
         [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'"
       ></app-node-controller>
     </ng-container>

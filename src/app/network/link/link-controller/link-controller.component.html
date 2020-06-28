@@ -6,7 +6,8 @@
 
   <app-link-toolbar [(data)]="data" [link]="link"></app-link-toolbar>
 
-  <ng-container [ngSwitch]="hasProjections()">
+  <ng-container [ngSwitch]="connectome.hasProjections()">
+
     <ng-container *ngSwitchCase="true">
       <app-link-projections
         (connectomeChange)="onConnectomeChange($event)"
@@ -17,11 +18,11 @@
 
     <ng-container *ngSwitchCase="false">
 
-      <ng-container *ngIf="connectome.hasOwnProperty('src_idx')">
+      <ng-container *ngIf="connectome.hasSourceIndices()">
         <mat-list dense>
           <mat-list-item>
             <app-array-input-popup
-              [(value)]="connectome['src_idx']"
+              [(value)]="connectome.src_idx"
               [options]="srcIdxOptions"
               style="width:100%"
             ></app-array-input-popup>
@@ -29,11 +30,11 @@
         </mat-list>
       </ng-container>
 
-      <ng-container *ngIf="connectome.hasOwnProperty('tgt_idx')">
+      <ng-container *ngIf="connectome.hasTargetIndices()">
         <mat-list dense>
           <mat-list-item>
             <app-array-input-popup
-              [(value)]="connectome['tgt_idx']"
+              [(value)]="connectome.tgt_idx"
               [options]="tgtIdxOptions"
               style="width:100%"
             ></app-array-input-popup>
@@ -41,19 +42,21 @@
         </mat-list>
       </ng-container>
 
-      <ng-container *ngIf="!connectSpikeDetector()">
-        <mat-list dense>
-          <ng-container *ngIf="!connectome.hasOwnProperty('src_idx') && !connectome.hasOwnProperty('tgt_idx')">
-            <mat-list-item>
-              <app-select
-                (selectedChange)="onRuleSelect($event)"
-                [(selected)]="connectome.conn_spec.rule"
-                [options]="connRules"
-              ></app-select>
-            </mat-list-item>
-          </ng-container>
+      <mat-list dense>
 
-          <ng-container *ngFor="let conn of slider.connection">
+        <ng-container *ngIf="!connectome.hasSourceIndices() && !connectome.hasTargetIndices()">
+          <mat-list-item>
+            <app-select
+              (selectedChange)="onRuleSelect($event)"
+              [(selected)]="connectome.conn_spec.rule"
+              [options]="connRules"
+              [disabled]="connectSpikeDetector()"
+            ></app-select>
+          </mat-list-item>
+        </ng-container>
+
+        <ng-container *ngFor="let conn of slider.connection">
+          <ng-container *ngIf="connectome.conn_spec.hasOwnProperty(conn.id)">
             <mat-list-item
               [style.display]="paramDisplay('conn_spec.' + conn.id) ? '' : 'none'">
               <app-link-param
@@ -65,8 +68,9 @@
               ></app-link-param>
             </mat-list-item>
           </ng-container>
-        </mat-list>
-      </ng-container>
+        </ng-container>
+
+      </mat-list>
 
       <ng-container *ngIf="!connectRecorder()">
         <mat-list dense>
@@ -81,18 +85,21 @@
 
         <mat-list dense>
           <ng-container *ngFor="let syn of slider.synapse">
-            <mat-list-item
-              [style.display]="paramDisplay('syn_spec.' + syn.id) ? '' : 'none'">
-              <app-link-param
-                (valueChange)="onValueChange($event)"
-                [(value)]="connectome.syn_spec[syn.id]"
-                [link]="link"
-                [options]="syn"
-                [random]="false"
-              ></app-link-param>
-            </mat-list-item>
+            <ng-container *ngIf="connectome.syn_spec.hasOwnProperty(syn.id)">
+              <mat-list-item
+                [style.display]="paramDisplay('syn_spec.' + syn.id) ? '' : 'none'">
+                <app-link-param
+                  (valueChange)="onValueChange($event)"
+                  [(value)]="connectome.syn_spec[syn.id]"
+                  [link]="link"
+                  [options]="syn"
+                  [random]="false"
+                ></app-link-param>
+              </mat-list-item>
+            </ng-container>
           </ng-container>
         </mat-list>
+
       </ng-container>
     </ng-container>
 
