@@ -1,5 +1,8 @@
 import * as objectHash from 'object-hash';
 
+import { environment } from '../../environments/environment';
+
+
 import { AppData } from './appData';
 import { AppNode } from './appNode';
 import { AppLink } from './appLink';
@@ -18,6 +21,7 @@ export class Data {
   updatedAt: string;
   app: AppData;
   simulation: SimData;
+  version?: string;
 
   constructor(
     data: any = {},
@@ -35,6 +39,10 @@ export class Data {
     this.clean()
   }
 
+  toObject(): any {
+    return JSON.parse(JSON.stringify(this))
+  }
+
   clone(): Data {
     return new Data({
       name: this.name,
@@ -47,11 +55,11 @@ export class Data {
   }
 
   createNode(elementType: string, point: number[]): void {
-    var newName = elementType + '-' + this.simulation.abc[this.simulation.collections.length];
+    var newName = elementType + '-' + this.label(this.simulation.collections.length);
     this.app.addModel(newName);
     this.app.addNode(point);
-    this.simulation.addModel(elementType);
-    this.simulation.addCollection(elementType);
+    this.simulation.addModel(newName, elementType);
+    this.simulation.addCollection(newName, elementType);
     this.clean();
   }
 
@@ -62,23 +70,20 @@ export class Data {
 
     var links = this.app.links.filter(link => {
       var connectome = this.simulation.connectomes[link.idx];
-      return connectome.source != node.idx && connectome.target != node.idx;
+      return !(connectome.source == node.idx || connectome.target == node.idx);
     });
-
-    if (links.length != this.simulation.connectomes.length) {
-      links.forEach((link, idx) => link.idx = idx)
-      this.app.links = links;
-      var connectomes = this.simulation.connectomes.filter(connectome => connectome.source != node.idx && connectome.target != node.idx);
-      connectomes.forEach(connectome => {
-        connectome.source = connectome.source > node.idx ? connectome.source - 1 : connectome.source;
-        connectome.target = connectome.target > node.idx ? connectome.target - 1 : connectome.target;
-      })
-      this.simulation.connectomes = connectomes;
-    }
+    links.forEach((link, idx) => link.idx = idx)
+    this.app.links = links;
+    var connectomes = this.simulation.connectomes.filter(connectome => connectome.source != node.idx && connectome.target != node.idx);
+    connectomes.forEach(connectome => {
+      connectome.source = connectome.source > node.idx ? connectome.source - 1 : connectome.source;
+      connectome.target = connectome.target > node.idx ? connectome.target - 1 : connectome.target;
+    })
+    this.simulation.connectomes = connectomes;
     this.clean();
   }
 
-  connectNodes(source: AppNode, target: AppNode): void {
+  createLink(source: AppNode, target: AppNode): void {
     var connectomes = this.simulation.connectomes;
     var checkLinks = this.app.links.filter(link => (connectomes[link.idx].source == source.idx && connectomes[link.idx].target == target.idx));
     if (checkLinks.length == 0) {
@@ -100,6 +105,7 @@ export class Data {
     this.simulation.clean(this);
     this.cleanModels();
     this.updateHash();
+    this.version = environment.VERSION;
   }
 
   updateHash(): void {
@@ -113,11 +119,16 @@ export class Data {
     this.app.models = {};
     this.app.nodes.forEach(node => {
       var collection = this.simulation.collections[node.idx];
-      var newName = collection.element_type + '-' + this.simulation.abc[node.idx];
+      var newName = collection.element_type + '-' + this.label(node.idx);
       this.simulation.models[newName] = simModels[collection.model];
       this.app.models[newName] = appModels[collection.model];
       collection['model'] = newName;
     })
+  }
+
+  label(idx: number): string {
+    var abc = 'abcdefghijklmnopqrstuvwxyz123456789';
+    return abc[idx];
   }
 
 }

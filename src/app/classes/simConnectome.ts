@@ -29,7 +29,6 @@ export class SimConnectome {
   }
 
   cleanSpecs(): void {
-
     if (this.conn_spec == undefined || this.conn_spec == {}) {
       this.conn_spec = { rule: 'all_to_all' };
     } else if (typeof this.conn_spec == 'string') {
