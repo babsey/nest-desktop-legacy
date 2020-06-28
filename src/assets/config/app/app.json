@@ -2,5 +2,5 @@
   "log": false,
   "autoStart": false,
   "loading": true,
-  "advanced": false
+  "devMode": false
 }

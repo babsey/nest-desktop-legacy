@@ -3,18 +3,18 @@
   "description": "The simulation shows subthreshold activity response of a set of ten neurons to external incoming spikes.",
   "app": {
     "models": {
-      "stimulator-0": {
+      "stimulator-a": {
         "display": [
           "spike_times"
         ]
       },
-      "neuron-1": {
+      "neuron-b": {
         "display": [
           "C_m",
           "tau_m"
         ]
       },
-      "recorder-2": {
+      "recorder-c": {
         "display": []
       }
     },
@@ -48,13 +48,13 @@
       "resolution": 0.1
     },
     "models": {
-      "stimulator-0": {
+      "stimulator-a": {
         "existing": "spike_generator",
         "params": {
           "spike_times": [300]
         }
       },
-      "neuron-1": {
+      "neuron-b": {
         "existing": "iaf_psc_alpha",
         "params": {
           "V_m": -70,
@@ -69,7 +69,7 @@
           "tau_syn_in": 2
         }
       },
-      "recorder-2": {
+      "recorder-c": {
         "existing": "voltmeter",
         "params": {
           "interval": 1
@@ -78,15 +78,15 @@
     },
     "collections": [{
       "element_type": "stimulator",
-      "model": "stimulator-0",
+      "model": "stimulator-a",
       "n": 1
     }, {
       "element_type": "neuron",
-      "model": "neuron-1",
+      "model": "neuron-b",
       "n": 1
     }, {
       "element_type": "recorder",
-      "model": "recorder-2",
+      "model": "recorder-c",
       "n": 1
     }],
     "connectomes": [{
