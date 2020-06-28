@@ -21,10 +21,6 @@ export class AnimationControllerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  advanced(): boolean {
-    return this._appConfigService.config.app.advanced;
-  }
-
   increment(): void {
     this._animationControllerService.frames.speed = this._animationControllerService.frames.speed + 1;
   }

@@ -68,10 +68,10 @@ export class AnimationAnalogComponent implements OnInit, OnDestroy {
   }
 
   plotAnalogData(record: Record): void {
-    if (!record.hasOwnProperty('positions') || !record.hasOwnProperty('global_ids')) return
-    if (record.positions.length == 0) return
-    var positions = record.positions;
-    var global_ids = record.global_ids;
+    if (!record.nodes.hasOwnProperty('positions') || !record.nodes.hasOwnProperty('global_ids')) return
+    if (record.nodes.positions.length == 0) return
+    var positions = record.nodes.positions;
+    var global_ids = record.nodes.global_ids;
 
     var source = this._animationControllerService.source;
     var sourceData = record.events[source];

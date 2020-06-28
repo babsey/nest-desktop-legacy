@@ -101,7 +101,7 @@ export class ChartRecordsService {
       y: y,
       _source: {
         recordIdx: idx,
-        plotConfigIdx: config['idx'],
+        curve: config['curve'],
       },
       legendgroup: config['legendgroup'] || '',
       hoverinfo: config['hoverinfo'] || 'all',
@@ -118,7 +118,7 @@ export class ChartRecordsService {
     }
   }
 
-  scatter(idx: number, x: number[], y: number[], color: string, name: string = '', config: any = {}, yaxis: string = 'y2'): any {
+  scatter(idx: number, x: number[], y: number[], color: string, config: any = {}, yaxis: string = 'y2'): any {
     return {
       mode: 'markers',
       type: 'scattergl',

@@ -16,6 +16,8 @@ import { Record } from '../classes/record';
 })
 export class VisualizationComponent implements OnInit, OnDestroy {
   @Input() data: Data;
+  @Input() layout: any = {};
+  @Input() kernel: any = {};
   @Input() records: Record[];
   private subscription: any;
 
@@ -83,6 +85,10 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     this._simulationControllerService.mode = mode
     this._visualizationService.mode = mode;
     this._visualizationService.update.emit()
+  }
+
+  isSelected(mode: string): boolean {
+    return this._simulationControllerService.mode == mode;
   }
 
 }
