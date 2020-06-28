@@ -27,7 +27,7 @@ export class TicksSliderInlineComponent implements OnInit, OnChanges {
     this.valueChange.emit(this.value);
   }
 
-  displayWith(ticks: any[]): any {
-    return (idx: number): string[] => ticks[idx];
+  displayWith(): any {
+    return (idx: number): string[] => this.options.ticks[idx];
   }
 }
