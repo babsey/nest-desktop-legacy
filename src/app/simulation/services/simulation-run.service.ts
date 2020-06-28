@@ -5,9 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ToastrService } from 'ngx-toastr';
 
 import { AnimationControllerService } from '../../visualization/animation/animation-controller/animation-controller.service';
-import { SimulationScriptService } from '../simulation-script/simulation-script.service';
 import { SimulationService } from '../services/simulation.service';
-import { DataService } from '../../services/data/data.service';
 import { LogService } from '../../log/log.service';
 import { NestServerService } from '../../nest-server/nest-server.service';
 
@@ -32,9 +30,7 @@ export class SimulationRunService {
 
   constructor(
     private _animationControllerService: AnimationControllerService,
-    private _simulationScriptService: SimulationScriptService,
     private _simulationService: SimulationService,
-    private _dataService: DataService,
     private _logService: LogService,
     private _nestServerService: NestServerService,
     private http: HttpClient,
@@ -89,12 +85,12 @@ export class SimulationRunService {
       }
     })
 
-
     if (this.config['showSnackBar']) {
       this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     }
 
-    (this.mode == 'object') ? this.run_object(clonedData) : this.run_script(clonedData);
+    // console.log(clonedData);
+    (this.mode == 'object') ? this.run_object(clonedData) : this.run_code(clonedData);
   }
 
   run_object(data: Data): void {
@@ -105,12 +101,12 @@ export class SimulationRunService {
       .subscribe(data => this.response(data), err => this.error(err['error']))
   }
 
-  run_script(data: Data): void {
+  run_code(data: Data): void {
     const urlRoot: string = this._nestServerService.url();
     this._logService.log('Script request to server');
-    let script: string = this._simulationService.script;
+    let code: string = this._simulationService.code;
     this.running = true;
-    this.http.post(urlRoot + '/exec', { source: script, return: 'response' })
+    this.http.post(urlRoot + '/exec', { source: code, return: 'response' })
       .subscribe(data => this.response(data), err => this.error(err['error']))
   }
 

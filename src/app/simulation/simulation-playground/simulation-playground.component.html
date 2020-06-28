@@ -1,6 +1,8 @@
 <ng-container *ngIf="records.length > 0 && data != undefined; else noRecords">
   <app-visualization
     [data]="data"
+    [layout]="layout"
+    [kernel]="kernel"
     [records]="records"
   ></app-visualization>
 </ng-container>

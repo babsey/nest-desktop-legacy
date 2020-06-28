@@ -29,6 +29,7 @@
       <mat-sidenav-content>
         <app-simulation-sidenav-content
           (dataChange)="onDataChange($event)"
+          (appChange)="onAppChange($event)"
           [(data)]="_simulationService.data"
           [mode]="_simulationService.mode"
           [records]="_simulationEventService.records"

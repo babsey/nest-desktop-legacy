@@ -52,8 +52,8 @@
   </button>
 
   <button mat-icon-button
-    (click)="selectControllerMode('script')"
-    [class.mat-fab]="_simulationService.sidenavOpened && _simulationService.sidenavMode=='script'"
+    (click)="selectControllerMode('codeEditor')"
+    [class.mat-fab]="_simulationService.sidenavOpened && _simulationService.sidenavMode=='codeEditor'"
     matTooltip="Script code"
     matTooltipPosition="before"
     class="app-button"
@@ -61,15 +61,27 @@
     <fa-icon icon="code"></fa-icon>
   </button>
 
-  <!-- <button mat-icon-button
-    (click)="selectControllerMode('sketchSettings')"
-    [class.mat-fab]="_simulationService.sidenavOpened && _simulationService.sidenavMode=='sketchSettings'"
-    matTooltip="Sketch settings"
-    matTooltipPosition="before"
-    class="app-button"
-    >
-    <fa-icon icon="bezier-curve"></fa-icon>
-  </button> -->
+  <ng-container *ngIf="devMode()">
+    <button mat-icon-button
+      (click)="selectControllerMode('rawData')"
+      [class.mat-fab]="_simulationService.sidenavOpened && _simulationService.sidenavMode=='rawData'"
+      matTooltip="Raw data"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      JSON
+    </button>
+
+    <button mat-icon-button
+      (click)="selectControllerMode('sketchSettings')"
+      [class.mat-fab]="_simulationService.sidenavOpened && _simulationService.sidenavMode=='sketchSettings'"
+      matTooltip="Sketch settings"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="bezier-curve"></fa-icon>
+    </button>
+  </ng-container>
 
   <button mat-icon-button *ngIf="_visualizationService.mode=='chart'"
     (click)="selectControllerMode('chart')"
@@ -107,16 +119,6 @@
     >
     <fa-icon icon="poll"></fa-icon>
   </button>
-
-  <!-- <button mat-icon-button
-    (click)="selectControllerMode('rawData')"
-    [class.mat-fab]="_simulationService.sidenavOpened && _simulationService.sidenavMode=='rawData'"
-    matTooltip="Raw data"
-    matTooltipPosition="before"
-    class="app-button"
-    >
-    JSON
-  </button> -->
 
   <span class="flex-spacer"></span>
 

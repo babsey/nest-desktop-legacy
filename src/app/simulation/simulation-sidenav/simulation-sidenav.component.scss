@@ -2,27 +2,12 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
+  min-width: 320px;
 
   .controller-content {
     height: 100%;
-
-    app-network-controller,
-    app-network-list,
-    app-network-selection,
-    app-network-sketch-controller,
-    app-simulation-controller,
-    app-chart-controller,
-    app-animation-controller,
-    app-simulation-stats {
-      width: 320px;
-      display: block;
-    }
-
-    app-simulation-script,
-    app-simulation-raw-data {
-      width: 420px;
-      display: block;
-    }
+    width: 100%;
   }
 
 }

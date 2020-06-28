@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SimulationScriptComponent } from './simulation-script.component';
+import { SimulationRawDataComponent } from './simulation-raw-data.component';
 
-describe('SimulationScriptComponent', () => {
-  let component: SimulationScriptComponent;
-  let fixture: ComponentFixture<SimulationScriptComponent>;
+describe('SimulationRawDataComponent', () => {
+  let component: SimulationRawDataComponent;
+  let fixture: ComponentFixture<SimulationRawDataComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SimulationScriptComponent ]
+      declarations: [ SimulationRawDataComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SimulationScriptComponent);
+    fixture = TestBed.createComponent(SimulationRawDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

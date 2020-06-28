@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { environment } from '../../../environments/environment';
 
-import { DataService } from '../../services/data/data.service';
 import { DBService } from '../../services/db/db.service';
 import { NavigationService } from '../../navigation/navigation.service';
 import { SimulationConfigService } from '../simulation-config/simulation-config.service';
@@ -25,7 +24,6 @@ export class SimulationProtocolService {
   public change: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private _dataService: DataService,
     private _dbService: DBService,
     private _navigationService: NavigationService,
     private _networkService: NetworkService,
@@ -73,6 +71,7 @@ export class SimulationProtocolService {
           delete dataCloned['_id']
           delete dataCloned['_rev']
         }
+        // console.log('Create data in db')
         this._dbService.db.create(this.db, dataCloned)
           .then(res => {
             if (reload) {
@@ -87,6 +86,7 @@ export class SimulationProtocolService {
       } else {
         this.hashList().then(hash => {
           if (hash.indexOf(dataCloned['hash']) != -1 && dataCloned._id) {
+            // console.log('Update data in db')
             this._dbService.db.update(this.db, dataCloned).then(res => {
               if (reload) {
                 this.load(res.id).then(() => {
@@ -101,6 +101,7 @@ export class SimulationProtocolService {
               delete dataCloned['_id']
               delete dataCloned['_rev']
             }
+            // console.log('Create data in db')
             this._dbService.db.create(this.db, dataCloned)
               .then(res => {
                 if (reload) {

@@ -1,0 +1,11 @@
+.copy-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  z-index: 10;
+}
+
+::ng-deep .CodeMirror {
+  height: 100%;
+  width: 520px;
+}

@@ -13,7 +13,8 @@ import { SimConnectome } from '../../classes/simConnectome';
 @Injectable({
   providedIn: 'root'
 })
-export class SimulationScriptService {
+export class SimulationCodeService {
+  private data: Data;
   private modelLabel: any = {
     'stimulator': 'stim',
     'neuron': 'neuron',
@@ -25,52 +26,53 @@ export class SimulationScriptService {
   ) { }
 
   _(n: number = 1): string {
-    return '\n' + '    '.repeat(n)
+    return '\n' + '  '.repeat(n)
   }
 
   end(): string {
     return '\n';
   }
 
-  script(data: Data): string {
+  generate(data: Data, sections: string[] = ['kernel', 'models', 'nodes', 'connections', 'events']): string {
+    this.data = data;
     let script: string = '';
     script += this.importModules();
-    script += this.randomSeed(data.simulation.random_seed);
+    script += 'nest.ResetKernel()\n';
 
-    script += '\n\n';
-    if (data.simulation.hasOwnProperty('kernel')) {
-      script += '# Set kernel status\n';
-      script += this.setKernelStatus(data.simulation.kernel);
+    if (sections.includes('kernel') && data.simulation.hasOwnProperty('kernel')) {
+      script += '\n\n';
+      script += '# Simulation kernel\n';
+      script += this.randomSeed();
+      script += this.setKernelStatus();
+    }
+
+    if (sections.includes('models')) {
+      script += '\n\n';
+      script += '# Copy models\n';
+      data.app.nodes.map(node => script += this.copyModel(node.idx))
+    }
+
+    if (sections.includes('nodes')) {
+      script += '\n\n';
+      script += '# Create nodes\n';
+      data.app.nodes.map(node => script += this.createNode(node.idx))
+    }
+
+    if (sections.includes('connections')) {
+      script += '\n\n';
+      script += '# Connect nodes\n';
+      data.app.links.map(link => script += this.connectNodes(link.idx))
     }
 
     script += '\n\n';
-    script += '# Copy models\n';
-    data.simulation.collections.map(node => {
-      const model: SimModel = data.simulation.models[node.model];
-      script += this.copyModel(node, model, data.app.models[node.model]);
-    })
-
-    script += '\n\n';
-    script += '# Create nodes\n';
-    data.simulation.collections.map(node => {
-      const model: SimModel = data.simulation.models[node.model];
-      // script += this.copyModel(node, model, data.app.models[node.model]);
-      script += this.createNode(node);
-    })
-
-    script += '\n\n';
-    script += '# Connect nodes\n';
-    data.simulation.connectomes.map(connection => {
-      script += this.connectNodes(connection, data.simulation.collections);
-    })
-
-    script += '\n\n';
     script += '# Run simulation\n';
-    script += this.simulate(data.simulation.time);
+    script += this.simulate();
 
-    script += '\n\n';
-    script += '# Get events\n';
-    script += this.getData(data.simulation);
+    if (sections.includes('events')) {
+      script += '\n\n';
+      script += '# Collect events\n';
+      script += this.getData();
+    }
     return script;
   }
 
@@ -85,20 +87,20 @@ export class SimulationScriptService {
     let script: string = '';
     script += 'import nest\n';
     script += 'import numpy as np\n';
-    return script + '\n\n';
+    return script + '\n';
   }
 
-  randomSeed(seed: number = 0, local_num_threads: number = 1): string {
+  randomSeed(): string {
     let script: string = '';
-    script += 'np.random.seed(' + (seed) + ')\n';
+    script += 'np.random.seed(' + (this.data.simulation.random_seed) + ')\n';
     return script;
   }
 
-  setKernelStatus(status: any): string {
+  setKernelStatus(): string {
+    let status = this.data.simulation.kernel;
     if (status == undefined) return ''
     const local_num_threads = parseInt(status.hasOwnProperty('local_num_threads') ? status['local_num_threads'] : 1);
     let script: string = '';
-    script += 'nest.ResetKernel()\n';
     script += 'nest.SetKernelStatus({';
     script += this._() + '"local_num_threads": ' + local_num_threads + ',',
       script += this._() + '"resolution": ' + this._formatService.format(status['resolution'] || 1) + ',';
@@ -149,64 +151,79 @@ export class SimulationScriptService {
     return script;
   }
 
-  filterParams(params: any, display: string[], node: SimCollection): any {
+  filterParams(idx: number, display: string[], params: any): any {
     let filteredParams: any = {};
+    let simNode = this.data.simulation.collections[idx];
     if (display) {
       display.map(key => {
-        if (node.hasOwnProperty('params')) {
-          if (node.params.hasOwnProperty(key)) return
+        if (simNode.hasOwnProperty('params')) {
+          if (simNode.params.hasOwnProperty(key)) return
         }
         filteredParams[key] = params[key];
       });
+      if (params.hasOwnProperty('record_from')) {
+        filteredParams['record_from'] = params.record_from;
+      }
     }
     return filteredParams;
   }
 
-  copyModel(node: SimCollection, model: SimModel, appModel: AppModel): string {
+  copyModel(idx: number): string {
+    let simNode = this.data.simulation.collections[idx];
+    let model = this.data.app.models[simNode.model];
+    let simModel = this.data.simulation.models[simNode.model];
     let script: string = '';
-    script += 'nest.CopyModel("' + model.existing + '", "' + node.model + '"';
-    if (model.hasOwnProperty('params')) {
-      script += this.params(this.filterParams(model.params, appModel['display'], node));
+    script += 'nest.CopyModel("' + simModel.existing + '", "' + simNode.model + '"';
+    if (simModel.hasOwnProperty('params')) {
+      script += this.params(this.filterParams(idx, model.display, simModel.params));
     }
     script += ')';
     return script + '\n';
   }
 
-  createNode(node: SimCollection): string {
+  createNode(idx: number): string {
+    let simNode = this.data.simulation.collections[idx];
     let script: string = '';
-    script += this.nodeVariable(node.model) + ' = nest.Create("' + node.model + '", ' + node.n;
-    script += this.params(node.params);
+    script += this.nodeVariable(simNode.model) + ' = nest.Create("' + simNode.model + '", ' + simNode.n;
+    script += this.params(simNode.params);
     script += ')';
     return script + '\n';
   }
 
-  connectNodes(connection: SimConnectome, nodes: SimCollection[]): string {
-    let script: string = '';
-    let source = nodes[connection.source];
-    let target = nodes[connection.target];
+  connectNodes(idx: number): string {
+    let simLink = this.data.simulation.connectomes[idx];
+    let source = this.data.simulation.collections[simLink.source];
+    let target = this.data.simulation.collections[simLink.target];
     if (['multimeter', 'voltmeter'].includes(target.model)) {
       target = [source, source = target][0];
     }
+    let script: string = '';
     script += 'nest.Connect(' + this.nodeVariable(source.model) + ', ' + this.nodeVariable(target.model);
-    if (connection.conn_spec) {
-      if (connection.conn_spec.rule != 'all_to_all') {
-        const connSpecList: string[] = [this._() + '"rule":"' + connection.conn_spec.rule + '"'];
-        Object.keys(connection.conn_spec).filter(key => key != 'rule').map(key => {
-          connSpecList.push(this._() + '"' + key + '": ' + connection.conn_spec[key]);
-        })
+    if (simLink.conn_spec) {
+      if (simLink.conn_spec.rule != 'all_to_all') {
+        const connSpecList: string[] = [this._() + '"rule":"' + simLink.conn_spec.rule + '"'];
+        Object.keys(simLink.conn_spec)
+          .filter(key => key != 'rule')
+          .map(key => {
+            connSpecList.push(this._() + '"' + key + '": ' + simLink.conn_spec[key]);
+          })
         script += ', conn_spec={';
         script += connSpecList.join(',')
         script += this.end() + '}';
       }
     }
-    if (connection.syn_spec) {
+    if (simLink.syn_spec) {
       const synSpecList: string[] = []
-      if (connection.syn_spec.hasOwnProperty('model')) {
-        synSpecList.push(this._() + '"model": "' + connection.syn_spec['model'] + '"')
+      if (simLink.syn_spec.hasOwnProperty('model')) {
+        if (simLink.syn_spec.model != 'static_synapse') {
+          synSpecList.push(this._() + '"model": "' + simLink.syn_spec.model + '"')
+        }
       }
-      Object.keys(connection.syn_spec).filter(key => key != 'model').map(key => {
-        synSpecList.push(this._() + '"' + key + '": ' + this._formatService.format(connection.syn_spec[key]));
-      })
+      Object.keys(simLink.syn_spec)
+        .filter(key => key != 'model')
+        .map(key => {
+          synSpecList.push(this._() + '"' + key + '": ' + this._formatService.format(simLink.syn_spec[key]));
+        })
       if (synSpecList.length > 0) {
         script += ', syn_spec={';
         script += synSpecList.join(',')
@@ -214,51 +231,48 @@ export class SimulationScriptService {
       }
     }
     script += ')';
-    return script + '\n'
+    return script + '\n';
   }
 
-  simulate(time: number): string {
-    let script: string = 'nest.Simulate(' + time.toFixed(1) + ')';
-    return script + '\n'
+  simulate(): string {
+    let script: string = 'nest.Simulate(' + this.data.simulation.time.toFixed(1) + ')';
+    return script + '\n';
   }
 
-  getRecord(node: SimCollection, idx: number, neuron: string): string {
-    const nodeVars = this.nodeVariable(node.model);
+  getRecord(idx: number): string {
+    const simNode = this.data.simulation.collections[idx];
+    const simModel = this.data.simulation.models[simNode.model];
+
+    const nodeVars = this.nodeVariable(simNode.model);
     let script: string = '{';
-    script += this._(2) + '"events": nest.GetStatus(' + nodeVars + ', "events")[0],';
+    script += this._(2) + '"events": nest.GetStatus(' + nodeVars + ', "events"),';
 
-    if (neuron == 'target') {
-      script += this._(2) + '"global_ids": nest.GetStatus(nest.GetConnections(' + nodeVars + '),"target"),'
-    } else {
+    if (simModel.existing == 'spike_detector') {
       script += this._(2) + '"global_ids": nest.GetStatus(nest.GetConnections(None, ' + nodeVars + '), "source"),'
+    } else {
+      script += this._(2) + '"global_ids": nest.GetStatus(nest.GetConnections(' + nodeVars + '), "target"),'
     }
 
-    script += this._(2) + '"recorderIdx": ' + idx + ',';
-    // script += this._(3) + '"idx": ' + idx + ',';
-    // script += this._(3) + '"model": nest.GetStatus(' + nodeVars + ', "model"),';
-    // script += this._(2) + '},';
-    // script += this._(2) + '"senders": list(set(nest.GetStatus(' + nodeVars + ', "events")[0]["senders"]))';
+    script += this._(2) + '"recorder": {';
+    script += this._(3) + '"idx": ' + idx + ',';
+    script += this._(3) + '"model": "' + simModel.existing + '",';
+    script += this._(2) + '},';
     script += this._() + '}';
-    return script
+    return script;
   }
 
-  getData(simulation: any): string {
+  getData(): string {
     let script: string = '';
     script += 'response = {';
     script += this._() + '"kernel": {"time": nest.GetKernelStatus("time")},'
     script += this._() + '"records": [';
-    let records = [];
-    simulation.collections.map((node, idx) => {
-      if (node.element_type == 'recorder') {
-        const simModel = simulation.models[node.model];
-        const neuron = simModel.existing == 'spike_detector' ? 'source' : 'target';
-        records.push(this.getRecord(node, idx, neuron))
-      }
-    })
+    let records = this.data.app.nodes
+      .filter(node => this.data.simulation.collections[node.idx].element_type == 'recorder')
+      .map(node => this.getRecord(node.idx))
     script += records.join(',');
     script += ']';
     script += this.end() + '}';
-    return script + '\n'
+    return script + '\n';
   }
 
 }

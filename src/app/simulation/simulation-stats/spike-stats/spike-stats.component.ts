@@ -47,11 +47,11 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
   update(): void {
     var record = this.records[this.idx];
     this.times = Object.create(null);
-    record.global_ids.forEach(id => this.times[id] = [])
+    record.nodes.global_ids.forEach(id => this.times[id] = [])
     record.events.senders.forEach((sender, idx) => {
       this.times[sender].push(record.events.times[idx]);
     });
-    this.stats = record.global_ids.map(id => {
+    this.stats = record.nodes.global_ids.map(id => {
       var isi = this.isi(this.times[id]);
       var isi_mean = isi.length > 1 ? this._mathService.mean(isi) : 0;
       var isi_std = isi.length > 1 ? this._mathService.deviation(isi) : 0;

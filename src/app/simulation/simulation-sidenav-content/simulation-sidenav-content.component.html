@@ -4,6 +4,7 @@
     [style.height]="mode=='labBook' ? '200px' : '100%'">
     <app-network-sketch
       (dataChange)="onDataChange($event)"
+      (nodeChange)="onNodeChange($event)"
       [(data)]="data"
       [eventTrigger]="mode=='networkEditor'"
       [width]="width"

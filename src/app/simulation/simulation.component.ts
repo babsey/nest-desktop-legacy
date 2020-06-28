@@ -4,12 +4,11 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MediaMatcher } from '@angular/cdk/layout';
 
 import { AnimationControllerService } from '../visualization/animation/animation-controller/animation-controller.service';
-import { DataService } from '../services/data/data.service';
 import { NetworkService } from '../network/services/network.service';
 import { SimulationEventService } from './services/simulation-event.service';
 import { SimulationRunService } from './services/simulation-run.service';
 import { SimulationService } from './services/simulation.service';
-import { SimulationScriptService } from './simulation-script/simulation-script.service';
+import { SimulationCodeService } from './simulation-code/simulation-code.service';
 import { VisualizationService } from '../visualization/visualization.service';
 
 import { Data } from '../classes/data';
@@ -21,7 +20,7 @@ import { enterAnimation } from '../animations/enter-animation';
   selector: 'app-simulation',
   templateUrl: './simulation.component.html',
   styleUrls: ['./simulation.component.scss'],
-  animations: [ enterAnimation ],
+  animations: [enterAnimation],
 })
 export class SimulationComponent implements OnInit, OnDestroy {
   public mobileQuery: MediaQueryList;
@@ -29,9 +28,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   constructor(
     private _animationControllerService: AnimationControllerService,
-    private _dataService: DataService,
     private _networkService: NetworkService,
-    private _simulationScriptService: SimulationScriptService,
+    private _simulationCodeService: SimulationCodeService,
     private _visualizationService: VisualizationService,
     private bottomSheet: MatBottomSheet,
     private changeDetectorRef: ChangeDetectorRef,
@@ -62,7 +60,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     if (id) {
       this._simulationService.load(id).then(doc => {
         this._simulationService.data = new Data(doc);
-        this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
+        this._simulationService.code = this._simulationCodeService.generate(this._simulationService.data);
         this._networkService.update.emit(this._simulationService.data);
         this._simulationService.dataLoaded = true;
         if (this.router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
@@ -70,7 +68,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
         }
       })
     } else {
-      this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
+      this._simulationService.data = new Data();
+      this._simulationService.code = this._simulationCodeService.generate(this._simulationService.data);
       this._simulationService.mode = 'networkEditor';
       this._simulationService.dataLoaded = true;
     }
@@ -117,10 +116,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
   onDataChange(data: Data): void {
     // console.log('Simulation on data change')
     this._simulationService.data._id = '';
-
     setTimeout(() => {
-      // this._simulationService.data = this._dataService.clean(this._simulationService.data);
-      this._simulationService.script = this._simulationScriptService.script(this._simulationService.data);
+      this._simulationService.code = this._simulationCodeService.generate(this._simulationService.data);
       if (this._simulationService.mode == 'activityExplorer') {
         this.run()
       }
@@ -129,6 +126,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   onAppChange(data: any): void {
     // console.log('On app change')
+    this._simulationService.data._id = '';
+    setTimeout(() => {
+      this._simulationService.code = this._simulationCodeService.generate(this._simulationService.data);
+    }, 1)
     this._visualizationService.init.emit()
   }
 
