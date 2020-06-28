@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: ubuntu:18.04
+From: ubuntu:20.04
 
 %labels
   AUTHOR Sebastian Spreizer <spreizer@web.de>
@@ -24,10 +24,10 @@ From: ubuntu:18.04
   python3-pip \
   wget
 
-  pip3 install nest-desktop==2.2.*
+  pip3 install nest-desktop==2.4.*
 
   cd /tmp/
-  VERSION=2.18.0
+  VERSION=2.20.0
   if [ ! -f "v${VERSION}.tar.gz" ]; then
     wget https://github.com/nest/nest-simulator/archive/v${VERSION}.tar.gz
   fi
