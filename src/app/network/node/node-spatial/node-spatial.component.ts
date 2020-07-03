@@ -4,7 +4,7 @@ import { NetworkConfigService } from '../../network-config/network-config.servic
 import { PositionService } from '../../services/position.service';
 
 import { AppNode } from '../../../classes/appNode';
-import { SimCollection } from '../../../classes/simCollection';
+import { SimNode } from '../../../classes/simNode';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { SimCollection } from '../../../classes/simCollection';
 })
 export class NodeSpatialComponent implements OnInit {
   @Input() node: AppNode;
-  @Input() collection: SimCollection;
+  @Input() collection: SimNode;
   @Output() nodeChange: EventEmitter<any> = new EventEmitter();
   @Output() collectionChange: EventEmitter<any> = new EventEmitter();
   public data: any[] = [];

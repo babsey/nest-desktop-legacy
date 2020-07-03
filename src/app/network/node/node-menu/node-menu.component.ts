@@ -9,7 +9,7 @@ import { SimulationEventService } from '../../../simulation/services/simulation-
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
-import { SimCollection } from '../../../classes/simCollection';
+import { SimNode } from '../../../classes/simNode';
 
 
 @Component({
@@ -23,8 +23,8 @@ export class NodeMenuComponent implements OnInit, OnChanges {
   @Input() disabled: boolean = false;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
   @Output() nodeChange: EventEmitter<any> = new EventEmitter();
-  public collection: SimCollection;
-  public collections: SimCollection[];
+  public collection: SimNode;
+  public collections: SimNode[];
   public colors: string[];
   public configModel: any;
   public linkedNode: AppNode;
@@ -58,8 +58,8 @@ export class NodeMenuComponent implements OnInit, OnChanges {
     this.model = this.collection.model;
     var models = this._modelService.list(this.collection.element_type);
     this.models = models.map(model => { return { value: model, label: this._modelService.config(model).label } });
-    var simModel = this.data.simulation.models[this.model];
-    this.configModel = this._modelService.config(simModel.existing);
+    var model = this.data.simulation.getModel(this.collection)
+    this.configModel = this._modelService.config(model);
     this.isRecorder = this.data.simulation.collections[this.node.idx].element_type == 'recorder';
   }
 
@@ -74,11 +74,10 @@ export class NodeMenuComponent implements OnInit, OnChanges {
   }
 
   setLevel(level: number): void {
-    var model = this.data.app.models[this.model];
-    model.display = [];
+    this.node.display = [];
     this.configModel.params.map(param => {
       if (param.level <= level) {
-        model.display.push(param.id)
+        this.node.display.push(param.id)
       }
     })
     this.updateParams()
@@ -87,36 +86,31 @@ export class NodeMenuComponent implements OnInit, OnChanges {
   }
 
   updateParams(): void {
-    var simModel = this.data.simulation.models[this.model];
     this.configModel.params.forEach(param => {
-      if (!(param.id in simModel.params)) {
-        simModel.params[param.id] = param.value;
+      if (!(param.id in this.collection.params)) {
+        this.collection.params[param.id] = param.value;
       }
     })
     this.updateRecordFrom()
   }
 
   updateRecordFrom(): void {
-    if (!this.data.simulation.models.hasOwnProperty(this.model)) return
-    var model = this.data.simulation.models[this.model];
-    if (model.existing != 'multimeter') return
+    var model = this.data.simulation.getModel(this.collection);
+    if (model != 'multimeter') return
     let recordedNeurons = this.data.simulation.connectomes.filter(connectome => connectome.source == this.node.idx)
     if (recordedNeurons.length > 0) {
-      var collections = this.data.simulation.collections;
-      let recordedNeuron = collections[recordedNeurons[0]['target']];
-      var recordables = this._modelService.config(this.data.simulation.models[recordedNeuron.model].existing).recordables || [];
-      if (!model.params.hasOwnProperty('record_from')) {
-        model.params['record_from'] = recordables.includes('V_m') ? ['V_m'] : [];;
+      let recordedNeuron = this.data.simulation.collections[recordedNeurons[0]['target']];
+      let recordedModel = this.data.simulation.getModel(recordedNeuron);
+      var recordables = this._modelService.config(recordedModel).recordables || [];
+      if (!this.node.params.hasOwnProperty('record_from')) {
+        this.node.params['record_from'] = recordables.includes('V_m') ? ['V_m'] : [];
       }
     }
   }
 
   resetParameters(): void {
-    var simModel = this.data.simulation.models[this.model];
-    simModel.params = {};
-    this.configModel.params.forEach(param => {
-      simModel.params[param.id] = param.value
-    })
+    this.collection.params = {};
+    this.configModel.params.forEach(param => this.collection.params[param.id] = param.value)
     this.dataChange.emit(this.data)
   }
 

@@ -6,7 +6,7 @@
   [fillColor]="node.hasOwnProperty('color') ? 'white' : fillColor()"
   [elementType]="collection.element_type"
   [idx]="node.idx"
-  [label]="label()"
+  [label]="node.label"
   [selected]="selected == node"
   [spatial]="collection.isSpatial()"
   [attr.transform]="'translate('+ node.position['x'] + ',' + node.position['y'] + ')'"

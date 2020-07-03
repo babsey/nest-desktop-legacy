@@ -14,7 +14,7 @@
           <span class="flex">
             <span class="ellipsis">{{ param.label | capitalize }}</span>
             <span class="flex-spacer"></span>
-            <span class="ellipsis">{{ _formatService.format(model.params[param.id] || param.value) }}</span>
+            <span class="ellipsis">{{ _formatService.format(node.params[param.id] || param.value) }}</span>
             <span class="unit">{{ param.unit }}</span>
           </span>
         </mat-list-item>

@@ -9,9 +9,9 @@ import { NetworkService } from '../../services/network.service';
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
-import { AppLink } from '../../../classes/appLink';
-import { SimCollection } from '../../../classes/simCollection';
-import { SimConnectome } from '../../../classes/simConnectome';
+import { AppConnection } from '../../../classes/appConnection';
+import { SimNode } from '../../../classes/simNode';
+import { SimConnection } from '../../../classes/simConnection';
 
 
 @Component({
@@ -21,10 +21,10 @@ import { SimConnectome } from '../../../classes/simConnectome';
 })
 export class LinkListComponent implements OnInit {
   @Input() data: Data;
-  @Input() link: AppLink;
+  @Input() link: AppConnection;
   @Input() selective: boolean = false;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
-  public connectome: SimConnectome;
+  public connectome: SimConnection;
 
   constructor(
     private _appConfigService: AppConfigService,
@@ -48,7 +48,7 @@ export class LinkListComponent implements OnInit {
     return this._colorService.node(this.connectome[src]);
   }
 
-  collection(idx: number): SimCollection {
+  collection(idx: number): SimNode {
     return this.data.simulation.collections[idx];
   }
 

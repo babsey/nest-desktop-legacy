@@ -24,10 +24,10 @@
         <g app-node-shape
           (click)="selectNode(node)"
           [strokeColor]="color()"
-          [elementType]="collection().element_type"
+          [elementType]="simNode().element_type"
           [idx]="node.idx"
-          [label]="label()"
-          [spatial]="collection().isSpatial()"
+          [label]="node.label"
+          [spatial]="simNode().isSpatial()"
           transform="translate(32,32)"
           radius="20"
           strokeWidth="4"
@@ -38,7 +38,7 @@
 
     <mat-select
         (selectionChange)="selectModel($event)"
-        [(ngModel)]="simModel().existing"
+        [(ngModel)]="simNode().model"
         [disabled]="disabled"
       >
       <ng-container *ngFor="let model of models">

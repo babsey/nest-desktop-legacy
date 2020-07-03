@@ -13,7 +13,7 @@ import { NetworkClearDialogComponent } from '../network-clear-dialog/network-cle
 
 import { Data } from '../../classes/data';
 import { AppNode } from '../../classes/appNode';
-import { AppLink } from '../../classes/appLink';
+import { AppConnection } from '../../classes/appConnection';
 
 
 @Component({
@@ -65,7 +65,7 @@ export class NetworkSketchComponent implements OnInit {
     return this._networkService.selected.node;
   }
 
-  selectedLink(): AppLink {
+  selectedLink(): AppConnection {
     return this._networkService.selected.link;
   }
 
@@ -105,7 +105,7 @@ export class NetworkSketchComponent implements OnInit {
     });
   }
 
-  colorLink(link: AppLink): string {
+  colorLink(link: AppConnection): string {
     var connectome = this.data.simulation.connectomes[link.idx];
     return this._colorService.node(connectome.source);
   }
@@ -137,7 +137,7 @@ export class NetworkSketchComponent implements OnInit {
     }
   }
 
-  onLinkEnter(event: MouseEvent, link: AppLink): void {
+  onLinkEnter(event: MouseEvent, link: AppConnection): void {
     this._networkSketchService.focused.node = null;
     this._networkSketchService.focused.link = link;
   }
@@ -150,7 +150,7 @@ export class NetworkSketchComponent implements OnInit {
     this._networkSketchService.reset();
   }
 
-  onContextMenu(event: MouseEvent, node: AppNode, link: AppLink): void {
+  onContextMenu(event: MouseEvent, node: AppNode, link: AppConnection): void {
     if (!this.eventTrigger) return
     event.preventDefault();
     this._networkService.resetSelection();

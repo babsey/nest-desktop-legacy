@@ -63,7 +63,8 @@ export class SimulationService {
           'spatial-neurons',
           'spike-activity',
           'spike-input',
-          'current-input',
+          // 'current-input',
+          'current-input-v2',
         ];
         return this.fromFiles(files)
       } else {
@@ -82,7 +83,6 @@ export class SimulationService {
       simulations.map(d => {
         d['version'] = environment.VERSION;
         let simulation = new Data(d);
-        simulation.cleanModels();
         simulations.push(simulation);
         this._dbService.db.create(this.db, simulation)
       })

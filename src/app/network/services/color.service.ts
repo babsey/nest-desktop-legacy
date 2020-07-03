@@ -4,7 +4,7 @@ import { NetworkConfigService } from '../network-config/network-config.service';
 import { SimulationService } from '../../simulation/services/simulation.service';
 
 import { AppNode } from '../../classes/appNode';
-import { SimConnectome } from '../../classes/simConnectome';
+import { SimConnection } from '../../classes/simConnection';
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +44,7 @@ export class ColorService {
     }
   }
 
-  connectome(connectome: SimConnectome): string {
+  connectome(connectome: SimConnection): string {
     return this.weight(connectome.syn_spec['weight'] || 1);
   }
 

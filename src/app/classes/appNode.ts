@@ -3,6 +3,7 @@ import { Data } from './data';
 
 export class AppNode {
   idx: number;
+  label: string;
   position: any;
   display: string[];
   params: any;
@@ -23,6 +24,7 @@ export class AppNode {
 
   clean(data: Data): void {
     this.global_ids = undefined;
+    this.setLabel(this.idx);
     this.cleanRecColor(data)
   }
 
@@ -38,5 +40,11 @@ export class AppNode {
     } else {
       this.color = undefined;
     }
+  }
+
+  setLabel(idx: number): void {
+    // if (this.label) return
+    var abc = 'abcdefghijklmnopqrstuvwxyz123456789';
+    this.label = abc[idx];
   }
 }

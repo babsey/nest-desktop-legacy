@@ -12,9 +12,9 @@ import { NetworkService } from '../../services/network.service';
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
-import { AppLink } from '../../../classes/appLink';
-import { SimCollection } from '../../../classes/simCollection';
-import { SimConnectome } from '../../../classes/simConnectome';
+import { AppConnection } from '../../../classes/appConnection';
+import { SimNode } from '../../../classes/simNode';
+import { SimConnection } from '../../../classes/simConnection';
 
 
 @Component({
@@ -24,10 +24,10 @@ import { SimConnectome } from '../../../classes/simConnectome';
 })
 export class LinkToolbarComponent implements OnInit {
   @Input() data: Data;
-  @Input() link: AppLink;
+  @Input() link: AppConnection;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
   @Output() nodeClick: EventEmitter<any> = new EventEmitter();
-  public connectome: SimConnectome;
+  public connectome: SimConnection;
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -55,10 +55,10 @@ export class LinkToolbarComponent implements OnInit {
   }
 
   label(idx: number): string {
-    return this.collection(idx).model.split('-')[1]
+    return this.collection(idx).label
   }
 
-  collection(idx: number): SimCollection {
+  collection(idx: number): SimNode {
     return this.data.simulation.collections[idx];
   }
 

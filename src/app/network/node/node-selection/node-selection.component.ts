@@ -11,7 +11,7 @@ import { NetworkService } from '../../services/network.service';
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
-import { SimCollection } from '../../../classes/simCollection';
+import { SimNode } from '../../../classes/simNode';
 import { SimModel } from '../../../classes/simModel';
 
 
@@ -26,10 +26,9 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
   @Input() selection: boolean = false;
   @Output() nodeChange: EventEmitter<any> = new EventEmitter();
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
-  public collection: SimCollection;
+  public collection: SimNode;
   public configModel: any = {};
   public linkedNode: AppNode;
-  public model: SimModel;
   public models: any[] = [];
   public options: any = {};
 
@@ -59,11 +58,11 @@ export class NodeSelectionComponent implements OnInit, OnChanges {
   update(): void {
     if (this.node == undefined) return
     this.collection = this.data.simulation.collections[this.node.idx];
-    this.model = this.data.simulation.models[this.collection.model];
-    this.configModel = this._modelService.config(this.model.existing);
+    var model = this.data.simulation.getModel(this.collection);
+    this.configModel = this._modelService.config(model);
     this.configModel.params.forEach(param => {
-      if (!(param.id in this.model.params)) {
-        this.model.params[param.id] = param.value;
+      if (!(param.id in this.collection.params)) {
+        this.collection.params[param.id] = param.value;
       }
     })
     var models = this._modelService.list(this.collection.element_type);

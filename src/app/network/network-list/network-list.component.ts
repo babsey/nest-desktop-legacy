@@ -4,7 +4,7 @@ import { NetworkService } from '../services/network.service';
 
 import { Data } from '../../classes/data';
 import { AppNode } from '../../classes/appNode';
-import { AppLink } from '../../classes/appLink';
+import { AppConnection } from '../../classes/appConnection';
 
 import { listAnimation } from '../../animations/list-animation';
 
@@ -36,7 +36,7 @@ export class NetworkListComponent implements OnInit {
     return this._networkService.isNodeSelected(node, this.data) || !this.selective;
   }
 
-  linkDisplay(link: AppLink): boolean {
+  linkDisplay(link: AppConnection): boolean {
     return this._networkService.isLinkSelected(link, this.data) || !this.selective;
   }
 

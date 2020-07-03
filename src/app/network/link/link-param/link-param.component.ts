@@ -6,7 +6,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { ModelConfigDialogComponent } from '../../../model/model-config-dialog/model-config-dialog.component';
 import { AppService } from '../../../app.service';
 
-import { AppLink } from '../../../classes/appLink';
+import { AppConnection } from '../../../classes/appConnection';
 
 
 @Component({
@@ -15,7 +15,7 @@ import { AppLink } from '../../../classes/appLink';
   styleUrls: ['./link-param.component.scss']
 })
 export class LinkParamComponent implements OnInit {
-  @Input() link: AppLink;
+  @Input() link: AppConnection;
   @Input() random: boolean = true;
   @Input() options: any;
   @Input() value: any;

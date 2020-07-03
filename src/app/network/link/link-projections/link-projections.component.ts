@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { NetworkConfigService } from '../../network-config/network-config.service';
 
-import { AppLink } from '../../../classes/appLink';
-import { SimConnectome } from '../../../classes/simConnectome';
+import { AppConnection } from '../../../classes/appConnection';
+import { SimConnection } from '../../../classes/simConnection';
 
 
 @Component({
@@ -12,8 +12,8 @@ import { SimConnectome } from '../../../classes/simConnectome';
   styleUrls: ['./link-projections.component.scss']
 })
 export class LinkProjectionsComponent implements OnInit {
-  @Input() link: AppLink;
-  @Input() connectome: SimConnectome;
+  @Input() link: AppConnection;
+  @Input() connectome: SimConnection;
   @Output() connectomeChange: EventEmitter<any> = new EventEmitter();
   public config: any;
 

@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 
 import { AppData } from './appData';
 import { AppNode } from './appNode';
-import { AppLink } from './appLink';
+import { AppConnection } from './appConnection';
 import { SimData } from './simData';
 import { SimModel } from './simModel';
 
@@ -55,11 +55,11 @@ export class Data {
   }
 
   createNode(elementType: string, point: number[]): void {
-    var newName = elementType + '-' + this.label(this.simulation.collections.length);
-    this.app.addModel(newName);
+    // var newName = elementType + '-' + this.label(this.simulation.collections.length);
+    // this.app.addModel(newName);
+    // this.simulation.addModel(newName, elementType);
     this.app.addNode(point);
-    this.simulation.addModel(newName, elementType);
-    this.simulation.addCollection(newName, elementType);
+    this.simulation.addCollection(elementType);
     this.clean();
   }
 
@@ -93,7 +93,7 @@ export class Data {
     }
   }
 
-  deleteLink(link: AppLink): void {
+  deleteLink(link: AppConnection): void {
     this.app.links = this.app.links.filter(l => l.idx != link.idx);
     this.simulation.connectomes = this.simulation.connectomes.filter((connectome, idx) => idx != link.idx);
     this.app.links.forEach((l, idx) => l.idx = idx)
@@ -103,32 +103,12 @@ export class Data {
   clean(): void {
     this.app.clean(this);
     this.simulation.clean(this);
-    this.cleanModels();
     this.updateHash();
     this.version = environment.VERSION;
   }
 
   updateHash(): void {
     this.hash = objectHash(this.simulation);
-  }
-
-  cleanModels(): void {
-    var simModels = this.simulation.models;
-    var appModels = this.app.models;
-    this.simulation.models = {};
-    this.app.models = {};
-    this.app.nodes.forEach(node => {
-      var collection = this.simulation.collections[node.idx];
-      var newName = collection.element_type + '-' + this.label(node.idx);
-      this.simulation.models[newName] = simModels[collection.model];
-      this.app.models[newName] = appModels[collection.model];
-      collection['model'] = newName;
-    })
-  }
-
-  label(idx: number): string {
-    var abc = 'abcdefghijklmnopqrstuvwxyz123456789';
-    return abc[idx];
   }
 
 }

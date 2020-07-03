@@ -37,14 +37,14 @@
 
   <mat-selection-list dense
     (click)="dataChange.emit(data)"
-    [(ngModel)]="data.app.models[collection.model].display"
+    [(ngModel)]="node.display"
     >
     <ng-container *ngFor="let param of configModel.params">
       <mat-list-option [value]="param.id" [title]="param.id">
         <span class="flex">
           <span class="ellipsis">{{ param.label | capitalize }}</span>
           <span class="flex-spacer"></span>
-          <span class="value">{{ model.params[param.id] }}</span>
+          <span class="value">{{ collection.params[param.id] }}</span>
           <span class="unit">{{ param.unit }}</span>
         </span>
       </mat-list-option>

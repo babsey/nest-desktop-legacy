@@ -99,9 +99,8 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
 
       const recorder = this.data.simulation.collections[record.recorder.idx];
       if (recorder) {
-        var model = this.data.simulation.models[recorder.model].existing;
         record['layout'] = {
-          'label': model.split('-')[1],
+          'label': recorder.label,
           'color': this._colorService.node(record.recorder.idx),
         }
       }
@@ -126,10 +125,10 @@ export class SimulationPlaygroundComponent implements OnInit, OnDestroy {
         connectome => this.data.simulation.collections[connectome.target]);
     if (key) {
       return collections.filter(
-        collection => this.data.app.models[collection.model].display.includes(key)).map(
-          collection => this.data.simulation.models[collection.model].params[key]);
+        (collection, idx) => this.data.app.nodes[idx].display.includes(key)).map(
+          collection => collection.params[key]);
     }
-    return collections.map(collection => this.data.simulation.models[collection.model].params);
+    return collections.map(collection => collection.params);
   }
 
 }

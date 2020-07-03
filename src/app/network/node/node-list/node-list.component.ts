@@ -8,7 +8,7 @@ import { NetworkService } from '../../services/network.service';
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
-import { SimCollection } from '../../../classes/simCollection';
+import { SimNode } from '../../../classes/simNode';
 import { SimModel } from '../../../classes/simModel';
 
 import { listAnimation } from '../../../animations/list-animation';
@@ -26,8 +26,7 @@ export class NodeListComponent implements OnInit, OnChanges {
   @Input() data: Data;
   @Input() node: AppNode;
   @Input() selective: boolean = false;
-  public collection: SimCollection;
-  public model: SimModel;
+  public collection: SimNode;
   public modelConfig: any = {};
 
   constructor(
@@ -55,14 +54,12 @@ export class NodeListComponent implements OnInit, OnChanges {
   update(): void {
     if (this.node == undefined) return
     this.collection = this.data.simulation.collections[this.node.idx];
-    this.model = this.data.simulation.models[this.collection.model];
-    this.modelConfig = this._modelService.config(this.model.existing);
+    const model = this.data.simulation.getModel(this.collection);
+    this.modelConfig = this._modelService.config(model);
   }
 
   paramDisplay(param: string): boolean {
-    var model = this.data.app.models[this.collection.model];
-    if (!model) return
-    return model.hasOwnProperty('display') ? model.display.includes(param) || !this.selective: true;
+    return this.node.hasOwnProperty('display') ? this.node.display.includes(param) || !this.selective: true;
   }
 
   isSelected(): boolean {

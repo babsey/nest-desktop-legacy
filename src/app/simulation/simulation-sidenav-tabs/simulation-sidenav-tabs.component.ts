@@ -36,6 +36,9 @@ export class SimulationSidenavTabsComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (['stats'].includes(this._simulationService.sidenavMode)) {
+      this._simulationService.sidenavMode = 'networkController'
+    }
   }
 
   selectControllerMode(mode: string): void {

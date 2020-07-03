@@ -8,7 +8,7 @@ import { NetworkConfigService } from '../../network-config/network-config.servic
 import { NetworkSketchService } from '../../network-sketch/network-sketch.service';
 
 import { Data } from '../../../classes/data';
-import { AppLink } from '../../../classes/appLink';
+import { AppConnection } from '../../../classes/appConnection';
 
 
 @Component({
@@ -18,10 +18,10 @@ import { AppLink } from '../../../classes/appLink';
 })
 export class LinkSketchComponent implements OnInit {
   @Input() data: Data;
-  @Input() link: AppLink;
+  @Input() link: AppConnection;
   @Input() width: number;
   @Input() height: number;
-  @Input() selected: AppLink;
+  @Input() selected: AppConnection;
   @Input() color: string;
   private selector: any;
   private drag_line: any;

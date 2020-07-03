@@ -49,9 +49,8 @@ export class SimulationStatsComponent implements OnInit {
     this.selectedModel = record.recorder.model;
     if (this.selectedModel == 'multimeter') {
       var collection = this.data.simulation.collections[record.recorder.idx];
-      var model = this.data.simulation.models[collection.model];
-      if (model['params'].hasOwnProperty('record_from')) {
-        this.recordFrom = model['params'].record_from;
+      if (collection.params.hasOwnProperty('record_from')) {
+        this.recordFrom = collection.params.record_from;
         if (this.recordFrom.indexOf('V_m') == -1) {
           this.selectedRecord = this.recordFrom[0];
         }

@@ -1,7 +1,7 @@
 import { Data } from './data';
 
 
-export class SimConnectome {
+export class SimConnection {
   source: number;
   target: number;
   src_idx?: number[];
@@ -24,7 +24,7 @@ export class SimConnectome {
 
   clean(data: Data): void {
     this.cleanSpecs()
-    this.cleanConnectome(data)
+    this.cleanConnection(data)
     this.cleanOrderConnectionRecorder(data)
   }
 
@@ -46,7 +46,7 @@ export class SimConnectome {
     }
   }
 
-  cleanConnectome(data: Data): void {
+  cleanConnection(data: Data): void {
     if (this.isBothSpatial(data) && !this.hasProjections()) {
       var projections = {
         weights: this.syn_spec.hasOwnProperty('weight') ? this.syn_spec.weight : 1,
@@ -86,8 +86,8 @@ export class SimConnectome {
     if (this.source == this.target) return false
     var source = data.simulation.collections[this.source];
     var target = data.simulation.collections[this.target];
-    var sourceModel = data.simulation.models[source.model].existing;
-    var targetModel = data.simulation.models[target.model].existing;
+    var sourceModel = data.simulation.getModel(source);
+    var targetModel = data.simulation.getModel(target);
     if (sourceModel == 'spike_detector' || ['voltmeter', 'multimeter'].includes(targetModel)) {
       this.target = [this.source, this.source = this.target][0];
       return true;

@@ -9,9 +9,9 @@ import { NetworkSketchService } from '../../network-sketch/network-sketch.servic
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
-import { AppLink } from '../../../classes/appLink';
-import { SimCollection } from '../../../classes/simCollection';
-import { SimConnectome } from '../../../classes/simConnectome';
+import { AppConnection } from '../../../classes/appConnection';
+import { SimNode } from '../../../classes/simNode';
+import { SimConnection } from '../../../classes/simConnection';
 
 
 @Component({
@@ -21,11 +21,11 @@ import { SimConnectome } from '../../../classes/simConnectome';
 })
 export class LinkControllerComponent implements OnInit, OnChanges {
   @Input() data: Data;
-  @Input() link: AppLink;
+  @Input() link: AppConnection;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
-  public collections: SimCollection[];
-  public connectomes: SimConnectome[];
-  public connectome: SimConnectome;
+  public collections: SimNode[];
+  public connectomes: SimConnection[];
+  public connectome: SimConnection;
   public connOptions: any[] = [];
   public connRules: any[] = [];
   public options: any;
@@ -95,16 +95,15 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   }
 
   connectRecorder(): boolean {
-    var source = this.collections[this.connectome.source];
-    var target = this.collections[this.connectome.target];
+    const source = this.collections[this.connectome.source];
+    const target = this.collections[this.connectome.target];
     return source.element_type == 'recorder' || target.element_type == 'recorder';
   }
 
   connectSpikeDetector(): boolean {
-    var target = this.collections[this.connectome.target];
-    var model = this.data.simulation.models[target.model];
-    if (model == undefined) return;
-    return model.existing == 'spike_detector';
+    const target = this.collections[this.connectome.target];
+    const model = this.data.simulation.getModel(target);
+    return model == 'spike_detector';
   }
 
   linkDisplay(): string {
@@ -112,7 +111,8 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   }
 
   paramDisplay(param: string): boolean {
-    return true; //this.link.hasOwnProperty('display') ? this.link.display.includes(param) : true;
+    return true;
+    // return this.link.hasOwnProperty('display') ? this.link.display.includes(param) : true;
   }
 
   onValueChange(value: any): void {
@@ -142,7 +142,7 @@ export class LinkControllerComponent implements OnInit, OnChanges {
     this.dataChange.emit(this.data)
   }
 
-  onConnectomeChange(connectome: SimConnectome): void {
+  onConnectomeChange(connectome: SimConnection): void {
     this.dataChange.emit(this.data)
   }
 

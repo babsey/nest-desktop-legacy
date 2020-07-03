@@ -68,16 +68,14 @@ export class SimulationRunService {
     var clonedData = data.clone();
     data.app.nodes.map(node => {
       var collection = clonedData.simulation.collections[node.idx];
-      var simModel = clonedData.simulation.models[collection.model];
       if (node.hasOwnProperty('params')) {
         Object.keys(node.params).map(paramKey => {
           var param = node.params[paramKey];
           if (param.hasOwnProperty('factors')) {
             param.factors.map(factor => {
               var fac = data.app.factors.find(f => f.id == factor);
-
-              if (fac && simModel.params.hasOwnProperty(paramKey)) {
-                simModel.params[paramKey] = simModel.params[paramKey] * fac.value;
+              if (fac && collection.params.hasOwnProperty(paramKey)) {
+                collection.params[paramKey] = collection.params[paramKey] * fac.value;
               }
             })
           }

@@ -1,4 +1,4 @@
-export class AppLink {
+export class AppConnection {
   idx: number;
   display?: string[];
   params?: any;

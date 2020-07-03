@@ -5,9 +5,9 @@ import { NetworkService } from '../services/network.service';
 
 import { Data } from '../../classes/data';
 import { AppNode } from '../../classes/appNode';
-import { AppLink } from '../../classes/appLink';
-import { SimCollection } from '../../classes/simCollection';
-import { SimConnectome } from '../../classes/simConnectome';
+import { AppConnection } from '../../classes/appConnection';
+import { SimNode } from '../../classes/simNode';
+import { SimConnection } from '../../classes/simConnection';
 
 
 @Component({
@@ -31,11 +31,11 @@ export class NetworkControllerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  collection(idx: number): SimCollection {
+  collection(idx: number): SimNode {
     return this.data.simulation.collections[idx];
   }
 
-  connectome(idx: number): SimConnectome {
+  connectome(idx: number): SimConnection {
     return this.data.simulation.connectomes[idx];
   }
 
@@ -43,7 +43,7 @@ export class NetworkControllerComponent implements OnInit {
     return this._networkService.elementType == null || this._networkService.elementType == elementType;
   }
 
-  isSelectedSource(link: AppLink): boolean {
+  isSelectedSource(link: AppConnection): boolean {
     var connectome = this.data.simulation.connectomes[link.idx];
     var collection = this.data.simulation.collections[connectome.source];
     return this.isSelected(collection.element_type)

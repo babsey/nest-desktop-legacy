@@ -5,10 +5,10 @@ import { NetworkConfigService } from '../network-config/network-config.service';
 
 import { Data } from '../../classes/data';
 import { AppNode } from '../../classes/appNode';
-import { AppLink } from '../../classes/appLink';
+import { AppConnection } from '../../classes/appConnection';
 import { Record } from '../../classes/record';
-import { SimCollection } from '../../classes/simCollection';
-import { SimConnectome } from '../../classes/simConnectome';
+import { SimNode } from '../../classes/simNode';
+import { SimConnection } from '../../classes/simConnection';
 
 
 @Injectable({
@@ -44,7 +44,7 @@ export class NetworkService {
     return unselected;
   }
 
-  isLinkSelected(link: AppLink, data: Data, unselected: boolean = true): boolean {
+  isLinkSelected(link: AppConnection, data: Data, unselected: boolean = true): boolean {
     if (this.selected.link) {
       return this.selected.link == link;
     } else if (this.selected.node) {
@@ -61,7 +61,7 @@ export class NetworkService {
     this.selected.link = null;
   }
 
-  selectLink(link: AppLink): void {
+  selectLink(link: AppConnection): void {
     this.elementType = null;
     this.selected.node = null;
     this.selected.link = this.selected.link == link ? null : link;

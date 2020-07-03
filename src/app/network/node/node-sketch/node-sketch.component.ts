@@ -9,9 +9,9 @@ import { NetworkSketchService } from '../../network-sketch/network-sketch.servic
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
-import { AppLink } from '../../../classes/appLink';
-import { SimCollection } from '../../../classes/simCollection';
-import { SimConnectome } from '../../../classes/simConnectome';
+import { AppConnection } from '../../../classes/appConnection';
+import { SimNode } from '../../../classes/simNode';
+import { SimConnection } from '../../../classes/simConnection';
 
 
 @Component({
@@ -29,7 +29,7 @@ export class NodeSketchComponent implements OnInit {
   @Input() width: number;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
   private selector: any;
-  public collection: SimCollection;
+  public collection: SimNode;
 
   constructor(
     private _colorService: ColorService,
@@ -49,10 +49,6 @@ export class NodeSketchComponent implements OnInit {
       node.call(this.dragHandler());
     }
     this.collection = this.data.simulation.collections[this.node.idx];
-  }
-
-  label(): string {
-    return this.collection.model.split('-')[1]
   }
 
   radius(): number {

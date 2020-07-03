@@ -10,9 +10,9 @@ import { NetworkService } from '../../services/network.service';
 
 import { Data } from '../../../classes/data';
 import { AppNode } from '../../../classes/appNode';
-import { AppLink } from '../../../classes/appLink';
-import { SimCollection } from '../../../classes/simCollection';
-import { SimConnectome } from '../../../classes/simConnectome';
+import { AppConnection } from '../../../classes/appConnection';
+import { SimNode } from '../../../classes/simNode';
+import { SimConnection } from '../../../classes/simConnection';
 
 
 @Component({
@@ -22,11 +22,11 @@ import { SimConnectome } from '../../../classes/simConnectome';
 })
 export class LinkSelectionComponent implements OnInit, OnChanges {
   @Input() data: Data;
-  @Input() link: AppLink;
+  @Input() link: AppConnection;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
   public connOptions: any[] = [];
   public connRules: any[] = [];
-  public connectome: SimConnectome;
+  public connectome: SimConnection;
   public options: any;
   public slider: any = {};
   public synModel: any;
@@ -75,7 +75,7 @@ export class LinkSelectionComponent implements OnInit, OnChanges {
     }
   }
 
-  collection(idx: number): SimCollection {
+  collection(idx: number): SimNode {
     return this.data.simulation.collections[idx];
   }
 

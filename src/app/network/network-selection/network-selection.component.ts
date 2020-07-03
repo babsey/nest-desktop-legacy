@@ -3,9 +3,9 @@ import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angu
 import { NetworkService } from '../services/network.service';
 
 import { AppNode } from '../../classes/appNode';
-import { AppLink } from '../../classes/appLink';
+import { AppConnection } from '../../classes/appConnection';
 import { Data } from '../../classes/data';
-import { SimCollection } from '../../classes/simCollection';
+import { SimNode } from '../../classes/simNode';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
     // console.log('Change network selection')
   }
 
-  collection(idx: number): SimCollection {
+  collection(idx: number): SimNode {
     return this.data.simulation.collections[idx];
   }
 
@@ -38,7 +38,7 @@ export class NetworkSelectionComponent implements OnInit, OnChanges {
     return this._networkService.elementType == null || this._networkService.elementType == elementType;
   }
 
-  isSelectedSource(link: AppLink): boolean {
+  isSelectedSource(link: AppConnection): boolean {
     var connectome = this.data.simulation.connectomes[link.idx];
     var collection = this.data.simulation.collections[connectome.source];
     return this.isSelected(collection.element_type)

@@ -1,7 +1,7 @@
 <div class="controller node-controller"
   [style.border-color]="color()"
   [style.display]="nodeDisplay()"
-  *ngIf="simModel"
+  *ngIf="collection"
   >
 
   <app-node-toolbar
@@ -43,12 +43,12 @@
   <mat-list dense>
     <ng-container *ngIf="!linkedNode">
       <ng-container *ngFor="let param of configModel.params">
-        <mat-list-item [style.display]="paramDisplay(collection.model, param.id) ? '' : 'None'" >
+        <mat-list-item [style.display]="paramDisplay(param.id) ? '' : 'None'" >
           <app-model-param
             (paramHide)="onParamHide($event)"
             (valueChange)="onValueChange($event)"
-            [(value)]="simModel.params[param.id]"
-            [model]="simModel.existing"
+            [(value)]="collection.params[param.id]"
+            [model]="collection.model"
             [options]="param"
             [view]="param.input"
           ></app-model-param>
@@ -58,7 +58,7 @@
   </mat-list>
 
   <mat-list dense>
-    <mat-list-item [style.display]="simModel.existing == 'multimeter' ? '' : 'None'" >
+    <mat-list-item [style.display]="model == 'multimeter' ? '' : 'None'" >
       <mat-form-field style="width:100%">
         <mat-label>Record from</mat-label>
         <mat-select multiple [(ngModel)]="collection.params.record_from" (selectionChange)="onRecordChange($event)">

@@ -1,26 +1,20 @@
 import { Data } from './data';
-import { AppModel } from './appModel';
 import { AppNode } from './appNode';
-import { AppLink } from './appLink';
+import { AppConnection } from './appConnection';
 
 export class AppData {
   kernel: any;
   models: any;
   nodes: AppNode[];
-  links: AppLink[];
+  links: AppConnection[];
   factors?: any[];
 
   constructor(
     data: any = {},
   ) {
     this.kernel = data.kernel || {};
-    this.models = data.models || {};
     this.nodes = data.nodes ? data.nodes.map(d => new AppNode(d)) : [];
-    this.links = data.links ? data.links.map(d => new AppLink(d)) : [];
-  }
-
-  addModel(name: string): void {
-    this.models[name] = new AppModel();
+    this.links = data.links ? data.links.map(d => new AppConnection(d)) : [];
   }
 
   addNode(point: number[]): void {
@@ -31,7 +25,7 @@ export class AppData {
   }
 
   addLinks(): void {
-    this.links.push(new AppLink({
+    this.links.push(new AppConnection({
       idx: this.links.length,
     }))
   }

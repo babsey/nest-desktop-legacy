@@ -4,10 +4,9 @@ import { FormatService } from '../../services/format/format.service';
 
 import { Data } from '../../classes/data';
 import { AppNode } from '../../classes/appNode';
-import { AppModel } from '../../classes/appModel';
-import { SimCollection } from '../../classes/simCollection';
+import { SimNode } from '../../classes/simNode';
 import { SimModel } from '../../classes/simModel';
-import { SimConnectome } from '../../classes/simConnectome';
+import { SimConnection } from '../../classes/simConnection';
 
 
 @Injectable({
@@ -76,11 +75,8 @@ export class SimulationCodeService {
     return script;
   }
 
-  nodeVariable(model: string): string {
-    const modelName: string[] = model.split('-');
-    const modelPrefix: string = this.modelLabel[modelName[0]];
-    return 'node' + modelName[1].toUpperCase();
-    // return modelPrefix + modelName[1].toUpperCase();
+  nodeVariable(node: SimNode): string {
+    return 'node' + node.label.toUpperCase();
   }
 
   importModules(): string {
@@ -151,14 +147,10 @@ export class SimulationCodeService {
     return script;
   }
 
-  filterParams(idx: number, display: string[], params: any): any {
+  filterParams(display: string[], params: any): any {
     let filteredParams: any = {};
-    let simNode = this.data.simulation.collections[idx];
     if (display) {
       display.map(key => {
-        if (simNode.hasOwnProperty('params')) {
-          if (simNode.params.hasOwnProperty(key)) return
-        }
         filteredParams[key] = params[key];
       });
       if (params.hasOwnProperty('record_from')) {
@@ -170,22 +162,25 @@ export class SimulationCodeService {
 
   copyModel(idx: number): string {
     let simNode = this.data.simulation.collections[idx];
-    let model = this.data.app.models[simNode.model];
+    if (!this.data.simulation.models.hasOwnProperty(simNode.model)) return ''
     let simModel = this.data.simulation.models[simNode.model];
     let script: string = '';
     script += 'nest.CopyModel("' + simModel.existing + '", "' + simNode.model + '"';
     if (simModel.hasOwnProperty('params')) {
-      script += this.params(this.filterParams(idx, model.display, simModel.params));
+      script += this.params(simModel.params);
     }
     script += ')';
     return script + '\n';
   }
 
   createNode(idx: number): string {
+    let appNode = this.data.app.nodes[idx];
     let simNode = this.data.simulation.collections[idx];
     let script: string = '';
-    script += this.nodeVariable(simNode.model) + ' = nest.Create("' + simNode.model + '", ' + simNode.n;
-    script += this.params(simNode.params);
+    script += this.nodeVariable(simNode) + ' = nest.Create("' + simNode.model + '", ' + simNode.n;
+    if (simNode.hasOwnProperty('params')) {
+      script += this.params(this.filterParams(appNode.display, simNode.params));
+    }
     script += ')';
     return script + '\n';
   }
@@ -198,7 +193,7 @@ export class SimulationCodeService {
       target = [source, source = target][0];
     }
     let script: string = '';
-    script += 'nest.Connect(' + this.nodeVariable(source.model) + ', ' + this.nodeVariable(target.model);
+    script += 'nest.Connect(' + this.nodeVariable(source) + ', ' + this.nodeVariable(target);
     if (simLink.conn_spec) {
       if (simLink.conn_spec.rule != 'all_to_all') {
         const connSpecList: string[] = [this._() + '"rule":"' + simLink.conn_spec.rule + '"'];
@@ -241,13 +236,13 @@ export class SimulationCodeService {
 
   getRecord(idx: number): string {
     const simNode = this.data.simulation.collections[idx];
-    const simModel = this.data.simulation.models[simNode.model];
+    const model = this.data.simulation.getModel(simNode);
 
-    const nodeVars = this.nodeVariable(simNode.model);
+    const nodeVars = this.nodeVariable(simNode);
     let script: string = '{';
     script += this._(2) + '"events": nest.GetStatus(' + nodeVars + ', "events"),';
 
-    if (simModel.existing == 'spike_detector') {
+    if (model == 'spike_detector') {
       script += this._(2) + '"global_ids": nest.GetStatus(nest.GetConnections(None, ' + nodeVars + '), "source"),'
     } else {
       script += this._(2) + '"global_ids": nest.GetStatus(nest.GetConnections(' + nodeVars + '), "target"),'
@@ -255,7 +250,7 @@ export class SimulationCodeService {
 
     script += this._(2) + '"recorder": {';
     script += this._(3) + '"idx": ' + idx + ',';
-    script += this._(3) + '"model": "' + simModel.existing + '",';
+    script += this._(3) + '"model": "' + model + '",';
     script += this._(2) + '},';
     script += this._() + '}';
     return script;

@@ -91,12 +91,8 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
     return data.map(t => t[element]).reduce((acc, value) => acc + value, 0) / data.length;
   }
 
-  onCellClicked(element): void {
-    console.log(this.times[element.id])
-  }
-
-  onRowHover(row): void {
-    console.log(row)
+  onRowClick(row): void {
+    console.log(this.times[row.id])
   }
 
 }
