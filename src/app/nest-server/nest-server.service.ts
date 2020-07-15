@@ -43,11 +43,11 @@ export class NestServerService {
   }
 
   url(): string {
-    var config = this._nestServerConfigService.config;
-    var host = config['host'] || window.location.host.split(':')[0] || 'localhost';
-    var url = (config['secure'] ? 'https://' : 'http://') + host;
+    const config: any = this._nestServerConfigService.config;
+    const host: string = config['host'] || window.location.host.split(':')[0] || 'localhost';
+    let url: string = (config['secure'] ? 'https://' : 'http://') + host;
     if (config['port']) {
-      url = url + ':' + config['port'];
+      url += ':' + config['port'];
     }
     return url;
   }
@@ -87,21 +87,29 @@ export class NestServerService {
   }
 
   seekServer(): void {
-    const protocol = window.location.protocol;
-    const hostname = window.location.hostname || 'localhost';
+    const config: any = this._nestServerConfigService.config;
+    const protocol: string = window.location.protocol;
+    const hostname: string = window.location.hostname || 'localhost';
+    const port: string = config['port'] || '5000';
     const hosts = [
       'server.' + hostname,
       hostname + '/server',
-      hostname + ':5000'
-    ]
+      hostname + ':' + port,
+    ];
     hosts.forEach(host => {
-      this.ping(protocol + '//' + host)
+      const url: string = protocol + '//' + host;
+      this.ping(url)
         .then(resp => {
-          this.updateSetting(resp)
+          config['host'] = host.split(':')[0];
+          if (host.split(':')[1]) {
+            config['port'] = host.split(':')[1];
+          }
+          config['secure'] = protocol.startsWith('https');
+          this._nestServerConfigService.save();
           this.checkVersion(resp['body'])
-        }).catch(error => { })
+        })
+        .catch(error => { })
     })
-
   }
 
   checkVersion(info): void {
@@ -120,16 +128,6 @@ export class NestServerService {
       var simulatorVersion = this.status.server['version'].split('.');
       this.status.simulator.valid = appVersion[0] == simulatorVersion[0];
     }
-  }
-
-  updateSetting(resp): void {
-    var config = this._nestServerConfigService.config;
-    var host = resp.url.split('//')[1];
-    var hostname = host.split(':')[0]
-    config['host'] = host.split(':')[0];
-    config['secure'] = resp.url.startsWith('https:');
-    config['port'] = resp.url.includes(':5000') ? '5000' : '';
-    this._nestServerConfigService.save()
   }
 
   oidcLoginFailed(resp): void {
