@@ -35,7 +35,7 @@
     "core-js": "^3.6.4",
     "d3": "^5.15.0",
     "hammerjs": "^2.0.8",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "material-community-components": "^6.0.1",
     "mathjs": "^7.0.0",
     "ngx-toastr": "^12.0.1",
