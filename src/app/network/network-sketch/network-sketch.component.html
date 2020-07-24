@@ -1,20 +1,15 @@
 <mat-menu #contextMenu="matMenu"class="context-menu">
   <ng-container *ngIf="contextMenuData.node">
     <app-node-menu
-      (dataChange)="dataChange.emit($event)"
-      (nodeChange)="nodeChange.emit($event)"
-      [(data)]="data"
       [node]="contextMenuData.node"
       class="node-menu"
     ></app-node-menu>
   </ng-container>
 
-  <ng-container *ngIf="contextMenuData.link">
+  <ng-container *ngIf="contextMenuData.connection">
     <app-link-menu
-      (dataChange)="dataChange.emit($event)"
-      [(data)]="data"
-      [link]="contextMenuData.link"
-      class="link-menu"
+      [connection]="contextMenuData.connection"
+      class="connection-menu"
     ></app-link-menu>
   </ng-container>
 </mat-menu>
@@ -26,34 +21,33 @@
 ></div>
 
 
-<span class="network-sketch-container" [style.width]="width + 'px'" [style.height]="height + 'px'">
+<span
+  class="network-sketch-container"
+  [style.width]="width + 'px'"
+  [style.height]="height + 'px'">
 
   <svg
     (mouseenter)="onSVGEnter($event)"
+    (mouseover)="onSVGOver($event)"
     (mouseleave)="onSVGLeave($event)"
     [attr.height]="(height-12) + 'px'"
     [attr.width]="(width-10) + 'px'"
     class="network-sketch">
 
     <g app-background-sketch
-      (dataChange)="onDataChange($event)"
-      [(data)]="data"
+      [network]="network"
       [eventTrigger]="eventTrigger"
       [height]="(height-12)"
       [width]="(width-10)"
       transform="translate(1,1)"
     ></g>
 
-    <ng-container *ngFor="let link of data.app.links">
+    <ng-container *ngFor="let connection of network.connections">
       <g app-link-sketch
-        (click)="onLinkClick($event)"
-        (contextmenu)="onContextMenu($event, null, link)"
-        (dataChange)="onDataChange($event)"
-        (mouseenter)="onLinkEnter($event, link)"
-        [(data)]="data"
-        [color]="colorLink(link)"
-        [link]="link"
-        [selected]="selectedLink()"
+        (click)="network.view.resetFocus()"
+        (contextmenu)="onContextMenu($event, null, connection)"
+        (mouseenter)="connection.view.focus()"
+        [connection]="connection"
         transform="translate(1,1)"
       ></g>
     </ng-container>
@@ -63,27 +57,26 @@
         class="dragline"
         d="M0,0L0,0"
         stroke-linecap="round"
+        [style.display]="_networkSketchService.viewDragline ? '' : 'none'"
         >
       </svg:path>
       <svg:path
         class="dragline mask"
         d="M0,0L0,0"
+        [style.display]="_networkSketchService.viewDragline ? '' : 'none'"
         >
       </svg:path>
     </svg:g>
 
-    <ng-container *ngFor="let node of data.app.nodes">
+    <ng-container *ngFor="let node of network.nodes">
       <g app-node-sketch
-        (click)="onNodeClick($event)"
+        (click)="network.view.resetFocus()"
         (contextmenu)="onContextMenu($event, node, null)"
-        (dataChange)="onDataChange($event)"
         (mouseenter)="onNodeEnter($event, node)"
-        [(data)]="data"
         [dragable]="eventTrigger"
         [eventTrigger]="eventTrigger"
         [height]="(height-12)"
         [node]="node"
-        [selected]="selectedNode()"
         [width]="(width-10)"
         transform="translate(1,1)"
         ></g>

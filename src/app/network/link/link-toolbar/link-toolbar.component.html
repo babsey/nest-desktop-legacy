@@ -1,14 +1,12 @@
 <div style="visibility: hidden; position: fixed"
     [style.left]="contextMenuPosition.x"
     [style.top]="contextMenuPosition.y"
-    [matMenuTriggerFor]="linkMenu">
+    [matMenuTriggerFor]="connectionMenu">
 </div>
 
-<mat-menu #linkMenu="matMenu" class="context-menu link-menu">
+<mat-menu #connectionMenu="matMenu" class="context-menu connection-menu">
   <app-link-menu
-    (dataChange)="dataChange.emit($event)"
-    [(data)]="data"
-    [link]="link"
+    [connection]="connection"
   ></app-link-menu>
 </mat-menu>
 
@@ -17,48 +15,47 @@
   (mouseout)="onMouseOut($event)"
   (mouseover)="onMouseOver($event)">
   <mat-toolbar
-    [style.background-image]="backgroundImage()"
+    [style.background-image]="connection.view.getBackgroundImage()"
     class="link-toolbar"
     color="primary">
 
-    <button mat-button (click)="selectNode(connectome.source)" style="width:33.3%;; height:40px">
+    <button mat-button
+      (click)="connection.source.view.select()"
+      style="width:33.3%;; height:40px">
       <svg width="64" height="64" style="margin-top:-6px">
         <g app-node-shape
-          [strokeColor]="color('source')"
-          [elementType]="collection(connectome.source).element_type"
-          [idx]="connectome.source"
-          [label]="label(connectome.source)"
-          [spatial]="isSpatial(connectome.source)"
+          [node]="connection.source"
+          [showSelection]="false"
           style="pointer-events:none"
           transform="translate(32,32)"
-          radius="20"
+          radius="18"
           strokeWidth="4"
           labelSize="16"
         ></g>
       </svg>
     </button>
 
-    <button mat-button (click)="selectLink()" style="width:33.3%; height: 40px">
+    <button mat-button
+      (click)="connection.view.select()"
+      style="width:33.3%; height: 40px">
       <fa-icon
-        [style.color]="color_weight()"
+        [style.color]="connection.view.colorWeight()"
         class="material-icons arrow"
         icon="long-arrow-alt-right"
         style="width:100%; font-size: 24px"
       ></fa-icon>
     </button>
 
-    <button mat-button (click)="selectNode(connectome.target)" style="width:33.3%; height:40px">
+    <button mat-button
+      (click)="connection.target.view.select()"
+      style="width:33.3%; height:40px">
         <svg width="64" height="64" style="margin-top:-6px">
           <g app-node-shape
-            (click)="selectNode(connectome.target)"
-            [strokeColor]="color('target')"
-            [elementType]="collection(connectome.target).element_type"
-            [idx]="connectome.target"
-            [label]="label(connectome.target)"
-            [spatial]="isSpatial(connectome.target)"
+            [node]="connection.target"
+            [showSelection]="false"
             style="pointer-events:none"
             transform="translate(32,32)"
-            radius="20"
+            radius="18"
             strokeWidth="4"
             labelSize="16"
           ></g>

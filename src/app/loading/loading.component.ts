@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { AppService } from '../app.service';
 import { LoadingService } from './loading.service';
 import { NavigationService } from '../navigation/navigation.service';
 
@@ -13,12 +14,13 @@ import { NavigationService } from '../navigation/navigation.service';
 export class LoadingComponent implements OnInit {
 
   constructor(
+    public _appService: AppService,
     public _loadingService: LoadingService,
     public _navigationService: NavigationService,
     public router: Router,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   onClick(event: MouseEvent): void {

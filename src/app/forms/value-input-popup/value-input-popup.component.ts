@@ -14,7 +14,7 @@ export class ValueInputPopupComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   onChange(value: any): void {

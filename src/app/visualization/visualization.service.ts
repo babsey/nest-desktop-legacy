@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Record } from '../classes/record';
+import { Activity } from '../components/activity';
 
 
 @Injectable({
@@ -15,11 +15,11 @@ export class VisualizationService {
 
   constructor() { }
 
-  checkPositions(records: Record[]): void {
-    // console.log(records)
-    if (records.length > 0) {
-      var recordsWithPositions = records.filter(record => record.nodes.positions.length > 0);
-      this.hasPositions = recordsWithPositions.length > 0;
+  checkPositions(activities: Activity[]): void {
+    // console.log(activities)
+    if (activities.length > 0) {
+      const activitiesWithPositions: Activity[] = activities.filter(activity => activity.nodePositions.length > 0);
+      this.hasPositions = activitiesWithPositions.length > 0;
     } else {
       this.hasPositions = false;
     }

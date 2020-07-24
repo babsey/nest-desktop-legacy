@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as PouchDB from 'pouchdb/dist/pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert/dist/pouchdb.upsert';
 
-import { Data } from '../../../classes/data';
+import { Project } from '../../../components/project';
 
 
 @Injectable({
@@ -51,7 +51,7 @@ export class PouchDBService {
       .catch(err => err);
   }
 
-  update(db: any, data: Data): any {
+  update(db: any, data: Project): any {
     return db.get(data['_id'])
       .then(doc => {
         let keys = Object.keys(data);

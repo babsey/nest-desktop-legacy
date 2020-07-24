@@ -13,7 +13,7 @@ export class HelpListComponent implements OnInit {
     public router: Router,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   navigate(path: string): void {

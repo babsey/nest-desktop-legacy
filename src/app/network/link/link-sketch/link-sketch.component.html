@@ -1,6 +1,6 @@
 <svg:defs>
   <svg:marker
-    id="hillock{{link.idx}}"
+    id="hillock{{ connection.idx }}"
     viewBox="0 0 5 3"
     refX=3.5
     refY=1.5
@@ -15,7 +15,7 @@
   </svg:marker>
 
   <svg:marker
-    id="terminus{{link.idx}}"
+    id="terminus{{ connection.idx }}"
     viewBox="0 0 5 5"
     refX=1
     refY=2.5
@@ -23,7 +23,7 @@
     markerHeight=5
     orient="auto"
     >
-    <ng-container [ngSwitch]="synWeight() > 0">
+    <ng-container [ngSwitch]="connection.synapse.weight > 0">
       <ng-container *ngSwitchCase="true">
         <svg:path
           [style.fill]="color"
@@ -42,7 +42,7 @@
   </svg:marker>
 
   <svg:marker
-    id="exc{{link.idx}}"
+    id="exc{{ connection.idx }}"
     [attr.refX]="nodeRadius() + 1.5"
     refY=1
     markerWidth=3
@@ -55,7 +55,7 @@
   </svg:marker>
 
   <svg:marker
-    id="inh{{link.idx}}"
+    id="inh{{ connection.idx }}"
     [attr.refX]="nodeRadius() + 2"
     refY=2
     markerWidth=4
@@ -72,20 +72,21 @@
 <!-- critical point: to many calling of drawPath(), distance() -->
 <svg:path
   (click)="onClick($event)"
-  [attr.d]="drawPath()"
+  (mouseover)="onMouseover($event)"
+  [attr.d]="connection.view.drawPath()"
   class="link"
   style="stroke: white; stroke-linecap:round"
   [style.stroke-width.px]="linkWidth() * 3"
   [style.marker-end]="markerEnd()"
-  [style.opacity]="(distance() < linkMaxDistance()) || isNodeFocused() || isNodeSelected() || isLinkFocused() || isLinkSelected() ? 1 : terminusOpacity()"
+  [style.opacity]="opacity() ? 1 : terminusOpacity()"
 ></svg:path>
 
 <svg:path
-  [attr.d]="drawPath()"
+  [attr.d]="connection.view.drawPath()"
   [style.stroke]="color"
-  [style.stroke-dasharray]="selected == link ? '10, 5' : ''"
+  [style.stroke-dasharray]="dashLine() ? '10, 5' : ''"
   style="pointer-events: none"
   [style.stroke-width.px]="linkWidth()"
   class="link"
-  [style.opacity]="(distance() < linkMaxDistance()) || isNodeFocused() || isNodeSelected() || isLinkFocused() || isLinkSelected() ? 1 : linkOpacity()"
+  [style.opacity]="opacity() ? 1 : linkOpacity()"
 ></svg:path>

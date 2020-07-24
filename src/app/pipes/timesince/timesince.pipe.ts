@@ -6,16 +6,16 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TimesincePipe implements PipeTransform {
 
   transform(value: any): string {
-    var date: any = new Date(value);
-    var now: any = new Date();
-    var seconds: number = Math.floor((now - date) / 1000);
+    const date: any = new Date(value);
+    const now: any = new Date();
+    const seconds: any = Math.floor((now - date) / 1000);
 
     if (seconds < 1) {
       return 'now'
     }
 
-    var timesince: number;
-    var timeunit: string;
+    let timesince: number;
+    let timeunit: string;
 
     if (seconds > 31622400) {
       timesince = Math.floor(seconds / 31622400);

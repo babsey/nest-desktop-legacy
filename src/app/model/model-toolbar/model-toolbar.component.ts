@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { AppService } from '../../app.service';
 import { ModelService } from '../model.service';
 
 import { enterAnimation } from '../../animations/enter-animation';
+
+import { Model } from '../../components/model';
 
 
 @Component({
@@ -14,38 +17,39 @@ import { enterAnimation } from '../../animations/enter-animation';
 export class ModelToolbarComponent implements OnInit {
 
   constructor(
+    public _appService: AppService,
     public _modelService: ModelService,
   ) { }
 
   ngOnInit() {
   }
 
-  hasModel(): boolean {
-    return this._modelService.hasModel(this._modelService.selectedModel)
-  }
-
   addModel(): void {
-    var model = this._modelService.selectedModel;
-    var config = {
-      id: model,
-      element_type: this._modelService.defaults.element_type,
-      label: model,
-      params: []
+    const modelId: string = this._modelService.selectedModel;
+    const model: any = {
+      id: modelId,
+      elementType: this._modelService.defaults.elementType,
+      label: modelId,
+      params: [],
     };
     if (this._modelService.defaults.hasOwnProperty('recordables')) {
-      config['recordables'] = this._modelService.defaults.recordables;
+      model['recordables'] = this._modelService.defaults.recordables;
     }
-    this._modelService.models[model] = config;
-    this._modelService.save(config)
-    this._modelService.update.emit()
+    this._appService.data.addModel(model);
+    this._modelService.update.emit();
   }
 
   deleteModel(): void {
-    var model = this._modelService.selectedModel;
-    delete this._modelService.models[model]
-    this._modelService.delete(model)
-    this._modelService.update.emit()
+    const model: string = this._modelService.selectedModel;
+    this._appService.data.deleteModel(model);
+    this._modelService.update.emit();
   }
 
+  saveModel(): void {
+    const model: Model = this._appService.data.getModel(this._modelService.selectedModel);
+    if (model) {
+      this._appService.data.saveModel(model.serialize('db'));
+    }
+  }
 
 }

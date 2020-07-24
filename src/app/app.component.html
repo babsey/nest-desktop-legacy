@@ -4,7 +4,6 @@
   >
 </app-navigation>
 
-<ng-container *ngIf="_loadingService.loaded.database">
   <mat-sidenav-container id="container" autosize>
     <mat-sidenav
       (openedChange)="triggerResize()"
@@ -14,8 +13,7 @@
       class="no-print"
       id="navigation"
       position="start"
-      role="region"
-      >
+      role="region">
       <ng-container *ngIf="_navigationService.sidenavOpened">
         <router-outlet #navOutlet="outlet" name="nav"></router-outlet>
       </ng-container>
@@ -26,7 +24,6 @@
     </mat-sidenav-content>
 
   </mat-sidenav-container>
-</ng-container>
 
 <div
   [style.display]="_appService.rightClick ? '' : 'none'"

@@ -1,17 +1,6 @@
-import { Component, Input, OnInit, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
-import { AppConfigService } from '../../../config/app-config/app-config.service';
-import { ColorService } from '../../services/color.service';
-import { NetworkConfigService } from '../../network-config/network-config.service';
-import { ModelService } from '../../../model/model.service';
-import { NetworkService } from '../../services/network.service';
-import { NetworkSketchService } from '../../network-sketch/network-sketch.service';
-
-import { Data } from '../../../classes/data';
-import { AppNode } from '../../../classes/appNode';
-import { AppConnection } from '../../../classes/appConnection';
-import { SimNode } from '../../../classes/simNode';
-import { SimConnection } from '../../../classes/simConnection';
+import { Connection } from '../../../components/connection';
 
 
 @Component({
@@ -19,19 +8,9 @@ import { SimConnection } from '../../../classes/simConnection';
   templateUrl: './link-controller.component.html',
   styleUrls: ['./link-controller.component.scss'],
 })
-export class LinkControllerComponent implements OnInit, OnChanges {
-  @Input() data: Data;
-  @Input() link: AppConnection;
-  @Output() dataChange: EventEmitter<any> = new EventEmitter();
-  public collections: SimNode[];
-  public connectomes: SimConnection[];
-  public connectome: SimConnection;
-  public connOptions: any[] = [];
+export class LinkControllerComponent implements OnInit {
+  @Input() connection: Connection;
   public connRules: any[] = [];
-  public options: any;
-  public selection: boolean = false;
-  public slider: any = {};
-  public synModel: any;
   public synModels: any[] = [];
   public srcIdxOptions: any = {
     label: 'Source Indices',
@@ -43,107 +22,15 @@ export class LinkControllerComponent implements OnInit, OnChanges {
   };
 
   constructor(
-    private _appConfigService: AppConfigService,
-    private _colorService: ColorService,
-    private _modelService: ModelService,
-    private _networkService: NetworkService,
-    private _networkSketchService: NetworkSketchService,
-    public _networkConfigService: NetworkConfigService,
   ) { }
 
-  ngOnInit(): void {
-    this.update()
-  }
-
-  ngOnChanges(): void {
-    this.update()
-  }
-
-  update(): void {
-    // console.log('Update link controller')
-    if (this.link == undefined) return
-    this.collections = this.data.simulation.collections;
-    this.connectomes = this.data.simulation.connectomes;
-    this.connectome = this.connectomes[this.link.idx];
-
-    if (!this.connectome.hasProjections()) {
-      this.data.clean();
-
-      var connectionConfig = this._networkConfigService.config.connection;
-      this.connRules = connectionConfig.specs.map(spec => { return { value: spec.rule, label: spec.label } });
-      var connRule = this.connectome.hasOwnProperty('conn_spec') ? this.connectome.conn_spec.rule || 'all_to_all' : 'all_to_all';
-      this.slider.connection = connectionConfig.specs.find(spec => spec.rule == connRule).params || [];
-
-      var synapses = this._modelService.list('synapse');
-      this.synModels = synapses.map(synapse => { return { value: synapse, label: this._modelService.config(synapse).label } });
-      var synModel = this.connectome.hasOwnProperty('syn_spec') ? this.connectome.syn_spec.model || 'static_synapse' : 'static_synapse';
-      this.synModel = this._modelService.config(synModel);
-      this.slider.synapse = this.synModel['params'] || [];
+  ngOnInit() {
+    // console.log('Update connection controller')
+    if (this.connection == undefined) return
+    if (!this.connection.hasProjections()) {
+      this.connRules = this.connection.config.data.rules;
+      this.synModels = this.connection.network.project.app.filterModels('synapse');
     }
-  }
-
-  color(src: string): string {
-    return this._colorService.node(this.connectome[src]);
-  }
-
-  source(): AppNode {
-    return this.data.app.nodes[this.connectome.source];
-  }
-
-  target(): AppNode {
-    return this.data.app.nodes[this.connectome.target];
-  }
-
-  connectRecorder(): boolean {
-    const source = this.collections[this.connectome.source];
-    const target = this.collections[this.connectome.target];
-    return source.element_type == 'recorder' || target.element_type == 'recorder';
-  }
-
-  connectSpikeDetector(): boolean {
-    const target = this.collections[this.connectome.target];
-    const model = this.data.simulation.getModel(target);
-    return model == 'spike_detector';
-  }
-
-  linkDisplay(): string {
-    return this._networkService.isLinkSelected(this.link, this.data) ? '' : 'none';
-  }
-
-  paramDisplay(param: string): boolean {
-    return true;
-    // return this.link.hasOwnProperty('display') ? this.link.display.includes(param) : true;
-  }
-
-  onValueChange(value: any): void {
-    this.dataChange.emit(this.data)
-  }
-
-  onDataChange(data: Data): void {
-    this.dataChange.emit(this.data)
-  }
-
-  onRuleSelect(rule: string): void {
-    this.connectome.conn_spec = {};
-    this.connectome.conn_spec.rule = rule;
-    this.link.display = ['syn_spec.weight', 'syn_spec.delay'];
-    var conn_spec = this._networkConfigService.config.connection.specs.find(conn_spec => conn_spec.rule == rule);
-    if (conn_spec.hasOwnProperty('params')) {
-      conn_spec.params.map(param => {
-        this.connectome.conn_spec[param.id] = param.value;
-        this.link.display.push('conn_spec.' + param.id);
-      })
-    }
-    this.update()
-    this.dataChange.emit(this.data)
-  }
-
-  onModelSelect(model: string): void {
-    this.dataChange.emit(this.data)
-  }
-
-  onConnectomeChange(connectome: SimConnection): void {
-    this.dataChange.emit(this.data)
   }
 
 }

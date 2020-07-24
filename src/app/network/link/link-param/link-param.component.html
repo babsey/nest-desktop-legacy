@@ -35,11 +35,11 @@
   >
   <ng-container [ngSwitch]="isNumber()">
     <ng-container *ngSwitchCase="true">
-      <ng-container *ngIf="link.hasOwnProperty('params')">
+      <ng-container *ngIf="connection.hasOwnProperty('params')">
         <mat-chip-list>
-          <ng-container *ngIf="link.params.hasOwnProperty(options.id)">
-            <ng-container *ngFor="let factor of link.params[options.id]['factors']">
-              <mat-chip title="{{ factor }}" (click)="onFactorClick(factor)">{{ factor }}</mat-chip>
+          <ng-container *ngIf="connection.params.hasOwnProperty(options.id)">
+            <ng-container *ngFor="let factor of connection.params[options.id]['factors']">
+              <mat-chip [attr.title]="factor" (click)="onFactorClick(factor)">{{ factor }}</mat-chip>
             </ng-container>
           </ng-container>
         </mat-chip-list>

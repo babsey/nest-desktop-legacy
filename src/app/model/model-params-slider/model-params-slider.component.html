@@ -5,7 +5,7 @@
 
   <mat-list-item>
     <mat-form-field style="width:100%">
-      <input matInput placeholder="Name" name="name" [(ngModel)]="model.label" (change)="save()">
+      <input matInput placeholder="Name" name="name" [(ngModel)]="settings.label" (change)="save()">
     </mat-form-field>
   </mat-list-item>
 
@@ -13,10 +13,10 @@
     <h3 matSubheader>Controller view</h3>
   </mat-list-item>
 
-  <mat-list-item *ngFor="let param of model.params" class="param">
+  <mat-list-item *ngFor="let param of settings.params" class="param">
     <app-model-param
       [value]="param.value"
-      [model]="model.id"
+      [model]="model"
       [options]="param"
       [view]="param.input"
     ></app-model-param>

@@ -6,16 +6,11 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./validation-check.component.scss']
 })
 export class ValidationCheckComponent implements OnInit {
-  @Input() status: any;
+  @Input() component: any;
 
   constructor() { }
 
   ngOnInit() {
-  }
-
-  icon(): string {
-    if (!this.status.ready) return 'circle-notch';
-    return this.status.valid ? 'check' : 'exclamation'
   }
 
 }

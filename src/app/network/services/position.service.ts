@@ -18,7 +18,7 @@ export class PositionService {
     return Math.floor(val * 100) / 100;
   }
 
-  freePositions(n:number = 1, spatial: any): number[][] {
+  freePositions(size: number = 1, spatial: any): number[][] {
     var center = spatial['center'] || [0, 0];
     var extent = spatial['extent'] || [1, 1];
     var minX = center[0] - extent[0] / 2;
@@ -27,7 +27,7 @@ export class PositionService {
     var maxY = center[1] + extent[1] / 2;
     // console.log(center,extent,minX,maxX,minY,maxY,length)
 
-    var positions = Array.from({ length: n }, () => {
+    var positions = Array.from({ length: size }, () => {
       var x = math.random(minX, maxX);
       var y = math.random(minY, maxY);
       return [this.round(x), this.round(y)];

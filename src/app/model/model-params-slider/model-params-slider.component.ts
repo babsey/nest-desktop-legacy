@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
+import { ModelService } from '../model.service';
+import { Model } from '../../components/model';
+
 
 @Component({
   selector: 'app-model-params-slider',
@@ -8,14 +11,17 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 })
 export class ModelParamsSliderComponent implements OnInit, OnChanges {
   @Input() model: any = {};
+  public settings: Model;
 
   constructor(
+    private _modelService: ModelService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.settings = this._modelService.getSettings(this.model);
   }
 
-  ngOnChanges(): void {
+  ngOnChanges() {
   }
 
   save(): void {

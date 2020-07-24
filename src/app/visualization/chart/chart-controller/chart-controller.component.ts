@@ -21,16 +21,16 @@ export class ChartControllerComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(this._chartRecordsService.panelOrder, event.previousIndex, event.currentIndex);
     this._chartRecordsService.panelOrder.map((p,i) => {
-      var yaxisIdx = (this._chartRecordsService.panelOrder.length - i);
+      const yaxisIdx: number = (this._chartRecordsService.panelOrder.length - i);
       this._chartRecordsService.panel[p]['yaxis'] = yaxisIdx;
     })
-    var panelSelected = this._chartRecordsService.panelSelected;
+    const panelSelected: string[] = this._chartRecordsService.panelSelected;
     this._chartRecordsService.panelSelected = [];
     setTimeout(() => {
       this._chartRecordsService.panelSelected = panelSelected;

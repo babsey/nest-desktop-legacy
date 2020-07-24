@@ -1,15 +1,18 @@
-.link-selection {
-  border-left: 4px solid black;
-  border-right: 4px solid black;
-  width: calc(100% - 8px);
-  margin-bottom: 4px;
-
+.connection-selection {
   mat-selection-list {
     padding: 0;
 
     mat-list-option {
       height: 32px;
       line-height: 32px;
+
+      .value {
+        margin: 0 4px;
+      }
+
+      .unit {
+        margin-right: -10px;
+      }
     }
   }
 }

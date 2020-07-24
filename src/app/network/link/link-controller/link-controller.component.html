@@ -1,28 +1,27 @@
-<div class="controller link-controller"
-  [style.border-left-color]="color('source')"
-  [style.border-right-color]="color('target')"
-  [style.display]="linkDisplay()"
-  >
+<div class="controller connection-controller"
+  [style.border-left-color]="connection.source.view.color"
+  [style.border-right-color]="connection.target.view.color"
+  [style.display]="connection.view.isSelected() ? '' : 'none'">
 
-  <app-link-toolbar [(data)]="data" [link]="link"></app-link-toolbar>
+  <app-link-toolbar
+    [connection]="connection"
+  ></app-link-toolbar>
 
-  <ng-container [ngSwitch]="connectome.hasProjections()">
+  <ng-container [ngSwitch]="connection.hasProjections()">
 
     <ng-container *ngSwitchCase="true">
       <app-link-projections
-        (connectomeChange)="onConnectomeChange($event)"
-        [(connectome)]="connectome"
-        [link]="link"
+        [connection]="connection"
         ></app-link-projections>
     </ng-container>
 
     <ng-container *ngSwitchCase="false">
 
-      <ng-container *ngIf="connectome.hasSourceIndices()">
+      <ng-container *ngIf="connection.hasSourceIndices()">
         <mat-list dense>
           <mat-list-item>
             <app-array-input-popup
-              [(value)]="connectome.src_idx"
+              [(value)]="connection.src_idx"
               [options]="srcIdxOptions"
               style="width:100%"
             ></app-array-input-popup>
@@ -30,11 +29,11 @@
         </mat-list>
       </ng-container>
 
-      <ng-container *ngIf="connectome.hasTargetIndices()">
+      <ng-container *ngIf="connection.hasTargetIndices()">
         <mat-list dense>
           <mat-list-item>
             <app-array-input-popup
-              [(value)]="connectome.tgt_idx"
+              [(value)]="connection.tgt_idx"
               [options]="tgtIdxOptions"
               style="width:100%"
             ></app-array-input-popup>
@@ -44,55 +43,51 @@
 
       <mat-list dense>
 
-        <ng-container *ngIf="!connectome.hasSourceIndices() && !connectome.hasTargetIndices()">
+        <ng-container *ngIf="!connection.hasSourceIndices() && !connection.hasTargetIndices()">
           <mat-list-item>
             <app-select
-              (selectedChange)="onRuleSelect($event)"
-              [(selected)]="connectome.conn_spec.rule"
+              [(selected)]="connection.rule"
               [options]="connRules"
-              [disabled]="connectSpikeDetector()"
+              [disabled]="connection.view.connectSpikeDetector()"
             ></app-select>
           </mat-list-item>
         </ng-container>
 
-        <ng-container *ngFor="let conn of slider.connection">
-          <ng-container *ngIf="connectome.conn_spec.hasOwnProperty(conn.id)">
-            <mat-list-item
-              [style.display]="paramDisplay('conn_spec.' + conn.id) ? '' : 'none'">
-              <app-link-param
-                (valueChange)="onValueChange($event)"
-                [(value)]="connectome.conn_spec[conn.id]"
-                [link]="link"
-                [options]="conn"
-                [random]="false"
-              ></app-link-param>
-            </mat-list-item>
+        <ng-container *ngIf="connection.params.length > 0">
+          <ng-container *ngFor="let connParam of connection.params">
+              <mat-list-item
+                [style.display]="connParam.visible || connParam.visible === undefined ? '' : 'none'">
+                <app-link-param
+                  [(value)]="connParam.value"
+                  [connection]="connection"
+                  [options]="connection.view.getRuleParamConfig(connParam.id)"
+                  [random]="false"
+                ></app-link-param>
+              </mat-list-item>
           </ng-container>
         </ng-container>
 
       </mat-list>
 
-      <ng-container *ngIf="!connectRecorder()">
+      <ng-container *ngIf="!connection.view.connectRecorder()">
         <mat-list dense>
           <mat-list-item>
             <app-select
-              (selectedChange)="onModelSelect($event)"
-              [(selected)]="connectome.syn_spec['model']"
+              [(selected)]="connection.synapse.modelId"
               [options]="synModels"
             ></app-select>
           </mat-list-item>
         </mat-list>
 
         <mat-list dense>
-          <ng-container *ngFor="let syn of slider.synapse">
-            <ng-container *ngIf="connectome.syn_spec.hasOwnProperty(syn.id)">
+          <ng-container *ngIf="connection.synapse.params.length > 0">
+            <ng-container *ngFor="let synParam of connection.synapse.params">
               <mat-list-item
-                [style.display]="paramDisplay('syn_spec.' + syn.id) ? '' : 'none'">
+                [style.display]="synParam.visible || synParam.visible === undefined ? '' : 'none'">
                 <app-link-param
-                  (valueChange)="onValueChange($event)"
-                  [(value)]="connectome.syn_spec[syn.id]"
-                  [link]="link"
-                  [options]="syn"
+                  [(value)]="synParam.value"
+                  [connection]="connection"
+                  [options]="synParam.options"
                   [random]="false"
                 ></app-link-param>
               </mat-list-item>

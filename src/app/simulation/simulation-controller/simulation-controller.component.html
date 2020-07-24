@@ -1,42 +1,32 @@
-<div id="controller" style="position:relative;">
-  <ng-container [ngSwitch]="mode">
+<span class="controller simulation-controller">
+  <mat-list dense class="controller-menu light-theme">
+    <mat-list-item mat-subheader>
+      Simulation
+    </mat-list-item>
+    <mat-list-item *ngFor="let param of params">
+      <app-value-slider-inline
+        (valueChange)="onChange($event, param.id)"
+        [options]="param"
+        [(value)]="simulation[param.id]"
+      ></app-value-slider-inline>
+    </mat-list-item>
+  </mat-list>
 
-    <ng-container *ngSwitchCase="'network'">
-      <app-network-controller
-        (appChange)="onAppChange($event)"
-        (dataChange)="onDataChange($event)"
-        [(data)]="data"
-      ></app-network-controller>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'simulation'">
-      <app-kernel-controller
-        (dataChange)="onDataChange($event)"
-        [(data)]="data"
-        class="kernel"
-      ></app-kernel-controller>
-
-      <app-simulation-controller
-        (dataChange)="onDataChange($event)"
-        [(data)]="data"
-        class="simulation"
-      ></app-simulation-controller>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'chart'">
-      <app-chart-controller></app-chart-controller>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'animation'">
-      <app-animation-controller></app-animation-controller>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'stats'">
-      <app-simulation-stats
-        [data]="data"
-        [records]="records"
-      ></app-simulation-stats>
-    </ng-container>
-
-  </ng-container>
-</div>
+  <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
+    <mat-list-option
+      [selected]="_simulationRunService.config['autoRandomSeed']"
+      value="autoRandomSeed">
+      <span>Randomize seed</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="_simulationRunService.config['runAfterChange']"
+      value="runAfterChange">
+      <span>Simulate after change</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="_simulationRunService.config['runAfterLoad']"
+      value="runAfterLoad">
+      <span>Simulate after load</span>
+    </mat-list-option>
+  </mat-selection-list>
+</span>

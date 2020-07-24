@@ -9,7 +9,7 @@ export class TestsuiteComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
 }

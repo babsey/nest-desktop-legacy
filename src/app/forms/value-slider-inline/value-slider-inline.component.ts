@@ -14,7 +14,7 @@ export class ValueSliderInlineComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   onChange(event: any): void {

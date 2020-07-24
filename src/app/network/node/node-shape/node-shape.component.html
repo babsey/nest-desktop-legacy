@@ -1,52 +1,130 @@
-<svg:g>
-  <ng-container [ngSwitch]="spatial">
-    <ng-container *ngSwitchCase="true">
-      <svg:polygon
-        class="node"
-        [attr.points]="layer()"
-        [style.fill]="fillColor"
-        [style.stroke]="strokeColor"
-        [style.stroke-dasharray]="selected ? '7.85' : ''"
-        [style.stroke-width.px]="strokeWidth"
-        ></svg:polygon>
-      <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label }}</svg:text>
-    </ng-container>
-    <ng-container *ngSwitchCase="false">
-      <ng-container [ngSwitch]="elementType">
-        <ng-container *ngSwitchCase="'neuron'">
-          <svg:circle
-            class="node circle"
-            [attr.r]="radius"
-            [style.fill]="fillColor"
-            [style.stroke]="strokeColor"
-            [style.stroke-dasharray]="selected ? '7.85' : ''"
-            [style.stroke-width.px]="strokeWidth"
-          ></svg:circle>
-          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label }}</svg:text>
-        </ng-container>
-        <ng-container *ngSwitchCase="'stimulator'">
-          <svg:polygon
-            class="node triangle"
-            [attr.points]="triangle()"
-            [style.fill]="fillColor"
-            [style.stroke]="strokeColor"
-            [style.stroke-dasharray]="selected ? '7.85' : ''"
-            [style.stroke-width.px]="strokeWidth"
+<ng-container *ngIf="node.view">
+
+  <svg:g>
+    <ng-container [ngSwitch]="node.view.isSpatial()">
+
+      <ng-container *ngSwitchCase="true">
+        <svg:polygon
+          class="node"
+          [attr.points]="node.view.getLayerPoints(radius)"
+          [style.stroke]="node.view.color"
+          [style.stroke-dasharray]="node.view.isSelected() ? '7.85' : ''"
+          [style.stroke-width.px]="strokeWidth"
           ></svg:polygon>
-          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label }}</svg:text>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="false">
+
+        <!-- <ng-container [ngSwitch]="node.model.elementType">
+          <ng-container *ngSwitchCase="'neuron'">
+            <svg:circle
+              class="node circle"
+              [attr.r]="radius"
+              [style.stroke]="node.view.color"
+              [style.stroke-dasharray]="node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="strokeWidth"
+            ></svg:circle>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'stimulator'">
+            <svg:polygon
+              class="node triangle"
+              [attr.points]="node.view.getTrianglePoints(radius)"
+              [style.stroke]="node.view.color"
+              [style.stroke-dasharray]="node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="strokeWidth"
+            ></svg:polygon>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'recorder'">
+            <svg:polygon
+              class="node square"
+              [attr.points]="node.view.getSquarePoints(radius)"
+              [style.stroke]="node.view.color"
+              [style.stroke-dasharray]="node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="strokeWidth"
+            ></svg:polygon>
+          </ng-container>
+        </ng-container> -->
+
+        <ng-container [ngSwitch]="node.view.weight">
+          <ng-container *ngSwitchCase="'excitatory'">
+
+            <ng-container *ngIf="node.size > 1">
+              <svg:polygon
+                class="node triangle"
+                [attr.points]="node.view.getTrianglePoints(radius)"
+                [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+                [style.stroke-width.px]="2*strokeWidth"
+                [style.stroke]="node.view.color"
+              ></svg:polygon>
+            </ng-container>
+
+            <svg:polygon
+              class="node triangle"
+              [attr.points]="node.view.getTrianglePoints(radius)"
+              [style.fill]="node.size > 1 ? 'none' : 'white'"
+              [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="node.size > 1 ? (strokeWidth / 2) : strokeWidth"
+              [style.stroke]="node.size > 1 ? 'white' : node.view.color"
+            ></svg:polygon>
+
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'inhibitory'">
+
+            <ng-container *ngIf="node.size > 1">
+              <svg:circle
+                class="node circle"
+                [attr.r]="radius"
+                [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+                [style.stroke-width.px]="2*strokeWidth"
+                [style.stroke]="node.view.color"
+              ></svg:circle>
+            </ng-container>
+
+            <svg:circle
+              class="node circle"
+              [attr.r]="radius"
+              [style.fill]="node.size > 1 ? 'none' : 'white'"
+              [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="node.size > 1 ? (strokeWidth / 2) : strokeWidth"
+              [style.stroke]="node.size > 1 ? 'white' : node.view.color"
+            ></svg:circle>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            <ng-container *ngIf="node.size > 1">
+              <svg:polygon
+                class="node square"
+                [attr.points]="node.view.getSquarePoints(radius)"
+                [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+                [style.stroke-width.px]="2*strokeWidth"
+                [style.stroke]="node.view.color"
+              ></svg:polygon>
+            </ng-container>
+
+            <svg:polygon
+              class="node square"
+              [attr.points]="node.view.getSquarePoints(radius)"
+              [style.fill]="node.size > 1 ? 'none' : 'white'"
+              [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="node.size > 1 ? (strokeWidth / 2) : strokeWidth"
+              [style.stroke]="node.size > 1 ? 'white' : node.view.color"
+            ></svg:polygon>
+          </ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="'recorder'">
-          <svg:polygon
-            class="node square"
-            [attr.points]="square()"
-            [style.fill]="fillColor"
-            [style.stroke]="strokeColor"
-            [style.stroke-dasharray]="selected ? '7.85' : ''"
-            [style.stroke-width.px]="strokeWidth"
-          ></svg:polygon>
-          <svg:text class="label" dx="0" dy=".4em" text-anchor="middle" [style.font-size.px]="labelSize">{{ label }}</svg:text>
-        </ng-container>
+
       </ng-container>
     </ng-container>
-  </ng-container>
-</svg:g>
+
+    <svg:text
+      class="label"
+      dx="0"
+      [style.fontSize]="labelSize"
+      [attr.dy]="node.view.weight === 'excitatory' ? '.6em' : '.4em'"
+      text-anchor="middle">
+      {{ node.view.label }}
+    </svg:text>
+  </svg:g>
+</ng-container>

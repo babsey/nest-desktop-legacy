@@ -16,7 +16,7 @@ export class NetworkConfigComponent implements OnInit {
     public _colorService: ColorService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   onChange(event: any): void {

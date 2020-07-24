@@ -6,7 +6,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { ModelConfigDialogComponent } from '../../../model/model-config-dialog/model-config-dialog.component';
 import { AppService } from '../../../app.service';
 
-import { AppConnection } from '../../../classes/appConnection';
+import { Connection } from '../../../components/connection';
 
 
 @Component({
@@ -15,7 +15,7 @@ import { AppConnection } from '../../../classes/appConnection';
   styleUrls: ['./link-param.component.scss']
 })
 export class LinkParamComponent implements OnInit {
-  @Input() link: AppConnection;
+  @Input() connection: Connection;
   @Input() random: boolean = true;
   @Input() options: any;
   @Input() value: any;
@@ -29,7 +29,7 @@ export class LinkParamComponent implements OnInit {
     private dialog: MatDialog,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   setDefaultValue(): void {
@@ -38,12 +38,9 @@ export class LinkParamComponent implements OnInit {
   }
 
   addFactor(): void {
-    if (!this.link.hasOwnProperty('params')) {
-      this.link['params'] = {};
-    }
-
-    this.link['params'][this.options.id] = {
-      factors: ['g'],
+    const param = this.connection.synapse['params'].find(param => param.id === this.options.id);
+    if (param) {
+      param['factors'].push('g')
     }
   }
 
@@ -52,7 +49,7 @@ export class LinkParamComponent implements OnInit {
   }
 
   isNumber(): boolean {
-    return typeof this.value == 'number';
+    return typeof this.value === 'number';
   }
 
   onFactorClick(factor): void {

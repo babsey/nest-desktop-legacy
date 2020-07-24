@@ -1,0 +1,104 @@
+{
+  "name": "Spike input",
+  "description": "The simulation shows subthreshold activity response of a set of ten neurons to external incoming spikes.",
+  "app": {
+    "models": {
+      "stimulator-a": {
+        "display": [
+          "spike_times"
+        ]
+      },
+      "neuron-b": {
+        "display": [
+          "C_m",
+          "tau_m"
+        ]
+      },
+      "recorder-c": {
+        "display": []
+      }
+    },
+    "nodes": [{
+      "idx": 0,
+      "position": {
+        "x": 50,
+        "y": 100
+      }
+    }, {
+      "idx": 1,
+      "position": {
+        "x": 200,
+        "y": 50
+      }
+    }, {
+      "idx": 2,
+      "position": {
+        "x": 350,
+        "y": 100
+      }
+    }],
+    "links": [{
+      "idx": 0
+    }, {
+      "idx": 1
+    }]
+  },
+  "simulation": {
+    "kernel": {
+      "resolution": 0.1
+    },
+    "models": {
+      "stimulator-a": {
+        "existing": "spike_generator",
+        "params": {
+          "spike_times": [300]
+        }
+      },
+      "neuron-b": {
+        "existing": "iaf_psc_alpha",
+        "params": {
+          "V_m": -70,
+          "E_L": -70,
+          "I_e": 0,
+          "C_m": 250,
+          "tau_m": 10,
+          "V_th": -55,
+          "V_reset": -70,
+          "t_ref": 2,
+          "tau_syn_ex": 2,
+          "tau_syn_in": 2
+        }
+      },
+      "recorder-c": {
+        "existing": "voltmeter",
+        "params": {
+          "interval": 1
+        }
+      }
+    },
+    "collections": [{
+      "element_type": "stimulator",
+      "model": "stimulator-a",
+      "n": 1
+    }, {
+      "element_type": "neuron",
+      "model": "neuron-b",
+      "n": 1
+    }, {
+      "element_type": "recorder",
+      "model": "recorder-c",
+      "n": 1
+    }],
+    "connectomes": [{
+      "source": 0,
+      "target": 1
+    }, {
+      "source": 2,
+      "target": 1
+    }],
+    "time": 1000
+  },
+  "_id": "fafa588d-3266-402d-95b9-6b1498afc740",
+  "group": "nest-desktop",
+  "user": "nest-desktop"
+}

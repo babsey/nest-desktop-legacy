@@ -16,10 +16,10 @@ export class TicksSliderPopupComponent implements OnInit, OnChanges {
   constructor() {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
-  ngOnChanges(): void {
+  ngOnChanges() {
     this.idx = this.options.ticks.indexOf(this.value);
   }
 

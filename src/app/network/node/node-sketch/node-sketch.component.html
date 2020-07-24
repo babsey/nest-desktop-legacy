@@ -1,14 +1,9 @@
 <svg:g app-node-shape
   (click)="onClick($event)"
+  [node]="node"
   [radius]="radius()"
   [strokeWidth]="strokeWidth()"
-  [strokeColor]="strokeColor()"
-  [fillColor]="node.hasOwnProperty('color') ? 'white' : fillColor()"
-  [elementType]="collection.element_type"
-  [idx]="node.idx"
-  [label]="node.label"
-  [selected]="selected == node"
-  [spatial]="collection.isSpatial()"
-  [attr.transform]="'translate('+ node.position['x'] + ',' + node.position['y'] + ')'"
+  [matTooltip]="node.model.label || node.modelId"
+  [attr.transform]="'translate('+ node.view.position.x + ',' + node.view.position.y + ')'"
   class="node"
 ></svg:g>

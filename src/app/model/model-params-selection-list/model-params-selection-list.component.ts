@@ -16,21 +16,21 @@ export class ModelParamsSelectionListComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   hasParam(id: string): boolean {
     if (this._modelService.hasModel(this.model)) {
-      var config = this._modelService.config(this.model);
-      return config.params.filter(param => param.id == id).length > 0;
+      const settings: any = this._modelService.getSettings(this.model);
+      return settings.params.filter(param => param.id == id).length > 0;
     }
     return false
   }
 
-  addParam(id: string, value: any): void {
-    var param = {
-      id: id,
-      label: id,
+  addParam(paramId: string, value: any): void {
+    const param: any = {
+      id: paramId,
+      label: paramId,
       value: value,
       level: 1,
       input: 'valueSlider',
@@ -41,18 +41,18 @@ export class ModelParamsSelectionListComponent implements OnInit {
     if (Array.isArray(value)) {
       param.input = 'arrayInput';
     }
-    var config = this._modelService.config(this.model);
-    config.params.push(param);
-    config.params.sort((a, b) => a.id - b.id)
+    const settings: any = this._modelService.getSettings(this.model);
+    settings.params.push(param);
+    settings.params.sort((a, b) => a.id - b.id)
   }
 
-  removeParam(id: string): void {
-    var config = this._modelService.config(this.model);
-    config.params = config.params.filter(param => param.id != id);
+  removeParam(paramId: string): void {
+    const settings: any = this._modelService.getSettings(this.model);
+    settings.params = settings.params.filter(param => param.id != paramId);
   }
 
   changeParam(event: any): void {
-    var option = event.option.value;
+    const option: any = event.option.value;
     if (event.option.selected) {
       this.addParam(option.id, option.value)
     } else {

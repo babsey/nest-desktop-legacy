@@ -1,73 +1,58 @@
 <div class="controller node-controller"
-  [style.border-color]="color()"
-  [style.display]="nodeDisplay()"
-  *ngIf="collection"
-  >
+  [style.border-color]="node.view.color"
+  [style.display]="node.view.isSelected(true) ? '' : 'none'">
 
   <app-node-toolbar
-    (dataChange)="onDataChange($event)"
-    (nodeChange)="onNodeChange($event)"
-    [(data)]="data"
-    [(node)]="node"
+    [node]="node"
     [disabled]="false"
-    ></app-node-toolbar>
+  ></app-node-toolbar>
 
-  <ng-container *ngIf="!isRecorder()">
-    <ng-container *ngIf="!collection.isSpatial()">
+  <ng-container *ngIf="!node.view.isRecorder()">
+    <ng-container *ngIf="!node.view.isSpatial()">
       <mat-list dense>
         <mat-list-item>
-          <app-node-param
-            (valueChange)="onValueChange($event)"
-            [(value)]="collection.n"
-            [options]="_networkConfigService.config['node'].npop"
-            view="valueSlider"
-          ></app-node-param>
+          <app-value-slider-inline
+            [(value)]="node.size"
+            [options]="node.config.data.size"
+          ></app-value-slider-inline>
         </mat-list-item>
       </mat-list>
-      </ng-container>
+    </ng-container>
 
-      <ng-container *ngIf="collection.isSpatial()">
-        <mat-nav-list dense>
-          <mat-list-item>
-            <app-node-spatial
-              (collectionChange)="onCollectionChange($event)"
-              (nodeChange)="onNodeChange($event)"
-              [(collection)]="collection"
-              [(node)]="node"
-            ></app-node-spatial>
-          </mat-list-item>
-        </mat-nav-list>
-      </ng-container>
+    <ng-container *ngIf="node.view.isSpatial()">
+      <mat-nav-list dense>
+        <mat-list-item>
+          <app-node-spatial
+            [node]="node"
+          ></app-node-spatial>
+        </mat-list-item>
+      </mat-nav-list>
+    </ng-container>
   </ng-container>
 
   <mat-list dense>
     <ng-container *ngIf="!linkedNode">
-      <ng-container *ngFor="let param of configModel.params">
-        <mat-list-item [style.display]="paramDisplay(param.id) ? '' : 'None'" >
-          <app-model-param
-            (paramHide)="onParamHide($event)"
-            (valueChange)="onValueChange($event)"
-            [(value)]="collection.params[param.id]"
-            [model]="collection.model"
-            [options]="param"
-            [view]="param.input"
-          ></app-model-param>
+      <ng-container *ngFor="let param of node.params">
+        <mat-list-item [style.display]="param.visible ? '' : 'None'" >
+          <app-node-param [param]="param"></app-node-param>
         </mat-list-item>
       </ng-container>
     </ng-container>
-  </mat-list>
 
-  <mat-list dense>
-    <mat-list-item [style.display]="model == 'multimeter' ? '' : 'None'" >
-      <mat-form-field style="width:100%">
-        <mat-label>Record from</mat-label>
-        <mat-select multiple [(ngModel)]="collection.params.record_from" (selectionChange)="onRecordChange($event)">
-          <ng-container *ngFor="let recordable of recordables">
-            <mat-option [value]="recordable">{{ recordable }}</mat-option>
-          </ng-container>
-        </mat-select>
-      </mat-form-field>
-    </mat-list-item>
+    <ng-container *ngIf="node.modelId === 'multimeter'">
+      <mat-list-item>
+        <mat-form-field style="width:100%">
+          <mat-label>Record from</mat-label>
+          <mat-select multiple [(ngModel)]="node.params.record_from.value">
+            <ng-container *ngFor="let recordable of recordables">
+              <mat-option [value]="recordable">
+                {{ recordable }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </mat-list-item>
+    </ng-container>
   </mat-list>
 
 </div>

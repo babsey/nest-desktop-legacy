@@ -19,13 +19,13 @@
         <fa-icon icon="home"></fa-icon>
       </button>
     </div>
-    <div class="simulation-theme">
+    <div class="project-theme">
       <button mat-icon-button
-        (click)="onClick($event, 'simulation')"
-        [disabled]="!_simulationService.status.ready && !_simulationProtocolService.status.ready"
-        [routerLink]="[{ outlets: { nav: [isNavLoaded('simulation') ? '' : 'simulation'] } }]"
+        (click)="onClick($event, 'project')"
+        [disabled]="!_appService.data.projectDB"
+        [routerLink]="[{ outlets: { nav: [isNavLoaded('project') ? '' : 'project'] } }]"
         color="primary"
-        matTooltip="Open an existing or create a new simulation."
+        matTooltip="Open an existing or create a new project."
         matTooltipPosition="after"
         routerLinkActive="mat-mini-fab"
         >
@@ -35,7 +35,7 @@
     <div class="model-theme">
       <button mat-icon-button
         (click)="onClick($event, 'model')"
-        [disabled]="!_modelService.status.ready"
+        [disabled]="!_appService.data.modelDB"
         [routerLink]="[{ outlets: { nav: ['model'] } }]"
         color="primary"
         matTooltip="List of models"
@@ -47,8 +47,8 @@
     </div>
     <div class="config-theme">
       <button mat-icon-button
-        (click)="onClick($event, 'config')"
-        [routerLink]="[{ outlets: { nav: ['config'] } }]"
+        (click)="onClick($event, 'setting')"
+        [routerLink]="[{ outlets: { nav: ['setting'] } }]"
         color="primary"
         matTooltip="List of settings"
         matTooltipPosition="after"

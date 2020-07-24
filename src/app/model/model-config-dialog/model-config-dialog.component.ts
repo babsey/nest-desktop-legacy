@@ -19,12 +19,11 @@ export class ModelConfigDialogComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     // console.log(this.data)
-    var configModel = this._modelService.models[this.data.model];
-    var params = configModel['params'].find(param => param.id == this.data.param);
-    this.idx = configModel['params'].map(param => param.id).indexOf(params.id);
-    this.options = Object.assign({}, params);
+    const modelSettings: any = this._modelService.getSettings(this.data.model);
+    this.idx = modelSettings.params.map(param => param.id).indexOf(this.data.param);
+    this.options = Object.assign({}, modelSettings.params[this.idx]);
     // this.options = params;
   }
 
@@ -40,7 +39,8 @@ export class ModelConfigDialogComponent implements OnInit {
   }
 
   onSave(): void {
-    this._modelService.config(this.data.model).params[this.idx] = this.options;
+    const modelSettings: any = this._modelService.getSettings(this.data.model);
+    modelSettings.params[this.idx] = this.options;
     // this._modelService.save(this.options);
     this.dialogRef.close();
   }

@@ -1,18 +1,15 @@
-<div class="selection link-selection"
-  [style.display]="linkDisplay()"
-  [style.border-left-color]="color('source')"
-  [style.border-right-color]="color('target')"
-  >
+<div class="selection connection-selection"
+  [style.border-left-color]="connection.source.view.color"
+  [style.border-right-color]="connection.target.view.color"
+  [style.display]="connection.view.isSelected() ? '' : 'none'">
 
   <app-link-toolbar
-    [(data)]="data"
-    [link]="link"
-    (dataChange)="onDataChange($event)"
+    [connection]="connection"
   ></app-link-toolbar>
 
-  <mat-selection-list dense [(ngModel)]="link.display" class="selection-menu" (click)="dataChange.emit(data)">
+  <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
 
-    <!-- <ng-container *ngIf="isBothSpatial()">
+    <ng-container *ngIf="connection.isBothSpatial()">
       <mat-list-option value="connection_type">
         <span class="flex">
           <span class="ellipsis">Connection type</span>
@@ -52,21 +49,26 @@
           <span>ms</span>
         </span>
       </mat-list-option>
-    </ng-container> -->
+    </ng-container>
 
-    <!-- <ng-container *ngIf=!isBothSpatial()>
+    <ng-container *ngIf="!connection.isBothSpatial() && !connection.view.connectRecorder()">
 
-      <ng-container *ngFor="let syn of slider.synapse">
-        <mat-list-option [value]="'syn_spec.' + syn.id">
+      <ng-container *ngFor="let synParam of connection.synapse.params">
+        <mat-list-option
+          [matTooltip]="synParam.id"
+          [selected]="synParam.visible"
+          [value]="synParam.id"
+          matTooltipPosition="before">
           <span class="flex">
-            <span class="ellipsis">{{ syn.label | capitalize }}</span>
+            <span class="ellipsis">{{ synParam.options.label | capitalize }}</span>
             <span class="flex-spacer"></span>
-            <span class="unit">{{ syn.unit }}</span>
+            <span class="value">{{ synParam.value }}</span>
+            <span class="unit">{{ synParam.options.unit }}</span>
           </span>
         </mat-list-option>
       </ng-container>
 
-    </ng-container> -->
+    </ng-container>
   </mat-selection-list>
 
 </div>

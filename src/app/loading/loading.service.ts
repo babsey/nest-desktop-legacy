@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { AppService } from '../app.service';
 import { AppConfigService } from '../config/app-config/app-config.service';
 import { ModelConfigService } from '../model/model-config/model-config.service';
 import { ModelService } from '../model/model.service';
@@ -8,8 +9,6 @@ import { NestServerService } from '../nest-server/nest-server.service';
 import { NestServerConfigService } from '../nest-server/nest-server-config/nest-server-config.service';
 import { NetworkConfigService } from '../network/network-config/network-config.service';
 import { SimulationConfigService } from '../simulation/simulation-config/simulation-config.service';
-import { SimulationProtocolService } from '../simulation/services/simulation-protocol.service';
-import { SimulationService } from '../simulation/services/simulation.service';
 import { VisualizationConfigService } from '../visualization/visualization-config/visualization-config.service';
 
 
@@ -24,6 +23,7 @@ export class LoadingService {
   }
 
   constructor(
+    private _appService: AppService,
     public _appConfigService: AppConfigService,
     public _modelConfigService: ModelConfigService,
     public _modelService: ModelService,
@@ -31,8 +31,6 @@ export class LoadingService {
     public _nestServerService: NestServerService,
     public _networkConfigService: NetworkConfigService,
     public _simulationConfigService: SimulationConfigService,
-    public _simulationProtocolService: SimulationProtocolService,
-    public _simulationService: SimulationService,
     public _visualizationConfigService: VisualizationConfigService,
     public router: Router,
   ) { }
@@ -42,7 +40,6 @@ export class LoadingService {
     const checkingConfigLoaded = setInterval(() => {
       if (this.isConfigReady()) {
         this.checkServer()
-        this.initDatabase()
         clearInterval(checkingConfigLoaded)
       }
     }, 100)
@@ -76,27 +73,6 @@ export class LoadingService {
     this._nestServerService.check()
   }
 
-  initDatabase(): void {
-    if (this.loaded.database) return
-    // console.log('Initialize database')
-    this._modelService.init()
-    this._simulationService.init()
-    this._simulationProtocolService.init()
-    this.loaded.database = true;
-  }
-
-  isDatabaseReady(): boolean {
-    return (
-      this._modelService.status.ready &&
-      this._simulationService.status.ready &&
-      this._simulationProtocolService.status.ready
-    )
-  }
-
-  isReady(): boolean {
-    return this.isConfigReady() && this.isDatabaseReady()
-  }
-
   isSimulatorReady(): boolean {
     return this._nestServerService.status.response && this._nestServerService.status.simulator.ready;
   }
@@ -110,9 +86,4 @@ export class LoadingService {
     this._visualizationConfigService.reset()
   }
 
-  resetDatabases(): void {
-    this._modelService.reset()
-    this._simulationService.reset()
-    this._simulationProtocolService.reset()
-  }
 }

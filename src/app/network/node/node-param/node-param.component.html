@@ -6,15 +6,17 @@
 </div>
 
 <mat-menu #contextMenu="matMenu" class="context-menu">
-  <mat-toolbar class="ellipsis">{{ options.label | capitalize }}</mat-toolbar>
-  <button mat-menu-item (click)="setDefaultValue()">
-    <fa-icon class="menu-icon" icon="eraser"></fa-icon> Set default value: {{ options.value }}
+  <mat-toolbar class="ellipsis">
+    {{ param.options.label | capitalize }}
+  </mat-toolbar>
+  <button mat-menu-item (click)="param.value = param.options.value;">
+    <fa-icon class="menu-icon" icon="eraser"></fa-icon> Set default value: {{ param.options.value }}
   </button>
   <ng-container *ngIf="model">
     <button mat-menu-item (click)="openConfigDialog()">
       <fa-icon class="menu-icon" icon="sliders-h"></fa-icon> Configure sliders
     </button>
-    <button mat-menu-item (click)="hideParam(options.id)">
+    <button mat-menu-item (click)="param.visible = false">
       <fa-icon class="menu-icon" icon="eye-slash"></fa-icon> Hide parameter
     </button>
     <ng-container *ngIf="view=='arrayInput'">
@@ -30,36 +32,32 @@
   (mouseout)="onMouseOut($event)"
   (mouseover)="onMouseOver($event)">
 
-  <ng-container [ngSwitch]="view">
+  <ng-container [ngSwitch]="param.options.input">
     <ng-container *ngSwitchCase="'valueInput'">
       <app-value-input-inline
-        (valueChange)="onValueChange($event)"
-        [value]="value"
-        [options]="options"
+        [(value)]="param.value"
+        [options]="param.options"
         class="list-item"
       ></app-value-input-inline>
     </ng-container>
     <ng-container *ngSwitchCase="'arrayInput'">
       <app-array-input-inline
-        (valueChange)="onValueChange($event)"
-        [value]="value"
-        [options]="options"
+        [(value)]="param.value"
+        [options]="param.options"
         class="list-item"
       ></app-array-input-inline>
     </ng-container>
     <ng-container *ngSwitchCase="'valueSlider'">
       <app-value-slider-inline
-        (valueChange)="onValueChange($event)"
-        [value]="value"
-        [options]="options"
+        [(value)]="param.value"
+        [options]="param.options"
         class="list-item"
       ></app-value-slider-inline>
     </ng-container>
     <ng-container *ngSwitchCase="'tickSlider'">
       <app-ticks-slider-inline
-        (valueChange)="onValueChange($event)"
-        [value]="value"
-        [options]="options"
+        [(value)]="param.value"
+        [options]="param.options"
         class="list-item"
       ></app-ticks-slider-inline>
     </ng-container>

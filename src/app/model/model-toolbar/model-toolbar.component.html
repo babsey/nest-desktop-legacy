@@ -3,10 +3,10 @@
     <ng-container *ngIf="_modelService.selectedModel">
       <span [@enterAnimation] class="flex">
           <span style="line-height:40px">
-            {{ _modelService.label(_modelService.selectedModel) }}
+            {{ _modelService.label() }}
           </span>
         <span class="flex-spacer"></span>
-        <ng-container [ngSwitch]="hasModel()">
+        <ng-container [ngSwitch]="_modelService.hasModel()">
           <ng-container *ngSwitchCase="true">
             <button mat-icon-button (click)="deleteModel()" class="toolbarButton">
               Delete
@@ -18,7 +18,7 @@
             </button>
           </ng-container>
         </ng-container>
-        <button mat-icon-button (click)="_modelService.save()" class="toolbarButton">
+        <button mat-icon-button (click)="saveModel()" class="toolbarButton">
           Save
         </button>
       </span>

@@ -1,8 +1,7 @@
 <fa-icon
   [icon]="icon()"
   [spin]="!response"
-  [class.red]="response && !status.ready"
-  [class.orange]="response && status.ready && !status.valid"
-  [class.green]="response && status.ready && status.valid"
-  >
+  [class.red]="response && !ready"
+  [class.orange]="response && ready && !valid"
+  [class.green]="response && ready && valid">
 </fa-icon>

@@ -14,7 +14,7 @@ export class VisualizationConfigComponent implements OnInit {
     public _visualizationConfigService: VisualizationConfigService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
 }

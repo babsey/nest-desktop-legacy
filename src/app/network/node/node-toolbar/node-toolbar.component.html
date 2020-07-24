@@ -1,9 +1,6 @@
 <mat-menu #nodeMenu="matMenu"class="context-menu node-menu">
   <app-node-menu
-    [(data)]="data"
     [node]="node"
-    (dataChange)="dataChange.emit($event)"
-    (nodeChange)="nodeChange.emit($event)"
   ></app-node-menu>
 </mat-menu>
 
@@ -16,20 +13,19 @@
 <span
   (contextmenu)="onContextMenu($event)"
   (mouseout)="onMouseOut($event)"
-  (mouseover)="onMouseOver($event)"
-  >
-  <mat-toolbar color="primary" class="node-toolbar" [style.background-color]="color()">
+  (mouseover)="onMouseOver($event)">
+  <mat-toolbar
+    color="primary"
+    class="node-toolbar"
+    [style.background-color]="node.view.color">
     <span class="node-shape-container">
       <svg width="64" height="64" style="margin-top:12px">
         <g app-node-shape
-          (click)="selectNode(node)"
-          [strokeColor]="color()"
-          [elementType]="simNode().element_type"
-          [idx]="node.idx"
-          [label]="node.label"
-          [spatial]="simNode().isSpatial()"
+          (click)="node.view.select()"
+          [node]="node"
+          [showSelection]="false"
           transform="translate(32,32)"
-          radius="20"
+          radius="18"
           strokeWidth="4"
           labelSize="16"
         ></g>
@@ -37,12 +33,13 @@
     </span>
 
     <mat-select
-        (selectionChange)="selectModel($event)"
-        [(ngModel)]="simNode().model"
-        [disabled]="disabled"
-      >
+      (selectionChange)="selectModel($event)"
+      [(ngModel)]="node.modelId"
+      [disabled]="disabled">
       <ng-container *ngFor="let model of models">
-        <mat-option [value]="model.value">{{ model.label | capitalize }}</mat-option>
+        <mat-option [value]="model.id">
+          {{ model.label | capitalize }}
+        </mat-option>
       </ng-container>
     </mat-select>
   </mat-toolbar>

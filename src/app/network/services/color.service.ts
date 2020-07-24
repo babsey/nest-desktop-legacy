@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { NetworkConfigService } from '../network-config/network-config.service';
-import { SimulationService } from '../../simulation/services/simulation.service';
 
-import { AppNode } from '../../classes/appNode';
-import { SimConnection } from '../../classes/simConnection';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +11,6 @@ export class ColorService {
 
   constructor(
     private _networkConfigService: NetworkConfigService,
-    private _simulationService: SimulationService,
   ) {
     this.schemes = {
       "category10": ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
@@ -30,26 +26,6 @@ export class ColorService {
 
   colors(): string[] {
     return Array.apply([], this._networkConfigService.config.color.cycle);
-  }
-
-  node(idx: number): string {
-    let colors = this._networkConfigService.config.color.cycle;
-    let node = this._simulationService.data.app.nodes[idx];
-    if (node == undefined || node.color == undefined || node.color == idx) {
-      return colors[idx % colors.length];
-    } else if (typeof node.color == 'number') {
-      return this.node(node.color);
-    } else {
-      return node.color;
-    }
-  }
-
-  connectome(connectome: SimConnection): string {
-    return this.weight(connectome.syn_spec['weight'] || 1);
-  }
-
-  weight(value: number): string {
-    return value < 0 ? '#b34846' : '#467ab3';
   }
 
   schemesKeys(): string[] {

@@ -1,14 +1,15 @@
-<!-- <mat-toolbar [style.background-image]="backgroundImage()"></mat-toolbar> -->
+<!-- <mat-toolbar [style.background-image]="connection.view.getBackgroundImage()"></mat-toolbar> -->
 
 <div style="border-left: 4px solid black; border-right: 4px solid black"
-  [style.border-left-color]="color('source')"
-  [style.border-right-color]="color('target')">
-  <button mat-menu-item class="menu-item" (click)="resetParameters()">
+  [style.border-left-color]="connection.source.view.color"
+  [style.border-right-color]="connection.target.view.color">
+
+  <button mat-menu-item class="menu-item" (click)="connection.reset()">
     <fa-icon class="menu-icon" icon="eraser"></fa-icon> Reset parameters
   </button>
 
-  <ng-container *ngIf="data.simulation.connectomes[link.idx]">
-    <ng-container [ngSwitch]="data.simulation.connectomes[link.idx].hasSourceIndices()">
+  <ng-container *ngIf="connection">
+    <ng-container [ngSwitch]="connection.hasSourceIndices()">
       <ng-container *ngSwitchCase="true">
         <button mat-menu-item class="menu-item" (click)="allSources()">
           <fa-icon class="menu-icon" icon="random"></fa-icon> Set all sources
@@ -21,7 +22,7 @@
       </ng-container>
     </ng-container>
 
-    <ng-container [ngSwitch]="data.simulation.connectomes[link.idx].hasTargetIndices()">
+    <ng-container [ngSwitch]="connection.hasTargetIndices()">
       <ng-container *ngSwitchCase="true">
         <button mat-menu-item class="menu-item" (click)="allTargets()">
           <fa-icon class="menu-icon" icon="random"></fa-icon> Set all targets
@@ -35,7 +36,7 @@
     </ng-container>
   </ng-container>
 
-  <button mat-menu-item class="menu-item" (click)="deleteLink()">
-    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete link
+  <button mat-menu-item class="menu-item" (click)="deleteConnection()">
+    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete connection
   </button>
 </div>

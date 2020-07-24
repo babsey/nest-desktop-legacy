@@ -1,7 +1,21 @@
-<fa-icon
-  [icon]="icon()"
-  [spin]="!status.ready"
-  [class.orange]="status.ready && !status.valid"
-  [class.green]="status.ready && status.valid "
-  >
-</fa-icon>
+<ng-container [ngSwitch]="component.isReady()">
+  <ng-container *ngSwitchCase="false">
+    <fa-icon icon="circle-notch" [spin]="true">
+    </fa-icon>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="true">
+    <ng-container [ngSwitch]="component.isValid()">
+
+      <ng-container *ngSwitchCase="true">
+        <fa-icon icon="check" class="green"></fa-icon>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="false">
+        <fa-icon icon="exclamation" class="orange"></fa-icon>
+      </ng-container>
+
+    </ng-container>
+  </ng-container>
+
+</ng-container>

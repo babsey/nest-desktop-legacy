@@ -6,8 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./response-check.component.scss']
 })
 export class ResponseCheckComponent implements OnInit {
-  @Input() response: boolean;
-  @Input() status: any;
+  @Input() ready: boolean;
+  @Input() valid: boolean;
 
   constructor() { }
 
@@ -16,8 +16,12 @@ export class ResponseCheckComponent implements OnInit {
 
   icon(): string {
     if (!this.response) return 'circle-notch';
-    if (!this.status.ready) return 'times';
-    return this.status.valid ? 'check' : 'exclamation'
+    if (!this.ready) return 'times';
+    return this.valid ? 'check' : 'exclamation'
+  }
+
+  get response(): boolean {
+    return this.ready !== undefined;
   }
 
 }

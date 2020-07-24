@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { LoadingService } from '../loading/loading.service';
+import { AppService } from '../app.service';
 import { enterAnimation } from '../animations/enter-animation';
-
-import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -13,13 +11,12 @@ import { environment } from '../../environments/environment';
   animations: [enterAnimation],
 })
 export class StartpageComponent implements OnInit {
-  public version = environment.VERSION;
 
   constructor(
-    public _loadingService: LoadingService,
+    public _appService: AppService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
 }

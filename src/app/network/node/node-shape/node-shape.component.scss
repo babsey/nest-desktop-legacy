@@ -1,6 +1,7 @@
 .node {
   stroke-dashoffset: 7.85;
   cursor: pointer;
+  fill: white;
 }
 
 .node:hover {
@@ -10,6 +11,7 @@
 .label {
   pointer-events: none;
   font-weight: 500;
+  font-size: 12px;
 }
 
 .square {

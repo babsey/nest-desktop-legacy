@@ -22,13 +22,13 @@ export class ModelParamsListComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
-  hasParam(id: string): boolean {
+  hasParam(paramId: string): boolean {
     if (this._modelService.hasModel(this.model)) {
-      var config = this._modelService.config(this.model);
-      return config.params.filter(param => param.id == id).length > 0;
+      const settings: any = this._modelService.getSettings(this.model);
+      return settings.params.filter(param => param.id == paramId).length > 0;
     }
     return false
   }

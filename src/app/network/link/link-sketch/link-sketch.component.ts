@@ -1,14 +1,11 @@
 // `http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ElementRef } from '@angular/core';
 
 import * as d3 from 'd3';
 
-import { NetworkService } from '../../services/network.service';
-import { NetworkConfigService } from '../../network-config/network-config.service';
-import { NetworkSketchService } from '../../network-sketch/network-sketch.service';
 
-import { Data } from '../../../classes/data';
-import { AppConnection } from '../../../classes/appConnection';
+import { Connection } from '../../../components/connection';
+import { Node } from '../../../components/node';
 
 
 @Component({
@@ -16,119 +13,76 @@ import { AppConnection } from '../../../classes/appConnection';
   templateUrl: './link-sketch.component.html',
   styleUrls: ['./link-sketch.component.scss'],
 })
-export class LinkSketchComponent implements OnInit {
-  @Input() data: Data;
-  @Input() link: AppConnection;
+export class LinkSketchComponent implements OnInit, OnDestroy {
+  @Input() connection: Connection;
   @Input() width: number;
   @Input() height: number;
-  @Input() selected: AppConnection;
-  @Input() color: string;
+  public color: string = 'white';
   private selector: any;
-  private drag_line: any;
-  private subscription: any;
+  private intervalId: any;
 
   constructor(
-    private _networkService: NetworkService,
-    private _networkConfigService: NetworkConfigService,
-    private _networkSketchService: NetworkSketchService,
     private elementRef: ElementRef,
   ) {
     this.selector = d3.select(elementRef.nativeElement);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.color = this.connection.source.view.color;
+    this.intervalId = setInterval(() => {
+      this.color = this.connection.source.view.color;
+    }, 100)
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
   }
 
   onClick(event: MouseEvent): void {
-    this._networkService.selectLink(this.link);
+    this.connection.view.select();
   }
 
-  synWeight(): number {
-    var connectome = this.data.simulation.connectomes[this.link.idx];
-    if (!('syn_spec' in connectome)) return 1
-    if (!('weight' in connectome['syn_spec'])) return 1
-    return connectome.syn_spec.weight
-  }
-
-  drawPath(): string {
-    var connectome = this.data.simulation.connectomes[this.link.idx];
-    var source = this.data.app.nodes[connectome.source].position;
-    var target = this.data.app.nodes[connectome.target].position;
-    return this._networkSketchService.drawPath(source, target, true)
-  }
-
-  distance(): number {
-    var connectome = this.data.simulation.connectomes[this.link.idx];
-    if (connectome == undefined) return 0;
-    if (connectome.source == connectome.target) {
-      return this._networkConfigService.config.sketch.link.maxDistance.value;
-    };
-    var source = this.data.app.nodes[connectome.source].position;
-    var target = this.data.app.nodes[connectome.target].position;
-    var x1 = source.x,
-      y1 = source.y,
-      x2 = target.x,
-      y2 = target.y,
-      dx = x2 - x1,
-      dy = y2 - y1,
-      dr = Math.sqrt(dx * dx + dy * dy);
-    return dr
+  onMouseover(event: MouseEvent): void {
+    this.connection.view.focus();
   }
 
   markerEnd(): string {
-    if (this.synWeight() > 0) {
-      return 'url(#exc' + this.link.idx + ')'
-    } else if (this.synWeight() < 0) {
-      return 'url(#inh' + this.link.idx + ')'
+    if (this.connection.synapse.weight > 0) {
+      return 'url(#exc' + this.connection.idx + ')'
+    } else if (this.connection.synapse.weight < 0) {
+      return 'url(#inh' + this.connection.idx + ')'
     } else {
-      return ""
+      return ''
     }
   }
 
   nodeRadius(): number {
-    return this._networkConfigService.config.sketch.node.radius.value / this.linkWidth() / Math.PI;
+    return this.connection.source.config.data.graph.radius.value / this.linkWidth() / Math.PI;
   }
 
   linkWidth(): number {
-    return this._networkConfigService.config.sketch.link.width.value;
-  }
-
-  linkMaxDistance(): number {
-    return this._networkConfigService.config.sketch.link.maxDistance.value;
+    return this.connection.config.data.graph.width.value;
   }
 
   linkOpacity(): number {
-    return this._networkConfigService.config.sketch.link.opacity.value;
+    return this.connection.config.data.graph.opacity.value;
   }
 
   terminusOpacity(): number {
-    return this._networkConfigService.config.sketch.link.terminusOpacity.value;
+    return this.connection.config.data.graph.terminusOpacity.value;
   }
 
-  isNodeFocused(): boolean {
-    var node = this._networkSketchService.focused.node;
-    if (!node) return false;
-    var connectome = this.data.simulation.connectomes[this.link.idx];
-    return node.idx == connectome.source;
+  dashLine(): boolean {
+    return this.connection.view.probabilistic();
   }
 
-  isLinkFocused(): boolean {
-    var link = this._networkSketchService.focused.link;
-    if (!link) return false;
-    return this.link.idx == link.idx;
-  }
-
-  isNodeSelected(): boolean {
-    var node = this._networkService.selected.node;
-    if (!node) return false;
-    var connectome = this.data.simulation.connectomes[this.link.idx];
-    return node.idx == connectome.source;
-  }
-
-  isLinkSelected(): boolean {
-    var link = this._networkService.selected.link;
-    if (!link) return false;
-    return this.link.idx == link.idx;
+  opacity(): boolean {
+    const node: Node = this.connection.source;
+    const isNodeFocused: boolean = node.view.isFocused();
+    const isNodeSelected: boolean = node.view.isSelected();
+    const isConnectionFocused: boolean = this.connection.view.isFocused();
+    const isConnectionSelected: boolean = this.connection.view.isSelected();
+    return isNodeFocused || isNodeSelected || isConnectionFocused || isConnectionSelected;
   }
 
 }

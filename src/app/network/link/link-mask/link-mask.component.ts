@@ -14,8 +14,10 @@ import { NetworkConfigService } from '../../network-config/network-config.servic
 export class LinkMaskComponent implements OnInit {
   @Input() projections: any;
   @Output() projectionsChange: EventEmitter<any> = new EventEmitter();
-  public data: any[] = [];
-  public layout: any = {};
+  public graph: any = {
+    data: [],
+    layout: {},
+  }
   public maskOptions: any = [
     { value: 'none', label: 'none' },
     { value: 'rectangular', label: 'rectangular' },
@@ -35,9 +37,9 @@ export class LinkMaskComponent implements OnInit {
     public _networkConfigService: NetworkConfigService,
   ) { }
 
-  ngOnInit(): void {
-    this.layout['xaxis'] = { range: [-.55, .55] }
-    this.layout['yaxis'] = { range: [-.55, .55] }
+  ngOnInit() {
+    this.graph.layout['xaxis'] = { range: [-.55, .55] }
+    this.graph.layout['yaxis'] = { range: [-.55, .55] }
     this.selectMaskConfig();
     setTimeout(() => this.draw(), 100)
   }
@@ -69,7 +71,7 @@ export class LinkMaskComponent implements OnInit {
   }
 
   draw(): void {
-    this.layout['shapes'] = [];
+    this.graph.layout['shapes'] = [];
     if (!this.projections.mask) return
     switch (this.projections.mask.masktype) {
       case 'rectangular':
@@ -89,7 +91,7 @@ export class LinkMaskComponent implements OnInit {
 
   drawRect(): void {
     var specs = this.projections.mask.specs;
-    this.layout['shapes'] = [{
+    this.graph.layout['shapes'] = [{
       type: 'rect',
       xref: 'x',
       yref: 'y',
@@ -107,7 +109,7 @@ export class LinkMaskComponent implements OnInit {
 
   drawCircle(): void {
     var specs = this.projections.mask.specs;
-    this.layout['shapes'] = [{
+    this.graph.layout['shapes'] = [{
       type: 'circle',
       xref: 'x',
       yref: 'y',
@@ -125,7 +127,7 @@ export class LinkMaskComponent implements OnInit {
 
   drawDoughnut(): void {
     var specs = this.projections.mask.specs;
-    this.layout['shapes'] = [{
+    this.graph.layout['shapes'] = [{
       type: 'circle',
       xref: 'x',
       yref: 'y',
@@ -180,7 +182,7 @@ export class LinkMaskComponent implements OnInit {
 
   drawEllipsis(): void {
     var specs = this.projections.mask.specs;
-    this.layout['shapes'] = [{
+    this.graph.layout['shapes'] = [{
       type: 'circle',
       xref: 'x',
       yref: 'y',

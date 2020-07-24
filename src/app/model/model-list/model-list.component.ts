@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { NestServerService } from '../../nest-server/nest-server.service';
-import { NavigationService } from '../../navigation/navigation.service';
+import { AppService } from '../../app.service';
 import { ModelService } from '../model.service';
 
 import { listAnimation } from '../../animations/list-animation';
+
+import { Model } from '../../components/model';
 
 
 @Component({
@@ -16,79 +17,42 @@ import { listAnimation } from '../../animations/list-animation';
 })
 export class ModelListComponent implements OnInit, OnDestroy {
   private subscription: any;
-  public availableModels: any[] = [];
-  public enabledModels: any[] = [];
-  public filteredModels: any[] = [];
-  public elementType: string = 'all';
+  public availableModels: string[] = [];
+  public enabledModels: string[] = [];
+  public filteredModels: string[] = [];
   public searchTerm: string = '';
   public view: string = 'enabled';
 
   constructor(
     private http: HttpClient,
-    public _nestServerService: NestServerService,
+    public _appService: AppService,
     public _modelService: ModelService,
-    public _navigationService: NavigationService,
   ) { }
 
-  ngOnInit(): void {
-    this.update()
-    this.subscription = this._modelService.update.subscribe((): void => this.update())
+  ngOnInit() {
+    this.subscription = this._modelService.update.subscribe((): void => this.update());
+    this.update();
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe()
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   update(): void {
-    this.enabledModels = this._modelService.list();
-    this.requestModels().subscribe(resp => {
-      this.availableModels = resp;
-      this.filterModels()
+    this.enabledModels = this._appService.data.filterModels().map(model => model.id);
+    const urlRoot: string = this._appService.data.nestServer.url;
+    this.http.get(urlRoot + '/api/nest/Models').subscribe(resp => {
+      this.availableModels = Object.entries(resp).map(entry => entry[1]);
+      this.filterModels();
     })
   }
 
-  requestModels(): any {
-    var urlRoot = this._nestServerService.url();
-    return this.http.get(urlRoot + '/api/nest/Models')
-  }
-
-  filterModelsByType(): void {
-    if (this.elementType != 'all') {
-      let result: string[] = [];
-      for (let model of this.filteredModels) {
-        if ((model.indexOf('synapse') != -1) || (model.indexOf('connection') != -1) || (model.indexOf('junction') != -1)) {
-          if (this.elementType == 'synapse') {
-            result.push(model)
-          }
-        } else if ((model.indexOf('generator') != -1) || (model.indexOf('dilutor') != -1)) {
-          if (this.elementType == 'stimulator') {
-            result.push(model)
-          }
-        } else if ((model.indexOf('recorder') != -1) || (model.indexOf('meter') != -1) || (model.indexOf('detector') != -1)) {
-          if (this.elementType == 'recorder') {
-            result.push(model)
-          }
-        } else if (model.indexOf('transmitter') != -1) {
-          if (this.elementType == 'other') {
-            result.push(model)
-          }
-        } else {
-          if (this.elementType == 'neuron') {
-            result.push(model)
-          }
-        }
-      }
-      this.filteredModels = result
-    }
-  }
-
   filterModelsBySearch(): void {
-    var searchTerm = this.searchTerm;
-    if (searchTerm) {
+    if (this.searchTerm) {
       let result: string[] = [];
       for (let model of this.filteredModels) {
-        if (model.toLowerCase().indexOf(searchTerm.toLowerCase()) != -1) {
-          result.push(model)
+        if (model.toLowerCase().indexOf(this.searchTerm.toLowerCase()) != -1) {
+          result.push(model);
         }
       }
       this.filteredModels = result;
@@ -96,37 +60,18 @@ export class ModelListComponent implements OnInit, OnDestroy {
   }
 
   filterModels(): void {
-    this.enabledModels = this._modelService.list();
-    this.filteredModels = this.view == 'available' ? this.availableModels : this.enabledModels;
-    this.filterModelsByType()
-    this.filterModelsBySearch()
+    this.filteredModels = this.view === 'available' ? this.availableModels : this.enabledModels;
+    this.filterModelsBySearch();
   }
 
   search(query: string): void {
     this.searchTerm = query;
-    this.filterModels()
+    this.filterModels();
   }
 
   viewModels(view: string): void {
     this.view = view;
-    this.filterModels()
-  }
-
-  isSelected(model: any): boolean {
-    return this._modelService.selectedModel == model;
-  }
-
-  isEnabled(model: any): boolean {
-    return this._modelService.hasModel(model);
-  }
-
-  resetModelConfigs(): void {
-    this._modelService.reset()
-    setTimeout(() => this.update(), 1000)
-  }
-
-  shortLabel(label: string): string {
-    return label.split('_').map(d => d[0]).join('')
+    this.filterModels();
   }
 
 }

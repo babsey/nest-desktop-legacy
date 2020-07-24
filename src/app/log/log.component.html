@@ -1,4 +1,4 @@
-<ng-container *ngIf="_appConfigService.config.app['log']">
+<ng-container *ngIf="_appService.data.config.data.log">
   <mat-nav-list dense class="logs">
     <ng-container *ngFor="let log of _logService.logs">
       <mat-list-item (click)="setTime(log[0])" class="log" [class.active]="isTime(log[0])">

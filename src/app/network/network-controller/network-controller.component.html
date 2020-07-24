@@ -1,41 +1,35 @@
-<ng-container *ngIf="data">
-  <div style="height:calc(100vh - 73px); overflow-y: auto">
-    <ng-container *ngFor="let node of data.app.nodes">
-      <app-node-controller
-        (dataChange)="onDataChange($event)"
-        (nodeChange)="onNodeChange($event)"
-        [(data)]="data"
-        [node]="node"
-        [style.display]="isSelected(collection(node.idx).element_type) ? '': 'None'"
-      ></app-node-controller>
-    </ng-container>
+<div style="height:calc(100vh - 73px); overflow-y: auto">
 
-    <ng-container *ngFor="let link of data.app.links">
-      <app-link-controller
-        (dataChange)="onDataChange($event)"
-        [link]="link"
-        [(data)]="data"
-        [style.display]="isSelectedSource(link) ? '': 'None'"
-      ></app-link-controller>
-    </ng-container>
+  <ng-container *ngFor="let node of network.nodes">
+    <app-node-controller
+      [node]="node"
+      [style.display]="network.view.isElementTypeSelected(node.model.elementType) ? '': 'None'"
+    ></app-node-controller>
+  </ng-container>
 
+  <ng-container *ngFor="let connection of network.connections">
+    <app-link-controller
+      [connection]="connection"
+      [style.display]="network.view.isElementTypeSelected(connection.source.model.elementType) ? '': 'None'"
+    ></app-link-controller>
+  </ng-container>
 
-    <ng-container *ngIf="data.app.hasOwnProperty('factors')">
-      <mat-divider></mat-divider>
-      <mat-list dense>
-        <h3 mat-subheader>Factor</h3>
+  <ng-container *ngIf="network.hasOwnProperty('factors')">
+    <mat-divider></mat-divider>
+    <mat-list dense>
+      <h3 mat-subheader>Factor</h3>
 
-          <ng-container *ngFor="let factor of data.app['factors']">
-            <mat-list-item>
-              <app-value-slider-inline
-                (valueChange)="onValueChange($event)"
-                [(value)]="factor.value"
-                [options]="factor.options"
-                class="list-item"
-              ></app-value-slider-inline>
-            </mat-list-item>
-          </ng-container>
-      </mat-list>
-    </ng-container>
-  </div>
-</ng-container>
+      <ng-container *ngFor="let factor of network['factors']">
+        <mat-list-item>
+          <app-value-slider-inline
+            [(value)]="factor.value"
+            [options]="factor.options"
+            class="list-item"
+          ></app-value-slider-inline>
+        </mat-list-item>
+      </ng-container>
+
+    </mat-list>
+  </ng-container>
+
+</div>

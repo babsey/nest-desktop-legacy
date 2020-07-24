@@ -12,7 +12,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { ToastrModule } from 'ngx-toastr';
 
 // modules
-import { AppRoutingModule } from './modules/app-routing.module';
+import { RoutesModule } from './routes/routes.module';
 import { MaterialModule } from './modules/material.module';
 
 import { ConfigModule } from './config/config.module';
@@ -21,8 +21,9 @@ import { ModelModule } from './model/model.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { NestServerModule } from './nest-server/nest-server.module';
 import { NetworkModule } from './network/network.module';
+import { ProjectModule } from './project/project.module';
+import { ProjectNavigationModule } from './project-navigation/project-navigation.module';
 import { SimulationModule } from './simulation/simulation.module';
-import { SimulationNavigationModule } from './simulation-navigation/simulation-navigation.module';
 import { VisualizationModule } from './visualization/visualization.module';
 
 
@@ -52,7 +53,7 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
   ],
   imports: [
     // NoopAnimationsModule,
-    AppRoutingModule,
+    RoutesModule,
     BrowserAnimationsModule,
     BrowserModule,
     ConfigModule,
@@ -64,8 +65,9 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
     NavigationModule,
     NestServerModule,
     NetworkModule,
+    ProjectModule,
+    ProjectNavigationModule,
     SimulationModule,
-    SimulationNavigationModule,
     ToastrModule.forRoot(),
     VisualizationModule,
     MccColorPickerModule.forRoot({

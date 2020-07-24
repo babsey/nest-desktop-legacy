@@ -2,30 +2,28 @@
   <mat-list-item>
     <app-select
       (selectedChange)="onSelectConnectionType($event)"
-      [(selected)]="connectome.projections['connection_type']"
+      [(selected)]="connection.projections['connection_type']"
       [options]="config.connection_type"
     ></app-select>
   </mat-list-item>
 </mat-list>
 
 <mat-list dense>
-  <ng-container *ngIf="connectome.projections.hasOwnProperty('kernel')">
+  <ng-container *ngIf="connection.projections.hasOwnProperty('kernel')">
     <mat-list-item>
       <app-link-param
-        (valueChange)="onValueChange($event)"
-        [(value)]="connectome.projections.kernel"
-        [link]="link"
+        [(value)]="connection.projections.kernel"
+        [connection]="connection"
         [options]="config.kernel"
       ></app-link-param>
     </mat-list-item>
   </ng-container>
 
-  <ng-container *ngIf="connectome.projections.hasOwnProperty('number_of_connections')">
+  <ng-container *ngIf="connection.projections.hasOwnProperty('number_of_connections')">
     <mat-list-item>
       <app-link-param
-        (valueChange)="onValueChange($event)"
-        [(value)]="connectome.projections.number_of_connections"
-        [link]="link"
+        [(value)]="connection.projections.number_of_connections"
+        [connection]="connection"
         [options]="config.number_of_connections"
       ></app-link-param>
     </mat-list-item>
@@ -34,27 +32,25 @@
   <mat-list-item>
     <app-link-mask
       (projectionsChange)="onProjectionsChange($event)"
-      [(projections)]="connectome.projections"
+      [(projections)]="connection.projections"
     ></app-link-mask>
   </mat-list-item>
 
-  <ng-container *ngIf="connectome.projections.hasOwnProperty('weights')">
+  <ng-container *ngIf="connection.projections.hasOwnProperty('weights')">
     <mat-list-item>
       <app-link-param
-        (valueChange)="onValueChange($event)"
-        [(value)]="connectome.projections.weights"
-        [link]="link"
+        [(value)]="connection.projections.weights"
+        [connection]="connection"
         [options]="config.weights"
       ></app-link-param>
     </mat-list-item>
   </ng-container>
 
-  <ng-container *ngIf="connectome.projections.hasOwnProperty('delays')">
+  <ng-container *ngIf="connection.projections.hasOwnProperty('delays')">
     <mat-list-item>
       <app-link-param
-        (valueChange)="onValueChange($event)"
-        [(value)]="connectome.projections.delays"
-        [link]="link"
+        [(value)]="connection.projections.delays"
+        [connection]="connection"
         [options]="config.delays"
       ></app-link-param>
     </mat-list-item>
@@ -63,15 +59,18 @@
 </mat-list>
 
 <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
-  <mat-list-option value="allow_autapses" [selected]="connectome.projections.allow_autapses">
+  <mat-list-option value="allow_autapses"
+    [selected]="connection.projections.allow_autapses">
     {{ config.allow_autapses.label | capitalize }}
   </mat-list-option>
 
-  <mat-list-option value="allow_multapses" [selected]="connectome.projections.allow_multapses">
+  <mat-list-option value="allow_multapses"
+    [selected]="connection.projections.allow_multapses">
     {{ config.allow_multapses.label | capitalize }}
   </mat-list-option>
 
-  <mat-list-option value="allow_oversized_mask" [selected]="connectome.projections.allow_oversized_mask">
+  <mat-list-option value="allow_oversized_mask"
+    [selected]="connection.projections.allow_oversized_mask">
     {{ config.allow_oversized_mask.label | capitalize }}
   </mat-list-option>
 </mat-selection-list>

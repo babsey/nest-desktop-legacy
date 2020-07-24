@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { Node } from '../../../components/node';
+
 
 @Component({
   selector: '[app-node-shape]',
@@ -7,43 +9,16 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./node-shape.component.scss']
 })
 export class NodeShapeComponent implements OnInit {
-  @Input() elementType: string = 'neuron';
-  @Input() idx: any;
-  @Input() label: string;
-  @Input() fillColor: string = 'white';
-  @Input() selected: boolean = false;
-  @Input() spatial: boolean = false;
+  @Input() node: Node;
   @Input() radius: number = 15;
-  @Input() strokeColor: string = 'black';
   @Input() strokeWidth: number = 2.5;
   @Input() labelSize: number = 12;
+  @Input() showSelection: boolean = true;
 
   constructor(
   ) { }
 
-  ngOnInit(): void {
-  }
-
-  square(): string {
-    var a = this.radius / 2. * Math.sqrt(Math.PI);
-    var points = [[-a,-a].join(','),[a,-a].join(','),[a,a].join(','),[-a,a].join(',')].join(' ');
-    return points;
-  }
-
-  triangle(): string {
-    var a = this.radius / 2. * Math.sqrt(2 * Math.PI);
-    var alpha = 30. / 180. * Math.PI;
-    var x = Math.sin(alpha) * a;
-    var y = Math.cos(alpha) * a;
-    var points = [[-x,y].join(','),[2*x,0].join(','),[-x,-y].join(',')].join(',');
-    return points;
-  }
-
-  layer(): string {
-    var a = Number(this.radius) + 4;
-    var b = Number(this.radius) - 4;
-    var points = [[a,0].join(','), [0,b].join(','), [-a,0].join(','), [0,-b].join(',')].join(' ');
-    return points;
+  ngOnInit() {
   }
 
 }

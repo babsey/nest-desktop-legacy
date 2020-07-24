@@ -27,7 +27,7 @@ export class AnimationColormapComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   onValueChange(value: number): void {

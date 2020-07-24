@@ -1,0 +1,127 @@
+<div class="flex button-toolbar"
+  style="flex-direction:column; height:calc(100vh - 40px)">
+
+  <button mat-icon-button
+    (click)="toggleSidenav()"
+    style="height:40px">
+    <fa-icon [icon]="isSidenavOpened() ? 'chevron-right' : 'chevron-left'"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('networkSelection')"
+    [class.mat-fab]="isMode('networkSelection')"
+    matTooltip="Network selection"
+    matTooltipPosition="before"
+    class="app-button"
+    >
+    <fa-icon icon="tasks"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('networkController')"
+    [class.mat-fab]="isMode('networkController')"
+    matTooltip="Network controller"
+    matTooltipPosition="before"
+    class="app-button"
+    >
+    <fa-icon icon="sliders-h"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('simulation')"
+    [class.mat-fab]="isMode('simulation')"
+    matTooltip="Simulation settings"
+    matTooltipPosition="before"
+    class="app-button"
+    >
+    <!-- <fa-icon icon="wrench"></fa-icon> -->
+    <span class="fa-stack" style="line-height:2em">
+      <fa-icon icon="cog" class="fa-stack-1x"></fa-icon>
+      <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top:11px; left:-14px"></fa-icon>
+    </span>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('codeEditor')"
+    [class.mat-fab]="isMode('codeEditor')"
+    matTooltip="Script code"
+    matTooltipPosition="before"
+    class="app-button"
+    >
+    <fa-icon icon="code"></fa-icon>
+  </button>
+
+  <ng-container *ngIf="_appService.data.config.data.devMode">
+    <button mat-icon-button
+      (click)="selectMode('rawData')"
+      [class.mat-fab]="isMode('rawData')"
+      matTooltip="Raw data"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      JSON
+    </button>
+
+    <button mat-icon-button
+      (click)="selectMode('sketchSettings')"
+      [class.mat-fab]="isMode('sketchSettings')"
+      matTooltip="Sketch settings"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="bezier-curve"></fa-icon>
+    </button>
+  </ng-container>
+
+  <button mat-icon-button *ngIf="_visualizationService.mode === 'chart'"
+    (click)="selectMode('chart')"
+    [class.mat-fab]="isMode('chart')"
+    matTooltip="Chart settings"
+    matTooltipPosition="before"
+    class="app-button"
+    >
+    <span class="fa-stack" style="line-height:2em">
+      <fa-icon icon="chart-line" class="fa-stack-1x"></fa-icon>
+      <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top: 11px; left: -14px"></fa-icon>
+    </span>
+  </button>
+
+  <button mat-icon-button *ngIf="_visualizationService.mode === 'animation'"
+    (click)="selectMode('animation')"
+    [class.mat-fab]="isMode('animation')"
+    matTooltip="Animation settings"
+    matTooltipPosition="before"
+    class="app-button"
+    >
+    <!-- <fa-icon icon="braille"></fa-icon> -->
+    <span class="fa-stack" style="line-height:2em">
+      <fa-icon icon="braille" class="fa-stack-1x"></fa-icon>
+      <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top: 11px; left: -14px"></fa-icon>
+    </span>
+  </button>
+
+  <button mat-icon-button *ngIf="_appService.data.project.hasActivities()"
+    (click)="selectMode('stats')"
+    [class.mat-fab]="isMode('stats')"
+    matTooltip="Simulation stats"
+    matTooltipPosition="before"
+    class="app-button"
+    >
+    <fa-icon icon="poll"></fa-icon>
+  </button>
+
+  <span class="flex-spacer"></span>
+
+  <button mat-icon-button
+    (click)="toggleNetworkQuickView()"
+    [class.mat-fab]="isNetworkQuickViewOpened()"
+    [style.display]="mobileQuery.matches ? 'none' : ''"
+    matTooltip="Quick view network sketch"
+    matTooltipPosition="before"
+    >
+    <span>
+      <fa-icon icon="shapes" rotate="90"></fa-icon>
+    </span>
+  </button>
+
+</div>

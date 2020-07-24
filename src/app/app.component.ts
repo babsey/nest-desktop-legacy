@@ -4,7 +4,6 @@ import { MediaMatcher } from '@angular/cdk/layout';
 
 import { LoadingService } from './loading/loading.service';
 import { NavigationService } from './navigation/navigation.service';
-import { AppConfigService } from './config/app-config/app-config.service';
 import { AppService } from './app.service';
 
 
@@ -23,10 +22,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private media: MediaMatcher,
-    public _appConfigService: AppConfigService,
     public _appService: AppService,
     public _navigationService: NavigationService,
-    public _loadingService: LoadingService,
     public router: Router,
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 1023px)');
@@ -34,11 +31,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  ngOnInit(): void {
-    this._loadingService.init()
+  ngOnInit() {
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 

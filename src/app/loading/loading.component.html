@@ -2,7 +2,9 @@
   <fa-icon
     class="fa-lg"
     icon="wrench"
-    [style.opacity]="_loadingService.isConfigReady() ? 1 : 0"
+    [style.opacity]="_appService.data.isConfigReady() ? 1 : 0"
+    [class.green]="_appService.data.isConfigValid()"
+    [class.red]="!_appService.data.isConfigValid()"
   ></fa-icon>
 </button>
 
@@ -10,7 +12,9 @@
   <fa-icon
     class="fa-lg"
     icon="database"
-    [style.opacity]="_loadingService.isDatabaseReady() ? 1 : 0"
+    [class.green]="_appService.data.isDatabaseValid()"
+    [class.red]="!_appService.data.isDatabaseValid()"
+    [style.opacity]="_appService.data.isDatabaseReady() ? 1 : 0.5"
   ></fa-icon>
 </button>
 
@@ -18,8 +22,8 @@
   <fa-icon
     class="fa-lg"
     icon="server"
-    [class.green]="_loadingService._nestServerService.status.simulator.valid"
-    [class.red]="!_loadingService._nestServerService.status.simulator.valid"
-    [style.opacity]="_loadingService._nestServerService.status.server.response ? 1 : 0"
+    [class.green]="_appService.data.nestServer.simulatorValid"
+    [class.red]="!_appService.data.nestServer.simulatorValid"
+    [style.opacity]="_appService.data.nestServer.serverReady ? 1 : 0.5"
   ></fa-icon>
 </button>

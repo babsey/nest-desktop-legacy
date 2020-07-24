@@ -16,8 +16,8 @@
     <ng-container *ngIf="showPlot">
       <span style="width:700px; height:500px">
         <plotly-plot
-          [data]="data"
-          [layout]="layout"
+          [data]="graph.data"
+          [layout]="graph.layout"
           [style]="{position: 'relative', width: '100%', height: '100%'}"
           [useResizeHandler]="true"
         ></plotly-plot>
@@ -29,7 +29,7 @@
         <h3 mat-subheader class="flex">
           <span class="param-label ellipsis" style="line-height:16px">Mask</span>
           <span class="flex-spacer"></span>
-          <span class="simulation-theme">
+          <span class="project-theme">
             <mat-nav-list dense color="primary" class="flex" style="padding:0">
               <mat-list-item (click)="showPlot=!showPlot" [class.active]="showPlot" class="navButton">
                 <fa-icon icon="crop-alt"></fa-icon>

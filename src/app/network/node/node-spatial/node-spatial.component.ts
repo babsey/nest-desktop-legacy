@@ -3,8 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NetworkConfigService } from '../../network-config/network-config.service';
 import { PositionService } from '../../services/position.service';
 
-import { AppNode } from '../../../classes/appNode';
-import { SimNode } from '../../../classes/simNode';
+import { Node } from '../../../components/node';
 
 
 @Component({
@@ -13,12 +12,12 @@ import { SimNode } from '../../../classes/simNode';
   styleUrls: ['./node-spatial.component.scss']
 })
 export class NodeSpatialComponent implements OnInit {
-  @Input() node: AppNode;
-  @Input() collection: SimNode;
+  @Input() node: Node;
   @Output() nodeChange: EventEmitter<any> = new EventEmitter();
-  @Output() collectionChange: EventEmitter<any> = new EventEmitter();
-  public data: any[] = [];
-  public layout: any = {};
+  public graph: any = {
+    data: [],
+    layout: {},
+  }
   public showPlot: boolean = false;
   public positionType: string = 'free';
 
@@ -27,19 +26,19 @@ export class NodeSpatialComponent implements OnInit {
     private _positionService: PositionService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   plot(): void {
-    if (!this.collection.spatial.hasOwnProperty('positions')) return
-    var x = [];
-    var y = [];
-    this.collection.spatial.positions.map(p => {
+    if (!this.node.spatial.hasOwnProperty('positions')) return
+    const x: number[] = [];
+    const y: number[] = [];
+    this.node.spatial.positions.values.map(p => {
       x.push(p[0])
       y.push(p[1])
     })
 
-    this.data = [{
+    this.graph.data = [{
       mode: 'markers',
       type: 'scattergl',
       x: x,
@@ -52,14 +51,14 @@ export class NodeSpatialComponent implements OnInit {
       }
     }]
 
-    var center = this.collection.spatial.center || [0, 0];
-    var extent = this.collection.spatial.extent || [1, 1];
-    var minX = center[0] - extent[0] / 2;
-    var maxX = center[0] + extent[0] / 2;
-    var minY = center[1] - extent[1] / 2;
-    var maxY = center[1] + extent[1] / 2;
+    const extent: number[] = this.node.spatial.positions.extent || [1, 1];
+    const center: number[] = this.node.spatial.positions['center'] || [0, 0];
+    const minX: number = center[0] - extent[0] / 2;
+    const maxX: number = center[0] + extent[0] / 2;
+    const minY: number = center[1] - extent[1] / 2;
+    const maxY: number = center[1] + extent[1] / 2;
 
-    this.layout = {
+    this.graph.layout = {
       xaxis: {
         range: [minX + minX / 100, maxX + maxX / 100],
         title: 'Row',
@@ -73,22 +72,8 @@ export class NodeSpatialComponent implements OnInit {
   }
 
   spatialEvent(event: any): void {
-    this.collection.spatial['edge_wrap'] = event.option.selected;
+    this.node.spatial.positions.edgeWrap = event.option.selected;
     // this.nodeChange.emit()
   }
 
-  genPositions(): void {
-    switch (this.positionType) {
-      case 'free':
-        this.collection.spatial.positions = this._positionService.freePositions(this.collection.n, this.collection.spatial);
-        break;
-      case 'grid':
-        this.collection.spatial.positions = this._positionService.gridPositions(this.collection.spatial);
-        break;
-    }
-    delete this.collection.rows;
-    delete this.collection.columns;
-    this.plot()
-    this.collectionChange.emit(this.collection)
-  }
 }

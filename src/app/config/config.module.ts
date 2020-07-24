@@ -6,8 +6,8 @@ import { MccColorPickerModule } from 'material-community-components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppPipesModule } from '../pipes/pipes.module';
-import { AppRoutingModule } from '../modules/app-routing.module';
 import { MaterialModule } from '../modules/material.module';
+import { RoutesModule } from '../routes/routes.module';
 
 import { ModelModule } from '../model/model.module';
 import { NestServerModule } from '../nest-server/nest-server.module';
@@ -35,7 +35,6 @@ import { AppConfigService } from './app-config/app-config.service';
   ],
   imports: [
     AppPipesModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
     FontAwesomeModule,
@@ -44,6 +43,7 @@ import { AppConfigService } from './app-config/app-config.service';
     ModelModule,
     NestServerModule,
     NetworkModule,
+    RoutesModule,
     SimulationModule,
     VisualizationModule,
     MccColorPickerModule.forRoot({

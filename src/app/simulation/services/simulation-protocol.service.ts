@@ -8,7 +8,7 @@ import { NavigationService } from '../../navigation/navigation.service';
 import { SimulationConfigService } from '../simulation-config/simulation-config.service';
 import { NetworkService } from '../../network/services/network.service';
 
-import { Data } from '../../classes/data';
+import { Project } from '../../components/project';
 
 
 @Injectable({
@@ -38,10 +38,10 @@ export class SimulationProtocolService {
     this.initVersion()
   }
 
-  loadSimulations(): any {
-    return this.list().then(simulations => {
-      simulations.map(simulation => simulation['source'] = 'protocol')
-      return simulations;
+  loadProjects(): any {
+    return this.list().then(projects => {
+      projects.map(project => project['source'] = 'protocol')
+      return projects;
     })
   }
 
@@ -62,32 +62,32 @@ export class SimulationProtocolService {
     return this.list().then(docs => docs.map(row => row.hash));
   }
 
-  save(data: Data, reload: boolean = false): void {
-    // console.log('Save protocol')
-    let dataCloned = data.clone();
+  save(project: Project, reload: boolean = false): void {
+    // console.log('Save project')
+    let data = project.serialize('db');
     this.count().then(count => {
       if (count == 0) {
-        if ('_id' in dataCloned) {
-          delete dataCloned['_id']
-          delete dataCloned['_rev']
+        if ('_id' in data) {
+          delete data['_id']
+          delete data['_rev']
         }
-        // console.log('Create data in db')
-        this._dbService.db.create(this.db, dataCloned)
+        // console.log('Create project in db')
+        this._dbService.db.create(this.db, data)
           .then(res => {
             if (reload) {
               this.load(res.id).then(() => {
                 this.change.emit()
               })
             } else {
-              data['_id'] = res.id;
+              project['_id'] = res.id;
               this.change.emit()
             }
           })
       } else {
         this.hashList().then(hash => {
-          if (hash.indexOf(dataCloned['hash']) != -1 && dataCloned._id) {
-            // console.log('Update data in db')
-            this._dbService.db.update(this.db, dataCloned).then(res => {
+          if (hash.indexOf(data['hash']) != -1 && data._id) {
+            // console.log('Update project in db')
+            this._dbService.db.update(this.db, data).then(res => {
               if (reload) {
                 this.load(res.id).then(() => {
                   this.change.emit()
@@ -97,19 +97,19 @@ export class SimulationProtocolService {
               }
             })
           } else {
-            if ('_id' in dataCloned) {
-              delete dataCloned['_id']
-              delete dataCloned['_rev']
+            if ('_id' in data) {
+              delete data['_id']
+              delete data['_rev']
             }
-            // console.log('Create data in db')
-            this._dbService.db.create(this.db, dataCloned)
+            // console.log('Create project in db')
+            this._dbService.db.create(this.db, data)
               .then(res => {
                 if (reload) {
                   this.load(res.id).then(() => {
                     this.change.emit()
                   })
                 } else {
-                  data['_id'] = res.id;
+                  project['_id'] = res.id;
                   this.change.emit()
                 }
               })
@@ -139,32 +139,32 @@ export class SimulationProtocolService {
     return s;
   }
 
-  download(data: Data[]): void {
-    data.forEach(d => d['_rev'] = undefined);
-    var dataJSON = JSON.stringify(data);
+  download(projects: Project[]): void {
+    var data = projects.map(project => project.serialize('file'))
     var element = document.createElement('a');
-    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(dataJSON));
+    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(JSON.stringify(data)));
     var now = new Date();
     var date = [now.getFullYear()-2000, this.pad(now.getMonth() + 1), this.pad(now.getDate())];
     var time = [this.pad(now.getHours()), this.pad(now.getMinutes()), this.pad(now.getSeconds())];
     var datetime = date.join('') + '_' + time.join('');
-    element.setAttribute('download', "NEST_Desktop-" + datetime + "-protocols.json");
+    element.setAttribute('download', "NEST_Desktop-" + datetime + ".json");
     element.style.display = 'none';
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
   }
 
-  upload(data: Data[]): void {
+  upload(project: Project[]): void {
+    // console.log('Upload projects')
     var config = this._simulationConfigService.config.db.protocol;
     config['host'] = "";
     config['port'] = "";
     this.db = this._dbService.init('protocol', config);
-    this.db.bulkDocs(data, (err, response) => {
+    this.db.bulkDocs(project, (err, response) => {
       if (err) {
         this.snackBar.open(err, 'Ok');
       } else {
-        this.snackBar.open('Protocols uploaded successfully.', null, {
+        this.snackBar.open('Projects uploaded successfully.', null, {
           duration: 2000,
         });
         this.change.emit()

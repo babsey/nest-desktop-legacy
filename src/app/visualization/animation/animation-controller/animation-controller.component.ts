@@ -18,7 +18,7 @@ export class AnimationControllerComponent implements OnInit {
     public _animationControllerService: AnimationControllerService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   increment(): void {

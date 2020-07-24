@@ -1,17 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { AppConfigService } from '../../../config/app-config/app-config.service';
-import { ColorService } from '../../services/color.service';
-import { ModelService } from '../../../model/model.service';
 import { FormatService } from '../../../services/format/format.service';
-import { NetworkConfigService } from '../../network-config/network-config.service';
-import { NetworkService } from '../../services/network.service';
 
-import { Data } from '../../../classes/data';
-import { AppNode } from '../../../classes/appNode';
-import { AppConnection } from '../../../classes/appConnection';
-import { SimNode } from '../../../classes/simNode';
-import { SimConnection } from '../../../classes/simConnection';
+import { Connection } from '../../../components/connection';
 
 
 @Component({
@@ -20,129 +11,40 @@ import { SimConnection } from '../../../classes/simConnection';
   styleUrls: ['./link-list.component.scss']
 })
 export class LinkListComponent implements OnInit {
-  @Input() data: Data;
-  @Input() link: AppConnection;
+  @Input() connection: Connection;
   @Input() selective: boolean = false;
-  @Output() dataChange: EventEmitter<any> = new EventEmitter();
-  public connectome: SimConnection;
 
   constructor(
-    private _appConfigService: AppConfigService,
-    private _modelService: ModelService,
-    private _networkConfigService: NetworkConfigService,
-    private _networkService: NetworkService,
-    public _colorService: ColorService,
     public _formatService: FormatService,
   ) { }
 
-  ngOnInit(): void {
-    this.update()
-  }
-
-  update(): void {
-    if (this.link == undefined) return
-    this.connectome = this.data.simulation.connectomes[this.link.idx];
-  }
-
-  color(src: string): string {
-    return this._colorService.node(this.connectome[src]);
-  }
-
-  collection(idx: number): SimNode {
-    return this.data.simulation.collections[idx];
-  }
-
-  source(): AppNode {
-    return this.data.app.nodes[this.connectome.source];
-  }
-
-  target(): AppNode {
-    return this.data.app.nodes[this.connectome.target];
-  }
-
-  isSpatial(idx: number): boolean {
-    var collection = this.collection(idx);
-    return collection.isSpatial();
-  }
-
-  selectNode(idx: number): void {
-    var node = this.data.app.nodes[idx];
-    this._networkService.selectNode(node)
-  }
-
-  selectLink(): void {
-    this._networkService.selectLink(this.link)
-  }
-
-  paramDisplay(param: string): boolean {
-    return this.link.hasOwnProperty('display') ? this.link.display.includes(param) || !this.selective : true;
-  }
-
-  isBothSpatial(): boolean {
-    var collections = this.data.simulation.collections;
-    var source = collections[this.connectome.source];
-    var target = collections[this.connectome.target];
-    return source.hasOwnProperty('spatial') && target.hasOwnProperty('spatial');
-  }
-
-  isProjections(): boolean {
-    return this.connectome.hasOwnProperty('projections')
-  }
-
-  connRule(): string {
-    if (!this.connectome.hasOwnProperty('conn_spec')) return 'all_to_all'
-    return this.connectome.conn_spec.rule || 'all_to_all'
-  }
-
-  synModel(): string {
-    if (!this.connectome.hasOwnProperty('syn_spec')) return 'static_synapse'
-    return this.connectome.syn_spec.model || 'static_synapse'
-  }
-
-  synWeight(): number {
-    var weight = 1;
-    if (this.connectome.hasOwnProperty('syn_spec')) {
-      weight = this.connectome.syn_spec.weight || weight;
-    }
-    return this._formatService.format(weight);
-  }
-
-  synDelay(): number {
-    var delay = 1;
-    if (this.connectome.hasOwnProperty('syn_spec')) {
-      delay = this.connectome.syn_spec.delay || delay;
-    }
-    return this._formatService.format(delay);
+  ngOnInit() {
   }
 
   synWeights(): any {
-    if (!this.connectome.projections.hasOwnProperty('weights')) {
-      return this._formatService.format(1)
+    if (!this.connection.projections.hasOwnProperty('weights')) {
+      return this._formatService.format(1);
     }
-    if (!this.connectome.projections.weights.hasOwnProperty('parametertype')) {
-      return this._formatService.format(this.connectome.projections.weights)
+    if (!this.connection.projections.weights.hasOwnProperty('parametertype')) {
+      return this._formatService.format(this.connection.projections.weights);
     }
-    if (this.connectome.projections.weights.parametertype == 'constant') {
-      return this._formatService.format(this.connectome.projections.weights.specs.value)
+    if (this.connection.projections.weights.parametertype == 'constant') {
+      return this._formatService.format(this.connection.projections.weights.specs.value);
     }
-    return this.connectome.projections.weights.parametertype
+    return this.connection.projections.weights.parametertype;
   }
 
   synDelays(): any {
-    if (!this.connectome.projections.hasOwnProperty('delays')) {
-      return this._formatService.format(1)
+    if (!this.connection.projections.hasOwnProperty('delays')) {
+      return this._formatService.format(1);
     }
-    if (!this.connectome.projections.delays.hasOwnProperty('parametertype')) {
-      return this._formatService.format(this.connectome.projections.delays)
+    if (!this.connection.projections.delays.hasOwnProperty('parametertype')) {
+      return this._formatService.format(this.connection.projections.delays);
     }
-    if (this.connectome.projections.delays.parametertype == 'constant') {
-      return this._formatService.format(this.connectome.projections.delays.specs.value)
+    if (this.connection.projections.delays.parametertype == 'constant') {
+      return this._formatService.format(this.connection.projections.delays.specs.value);
     }
-    return this.connectome.projections.delays.parametertype
-  }
-
-  onDataChange(data: Data): void {
-    this.dataChange.emit(this.data)
+    return this.connection.projections.delays.parametertype;
   }
 
 }

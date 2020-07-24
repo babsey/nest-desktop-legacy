@@ -42,7 +42,7 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
     private element: ElementRef,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     // console.log('Three scatter on init')
     if (this.useStats) {
       this.stats = new STATS();
@@ -54,7 +54,7 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
     this.init()
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     console.log('Three scatter on destroy')
     this._animationControllerService.stop();
     cancelAnimationFrame(this.requestID);

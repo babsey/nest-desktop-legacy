@@ -1,16 +1,16 @@
 <span class="config-theme">
   <mat-toolbar class="navbar" color="primary">
-    {{ routeConfig.replace('-', ' ') | capitalize }}
+    {{ routeSetting.replace('-', ' ') | capitalize }}
   </mat-toolbar>
 </span>
 
 <div style="width:640px; margin: 8px">
-  <ng-container [ngSwitch]="routeConfig">
-    <app-app-config *ngSwitchCase="'application'" class="config"></app-app-config>
-    <app-nest-server-config *ngSwitchCase="'nest-server'" class="config"></app-nest-server-config>
-    <app-model-config *ngSwitchCase="'model'" class="config"></app-model-config>
-    <app-network-config *ngSwitchCase="'network'" class="config"></app-network-config>
-    <app-simulation-config *ngSwitchCase="'simulation'" class="config"></app-simulation-config>
-    <app-visualization-config *ngSwitchCase="'visualization'" class="config"></app-visualization-config>
+  <ng-container [ngSwitch]="routeSetting">
+    <app-app-config *ngSwitchCase="'application'" class="setting"></app-app-config>
+    <app-nest-server-config *ngSwitchCase="'nest-server'" class="setting"></app-nest-server-config>
+    <app-model-config *ngSwitchCase="'model'" class="setting"></app-model-config>
+    <app-network-config *ngSwitchCase="'network'" class="setting"></app-network-config>
+    <app-simulation-config *ngSwitchCase="'simulation'" class="setting"></app-simulation-config>
+    <app-visualization-config *ngSwitchCase="'visualization'" class="setting"></app-visualization-config>
   </ng-container>
 </div>

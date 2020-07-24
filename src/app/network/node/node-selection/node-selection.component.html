@@ -1,53 +1,27 @@
 <div class="node-selection"
-  [style.display]="nodeDisplay()"
-  [style.border-color]="color()"
-  >
+  [style.border-color]="node.view.color"
+  [style.display]="node.view.isSelected(true) ? '' : 'none'">
 
   <app-node-toolbar
-    (dataChange)="onDataChange($event)"
-    (nodeChange)="onNodeChange($event)"
-    [(data)]="data"
     [node]="node"
   ></app-node-toolbar>
 
-  <!-- <ng-container *ngIf="!isRecorder()">
-    <ng-container *ngIf="!collection.isSpatial()">
-      <mat-list dense>
-        <mat-list-item style="height:40px;line-height:40px">
-          <app-node-param
-            (valueChange)="onValueChange($event)"
-            [(node)]="node"
-            [(value)]="collection.n"
-            [data]="data"
-            [options]="_networkConfigService.config['node'].npop"
-            view="valueSlider"
-          ></app-node-param>
-        </mat-list-item>
-      </mat-list>
-    </ng-container>
+  <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
 
-    <ng-container *ngIf="collection.isSpatial()">
-      <mat-nav-list dense>
-        <mat-list-item>
-          <app-node-spatial [node]="node" [collection]="collection"></app-node-spatial>
-        </mat-list-item>
-      </mat-nav-list>
-    </ng-container>
-  </ng-container> -->
-
-  <mat-selection-list dense
-    (click)="dataChange.emit(data)"
-    [(ngModel)]="node.display"
-    >
-    <ng-container *ngFor="let param of configModel.params">
-      <mat-list-option [value]="param.id" [title]="param.id">
+    <ng-container *ngFor="let param of node.params">
+      <mat-list-option
+        [matTooltip]="param.id"
+        [selected]="param.visible"
+        [value]="param.id"
+        matTooltipPosition="before">
         <span class="flex">
-          <span class="ellipsis">{{ param.label | capitalize }}</span>
+          <span class="ellipsis">{{ param.options.label | capitalize }}</span>
           <span class="flex-spacer"></span>
-          <span class="value">{{ collection.params[param.id] }}</span>
-          <span class="unit">{{ param.unit }}</span>
+          <span class="value">{{ param.value }}</span>
+          <span class="unit">{{ param.options.unit }}</span>
         </span>
       </mat-list-option>
     </ng-container>
+
   </mat-selection-list>
 </div>

@@ -9,8 +9,8 @@
     <ng-container *ngIf="showPlot">
       <span style="width:700px; height:500px">
         <plotly-plot
-        [data]="data"
-        [layout]="layout"
+        [data]="graph.data"
+        [layout]="graph.layout"
         [style]="{position: 'relative', width: '100%', height: '100%'}"
         [useResizeHandler]="true"
         >
@@ -23,7 +23,7 @@
         <h3 mat-subheader class="flex">
           <span class="param-label ellipsis" style="line-height:16px">Spatial</span>
           <span class="flex-spacer"></span>
-          <span class="simulation-theme">
+          <span class="project-theme">
             <mat-nav-list dense class="flex" style="padding:0" color="primary">
               <mat-list-item (click)="showPlot=!showPlot" [class.active]="showPlot" class="navButton">
                 <fa-icon icon="braille"></fa-icon>
@@ -49,10 +49,10 @@
           <mat-list dense style="padding:0">
             <mat-list-item class="list-item">
                 <app-value-slider-inline
-                  [(value)]="collection['n']"
-                  [options]="_networkConfigService.config['node'].npop"
+                  [(value)]="node.size"
+                  [options]="node.config.data.size"
                   style="width:100%"
-                  (valueChange)="genPositions()"
+                  (valueChange)="node.spatial.positions.generate()"
                 ></app-value-slider-inline>
             </mat-list-item>
           </mat-list>
@@ -61,31 +61,55 @@
         <ng-container *ngSwitchCase="'grid'">
           <mat-nav-list dense style="padding: 0">
             <mat-list-item class="list-item">
-              <app-value-slider-popup [(value)]="collection.spatial['rows']" [options]="_networkConfigService.config.spatial['rows']" style="width:100%" (valueChange)="genPositions()"></app-value-slider-popup>
+              <app-value-slider-popup
+                [(value)]="node.spatial.rows"
+                [options]="node.spatial.config.data.rows"
+                style="width:100%"
+                (valueChange)="node.spatial.positions.generate()">
+              </app-value-slider-popup>
             </mat-list-item>
             <mat-list-item class="list-item">
-              <app-value-slider-popup [(value)]="collection.spatial['columns']" [options]="_networkConfigService.config.spatial['columns']" style="width:100%" (valueChange)="genPositions()"></app-value-slider-popup>
+              <app-value-slider-popup
+              [(value)]="node.spatial.columns"
+              [options]="node.spatial.config.data.columns"
+              style="width:100%"
+              (valueChange)="node.spatial.positions.generate()">
+            </app-value-slider-popup>
             </mat-list-item>
           </mat-nav-list>
         </ng-container>
       </ng-container>
 
       <mat-selection-list dense style="padding:0" (selectionChange)="spatialEvent($event)">
-        <mat-list-option class="list-item" value="edge_wrap" [selected]="collection.spatial['edge_wrap']">Wrapped edges</mat-list-option>
+        <mat-list-option class="list-item" value="edge_wrap" [selected]="node.spatial['edge_wrap']">Wrapped edges</mat-list-option>
       </mat-selection-list>
 
       <mat-nav-list dense style="padding: 0">
         <mat-list-item class="list-item">
-          <app-array-input-popup [(value)]="collection.spatial['center']" [options]="_networkConfigService.config.spatial['center']" style="width:100%" (valueChange)="genPositions()"></app-array-input-popup>
+          <app-array-input-popup
+          [(value)]="node.spatial.center"
+          [options]="node.spatial.config.data.center"
+          style="width:100%"
+          (valueChange)="node.spatial.positions.generate()">
+        </app-array-input-popup>
         </mat-list-item>
         <mat-list-item class="list-item">
-          <app-array-input-popup [(value)]="collection.spatial['extent']" [options]="_networkConfigService.config.spatial['extent']" style="width:100%" (valueChange)="genPositions()"></app-array-input-popup>
+          <app-array-input-popup
+          [(value)]="node.spatial.extent"
+          [options]="node.spatial.config.data.extent"
+          style="width:100%"
+          (valueChange)="node.spatial.positions.generate()">
+        </app-array-input-popup>
         </mat-list-item>
         <mat-list-item class="list-item">
-          <app-array-input-popup [(value)]="collection.spatial['positions']" [options]="_networkConfigService.config.spatial['positions']" style="width:100%"></app-array-input-popup>
+          <app-array-input-popup
+          [(value)]="node.spatial.positions.value"
+          [options]="node.spatial.config.data.positions"
+          style="width:100%">
+        </app-array-input-popup>
         </mat-list-item>
 
-        <mat-list-item class="list-item" (click)="genPositions()">
+        <mat-list-item class="list-item" (click)="node.spatial.positions.generate()">
           Generate positions
         </mat-list-item>
       </mat-nav-list>
@@ -93,8 +117,10 @@
   </span>
 </mat-menu>
 
-<div class="spatial-container flex" [matMenuTriggerFor]="spatialMenu" (click)="plot()">
+<div class="spatial-container flex"
+  [matMenuTriggerFor]="spatialMenu"
+  (click)="plot()">
   <span class="label">Positions</span>
   <span class="flex-spacer"></span>
-  <span>{{ collection.spatial.positions.length }}</span>
+  <span>{{ node.spatial.positions.values.length }}</span>
 </div>

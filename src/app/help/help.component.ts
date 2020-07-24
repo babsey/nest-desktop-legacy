@@ -16,7 +16,7 @@ export class HelpComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.subscription = this.route.params.subscribe((params: string[]): void => {
       if (params.hasOwnProperty('help')) {
         this.help = params['help'];
@@ -24,7 +24,7 @@ export class HelpComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.subscription.unsubscribe()
   }
 

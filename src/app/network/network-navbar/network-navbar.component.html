@@ -1,22 +1,22 @@
 <nav mat-tab-nav-bar>
   <a mat-tab-link
-    (click)="selectElementType(null)"
-    [active]="isSelected(null)"
+    (click)="network.view.selectedElementType = null"
+    [active]="network.view.selectedElementType === null"
     class="tab-nav"
   > All </a>
   <a mat-tab-link
-    (click)="selectElementType('stimulator')"
-    [active]="isSelected('stimulator')"
+    (click)="network.view.selectedElementType = 'stimulator'"
+    [active]="network.view.selectedElementType === 'stimulator'"
     class="tab-nav"
   > Stimulator </a>
   <a mat-tab-link
-    (click)="selectElementType('neuron')"
-    [active]="isSelected('neuron')"
+    (click)="network.view.selectedElementType = 'neuron'"
+    [active]="network.view.selectedElementType === 'neuron'"
     class="tab-nav"
   > Neuron </a>
   <a mat-tab-link
-    (click)="selectElementType('recorder')"
-    [active]="isSelected('recorder')"
+    (click)="network.view.selectedElementType = 'recorder'"
+    [active]="network.view.selectedElementType === 'recorder'"
     class="tab-nav"
   > Recorder </a>
 </nav>

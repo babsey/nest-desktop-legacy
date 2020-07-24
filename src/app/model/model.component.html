@@ -25,9 +25,9 @@
               ></app-model-params-selection-list>
             </ng-container>
             <ng-container *ngSwitchCase="'slider'">
-              <ng-container *ngIf="_modelService.enabledModel">
+              <ng-container *ngIf="_modelService.hasModel()">
                 <app-model-params-slider
-                  [model]="_modelService.config()"
+                  [model]="_modelService.selectedModel"
                 ></app-model-params-slider>
               </ng-container>
             </ng-container>
@@ -58,7 +58,7 @@
         class="fa-lg fa-spin"
         style="display:inline-block"
       ></fa-icon>
-      <span style="margin-left: 8px">Model is loading.</span>
+      <span style="margin-left: 8px">Model is requesting in NEST.</span>
     </span>
   </div>
 </ng-template>

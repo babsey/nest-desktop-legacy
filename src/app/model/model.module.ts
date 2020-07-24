@@ -7,9 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppFormsModule } from '../forms/forms.module';
 import { AppPipesModule } from '../pipes/pipes.module';
-import { AppRoutingModule } from '../modules/app-routing.module';
 import { MaterialModule } from '../modules/material.module';
-
+import { RoutesModule } from '../routes/routes.module';
 
 import { ModelComponent } from './model.component';
 import { ModelConfigComponent } from './model-config/model-config.component';
@@ -52,9 +51,8 @@ import { ModelToolbarComponent } from './model-toolbar/model-toolbar.component';
     ModelToolbarComponent,
   ],
   imports: [
-    AppPipesModule,
-    AppRoutingModule,
     AppFormsModule,
+    AppPipesModule,
     BrowserAnimationsModule,
     CommonModule,
     FontAwesomeModule,
@@ -62,6 +60,7 @@ import { ModelToolbarComponent } from './model-toolbar/model-toolbar.component';
     HttpClientModule,
     MaterialModule,
     ReactiveFormsModule,
+    RoutesModule,
   ],
   providers: [
   ],

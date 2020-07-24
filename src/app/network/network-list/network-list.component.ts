@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { NetworkService } from '../services/network.service';
 
-import { Data } from '../../classes/data';
-import { AppNode } from '../../classes/appNode';
-import { AppConnection } from '../../classes/appConnection';
+import { Network } from '../../components/network';
+import { Node } from '../../components/node';
+import { Connection } from '../../components/connection';
 
 import { listAnimation } from '../../animations/list-animation';
 
@@ -18,26 +18,25 @@ import { listAnimation } from '../../animations/list-animation';
   ]
 })
 export class NetworkListComponent implements OnInit {
-  @Input() data: Data;
+  @Input() network: Network;
   @Input() selective: boolean = true;
   @Input() paramSelective: boolean = true;
   @Input() columns: boolean = false;
-  @Output() dataChange: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private _networkService: NetworkService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     // console.log('Init network list')
   }
 
-  nodeDisplay(node: AppNode): boolean {
-    return this._networkService.isNodeSelected(node, this.data) || !this.selective;
+  nodeDisplay(node: Node): boolean {
+    return node.view.isSelected() || !this.selective;
   }
 
-  linkDisplay(link: AppConnection): boolean {
-    return this._networkService.isLinkSelected(link, this.data) || !this.selective;
+  connectionDisplay(connection: Connection): boolean {
+    return connection.view.isSelected() || !this.selective;
   }
 
 }

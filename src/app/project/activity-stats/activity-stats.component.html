@@ -1,0 +1,78 @@
+<ng-container *ngIf="selectedModel!=undefined">
+  <span class="dark-theme">
+    <button mat-mini-fab
+      color="primary"
+      (click)="unselect()"
+      style="z-index:1000;position:absolute;top:5px;left:10px">
+      <fa-icon icon="arrow-left"></fa-icon>
+    </button>
+  </span>
+</ng-container>
+
+<ng-container [ngSwitch]="selectedModel">
+
+  <ng-container *ngSwitchCase="'spike_detector'">
+    <app-spike-stats
+      [color]="colorSelected()"
+      [idx]="selectedIdx"
+      [activities]="activities"
+      ></app-spike-stats>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'multimeter'">
+    <app-analog-stats
+      [color]="colorSelected()"
+      [idx]="selectedIdx"
+      [activities]="activities"
+      [recordFrom]="recordFrom"
+      [selectedRecordFrom]="selectedRecordFrom"
+    ></app-analog-stats>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'voltmeter'">
+    <app-analog-stats
+      [color]="colorSelected()"
+      [idx]="selectedIdx"
+      [activities]="activities"
+      [selectedRecord]="'V_m'"
+    ></app-analog-stats>
+  </ng-container>
+
+  <ng-container *ngSwitchDefault>
+    <mat-nav-list dense>
+      <h3 matSubheader>
+        <span class="flex">
+          Id
+          <span class="flex-spacer"></span>
+          Model
+          <span class="flex-spacer"></span>
+          Project size
+        </span>
+      </h3>
+      <ng-container *ngFor="let activity of activities">
+        <mat-list-item
+          (click)="select(activity)"
+          style="width:100%;line-height:40px">
+          <span class="flex" style="height:40px">
+            <span>
+              <svg width="40" height="40">
+                <g app-node-shape
+                  [strokeColor]="activity.recorder.view.color"
+                  [elementType]="'recorder'"
+                  [label]="activity.recorder.view.label"
+                  [idx]="activity.recorder.idx"
+                  transform="translate(20,20)"
+                ></g>
+              </svg>
+            </span>
+            <span class="flex-spacer"></span>
+            <span>{{ activity.recorder.model.label }}</span>
+            <span class="flex-spacer"></span>
+            <span>{{ activity.recorder.events.senders.length }}</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+
+</ng-container>

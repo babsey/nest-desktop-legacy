@@ -1,20 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 import { MatMenuTrigger } from '@angular/material/menu';
 
-import { AppConfigService } from '../../../config/app-config/app-config.service';
 import { AppService } from '../../../app.service';
-import { ColorService } from '../../services/color.service';
-import { ModelService } from '../../../model/model.service';
-import { NetworkConfigService } from '../../network-config/network-config.service';
-import { NetworkControllerService } from '../../network-controller/network-controller.service';
-import { NetworkService } from '../../services/network.service';
 
-import { Data } from '../../../classes/data';
-import { AppNode } from '../../../classes/appNode';
-import { AppConnection } from '../../../classes/appConnection';
-import { SimNode } from '../../../classes/simNode';
-import { SimConnection } from '../../../classes/simConnection';
+import { Connection } from '../../../components/connection';
 
 
 @Component({
@@ -23,74 +13,16 @@ import { SimConnection } from '../../../classes/simConnection';
   styleUrls: ['./link-toolbar.component.scss']
 })
 export class LinkToolbarComponent implements OnInit {
-  @Input() data: Data;
-  @Input() link: AppConnection;
-  @Output() dataChange: EventEmitter<any> = new EventEmitter();
-  @Output() nodeClick: EventEmitter<any> = new EventEmitter();
-  public connectome: SimConnection;
+  @Input() connection: Connection;
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
     private _appService: AppService,
-    private _appConfigService: AppConfigService,
-    private _colorService: ColorService,
-    private _modelService: ModelService,
-    private _networkConfigService: NetworkConfigService,
-    private _networkControllerService: NetworkControllerService,
-    private _networkService: NetworkService,
   ) { }
 
-  ngOnInit(): void {
-    this.connectome = this.data.simulation.connectomes[this.link.idx];
-  }
-
-  backgroundImage(): string {
-    var bg = '#fafafa';
-    var source = this.color('source');
-    var target = this.color('target');
-    var gradient = ['150deg', source, source, bg, bg, target, target].join(', ');
-    return 'linear-gradient(' + gradient + ')';
-  }
-
-  label(idx: number): string {
-    return this.collection(idx).label
-  }
-
-  collection(idx: number): SimNode {
-    return this.data.simulation.collections[idx];
-  }
-
-  color(src: string): string {
-    return this._colorService.node(this.connectome[src]);
-  }
-
-  color_weight(): string {
-    return this._colorService.connectome(this.connectome);
-  }
-
-  source(): AppNode {
-    return this.data.app.nodes[this.connectome.source];
-  }
-
-  target(): AppNode {
-    return this.data.app.nodes[this.connectome.target];
-  }
-
-  isSpatial(idx: number): boolean {
-    var collection = this.collection(idx);
-    return collection.isSpatial();
-  }
-
-  selectNode(idx: number): void {
-    var node = this.data.app.nodes[idx];
-    var elementType = this.data.simulation.collections[idx].element_type;
-    this._networkService.selectNode(node, elementType);
-  }
-
-  selectLink(): void {
-    this._networkService.selectLink(this.link)
+  ngOnInit() {
   }
 
   onMouseOver(event: MouseEvent): void {

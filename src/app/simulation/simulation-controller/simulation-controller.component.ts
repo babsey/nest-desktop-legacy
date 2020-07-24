@@ -1,41 +1,38 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
-import { SimulationProtocolService } from '../services/simulation-protocol.service';
 import { SimulationRunService } from '../services/simulation-run.service';
-import { VisualizationService } from '../../visualization/visualization.service';
 
-import { Data } from '../../classes/data';
-import { Record } from '../../classes/record';
+import { Simulation } from '../../components/simulation';
+
 
 @Component({
-  selector: 'app-controller',
+  selector: 'app-simulation-controller',
   templateUrl: './simulation-controller.component.html',
-  styleUrls: ['./simulation-controller.component.scss'],
+  styleUrls: ['./simulation-controller.component.scss']
 })
-export class ControllerComponent implements OnInit {
-  @Input() data: Data;
-  @Input() records: Record[];
-  @Input() mode: string = 'network';
-  @Output() dataChange: EventEmitter<any> = new EventEmitter();
-  @Output() appChange: EventEmitter<any> = new EventEmitter();
+export class SimulationControllerComponent implements OnInit {
+  @Input() simulation: Simulation;
+  public params: any[];
 
   constructor(
-    private _simulationProtocolService: SimulationProtocolService,
     public _simulationRunService: SimulationRunService,
-    public _visualizationService: VisualizationService,
-  ) { }
-
-  ngOnInit(): void {
+  ) {
   }
 
-  onDataChange(data: Data): void {
-    // console.log('Simulation controller on data change')
-    this.dataChange.emit(this.data)
+  ngOnInit() {
+    this.params = this.simulation.config.data.params || [];
   }
 
-  onAppChange(app: any): void {
-    // this.data.app = data.app;
-    this.appChange.emit(this.data);
+  onChange(value: any, id: string): void {
+    if (id === 'randomSeed') {
+      this._simulationRunService.config['autoRandomSeed'] = false;
+      this._simulationRunService.saveConfig()
+    }
+  }
+
+  onSelectionChange(event: any): void {
+    this._simulationRunService.config[event.option.value] = event.option.selected;
+    this._simulationRunService.saveConfig()
   }
 
 }

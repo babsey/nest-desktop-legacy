@@ -9,22 +9,22 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./config.component.scss']
 })
 export class ConfigComponent implements OnInit, OnDestroy {
-  public routeConfig: any;
+  public routeSetting: any;
   private subscription: any;
 
   constructor(
     private route: ActivatedRoute,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.subscription = this.route.params.subscribe(params => {
-      if ('config' in params) {
-        this.routeConfig = params['config'];
+      if ('setting' in params) {
+        this.routeSetting = params['setting'];
       }
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.subscription.unsubscribe()
   }
 

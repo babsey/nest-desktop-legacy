@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { AppService } from '../app.service';
 import { AppConfigService } from '../config/app-config/app-config.service';
 import { ModelService } from './model.service';
 import { NavigationService } from '../navigation/navigation.service';
@@ -18,18 +19,16 @@ export class ModelComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    public _appService: AppService,
     public _modelService: ModelService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     let paramMap = this.route.snapshot.paramMap;
-    let model = paramMap.get('model');
-    if (model) {
-      this._modelService.selectModel(model);
-    }
+    this._modelService.selectedModel = paramMap.get('model');
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     // this._modelService.selectedModel = '';
   }
 

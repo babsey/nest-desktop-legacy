@@ -32,7 +32,7 @@ export class ModelParamComponent implements OnInit {
     private dialog: MatDialog,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   setDefaultValue(): void {

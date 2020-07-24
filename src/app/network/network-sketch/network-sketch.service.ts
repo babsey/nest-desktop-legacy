@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 
 import * as d3 from 'd3';
 
-import { NetworkConfigService } from '../network-config/network-config.service';
-
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +11,11 @@ export class NetworkSketchService {
     width: 0,
     height: 0,
   };
-  public focused: any = {
-    node: null,
-    link: null,
-  }
   public keyDown: string = '';
   public connect: boolean = false;
+  public viewDragline = true;
 
   constructor(
-    public _networkConfigService: NetworkConfigService,
   ) {
   }
 
@@ -34,11 +28,11 @@ export class NetworkSketchService {
       dx = x2 - x1,
       dy = y2 - y1,
       dr = Math.sqrt(dx * dx + dy * dy),
-      r = this._networkConfigService.config.sketch.node.radius + 5;
+      r = 20;
 
     // Defaults for normal edge.
-    var ellipticalArc = this._networkConfigService.config.sketch.link.ellipticalArc.value;
-    var xAxisRotation = this._networkConfigService.config.sketch.link.xAxisRotation.value;
+    var ellipticalArc = 2.5;
+    var xAxisRotation = 0;
     var drx = dr * ellipticalArc * 2,
       dry = dr * ellipticalArc,
       xAxisRotation = xAxisRotation, // degrees
@@ -69,10 +63,11 @@ export class NetworkSketchService {
   };
 
   reset(): void {
-    var selector = d3.selectAll('.network-sketch');
+    const selector: any = d3.selectAll('.network-sketch');
     selector.selectAll('.dragline').attr('d', 'M0,0L0,0');
     selector.select('.select-panel').attr('transform', 'translate(0,0)')
     selector.selectAll('.select').remove();
+    this.viewDragline = false;
   }
 
   dragLine(source: any, target: any, color: string, isTargetNode = false): void {

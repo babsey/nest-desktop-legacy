@@ -1,16 +1,15 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
 
 import { MatMenuTrigger } from '@angular/material/menu';
 
-import { AppConfigService } from '../../../config/app-config/app-config.service';
-import { ColorService } from '../../services/color.service';
-import { ModelService } from '../../../model/model.service';
 import { NetworkConfigService } from '../../network-config/network-config.service';
 import { NetworkService } from '../../services/network.service';
 
-import { Data } from '../../../classes/data';
-import { AppNode } from '../../../classes/appNode';
-import { SimNode } from '../../../classes/simNode';
+import { Connection } from '../../../components/connection';
+import { Model } from '../../../components/model';
+import { Network } from '../../../components/network';
+import { Node } from '../../../components/node';
+import { Parameter } from '../../../components/parameter';
 
 
 @Component({
@@ -18,114 +17,30 @@ import { SimNode } from '../../../classes/simNode';
   templateUrl: './node-controller.component.html',
   styleUrls: ['./node-controller.component.scss'],
 })
-export class NodeControllerComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() data: Data;
-  @Input() node: AppNode;
-  @Output() dataChange: EventEmitter<any> = new EventEmitter();
-  @Output() nodeChange: EventEmitter<any> = new EventEmitter();
+export class NodeControllerComponent implements OnInit, OnDestroy {
+  @Input() node: Node;
   private subscription: any;
-  public collection: SimNode;
-  public collections: SimNode[] = [];
-  public configModel: any = {};
-  public linkedNode: AppNode;
-  public nodes: AppNode[] = [];
-  public options: any = {};
   public recordables: string[] = [];
-  public model: any;
 
   constructor(
-    private _appConfigService: AppConfigService,
-    private _modelService: ModelService,
     private _networkService: NetworkService,
-    public _colorService: ColorService,
     public _networkConfigService: NetworkConfigService,
   ) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     // console.log('Init node controller')
-    this.subscription = this._networkService.update.subscribe((data: Data) => this.update())
+    this.subscription = this._networkService.update.subscribe((network: Network) => this.update())
     this.update()
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.subscription.unsubscribe()
   }
 
-  ngOnChanges(): void {
-    // console.log('Update node controller')
-    this.update()
-  }
-
-  color(): string {
-    return this._colorService.node(this.node.idx);
-  }
-
   update(): void {
-    if (this.node == undefined) return
-    this.collection = this.data.simulation.collections[this.node.idx];
-    this.nodes = this.data.app.nodes
-      .filter(node => {
-        var collection = this.data.simulation.collections[node.idx];
-        return collection.element_type == this.collection.element_type && node != this.node
-      });
-    this.collections = this.nodes.map(node => this.data.simulation.collections[node.idx])
-    this.model = this.data.simulation.getModel(this.collection);
-    this.configModel = this._modelService.config(this.model);
-    this.updateRecordFrom()
+    if (this.node.model.existing !== 'multimeter') return
+    this.recordables = this.recordables;
   }
 
-  updateRecordFrom(): void {
-    if (this.model != 'multimeter') return
-    let recordedNeurons = this.data.simulation.connectomes.filter(connectome => connectome.source == this.node.idx)
-    if (recordedNeurons.length == 1) {
-      var collections = this.data.simulation.collections;
-      let recordedNeuron = collections[recordedNeurons[0]['target']];
-      let recordedModel = this.data.simulation.getModel(recordedNeuron);
-      this.recordables = this._modelService.config(recordedModel).recordables || [];
-      if (this.collection.params.hasOwnProperty('record_from')) {
-        this.collection.params['record_from'] = this.collection.params['record_from'].filter(rec => this.recordables.includes(rec));
-      } else {
-        this.collection.params['record_from'] = this.recordables.includes('V_m') ? ['V_m'] : [];
-      }
-    }
-  }
-
-  isRecorder(): boolean {
-    return this.collection.element_type == 'recorder';
-  }
-
-  nodeDisplay(): string {
-    return this._networkService.isNodeSelected(this.node, this.data) ? '' : 'none';
-  }
-
-  paramDisplay(param: string): boolean {
-    return this.node.hasOwnProperty('display') ? this.node.display.includes(param) : true;
-  }
-
-  onDataChange(data: Data): void {
-    this.updateRecordFrom()
-    this.dataChange.emit(this.data)
-  }
-
-  onCollectionChange(collection: SimNode): void {
-    this.dataChange.emit(this.data)
-  }
-
-  onNodeChange(node: AppNode): void {
-    this.nodeChange.emit(this.node)
-  }
-
-  onValueChange(value: any): void {
-    // console.log('Node controller on value change: ' + value)
-    this.dataChange.emit(this.data)
-  }
-
-  onRecordChange(event: any): void {
-    this.dataChange.emit(this.data)
-  }
-
-  onParamHide(param: string): void {
-    this.node['display'] = this.node.display.filter(d => d != param);
-  }
 }

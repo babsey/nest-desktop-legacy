@@ -69,7 +69,7 @@ export class ChartRecordsService {
   }
 
   setPanelSizes(): void {
-    var numPanels = this.panelSelected.length;
+    const numPanels: number = this.panelSelected.length;
     this.panelOrder.map(p => {
       this.panel[p].size = 0;
     })
@@ -88,8 +88,8 @@ export class ChartRecordsService {
         this.panel[p].size = [1, 1, 1, 1][numPanels - 1];
       }
     })
-    var sizes = this.panelSelected.map(p => this.panel[p].size);
-    var totalSize = sizes.reduce((a, b) => a + b, 0);
+    const sizes: number[] = this.panelSelected.map(p => this.panel[p].size);
+    const totalSize: number = sizes.reduce((a, b) => a + b, 0);
     this.panelSelected.map((p, i) => this.panel[p].size = Math.round(sizes[i] / totalSize * 100));
   }
 
@@ -100,7 +100,7 @@ export class ChartRecordsService {
       x: x,
       y: y,
       _source: {
-        recordIdx: idx,
+        activityIdx: idx,
         curve: config['curve'],
       },
       legendgroup: config['legendgroup'] || '',

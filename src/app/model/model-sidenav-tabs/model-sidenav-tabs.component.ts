@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, Input } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 
-import { AppConfigService } from '../../config/app-config/app-config.service';
+import { AppService } from '../../app.service';
 import { ModelService } from '../model.service';
 
 
@@ -15,7 +15,7 @@ export class ModelSidenavTabsComponent implements OnInit {
   private _mobileQueryListener: () => void;
 
   constructor(
-    private _appConfigService: AppConfigService,
+    private _appService: AppService,
     private changeDetectorRef: ChangeDetectorRef,
     private media: MediaMatcher,
     public _modelService: ModelService,
@@ -37,7 +37,7 @@ export class ModelSidenavTabsComponent implements OnInit {
   }
 
   devMode(): boolean {
-    return this._appConfigService.config.app.devMode == true;
+    return this._appService.data.config.data.devMode === true;
   }
 
 }

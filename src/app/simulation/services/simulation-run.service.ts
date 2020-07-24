@@ -4,12 +4,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ToastrService } from 'ngx-toastr';
 
+import { AppService } from '../../app.service';
 import { AnimationControllerService } from '../../visualization/animation/animation-controller/animation-controller.service';
-import { SimulationService } from '../services/simulation.service';
 import { LogService } from '../../log/log.service';
 import { NestServerService } from '../../nest-server/nest-server.service';
 
-import { Data } from '../../classes/data';
+import { Project } from '../../components/project';
+import { Activity } from '../../components/activity';
 
 
 var STORAGE_NAME = 'simulation-config';
@@ -18,6 +19,7 @@ var STORAGE_NAME = 'simulation-config';
   providedIn: 'root'
 })
 export class SimulationRunService {
+  private project: Project;
   private snackBarRef: any;
   public config: Object = {
     runAfterLoad: true,
@@ -26,18 +28,18 @@ export class SimulationRunService {
   }
   public running: boolean = false;
   public simulated: EventEmitter<any> = new EventEmitter();
-  public mode: string = 'object';
+  public mode: string = 'declarative';
 
   constructor(
+    private _appService: AppService,
     private _animationControllerService: AnimationControllerService,
-    private _simulationService: SimulationService,
     private _logService: LogService,
     private _nestServerService: NestServerService,
     private http: HttpClient,
     private snackBar: MatSnackBar,
     private toastr: ToastrService,
   ) {
-    let configJSON = localStorage.getItem(STORAGE_NAME);
+    const configJSON: string = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
       this.config = JSON.parse(configJSON)
     } else {
@@ -46,65 +48,62 @@ export class SimulationRunService {
   }
 
   saveConfig(): void {
-    let configJSON = JSON.stringify(this.config);
+    const configJSON: string = JSON.stringify(this.config);
     localStorage.setItem(STORAGE_NAME, configJSON);
   }
 
-  run(data: Data, force: boolean = false): void {
+  run(force: boolean = false): void {
     if (this.running) return
-    // console.log('Run simulation')
     if (!(force || this.config['runAfterChange'])) return
 
-    var urlRoot = this._nestServerService.url();
-    this._logService.reset()
+    this._logService.reset();
+    this.project = this._appService.data.project;
 
     if (this.config['autoRandomSeed']) {
       this._logService.log('Randomize seed');
-      let seed = Math.random() * 1000;
-      data.simulation['random_seed'] = parseInt(seed.toFixed(0));
+      const seed: number = Math.random() * 1000;
+      this.project.simulation['randomSeed'] = parseInt(seed.toFixed(0));
     }
 
-    this._logService.log('Clean and hash data');
-    var clonedData = data.clone();
-    data.app.nodes.map(node => {
-      var collection = clonedData.simulation.collections[node.idx];
-      if (node.hasOwnProperty('params')) {
-        Object.keys(node.params).map(paramKey => {
-          var param = node.params[paramKey];
-          if (param.hasOwnProperty('factors')) {
-            param.factors.map(factor => {
-              var fac = data.app.factors.find(f => f.id == factor);
-              if (fac && collection.params.hasOwnProperty(paramKey)) {
-                collection.params[paramKey] = collection.params[paramKey] * fac.value;
-              }
-            })
-          }
-        })
-      }
-    })
+    // this._logService.log('Clean and hash project');
+    // var clonedData = project.clone();
+    // project.app.nodes.map(node => {
+    //   var collection = clonedData.simulation.collections[node.idx];
+    //   if (node.hasOwnProperty('params')) {
+    //     Object.keys(node.params).map(paramKey => {
+    //       var param = node.params[paramKey];
+    //       if (param.hasOwnProperty('factors')) {
+    //         param.factors.map(factor => {
+    //           var fac = project.app.factors.find(f => f.id == factor);
+    //           if (fac && collection.params.hasOwnProperty(paramKey)) {
+    //             collection.params[paramKey] = collection.params[paramKey] * fac.value;
+    //           }
+    //         })
+    //       }
+    //     })
+    //   }
+    // })
 
     if (this.config['showSnackBar']) {
       this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     }
 
-    // console.log(clonedData);
-    (this.mode == 'object') ? this.run_object(clonedData) : this.run_code(clonedData);
+    (this.mode === 'declarative') ? this.runScript() : this.execCode();
   }
 
-  run_object(data: Data): void {
-    const urlRoot: string = this._nestServerService.url();
-    this._logService.log('Object request to server');
+  runScript(): void {
+    const urlRoot: string = this._appService.data.nestServer.url;
+    this._logService.log('Run script on server');
     this.running = true;
-    this.http.post(urlRoot + '/script/simulation/run', data.simulation)
+    this.http.post(urlRoot + '/script/simulation/run', this.project.serialize('simulator'))
       .subscribe(data => this.response(data), err => this.error(err['error']))
   }
 
-  run_code(data: Data): void {
-    const urlRoot: string = this._nestServerService.url();
-    this._logService.log('Script request to server');
-    let code: string = this._simulationService.code;
+  execCode(): void {
+    const urlRoot: string = this._appService.data.nestServer.url;
+    this._logService.log('Exec code on server');
     this.running = true;
-    this.http.post(urlRoot + '/exec', { source: code, return: 'response' })
+    this.http.post(urlRoot + '/exec', { source: this.project.code.script, return: 'response' })
       .subscribe(data => this.response(data), err => this.error(err['error']))
   }
 
@@ -125,8 +124,29 @@ export class SimulationRunService {
         duration: 5000
         });
       }
+
+      this.project.updateActivities(resp['data']);
+      // console.log(this.project.activities)
       this.simulated.emit(resp['data'])
     }
+  }
+
+  fetchElementTypes(idx: number): string[] {
+    return this.project.network.connections
+      .filter(connection => connection.source.idx === idx)
+      .map(connection => connection.target.model.elementType);
+  }
+
+  listParams(idx: number, key: string = ''): any[] {
+    var nodes = this.project.network.connections
+      .filter(connection => connection.source.idx === idx)
+      .map(connection => connection.target);
+    if (key) {
+      return nodes
+        .filter(node => node.params.find(param => param.id == key).visible)
+        .map(node => node.params.find(param => param.id == key));
+    }
+    return nodes.map(nodes => nodes.params);
   }
 
   error(message: string, title: string = null): void {

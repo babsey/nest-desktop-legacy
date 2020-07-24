@@ -38,12 +38,12 @@ export class ConfigListComponent implements OnInit {
   }
 
   navigate(path: string): void {
-    this.router.navigate([{outlets: {primary: 'config/' + path, nav: 'config'}}]);
+    this.router.navigate([{outlets: {primary: 'setting/' + path, nav: 'setting'}}]);
     this.configClick.emit()
   }
 
   isActive(path: string): boolean {
-    return this.router.url.includes('/config/' + path)
+    return this.router.url.includes('/setting/' + path)
   }
 
   reset(): void {

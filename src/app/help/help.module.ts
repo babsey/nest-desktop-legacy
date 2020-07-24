@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { AppRoutingModule } from '../modules/app-routing.module';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RoutesModule } from '../routes/routes.module';
 
 import { MaterialModule } from '../modules/material.module';
 
@@ -19,10 +19,10 @@ import { HelpListComponent } from './help-list/help-list.component';
     HelpListComponent,
   ],
   imports: [
-    AppRoutingModule,
     CommonModule,
-    MaterialModule,
     FontAwesomeModule,
+    MaterialModule,
+    RoutesModule,
   ]
 })
 export class HelpModule { }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
-import { NetworkService } from '../services/network.service';
+import { Network } from '../../components/network';
 
 
 @Component({
@@ -9,20 +9,12 @@ import { NetworkService } from '../services/network.service';
   styleUrls: ['./network-navbar.component.scss']
 })
 export class NetworkNavbarComponent implements OnInit {
+  @Input() network: Network;
 
   constructor(
-    private _networkService: NetworkService,
   ) { }
 
   ngOnInit() {
-  }
-
-  selectElementType(elementType: string): void {
-    this._networkService.selectElementType(elementType)
-  }
-
-  isSelected(elementType: string): boolean {
-    return this._networkService.elementType == null || this._networkService.elementType == elementType;
   }
 
 }

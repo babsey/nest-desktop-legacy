@@ -6,8 +6,8 @@ import { ColorService } from '../../services/color.service';
 import { NetworkService } from '../../services/network.service';
 import { NetworkSketchService } from '../network-sketch.service';
 
-import { Data } from '../../../classes/data';
-import { AppNode } from '../../../classes/appNode';
+import { Network } from '../../../components/network';
+import { Node } from '../../../components/node';
 
 
 @Component({
@@ -16,11 +16,10 @@ import { AppNode } from '../../../classes/appNode';
   styleUrls: ['./background-sketch.component.scss'],
 })
 export class BackgroundSketchComponent implements OnInit, OnChanges {
-  @Input() data: Data;
+  @Input() network: Network;
   @Input() width: number = 600;
   @Input() height: number = 400;
   @Input() eventTrigger: boolean = true;
-  @Output() dataChange: EventEmitter<any> = new EventEmitter();
   private host: any;
   private selector: any;
   private sourceNode: any;
@@ -35,58 +34,54 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
     this.selector = d3.select(elementRef.nativeElement);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.init()
     this.resize()
   }
 
-  ngOnChanges(): void {
+  ngOnChanges() {
     this.resize()
   }
 
   init(): void {
-    // if (this.data == undefined) return
     // console.log('Sketch background init')
-    var _this = this;
+    const _this = this;
 
-    var elementTypes = ['recorder', 'neuron', 'stimulator'];
-    var background = this.selector.append('svg:rect')
+    const elementTypes: string[] = ['recorder', 'neuron', 'stimulator'];
+    const background = this.selector.append('svg:rect')
       .attr('class', 'background')
       .style('fill', 'white')
       .attr('width', this.width)
       .attr('height', this.height);
 
     background.on('mousemove', function() {
-        var selectedNode = _this._networkService.selected.node;
-        _this._networkSketchService.focused.node = null;
-        _this._networkSketchService.focused.link = null;
-
-        if (selectedNode && _this.eventTrigger) {
-          var point = d3.mouse(this);
-          var target = {
-            x: point[0],
-            y: point[1],
-          };
-
-          var color = _this._colorService.node(selectedNode.idx);
-          _this._networkSketchService.dragLine(selectedNode.position, target, color);
-        }
-      })
+      _this.network.view.resetFocus();
+      const selectedNode: Node = _this.network.view.selectedNode;
+      if (selectedNode && _this.eventTrigger) {
+        const point: number[] = d3.mouse(this);
+        const target: any = {
+          x: point[0],
+          y: point[1],
+        };
+        const color: string = selectedNode.view.color;
+        _this._networkSketchService.dragLine(selectedNode.view.position, target, color);
+      }
+    })
       .on('click', () => this.reset())
       .on('contextmenu', function() {
         if (!_this.eventTrigger) return
         d3.event.preventDefault();
         _this.reset();
 
-        if ( !_this.eventTrigger ) return
-        if ( _this._networkService.selected.node || _this._networkService.selected.link) return
+        if (!_this.eventTrigger) return
+        if (_this.network.view.selectedNode || _this.network.view.selectedConnection) return
+        const colors: string[] = _this.network.view.colors;
 
-        var data = _this.data;
-        var point = d3.mouse(this);
-        var selectPanel = _this.host.select('.select-panel')
+        const point: number[] = d3.mouse(this);
+        const selectPanel = _this.host.select('.select-panel')
           .attr('transform', 'translate(' + point[0] + ',' + point[1] + ')');
 
-        var tooltip = selectPanel.select('.tooltip');
+        const tooltip = selectPanel.select('.tooltip');
         // var tooltip = select.append('svg:text')
         //   .attr('class', 'tooltip')
         //   .attr('transform', 'translate(0, -45)')
@@ -103,28 +98,27 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
             _this.reset();
           });
 
-        var arcFrame = d3.arc()
+        const arcFrame = d3.arc()
           .innerRadius(16)
           .outerRadius(40);
 
-        var colors = _this._colorService.colors();
         elementTypes.forEach((d, i) => {
-          selectPanel.append('svg:path').attr('class', "select " +d)
+          selectPanel.append('svg:path').attr('class', "select " + d)
             .datum({
               startAngle: Math.PI * i * 2 / 3,
               endAngle: Math.PI * (i + 1) * 2 / 3,
             })
             .style('fill', 'white')
             .attr('fill-opacity', '0.8')
-            .style('stroke', () => colors[data.app.nodes.length % colors.length])
+            .style('stroke', () => colors[_this.network.nodes.length % colors.length])
             .style('stroke-width', 2.5)
             .attr('d', arcFrame)
             .on('mouseover', function() {
               tooltip.style('visibility', 'visible')
                 .select('.label').text(d);
 
-              if (!_this._networkService.selected.node || d != 'stimulator') {
-                d3.select(this).style('fill', () => colors[data.app.nodes.length % colors.length])
+              if (!_this.network.view.selectedNode || d !== 'stimulator') {
+                d3.select(this).style('fill', () => colors[_this.network.nodes.length % colors.length])
               }
             })
             .on('mouseout', function() {
@@ -135,13 +129,12 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
               _this.reset();
               _this.create(d, point)
               // console.log('Node change')
-              _this.dataChange.emit(_this.data)
             });
 
-          var f = (i * 2 / 3) + (1 / 3);
+          const f: number = (i * 2 / 3) + (1 / 3);
           selectPanel.append('svg:text')
             .attr('class', 'select label')
-            .attr('fill', (_this._networkService.selected.node && d == 'stimulator') ? '#cccccc' : 'black')
+            .attr('fill', (_this.network.view.selectedNode && d === 'stimulator') ? '#cccccc' : 'black')
             .attr('dx', Math.sin(Math.PI * f) * 28)
             .attr('dy', -Math.cos(Math.PI * f) * 28 + 5)
             .text(d.slice(0, 1).toUpperCase());
@@ -149,26 +142,33 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
       })
   }
 
-  create(elementType: string, point: number[]): void {
-    // console.log('Create node')
-    this.data.createNode(elementType, point);
-    this._networkService.update.emit(this.data);
-    this.dataChange.emit(this.data);
+  reset(): void {
+    this.network.view.resetSelection();
+    this._networkSketchService.reset();
   }
 
-  selected(): AppNode {
-    return this._networkService.selected.node;
+  create(elementType: string, point: number[]): void {
+    // console.log('Create node')
+    const defaultModels: any = {
+      neuron: 'iaf_psc_alpha',
+      recorder: 'voltmeter',
+      stimulator: 'dc_generator',
+    }
+    const node: any = {
+      model: defaultModels[elementType],
+      view: {
+        elementType: elementType,
+        position: { x: point[0], y: point[1] },
+      },
+    };
+    this.network.addNode(node);
+    // this._networkService.update.emit(this.network);
   }
 
   resize(): void {
     this.selector.select('rect.background')
       .attr('width', this.width)
       .attr('height', this.height);
-  }
-
-  reset(): void {
-    this._networkService.resetSelection()
-    this._networkSketchService.reset();
   }
 
 }

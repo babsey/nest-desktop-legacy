@@ -1,24 +1,25 @@
 <div class="node-list"
-  [style.border-color]="color()">
+  [style.border-color]="node.view.color"
+  [style.display]="node.view.isSelected(true) ? '' : 'none'">
 
   <app-node-toolbar
-    [(data)]="data"
     [node]="node"
     [disabled]="true"
   ></app-node-toolbar>
 
   <mat-list dense>
-    <span [@listAnimation]="modelConfig.params.length">
-      <ng-container *ngFor="let param of modelConfig.params">
-        <mat-list-item [style.display]="paramDisplay(param.id) ? '' : 'none'">
+    <span [@listAnimation]="node.params.length">
+      <ng-container *ngFor="let param of node.params">
+        <mat-list-item [style.display]="param.visible ? '' : 'none'">
           <span class="flex">
-            <span class="ellipsis">{{ param.label | capitalize }}</span>
+            <span class="ellipsis">{{ param.options.label | capitalize }}</span>
             <span class="flex-spacer"></span>
-            <span class="ellipsis">{{ _formatService.format(node.params[param.id] || param.value) }}</span>
-            <span class="unit">{{ param.unit }}</span>
+            <span class="ellipsis">{{ _formatService.format(param.value) }}</span>
+            <span class="unit">{{ param.options.unit }}</span>
           </span>
         </mat-list-item>
       </ng-container>
     </span>
   </mat-list>
+
 </div>

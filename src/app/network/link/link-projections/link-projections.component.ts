@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { NetworkConfigService } from '../../network-config/network-config.service';
 
-import { AppConnection } from '../../../classes/appConnection';
-import { SimConnection } from '../../../classes/simConnection';
+import { Connection } from '../../../components/connection';
 
 
 @Component({
@@ -12,34 +11,19 @@ import { SimConnection } from '../../../classes/simConnection';
   styleUrls: ['./link-projections.component.scss']
 })
 export class LinkProjectionsComponent implements OnInit {
-  @Input() link: AppConnection;
-  @Input() connectome: SimConnection;
-  @Output() connectomeChange: EventEmitter<any> = new EventEmitter();
+  @Input() connection: Connection;
   public config: any;
 
   constructor(
     private _networkConfigService: NetworkConfigService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.config = this._networkConfigService.config.projections;
   }
 
-  onValueChange(value: any): void {
-    this.connectomeChange.emit(this.connectome)
-  }
-
-  onProjectionsChange(projections: any): void {
-    this.connectomeChange.emit(this.connectome)
-  }
-
-  onSelectConnectionType(value: any): void {
-    this.connectomeChange.emit(this.connectome)
-  }
-
   onSelectionChange(event: any): void {
-    this.connectome.projections[event.option.value] = event.option.selected;
-    this.connectomeChange.emit(this.connectome)
+    this.connection.projections[event.option.value] = event.option.selected;
   }
 
 }
