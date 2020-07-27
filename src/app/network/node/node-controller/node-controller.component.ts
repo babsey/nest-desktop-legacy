@@ -1,9 +1,6 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { MatMenuTrigger } from '@angular/material/menu';
-
-import { NetworkConfigService } from '../../network-config/network-config.service';
-import { NetworkService } from '../../services/network.service';
 
 import { Connection } from '../../../components/connection';
 import { Model } from '../../../components/model';
@@ -17,30 +14,13 @@ import { Parameter } from '../../../components/parameter';
   templateUrl: './node-controller.component.html',
   styleUrls: ['./node-controller.component.scss'],
 })
-export class NodeControllerComponent implements OnInit, OnDestroy {
+export class NodeControllerComponent implements OnInit {
   @Input() node: Node;
-  private subscription: any;
-  public recordables: string[] = [];
 
-  constructor(
-    private _networkService: NetworkService,
-    public _networkConfigService: NetworkConfigService,
-  ) {
+  constructor() {
   }
 
   ngOnInit() {
-    // console.log('Init node controller')
-    this.subscription = this._networkService.update.subscribe((network: Network) => this.update())
-    this.update()
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe()
-  }
-
-  update(): void {
-    if (this.node.model.existing !== 'multimeter') return
-    this.recordables = this.recordables;
   }
 
 }

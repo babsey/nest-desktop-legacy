@@ -16,10 +16,10 @@
     <span [@listAnimation]="network.connections.length">
       <ng-container *ngFor="let connection of network.connections">
         <ng-container *ngIf="connectionDisplay(connection)">
-          <app-link-list
+          <app-connection-list
             [connection]="connection"
             [selective]="paramSelective"
-          ></app-link-list>
+          ></app-connection-list>
         </ng-container>
       </ng-container>
     </span>

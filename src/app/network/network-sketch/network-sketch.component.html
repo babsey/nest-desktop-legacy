@@ -7,10 +7,10 @@
   </ng-container>
 
   <ng-container *ngIf="contextMenuData.connection">
-    <app-link-menu
+    <app-connection-menu
       [connection]="contextMenuData.connection"
       class="connection-menu"
-    ></app-link-menu>
+    ></app-connection-menu>
   </ng-container>
 </mat-menu>
 
@@ -43,7 +43,7 @@
     ></g>
 
     <ng-container *ngFor="let connection of network.connections">
-      <g app-link-sketch
+      <g app-connection-sketch
         (click)="network.view.resetFocus()"
         (contextmenu)="onContextMenu($event, null, connection)"
         (mouseenter)="connection.view.focus()"

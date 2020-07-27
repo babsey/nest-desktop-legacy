@@ -23,6 +23,7 @@ export class Node {
   positions: number[][] = [];
 
   // Only recorder
+  recordFrom: string[];         // only for multimeter
   events: any = {};
   activity: Activity;
 
@@ -74,11 +75,11 @@ export class Node {
 
   get recordables(): string[] {
     if (this.model.existing !== 'multimeter') return []
-    const targets: Node[] = this.targets || [];
+    const targets: Node[] = this.targets;
     if (targets.length === 0) return []
     const recordables = targets.map(target => target.model.recordables);
     if (recordables.length === 0) return [];
-    const recordablesFlat: string[] = [].concat(recordables);
+    const recordablesFlat: string[] = [].concat(...recordables);
     const recordablesSet: any[] = [...new Set(recordablesFlat)];
     recordablesSet.sort((a: number, b: number) => a - b);
     return recordablesSet;
@@ -125,6 +126,9 @@ export class Node {
     } else if (node.hasOwnProperty('params')) {
       node.params.forEach(param => this.addParameter(param));
     }
+    if (this.model.existing === 'multimeter') {
+      this.recordFrom = node !== null ? node.recordFrom || ['V_m'] : ['V_m'];
+    }
   }
 
   addParameter(param: any): void {
@@ -151,9 +155,8 @@ export class Node {
 
   collectRecordFromTargets(): void {
     if (this.model.existing !== 'multimeter') return
-    const param: Parameter = this.params.find(p => p.id === 'record_from');
     const recordables = this.recordables;
-    param.value = (recordables.length > 0) ? param.value.filter(rec => recordables.includes(rec)) : [];
+    this.recordFrom = (recordables.length > 0) ? this.recordFrom.filter(rec => recordables.includes(rec)) : [];
   }
 
   clone(): Node {
@@ -187,6 +190,9 @@ export class Node {
       this.params
         .filter(p => p.visible)
         .forEach(p => node.params[p.id] = p.value);
+      if (this.model.existing === 'multimeter' && this.recordFrom.length > 0) {
+        node.params['record_from'] = this.recordFrom;
+      }
       // if (this.spatial) {
       //   kwargs['positions'] = this.spatial.positions;
       // }
@@ -194,6 +200,9 @@ export class Node {
       node['size'] = this.size;
       node['view'] = this.view.serialize();
       node['params'] = this.params.map(param => param.serialize());
+      if (this.model.existing === 'multimeter') {
+        node['recordFrom'] = this.recordFrom;
+      }
     }
     return node;
   }

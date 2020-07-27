@@ -16,15 +16,15 @@ import { ModelModule } from '../model/model.module';
 
 import { BackgroundSketchComponent } from './network-sketch/background-sketch/background-sketch.component';
 
-import { LinkControllerComponent } from './link/link-controller/link-controller.component';
-import { LinkListComponent } from './link/link-list/link-list.component';
-import { LinkMenuComponent } from './link/link-menu/link-menu.component';
-import { LinkMaskComponent } from './link/link-mask/link-mask.component';
-import { LinkParamComponent } from './link/link-param/link-param.component';
-import { LinkProjectionsComponent } from './link/link-projections/link-projections.component';
-import { LinkSelectionComponent } from './link/link-selection/link-selection.component';
-import { LinkSketchComponent } from './link/link-sketch/link-sketch.component';
-import { LinkToolbarComponent } from './link/link-toolbar/link-toolbar.component';
+import { ConnectionControllerComponent } from './connection/connection-controller/connection-controller.component';
+import { ConnectionListComponent } from './connection/connection-list/connection-list.component';
+import { ConnectionMenuComponent } from './connection/connection-menu/connection-menu.component';
+import { ConnectionMaskComponent } from './connection/connection-mask/connection-mask.component';
+import { ConnectionParamComponent } from './connection/connection-param/connection-param.component';
+import { ConnectionProjectionsComponent } from './connection/connection-projections/connection-projections.component';
+import { ConnectionSelectionComponent } from './connection/connection-selection/connection-selection.component';
+import { ConnectionSketchComponent } from './connection/connection-sketch/connection-sketch.component';
+import { ConnectionToolbarComponent } from './connection/connection-toolbar/connection-toolbar.component';
 
 import { NetworkClearDialogComponent } from './network-clear-dialog/network-clear-dialog.component';
 import { NetworkComponent } from './network.component';
@@ -52,15 +52,15 @@ import { NodeToolbarComponent } from './node/node-toolbar/node-toolbar.component
 @NgModule({
   declarations: [
     BackgroundSketchComponent,
-    LinkControllerComponent,
-    LinkMenuComponent,
-    LinkListComponent,
-    LinkMaskComponent,
-    LinkParamComponent,
-    LinkProjectionsComponent,
-    LinkSelectionComponent,
-    LinkSketchComponent,
-    LinkToolbarComponent,
+    ConnectionControllerComponent,
+    ConnectionMenuComponent,
+    ConnectionListComponent,
+    ConnectionMaskComponent,
+    ConnectionParamComponent,
+    ConnectionProjectionsComponent,
+    ConnectionSelectionComponent,
+    ConnectionSketchComponent,
+    ConnectionToolbarComponent,
     NetworkClearDialogComponent,
     NetworkComponent,
     NetworkConfigComponent,
@@ -87,15 +87,15 @@ import { NodeToolbarComponent } from './node/node-toolbar/node-toolbar.component
   ],
   exports: [
     BackgroundSketchComponent,
-    LinkControllerComponent,
-    LinkMenuComponent,
-    LinkListComponent,
-    LinkMaskComponent,
-    LinkParamComponent,
-    LinkProjectionsComponent,
-    LinkSelectionComponent,
-    LinkSketchComponent,
-    LinkToolbarComponent,
+    ConnectionControllerComponent,
+    ConnectionMenuComponent,
+    ConnectionListComponent,
+    ConnectionMaskComponent,
+    ConnectionParamComponent,
+    ConnectionProjectionsComponent,
+    ConnectionSelectionComponent,
+    ConnectionSketchComponent,
+    ConnectionToolbarComponent,
     NetworkClearDialogComponent,
     NetworkComponent,
     NetworkConfigComponent,

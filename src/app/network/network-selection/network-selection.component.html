@@ -8,10 +8,10 @@
   </ng-container>
 
   <ng-container *ngFor="let connection of network.connections">
-    <app-link-selection
+    <app-connection-selection
       [connection]="connection"
       [style.display]="network.view.isElementTypeSelected(connection.source.model.elementType) ? '': 'None'"
-    ></app-link-selection>
+    ></app-connection-selection>
   </ng-container>
 
 </div>

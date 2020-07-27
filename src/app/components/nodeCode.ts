@@ -58,9 +58,7 @@ export class NodeCode extends Code {
     this.node.params
       .filter(param => param.visible)
       .map(param => {
-        if (param.id === 'record_from') {
-          const record_from: string[] = param.value.map(v => '"' + v + '"');
-          paramsList.push(this._() + '"' + param.id + '": [' + record_from.join(',') + ']');
+        paramsList.push(this._() + '"' + param.id + '": ' + this.format(param.value));
           // } else if (this.isRandom(param)) {
           //   if (param.parametertype == 'constant') {
           //     paramsList.push(this._() + '"' + param.id + '": ' + this.format(param.specs.value));
@@ -73,10 +71,12 @@ export class NodeCode extends Code {
           //     let random: string = 'nest.random.' + params[param].parametertype + '(' + values.join(', ') + ')';
           //     paramsList.push(this._() + '"' + param + '": ' + random)
           //   }
-        } else {
-          paramsList.push(this._() + '"' + param.id + '": ' + this.format(param.value));
-        }
+        // } else {
+        // }
       })
+      if (this.node.model.existing === 'multimeter') {
+        paramsList.push(this._() + '"record_from": [' + this.node.recordFrom.map(record => '"' + record + '"').join(',') + ']');
+      }
     if (paramsList.length > 0) {
       script += ', params={';
       script += paramsList.join(',')

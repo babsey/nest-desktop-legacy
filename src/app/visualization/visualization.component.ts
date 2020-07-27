@@ -40,9 +40,10 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     this._logService.log('Update visualization');
     // console.log('Visualization update')
     if (this._visualizationService.mode == 'animation') {
-      let sources: any[] = [].concat(this.project.activities.map(activity =>
+      const activities: string[][] = this.project.activities.map(activity =>
         Object.keys(activity.recorder.events).filter(val => !(['senders', 'times'].includes(val)))
-      ))[0];
+      );
+      let sources: any[] = [].concat(...activities);
       if (sources.length == 0) {
         this._animationControllerService.source = 'spike';
         this._animationControllerService.sources = [];
