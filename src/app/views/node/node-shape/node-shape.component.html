@@ -1,0 +1,106 @@
+<svg:g>
+  <ng-container [ngSwitch]="node.spatial.hasPositions() && false">
+
+    <ng-container *ngSwitchCase="true">
+      <ng-container *ngIf="node.size > 1">
+        <svg:polygon
+          [attr.points]="points('layer')"
+          [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+          [style.stroke-width.px]="2*strokeWidth"
+          [style.stroke]="node.view.color"
+          class="node layer"
+        ></svg:polygon>
+      </ng-container>
+
+      <svg:polygon
+        [attr.points]="points('layer')"
+        [style.fill]="node.size > 1 ? 'none' : 'white'"
+        [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+        [style.stroke-width.px]="node.size > 1 ? (strokeWidth / 2) : strokeWidth"
+        [style.stroke]="node.size > 1 ? 'white' : node.view.color"
+        class="node layer"
+      ></svg:polygon>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="false">
+
+      <ng-container [ngSwitch]="node.view.weight">
+        <ng-container *ngSwitchCase="'excitatory'">
+
+          <ng-container *ngIf="node.size > 1">
+            <svg:polygon
+              [attr.points]="points('triangle')"
+              [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="2*strokeWidth"
+              [style.stroke]="node.view.color"
+              class="node triangle"
+            ></svg:polygon>
+          </ng-container>
+
+          <svg:polygon
+            [attr.points]="points('triangle')"
+            [style.fill]="node.size > 1 ? 'none' : 'white'"
+            [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+            [style.stroke-width.px]="node.size > 1 ? (strokeWidth / 2) : strokeWidth"
+            [style.stroke]="node.size > 1 ? 'white' : node.view.color"
+            class="node triangle"
+          ></svg:polygon>
+
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'inhibitory'">
+
+          <ng-container *ngIf="node.size > 1">
+            <svg:circle
+              [attr.r]="radius"
+              [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="2*strokeWidth"
+              [style.stroke]="node.view.color"
+              class="node circle"
+            ></svg:circle>
+          </ng-container>
+
+          <svg:circle
+            [attr.r]="radius"
+            [style.fill]="node.size > 1 ? 'none' : 'white'"
+            [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+            [style.stroke-width.px]="node.size > 1 ? (strokeWidth / 2) : strokeWidth"
+            [style.stroke]="node.size > 1 ? 'white' : node.view.color"
+            class="node circle"
+          ></svg:circle>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+          <ng-container *ngIf="node.size > 1">
+            <svg:polygon
+              [attr.points]="points('square')"
+              [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+              [style.stroke-width.px]="2*strokeWidth"
+              [style.stroke]="node.view.color"
+              class="node square"
+            ></svg:polygon>
+          </ng-container>
+
+          <svg:polygon
+            [attr.points]="points('square')"
+            [style.fill]="node.size > 1 ? 'none' : 'white'"
+            [style.stroke-dasharray]="showSelection && node.view.isSelected() ? '7.85' : ''"
+            [style.stroke-width.px]="node.size > 1 ? (strokeWidth / 2) : strokeWidth"
+            [style.stroke]="node.size > 1 ? 'white' : node.view.color"
+            class="node square"
+          ></svg:polygon>
+        </ng-container>
+      </ng-container>
+
+    </ng-container>
+  </ng-container>
+
+  <svg:text
+    [attr.dy]="node.view.weight === 'excitatory' ? '.6em' : '.4em'"
+    [style.fontSize]="labelSize"
+    class="label"
+    dx="0"
+    text-anchor="middle">
+    {{ node.view.label }}
+  </svg:text>
+</svg:g>

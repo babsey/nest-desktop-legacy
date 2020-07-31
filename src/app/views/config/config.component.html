@@ -1,0 +1,16 @@
+<span class="config-theme">
+  <mat-toolbar class="navbar" color="primary">
+    {{ routeSetting.replace('-', ' ') | capitalize }}
+  </mat-toolbar>
+</span>
+
+<div style="width:640px; margin: 8px">
+  <ng-container [ngSwitch]="routeSetting">
+    <app-app-config *ngSwitchCase="'application'" class="setting"></app-app-config>
+    <app-nest-server-config *ngSwitchCase="'nest-server'" class="setting"></app-nest-server-config>
+    <app-model-config *ngSwitchCase="'model'" class="setting"></app-model-config>
+    <app-network-config *ngSwitchCase="'network'" class="setting"></app-network-config>
+    <app-simulation-config *ngSwitchCase="'simulation'" class="setting"></app-simulation-config>
+    <app-activity-config *ngSwitchCase="'activity'" class="setting"></app-activity-config>
+  </ng-container>
+</div>

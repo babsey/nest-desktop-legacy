@@ -16,7 +16,7 @@ export class NESTServer {
   simulatorValid: boolean = false;
 
   constructor() {
-    this.config = new Config(this);
+    this.config = new Config(this.constructor.name);
     this.check();
   }
 

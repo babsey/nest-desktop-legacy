@@ -1,0 +1,132 @@
+<input #file type="file" style="display:none" (change)="onFileAdded()"/>
+
+<mat-menu #projectMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="selectionList=!selectionList" [class.active]="selectionList">
+    <fa-icon class="menu-icon" icon="edit"></fa-icon>
+    Manage projects
+  </button>
+  <button mat-menu-item (click)="openUploadDialog()">
+    <fa-icon class="menu-icon" icon="upload"></fa-icon>
+    Upload project
+  </button>
+  <button mat-menu-item (click)="downloadAllProjects()">
+    <fa-icon class="menu-icon" icon="download"></fa-icon>
+    Download all projects
+  </button>
+  <button mat-menu-item (click)="app.resetProjects()">
+    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon>
+    Delete all projects
+  </button>
+  <button mat-menu-item (click)="cleanDatabase()">
+    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon>
+    Clean databases
+  </button>
+</mat-menu>
+
+<span>
+  <mat-toolbar class="navbar" color="primary" style="padding: 0">
+    Project
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="projectMenu">
+      <fa-icon icon="ellipsis-v"></fa-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-nav-list dense style="padding:0">
+    <mat-list-item (click)="newProject()">
+      <fa-icon class="list-icon" icon="plus"></fa-icon>
+      New project
+    </mat-list-item>
+  </mat-nav-list>
+
+  <mat-list dense style="padding:0">
+    <mat-list-item>
+
+      <mat-form-field floatLabel="never" style="width:100%; height:40px">
+        <input matInput
+          [(ngModel)]="app.project.name"
+          class="formControl"
+          placeholder="Project name"
+          type="text"
+        />
+        <span matSuffix>
+          <button mat-icon-button
+            (click)="app.project.name = ''"
+            [style.display]="app.project.name ? '' : 'none'"
+            aria-label="Clear"
+            class="button"
+            >
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </span>
+      </mat-form-field>
+
+      <button mat-icon-button
+        (click)="app.project.save()"
+        [style.display]="app.project.name ? '' : 'none'"
+        class="list-icon"
+        matTooltip="Save the current project"
+        >
+        <fa-icon icon="save" class="fa-lg"></fa-icon>
+      </button>
+    </mat-list-item>
+
+    <mat-list-item class="simulation">
+      <span matLine class="flex searchItem">
+        <fa-icon class="icon" icon="search"></fa-icon>
+        <span style="flex-grow:1">
+          <mat-form-field floatLabel="never" style="width:100%">
+            <input matInput
+              [(ngModel)]="app.view.projectSearchTerm"
+              autocomplete="off"
+              class="formControl"
+              placeholder="Search project"
+              type="text"
+            />
+            <span matSuffix>
+              <button mat-icon-button
+                (click)="app.view.projectSearchTerm = ''"
+                [style.display]="app.view.projectSearchTerm ? '' : 'none'"
+                aria-label="Clear"
+                class="button"
+                >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </span>
+          </mat-form-field>
+        </span>
+      </span>
+    </mat-list-item>
+  </mat-list>
+
+  <div style="height: calc(100vh - 160px); overflow: auto">
+    <ng-container [ngSwitch]="selectionList" class="project-theme">
+
+      <ng-container *ngSwitchCase="false">
+        <app-project-list
+          [app]="app"
+          class="project-theme"
+        ></app-project-list>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="true">
+        <app-project-selection
+          [app]="app"
+          class="project-theme"
+        ></app-project-selection>
+      </ng-container>
+
+    </ng-container>
+  </div>
+
+  <app-log></app-log>
+</span>
+
+
+<ng-template #empty>
+  <input matInput
+    class="formControl"
+    placeholder="Name of the simulation"
+    type="text"
+  />
+</ng-template>

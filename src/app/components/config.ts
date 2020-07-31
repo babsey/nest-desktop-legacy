@@ -2,10 +2,10 @@ import { environment } from '../../environments/environment';
 
 
 export class Config {
-  public name: string;
+  private name: string;
 
-  constructor(component: any) {
-    this.name = component.constructor.name;
+  constructor(name: string) {
+    this.name = name;
     if (!this.isValid()) {
       this.upgrade()
     }

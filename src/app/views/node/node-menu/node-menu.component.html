@@ -1,0 +1,95 @@
+<mat-toolbar
+  [style.background-color]="node.view.color"
+  color="primary"
+  class="node-menu-toolbar ellipsis">
+  {{ node.model.label | capitalize }}
+</mat-toolbar>
+
+<div
+  style="border-left: 4px solid black;"
+  [style.border-color]="node.view.color">
+
+  <button mat-menu-item class="menu-item">
+    <fa-icon
+      [style.color]="node.view.color"
+      class="menu-icon"
+      icon="paint-brush"></fa-icon>
+    <mcc-color-picker hideEmptyUsedColors
+      [selectedColor]="node.view.color"
+      (selected)="selectColor($event)"
+      class="color-picker">
+      <mcc-color-picker-collection
+        [colors]="node.network.view.colors"
+        hideEmpty="true"
+      ></mcc-color-picker-collection>
+    </mcc-color-picker>
+    Colorize node
+  </button>
+
+  <ng-container *ngIf="!node.view.isRecorder()">
+  <button mat-menu-item class="menu-item" [matMenuTriggerFor]="synWeightMenu">
+    <fa-icon class="menu-icon" icon="dumbbell"></fa-icon> Set synapse weight
+  </button>
+  </ng-container>
+
+  <button mat-menu-item class="menu-item" [matMenuTriggerFor]="levelMenu">
+    <fa-icon class="menu-icon" icon="eye"></fa-icon> Set level of parameter view
+  </button>
+
+  <ng-container [ngSwitch]="node.spatial.hasPositions()">
+    <ng-container *ngSwitchCase="true">
+      <button mat-menu-item class="menu-item" (click)="node.initSpatial()">
+        <fa-icon class="menu-icon" icon="braille"></fa-icon> Unset spatial
+      </button>
+    </ng-container>
+    <ng-container *ngSwitchCase="false">
+      <button mat-menu-item class="menu-item" (click)="node.initSpatial({'pos': []})">
+        <fa-icon class="menu-icon" icon="braille"></fa-icon> Set spatial
+      </button>
+    </ng-container>
+  </ng-container>
+
+  <button mat-menu-item class="menu-item" (click)="node.resetParameters()">
+    <fa-icon class="menu-icon" icon="eraser"></fa-icon> Reset parameters
+  </button>
+
+  <button mat-menu-item class="menu-item" (click)="node.delete()">
+    <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete node
+  </button>
+
+  <ng-container *ngIf="node.model.elementType === 'recorder'">
+    <button mat-menu-item
+      class="menu-item"
+      (click)="node.downloadEvents()"
+      [disabled]="!node.view.hasEvents()">
+      <fa-icon class="menu-icon" icon="download"></fa-icon> Download events
+    </button>
+  </ng-container>
+</div>
+
+
+<mat-menu #synWeightMenu="matMenu" class="context-menu">
+  <button mat-menu-item class="menu-item" (click)="node.setWeights('excitatory')">
+    <fa-icon class="menu-icon" icon="plus"></fa-icon>
+    <span>Excitatory</span>
+  </button>
+  <button mat-menu-item class="menu-item" (click)="node.setWeights('inhibitory')">
+    <fa-icon class="menu-icon" icon="minus"></fa-icon>
+    <span>Inhibitory</span>
+  </button>
+</mat-menu>
+
+<mat-menu #levelMenu="matMenu" class="context-menu">
+  <button mat-menu-item class="menu-item" (click)="node.view.setLevel(1)">
+    <span>Rookie</span>
+  </button>
+  <button mat-menu-item class="menu-item" (click)="node.view.setLevel(2)">
+    <span>Beginner</span>
+  </button>
+  <button mat-menu-item class="menu-item" (click)="node.view.setLevel(3)">
+    <span>Advanced</span>
+  </button>
+  <button mat-menu-item class="menu-item" (click)="node.view.setLevel(4)">
+    <span>Expert</span>
+  </button>
+</mat-menu>

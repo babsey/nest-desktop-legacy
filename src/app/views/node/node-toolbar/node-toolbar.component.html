@@ -1,0 +1,44 @@
+<mat-menu #nodeMenu="matMenu"class="context-menu node-menu">
+  <app-node-menu
+    [node]="node"
+  ></app-node-menu>
+</mat-menu>
+
+<div style="visibility: hidden; position: fixed"
+  [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y"
+  [matMenuTriggerFor]="nodeMenu"
+></div>
+
+<span
+  (contextmenu)="onContextMenu($event)"
+  (mouseout)="onMouseOut($event)"
+  (mouseover)="onMouseOver($event)">
+  <!-- [style.background-image]="node.view.backgroundImage" -->
+  <mat-toolbar
+    [style.background-color]="node.view.color"
+    class="node-toolbar"
+    color="primary">
+    <span class="node-shape-container">
+      <svg viewBox="0 0 60 60" width="64" height="64" style="margin-top:12px">
+        <g app-node-shape
+          (click)="node.view.select()"
+          [node]="node"
+          [showSelection]="false"
+          transform="translate(32,32)"
+        ></g>
+      </svg>
+    </span>
+
+    <mat-select
+      (selectionChange)="selectModel($event)"
+      [(ngModel)]="node.modelId"
+      [disabled]="disabled">
+      <ng-container *ngFor="let model of models">
+        <mat-option [value]="model.id">
+          {{ model.label | capitalize }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-toolbar>
+</span>

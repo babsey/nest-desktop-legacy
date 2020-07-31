@@ -1,8 +1,9 @@
+import { AppView } from './appView';
 import { Config } from './config';
 import { DatabaseService } from './database';
-import { Model } from './model';
+import { Model } from './model/model';
 import { NESTServer } from './nestServer';
-import { Project } from './project';
+import { Project } from './project/project';
 
 import { environment } from '../../environments/environment';
 
@@ -17,12 +18,13 @@ export class App {
   config: Config;                       // config
   version: string;
   ready: boolean = false;
+  view: AppView;
 
-  // Model
+  // NEST model for NEST Simulator, e.g. neuron, synapse, stimulator, recorder
   modelDB: DatabaseService;
   models: Model[] = [];
 
-  // Project
+  // Project for NEST Desktop
   projectDB: DatabaseService;
   projects: Project[] = [];
   project: Project;
@@ -30,8 +32,9 @@ export class App {
   nestServer: NESTServer;
 
   constructor() {
-    this.config = new Config(this);
+    this.config = new Config(this.constructor.name);
     this.version = environment.VERSION;
+    this.view = new AppView(this);
     this.nestServer = new NESTServer();
     this.initProject();
     this.init();
@@ -46,7 +49,9 @@ export class App {
   }
 
   init(): Promise<any> {
-    return this.initModels().then(() => this.initProjects().then(() => this.ready = true));
+    return this.initModels()
+      .then(() => this.initProjects()
+      .then(() => this.ready = true));
   }
 
   isConfigReady() {
@@ -101,7 +106,7 @@ export class App {
       if (count == 0) {
         return this.loadModelsFromFiles();
       } else {
-        return this.modelDB.list().then(models =>
+        return this.modelDB.list('label').then(models =>
           models.forEach(model => this.models.push(new Model(this, model)))
         );
       }
@@ -128,12 +133,9 @@ export class App {
     return this.models.find(model => model.id === modelId);
   }
 
-  filterModels(elementType: string = null, sort: boolean = true): Model[] {
-    const models: Model[] = elementType ? this.models.filter(model => model.elementType === elementType) : this.models;
-    if (sort) {
-      models.sort((a, b) => ('' + a.id).localeCompare(b.id));
-    }
-    return models;
+  filterModels(elementType: string = null): Model[] {
+    if (elementType === null) return this.models;
+    return this.models.filter(model => model.elementType === elementType);
   }
 
   addModel(data: any): Promise<any> {
@@ -162,10 +164,10 @@ export class App {
     this.projects = [];
     return this.projectDB.count().then(count => {
       console.log('Projects in db:', count)
-      if (count == 0) {
+      if (count === 0) {
         return this.loadProjectFromFiles();
       } else {
-        return this.projectDB.list().then(projects =>
+        return this.projectDB.list('updatedAt', true).then(projects =>
           projects.forEach(project => this.projects.push(new Project(this, project)))
         );
       }
@@ -190,17 +192,12 @@ export class App {
 
   initProject(id: string = ''): Promise<any> {
     console.log('Initialize project:', id);
-    return new Promise(resolve => {
-      if (this.projectDB && id) {
-        this.projectDB.read(id).then(project => {
-          this.project = new Project(this, project);
-          this.project.code.generate()
-          resolve(true)
-        });
-      } else {
-        this.project = new Project(this);
-        this.project.code.generate()
+    return new Promise((resolve, reject) => {
+      try {
+        this.project = this.projects.find(project => project.id === id) || new Project(this);
         resolve(true)
+      } catch {
+        reject(true)
       }
     })
   }
@@ -214,32 +211,35 @@ export class App {
 
   addProjects(data: any[]): Promise<any> {
     const projects: Project[] = data.map(d => new Project(this, data));
-    return this.projectDB.db.bulkDocs(
-      projects.map(project => project.serialize('db'))
-    );
+    return this.projectDB.db.bulkDocs(projects.map(project => project.serialize('db')));
   }
 
   saveProject(project: Project): Promise<any> {
-    const p: any = project.serialize('db');
-    const hashlist: string[] = this.projects.map(project => project.hash);
-    if (hashlist.includes(p.hash) && p._id) {
-      return this.projectDB.update(p);
-    } else {
-      return this.projectDB.create(p);
-    }
+    console.log('Save project:', project.name)
+    // const hashlist: string[] = this.projects.map(project => project.hash);
+    project.clean();
+    return project.id ? this.projectDB.update(project.serialize('db')) : this.projectDB.create(project.serialize('db'));
   }
 
   deleteProject(projectId: string): Promise<any> {
-    this.projects = this.projects.filter(project => project._id !== projectId);
+    console.log('Delete project:', projectId)
+    this.projects = this.projects.filter(project => project.id !== projectId);
     return this.projectDB.delete(projectId);
   }
 
+  deleteProjects(projectIds: string[]): Promise<any> {
+    this.projects = this.projects.filter(project => !projectIds.includes(project.id));
+    return this.projectDB.deleteBulk(projectIds);
+  }
+
   downloadProject(projectId: string): void {
+    console.log('Download project:', projectId)
     const project: Project = this.projects.find(project => project._id === projectId);
     this.download(project.serialize('file'), 'projects');
   }
 
-  downloadProjects(projects: Project[]): void {
+  downloadProjects(projectIds: string[]): void {
+    const projects: Project[] = this.projects.filter(project => projectIds.includes(project.id));
     const data: any[] = projects.map(project => project.serialize('file'))
     this.download(data, 'projects');
   }

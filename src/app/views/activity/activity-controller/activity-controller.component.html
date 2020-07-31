@@ -1,0 +1,13 @@
+<ng-container *ngIf="_activityGraphService.graph">
+  <ng-container [ngSwitch]="_activityGraphService.graph.constructor.name">
+
+    <ng-container *ngIf="_activityGraphService.graph.constructor.name === 'ActivityChartGraph'">
+      <app-activity-chart-controller></app-activity-chart-controller>
+    </ng-container>
+
+    <ng-container *ngIf="_activityGraphService.graph.constructor.name === 'ActivityAnimationGraph'">
+      <app-activity-animation-controller></app-activity-animation-controller>
+    </ng-container>
+
+  </ng-container>
+</ng-container>

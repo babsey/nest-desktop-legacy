@@ -1,0 +1,65 @@
+<div id="controller">
+  <ng-container *ngIf="mode.startsWith('network')">
+    <app-network-navbar
+      [network]="project.network"
+      class="no-print"
+    ></app-network-navbar>
+  </ng-container>
+
+  <div class="controller-content">
+    <ng-container [ngSwitch]="mode">
+      <ng-container *ngSwitchCase="'networkSelection'">
+        <app-network-selection
+          [network]="project.network"
+        ></app-network-selection>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'networkController'">
+        <app-network-controller
+          [network]="project.network"
+        ></app-network-controller>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'simulation'">
+        <app-kernel-controller
+          [kernel]="project.simulation.kernel"
+          class="kernel"
+        ></app-kernel-controller>
+
+        <app-simulation-controller
+          [simulation]="project.simulation"
+          class="simulation"
+        ></app-simulation-controller>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'codeEditor'">
+          <app-simulation-code-editor
+            [code]="project.code"
+            style="height: 100%"
+          ></app-simulation-code-editor>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'rawData'">
+          <app-project-raw-data
+            [project]="project"
+            style="height: 100%"
+          ></app-project-raw-data>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'sketchSettings'">
+        <!-- <app-network-sketch-controller></app-network-sketch-controller> -->
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'activityController'">
+        <app-activity-controller></app-activity-controller>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'stats'">
+        <app-activity-stats
+          [project]="project"
+        ></app-activity-stats>
+      </ng-container>
+
+    </ng-container>
+  </div>
+</div>

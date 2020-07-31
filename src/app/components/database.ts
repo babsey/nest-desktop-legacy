@@ -38,15 +38,26 @@ export class DatabaseService {
       .catch(err => err);
   }
 
-  list(): any {
+  list(sortedBy: string = '', reverse: boolean = false): any {
     return this.db.allDocs({ include_docs: true })
-      .then(result => result.rows.map(row => row.doc))
+      .then(result => {
+        const docs: any[] = result.rows.map(row => row.doc);
+        if (sortedBy) {
+          docs.sort((a, b) => (a[sortedBy]).localeCompare(b[sortedBy]))
+        }
+        if (reverse) {
+          docs.reverse()
+        }
+        return docs;
+      })
       .catch(err => err);
   }
 
   // CRUD - Create, Read, Update, Delete
 
   create(data: any): any {
+    console.log('Create doc in db');
+    data['_id'] = null;
     data['createdAt'] = new Date();
     data['updatedAt'] = new Date();
     data['version'] = this.app.version;
@@ -56,12 +67,15 @@ export class DatabaseService {
   }
 
   read(id: string): any {
+    console.log('Read doc in db');
     return this.db.get(id)
       .then(doc => doc)
       .catch(err => err);
   }
 
   update(data: any): any {
+    console.log('Update doc in db');
+    data['updatedAt'] = new Date();
     data['version'] = this.app.version;
     return this.db.get(data['_id'])
       .then(doc => {
@@ -76,6 +90,7 @@ export class DatabaseService {
   }
 
   delete(id: string): any {
+    console.log('Delete doc in db');
     return this.db.get(id)
       .then(doc => this.db.remove(doc));
   }
@@ -110,9 +125,9 @@ export class DatabaseService {
       const appVersion: string[] = this.app.version.split('.')
       this._valid = appVersion[0] === dbVersion[0] && appVersion[1] === dbVersion[1];
     })
-    .catch(err => {
-      this.setVersion().then(() => this.checkVersion());
-    })
+      .catch(err => {
+        this.setVersion().then(() => this.checkVersion());
+      })
   }
 
 }

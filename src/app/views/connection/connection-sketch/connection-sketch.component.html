@@ -1,0 +1,69 @@
+<svg:defs>
+  <svg:marker
+    id="generic{{ connection.idx }}"
+    refY=2
+    refX=3
+    markerWidth=4
+    markerHeight=4
+    orient="auto">
+    <svg:path
+      [style.stroke]="color"
+      [style.strokeWidth.px]=".3"
+      fill="transparent"
+      d="M1,1L3,2L1,3"
+    ></svg:path>
+  </svg:marker>
+
+  <svg:marker
+    id="exc{{ connection.idx }}"
+    refY=2
+    refX=3
+    markerWidth=4
+    markerHeight=4
+    orient="auto">
+    <svg:path
+      [style.stroke]="color"
+      [style.strokeWidth.px]=".3"
+      fill="white"
+      d="M1,1L3,2L1,3L1,1L3,2"
+    ></svg:path>
+  </svg:marker>
+
+  <svg:marker
+    id="inh{{ connection.idx }}"
+    refY=2
+    refX=3
+    markerWidth=4
+    markerHeight=4
+    orient="auto">
+    <svg:circle
+      [attr.stroke]="color"
+      [style.strokeWidth.px]=".3"
+      fill="white"
+      r=1
+      transform="translate(2,2)"
+    ></svg:circle>
+  </svg:marker>
+</svg:defs>
+
+<!-- critical point: to many calling of drawPath(), distance() -->
+<svg:path
+  [attr.d]="connection.view.drawPath()"
+  [style.stroke]="color"
+  [style.stroke-dasharray]="dashLine() ? '10, 5' : ''"
+  style="pointer-events: none"
+  [style.stroke-width.px]="connectionWidth()"
+  class="connection"
+  [style.opacity]="opacity() ? 1 : connectionOpacity()"
+></svg:path>
+
+<svg:path
+  (click)="onClick($event)"
+  (mouseover)="onMouseover($event)"
+  [attr.d]="connection.view.drawPath()"
+  class="connection"
+  stroke="transparent"
+  [style.stroke-width.px]="connectionWidth() * 3"
+  [style.marker-end]="markerEnd()"
+  [style.opacity]="opacity() ? 1 : terminusOpacity()"
+></svg:path>

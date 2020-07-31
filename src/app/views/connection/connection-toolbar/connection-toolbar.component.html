@@ -1,0 +1,61 @@
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="connectionMenu">
+</div>
+
+<mat-menu #connectionMenu="matMenu" class="context-menu connection-menu">
+  <app-connection-menu
+    [connection]="connection"
+  ></app-connection-menu>
+</mat-menu>
+
+<span
+  (contextmenu)="onContextMenu($event)"
+  (mouseout)="onMouseOut($event)"
+  (mouseover)="onMouseOver($event)">
+
+  <mat-toolbar
+    [style.background-image]="connection.view.backgroundImage"
+    class="connection-toolbar"
+    color="primary">
+
+    <button mat-button
+      (click)="connection.source.view.select()"
+      style="width:33.3%;; height:40px">
+      <svg viewBox="0 0 60 60" width="64" height="64" style="margin-top:-6px">
+        <g app-node-shape
+          [node]="connection.source"
+          [showSelection]="false"
+          style="pointer-events:none"
+          transform="translate(32,32)"
+        ></g>
+      </svg>
+    </button>
+
+    <button mat-button
+      (click)="connection.view.select()"
+      style="width:33.3%; height: 40px">
+      <fa-icon
+        [style.color]="connection.view.colorWeight()"
+        class="material-icons arrow"
+        icon="long-arrow-alt-right"
+        style="width:100%; font-size: 24px"
+      ></fa-icon>
+    </button>
+
+    <button mat-button
+      (click)="connection.target.view.select()"
+      style="width:33.3%; height:40px">
+        <svg viewBox="0 0 60 60" width="64" height="64" style="margin-top:-6px">
+          <g app-node-shape
+            [node]="connection.target"
+            [showSelection]="false"
+            style="pointer-events:none"
+            transform="translate(32,32)"
+          ></g>
+        </svg>
+    </button>
+
+  </mat-toolbar>
+</span>

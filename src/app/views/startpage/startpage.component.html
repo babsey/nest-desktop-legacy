@@ -1,0 +1,81 @@
+
+<span style="flex-grow:1"></span>
+
+<header class="docs-header-background">
+  <div class="docs-header-section">
+    <div class="docs-header-headline">
+      <img src="/assets/img/logo/nest-desktop-logo-2.png" height="240px" />
+      <h1 class="mat-h1">NEST Desktop</h1>
+      <h2>An educational GUI for neuroscience</h2>
+    </div>
+  </div>
+</header>
+
+<app-loading></app-loading>
+
+<span style="flex-grow:1"></span>
+
+<span [@enterAnimation]>
+  <div fxFlex fxLayout="column" fxLayoutGap="10px" style="margin: 5px">
+    <div fxLayout="row wrap">
+      <div fxFlex="60" fxFlex.sm="100" style="padding: 5px;">
+        <mat-card style="text-align:justify">
+          <p>
+            NEST Desktop is a web-based GUI application for NEST Simulator, an advanced simulation tool for computational neuroscience.
+          </p>
+          <p>
+            The application enables the rapid construction, parametrization, and instrumentation of neuronal network models.
+            The primary objective is to provide an accessible classroom tool that allows users to rapidly explore neuroscience concepts without the need to learn a simulator control language at the same time.
+          </p>
+        </mat-card>
+      </div>
+      <div fxFlex="40" fxFlex.sm="100" style="padding: 5px">
+        <mat-list dense>
+          <mat-list-item>
+            <span class="list-header">Documentation</span>
+            <a target="_blank" href="https://nest-desktop.readthedocs.io">
+              https://nest-desktop.readthedocs.io
+            </a>
+          </mat-list-item>
+          <mat-list-item>
+            <span class="list-header">Source Code</span>
+            <a target="_blank" href="https://github.com/babsey/nest-desktop">
+              https://github.com/babsey/nest-desktop
+            </a>
+          </mat-list-item>
+          <mat-list-item>
+            <span class="list-header">License</span>
+            MIT License
+          </mat-list-item>
+          <mat-list-item>
+            <span class="list-header">Current Version</span>
+            {{ _appService.data.version }}
+          </mat-list-item>
+          <mat-list-item>
+            <span class="list-header">Contact</span>
+            <a href="mailto:s.spreizer@fz-juelich.de">
+              Sebastian Spreizer
+            </a>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  </div>
+</span>
+
+
+<footer>
+  <div class="flex logo">
+    <span class="flex-spacer"></span>
+    <img src="/assets/img/logo/nest-simulated.png" height="100%" />
+    <span class="flex-spacer"></span>
+    <img src="/assets/img/logo/hbp-logo.jpeg" height="100%" />
+    <span class="flex-spacer"></span>
+    <img src="/assets/img/logo/ebrains-logo.png" height="100%" />
+    <span class="flex-spacer"></span>
+    <span style="height:100%; line-height:80%">
+      <img src="/assets/img/logo/eu-logo.png" height="80%" />
+    </span>
+    <span class="flex-spacer"></span>
+  </div>
+</footer>

@@ -1,6 +1,7 @@
-import { Node } from './node';
-import { Model } from './model';
-import { Connection } from './connection';
+import { Node } from './node/node';
+import { Model } from './model/model';
+import { Connection } from './connection/connection';
+
 
 export class Parameter {
   parent: Model | Node | Connection;    // parent
@@ -11,7 +12,7 @@ export class Parameter {
 
   // For node and connection
   visible: boolean;
-  factors: string[];
+  factors: string[];                    // not functional yet
 
   // For model
   label: string;

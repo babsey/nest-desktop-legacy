@@ -1,0 +1,67 @@
+<mat-list dense>
+  <mat-list-item>
+    <app-select
+      [(selected)]="projections.connectionType"
+      [options]="config.connectionType"
+    ></app-select>
+  </mat-list-item>
+</mat-list>
+
+<mat-list dense>
+  <mat-list-item>
+    <app-connection-param
+      [(value)]="projections.kernel"
+      [connection]="projections.connection"
+      [options]="config.kernel"
+    ></app-connection-param>
+  </mat-list-item>
+
+  <mat-list-item>
+    <app-connection-param
+      [(value)]="projections.numberOfConnections"
+      [connection]="projections.connection"
+      [options]="config.numberOfConnections"
+    ></app-connection-param>
+  </mat-list-item>
+
+  <mat-list-item>
+    <app-connection-mask
+      (projectionsChange)="onProjectionsChange($event)"
+      [(projections)]="projections.connection.mask"
+    ></app-connection-mask>
+  </mat-list-item>
+
+  <mat-list-item>
+    <app-connection-param
+      [(value)]="projections.weights"
+      [connection]="projections.connection"
+      [options]="config.weights"
+    ></app-connection-param>
+  </mat-list-item>
+
+  <mat-list-item>
+    <app-connection-param
+      [(value)]="projections.delays"
+      [connection]="projections.connection"
+      [options]="config.delays"
+    ></app-connection-param>
+  </mat-list-item>
+
+</mat-list>
+
+<mat-selection-list dense (selectionChange)="onSelectionChange($event)">
+  <mat-list-option value="allowAutapses"
+    [selected]="projections.allowAutapses">
+    {{ config.allowAutapses.label | capitalize }}
+  </mat-list-option>
+
+  <mat-list-option value="allowMultapses"
+    [selected]="connection.projections.allow_multapses">
+    {{ config.allowMultapses.label | capitalize }}
+  </mat-list-option>
+
+  <mat-list-option value="allowOversizedMask"
+    [selected]="projections.allowOversizedMask">
+    {{ config.allowOversizedMask.label | capitalize }}
+  </mat-list-option>
+</mat-selection-list>
