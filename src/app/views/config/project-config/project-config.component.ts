@@ -4,16 +4,16 @@ import { Config } from '../../../components/config';
 
 
 @Component({
-  selector: 'app-config',
-  templateUrl: './app-config.component.html',
-  styleUrls: ['./app-config.component.scss']
+  selector: 'app-project-config',
+  templateUrl: './project-config.component.html',
+  styleUrls: ['./project-config.component.scss']
 })
-export class AppConfigComponent implements OnInit {
+export class ProjectConfigComponent implements OnInit {
   private _config: Config;
 
-  constructor () {
+  constructor() {
     this._config = new Config('App');
-  }
+   }
 
   ngOnInit() {
   }
@@ -22,9 +22,9 @@ export class AppConfigComponent implements OnInit {
     return this._config.data;
   }
 
-  onSelectionChange(event: any): void {
+  onChange(event: any): void {
     let config: any = this.config;
-    config[event.option.value] = event.option.selected;
+    config.databases.project[event.target.name] = event.target.value;
     this._config.data = config;
   }
 

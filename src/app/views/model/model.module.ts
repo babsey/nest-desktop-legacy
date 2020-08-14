@@ -12,7 +12,6 @@ import { RoutesModule } from '../routes.module';
 import { AppFormsModule } from '../forms/forms.module';
 
 import { ModelComponent } from './model.component';
-import { ModelConfigComponent } from './model-config/model-config.component';
 import { ModelConfigDialogComponent } from './model-config-dialog/model-config-dialog.component';
 import { ModelDocumentationComponent } from './model-documentation/model-documentation.component';
 import { ModelListComponent } from './model-list/model-list.component';
@@ -27,7 +26,6 @@ import { ModelToolbarComponent } from './model-toolbar/model-toolbar.component';
 @NgModule({
   declarations: [
     ModelComponent,
-    ModelConfigComponent,
     ModelConfigDialogComponent,
     ModelDocumentationComponent,
     ModelListComponent,
@@ -40,7 +38,6 @@ import { ModelToolbarComponent } from './model-toolbar/model-toolbar.component';
   ],
   exports: [
     ModelComponent,
-    ModelConfigComponent,
     ModelConfigDialogComponent,
     ModelDocumentationComponent,
     ModelListComponent,

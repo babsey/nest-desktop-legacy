@@ -24,25 +24,24 @@
   </mat-toolbar>
 
   <mat-nav-list dense class="navlist config-theme" style="padding:0" [@enterAnimation]>
+    <mat-list-item (click)="navigate('nest-server')" [class.active]="isActive('nest-server')">
+      <fa-icon class="list-icon" icon="server"></fa-icon> NEST Server
+    </mat-list-item>
     <mat-list-item (click)="navigate('application')" [class.active]="isActive('app')">
       <fa-icon class="list-icon" icon="clipboard-check"></fa-icon> Application
     </mat-list-item>
     <mat-list-item (click)="navigate('model')" [class.active]="isActive('model')">
       <fa-icon class="list-icon" icon="square-root-alt"></fa-icon> Model
     </mat-list-item>
+    <mat-list-item (click)="navigate('project')" [class.active]="isActive('project')">
+      <fa-icon class="list-icon" icon="cogs"></fa-icon> Project
+    </mat-list-item>
     <mat-list-item (click)="navigate('network')" [class.active]="isActive('network')">
       <fa-icon class="list-icon" icon="bezier-curve"></fa-icon> Network
     </mat-list-item>
-    <mat-list-item (click)="navigate('simulation')" [class.active]="isActive('simulation')">
-      <fa-icon class="list-icon" icon="cogs"></fa-icon> Simulation
-    </mat-list-item>
-    <mat-list-item (click)="navigate('activity')" [class.active]="isActive('activity')">
-      <fa-icon class="list-icon" icon="chart-line"></fa-icon> Visualization
-    </mat-list-item>
-    <mat-list-item (click)="navigate('nest-server')" [class.active]="isActive('nest-server')">
-      <fa-icon class="list-icon" icon="server"></fa-icon> NEST Server
-    </mat-list-item>
+    <!-- <mat-list-item (click)="navigate('activity-graph')" [class.active]="isActive('activity-graph')">
+      <fa-icon class="list-icon" icon="chart-line"></fa-icon> Activity graph
+    </mat-list-item> -->
   </mat-nav-list>
-
 
 </span>

@@ -5,7 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MccColorPickerModule } from 'material-community-components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import * as PlotlyJS from 'plotly.js/dist/plotly.js';
+import * as PlotlyJS from 'plotly.js-cartesian-dist';
 import { PlotlyModule } from 'angular-plotly.js';
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -18,7 +18,6 @@ import { NodeModule } from '../node/node.module';
 import { BackgroundSketchComponent } from './network-sketch/background-sketch/background-sketch.component';
 import { NetworkClearDialogComponent } from './network-clear-dialog/network-clear-dialog.component';
 import { NetworkComponent } from './network.component';
-import { NetworkConfigComponent } from './network-config/network-config.component';
 import { NetworkControllerComponent } from './network-controller/network-controller.component';
 import { NetworkListComponent } from './network-list/network-list.component';
 import { NetworkNavbarComponent } from './network-navbar/network-navbar.component';
@@ -32,7 +31,6 @@ import { NetworkSketchSheetComponent } from './network-sketch-sheet/network-sket
     BackgroundSketchComponent,
     NetworkClearDialogComponent,
     NetworkComponent,
-    NetworkConfigComponent,
     NetworkControllerComponent,
     NetworkListComponent,
     NetworkNavbarComponent,
@@ -48,7 +46,6 @@ import { NetworkSketchSheetComponent } from './network-sketch-sheet/network-sket
     BackgroundSketchComponent,
     NetworkClearDialogComponent,
     NetworkComponent,
-    NetworkConfigComponent,
     NetworkControllerComponent,
     NetworkListComponent,
     NetworkNavbarComponent,

@@ -6,7 +6,7 @@ import { AngularSplitModule } from 'angular-split';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import * as PlotlyJS from 'plotly.js/dist/plotly.js';
+import * as PlotlyJS from 'plotly.js-cartesian-dist';
 import { PlotlyModule } from 'angular-plotly.js';
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -14,9 +14,9 @@ import { AppPipesModule } from '../../pipes/pipes.module';
 
 import { MaterialModule } from '../material.module';
 import { AppFormsModule } from '../forms/forms.module';
+import { NodeModule } from '../node/node.module';
 
 import { ActivityGraphComponent } from './activity-graph/activity-graph.component';
-import { ActivityGraphConfigComponent } from './activity-graph-config/activity-graph-config.component';
 
 import { ActivityControllerComponent } from './activity-controller/activity-controller.component';
 import { ActivityAnimationControllerComponent } from './activity-controller/activity-animation-controller/activity-animation-controller.component';
@@ -41,7 +41,6 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     ActivityChartSplitControllerComponent,
     ActivityControllerComponent,
     ActivityGraphComponent,
-    ActivityGraphConfigComponent,
     ActivityStatsComponent,
     AnalogStatsComponent,
     AnimationColormapComponent,
@@ -56,7 +55,6 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     ActivityChartSplitControllerComponent,
     ActivityControllerComponent,
     ActivityGraphComponent,
-    ActivityGraphConfigComponent,
     ActivityStatsComponent,
     AnalogStatsComponent,
     AnimationColormapComponent,
@@ -72,6 +70,7 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     DragDropModule,
     FontAwesomeModule,
     FormsModule,
+    NodeModule,
     MaterialModule,
     PlotlyModule,
   ]

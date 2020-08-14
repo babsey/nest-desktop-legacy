@@ -15,7 +15,6 @@ import { ConfigModule } from './config/config.module';
 import { HelpModule } from './help/help.module';
 import { ModelModule } from './model/model.module';
 import { NavigationModule } from './navigation/navigation.module';
-import { NestServerModule } from './nest-server/nest-server.module';
 import { NetworkModule } from './network/network.module';
 import { ProjectModule } from './project/project.module';
 import { ProjectNavigationModule } from './project-navigation/project-navigation.module';
@@ -56,7 +55,6 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
     MaterialModule,
     ModelModule,
     NavigationModule,
-    NestServerModule,
     NetworkModule,
     ProjectModule,
     ProjectNavigationModule,

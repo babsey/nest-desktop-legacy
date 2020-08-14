@@ -19,11 +19,9 @@ export interface AnalogStatsElement {
   styleUrls: ['./analog-stats.component.scss']
 })
 export class AnalogStatsComponent implements OnInit, OnChanges {
-  @Input() activities: Activity[] = [];
-  @Input() idx: number;
+  @Input() activity: Activity;
   @Input() recordFrom: string[] = [];
   @Input() selectedRecordFrom: string;
-  @Input() color: string;
 
   public displayedColumns: string[] = ['id', 'mean', 'std'];
   public dataSource: MatTableDataSource<any>;
@@ -42,17 +40,19 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
     this.update()
   }
 
+  get color(): string {
+    return this.activity.recorder.view.color;
+  }
+
   update(): void {
     if (this.selectedRecordFrom == undefined) return
-
-    const activity: Activity = this.activities[this.idx];
-    const activityData: number[] = activity.recorder.events[this.selectedRecordFrom];
+    const activityData: number[] = this.activity.recorder.events[this.selectedRecordFrom];
     const data = Object.create(null);
-    activity.nodeIds.forEach(id => data[id] = [])
-    activity.recorder.events.senders.forEach((sender, idx) => {
+    this.activity.nodeIds.forEach(id => data[id] = [])
+    this.activity.recorder.events.senders.forEach((sender, idx) => {
       data[sender].push(activityData[idx]);
     });
-    const stats: AnalogStatsElement[] = activity.nodeIds.map(id => {
+    const stats: AnalogStatsElement[] = this.activity.nodeIds.map(id => {
       const d: number[] = data[id];
       return {
         id: id,

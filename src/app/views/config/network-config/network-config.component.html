@@ -1,8 +1,8 @@
-<mat-toolbar class="network-sketch-toolbar">
-  Network sketch
+<mat-toolbar class="config-section-toolbar" color="primary">
+  Network graph
 </mat-toolbar>
 
-<mat-list dense class="controller-menu light-theme">
+<mat-list dense style="padding:0">
   <mat-list-item mat-subheader>
     Node
   </mat-list-item>
@@ -11,7 +11,7 @@
     <mat-form-field style="width:100%">
       <mat-select
         placeholder="Pick a color scheme"
-        [(ngModel)]="color.scheme"
+        [(ngModel)]="config.color.scheme"
         (selectionChange)="selectScheme($event)"
         style="width:100%">
         <mat-option *ngFor="let scheme of colorSchemes.list()" [value]="scheme">
@@ -22,7 +22,7 @@
   </mat-list-item>
 
   <mat-list-item>
-    <ng-container *ngFor="let colorId of color.cycle; let idx = index">
+    <ng-container *ngFor="let colorId of config.color.cycle; let idx = index">
     <span
       [style.border-color]="colorId"
       style="border-width: 1.5px; border-radius: 15px; position:relative; line-height:normal; margin: 2px">

@@ -34,7 +34,7 @@ export class AnimationColormapComponent implements OnInit {
     return this._activityGraphService.graph.config.colorMap;
   }
 
-  onSelectionChange(value: number): void {
+  onChange(event: any): void {
     this._activityGraphService.update.emit();
   }
 

@@ -21,9 +21,7 @@ export interface SpikeStatsElement {
   styleUrls: ['./spike-stats.component.scss']
 })
 export class SpikeStatsComponent implements OnInit, OnChanges {
-  @Input() activities: Activity[] = [];
-  @Input() idx: number;
-  @Input() color: string;
+  @Input() activity: Activity;
   private stats: SpikeStatsElement[];
   private times: any;
 
@@ -44,14 +42,17 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
     this.update()
   }
 
+  get color(): string {
+    return this.activity.recorder.view.color;
+  }
+
   update(): void {
-    const activity: Activity = this.activities[this.idx];
     this.times = Object.create(null);
-    activity.nodeIds.forEach(id => this.times[id] = [])
-    activity.recorder.events.senders.forEach((sender, idx) => {
-      this.times[sender].push(activity.recorder.events.times[idx]);
+    this.activity.nodeIds.forEach(id => this.times[id] = [])
+    this.activity.recorder.events.senders.forEach((sender, idx) => {
+      this.times[sender].push(this.activity.recorder.events.times[idx]);
     });
-    this.stats = activity.nodeIds.map(id => {
+    this.stats = this.activity.nodeIds.map(id => {
       const isi: number[] = this.isi(this.times[id]);
       const isi_mean: number = isi.length > 1 ? this._mathService.mean(isi) : 0;
       const isi_std: number = isi.length > 1 ? this._mathService.deviation(isi) : 0;

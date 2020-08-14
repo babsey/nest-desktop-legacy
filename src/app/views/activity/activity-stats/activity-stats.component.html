@@ -1,44 +1,5 @@
-<ng-container *ngIf="selectedModel!=undefined">
-  <span class="dark-theme">
-    <button mat-mini-fab
-      color="primary"
-      (click)="unselect()"
-      style="z-index:1000;position:absolute;top:5px;left:10px">
-      <fa-icon icon="arrow-left"></fa-icon>
-    </button>
-  </span>
-</ng-container>
-
-<ng-container [ngSwitch]="selectedModel">
-
-  <ng-container *ngSwitchCase="'spike_detector'">
-    <app-spike-stats
-      [color]="colorSelected()"
-      [idx]="selectedIdx"
-      [activities]="activities"
-      ></app-spike-stats>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="'multimeter'">
-    <app-analog-stats
-      [color]="colorSelected()"
-      [idx]="selectedIdx"
-      [activities]="activities"
-      [recordFrom]="recordFrom"
-      [selectedRecordFrom]="selectedRecordFrom"
-    ></app-analog-stats>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="'voltmeter'">
-    <app-analog-stats
-      [color]="colorSelected()"
-      [idx]="selectedIdx"
-      [activities]="activities"
-      [selectedRecord]="'V_m'"
-    ></app-analog-stats>
-  </ng-container>
-
-  <ng-container *ngSwitchDefault>
+<ng-container [ngSwitch]="selectedActivity===undefined">
+  <ng-container *ngSwitchCase="true">
     <mat-nav-list dense>
       <h3 matSubheader>
         <span class="flex">
@@ -46,10 +7,10 @@
           <span class="flex-spacer"></span>
           Model
           <span class="flex-spacer"></span>
-          Project size
+          Data size
         </span>
       </h3>
-      <ng-container *ngFor="let activity of activities">
+      <ng-container *ngFor="let activity of project.activities">
         <mat-list-item
           (click)="select(activity)"
           style="width:100%;line-height:40px">
@@ -57,10 +18,8 @@
             <span>
               <svg width="40" height="40">
                 <g app-node-shape
-                  [strokeColor]="activity.recorder.view.color"
-                  [elementType]="'recorder'"
-                  [label]="activity.recorder.view.label"
-                  [idx]="activity.recorder.idx"
+                  [node]="activity.recorder"
+                  [showSelection]="false"
                   transform="translate(20,20)"
                 ></g>
               </svg>
@@ -75,4 +34,39 @@
     </mat-nav-list>
   </ng-container>
 
+  <ng-container *ngSwitchCase="false">
+      <span class="dark-theme">
+        <button mat-mini-fab
+          (click)="unselect()"
+          color="primary"
+          style="z-index:1000;position:absolute;top:5px;left:10px">
+          <fa-icon icon="arrow-left"></fa-icon>
+        </button>
+      </span>
+
+    <ng-container [ngSwitch]="selectedActivity.recorder.model.existing">
+
+      <ng-container *ngSwitchCase="'spike_detector'">
+        <app-spike-stats
+          [activity]="selectedActivity"
+          ></app-spike-stats>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'multimeter'">
+        <app-analog-stats
+          [activity]="selectedActivity"
+          [recordFrom]="recordFrom"
+          [selectedRecordFrom]="selectedRecordFrom"
+        ></app-analog-stats>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'voltmeter'">
+        <app-analog-stats
+          [activity]="selectedActivity"
+          [color]="colorSelected()"
+          [selectedRecordFrom]="'V_m'"
+        ></app-analog-stats>
+      </ng-container>
+
+  </ng-container>
 </ng-container>

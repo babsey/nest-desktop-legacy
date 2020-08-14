@@ -19,7 +19,6 @@ import { SimulationModule } from '../simulation/simulation.module';
 
 import { ProjectComponent } from './project.component';
 import { ProjectContainerComponent } from './project-container/project-container.component';
-import { ProjectConfigComponent } from './project-config/project-config.component';
 import { ProjectRawDataComponent } from './project-raw-data/project-raw-data.component';
 import { ProjectSidenavComponent } from './project-sidenav/project-sidenav.component';
 import { ProjectSidenavContentComponent } from './project-sidenav-content/project-sidenav-content.component';
@@ -31,7 +30,6 @@ import { ProjectToolbarComponent } from './project-toolbar/project-toolbar.compo
   declarations: [
     ProjectComponent,
     ProjectContainerComponent,
-    ProjectConfigComponent,
     ProjectRawDataComponent,
     ProjectSidenavComponent,
     ProjectSidenavContentComponent,
@@ -41,7 +39,6 @@ import { ProjectToolbarComponent } from './project-toolbar/project-toolbar.compo
   exports: [
     ProjectComponent,
     ProjectContainerComponent,
-    ProjectConfigComponent,
     ProjectRawDataComponent,
     ProjectSidenavComponent,
     ProjectSidenavContentComponent,

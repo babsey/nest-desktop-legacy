@@ -4,7 +4,7 @@
   [style.border-left-color]="connection.source.view.color"
   [style.border-right-color]="connection.target.view.color">
 
-  <ng-container *ngIf="connection._source !== connection._target">
+  <ng-container *ngIf="connection.source.idx !== connection.target.idx">
     <button mat-menu-item class="menu-item" (click)="connection.reverse()">
       <fa-icon class="menu-icon" icon="sync-alt"></fa-icon> Reverse connection
     </button>

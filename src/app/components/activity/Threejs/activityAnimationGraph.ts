@@ -51,6 +51,9 @@ export class ActivityAnimationGraph extends ActivityGraph {
     },
     dotSize: 10,
   };
+  
+  style: any = {};
+  data: any[];
 
   trailModes: string[] = ['off', 'growing', 'shrinking', 'temporal'];
   colorScales: any = {

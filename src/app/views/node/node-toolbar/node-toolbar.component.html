@@ -31,7 +31,7 @@
     </span>
 
     <mat-select
-      (selectionChange)="selectModel($event)"
+      (selectionChange)="node.selectModel($event)"
       [(ngModel)]="node.modelId"
       [disabled]="disabled">
       <ng-container *ngFor="let model of models">

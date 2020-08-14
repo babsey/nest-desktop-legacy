@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { listAnimation } from '../../../animations/list-animation';
 
+import { App } from '../../../components/app';
 import { Model } from '../../../components/model/model';
 
 import { AppService } from '../../../services/app/app.service';
@@ -25,7 +26,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
-    public _appService: AppService,
+    private _appService: AppService,
     public _modelService: ModelService,
   ) { }
 
@@ -38,9 +39,13 @@ export class ModelListComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  get app(): App {
+    return this._appService.data;
+  }
+
   update(): void {
-    this.enabledModels = this._appService.data.filterModels().map(model => model.id);
-    const urlRoot: string = this._appService.data.nestServer.url;
+    this.enabledModels = this.app.filterModels().map(model => model.id);
+    const urlRoot: string = this.app.nestServer.url;
     this.http.get(urlRoot + '/api/nest/Models').subscribe(resp => {
       this.availableModels = Object.entries(resp).map(entry => entry[1]);
       this.filterModels();

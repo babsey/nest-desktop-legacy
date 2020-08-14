@@ -15,8 +15,7 @@ import { Project } from '../../../components/project/project';
 })
 export class ActivityStatsComponent implements OnInit {
   @Input() project: Project;
-  public selectedIdx: number;
-  public selectedModel: Model;
+  public selectedActivity: Activity;
   public recordFrom: string[] = ['V_m'];
   public selectedRecord: string = 'V_m';
 
@@ -26,24 +25,16 @@ export class ActivityStatsComponent implements OnInit {
   ngOnInit() {
   }
 
-  colorSelected(): string {
-    if (this.selectedIdx == undefined) return 'black'
-    const activity: Activity = this.project.activities[this.selectedIdx];
-    return activity.recorder.view.color;
-  }
-
   select(activity: Activity): void {
-    this.selectedIdx = activity.idx;
-    this.selectedModel = activity.recorder.model;
-    if (this.selectedModel.existing === 'multimeter') {
+    this.selectedActivity = activity;
+    if (activity.recorder.model.existing === 'multimeter') {
       this.recordFrom = activity.recorder.getParameter('record_from').value || ['V_m'];
       this.selectedRecord = this.recordFrom[0];
     }
   }
 
   unselect(): void {
-    this.selectedIdx = undefined;
-    this.selectedModel = undefined;
+    this.selectedActivity = undefined;
     this.recordFrom = ['V_m'];
     this.selectedRecord = 'V_m';
   }

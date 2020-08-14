@@ -1,8 +1,11 @@
-<mat-toolbar color="primary" style="height:40px; padding-left:60px" [style.background-color]="color">
+<mat-toolbar
+  [style.background-color]="color"
+  color="primary"
+  style="height:40px; padding-left:60px">
   Statistics of
   <ng-container [ngSwitch]="recordFrom.length==0">
     <ng-container *ngSwitchCase="true">
-      {{ selectedRecord }}
+      {{ selectedRecordFrom }}
     </ng-container>
     <ng-container *ngSwitchCase="false">
       &nbsp;
@@ -26,14 +29,14 @@
 
   <!-- mean Column -->
   <ng-container matColumnDef="mean">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> &mu;({{ selectedRecord }}) </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> &mu;({{ selectedRecordFrom }}) </th>
     <td mat-cell *matCellDef="let element"> {{element.mean | format }} </td>
     <td mat-footer-cell *matFooterCellDef> &lambda; = {{ mean('mean') | format }} </td>
   </ng-container>
 
   <!-- std Column -->
   <ng-container matColumnDef="std">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> &sigma;({{ selectedRecord }}) </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> &sigma;({{ selectedRecordFrom }}) </th>
     <td mat-cell *matCellDef="let element"> {{ element.std | format }} </td>
     <td mat-footer-cell *matFooterCellDef> &lambda; = {{ mean('std') | format }} </td>
   </ng-container>

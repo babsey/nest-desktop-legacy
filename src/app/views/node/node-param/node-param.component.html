@@ -12,18 +12,16 @@
   <button mat-menu-item (click)="param.value = param.options.value;">
     <fa-icon class="menu-icon" icon="eraser"></fa-icon> Set default value: {{ param.options.value }}
   </button>
-  <ng-container *ngIf="model">
-    <button mat-menu-item (click)="openConfigDialog()">
-      <fa-icon class="menu-icon" icon="sliders-h"></fa-icon> Configure sliders
+  <button mat-menu-item (click)="openConfigDialog()">
+    <fa-icon class="menu-icon" icon="sliders-h"></fa-icon> Configure sliders
+  </button>
+  <button mat-menu-item (click)="param.visible = false">
+    <fa-icon class="menu-icon" icon="eye-slash"></fa-icon> Hide parameter
+  </button>
+  <ng-container *ngIf="param.options.input === 'arrayInput'">
+    <button mat-menu-item (click)="openGeneratorDialog()">
+      <fa-icon class="menu-icon" icon="dice"></fa-icon> Generate numbers
     </button>
-    <button mat-menu-item (click)="param.visible = false">
-      <fa-icon class="menu-icon" icon="eye-slash"></fa-icon> Hide parameter
-    </button>
-    <ng-container *ngIf="view=='arrayInput'">
-      <button mat-menu-item (click)="openGeneratorDialog()">
-        <fa-icon class="menu-icon" icon="dice"></fa-icon> Generate numbers
-      </button>
-    </ng-container>
   </ng-container>
 </mat-menu>
 

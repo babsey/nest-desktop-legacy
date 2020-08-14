@@ -1,16 +1,64 @@
-<span class="config-theme">
+<!-- <span class="config-theme">
   <mat-toolbar class="navbar" color="primary">
-    {{ routeSetting.replace('-', ' ') | capitalize }}
+    {{ currentSection | capitalize }}
   </mat-toolbar>
-</span>
+</span> -->
 
-<div style="width:640px; margin: 8px">
-  <ng-container [ngSwitch]="routeSetting">
-    <app-app-config *ngSwitchCase="'application'" class="setting"></app-app-config>
-    <app-nest-server-config *ngSwitchCase="'nest-server'" class="setting"></app-nest-server-config>
-    <app-model-config *ngSwitchCase="'model'" class="setting"></app-model-config>
-    <app-network-config *ngSwitchCase="'network'" class="setting"></app-network-config>
-    <app-simulation-config *ngSwitchCase="'simulation'" class="setting"></app-simulation-config>
-    <app-activity-config *ngSwitchCase="'activity'" class="setting"></app-activity-config>
-  </ng-container>
+<div
+  class="setting dark-theme"
+  style="width:640px; height:calc(100vh); overflow-y: auto">
+  <div
+    (click)="navigate('nest-server')"
+    [class.config-theme]="isActive('nest-server')"
+    class="section"
+    id="nest-server">
+    <app-nest-server-config></app-nest-server-config>
+  </div>
+  <div
+    (click)="navigate('application')"
+    [class.config-theme]="isActive('application')"
+    class="section"
+    id="application">
+    <app-config></app-config>
+  </div>
+  <div
+    (click)="navigate('model')"
+    [class.config-theme]="isActive('model')"
+    class="section"
+    id="model">
+    <app-model-config></app-model-config>
+  </div>
+  <div
+    (click)="navigate('project')"
+    [class.config-theme]="isActive('project')"
+    class="section"
+    id="project">
+    <app-project-config></app-project-config>
+  </div>
+  <div
+    (click)="navigate('network')"
+    [class.config-theme]="isActive('network')"
+    class="section"
+    id="network">
+    <app-network-config></app-network-config>
+  </div>
+  <div
+    (click)="navigate('activity-graph')"
+    [class.config-theme]="isActive('activity-graph')"
+    class="section"
+    id="activity-graph">
+    <app-activity-graph-config></app-activity-graph-config>
+  </div>
+  <div style="height:100vh"></div>
 </div>
+
+<!-- <div style="width:640px;">
+  <ng-container [ngSwitch]="currentSection">
+    <app-nest-server-config *ngSwitchCase="'nest-server'"></app-nest-server-config>
+    <app-config *ngSwitchCase="'application'"></app-config>
+    <app-model-config *ngSwitchCase="'model'"></app-model-config>
+    <app-project-config *ngSwitchCase="'project'"></app-project-config>
+    <app-network-config *ngSwitchCase="'network'"></app-network-config>
+    <app-activity-graph-config *ngSwitchCase="'activity-graph'"></app-activity-graph-config>
+  </ng-container>
+</div> -->

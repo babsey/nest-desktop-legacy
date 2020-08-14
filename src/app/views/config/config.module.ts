@@ -10,27 +10,37 @@ import { AppPipesModule } from '../../pipes/pipes.module';
 import { MaterialModule } from '../material.module';
 import { RoutesModule } from '../routes.module';
 
-import { ModelModule } from '../model/model.module';
-import { NestServerModule } from '../nest-server/nest-server.module';
-import { NetworkModule } from '../network/network.module';
-import { SimulationModule } from '../simulation/simulation.module';
-import { ActivityModule } from '../activity/activity.module';
-
-import { AppConfigComponent } from './app-config/app-config.component';
 import { ConfigComponent } from './config.component';
 import { ConfigListComponent } from './config-list/config-list.component';
+
+import { ActivityGraphConfigComponent } from './activity-graph-config/activity-graph-config.component';
+import { AppConfigComponent } from './app-config/app-config.component';
+import { ModelConfigComponent } from './model-config/model-config.component';
+import { NetworkConfigComponent } from './network-config/network-config.component';
+import { ProjectConfigComponent } from './project-config/project-config.component';
+import { NestServerConfigComponent } from './nest-server-config/nest-server-config.component';
 
 
 @NgModule({
   declarations: [
+    ActivityGraphConfigComponent,
     AppConfigComponent,
     ConfigComponent,
     ConfigListComponent,
+    ModelConfigComponent,
+    NestServerConfigComponent,
+    NetworkConfigComponent,
+    ProjectConfigComponent,
   ],
   exports: [
+    ActivityGraphConfigComponent,
     AppConfigComponent,
     ConfigComponent,
     ConfigListComponent,
+    ModelConfigComponent,
+    NestServerConfigComponent,
+    NetworkConfigComponent,
+    ProjectConfigComponent,
   ],
   imports: [
     AppPipesModule,
@@ -39,12 +49,7 @@ import { ConfigListComponent } from './config-list/config-list.component';
     FontAwesomeModule,
     FormsModule,
     MaterialModule,
-    ModelModule,
-    NestServerModule,
-    NetworkModule,
     RoutesModule,
-    SimulationModule,
-    ActivityModule,
     MccColorPickerModule.forRoot({
       used_colors: []
     }),

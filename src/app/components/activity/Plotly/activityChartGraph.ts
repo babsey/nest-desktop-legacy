@@ -1,4 +1,4 @@
-import * as PlotlyJS from 'plotly.js/dist/plotly.js';
+import * as PlotlyJS from 'plotly.js-cartesian-dist';
 
 import { Project } from '../../project/project';
 import { ActivityGraph } from '../activityGraph';
@@ -71,6 +71,8 @@ export class ActivityChartGraph extends ActivityGraph {
     icon: PlotlyJS.Icons.pencil,
     click: function(gd) { }
   };
+
+  frames: any[];
 
   constructor(project: Project) {
     super(project);

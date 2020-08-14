@@ -1,5 +1,8 @@
-<div class="content config">
+<mat-toolbar class="config-section-toolbar" color="primary">
+  NEST Server
+</mat-toolbar>
 
+<div class="content config">
   <mat-nav-list>
     <mat-list-item (click)="nestServer.seek()">
       Seek NEST Server
@@ -21,25 +24,41 @@
   </mat-nav-list>
 
   <mat-selection-list (selectionChange)="onSelectionChange($event)">
-    <mat-list-option [selected]="nestServer.config.data.custom" value="manual">Manual setting</mat-list-option>
+    <mat-list-option
+      [selected]="config.custom"
+      value="custom"
+    >Custom settings
+    </mat-list-option>
   </mat-selection-list>
 
-  <mat-list *ngIf="nestServer.config.data.custom">
+  <mat-list *ngIf="config.custom">
     <mat-list-item>
       <mat-form-field class="form-field">
-        <input matInput placeholder="Protocol" name="protocol">
+        <input matInput
+          (change)="onChange($event)"
+          [value]="config.protocol"
+          name="protocol"
+          placeholder="Protocol">
       </mat-form-field>
     </mat-list-item>
 
     <mat-list-item>
       <mat-form-field class="form-field">
-        <input matInput placeholder="Hostname" name="hostname">
+        <input matInput
+        (change)="onChange($event)"
+        [value]="config.hostname"
+        name="hostname"
+        placeholder="Hostname">
       </mat-form-field>
     </mat-list-item>
 
     <mat-list-item>
       <mat-form-field class="form-field">
-        <input matInput placeholder="Port" name="port" [(ngModel)]="nestServer.port">
+        <input matInput
+        (change)="onChange($event)"
+        [value]="config.port"
+        name="port"
+        placeholder="Port">
       </mat-form-field>
     </mat-list-item>
   </mat-list>
