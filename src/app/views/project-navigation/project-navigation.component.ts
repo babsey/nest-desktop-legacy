@@ -21,7 +21,7 @@ export class ProjectNavigationComponent implements OnInit {
   public fileReader = new FileReader();
 
   constructor(
-    private router: Router,
+    private _router: Router,
     private _appService: AppService,
   ) {
     this.initFileReader()
@@ -40,7 +40,7 @@ export class ProjectNavigationComponent implements OnInit {
 
   newProject(): void {
     this.selectionList = false;
-    this.router.navigate([{ outlets: { primary: 'project/' } }]);
+    this._router.navigate([{ outlets: { primary: 'project/' } }]);
   }
 
   initFileReader(): void {

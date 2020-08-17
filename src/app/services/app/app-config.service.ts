@@ -21,7 +21,7 @@ export class AppConfigService {
     ready: false,
     valid: false
   };
-  private files: string[] = [
+  private _files: string[] = [
     'app',
     'groups',
     'user',
@@ -29,7 +29,7 @@ export class AppConfigService {
   ];
 
   constructor(
-    private http: HttpClient,
+    private _http: HttpClient,
   ) {
   }
 
@@ -40,12 +40,12 @@ export class AppConfigService {
       this.config = JSON.parse(configJSON);
       this.isValid()
     } else {
-      this.fromFiles(this.files)
+      this.fromFiles(this._files)
     }
   }
 
   fromFiles(files: string[]): void {
-    var configFiles = files.map(file => this.http.get('/assets/config/app/' + file + '.json'));
+    var configFiles = files.map(file => this._http.get('/assets/config/app/' + file + '.json'));
     forkJoin(configFiles).subscribe(configs => {
       configs.map((config, idx) => {
         this.config[files[idx]] = config;
@@ -70,7 +70,7 @@ export class AppConfigService {
     var appVersion = environment.VERSION.split('.');
     var configVersion = this.config.version.split('.');
     var versionValid = appVersion[0] == configVersion[0] && appVersion[1] == configVersion[1];
-    var configValid = this.files.filter(file => this.config.hasOwnProperty(file)).length != 0;
+    var configValid = this._files.filter(file => this.config.hasOwnProperty(file)).length != 0;
     this.status.valid = versionValid && configValid;
     this.status.ready = true;
   }

@@ -18,20 +18,20 @@ export class NodeSketchComponent implements OnInit {
   @Input() eventTrigger: boolean = true;
   @Input() height: number;
   @Input() width: number;
-  private selector: any;
+  private _selector: any;
   public isDisabled: boolean = false;
 
   constructor(
     private _networkSketchService: NetworkSketchService,
-    private elementRef: ElementRef,
+    private _elementRef: ElementRef,
   ) {
-    this.selector = d3.select(elementRef.nativeElement);
+    this._selector = d3.select(_elementRef.nativeElement);
   }
 
   ngOnInit() {
     if (this.node === undefined) return
     if (this.dragable) {
-      const node = this.selector.selectAll("g.node").data([this.node]); // UPDATE
+      const node = this._selector.selectAll("g.node").data([this.node]); // UPDATE
       node.on('mousedown.drag', null);
       node.call(this.dragHandler());
     }

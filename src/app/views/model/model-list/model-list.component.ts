@@ -17,7 +17,7 @@ import { ModelService } from '../../../services/model/model.service';
   animations: [ listAnimation ]
 })
 export class ModelListComponent implements OnInit, OnDestroy {
-  private subscription: any;
+  private _subscription: any;
   public availableModels: string[] = [];
   public enabledModels: string[] = [];
   public filteredModels: string[] = [];
@@ -25,18 +25,18 @@ export class ModelListComponent implements OnInit, OnDestroy {
   public view: string = 'enabled';
 
   constructor(
-    private http: HttpClient,
+    private _http: HttpClient,
     private _appService: AppService,
     public _modelService: ModelService,
   ) { }
 
   ngOnInit() {
-    this.subscription = this._modelService.update.subscribe((): void => this.update());
+    this._subscription = this._modelService.update.subscribe((): void => this.update());
     this.update();
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this._subscription.unsubscribe();
   }
 
   get app(): App {
@@ -46,7 +46,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
   update(): void {
     this.enabledModels = this.app.filterModels().map(model => model.id);
     const urlRoot: string = this.app.nestServer.url;
-    this.http.get(urlRoot + '/api/nest/Models').subscribe(resp => {
+    this._http.get(urlRoot + '/api/nest/Models').subscribe(resp => {
       this.availableModels = Object.entries(resp).map(entry => entry[1]);
       this.filterModels();
     })

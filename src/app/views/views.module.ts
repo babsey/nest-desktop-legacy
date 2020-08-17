@@ -65,8 +65,8 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
 })
 export class ViewsModule {
   constructor(
-    private library: FaIconLibrary,
+    private _library: FaIconLibrary,
   ) {
-    library.addIconPacks(fas);
+    _library.addIconPacks(fas);
   }
 }

@@ -11,7 +11,7 @@ export class ActivityChartService {
   public binsize: any = 10.;
   public barmode: string = 'overlay';
   public barnorm: string = '';
-  private config: any = {};
+  private _config: any = {};
   public panel: any = {};
   public panelSelected: string[] = [];
   public panelOrder: string[] = ['input', 'analog', 'spike', 'histogram'];
@@ -37,7 +37,7 @@ export class ActivityChartService {
   constructor() {
     let configJSON = localStorage.getItem('network-config');
     if (configJSON) {
-      this.config = JSON.parse(configJSON);
+      this._config = JSON.parse(configJSON);
     }
     this.panelInit()
   }

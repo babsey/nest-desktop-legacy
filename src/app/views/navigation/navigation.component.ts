@@ -15,7 +15,7 @@ import { AppService } from '../../services/app/app.service';
 export class NavigationComponent implements OnInit {
 
   constructor(
-    private route: ActivatedRoute,
+    private _route: ActivatedRoute,
     public _appService: AppService,
     public router: Router,
   ) {

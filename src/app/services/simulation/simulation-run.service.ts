@@ -17,8 +17,8 @@ var STORAGE_NAME = 'simulation-config';
   providedIn: 'root'
 })
 export class SimulationRunService {
-  private project: Project;
-  private snackBarRef: any;
+  private _project: Project;
+  private _snackBarRef: any;
   public config: Object = {
     runAfterLoad: true,
     runAfterChange: true,
@@ -31,9 +31,9 @@ export class SimulationRunService {
     private _activityGraphService: ActivityGraphService,
     private _appService: AppService,
     private _logService: LogService,
-    private http: HttpClient,
-    private snackBar: MatSnackBar,
-    private toastr: ToastrService,
+    private _http: HttpClient,
+    private _snackBar: MatSnackBar,
+    private _toastr: ToastrService,
   ) {
     const configJSON: string = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
@@ -53,12 +53,12 @@ export class SimulationRunService {
     if (!(force || this.config['runAfterChange'])) return
 
     this._logService.reset();
-    this.project = this._appService.data.project;
+    this._project = this._appService.data.project;
 
     if (this.config['autoRandomSeed']) {
       this._logService.log('Randomize seed');
       const seed: number = Math.random() * 1000;
-      this.project.simulation['randomSeed'] = parseInt(seed.toFixed(0));
+      this._project.simulation['randomSeed'] = parseInt(seed.toFixed(0));
     }
 
     // this._logService.log('Clean and hash project');
@@ -81,7 +81,7 @@ export class SimulationRunService {
     // })
 
     if (this.config['showSnackBar']) {
-      this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
+      this._snackBarRef = this._snackBar.open('The simulation is running. Please wait.', null, {});
     }
 
     (this.mode === 'declarative') ? this.runScript() : this.execCode();
@@ -91,7 +91,7 @@ export class SimulationRunService {
     const urlRoot: string = this._appService.data.nestServer.url;
     this._logService.log('Run script on server');
     this.running = true;
-    this.http.post(urlRoot + '/script/simulation/run', this.project.serialize('simulator'))
+    this._http.post(urlRoot + '/script/simulation/run', this._project.serialize('simulator'))
       .subscribe(data => this.response(data), err => this.error(err['error']))
   }
 
@@ -99,7 +99,7 @@ export class SimulationRunService {
     const urlRoot: string = this._appService.data.nestServer.url;
     this._logService.log('Exec code on server');
     this.running = true;
-    this.http.post(urlRoot + '/exec', { source: this.project.code.script, return: 'response' })
+    this._http.post(urlRoot + '/exec', { source: this._project.code.script, return: 'response' })
       .subscribe(data => this.response(data), err => this.error(err['error']))
   }
 
@@ -109,31 +109,31 @@ export class SimulationRunService {
       const error = resp['error'];
       this.error(error['message'], error['title'])
     } else {
-      if (this.snackBarRef) {
-        this.snackBarRef.dismiss();
+      if (this._snackBarRef) {
+        this._snackBarRef.dismiss();
       }
       this._logService.logs = this._logService.logs.concat(resp['logs'] || []);
       this._logService.log('Response from server')
       if (resp['stdout']) {
         // console.log(resp['stdout'])
-        this.snackBarRef = this.snackBar.open(resp['stdout'], null, {
+        this._snackBarRef = this._snackBar.open(resp['stdout'], null, {
         duration: 5000
         });
       }
 
-      this.project.updateActivities(resp['data']);
+      this._project.updateActivities(resp['data']);
       this._activityGraphService.update.emit();
     }
   }
 
   fetchElementTypes(idx: number): string[] {
-    return this.project.network.connections
+    return this._project.network.connections
       .filter(connection => connection.source.idx === idx)
       .map(connection => connection.target.model.elementType);
   }
 
   listParams(idx: number, key: string = ''): any[] {
-    var nodes = this.project.network.connections
+    var nodes = this._project.network.connections
       .filter(connection => connection.source.idx === idx)
       .map(connection => connection.target);
     if (key) {
@@ -146,12 +146,12 @@ export class SimulationRunService {
 
   error(message: string, title: string = null): void {
     this.running = false;
-    if (this.snackBarRef) {
-      this.snackBarRef.dismiss();
+    if (this._snackBarRef) {
+      this._snackBarRef.dismiss();
     }
     var url = 'https://nest-desktop.readthedocs.io/en/master/user/troubleshooting.html#error-messages';
     var link = '<br><br><a target="_blank" href="' + url + '">See documentation for details.</a>';
-    this.toastr.error(message + link, title, {
+    this._toastr.error(message + link, title, {
       enableHtml: true,
       progressBar: true,
       timeOut: 5000,

@@ -12,7 +12,7 @@ import { AppService } from '../../../services/app/app.service';
   styleUrls: ['./network-sketch-sheet.component.scss']
 })
 export class NetworkSketchSheetComponent implements OnInit {
-  private subscription: any;
+  private _subscription: any;
 
   constructor(
     private _appService: AppService,

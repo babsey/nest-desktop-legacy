@@ -27,14 +27,14 @@ export class NetworkComponent implements OnInit, AfterViewInit {
 
   constructor(
     private _networkSketchService: NetworkSketchService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private media: MediaMatcher,
-    private route: ActivatedRoute,
-    private router: Router,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _media: MediaMatcher,
+    private _route: ActivatedRoute,
+    private _router: Router,
     public _projectService: ProjectService,
   ) {
-    this.mobileQuery = media.matchMedia('(max-width: 1023px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 

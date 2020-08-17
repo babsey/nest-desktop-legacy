@@ -13,8 +13,8 @@ import { ActivityGraphService } from '../../../services/activity/activity-graph.
 })
 export class ActivityAnimationComponent implements OnInit, OnDestroy {
   @Input() project: Project;
-  private subscriptionInit: any;
-  private subscriptionUpdate: any;
+  private _subscriptionInit: any;
+  private _subscriptionUpdate: any;
 
   constructor(
     public _activityGraphService: ActivityGraphService,
@@ -23,15 +23,15 @@ export class ActivityAnimationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('Ng init activity animation view');
-    this.subscriptionInit = this._activityGraphService.init.subscribe(() => this.init());
-    this.subscriptionUpdate = this._activityGraphService.update.subscribe(() => this.update());
+    this._subscriptionInit = this._activityGraphService.init.subscribe(() => this.init());
+    this._subscriptionUpdate = this._activityGraphService.update.subscribe(() => this.update());
     this.init();
   }
 
   ngOnDestroy() {
     console.log('Ng destroy activity animation view');
-    this.subscriptionInit.unsubscribe();
-    this.subscriptionUpdate.unsubscribe();
+    this._subscriptionInit.unsubscribe();
+    this._subscriptionUpdate.unsubscribe();
   }
 
   init() {

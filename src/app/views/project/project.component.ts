@@ -20,17 +20,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   constructor(
     public _appService: AppService,
-    private bottomSheet: MatBottomSheet,
-    private route: ActivatedRoute,
+    private _bottomSheet: MatBottomSheet,
+    private _route: ActivatedRoute,
   ) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => this.projectId = params['id']);
+    this._route.params.subscribe(params => this.projectId = params['id']);
   }
 
   ngOnDestroy() {
-    this.bottomSheet.dismiss();
+    this._bottomSheet.dismiss();
   }
 
 }

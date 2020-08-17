@@ -16,12 +16,12 @@ export class ModelSidenavTabsComponent implements OnInit {
 
   constructor(
     private _appService: AppService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private media: MediaMatcher,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _media: MediaMatcher,
     public _modelService: ModelService,
   ) {
-    this.mobileQuery = media.matchMedia('(max-width: 1023px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 

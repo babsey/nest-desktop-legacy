@@ -15,12 +15,12 @@ import { ModelService } from '../../services/model/model.service';
 export class ModelComponent implements OnInit, OnDestroy {
 
   constructor(
-    private route: ActivatedRoute,
+    private _route: ActivatedRoute,
     public _modelService: ModelService,
   ) { }
 
   ngOnInit() {
-    let paramMap = this.route.snapshot.paramMap;
+    let paramMap = this._route.snapshot.paramMap;
     this._modelService.selectedModel = paramMap.get('model');
   }
 

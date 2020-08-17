@@ -29,16 +29,16 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     private _activityGraphService: ActivityGraphService,
     private _modelService: ModelService,
     private _simulationRunService: SimulationRunService,
-    private bottomSheet: MatBottomSheet,
-    private changeDetectorRef: ChangeDetectorRef,
-    private media: MediaMatcher,
-    private route: ActivatedRoute,
-    private router: Router,
+    private _bottomSheet: MatBottomSheet,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _media: MediaMatcher,
+    private _route: ActivatedRoute,
+    private _router: Router,
     public _appService: AppService,
     public _projectService: ProjectService,
   ) {
-    this.mobileQuery = media.matchMedia('(max-width: 1023px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
@@ -53,7 +53,7 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.bottomSheet.dismiss();
+    this._bottomSheet.dismiss();
   }
 
   update(): void {
@@ -61,11 +61,11 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     if (this.id) {
       this._appService.data.initProject(this.id).then(() => {
         this._activityGraphService.init.emit();
-        if (this.router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
+        if (this._router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
           this.run(true)
         }
       }).catch(() => {
-        this.router.navigate([{ outlets: { primary: 'project/' } }]);
+        this._router.navigate([{ outlets: { primary: 'project/' } }]);
       })
     } else {
       this._appService.data.initProject();
