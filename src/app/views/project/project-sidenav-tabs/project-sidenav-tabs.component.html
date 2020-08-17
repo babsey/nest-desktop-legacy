@@ -73,7 +73,7 @@
     </button>
   </ng-container>
 
-  <ng-container *ngIf="_activityGraphService.graph">
+  <ng-container *ngIf="activityGraphService.graph">
     <button mat-icon-button
       (click)="selectMode('activityController')"
       [class.mat-fab]="isMode('activityController')"
@@ -83,7 +83,7 @@
       >
       <!-- <fa-icon icon="braille"></fa-icon> -->
       <span class="fa-stack" style="line-height:2em">
-        <ng-container [ngSwitch]="_activityGraphService.graph.constructor.name">
+        <ng-container [ngSwitch]="activityGraphService.graph.constructor.name">
           <ng-container *ngSwitchCase="'ActivityChartGraph'">
             <fa-icon icon="chart-line" class="fa-stack-1x"></fa-icon>
           </ng-container>
@@ -96,7 +96,7 @@
     </button>
   </ng-container>
 
-  <button mat-icon-button *ngIf="_appService.data.project.hasActivities()"
+  <button mat-icon-button *ngIf="appService.data.project.hasActivities()"
     (click)="selectMode('stats')"
     [class.mat-fab]="isMode('stats')"
     matTooltip="Simulation stats"

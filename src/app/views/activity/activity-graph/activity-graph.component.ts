@@ -15,7 +15,7 @@ export class ActivityGraphComponent implements OnInit {
   public mode: string = 'chart';
 
   constructor(
-    public _simulationRunService: SimulationRunService
+    public simulationRunService: SimulationRunService
   ) {
   }
 

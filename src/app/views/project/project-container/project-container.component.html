@@ -1,5 +1,5 @@
 <app-project-toolbar
-  [project]="_appService.data.project">
+  [project]="appService.data.project">
 </app-project-toolbar>
 
 <span class="project">
@@ -13,21 +13,21 @@
       (openedStart)="onOpenedStart($event)"
       (openedChange)="onOpenedChange($event)"
       [mode]="mobileQuery.matches ? 'over' : 'side'"
-      [(opened)]="_projectService.sidenavOpened"
+      [(opened)]="projectService.sidenavOpened"
       id="sidenav-right"
       position="end"
       role="region"
       >
       <app-project-sidenav
-        [project]="_appService.data.project"
-        [mode]="_projectService.sidenavMode"
+        [project]="appService.data.project"
+        [mode]="projectService.sidenavMode"
       ></app-project-sidenav>
     </mat-sidenav>
 
     <mat-sidenav-content>
       <app-project-sidenav-content
-        [project]="_appService.data.project"
-        [mode]="_projectService.mode"
+        [project]="appService.data.project"
+        [mode]="projectService.mode"
       ></app-project-sidenav-content>
     </mat-sidenav-content>
   </mat-sidenav-container>
@@ -45,7 +45,7 @@
       <fa-icon icon="times"></fa-icon>
     </button>
     <app-network-sketch
-      [network]="_appService.data.project.network"
+      [network]="appService.data.project.network"
       width="540"
       height="200"
       [eventTrigger]="false"

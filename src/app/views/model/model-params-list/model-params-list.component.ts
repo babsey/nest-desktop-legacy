@@ -18,7 +18,7 @@ export class ModelParamsListComponent implements OnInit {
   public objectKeys = Object.keys;
 
   constructor(
-    public _modelService: ModelService,
+    public modelService: ModelService,
   ) {
   }
 
@@ -26,8 +26,8 @@ export class ModelParamsListComponent implements OnInit {
   }
 
   hasParam(paramId: string): boolean {
-    if (this._modelService.hasModel(this.model)) {
-      const settings: any = this._modelService.getSettings(this.model);
+    if (this.modelService.hasModel(this.model)) {
+      const settings: any = this.modelService.getSettings(this.model);
       return settings.params.filter(param => param.id == paramId).length > 0;
     }
     return false

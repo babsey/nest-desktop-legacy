@@ -14,17 +14,17 @@
 
   <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
     <mat-list-option
-      [selected]="_simulationRunService.config['autoRandomSeed']"
+      [selected]="simulationRunService.config['autoRandomSeed']"
       value="autoRandomSeed">
       <span>Randomize seed</span>
     </mat-list-option>
     <mat-list-option
-      [selected]="_simulationRunService.config['runAfterChange']"
+      [selected]="simulationRunService.config['runAfterChange']"
       value="runAfterChange">
       <span>Simulate after change</span>
     </mat-list-option>
     <mat-list-option
-      [selected]="_simulationRunService.config['runAfterLoad']"
+      [selected]="simulationRunService.config['runAfterLoad']"
       value="runAfterLoad">
       <span>Simulate after load</span>
     </mat-list-option>

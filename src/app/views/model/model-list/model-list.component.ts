@@ -27,11 +27,11 @@ export class ModelListComponent implements OnInit, OnDestroy {
   constructor(
     private _http: HttpClient,
     private _appService: AppService,
-    public _modelService: ModelService,
+    public modelService: ModelService,
   ) { }
 
   ngOnInit() {
-    this._subscription = this._modelService.update.subscribe((): void => this.update());
+    this._subscription = this.modelService.update.subscribe((): void => this.update());
     this.update();
   }
 

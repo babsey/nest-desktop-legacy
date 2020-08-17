@@ -34,8 +34,8 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     private _media: MediaMatcher,
     private _route: ActivatedRoute,
     private _router: Router,
-    public _appService: AppService,
-    public _projectService: ProjectService,
+    public appService: AppService,
+    public projectService: ProjectService,
   ) {
     this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
@@ -47,7 +47,7 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
   ngOnChanges() {
     console.log('Project container on changes');
     if (this.id === undefined) {
-      this._projectService.mode = 'networkEditor';
+      this.projectService.mode = 'networkEditor';
     }
     this.update();
   }
@@ -59,7 +59,7 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
   update(): void {
     console.log('Project container update');
     if (this.id) {
-      this._appService.data.initProject(this.id).then(() => {
+      this.appService.data.initProject(this.id).then(() => {
         this._activityGraphService.init.emit();
         if (this._router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
           this.run(true)
@@ -68,13 +68,13 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
         this._router.navigate([{ outlets: { primary: 'project/' } }]);
       })
     } else {
-      this._appService.data.initProject();
+      this.appService.data.initProject();
       this._activityGraphService.init.emit();
     }
   }
 
   run(force: boolean = false): void {
-    this._projectService.mode = 'activityExplorer';
+    this.projectService.mode = 'activityExplorer';
     this._simulationRunService.run(force)
   }
 
@@ -83,22 +83,22 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
   }
 
   toggleNetworkQuickView(): void {
-    this._projectService.networkQuickView = !this._projectService.networkQuickView;
+    this.projectService.networkQuickView = !this.projectService.networkQuickView;
   }
 
   isNetworkQuickViewOpened(): boolean {
-    return this._projectService.networkQuickView;
+    return this.projectService.networkQuickView;
   }
 
   onOpenedStart(event: any): void {
-    if (this._projectService.mode == 'labBook') {
-      this._projectService.mode = 'networkEditor';
+    if (this.projectService.mode == 'labBook') {
+      this.projectService.mode = 'networkEditor';
     }
   }
 
   onClosedStart(event: any): void {
-    if (this._projectService.mode == 'networkEditor') {
-      this._projectService.mode = 'labBook';
+    if (this.projectService.mode == 'networkEditor') {
+      this.projectService.mode = 'labBook';
     }
   }
 

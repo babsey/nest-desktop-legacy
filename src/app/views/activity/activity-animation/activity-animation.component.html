@@ -1,5 +1,5 @@
-<ng-container *ngIf="_activityGraphService.graph.frames.length > 0">
+<ng-container *ngIf="activityGraphService.graph.frames.length > 0">
   <app-three-scatter
-    [graph]="_activityGraphService.graph"
+    [graph]="activityGraphService.graph"
   ></app-three-scatter>
 </ng-container>

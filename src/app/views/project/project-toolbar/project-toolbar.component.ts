@@ -23,26 +23,26 @@ export class ProjectToolbarComponent implements OnInit {
 
   constructor(
     private _appService: AppService,
-    public _simulationRunService: SimulationRunService,
-    public _projectService: ProjectService,
+    public simulationRunService: SimulationRunService,
+    public projectService: ProjectService,
   ) { }
 
   ngOnInit() {
   }
 
   run(force: boolean = false): void {
-    this._projectService.mode = 'activityExplorer';
-    this._simulationRunService.run(force)
+    this.projectService.mode = 'activityExplorer';
+    this.simulationRunService.run(force)
   }
 
   configSimulation(): void {
-    this._projectService.mode = 'activityExplorer';
-    this._projectService.sidenavMode = 'simulation';
+    this.projectService.mode = 'activityExplorer';
+    this.projectService.sidenavMode = 'simulation';
   }
 
   onSelectionChange(event: any): void {
-    this._simulationRunService.config[event.option.value] = event.option.selected;
-    this._simulationRunService.saveConfig();
+    this.simulationRunService.config[event.option.value] = event.option.selected;
+    this.simulationRunService.saveConfig();
   }
 
   onMouseOver(event: MouseEvent): void {

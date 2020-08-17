@@ -5,11 +5,11 @@ import { Node } from '../node/node';
 
 export class NetworkView {
   network: Network;                    // parent
-  _focusedConnection: Connection = null;
-  _focusedNode: Node = null;
-  _selectedConnection: Connection = null;
-  _selectedElementType: string = null;
-  _selectedNode: Node = null;
+  private _focusedConnection: Connection = null;
+  private _focusedNode: Node = null;
+  private _selectedConnection: Connection = null;
+  private _selectedElementType: string = null;
+  private _selectedNode: Node = null;
 
   constructor(network: Network) {
     this.network = network;

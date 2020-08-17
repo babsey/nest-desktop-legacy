@@ -17,38 +17,38 @@ import { ModelService } from '../../../services/model/model.service';
 export class ModelToolbarComponent implements OnInit {
 
   constructor(
-    public _appService: AppService,
-    public _modelService: ModelService,
+    public appService: AppService,
+    public modelService: ModelService,
   ) { }
 
   ngOnInit() {
   }
 
   addModel(): void {
-    const modelId: string = this._modelService.selectedModel;
+    const modelId: string = this.modelService.selectedModel;
     const model: any = {
       id: modelId,
-      elementType: this._modelService.defaults.elementType,
+      elementType: this.modelService.defaults.elementType,
       label: modelId,
       params: [],
     };
-    if (this._modelService.defaults.hasOwnProperty('recordables')) {
-      model['recordables'] = this._modelService.defaults.recordables;
+    if (this.modelService.defaults.hasOwnProperty('recordables')) {
+      model['recordables'] = this.modelService.defaults.recordables;
     }
-    this._appService.data.addModel(model);
-    this._modelService.update.emit();
+    this.appService.data.addModel(model);
+    this.modelService.update.emit();
   }
 
   deleteModel(): void {
-    const model: string = this._modelService.selectedModel;
-    this._appService.data.deleteModel(model);
-    this._modelService.update.emit();
+    const model: string = this.modelService.selectedModel;
+    this.appService.data.deleteModel(model);
+    this.modelService.update.emit();
   }
 
   saveModel(): void {
-    const model: Model = this._appService.data.getModel(this._modelService.selectedModel);
+    const model: Model = this.appService.data.getModel(this.modelService.selectedModel);
     if (model) {
-      this._appService.data.saveModel(model.serialize('db'));
+      this.appService.data.saveModel(model.serialize('db'));
     }
   }
 

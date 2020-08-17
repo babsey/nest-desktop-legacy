@@ -18,7 +18,7 @@ export class ModelSidenavTabsComponent implements OnInit {
     private _appService: AppService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
-    public _modelService: ModelService,
+    public modelService: ModelService,
   ) {
     this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
@@ -33,7 +33,7 @@ export class ModelSidenavTabsComponent implements OnInit {
   }
 
   toggleSidenav(): void {
-    this._modelService.sidenavOpened = !this._modelService.sidenavOpened;
+    this.modelService.sidenavOpened = !this.modelService.sidenavOpened;
   }
 
   devMode(): boolean {

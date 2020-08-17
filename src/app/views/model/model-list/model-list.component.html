@@ -44,10 +44,10 @@
         <span [@listAnimation]="filteredModels.length">
           <ng-container *ngFor="let model of filteredModels">
             <mat-list-item
-              (click)="_modelService.selectModel(model)"
+              (click)="modelService.selectModel(model)"
               routerLink="/model/{{model}}"
-              [class.active]="_modelService.isSelected(model)"
-              [class.enabled]="_modelService.hasModel(model) && view=='available'"
+              [class.active]="modelService.isSelected(model)"
+              [class.enabled]="modelService.hasModel(model) && view=='available'"
               class="model">
               {{ model }}
             </mat-list-item>

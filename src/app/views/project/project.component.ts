@@ -19,7 +19,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public projectId: string = '';
 
   constructor(
-    public _appService: AppService,
+    public appService: AppService,
     private _bottomSheet: MatBottomSheet,
     private _route: ActivatedRoute,
   ) {
