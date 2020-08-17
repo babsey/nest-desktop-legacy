@@ -21,8 +21,8 @@ export class ProjectSidenavTabsComponent implements OnInit {
     private _simulationRunService: SimulationRunService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
-    public _appService: AppService,
-    public _activityGraphService: ActivityGraphService,
+    public appService: AppService,
+    public activityGraphService: ActivityGraphService,
   ) {
     this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
@@ -36,7 +36,7 @@ export class ProjectSidenavTabsComponent implements OnInit {
   }
 
   get config(): any {
-    return this._appService.data.config.data;
+    return this.appService.data.config.data;
   }
 
   isSidenavOpened(): boolean {
@@ -51,7 +51,7 @@ export class ProjectSidenavTabsComponent implements OnInit {
       this._projectService.sidenavOpened = true;
     }
     if (mode == 'codeEditor' && this._projectService.sidenavOpened == true) {
-      this._appService.data.project.code.generate();
+      this.appService.data.project.code.generate();
     }
     this._simulationRunService.mode = (mode === 'codeEditor' ? 'imperative' : 'declarative');
     setTimeout(() => this.triggerResize(), 500)

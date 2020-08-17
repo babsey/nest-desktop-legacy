@@ -15,7 +15,7 @@ export class SimulationControllerComponent implements OnInit {
   public params: any[];
 
   constructor(
-    public _simulationRunService: SimulationRunService,
+    public simulationRunService: SimulationRunService,
   ) {
   }
 
@@ -25,14 +25,14 @@ export class SimulationControllerComponent implements OnInit {
 
   onChange(value: any, id: string): void {
     if (id === 'randomSeed') {
-      this._simulationRunService.config['autoRandomSeed'] = false;
-      this._simulationRunService.saveConfig()
+      this.simulationRunService.config['autoRandomSeed'] = false;
+      this.simulationRunService.saveConfig()
     }
   }
 
   onSelectionChange(event: any): void {
-    this._simulationRunService.config[event.option.value] = event.option.selected;
-    this._simulationRunService.saveConfig()
+    this.simulationRunService.config[event.option.value] = event.option.selected;
+    this.simulationRunService.saveConfig()
   }
 
 }

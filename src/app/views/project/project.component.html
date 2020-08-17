@@ -1,4 +1,4 @@
-<ng-container *ngIf="_appService.data.ready; else loading">
+<ng-container *ngIf="appService.data.ready; else loading">
   <app-project-container [id]="projectId"></app-project-container>
 </ng-container>
 

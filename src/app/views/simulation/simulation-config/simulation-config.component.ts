@@ -11,14 +11,14 @@ import { SimulationConfigService } from '../../../services/simulation/simulation
 export class SimulationConfigComponent implements OnInit {
 
   constructor(
-    public _simulationConfigService: SimulationConfigService,
+    public simulationConfigService: SimulationConfigService,
   ) { }
 
   ngOnInit() {
   }
 
   save(): void {
-    this._simulationConfigService.save()
+    this.simulationConfigService.save()
   }
 
 }

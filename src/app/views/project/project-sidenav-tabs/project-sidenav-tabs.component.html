@@ -96,7 +96,7 @@
     </button>
   </ng-container>
 
-  <button mat-icon-button *ngIf="_appService.data.project.hasActivities()"
+  <button mat-icon-button *ngIf="appService.data.project.hasActivities()"
     (click)="selectMode('stats')"
     [class.mat-fab]="isMode('stats')"
     matTooltip="Simulation stats"

@@ -18,14 +18,14 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
   private _subscriptionInit: any;
 
   constructor(
-    public _activityGraphService: ActivityGraphService,
+    public activityGraphService: ActivityGraphService,
   ) {
   }
 
   ngOnInit() {
     console.log('Ng Init activity chart view')
-    this._subscriptionInit = this._activityGraphService.init.subscribe(() => this.init());
-    this._subscriptionUpdate = this._activityGraphService.update.subscribe(() => this.update());
+    this._subscriptionInit = this.activityGraphService.init.subscribe(() => this.init());
+    this._subscriptionUpdate = this.activityGraphService.update.subscribe(() => this.update());
     this.init();
   }
 
@@ -41,12 +41,12 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
 
   init(): void {
     console.log('Init activity chart view');
-    this._activityGraphService.graph = new ActivityChartGraph(this.project);
+    this.activityGraphService.graph = new ActivityChartGraph(this.project);
   }
 
   update(): void {
     console.log('Update activity chart view');
-    this._activityGraphService.graph.update();
+    this.activityGraphService.graph.update();
     // this.activities.map(activity => {
     //   var recordables = Object.keys(activity.recorder.events).filter(d => !['times', 'senders'].includes(d));
     //   if (activity.hasSpikeData() && recordables.length === 0) {

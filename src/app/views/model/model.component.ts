@@ -16,12 +16,12 @@ export class ModelComponent implements OnInit, OnDestroy {
 
   constructor(
     private _route: ActivatedRoute,
-    public _modelService: ModelService,
+    public modelService: ModelService,
   ) { }
 
   ngOnInit() {
     let paramMap = this._route.snapshot.paramMap;
-    this._modelService.selectedModel = paramMap.get('model');
+    this.modelService.selectedModel = paramMap.get('model');
   }
 
   ngOnDestroy() {
