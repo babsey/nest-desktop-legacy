@@ -39,6 +39,12 @@ export class NetworkSketchComponent implements OnInit {
     this._selector = d3.select(_elementRef.nativeElement);
   }
 
+  private clearDialog() {
+    if (confirm('Do you really want to clear/empty your network?')) {
+      this.network.empty();
+    }
+  }
+
   ngOnInit() {
     // console.log('Init network sketch')
     // this.history()
@@ -54,7 +60,7 @@ export class NetworkSketchComponent implements OnInit {
   }
 
   onSVGEnter(event: MouseEvent): void {
-    if (!this.eventTrigger) return
+    if (!this.eventTrigger) return;
     this._appService.rightClick = true;
     this._networkSketchService.viewDragline = true;
   }
@@ -75,7 +81,11 @@ export class NetworkSketchComponent implements OnInit {
     if (this.eventTrigger && nodeSelected) {
       const color: string = nodeSelected.view.color;
       this._networkSketchService.connect = true;
-      this._networkSketchService.dragLine(nodeSelected.view.position, node.view.position, color);
+      this._networkSketchService.dragLine(
+        nodeSelected.view.position,
+        node.view.position,
+        color
+      );
     }
   }
 
