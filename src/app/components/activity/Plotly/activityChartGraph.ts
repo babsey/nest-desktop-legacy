@@ -4,6 +4,7 @@ import { Project } from '../../project/project';
 import { ActivityGraph } from '../activityGraph';
 
 import { Panel } from './panel';
+import { ModelAnalogLines } from './modelAnalogLines';
 import { NeuronAnalogLines } from './neuronAnalogLines';
 import { InputAnalogLines } from './inputAnalogLines';
 import { SpikeScatter } from './spikeScatter';
@@ -74,9 +75,9 @@ export class ActivityChartGraph extends ActivityGraph {
 
   frames: any[];
 
-  constructor(project: Project) {
+  constructor(project: Project, mode: string = 'project') {
     super(project);
-    this.init();
+    this.init(mode);
     this.update();
   }
 
@@ -94,9 +95,9 @@ export class ActivityChartGraph extends ActivityGraph {
     return graphData;
   }
 
-  init(): void {
+  init(mode: string): void {
     console.log('Init activity chart');
-    this.panels = this.registerPanels.map(panel => panel[1](this));
+    this.panels = mode === 'model' ? [new ModelAnalogLines(this)] : this.registerPanels.map(panel => panel[1](this));
   }
 
   update(): void {

@@ -6,7 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Project } from '../../components/project/project';
 import { Activity } from '../../components/activity/activity';
 
-import { AppService } from '../app/app.service';
 import { ActivityGraphService } from '../activity/activity-graph.service';
 import { LogService } from '../log/log.service';
 
@@ -29,7 +28,6 @@ export class SimulationRunService {
 
   constructor(
     private _activityGraphService: ActivityGraphService,
-    private _appService: AppService,
     private _logService: LogService,
     private http: HttpClient,
     private snackBar: MatSnackBar,
@@ -48,17 +46,16 @@ export class SimulationRunService {
     localStorage.setItem(STORAGE_NAME, configJSON);
   }
 
-  run(force: boolean = false): void {
+  run(project: Project, force: boolean = false, mode: string = 'imperative'): Promise<any> {
     if (this.running) return
     if (!(force || this.config['runAfterChange'])) return
 
     this._logService.reset();
-    this.project = this._appService.data.project;
 
     if (this.config['autoRandomSeed']) {
       this._logService.log('Randomize seed');
       const seed: number = Math.random() * 1000;
-      this.project.simulation['randomSeed'] = parseInt(seed.toFixed(0));
+      project.simulation['randomSeed'] = parseInt(seed.toFixed(0));
     }
 
     // this._logService.log('Clean and hash project');
@@ -84,26 +81,33 @@ export class SimulationRunService {
       this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
     }
 
-    (this.mode === 'declarative') ? this.runScript() : this.execCode();
+    const request: any = (mode === 'imperative') ? this.execCode(project) : this.runScript(project);
+    return new Promise((resolve,reject) => {
+      request.subscribe(data => {
+        this.response(project, data);
+        resolve(true);
+      }, err => {
+        this.error(err['error']);
+        reject(true);
+      })
+    })
   }
 
-  runScript(): void {
-    const urlRoot: string = this._appService.data.nestServer.url;
+  runScript(project: Project): any {
+    const urlRoot: string = project.app.nestServer.url;
     this._logService.log('Run script on server');
     this.running = true;
-    this.http.post(urlRoot + '/script/simulation/run', this.project.serialize('simulator'))
-      .subscribe(data => this.response(data), err => this.error(err['error']))
+    return this.http.post(urlRoot + '/script/simulation/run', project.serialize('simulator'))
   }
 
-  execCode(): void {
-    const urlRoot: string = this._appService.data.nestServer.url;
+  execCode(project: Project): any {
+    const urlRoot: string = project.app.nestServer.url;
     this._logService.log('Exec code on server');
     this.running = true;
-    this.http.post(urlRoot + '/exec', { source: this.project.code.script, return: 'response' })
-      .subscribe(data => this.response(data), err => this.error(err['error']))
+    return this.http.post(urlRoot + '/exec', { source: project.code.script, return: 'response' })
   }
 
-  response(resp): void {
+  response(project: Project, resp: any): void {
     this.running = false;
     if (resp['status'] == 'error') {
       const error = resp['error'];
@@ -121,7 +125,7 @@ export class SimulationRunService {
         });
       }
 
-      this.project.updateActivities(resp['data']);
+      project.updateActivities(resp['data']);
       this._activityGraphService.update.emit();
     }
   }

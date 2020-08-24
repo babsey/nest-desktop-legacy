@@ -51,7 +51,7 @@ export class App {
   init(): Promise<any> {
     return this.initModels()
       .then(() => this.initProjects()
-      .then(() => this.ready = true));
+        .then(() => this.ready = true));
   }
 
   isConfigReady() {
@@ -124,18 +124,22 @@ export class App {
     return promise;
   }
 
+  filterModels(elementType: string = null): Model[] {
+    if (elementType === null) return this.models;
+    return this.models.filter(model => model.elementType === elementType);
+  }
+
   resetModels(): Promise<any> {
     console.log('Reset model db');
     return this.modelDB.db.destroy().then(() => this.initModels());
   }
 
-  getModel(modelId: string): Model {
-    return this.models.find(model => model.id === modelId);
+  hasModel(modelId: string): boolean {
+    return this.models.find(model => model.id === modelId) !== undefined;
   }
 
-  filterModels(elementType: string = null): Model[] {
-    if (elementType === null) return this.models;
-    return this.models.filter(model => model.elementType === elementType);
+  getModel(modelId: string): Model | any {
+    return this.models.find(model => model.id === modelId) || { id: modelId, params: [] };
   }
 
   addModel(data: any): Promise<any> {
@@ -152,6 +156,12 @@ export class App {
   deleteModel(modelId: string): Promise<any> {
     this.models = this.models.filter(model => model.id !== modelId);
     return this.modelDB.delete(modelId);
+  }
+
+  createNeuronModelProject(model: string): Project {
+    const data: any = require('../../assets/projects/neuron-spike-response.json');
+    data.network.nodes[1].model = model;
+    return new Project(this, data);
   }
 
   //

@@ -28,4 +28,20 @@ export class ModelComponent implements OnInit, OnDestroy {
     // this._modelService.selectedModel = '';
   }
 
+  get modelId(): string {
+    return this._modelService.selectedModel;
+  }
+
+  get model(): any {
+    // return this._modelService.getSettings(this.modelId);
+    return this._modelService.defaults;
+  }
+
+  get elementType(): string {
+    return this.model.element_type;
+  }
+
+  get recordables(): string {
+    return this.model.recordables || [];
+  }
 }
