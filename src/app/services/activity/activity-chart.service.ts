@@ -8,10 +8,10 @@ import * as PlotlyJS from 'plotly.js-cartesian-dist';
   providedIn: 'root'
 })
 export class ActivityChartService {
+  private config: any = {};
   public binsize: any = 10.;
   public barmode: string = 'overlay';
   public barnorm: string = '';
-  private config: any = {};
   public panel: any = {};
   public panelSelected: string[] = [];
   public panelOrder: string[] = ['input', 'analog', 'spike', 'histogram'];

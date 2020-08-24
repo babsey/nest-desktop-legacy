@@ -14,20 +14,20 @@
           <ng-container [ngSwitch]="_modelService.sidenavMode">
             <ng-container *ngSwitchCase="'list'">
               <app-model-params-list
-                [model]="_modelService.selectedModel"
+                [model]="modelId"
                 class="modelParameters"
               ></app-model-params-list>
             </ng-container>
             <ng-container *ngSwitchCase="'selection'">
               <app-model-params-selection-list
-                [model]="_modelService.selectedModel"
+                [model]="modelId"
                 class="modelParameters"
               ></app-model-params-selection-list>
             </ng-container>
             <ng-container *ngSwitchCase="'slider'">
               <ng-container *ngIf="_modelService.hasModel()">
                 <app-model-params-slider
-                  [model]="_modelService.selectedModel"
+                  [model]="modelId"
                 ></app-model-params-slider>
               </ng-container>
             </ng-container>
@@ -36,8 +36,14 @@
         </mat-sidenav>
 
         <mat-sidenav-content>
+          <mat-card *ngIf="elementType === 'neuron' && recordables.includes('V_m')">
+            <app-model-activity-graph
+              [model]="modelId"
+            ></app-model-activity-graph>
+          </mat-card>
+
           <app-model-documentation
-           [model]="_modelService.selectedModel"
+            [model]="modelId"
           ></app-model-documentation>
         </mat-sidenav-content>
 

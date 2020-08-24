@@ -5,6 +5,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import * as PlotlyJS from 'plotly.js-cartesian-dist';
+import { PlotlyModule } from 'angular-plotly.js';
+PlotlyModule.plotlyjs = PlotlyJS;
+
 import { AppPipesModule } from '../../pipes/pipes.module';
 
 import { MaterialModule } from '../material.module';
@@ -12,6 +16,7 @@ import { RoutesModule } from '../routes.module';
 import { AppFormsModule } from '../forms/forms.module';
 
 import { ModelComponent } from './model.component';
+import { ModelActivityGraphComponent } from './model-activity-graph/model-activity-graph.component';
 import { ModelConfigDialogComponent } from './model-config-dialog/model-config-dialog.component';
 import { ModelDocumentationComponent } from './model-documentation/model-documentation.component';
 import { ModelListComponent } from './model-list/model-list.component';
@@ -26,6 +31,7 @@ import { ModelToolbarComponent } from './model-toolbar/model-toolbar.component';
 @NgModule({
   declarations: [
     ModelComponent,
+    ModelActivityGraphComponent,
     ModelConfigDialogComponent,
     ModelDocumentationComponent,
     ModelListComponent,
@@ -38,6 +44,7 @@ import { ModelToolbarComponent } from './model-toolbar/model-toolbar.component';
   ],
   exports: [
     ModelComponent,
+    ModelActivityGraphComponent,
     ModelConfigDialogComponent,
     ModelDocumentationComponent,
     ModelListComponent,
@@ -59,6 +66,7 @@ import { ModelToolbarComponent } from './model-toolbar/model-toolbar.component';
     MaterialModule,
     ReactiveFormsModule,
     RoutesModule,
+    PlotlyModule,
   ],
   providers: [
   ],

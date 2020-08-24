@@ -22,7 +22,7 @@ export class ModelService {
     valid: false,
   };
   public version: string;
-  public defaults: any = {};
+  private _defaults: any = {};
   public progress: boolean = false;
   public update: EventEmitter<any> = new EventEmitter();
 
@@ -31,6 +31,14 @@ export class ModelService {
     private _modelConfigService: ModelConfigService,
     private http: HttpClient,
   ) {
+  }
+
+  get defaults(): any {
+    return this._defaults;
+  }
+
+  set defaults(value: any) {
+    this._defaults = value;
   }
 
   requestModelDefaults(): void {
@@ -70,14 +78,13 @@ export class ModelService {
   }
 
   hasModel(modelId: string = null): boolean {
-    modelId = modelId || this.selectedModel;
-    return this._appService.data.getModel(modelId) !== undefined;
+    return this._appService.data.hasModel(modelId || this.selectedModel);
   }
 
   label(modelId: string = null): string {
     modelId = modelId || this.selectedModel;
     const model: any = this._appService.data.getModel(modelId);
-    return model ? model.label : modelId;
+    return model.label || modelId;
   }
 
 }

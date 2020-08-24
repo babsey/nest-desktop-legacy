@@ -32,7 +32,7 @@ export class ProjectToolbarComponent implements OnInit {
 
   run(force: boolean = false): void {
     this._projectService.mode = 'activityExplorer';
-    this._simulationRunService.run(force)
+    this._simulationRunService.run(this.project, force)
   }
 
   configSimulation(): void {

@@ -13,7 +13,6 @@ export class ActivityGraphService {
   public graph: ActivityAnimationGraph | ActivityChartGraph;
 
   constructor() {
-
   }
 
 }

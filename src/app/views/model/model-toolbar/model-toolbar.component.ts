@@ -28,7 +28,7 @@ export class ModelToolbarComponent implements OnInit {
     const modelId: string = this._modelService.selectedModel;
     const model: any = {
       id: modelId,
-      elementType: this._modelService.defaults.elementType,
+      elementType: this._modelService.defaults.element_type,
       label: modelId,
       params: [],
     };

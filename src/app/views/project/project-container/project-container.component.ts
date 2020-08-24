@@ -62,7 +62,8 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
       this._appService.data.initProject(this.id).then(() => {
         this._activityGraphService.init.emit();
         if (this.router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
-          this.run(true)
+          this._projectService.mode = 'activityExplorer';
+          this._simulationRunService.run(this._appService.data.project, true)
         }
       }).catch(() => {
         this.router.navigate([{ outlets: { primary: 'project/' } }]);
@@ -71,11 +72,6 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
       this._appService.data.initProject();
       this._activityGraphService.init.emit();
     }
-  }
-
-  run(force: boolean = false): void {
-    this._projectService.mode = 'activityExplorer';
-    this._simulationRunService.run(force)
   }
 
   triggerResize(): void {
