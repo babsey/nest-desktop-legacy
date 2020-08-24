@@ -1,10 +1,6 @@
 {
   "name": "nest-desktop",
-<<<<<<< HEAD
   "version": "2.5.0-dev",
-=======
-  "version": "2.4.1",
->>>>>>> fe84687b3ec2b01fbd15eb160a48fb8b7a08c4e6
   "license": "MIT",
   "scripts": {
     "ng": "ng",
