@@ -22,7 +22,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
   public enabledModels: string[] = [];
   public filteredModels: string[] = [];
   public searchTerm: string = '';
-  public view: string = 'enabled';
+  public view: string = 'available';
 
   constructor(
     private _http: HttpClient,
@@ -32,7 +32,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscription = this.modelService.update.subscribe((): void => this.update());
-    this.update();
+    setTimeout(() => this.update(), 1000);
   }
 
   ngOnDestroy() {
