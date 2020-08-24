@@ -26,7 +26,7 @@ export class ConnectionParamComponent implements OnInit {
 
   constructor(
     private _appService: AppService,
-    private dialog: MatDialog,
+    private _dialog: MatDialog,
   ) { }
 
   ngOnInit() {

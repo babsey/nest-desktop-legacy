@@ -23,7 +23,7 @@ export class NodeParamComponent implements OnInit {
   constructor(
     private _appService: AppService,
     private _generatorService: GeneratorService,
-    private dialog: MatDialog,
+    private _dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -31,7 +31,7 @@ export class NodeParamComponent implements OnInit {
 
   openConfigDialog(): void {
     if (this.param.id && this.param.parent.model) {
-      this.dialog.open(ModelConfigDialogComponent, {
+      this._dialog.open(ModelConfigDialogComponent, {
         data: {
           param: this.param.id,
           model: this.param.parent.model,
@@ -41,7 +41,7 @@ export class NodeParamComponent implements OnInit {
   }
 
   openGeneratorDialog(): void {
-    const dialogRef = this.dialog.open(ArrayGeneratorDialogComponent);
+    const dialogRef = this._dialog.open(ArrayGeneratorDialogComponent);
     dialogRef.afterClosed().subscribe(d => {
       if (d) {
         d.end = d.end != -1 ? d.end : 1000.;

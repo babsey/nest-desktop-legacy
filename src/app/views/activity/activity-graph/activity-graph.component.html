@@ -45,10 +45,10 @@
   <div style="height:100%" class="flex">
     <span style="margin:auto">
       <span>
-        <ng-container *ngIf="_simulationRunService.running">
+        <ng-container *ngIf="simulationRunService.running">
           Simulation is currently running. Please wait.
         </ng-container>
-        <ng-container *ngIf="!_simulationRunService.running">
+        <ng-container *ngIf="!simulationRunService.running">
           No activity found. Please simulate.
         </ng-container>
       </span>

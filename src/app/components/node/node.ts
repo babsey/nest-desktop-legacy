@@ -17,7 +17,7 @@ export class Node {
   view: NodeView;
 
   // Arguments for nest.Create
-  _modelId: string;
+  private _modelId: string;
   size: number;
   params: Parameter[] = [];
   spatial: NodeSpatial;

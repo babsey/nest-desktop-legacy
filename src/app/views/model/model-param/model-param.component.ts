@@ -30,7 +30,7 @@ export class ModelParamComponent implements OnInit {
   constructor(
     private _appService: AppService,
     private _generatorService: GeneratorService,
-    private dialog: MatDialog,
+    private _dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -43,7 +43,7 @@ export class ModelParamComponent implements OnInit {
 
   openConfigDialog(): void {
     if (this.options.id && this.model) {
-      this.dialog.open(ModelConfigDialogComponent, {
+      this._dialog.open(ModelConfigDialogComponent, {
         data: {
           param: this.options.id,
           model: this.model,
@@ -53,7 +53,7 @@ export class ModelParamComponent implements OnInit {
   }
 
   openGeneratorDialog(): void {
-    const dialogRef = this.dialog.open(ArrayGeneratorDialogComponent);
+    const dialogRef = this._dialog.open(ArrayGeneratorDialogComponent);
 
     dialogRef.afterClosed().subscribe(d => {
       if (d) {

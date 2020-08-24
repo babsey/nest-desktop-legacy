@@ -8,7 +8,7 @@ import * as PlotlyJS from 'plotly.js-cartesian-dist';
   providedIn: 'root'
 })
 export class ActivityChartService {
-  private config: any = {};
+  private _config: any = {};
   public binsize: any = 10.;
   public barmode: string = 'overlay';
   public barnorm: string = '';
@@ -37,7 +37,7 @@ export class ActivityChartService {
   constructor() {
     let configJSON = localStorage.getItem('network-config');
     if (configJSON) {
-      this.config = JSON.parse(configJSON);
+      this._config = JSON.parse(configJSON);
     }
     this.panelInit()
   }

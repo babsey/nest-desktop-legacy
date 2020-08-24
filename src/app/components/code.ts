@@ -1,6 +1,6 @@
 export class Code {
 
-  private modelLabel: any = {
+  private _modelLabel: any = {
     'stimulator': 'stim',
     'neuron': 'neuron',
     'recorder': 'rec',

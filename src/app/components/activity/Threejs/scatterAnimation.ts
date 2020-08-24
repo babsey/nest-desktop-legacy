@@ -10,14 +10,14 @@ export class ScatterAnimation {
   graph: ActivityAnimationGraph;                  // parent
   id: string;
 
-  private animationFrameIdx: number;
-  private camera: THREE.PerspectiveCamera;
-  private controls: OrbitControls;
-  private geometry: THREE.SphereGeometry;
-  private grid: THREE.GridHelper;
-  private scene: THREE.Scene;
-  private stats: STATS;
-  private useStats: boolean = false;
+  private _animationFrameIdx: number;
+  private _camera: THREE.PerspectiveCamera;
+  private _controls: OrbitControls;
+  private _geometry: THREE.SphereGeometry;
+  private _grid: THREE.GridHelper;
+  private _scene: THREE.Scene;
+  private _stats: STATS;
+  private _useStats: boolean = false;
   public renderer: THREE.WebGLRenderer;
 
 
@@ -25,10 +25,10 @@ export class ScatterAnimation {
     this.graph = graph;
     this.id = id;
 
-    if (this.useStats) {
-      this.stats = new STATS();
-      this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-      document.body.appendChild(this.stats.dom);
+    if (this._useStats) {
+      this._stats = new STATS();
+      this._stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+      document.body.appendChild(this._stats.dom);
     }
 
     this.init()
@@ -45,17 +45,17 @@ export class ScatterAnimation {
   init(): void {
     console.log('Init animation scatter scene');
 
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xfefefe);
+    this._scene = new THREE.Scene();
+    this._scene.background = new THREE.Color(0xfefefe);
 
-    this.camera = new THREE.PerspectiveCamera(5, this.aspect, 1, 10000);
+    this._camera = new THREE.PerspectiveCamera(5, this.aspect, 1, 10000);
     this.updateCameraPosition();
-    this.scene.add(this.camera);
+    this._scene.add(this._camera);
 
-    this.grid = new THREE.GridHelper(1, 10);
-    this.grid.position.x = .5;
-    this.grid.geometry.rotateZ(Math.PI / 2);
-    this.scene.add(this.grid);
+    this._grid = new THREE.GridHelper(1, 10);
+    this._grid.position.x = .5;
+    this._grid.geometry.rotateZ(Math.PI / 2);
+    this._scene.add(this._grid);
 
     this.renderer = new THREE.WebGLRenderer( { antialias: true } );
     this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -63,25 +63,25 @@ export class ScatterAnimation {
     this.resize();
     this.container.appendChild( this.renderer.domElement );
 
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.rotateSpeed = 1;
-    this.controls.zoomSpeed = 1.2;
-    this.controls.enableKeys = false;
+    this._controls = new OrbitControls(this._camera, this.renderer.domElement);
+    this._controls.rotateSpeed = 1;
+    this._controls.zoomSpeed = 1.2;
+    this._controls.enableKeys = false;
 
-    this.geometry = new THREE.SphereGeometry(.002);
+    this._geometry = new THREE.SphereGeometry(.002);
     this.animate();
   }
 
   clear() {
     this.container.removeChild( this.renderer.domElement );
-    while (this.scene.children.length > 0) {
-      this.scene.remove(this.scene.children[0]);
+    while (this._scene.children.length > 0) {
+      this._scene.remove(this._scene.children[0]);
     }
   }
 
   stop(): void {
     this.graph.stop();
-    cancelAnimationFrame(this.animationFrameIdx);
+    cancelAnimationFrame(this._animationFrameIdx);
   }
 
   animate(): void {
@@ -93,10 +93,10 @@ export class ScatterAnimation {
       const camera: any = _this.graph.config.camera;
 
       setTimeout(() => {
-        _this.animationFrameIdx = requestAnimationFrame(render);
+        _this._animationFrameIdx = requestAnimationFrame(render);
 
-        if (_this.stats) {
-          _this.stats.begin();
+        if (_this._stats) {
+          _this._stats.begin();
         }
 
         const framesSpeed: number = frames.speed;
@@ -112,13 +112,13 @@ export class ScatterAnimation {
           _this.updateCameraPosition()
         }
 
-        if (_this.stats) {
-          _this.stats.end();
+        if (_this._stats) {
+          _this._stats.end();
         }
 
       }, 1000 / frames.rate);
 
-      _this.renderer.render(_this.scene, _this.camera);
+      _this.renderer.render(_this._scene, _this._camera);
     }
 
     render()
@@ -128,7 +128,7 @@ export class ScatterAnimation {
   frameUpdate(): void {
     if (this.graph.frames.length === 0) return
 
-    this.scene.children.slice(2).map(object => this.scene.remove(object));
+    this._scene.children.slice(2).map(object => this._scene.remove(object));
 
     let frames: any = this.graph.config.frames;
     let nSamples: number = this.graph.endtime * frames.sampleRate;
@@ -183,7 +183,7 @@ export class ScatterAnimation {
 
     for (let i = 0; i < data.x.length; i++) {
       const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({ color: this.graph.color(data.color[i]), transparent: true, opacity: opacity });
-      const object: THREE.Mesh = new THREE.Mesh(this.geometry, material);
+      const object: THREE.Mesh = new THREE.Mesh(this._geometry, material);
       object.position.x = .5 - (trail.mode == 'temporal' ? ((ts - data.x[i]) / frames.windowSize) : 0);
       object.position.y = data.y[i];
       if (ndim > 2) {
@@ -194,16 +194,16 @@ export class ScatterAnimation {
         object.scale.y = scale;
         object.scale.z = scale;
       }
-      this.scene.add(object);
+      this._scene.add(object);
     }
   }
 
   updateCameraPosition(): void {
     const position: any = this.graph.config.camera.position;
-    this.camera.position.x = position.x;
-    this.camera.position.y = position.y;
-    this.camera.position.z = position.z;
-    this.camera.lookAt(this.scene.position);
+    this._camera.position.x = position.x;
+    this._camera.position.y = position.y;
+    this._camera.position.z = position.z;
+    this._camera.lookAt(this._scene.position);
   }
 
   degToRad(deg) {
@@ -218,7 +218,7 @@ export class ScatterAnimation {
     const thetaRad: number = this.degToRad(camera.rotation.theta)
     position.y = camera.distance / 2 * Math.sin(thetaRad);
     position.z = camera.distance * Math.sin(thetaRad / 2);
-    this.camera.lookAt(this.scene.position);
+    this._camera.lookAt(this._scene.position);
   }
 
   disableCameraControl(): void {
@@ -231,10 +231,10 @@ export class ScatterAnimation {
   }
 
   resize(): void {
-    this.camera.aspect = this.aspect;
-    this.camera.updateProjectionMatrix();
+    this._camera.aspect = this.aspect;
+    this._camera.updateProjectionMatrix();
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this._scene, this._camera);
   }
 
 }

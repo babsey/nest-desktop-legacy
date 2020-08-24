@@ -13,8 +13,8 @@ import { LogService } from '../../services/log/log.service';
 export class LogComponent implements OnInit {
 
   constructor(
-    public _logService: LogService,
-    public _appService: AppService,
+    public logService: LogService,
+    public appService: AppService,
     public router: Router,
   ) { }
 
@@ -22,15 +22,15 @@ export class LogComponent implements OnInit {
   }
 
   get config(): any {
-    return this._appService.data.config.data;
+    return this.appService.data.config.data;
   }
 
   setTime(time: Date): void {
-    this._logService.time == time;
+    this.logService.time == time;
   }
 
   isTime(time: Date): boolean {
-    return this._logService.time === time
+    return this.logService.time === time
   }
 
 }

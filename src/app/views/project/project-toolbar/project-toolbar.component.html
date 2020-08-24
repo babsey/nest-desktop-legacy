@@ -18,25 +18,25 @@
     style="padding:0"
     >
     <mat-list-option
-      [selected]="_simulationRunService.config['showSnackBar']"
+      [selected]="simulationRunService.config['showSnackBar']"
       value="showSnackBar"
       class="mat-menu-item">
       <span>Show simulation message</span>
     </mat-list-option>
     <mat-list-option
-      [selected]="_simulationRunService.config['autoRandomSeed']"
+      [selected]="simulationRunService.config['autoRandomSeed']"
       value="autoRandomSeed"
       class="mat-menu-item">
       <span>Randomize seed</span>
     </mat-list-option>
     <mat-list-option
-      [selected]="_simulationRunService.config['runAfterChange']"
+      [selected]="simulationRunService.config['runAfterChange']"
       value="runAfterChange"
       class="mat-menu-item">
       <span>Simulate after change</span>
     </mat-list-option>
     <mat-list-option
-      [selected]="_simulationRunService.config['runAfterLoad']"
+      [selected]="simulationRunService.config['runAfterLoad']"
       value="runAfterLoad"
       class="mat-menu-item">
       <span>Simulate after load</span>
@@ -60,8 +60,8 @@
     <span class="no-print">
       <span class="flex" style="width: 200px">
         <button mat-icon-button
-          (click)="_projectService.selectMode('networkEditor')"
-          [class.active]="_projectService.isMode('networkEditor')"
+          (click)="projectService.selectMode('networkEditor')"
+          [class.active]="projectService.isMode('networkEditor')"
           matTooltip="Construct network"
           >
           <span class="fa-stack">
@@ -70,8 +70,8 @@
           </span>
         </button>
         <button mat-icon-button
-          (click)="_projectService.selectMode('activityExplorer')"
-          [class.active]="_projectService.isMode('activityExplorer')"
+          (click)="projectService.selectMode('activityExplorer')"
+          [class.active]="projectService.isMode('activityExplorer')"
           matTooltip="Explore activity"
           >
           <span class="fa-stack">
@@ -80,8 +80,8 @@
           </span>
         </button>
         <button mat-icon-button
-          (click)="_projectService.selectMode('labBook')"
-          [class.active]="_projectService.isMode('labBook')"
+          (click)="projectService.selectMode('labBook')"
+          [class.active]="projectService.isMode('labBook')"
           matTooltip="View network summary"
           >
           <span class="fa-stack">
@@ -99,7 +99,7 @@
     <span class="flex-spacer"></span>
 
     <mat-form-field style="font-size:12px; width:60px; display: none">
-      <mat-select [(value)]="_simulationRunService.mode">
+      <mat-select [(value)]="simulationRunService.mode">
         <mat-option value="object">declarative</mat-option>
         <mat-option value="code">imperative</mat-option>
       </mat-select>
@@ -110,7 +110,7 @@
       (contextmenu)="onContextMenu($event)"
       (mouseout)="onMouseOut($event)"
       (mouseover)="onMouseOver($event)"
-      [disabled]="_simulationRunService.running"
+      [disabled]="simulationRunService.running"
       matTooltip="Simulate"
       class="no-print"
       style="width:128px"

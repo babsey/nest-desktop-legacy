@@ -12,6 +12,7 @@ import { ModelConfigService } from './model-config.service';
   providedIn: 'root'
 })
 export class ModelService {
+  private _defaults: any = {};
   public sidenavMode: string = 'list';
   public sidenavOpened: boolean = true;
   public params: string = 'list';
@@ -22,14 +23,13 @@ export class ModelService {
     valid: false,
   };
   public version: string;
-  private _defaults: any = {};
   public progress: boolean = false;
   public update: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private _appService: AppService,
     private _modelConfigService: ModelConfigService,
-    private http: HttpClient,
+    private _http: HttpClient,
   ) {
   }
 
@@ -47,7 +47,7 @@ export class ModelService {
     this.progress = true;
     const modelId = this.selectedModel;
     setTimeout(() => {
-      this.http.post(urlRoot + '/api/nest/GetDefaults', { model: modelId })
+      this._http.post(urlRoot + '/api/nest/GetDefaults', { model: modelId })
         .subscribe(resp => {
           // console.log(resp)
           this.progress = false;

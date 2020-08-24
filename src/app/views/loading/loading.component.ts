@@ -12,7 +12,7 @@ import { AppService } from '../../services/app/app.service';
 export class LoadingComponent implements OnInit {
 
   constructor(
-    public _appService: AppService,
+    public appService: AppService,
     public router: Router,
   ) { }
 
@@ -23,7 +23,7 @@ export class LoadingComponent implements OnInit {
     setTimeout(() => {
       var nav = window.location.href.includes('nav:') ?  null : 'app';
       this.router.navigate([{ outlets: { primary: null, nav: nav } }]);
-      this._appService.toggleSidenav();
+      this.appService.toggleSidenav();
     }, 10)
   }
 

@@ -24,7 +24,7 @@ export class NetworkSketchComponent implements OnInit {
   @Input() width: number = 600;
   @Input() height: number = 400;
   @Input() eventTrigger: boolean = true;
-  private selector: any;
+  private _selector: any;
 
   public contextMenuData: any = { node: null, connection: null };
   public contextMenuPosition: any = { x: '0px', y: '0px' };
@@ -33,10 +33,16 @@ export class NetworkSketchComponent implements OnInit {
   constructor(
     private _appService: AppService,
     private _networkSketchService: NetworkSketchService,
-    private elementRef: ElementRef,
-    private dialog: MatDialog,
+    private _elementRef: ElementRef,
+    private _dialog: MatDialog,
   ) {
-    this.selector = d3.select(elementRef.nativeElement);
+    this._selector = d3.select(_elementRef.nativeElement);
+  }
+
+  private clearDialog() {
+    if (confirm('Do you really want to clear/empty your network?')) {
+      this.network.empty();
+    }
   }
 
   ngOnInit() {
@@ -44,7 +50,7 @@ export class NetworkSketchComponent implements OnInit {
     // this.history()
     d3.select('body').on('keyup', () => {
       if (d3.event.keyCode === '27') {
-        this.selector.selectAll('.select').remove();
+        this._selector.selectAll('.select').remove();
         this.network.view.resetSelection();
       }
       this._networkSketchService.keyDown = '';
@@ -54,7 +60,7 @@ export class NetworkSketchComponent implements OnInit {
   }
 
   onSVGEnter(event: MouseEvent): void {
-    if (!this.eventTrigger) return
+    if (!this.eventTrigger) return;
     this._appService.rightClick = true;
     this._networkSketchService.viewDragline = true;
   }
@@ -75,7 +81,11 @@ export class NetworkSketchComponent implements OnInit {
     if (this.eventTrigger && nodeSelected) {
       const color: string = nodeSelected.view.color;
       this._networkSketchService.connect = true;
-      this._networkSketchService.dragLine(nodeSelected.view.position, node.view.position, color);
+      this._networkSketchService.dragLine(
+        nodeSelected.view.position,
+        node.view.position,
+        color
+      );
     }
   }
 

@@ -15,14 +15,14 @@ import { AppService } from '../../services/app/app.service';
 export class NavigationComponent implements OnInit {
 
   constructor(
-    private route: ActivatedRoute,
-    public _appService: AppService,
+    private _route: ActivatedRoute,
+    public appService: AppService,
     public router: Router,
   ) {
   }
 
   ngOnInit() {
-    this._appService.sidenavOpened = this.isNavLoaded();
+    this.appService.sidenavOpened = this.isNavLoaded();
   }
 
   isNavLoaded(mode: string = ''): boolean {
@@ -30,10 +30,10 @@ export class NavigationComponent implements OnInit {
   }
 
   onClick(event: MouseEvent, mode: string = ''): void {
-    if (this.isNavLoaded(mode) || (mode && !this._appService.sidenavOpened)) {
-      this._appService.toggleSidenav();
+    if (this.isNavLoaded(mode) || (mode && !this.appService.sidenavOpened)) {
+      this.appService.toggleSidenav();
     }
-    if (this._appService.sidenavOpened && mode) {
+    if (this.appService.sidenavOpened && mode) {
       this.router.navigate([{ outlets: { nav: mode } }]);
     } else if (mode) {
       this.router.navigate([{ outlets: { nav: null } }]);

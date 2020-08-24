@@ -27,14 +27,14 @@ export class NetworkComponent implements OnInit, AfterViewInit {
 
   constructor(
     private _networkSketchService: NetworkSketchService,
-    private changeDetectorRef: ChangeDetectorRef,
-    private media: MediaMatcher,
-    private route: ActivatedRoute,
-    private router: Router,
-    public _projectService: ProjectService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _media: MediaMatcher,
+    private _route: ActivatedRoute,
+    private _router: Router,
+    public projectService: ProjectService,
   ) {
-    this.mobileQuery = media.matchMedia('(max-width: 1023px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
@@ -49,15 +49,15 @@ export class NetworkComponent implements OnInit, AfterViewInit {
   }
 
   toggleSidenav(): void {
-    this._projectService.sidenavOpened = !this._projectService.sidenavOpened;
+    this.projectService.sidenavOpened = !this.projectService.sidenavOpened;
   }
 
   selectController(mode: string): void {
     if (this.mode == mode) {
-      this._projectService.sidenavOpened = !this._projectService.sidenavOpened;
+      this.projectService.sidenavOpened = !this.projectService.sidenavOpened;
     } else {
       this.mode = mode;
-      this._projectService.sidenavOpened = true;
+      this.projectService.sidenavOpened = true;
     }
   }
 

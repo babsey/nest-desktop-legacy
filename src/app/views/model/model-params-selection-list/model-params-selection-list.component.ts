@@ -13,7 +13,7 @@ export class ModelParamsSelectionListComponent implements OnInit {
   public objectKeys = Object.keys;
 
   constructor(
-    public _modelService: ModelService,
+    public modelService: ModelService,
   ) {
   }
 
@@ -21,8 +21,8 @@ export class ModelParamsSelectionListComponent implements OnInit {
   }
 
   hasParam(id: string): boolean {
-    if (this._modelService.hasModel(this.model)) {
-      const settings: any = this._modelService.getSettings(this.model);
+    if (this.modelService.hasModel(this.model)) {
+      const settings: any = this.modelService.getSettings(this.model);
       return settings.params.filter(param => param.id == id).length > 0;
     }
     return false
@@ -42,13 +42,13 @@ export class ModelParamsSelectionListComponent implements OnInit {
     if (Array.isArray(value)) {
       param.input = 'arrayInput';
     }
-    const settings: any = this._modelService.getSettings(this.model);
+    const settings: any = this.modelService.getSettings(this.model);
     settings.params.push(param);
     settings.params.sort((a, b) => a.id - b.id)
   }
 
   removeParam(paramId: string): void {
-    const settings: any = this._modelService.getSettings(this.model);
+    const settings: any = this.modelService.getSettings(this.model);
     settings.params = settings.params.filter(param => param.id != paramId);
   }
 

@@ -14,7 +14,7 @@ export class ActivityChartControllerComponent implements OnInit {
 
   constructor(
     private _activityGraphService: ActivityGraphService,
-    public _activityChartService: ActivityChartService,
+    public activityChartService: ActivityChartService,
   ) {
   }
 
@@ -22,46 +22,46 @@ export class ActivityChartControllerComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(this._activityChartService.panelOrder, event.previousIndex, event.currentIndex);
-    this._activityChartService.panelOrder.map((p,i) => {
-      const yaxisIdx: number = (this._activityChartService.panelOrder.length - i);
-      this._activityChartService.panel[p]['yaxis'] = yaxisIdx;
+    moveItemInArray(this.activityChartService.panelOrder, event.previousIndex, event.currentIndex);
+    this.activityChartService.panelOrder.map((p,i) => {
+      const yaxisIdx: number = (this.activityChartService.panelOrder.length - i);
+      this.activityChartService.panel[p]['yaxis'] = yaxisIdx;
     })
-    const panelSelected: string[] = this._activityChartService.panelSelected;
-    this._activityChartService.panelSelected = [];
+    const panelSelected: string[] = this.activityChartService.panelSelected;
+    this.activityChartService.panelSelected = [];
     setTimeout(() => {
-      this._activityChartService.panelSelected = panelSelected;
+      this.activityChartService.panelSelected = panelSelected;
       setTimeout(() => this._activityGraphService.update.emit(), 100)
     }, 1);
 
   }
 
   onNgModelChange(event): void {
-    this._activityChartService.panelSelected = [];
+    this.activityChartService.panelSelected = [];
     setTimeout(() => {
-      this._activityChartService.panelSelected = event;
+      this.activityChartService.panelSelected = event;
       setTimeout(() => this._activityGraphService.init.emit(), 100)
     }, 1);
   }
 
   onThresholdChange(value: number): void {
-    this._activityChartService.threshold.value = value;
+    this.activityChartService.threshold.value = value;
     this._activityGraphService.update.emit();
   }
 
   onBinSizeChange(value: number): void {
-    this._activityChartService.binsize = value;
+    this.activityChartService.binsize = value;
     this._activityGraphService.update.emit();
   }
 
   onBarmodeChange(value: string): void {
-    this._activityChartService.barmode = value;
+    this.activityChartService.barmode = value;
     this._activityGraphService.update.emit();
   }
 
   onBarnormChange(value: string): void {
-    this._activityChartService.barnorm = value;
-    this._activityChartService.barmode = 'stack';
+    this.activityChartService.barnorm = value;
+    this.activityChartService.barmode = 'stack';
     this._activityGraphService.update.emit();
   }
 

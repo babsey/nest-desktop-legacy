@@ -22,8 +22,8 @@ export interface SpikeStatsElement {
 })
 export class SpikeStatsComponent implements OnInit, OnChanges {
   @Input() activity: Activity;
-  private stats: SpikeStatsElement[];
-  private times: any;
+  private _stats: SpikeStatsElement[];
+  private _times: any;
 
   public displayedColumns: string[] = ['id', 'count', 'isi_mean', 'isi_std', 'cv_isi'];
   public dataSource: MatTableDataSource<any>;
@@ -47,24 +47,24 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
   }
 
   update(): void {
-    this.times = Object.create(null);
-    this.activity.nodeIds.forEach(id => this.times[id] = [])
+    this._times = Object.create(null);
+    this.activity.nodeIds.forEach(id => this._times[id] = [])
     this.activity.recorder.events.senders.forEach((sender, idx) => {
-      this.times[sender].push(this.activity.recorder.events.times[idx]);
+      this._times[sender].push(this.activity.recorder.events.times[idx]);
     });
-    this.stats = this.activity.nodeIds.map(id => {
-      const isi: number[] = this.isi(this.times[id]);
+    this._stats = this.activity.nodeIds.map(id => {
+      const isi: number[] = this.isi(this._times[id]);
       const isi_mean: number = isi.length > 1 ? this._mathService.mean(isi) : 0;
       const isi_std: number = isi.length > 1 ? this._mathService.deviation(isi) : 0;
       return {
         id: id,
-        count: this.times[id].length,
+        count: this._times[id].length,
         isi_mean: isi_mean,
         isi_std: isi_std,
         cv_isi: isi_mean > 0 ? isi_std / isi_mean : 0,
       }
     })
-    this.dataSource = new MatTableDataSource(this.stats);
+    this.dataSource = new MatTableDataSource(this._stats);
     this.dataSource.sort = this.sort;
   }
 
@@ -93,7 +93,7 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
   }
 
   onRowClick(row): void {
-    console.log(this.times[row.id])
+    console.log(this._times[row.id])
   }
 
 }

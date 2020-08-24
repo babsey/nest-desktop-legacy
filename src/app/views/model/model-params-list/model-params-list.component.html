@@ -7,7 +7,7 @@
     </span>
   </mat-list-item>
 
-  <ng-container *ngFor="let param of objectKeys(_modelService.defaults)">
+  <ng-container *ngFor="let param of objectKeys(modelService.defaults)">
     <mat-list-item
       [class.enabled]="hasParam(param)"
       class="item">
@@ -15,7 +15,7 @@
         <span>{{ param }}</span>
         <span class="flex-spacer"></span>
         <span class="description">
-          {{ _modelService.defaults[param] }}
+          {{ modelService.defaults[param] }}
         </span>
       </span>
     </mat-list-item>

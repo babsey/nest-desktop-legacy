@@ -6,7 +6,7 @@ import { Project } from '../../project/project';
 
 
 export class ActivityAnimationGraph extends ActivityGraph {
-  _frames: any[] = [];
+  private _frames: any[] = [];
   layout: any = {
     extent: [
       [-1, 0],

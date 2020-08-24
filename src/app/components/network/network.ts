@@ -83,6 +83,14 @@ export class Network {
     return new Network(this.project, this);
   }
 
+  /**
+   * Clears the network by deleting every node and every connection.
+   */
+  empty() {
+    this.connections.forEach(connection => this.deleteConnection(connection));
+    this.nodes.forEach(node => this.deleteNode(node));
+  }
+
   serialize(to: string): any {
     const network: any = {
       nodes: this.nodes.map(node => node.serialize(to)),

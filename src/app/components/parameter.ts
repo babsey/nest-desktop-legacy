@@ -8,7 +8,7 @@ export class Parameter {
   idx: number;                          // generative
 
   id: string;
-  _value: any;
+  private _value: any;
 
   // For node and connection
   visible: boolean;

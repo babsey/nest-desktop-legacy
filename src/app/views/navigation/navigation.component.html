@@ -1,10 +1,10 @@
 <div class="navigation">
   <mat-toolbar style="padding:0; height:40px" color="primary">
     <button mat-icon-button
-      (click)="_appService.toggleSidenav()"
+      (click)="appService.toggleSidenav()"
       [disabled]="!isNavLoaded()"
       style="height:40px">
-      <fa-icon [icon]="this._appService.sidenavOpened ? 'chevron-left' : 'chevron-right'"></fa-icon>
+      <fa-icon [icon]="this.appService.sidenavOpened ? 'chevron-left' : 'chevron-right'"></fa-icon>
     </button>
   </mat-toolbar>
 
@@ -22,7 +22,7 @@
     <div class="project-theme">
       <button mat-icon-button
         (click)="onClick($event, 'project')"
-        [disabled]="!_appService.data.projectDB"
+        [disabled]="!appService.data.projectDB"
         [routerLink]="[{ outlets: { nav: ['project'] } }]"
         color="primary"
         matTooltip="Open an existing or create a new project."
@@ -35,7 +35,7 @@
     <div class="model-theme">
       <button mat-icon-button
         (click)="onClick($event, 'model')"
-        [disabled]="!_appService.data.modelDB"
+        [disabled]="!appService.data.modelDB"
         [routerLink]="[{ outlets: { nav: ['model'] } }]"
         color="primary"
         matTooltip="List of models"

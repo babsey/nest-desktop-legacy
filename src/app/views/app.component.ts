@@ -18,15 +18,15 @@ export class AppComponent implements OnInit, OnDestroy {
   private _mobileQueryListener: () => void;
 
   constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private media: MediaMatcher,
-    public _appService: AppService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _media: MediaMatcher,
+    public appService: AppService,
     public router: Router,
   ) {
-    this.mobileQuery = media.matchMedia('(max-width: 1023px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this._appService.data = new App();
+    this.appService.data = new App();
   }
 
   ngOnInit() {

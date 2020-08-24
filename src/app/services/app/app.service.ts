@@ -15,18 +15,18 @@ export class AppService {
   public sidenavOpened: boolean = false;
 
   constructor(
-    private snackBar: MatSnackBar,
+    private _snackBar: MatSnackBar,
   ) {}
 
   upload(projects: Project[]): void {
     // console.log('Upload projects')
     this.data.addProjects(projects).then(resp => {
-      this.snackBar.open('Projects uploaded successfully.', null, {
+      this._snackBar.open('Projects uploaded successfully.', null, {
         duration: 2000,
       });
       this.change.emit();
     }).catch(err => {
-      this.snackBar.open(err, 'Ok');
+      this._snackBar.open(err, 'Ok');
     });
   }
 

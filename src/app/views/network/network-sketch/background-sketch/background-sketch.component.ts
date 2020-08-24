@@ -18,16 +18,16 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
   @Input() width: number = 600;
   @Input() height: number = 400;
   @Input() eventTrigger: boolean = true;
-  private host: any;
-  private selector: any;
-  private sourceNode: any;
+  private _host: any;
+  private _selector: any;
+  private _sourceNode: any;
 
   constructor(
     private _networkSketchService: NetworkSketchService,
-    private elementRef: ElementRef,
+    private _elementRef: ElementRef,
   ) {
-    this.host = d3.select(elementRef.nativeElement.parentElement);
-    this.selector = d3.select(elementRef.nativeElement);
+    this._host = d3.select(_elementRef.nativeElement.parentElement);
+    this._selector = d3.select(_elementRef.nativeElement);
   }
 
   ngOnInit() {
@@ -44,7 +44,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
     const _this = this;
 
     const elementTypes: string[] = ['recorder', 'neuron', 'stimulator'];
-    const background = this.selector.append('svg:rect')
+    const background = this._selector.append('svg:rect')
       .attr('class', 'background')
       .style('fill', 'white')
       .attr('width', this.width)
@@ -74,7 +74,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
         const colors: string[] = _this.network.view.colors;
 
         const point: number[] = d3.mouse(this);
-        const selectPanel = _this.host.select('.select-panel')
+        const selectPanel = _this._host.select('.select-panel')
           .attr('transform', 'translate(' + point[0] + ',' + point[1] + ')');
 
         const tooltip = selectPanel.select('.tooltip');
@@ -161,7 +161,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
   }
 
   resize(): void {
-    this.selector.select('rect.background')
+    this._selector.select('rect.background')
       .attr('width', this.width)
       .attr('height', this.height);
   }

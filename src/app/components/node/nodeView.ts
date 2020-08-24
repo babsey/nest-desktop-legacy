@@ -6,8 +6,8 @@ export class NodeView {
   node: Node;                 // parent
 
   // for the app
-  _color: any;                   // color of node
-  _label: string;
+  private _color: any;                   // color of node
+  private _label: string;
   position: any = { x: 0, y: 0 };
 
   // From Simulator

@@ -20,7 +20,7 @@ export class NodeListComponent implements OnInit {
   @Input() selective: boolean = false;
 
   constructor(
-    public _formatService: FormatService,
+    public formatService: FormatService,
   ) {
   }
 

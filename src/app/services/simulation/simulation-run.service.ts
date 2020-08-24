@@ -16,8 +16,8 @@ var STORAGE_NAME = 'simulation-config';
   providedIn: 'root'
 })
 export class SimulationRunService {
-  private project: Project;
-  private snackBarRef: any;
+  private _project: Project;
+  private _snackBarRef: any;
   public config: Object = {
     runAfterLoad: true,
     runAfterChange: true,
@@ -29,9 +29,9 @@ export class SimulationRunService {
   constructor(
     private _activityGraphService: ActivityGraphService,
     private _logService: LogService,
-    private http: HttpClient,
-    private snackBar: MatSnackBar,
-    private toastr: ToastrService,
+    private _http: HttpClient,
+    private _snackBar: MatSnackBar,
+    private _toastr: ToastrService,
   ) {
     const configJSON: string = localStorage.getItem(STORAGE_NAME);
     if (configJSON) {
@@ -78,7 +78,7 @@ export class SimulationRunService {
     // })
 
     if (this.config['showSnackBar']) {
-      this.snackBarRef = this.snackBar.open('The simulation is running. Please wait.', null, {});
+      this._snackBarRef = this._snackBar.open('The simulation is running. Please wait.', null, {});
     }
 
     const request: any = (mode === 'imperative') ? this.execCode(project) : this.runScript(project);
@@ -113,14 +113,14 @@ export class SimulationRunService {
       const error = resp['error'];
       this.error(error['message'], error['title'])
     } else {
-      if (this.snackBarRef) {
-        this.snackBarRef.dismiss();
+      if (this._snackBarRef) {
+        this._snackBarRef.dismiss();
       }
       this._logService.logs = this._logService.logs.concat(resp['logs'] || []);
       this._logService.log('Response from server')
       if (resp['stdout']) {
         // console.log(resp['stdout'])
-        this.snackBarRef = this.snackBar.open(resp['stdout'], null, {
+        this._snackBarRef = this._snackBar.open(resp['stdout'], null, {
         duration: 5000
         });
       }
@@ -131,13 +131,13 @@ export class SimulationRunService {
   }
 
   fetchElementTypes(idx: number): string[] {
-    return this.project.network.connections
+    return this._project.network.connections
       .filter(connection => connection.source.idx === idx)
       .map(connection => connection.target.model.elementType);
   }
 
   listParams(idx: number, key: string = ''): any[] {
-    var nodes = this.project.network.connections
+    var nodes = this._project.network.connections
       .filter(connection => connection.source.idx === idx)
       .map(connection => connection.target);
     if (key) {
@@ -150,12 +150,12 @@ export class SimulationRunService {
 
   error(message: string, title: string = null): void {
     this.running = false;
-    if (this.snackBarRef) {
-      this.snackBarRef.dismiss();
+    if (this._snackBarRef) {
+      this._snackBarRef.dismiss();
     }
     var url = 'https://nest-desktop.readthedocs.io/en/master/user/troubleshooting.html#error-messages';
     var link = '<br><br><a target="_blank" href="' + url + '">See documentation for details.</a>';
-    this.toastr.error(message + link, title, {
+    this._toastr.error(message + link, title, {
       enableHtml: true,
       progressBar: true,
       timeOut: 5000,

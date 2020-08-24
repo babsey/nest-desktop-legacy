@@ -18,7 +18,7 @@ export class ArrayInputPopupComponent implements OnInit {
 
   constructor(
     private _generatorService: GeneratorService,
-    private dialog: MatDialog,
+    private _dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -36,7 +36,7 @@ export class ArrayInputPopupComponent implements OnInit {
   }
 
   openGeneratorDialog(): void {
-    const dialogRef = this.dialog.open(ArrayGeneratorDialogComponent);
+    const dialogRef = this._dialog.open(ArrayGeneratorDialogComponent);
 
     dialogRef.afterClosed().subscribe(d => {
       if (d) {

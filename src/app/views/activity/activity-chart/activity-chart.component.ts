@@ -14,25 +14,25 @@ import { ActivityGraphService } from '../../../services/activity/activity-graph.
 export class ActivityChartComponent implements OnInit, OnDestroy {
   @Input() project: Project;
   @ViewChild('plot', { static: true }) plotRef: ElementRef;
-  private subscriptionUpdate: any;
-  private subscriptionInit: any;
+  private _subscriptionUpdate: any;
+  private _subscriptionInit: any;
 
   constructor(
-    public _activityGraphService: ActivityGraphService,
+    public activityGraphService: ActivityGraphService,
   ) {
   }
 
   ngOnInit() {
     console.log('Ng Init activity chart view')
-    this.subscriptionInit = this._activityGraphService.init.subscribe(() => this.init());
-    this.subscriptionUpdate = this._activityGraphService.update.subscribe(() => this.update());
+    this._subscriptionInit = this.activityGraphService.init.subscribe(() => this.init());
+    this._subscriptionUpdate = this.activityGraphService.update.subscribe(() => this.update());
     this.init();
   }
 
   ngOnDestroy() {
     console.log('Ng destroy activity chart view');
-    this.subscriptionInit.unsubscribe();
-    this.subscriptionUpdate.unsubscribe();
+    this._subscriptionInit.unsubscribe();
+    this._subscriptionUpdate.unsubscribe();
   }
 
   private get plot(): HTMLCanvasElement {
@@ -41,12 +41,12 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
 
   init(): void {
     console.log('Init activity chart view');
-    this._activityGraphService.graph = new ActivityChartGraph(this.project);
+    this.activityGraphService.graph = new ActivityChartGraph(this.project);
   }
 
   update(): void {
     console.log('Update activity chart view');
-    this._activityGraphService.graph.update();
+    this.activityGraphService.graph.update();
     // this.activities.map(activity => {
     //   var recordables = Object.keys(activity.recorder.events).filter(d => !['times', 'senders'].includes(d));
     //   if (activity.hasSpikeData() && recordables.length === 0) {

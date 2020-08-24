@@ -244,7 +244,7 @@ export class App {
 
   downloadProject(projectId: string): void {
     console.log('Download project:', projectId)
-    const project: Project = this.projects.find(project => project._id === projectId);
+    const project: Project = this.projects.find(project => project.id === projectId);
     this.download(project.serialize('file'), 'projects');
   }
 

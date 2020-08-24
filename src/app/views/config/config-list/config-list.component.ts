@@ -13,18 +13,18 @@ import { enterAnimation } from '../../../animations/enter-animation';
 export class ConfigListComponent implements OnInit {
 
   constructor(
-    private router: Router,
+    private _router: Router,
   ) { }
 
   ngOnInit() {
   }
 
   navigate(path: string): void {
-    this.router.navigate([{ outlets: { primary: 'setting/' + path, nav: 'setting' } }]);
+    this._router.navigate([{ outlets: { primary: 'setting/' + path, nav: 'setting' } }]);
   }
 
   isActive(path: string): boolean {
-    return this.router.url.includes('/setting/' + path)
+    return this._router.url.includes('/setting/' + path)
   }
 
   reset(): void {
