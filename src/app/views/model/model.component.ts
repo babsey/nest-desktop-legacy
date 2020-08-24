@@ -29,12 +29,12 @@ export class ModelComponent implements OnInit, OnDestroy {
   }
 
   get modelId(): string {
-    return this._modelService.selectedModel;
+    return this.modelService.selectedModel;
   }
 
   get model(): any {
     // return this._modelService.getSettings(this.modelId);
-    return this._modelService.defaults;
+    return this.modelService.defaults;
   }
 
   get elementType(): string {

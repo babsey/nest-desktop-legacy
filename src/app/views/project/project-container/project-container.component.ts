@@ -22,8 +22,8 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
 })
 export class ProjectContainerComponent implements OnInit, OnDestroy {
   @Input() id: string = '';
-  public mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
+  public mobileQuery: MediaQueryList;
 
   constructor(
     private _activityGraphService: ActivityGraphService,
@@ -61,9 +61,9 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     if (this.id) {
       this.appService.data.initProject(this.id).then(() => {
         this._activityGraphService.init.emit();
-        if (this.router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
-          this._projectService.mode = 'activityExplorer';
-          this._simulationRunService.run(this._appService.data.project, true)
+        if (this._router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
+          this.projectService.mode = 'activityExplorer';
+          this._simulationRunService.run(this.appService.data.project, true)
         }
       }).catch(() => {
         this._router.navigate([{ outlets: { primary: 'project/' } }]);

@@ -97,14 +97,14 @@ export class SimulationRunService {
     const urlRoot: string = project.app.nestServer.url;
     this._logService.log('Run script on server');
     this.running = true;
-    return this.http.post(urlRoot + '/script/simulation/run', project.serialize('simulator'))
+    return this._http.post(urlRoot + '/script/simulation/run', project.serialize('simulator'))
   }
 
   execCode(project: Project): any {
     const urlRoot: string = project.app.nestServer.url;
     this._logService.log('Exec code on server');
     this.running = true;
-    return this.http.post(urlRoot + '/exec', { source: project.code.script, return: 'response' })
+    return this._http.post(urlRoot + '/exec', { source: project.code.script, return: 'response' })
   }
 
   response(project: Project, resp: any): void {
