@@ -5,10 +5,10 @@
     direction="vertical"
     unit="percent"
     >
-    <ng-container *ngFor="let p of _activityChartService.panelOrder">
+    <ng-container *ngFor="let p of activityChartService.panelOrder">
       <as-split-area
-        [size]="_activityChartService.panel[p].size"
-        [visible]="_activityChartService.panelSelected.includes(p)"
+        [size]="activityChartService.panel[p].size"
+        [visible]="activityChartService.panelSelected.includes(p)"
         maxSize="100"
         minSize="0"
         >

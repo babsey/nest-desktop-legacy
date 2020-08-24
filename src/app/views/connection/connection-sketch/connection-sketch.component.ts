@@ -16,13 +16,13 @@ export class ConnectionSketchComponent implements OnInit {
   @Input() connection: Connection;
   @Input() width: number;
   @Input() height: number;
-  private selector: any;
-  private intervalId: any;
+  private _selector: any;
+  private _intervalId: any;
 
   constructor(
-    private elementRef: ElementRef,
+    private _elementRef: ElementRef,
   ) {
-    this.selector = d3.select(elementRef.nativeElement);
+    this._selector = d3.select(_elementRef.nativeElement);
   }
 
   ngOnInit() {

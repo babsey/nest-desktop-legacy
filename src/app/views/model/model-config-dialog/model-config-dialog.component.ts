@@ -11,20 +11,20 @@ import { ModelService } from '../../../services/model/model.service';
 })
 export class ModelConfigDialogComponent implements OnInit {
   public options: any;
-  private idx: number;
+  private _idx: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public _modelService: ModelService,
+    public modelService: ModelService,
     public dialogRef: MatDialogRef<ModelConfigDialogComponent>,
   ) {
   }
 
   ngOnInit() {
     // console.log(this.data)
-    const modelSettings: any = this._modelService.getSettings(this.data.model);
-    this.idx = modelSettings.params.map(param => param.id).indexOf(this.data.param);
-    this.options = Object.assign({}, modelSettings.params[this.idx]);
+    const modelSettings: any = this.modelService.getSettings(this.data.model);
+    this._idx = modelSettings.params.map(param => param.id).indexOf(this.data.param);
+    this.options = Object.assign({}, modelSettings.params[this._idx]);
     // this.options = params;
   }
 
@@ -40,8 +40,8 @@ export class ModelConfigDialogComponent implements OnInit {
   }
 
   onSave(): void {
-    const modelSettings: any = this._modelService.getSettings(this.data.model);
-    modelSettings.params[this.idx] = this.options;
+    const modelSettings: any = this.modelService.getSettings(this.data.model);
+    modelSettings.params[this._idx] = this.options;
     // this._modelService.save(this.options);
     this.dialogRef.close();
   }

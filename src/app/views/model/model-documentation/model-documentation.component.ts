@@ -24,7 +24,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
 
   constructor(
     private _appService: AppService,
-    private http: HttpClient,
+    private _http: HttpClient,
   ) { }
 
   ngOnInit() {
@@ -45,7 +45,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
     this.helptext = "";
     this.blocks = [];
     setTimeout(() => {
-      this.http.post(urlRoot + '/api/nest/help', data).subscribe(resp => {
+      this._http.post(urlRoot + '/api/nest/help', data).subscribe(resp => {
         if (resp == undefined) {
           this.helptext = '';
           return

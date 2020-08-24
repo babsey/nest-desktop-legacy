@@ -21,9 +21,9 @@ import { ActivityGraphService } from '../../../../services/activity/activity-gra
 export class ThreeScatterComponent implements OnInit, OnDestroy {
   @Input() graph: ActivityAnimationGraph;
   // @Input() config: any = {};
-  private data: any[] = [];
-  private subscriptionInit: any;
-  private subscriptionUpdate: any;
+  private _data: any[] = [];
+  private _subscriptionInit: any;
+  private _subscriptionUpdate: any;
   public scene: ScatterAnimation;
 
   constructor(
@@ -33,16 +33,16 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('Ng init Three scatter')
-    this.subscriptionInit = this._activityGraphService.init.subscribe(() => this.init());
-    this.subscriptionUpdate = this._activityGraphService.update.subscribe(() => this.update());
+    this._subscriptionInit = this._activityGraphService.init.subscribe(() => this.init());
+    this._subscriptionUpdate = this._activityGraphService.update.subscribe(() => this.update());
     this.init();
   }
 
   ngOnDestroy() {
     console.log('Ng destroy Three scatter');
     this.clear();
-    this.subscriptionInit.unsubscribe();
-    this.subscriptionUpdate.unsubscribe();
+    this._subscriptionInit.unsubscribe();
+    this._subscriptionUpdate.unsubscribe();
   }
 
   init() {

@@ -7,14 +7,14 @@
   <mat-sidenav-container id="container" autosize>
     <mat-sidenav
       (openedChange)="triggerResize()"
-      [(opened)]="_appService.sidenavOpened"
+      [(opened)]="appService.sidenavOpened"
       [mode]="mobileQuery.matches ? 'over' : 'side'"
       autoFocus="false"
       class="no-print"
       id="navigation"
       position="start"
       role="region">
-      <ng-container *ngIf="_appService.sidenavOpened">
+      <ng-container *ngIf="appService.sidenavOpened">
         <router-outlet #navOutlet="outlet" name="nav"></router-outlet>
       </ng-container>
     </mat-sidenav>
@@ -26,7 +26,7 @@
   </mat-sidenav-container>
 
 <div
-  [style.display]="_appService.rightClick ? '' : 'none'"
+  [style.display]="appService.rightClick ? '' : 'none'"
   class="mouse-right-click dark-theme"
   >
   <button mat-mini-fab color="primary">

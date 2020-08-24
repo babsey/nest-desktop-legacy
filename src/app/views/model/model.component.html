@@ -1,7 +1,7 @@
 <app-model-toolbar></app-model-toolbar>
 
 <span id="model">
-  <ng-container *ngIf="!_modelService.progress; else loading">
+  <ng-container *ngIf="!modelService.progress; else loading">
     <span class="flex" [@enterAnimation]>
       <mat-sidenav-container>
 
@@ -11,23 +11,23 @@
           position="end"
           [opened]="true">
 
-          <ng-container [ngSwitch]="_modelService.sidenavMode">
+          <ng-container [ngSwitch]="modelService.sidenavMode">
             <ng-container *ngSwitchCase="'list'">
               <app-model-params-list
-                [model]="_modelService.selectedModel"
+                [model]="modelService.selectedModel"
                 class="modelParameters"
               ></app-model-params-list>
             </ng-container>
             <ng-container *ngSwitchCase="'selection'">
               <app-model-params-selection-list
-                [model]="_modelService.selectedModel"
+                [model]="modelService.selectedModel"
                 class="modelParameters"
               ></app-model-params-selection-list>
             </ng-container>
             <ng-container *ngSwitchCase="'slider'">
-              <ng-container *ngIf="_modelService.hasModel()">
+              <ng-container *ngIf="modelService.hasModel()">
                 <app-model-params-slider
-                  [model]="_modelService.selectedModel"
+                  [model]="modelService.selectedModel"
                 ></app-model-params-slider>
               </ng-container>
             </ng-container>
@@ -37,7 +37,7 @@
 
         <mat-sidenav-content>
           <app-model-documentation
-           [model]="_modelService.selectedModel"
+           [model]="modelService.selectedModel"
           ></app-model-documentation>
         </mat-sidenav-content>
 

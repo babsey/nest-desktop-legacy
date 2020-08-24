@@ -9,7 +9,7 @@ export class Synapse {
   code: SynapseCode;
 
   // arguments for synapse in nest.Connect
-  _modelId: string;
+  private _modelId: string;
   params: Parameter[] = [];
 
   constructor(connection: any, synapse: any) {

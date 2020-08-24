@@ -14,7 +14,7 @@ export class Project {
   app: App;                             // parent
 
   // Database instances
-  _id: string;                          // id of the database
+  private _id: string;                          // id of the database
   createdAt: string;                    // when it is created in database
   updatedAt: string;                    // when it is updated in database
 

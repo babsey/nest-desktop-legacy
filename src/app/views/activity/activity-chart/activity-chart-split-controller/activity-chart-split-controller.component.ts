@@ -13,7 +13,7 @@ export class ActivityChartSplitControllerComponent implements OnInit {
   public useTransition: boolean = false;
 
   constructor(
-    public _activityChartService: ActivityChartService,
+    public activityChartService: ActivityChartService,
     private _activityGraphService: ActivityGraphService,
   ) { }
 
@@ -21,10 +21,10 @@ export class ActivityChartSplitControllerComponent implements OnInit {
   }
 
   dragEnd(event): void {
-    this._activityChartService.panelOrder
-      .filter(pp => this._activityChartService.panelSelected.includes(pp))
+    this.activityChartService.panelOrder
+      .filter(pp => this.activityChartService.panelSelected.includes(pp))
       .map((p, i) => {
-        this._activityChartService.panel[p].size = Math.round(event.sizes[i]);
+        this.activityChartService.panel[p].size = Math.round(event.sizes[i]);
       })
     this._activityGraphService.update.emit()
   }

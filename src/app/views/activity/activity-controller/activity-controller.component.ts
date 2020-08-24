@@ -10,7 +10,7 @@ import { ActivityGraphService } from '../../../services/activity/activity-graph.
 export class ActivityControllerComponent implements OnInit {
 
   constructor(
-    public _activityGraphService: ActivityGraphService,
+    public activityGraphService: ActivityGraphService,
   ) { }
 
   ngOnInit() {

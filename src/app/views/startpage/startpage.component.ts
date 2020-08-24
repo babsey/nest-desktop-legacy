@@ -14,7 +14,7 @@ import { AppService } from '../../services/app/app.service';
 export class StartpageComponent implements OnInit {
 
   constructor(
-    public _appService: AppService,
+    public appService: AppService,
   ) { }
 
   ngOnInit() {

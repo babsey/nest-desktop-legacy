@@ -4,9 +4,9 @@
   (legendDoubleClick)="onLegendDoubleClick($event)"
   (legendClick)="onLegendClick($event)"
   (selected)="onSelect($event)"
-  [config]="_activityGraphService.graph.config"
-  [data]="_activityGraphService.graph.data"
-  [layout]="_activityGraphService.graph.layout"
-  [style]="_activityGraphService.graph.style"
+  [config]="activityGraphService.graph.config"
+  [data]="activityGraphService.graph.data"
+  [layout]="activityGraphService.graph.layout"
+  [style]="activityGraphService.graph.style"
   [useResizeHandler]="true">
 </plotly-plot>

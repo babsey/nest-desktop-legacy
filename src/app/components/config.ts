@@ -2,21 +2,21 @@ import { environment } from '../../environments/environment';
 
 
 export class Config {
-  private name: string;
+  private _name: string;
 
   constructor(name: string) {
-    this.name = name;
+    this._name = name;
     if (!this.isValid()) {
       this.upgrade()
     }
   }
 
   get assetData(): any {
-    return require('../../assets/config/' + this.name + '.json');
+    return require('../../assets/config/' + this._name + '.json');
   }
 
   get itemName(): string {
-    return 'nest-desktop-' + this.name;
+    return 'nest-desktop-' + this._name;
   }
 
   get data(): any {

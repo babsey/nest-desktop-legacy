@@ -13,7 +13,7 @@ export class ArrayGeneratorDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ArrayGeneratorDialogComponent>,
-    public _generatorService: GeneratorService,
+    public generatorService: GeneratorService,
   ) { }
 
   ngOnInit() {

@@ -52,7 +52,7 @@ export class ParamRandomComponent implements OnInit {
   public selectedParameterType = this.findParameterType('constant');
 
   constructor(
-    private dialog: MatDialog,
+    private _dialog: MatDialog,
     private _distributionService: DistributionService,
     private _appConfigService: AppConfigService,
   ) {

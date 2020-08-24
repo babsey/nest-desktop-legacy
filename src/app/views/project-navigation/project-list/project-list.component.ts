@@ -25,7 +25,7 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private _appService: AppService,
-    private router: Router,
+    private _router: Router,
   ) {
   }
 
@@ -35,7 +35,7 @@ export class ProjectListComponent implements OnInit {
 
   onClick(project: Project): void {
     const url: string = 'project/' + project.id;
-    this.router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
+    this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
   }
 
   onMouseOver(event: MouseEvent): void {
