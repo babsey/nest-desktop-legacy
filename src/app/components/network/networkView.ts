@@ -5,59 +5,59 @@ import { Node } from '../node/node';
 
 export class NetworkView {
   network: Network;                    // parent
-  private _focusedConnection: Connection = null;
-  private _focusedNode: Node = null;
-  private _selectedConnection: Connection = null;
-  private _selectedElementType: string = null;
-  private _selectedNode: Node = null;
+  private _focusedConnection: Connection | null = null;
+  private _focusedNode: Node | null = null;
+  private _selectedConnection: Connection | null = null;
+  private _selectedElementType: string | null = null;
+  private _selectedNode: Node | null = null;
 
   constructor(network: Network) {
     this.network = network;
   }
 
-  get focusedConnection(): Connection {
+  get focusedConnection(): Connection | null {
     return this._focusedConnection;
   }
 
-  set focusedConnection(connection: Connection) {
+  set focusedConnection(connection: Connection | null) {
     this._focusedNode = null;
     this._focusedConnection = connection;
   }
 
-  get focusedNode(): Node {
+  get focusedNode(): Node | null  {
     return this._focusedNode;
   }
 
-  set focusedNode(node: Node) {
+  set focusedNode(node: Node | null ) {
     this._focusedConnection = null;
     this._focusedNode = node;
   }
 
-  get selectedConnection(): Connection {
+  get selectedConnection(): Connection | null {
     return this._selectedConnection;
   }
 
-  set selectedConnection(connection: Connection) {
-    this.selectedElementType = null;
-    this.selectedNode = null;
+  set selectedConnection(connection: Connection | null ) {
+    this._selectedElementType = null;
+    this._selectedNode = null;
     this._selectedConnection = this._selectedConnection === connection ? null : connection;
   }
 
-  get selectedElementType(): string {
+  get selectedElementType(): string | null {
     return this._selectedElementType;
   }
 
-  set selectedElementType(elementType: string) {
+  set selectedElementType(elementType: string | null ) {
     this.resetSelection();
     this._selectedElementType = elementType;
     // this._selectedElementType = this._selectedElementType == elementType ? null : elementType;
   }
 
-  get selectedNode(): Node {
+  get selectedNode(): Node | null {
     return this._selectedNode;
   }
 
-  set selectedNode(node: Node) {
+  set selectedNode(node: Node | null ) {
     this._selectedElementType = null;
     this._selectedConnection = null;
     this._selectedNode = this._selectedNode === node ? null : node;

@@ -22,7 +22,7 @@ export class Config {
   get data(): any {
     // check if item is existed in localstorage
     if (localStorage.hasOwnProperty(this.itemName)) {
-      const dataJSON: string = localStorage.getItem(this.itemName);
+      const dataJSON: string | null = localStorage.getItem(this.itemName);
       if (dataJSON) {
         return JSON.parse(dataJSON);
       }

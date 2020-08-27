@@ -46,11 +46,12 @@ export class Connection {
     this.config = new Config(this.constructor.name);
     this.code = new ConnectionCode(this);
     this.view = new ConnectionView(this);
+    this._idx = -1;
 
     this._source = connection.source;
     this._target = connection.target;
 
-    this.rule = connection.rule || Rule.AllToAll;
+    this._rule = connection.rule || Rule.AllToAll;
     this.params = connection.params || [];
 
     this.mask = new ConnectionMask(this, connection.mask);
@@ -145,7 +146,7 @@ export class Connection {
     if (to === 'simulator') {
       // Collect specifications of the connection
       connection['conn_spec'] = {
-        rule: this.rule,
+        rule: this._rule,
       };
       this.params.forEach(param => connection.conn_spec[param.id] = param.value);
       if (this.mask.masktype !== 'none') {
@@ -153,7 +154,7 @@ export class Connection {
       }
       connection['syn_spec'] = this.synapse.serialize(to);     // Collect specifications of the synapse
     } else {
-      connection['rule'] = this.rule;
+      connection['rule'] = this._rule;
       connection['params'] = this.params;
       connection['mask'] = this.mask.serialize(to);
       connection['synapse'] = this.synapse.serialize(to);

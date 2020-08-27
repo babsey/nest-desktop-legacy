@@ -37,9 +37,11 @@ export class ConnectionMask {
     } else {
       this.masktype = value;
       this.specs = {};
-      this.config.data[value].specs.forEach(spec => {
-        this.specs[spec.id] = spec.value;
-      });
+      this.config.data[value].specs.forEach(
+        (spec: { id: string | number; value: any }) => {
+          this.specs[spec.id] = spec.value;
+        }
+      );
     }
     this.draw();
   }

@@ -138,7 +138,7 @@ export class AnalogLines extends Panel {
     const senders: number[] = activity.recorder.senders.slice(0,100);
     const events: any[] = senders.map(sender => { return { x: [], y: [] } });
 
-    activity.recorder.events.senders.forEach((sender, idx) => {
+    activity.recorder.events.senders.forEach((sender: number, idx: number) => {
       if (!activity.recorder.events.hasOwnProperty(recordFrom)) return
       const senderIdx: number = senders.indexOf(sender);
       if (senderIdx === -1) return
@@ -147,7 +147,7 @@ export class AnalogLines extends Panel {
       events[senderIdx]['name'] = recordFrom + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']';
     })
 
-    data.forEach((d, idx) => {
+    data.forEach((d, idx: number) => {
       d.x = events[idx].x;
       d.y = events[idx].y;
       d.name = events[idx].name;
@@ -194,11 +194,11 @@ export class AnalogLines extends Panel {
   }
 
   updateAverageLine(activity: Activity, recordFrom: string): void {
-    const data: any = this.data.filter(d => d.activityIdx === activity.idx && d.legendgroup === recordFrom + '_avg');
+    const data: any[] = this.data.filter(d => d.activityIdx === activity.idx && d.legendgroup === recordFrom + '_avg');
     const senders: number[] = activity.recorder.senders;
     const events: any[] = senders.map(sender => { return { x: [], y: [] } });
 
-    activity.recorder.events.senders.forEach((sender, idx) => {
+    activity.recorder.events.senders.forEach((sender: number, idx: number) => {
       if (!activity.recorder.events.hasOwnProperty(recordFrom)) return
       const senderIdx: number = senders.indexOf(sender);
       events[senderIdx].x.push(activity.recorder.events.times[idx]);

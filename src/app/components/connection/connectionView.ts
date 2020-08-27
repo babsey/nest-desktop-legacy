@@ -3,7 +3,7 @@ import { drawPath } from './connectionGraph';
 
 
 export class ConnectionView {
-  connection: any;                         // parent
+  connection: Connection;                         // parent
   colorExcitation: string = '#595289'; //'#467ab3';
   colorInhibition: string = '#AF143C'; //'#b34846';
 
@@ -34,7 +34,7 @@ export class ConnectionView {
   }
 
   distance(): number {
-    if (this.connection._source === this.connection._target) {
+    if (this.connection.source === this.connection.target) {
       return 0;
     };
     const source: any = this.connection.source.view.position,
@@ -73,7 +73,10 @@ export class ConnectionView {
   }
 
   connectSpikeDetector(): boolean {
-    return this.connection.target.model === 'spike_detector';
+    return (
+      this.connection.source.model.elementType === "spike_detector" ||
+      this.connection.target.model.elementType === "spike_detector"
+    );
   }
 
   drawPath(): string {

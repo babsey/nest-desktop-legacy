@@ -15,6 +15,7 @@ export class Synapse {
   constructor(connection: any, synapse: any) {
     this.connection = connection;
     this.code = new SynapseCode(this);
+    this._modelId = "";
 
     if (synapse !== undefined && synapse.params.length > 0) {
       this._modelId = synapse.model || 'static_synapse';

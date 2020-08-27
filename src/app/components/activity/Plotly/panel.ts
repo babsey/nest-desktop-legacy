@@ -7,7 +7,7 @@ import { ActivityChartGraph } from './activityChartGraph';
 export class Panel {
   graph: ActivityChartGraph;        // parent
 
-  data: any[] = [];
+  private _data: any[] = [];
   layout: any = {
     yaxis: {
       title: '',
@@ -30,16 +30,24 @@ export class Panel {
     const heightTotal: number = math.sum(heights);
     heights.reverse()
     const ratio: number = 1. / heightTotal - (panels.length * 0.02);
-    const heightCumsum: number[] = heights.map((sum => value => sum += value)(0));
+    const heightCumsum: number[] = heights.map((sum => (value: number) => sum += value)(0));
     const steps = heightCumsum.map(h => h / heightTotal)
     steps.unshift(0)
     const yaxis = panels.length - idx;
     const domain: number[] = [steps[yaxis - 1] + 0.01, steps[yaxis] - 0.01];
     this.layout.yaxis['domain'] = domain;
-    this.data.forEach(d => {
+    this._data.forEach(d => {
       d['panelIdx'] = idx;
       d['yaxis'] = 'y' + (panels.length - idx);
     });
+  }
+
+  public get data() {
+    return this.data;
+  }
+
+  public set data(newData: any[]) {
+    this.data = newData;
   }
 
 }

@@ -53,7 +53,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
   };
   
   style: any = {};
-  data: any[];
+  data: any[] = [];
 
   trailModes: string[] = ['off', 'growing', 'shrinking', 'temporal'];
   colorScales: any = {
@@ -168,12 +168,12 @@ export class ActivityAnimationGraph extends ActivityGraph {
     const activities: string[][] = this.project.activities.map(activity =>
       Object.keys(activity.recorder.events).filter(val => !(['senders', 'times'].includes(val)))
     );
-    let sources: any[] = [].concat(...activities);
+    let sources: any[] = []; 
+    sources = sources.concat(...activities);
     if (sources.length === 0) {
       this.source = 'spike';
       this.sources = [];
     } else {
-      sources = sources.filter(this.onlyUnique);
       if (this.source === 'spike') {
         this.source = sources.includes('V_m') ? 'V_m' : sources[0];
         this.config.frames.sampleRate = 1;

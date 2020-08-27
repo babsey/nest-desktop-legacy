@@ -15,10 +15,10 @@ export class ActivityChartGraph extends ActivityGraph {
 
   panels: any[] = [];
   registerPanels: any[][] = [
-    ['Analog from stimulator', graph => new InputAnalogLines(graph)],
-    ['Analog from neurons', graph => new NeuronAnalogLines(graph)],
-    ['Spike scatter', graph => new SpikeScatter(graph)],
-    ['Histogram of spikes', graph => new SpikeHistogram(graph)],
+    ['Analog from stimulator', (graph: ActivityChartGraph) => new InputAnalogLines(graph)],
+    ['Analog from neurons', (graph: ActivityChartGraph) => new NeuronAnalogLines(graph)],
+    ['Spike scatter', (graph: ActivityChartGraph) => new SpikeScatter(graph)],
+    ['Histogram of spikes', (graph: ActivityChartGraph) => new SpikeHistogram(graph)],
   ];
 
   layout: any = {
@@ -70,10 +70,10 @@ export class ActivityChartGraph extends ActivityGraph {
     name: 'image_settings',
     title: 'Edit image settings',
     icon: PlotlyJS.Icons.pencil,
-    click: function(gd) { }
+    click: function(gd: any) { }
   };
 
-  frames: any[];
+  frames: any[] = [];
 
   constructor(project: Project, mode: string = 'project') {
     super(project);
@@ -82,8 +82,8 @@ export class ActivityChartGraph extends ActivityGraph {
   }
 
   get data(): any[] {
-    const graphData = [];
-    const panels: any[] = this.panels.filter(panel => panel.data.length > 0);
+    const graphData: any[] = [];
+    const panels: Panel[] = this.panels.filter(panel => panel.data.length > 0);
 
     panels.forEach((panel, idx) => {
       panel.updateLayout(idx);
