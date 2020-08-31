@@ -46,7 +46,6 @@ export class Connection {
     this.config = new Config(this.constructor.name);
     this.code = new ConnectionCode(this);
     this.view = new ConnectionView(this);
-    this._idx = -1;
 
     this._source = connection.source;
     this._target = connection.target;
