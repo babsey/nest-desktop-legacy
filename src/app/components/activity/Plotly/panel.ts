@@ -42,8 +42,8 @@ export class Panel {
     });
   }
 
-  public get data() {
-    return this.data;
+  public get data(): any[] {
+    return this._data;
   }
 
   public set data(newData: any[]) {
