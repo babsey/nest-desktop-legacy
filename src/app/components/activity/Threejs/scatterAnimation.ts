@@ -82,7 +82,9 @@ export class ScatterAnimation {
   }
 
   clear() {
-    this.container.removeChild(this.renderer.domElement);
+    try {
+      this.container.removeChild(this.renderer.domElement);
+    } catch { }
     while (this._scene.children.length > 0) {
       this._scene.remove(this._scene.children[0]);
     }
