@@ -75,7 +75,7 @@ export class ConnectionView {
   connectSpikeDetector(): boolean {
     return (
       this.connection.source.model.elementType === "spike_detector" ||
-      this.connection.target.model.elementType === "spike_detector"
+      this.connection.target.model.existing === "spike_detector"
     );
   }
 
