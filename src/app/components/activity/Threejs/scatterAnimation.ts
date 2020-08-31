@@ -22,7 +22,7 @@ export class ScatterAnimation {
 
   constructor(graph: ActivityAnimationGraph, id: string) {
     this._animationFrameIdx = -1;
-    this._camera = new THREE.PerspectiveCamera(5, this.aspect, 1, 10000);
+    this._camera = new THREE.PerspectiveCamera(5, 1, 1, 10000);
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
     });
