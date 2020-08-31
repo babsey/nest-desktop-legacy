@@ -47,7 +47,7 @@ export class Panel {
   }
 
   public set data(newData: any[]) {
-    this.data = newData;
+    this._data = newData;
   }
 
 }
