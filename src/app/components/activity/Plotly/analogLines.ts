@@ -147,7 +147,7 @@ export class AnalogLines extends Panel {
       events[senderIdx]['name'] = recordFrom + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']';
     })
 
-    data.forEach((d, idx: number) => {
+    data.forEach((d: any, idx: number) => {
       d.x = events[idx].x;
       d.y = events[idx].y;
       d.name = events[idx].name;
