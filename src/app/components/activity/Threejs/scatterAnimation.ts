@@ -217,7 +217,7 @@ export class ScatterAnimation {
       );
       object.position.x =
         0.5 -
-        (trail.mode == 'temporal'
+        (trail.mode === 'temporal'
           ? (ts - data.x[i]) / frames.windowSize
           : 0);
       object.position.y = data.y[i];
