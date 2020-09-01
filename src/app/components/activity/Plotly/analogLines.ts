@@ -194,21 +194,12 @@ export class AnalogLines extends Panel {
   }
 
   updateAverageLine(activity: Activity, recordFrom: string): void {
-<<<<<<< HEAD
     const data: any[] = this.data.filter(d => d.activityIdx === activity.idx && d.legendgroup === recordFrom + '_avg');
-    const senders: number[] = activity.recorder.senders;
-    const events: any[] = senders.map(sender => { return { x: [], y: [] } });
-
-    activity.recorder.events.senders.forEach((sender: number, idx: number) => {
-      if (!activity.recorder.events.hasOwnProperty(recordFrom)) return
-=======
-    const data: any = this.data.filter(d => d.activityIdx === activity.idx && d.legendgroup === recordFrom + '_avg');
     const senders: number[] = activity.senders;
     const events: any[] = senders.map(sender => { return { x: [], y: [] } });
 
-    activity.events.senders.forEach((sender, idx) => {
+    activity.events.senders.forEach((sender: number, idx: number) => {
       if (!activity.events.hasOwnProperty(recordFrom)) return
->>>>>>> 59d2024... Big Bang Commit (BBC)
       const senderIdx: number = senders.indexOf(sender);
       events[senderIdx].x.push(activity.events.times[idx]);
       events[senderIdx].y.push(activity.events[recordFrom][idx]);
