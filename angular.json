@@ -45,7 +45,7 @@
               "node_modules/codemirror/addon/fold/comment-fold.js",
               "node_modules/codemirror/addon/fold/indent-fold.js",
               "node_modules/codemirror/addon/fold/brace-fold.js",
-              "src/assets/codemirror/addon/hint/pyNEST-hint.js",
+              "src/assets/codemirror/addon/hint/pyNEST-hint.js"
             ]
           },
           "configurations": {
