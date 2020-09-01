@@ -1,0 +1,57 @@
+<ng-container *ngIf="project.activities.length > 0; else noActivity">
+
+  <span
+    *ngIf="project.network.view.hasPositions()"
+    class="no-print"
+    style="position:absolute;z-index:1000; padding: 8px;">
+
+    <mat-button-toggle-group
+      [(value)]="mode"
+      [vertical]="true"
+      ><mat-button-toggle
+        matTooltip="View activity chart"
+        matTooltipPosition="right"
+        value="chart"
+        ><fa-icon icon="chart-line"></fa-icon>
+      </mat-button-toggle>
+      <mat-button-toggle
+        matTooltip="View activity animation"
+        matTooltipPosition="right"
+        value="animation"
+        ><fa-icon icon="braille"></fa-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
+  </span>
+
+  <div style="overflow:hidden; height:calc(100vh - 40px)">
+    <ng-container [ngSwitch]="mode">
+
+      <ng-container *ngSwitchCase="'chart'">
+        <app-activity-chart [project]="project"></app-activity-chart>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'animation'">
+        <app-activity-animation [project]="project"></app-activity-animation>
+      </ng-container>
+
+    </ng-container>
+  </div>
+
+</ng-container>
+
+
+<ng-template #noActivity>
+  <div style="height:100%" class="flex">
+    <span style="margin:auto">
+      <span>
+        <ng-container *ngIf="simulationRunService.running">
+          Simulation is currently running. Please wait.
+        </ng-container>
+        <ng-container *ngIf="!simulationRunService.running">
+          No activity found. Please simulate.
+        </ng-container>
+      </span>
+    </span>
+  </div>
+</ng-template>

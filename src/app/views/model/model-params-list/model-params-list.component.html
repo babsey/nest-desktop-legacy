@@ -1,0 +1,23 @@
+<mat-list dense>
+  <mat-list-item style="font-weight:bold">
+    <span class="flex">
+      <span>Parameter</span>
+      <span class="flex-spacer"></span>
+      <span>Value</span>
+    </span>
+  </mat-list-item>
+
+  <ng-container *ngFor="let param of objectKeys(modelService.defaults)">
+    <mat-list-item
+      [class.enabled]="hasParam(param)"
+      class="item">
+      <span class="flex">
+        <span>{{ param }}</span>
+        <span class="flex-spacer"></span>
+        <span class="description">
+          {{ modelService.defaults[param] }}
+        </span>
+      </span>
+    </mat-list-item>
+  </ng-container>
+</mat-list>

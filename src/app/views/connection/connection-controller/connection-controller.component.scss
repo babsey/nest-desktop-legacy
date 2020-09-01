@@ -1,0 +1,24 @@
+.connection-controller {
+  border-left: 4px solid black;
+  border-right: 4px solid black;
+  width: calc(100% - 8px);
+  margin-bottom: 4px;
+
+  mat-list,
+  mat-nav-list {
+    padding: 0;
+
+    mat-list-item {
+      height: 40px;
+      line-height: 40px;
+    }
+
+    mat-list-item:hover {
+      background-color: rgba(0,0,0,0.04);
+    }
+  }
+
+  mat-selection-list {
+    padding: 0;
+  }
+}

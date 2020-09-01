@@ -1,0 +1,112 @@
+<h1 mat-dialog-title>Number generator</h1>
+
+<div mat-dialog-content>
+  <table>
+    <tr>
+      <td>
+        <mat-form-field class="select">
+          <mat-select placeholder="Generator type" [(ngModel)]="generatorService.options.type">
+            <mat-option value="fill">Fill with a number</mat-option>
+            <mat-option value="range">Ranged numbers</mat-option>
+            <mat-option value="linspace">Linear spaced numbers</mat-option>
+            <mat-option value="randomUniformInt">Uniform distributed integers</mat-option>
+            <mat-option value="randomUniformFloat">Uniform distributed floats</mat-option>
+            <mat-option value="randomNormal">Normal distributed values</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('value')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Value</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.value" placeholder="0" value="0" defaultValue="0"/>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('start')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Start</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.start" placeholder="0" value="0" defaultValue="0"/>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('end')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>End</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.end" placeholder="-1" defaultValue="-1" />
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('min')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Minimum</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.min" placeholder="0" value="0" defaultValue="0"/>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('max')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Maximum</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.max" placeholder="-1" defaultValue="-1" />
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('mu')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Mean</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.mu" placeholder="0" defaultValue="0" />
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('sigma')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Standard deviation</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.sigma" placeholder="1" defaultValue="1" />
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('step')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Step</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.step" placeholder="1" defaultValue="1" />
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.view('size')">
+      <td>
+        <mat-form-field floatLabel="always">
+          <mat-label>Size</mat-label>
+          <input matInput type="number" [(ngModel)]="generatorService.options.size" placeholder="1" defaultValue="1" />
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr *ngIf="generatorService.options.type.indexOf('random') != -1">
+      <td>
+        <mat-slide-toggle [(ngModel)]="generatorService.options.sort">Sort numbers</mat-slide-toggle>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="generatorService.options" cdkFocusInitial>Generate</button>
+</div>

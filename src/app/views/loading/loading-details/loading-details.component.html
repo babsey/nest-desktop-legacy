@@ -1,0 +1,144 @@
+<mat-menu #configMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="app.resetConfigs()">
+    <fa-icon class="menu-icon" icon="undo"></fa-icon>
+    Reset configurations
+  </button>
+</mat-menu>
+
+<mat-menu #databaseMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="app.resetDatabases()">
+    <fa-icon class="menu-icon" icon="undo"></fa-icon>
+    Reset databases
+  </button>
+</mat-menu>
+
+<mat-menu #serverMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="app.nestServer.check()">
+    <fa-icon class="menu-icon" icon="search"></fa-icon>
+    Check server
+  </button>
+</mat-menu>
+
+<span [@enterAnimation] class="loading">
+
+  <span class="nest-theme nest">
+    <mat-toolbar class="flex" color="primary">
+      NEST Desktop
+      <!-- <span class="flex-spacer"></span>
+      <span class="dense">{{ version }}</span> -->
+    </mat-toolbar>
+  </span>
+
+  <span>
+    <mat-list role="list" dense>
+
+      <span class="flex">
+        <h3 mat-subheader>
+          <fa-icon class="list-icon" icon="wrench"></fa-icon> Settings
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="configMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Application
+          <span class="flex-spacer"></span>
+          <span>
+            {{ app.config.data.version }}
+            <app-validation-check [component]="app.config"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Nest Server
+          <span class="flex-spacer"></span>
+          <span>
+            {{ app.nestServer.config.data.version }}
+            <app-validation-check [component]="app.nestServer.config"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <span class="flex">
+        <h3 mat-subheader>
+          <fa-icon class="list-icon" icon="database"></fa-icon> Databases
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="databaseMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Model
+          <span class="flex-spacer"></span>
+          <span>
+            <ng-container *ngIf="app.modelDB">
+              {{ app.modelDB.version }}
+            </ng-container>
+            <app-validation-check [component]="app.modelDB"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          Project
+          <span class="flex-spacer"></span>
+          <span>
+            <ng-container *ngIf="app.projectDB">
+              {{ app.projectDB.version }}
+            </ng-container>
+            <app-validation-check [component]="app.projectDB"></app-validation-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <span class="flex">
+        <h3 mat-subheader>
+        <fa-icon class="list-icon" icon="server"></fa-icon> Backend
+        </h3>
+        <span class="flex-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="serverMenu">
+          <fa-icon icon="ellipsis-v"></fa-icon>
+        </button>
+      </span>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          NEST Server
+          <span class="flex-spacer"></span>
+          <span>
+            {{ app.nestServer.serverVersion }}
+            <app-response-check
+              [ready]="app.nestServer.serverReady"
+              [valid]="app.nestServer.serverValid">
+            </app-response-check>
+          </span>
+        </span>
+      </mat-list-item>
+
+      <mat-list-item role="listitem">
+        <span class="flex">
+          NEST Simulator
+          <span class="flex-spacer"></span>
+          <span>
+            {{ app.nestServer.simulatorVersion }}
+            <app-response-check
+              [ready]="app.nestServer.simulatorReady"
+              [valid]="app.nestServer.simulatorValid">
+            </app-response-check>
+          </span>
+        </span>
+      </mat-list-item>
+    </mat-list>
+
+  </span>
+
+</span>

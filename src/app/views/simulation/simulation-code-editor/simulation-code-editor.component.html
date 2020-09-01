@@ -1,0 +1,27 @@
+<div style="position:absolute; z-index:10; background-color:white; width: 100">
+  <mat-button-toggle-group
+    (change)="onChange($event)"
+    [multiple]="true"
+    [value]="selected"
+    appearance="legacy">
+    <ng-container *ngFor="let block of blocks">
+      <mat-button-toggle [value]="block" >{{ block }}</mat-button-toggle>
+    </ng-container>
+  </mat-button-toggle-group>
+
+  <button mat-mini-fab color="light"
+    (click)="copyCode()"
+    title="Copy code"
+    style="margin: 0 4px"
+    >
+    <fa-icon icon="copy"></fa-icon>
+  </button>
+</div>
+
+
+<div style="position:relative; padding-top:40px">
+  <ngx-codemirror
+    [(ngModel)]="code.script"
+    [options]="options"
+  ></ngx-codemirror>
+</div>

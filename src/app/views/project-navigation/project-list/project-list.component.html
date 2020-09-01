@@ -1,0 +1,42 @@
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="projectMenu"
+    >
+</div>
+
+<mat-menu #projectMenu="matMenu" class="context-menu">
+  <!-- <mat-toolbar class="ellipsis">{{ focused.name }}</mat-toolbar> -->
+  <button mat-menu-item class="menu-item" (click)="focused.duplicate()">
+    <fa-icon class="menu-icon" icon="clone"></fa-icon> Duplicate
+  </button>
+  <button mat-menu-item class="menu-item" (click)="focused.download()">
+    <fa-icon class="menu-icon" icon="download"></fa-icon> Download
+  </button>
+  <button mat-menu-item class="menu-item" (click)="focused.delete()">
+    <fa-icon class="menu-icon" icon="trash"></fa-icon> Delete
+  </button>
+</mat-menu>
+
+<mat-nav-list dense style="padding:0">
+  <ng-container *ngFor="let project of app.view.filteredProjects">
+    <mat-list-item
+      (click)="onClick(project)"
+      (contextmenu)="onContextMenu($event, project)"
+      (mouseout)="onMouseOut($event)"
+      (mouseover)="onMouseOver($event)"
+      class="project"
+      [class.active]="project.isSelected()"
+      >
+      <span class="flex">
+        {{ project.name }}
+        <div class="flex-spacer"></div>
+        <ng-container *ngIf="project.updatedAt">
+          <span class="timesince">
+            {{ project.updatedAt | timesince }}
+          </span>
+        </ng-container>
+      </span>
+      </mat-list-item>
+  </ng-container>
+</mat-nav-list>

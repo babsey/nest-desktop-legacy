@@ -23,7 +23,7 @@ $nest: mat-palette($appSchemeCategory, 500);
 $outerspace: mat-palette($appSchemeCategory, 600);
 
 $light-theme: mat-light-theme($outerspace, $outerspace);
-$simulation-theme: mat-light-theme($summergreen, $outerspace);
+$project-theme: mat-light-theme($summergreen, $outerspace);
 $model-theme: mat-light-theme($crail, $outerspace);
 $config-theme: mat-light-theme($sycamore, $outerspace);
 $nest-theme: mat-light-theme($nest, $outerspace);
@@ -55,8 +55,8 @@ fa-icon {
   @include angular-material-theme($dark-theme);
 }
 
-.simulation-theme {
-  @include angular-material-theme($simulation-theme);
+.project-theme {
+  @include angular-material-theme($project-theme);
 
   .mat-list-item.active {
     background-color: mat-color($summergreen) !important;

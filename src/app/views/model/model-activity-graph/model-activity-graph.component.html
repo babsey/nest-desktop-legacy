@@ -1,0 +1,9 @@
+<ng-container *ngIf="graph">
+  <plotly-plot #plot
+    [config]="config"
+    [data]="graph.data"
+    [layout]="layout"
+    [style]="style"
+    [useResizeHandler]="true">
+  </plotly-plot>
+</ng-container>

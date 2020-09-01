@@ -1,0 +1,64 @@
+<span class="network" [@enterAnimation]>
+  <mat-sidenav-container class="network-container" hasBackdrop="false">
+    <mat-sidenav
+      (openedChange)="triggerResize()"
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [(opened)]="projectService.sidenavOpened"
+      class="network-sidenav controller"
+      position="end"
+      role="region"
+      >
+
+      <ng-container [ngSwitch]="mode">
+
+        <ng-container *ngSwitchCase="'selection'">
+          <app-network-selection
+            [network]="network"
+          ></app-network-selection>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'sketch'">
+          <!-- <app-network-sketch-controller></app-network-sketch-controller> -->
+        </ng-container>
+
+      </ng-container>
+    </mat-sidenav>
+
+    <mat-sidenav-content #content class="network-content content">
+      <ng-container [@enterAnimation]>
+        <app-network-sketch
+          [network]="network"
+          [height]="height"
+          [width]="width"
+          class="network-sketch"
+        ></app-network-sketch>
+      </ng-container>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <div class="button-toolbar">
+    <button mat-icon-button
+      (click)="toggleSidenav()"
+      style="height:40px">
+      <fa-icon [icon]="this.projectService.sidenavOpened ? 'chevron-right' : 'chevron-left'"></fa-icon>
+    </button>
+    <button mat-icon-button
+      (click)="selectController('selection')"
+      [class.mat-fab]="projectService.sidenavOpened && mode === 'selection'"
+      matTooltip="Network selection"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="tasks"></fa-icon>
+    </button>
+    <button mat-icon-button
+      (click)="selectController('sketch')"
+      [class.mat-fab]="projectService.sidenavOpened && mode === 'sketch'"
+      matTooltip="Sketch settings"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="bezier-curve"></fa-icon>
+    </button>
+  </div>
+</span>

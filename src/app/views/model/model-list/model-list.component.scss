@@ -1,0 +1,17 @@
+.icon {
+  width: 20px;
+}
+
+.searchField {
+  position: fixed;
+  left: 41px;
+  display: none;
+}
+
+.searchItem:hover .searchField {
+  display: block;
+}
+
+.enabled {
+  font-weight: bold !important;
+}

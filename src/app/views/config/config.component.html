@@ -1,0 +1,45 @@
+<div class="setting dark-theme">
+  <div
+    (click)="navigate('nest-server')"
+    [class.config-theme]="isActive('nest-server')"
+    class="section"
+    id="nest-server">
+    <app-nest-server-config></app-nest-server-config>
+  </div>
+  <div
+    (click)="navigate('application')"
+    [class.config-theme]="isActive('application')"
+    class="section"
+    id="application">
+    <app-config></app-config>
+  </div>
+  <div
+    (click)="navigate('model')"
+    [class.config-theme]="isActive('model')"
+    class="section"
+    id="model">
+    <app-model-config></app-model-config>
+  </div>
+  <div
+    (click)="navigate('project')"
+    [class.config-theme]="isActive('project')"
+    class="section"
+    id="project">
+    <app-project-config></app-project-config>
+  </div>
+  <div
+    (click)="navigate('network')"
+    [class.config-theme]="isActive('network')"
+    class="section"
+    id="network">
+    <app-network-config></app-network-config>
+  </div>
+  <div
+    (click)="navigate('activity-graph')"
+    [class.config-theme]="isActive('activity-graph')"
+    class="section"
+    id="activity-graph">
+    <app-activity-graph-config></app-activity-graph-config>
+  </div>
+  <div style="height:100vh"></div>
+</div>

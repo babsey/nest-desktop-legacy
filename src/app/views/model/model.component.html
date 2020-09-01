@@ -1,0 +1,70 @@
+<app-model-toolbar></app-model-toolbar>
+
+<span id="model">
+  <ng-container *ngIf="!modelService.progress; else loading">
+    <span class="flex" [@enterAnimation]>
+      <mat-sidenav-container>
+
+        <mat-sidenav
+          role="region"
+          mode="side"
+          position="end"
+          [opened]="true">
+
+          <ng-container [ngSwitch]="modelService.sidenavMode">
+            <ng-container *ngSwitchCase="'list'">
+              <app-model-params-list
+                [model]="modelId"
+                class="modelParameters"
+              ></app-model-params-list>
+            </ng-container>
+            <ng-container *ngSwitchCase="'selection'">
+              <app-model-params-selection-list
+                [model]="modelId"
+                class="modelParameters"
+              ></app-model-params-selection-list>
+            </ng-container>
+            <ng-container *ngSwitchCase="'slider'">
+              <ng-container *ngIf="modelService.hasModel()">
+                <app-model-params-slider
+                  [model]="modelId"
+                ></app-model-params-slider>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+          <mat-card *ngIf="elementType === 'neuron' && recordables.includes('V_m')">
+            <app-model-activity-graph
+              [model]="modelId"
+            ></app-model-activity-graph>
+          </mat-card>
+
+          <app-model-documentation
+            [model]="modelId"
+          ></app-model-documentation>
+        </mat-sidenav-content>
+
+      </mat-sidenav-container>
+
+      <app-model-sidenav-tabs></app-model-sidenav-tabs>
+    </span>
+  </ng-container>
+
+</span>
+
+
+<ng-template #loading>
+  <div style="height: calc(100% - 40px)" class="flex">
+    <span style="margin:auto">
+      <fa-icon
+        icon="compact-disc"
+        class="fa-lg fa-spin"
+        style="display:inline-block"
+      ></fa-icon>
+      <span style="margin-left: 8px">Model is requesting.</span>
+    </span>
+  </div>
+</ng-template>

@@ -1,0 +1,33 @@
+import { Component, OnInit, Input } from '@angular/core';
+
+import { Project } from '../../../components/project/project';
+
+
+@Component({
+  selector: 'app-project-raw-data',
+  templateUrl: './project-raw-data.component.html',
+  styleUrls: ['./project-raw-data.component.scss']
+})
+export class ProjectRawDataComponent implements OnInit {
+  @Input() project: Project;
+  public options: any = {
+    cursorBlinkRate: 700,
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    lineNumbers: true,
+    lineWrapping: true,
+    readOnly: true,
+    mode: { name: 'javascript', json: true }
+  };
+
+  constructor() {
+  }
+
+  ngOnInit() {
+  }
+
+  get content(): string {
+    return JSON.stringify(this.project.serialize('db'), null, "\t");
+  }
+
+}

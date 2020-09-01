@@ -1,0 +1,120 @@
+<div class="connection-list"
+  [style.border-left-color]="connection.source.view.color"
+  [style.border-right-color]="connection.target.view.color"
+  [style.display]="connection.view.isSelected() ? '' : 'none'">
+
+  <app-connection-toolbar
+    [connection]="connection"
+  ></app-connection-toolbar>
+
+  <mat-list dense>
+    <ng-container *ngIf="connection.hasOwnProperty('projections'); else nonSpatial">
+      <mat-list-item class="list-item"
+        [style.border-left-color]="connection.source.view.color"
+        [style.border-right-color]="connection.target.view.color">
+        <span class="flex">
+          <span>Connection type</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.projections.connection_type | capitalize }}</span>
+        </span>
+      </mat-list-item>
+
+      <ng-container *ngIf="connection.projections.hasOwnProperty('kernel')">
+        <mat-list-item class="list-item"
+          [style.border-left-color]="connection.source.view.color"
+          [style.border-right-color]="connection.target.view.color">
+          <span class="flex">
+            <span>Kernel</span>
+            <span class="flex-spacer"></span>
+            <span>{{ connection.projections.kernel.parametertype | capitalize }}</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+
+      <ng-container *ngIf="connection.projections.hasOwnProperty('number_of_connections')">
+        <mat-list-item class="list-item"
+          [style.border-left-color]="connection.source.view.color"
+          [style.border-right-color]="connection.target.view.color">
+          <span class="flex">
+            <span>Number of connections</span>
+            <span class="flex-spacer"></span>
+            <span>{{ connection.projections.number_of_connections }}</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+
+      <ng-container *ngIf="connection.projections.hasOwnProperty('weights')">
+        <mat-list-item class="list-item"
+          [style.border-left-color]="connection.source.view.color"
+          [style.border-right-color]="connection.target.view.color">
+          <span class="flex">
+            <span>Synaptic weight</span>
+            <span class="flex-spacer"></span>
+            <span>{{ synWeights() }}</span>
+            <span class="unit">pA</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+
+      <ng-container *ngIf="connection.projections.hasOwnProperty('delays')">
+        <mat-list-item class="list-item"
+          [style.border-left-color]="connection.source.view.color"
+          [style.border-right-color]="connection.target.view.color">
+          <span class="flex">
+            <span>Synaptic delay</span>
+            <span class="flex-spacer"></span>
+            <span>{{ synDelays() }}</span>
+            <span class="unit">ms</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #nonSpatial>
+      <mat-list-item class="list-item"
+        [style.border-left-color]="connection.source.view.color"
+        [style.border-right-color]="connection.target.view.color">
+        <span class="flex">
+          <span>Connection rule</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.rule }}</span>
+        </span>
+      </mat-list-item>
+
+      <ng-container *ngIf="connection.synapse.modelId !== 'static_synapse'">
+      <mat-list-item class="list-item"
+        [style.border-left-color]="connection.source.view.color"
+        [style.border-right-color]="connection.target.view.color">
+        <span class="flex">
+          <span>Synaptic model</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.synapse.model.label }}</span>
+        </span>
+      </mat-list-item>
+      </ng-container>
+
+      <mat-list-item class="list-item"
+        [style.border-left-color]="connection.source.view.color"
+        [style.border-right-color]="connection.target.view.color">
+        <div class="flex">
+          <span>Synaptic weight</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.synapse.weight }}</span>
+          <span class="unit">pA</span>
+        </div>
+      </mat-list-item>
+
+      <mat-list-item class="list-item"
+        [style.border-left-color]="connection.source.view.color"
+        [style.border-right-color]="connection.target.view.color">
+        <div class="flex">
+          <span>Synaptic delay</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.synapse.delay }}</span>
+          <span class="unit">ms</span>
+        </div>
+      </mat-list-item>
+    </ng-template>
+
+  </mat-list>
+</div>

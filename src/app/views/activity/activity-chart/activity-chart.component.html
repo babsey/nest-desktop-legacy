@@ -1,0 +1,12 @@
+<app-activity-chart-split-controller></app-activity-chart-split-controller>
+
+<plotly-plot #plot
+  (legendDoubleClick)="onLegendDoubleClick($event)"
+  (legendClick)="onLegendClick($event)"
+  (selected)="onSelect($event)"
+  [config]="activityGraphService.graph.config"
+  [data]="activityGraphService.graph.data"
+  [layout]="activityGraphService.graph.layout"
+  [style]="activityGraphService.graph.style"
+  [useResizeHandler]="true">
+</plotly-plot>

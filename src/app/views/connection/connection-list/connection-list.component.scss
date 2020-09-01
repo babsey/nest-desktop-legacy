@@ -1,0 +1,20 @@
+.connection-list {
+  border-left: 4px solid black;
+  border-right: 4px solid black;
+  width: calc(100% - 8px) !important;
+  margin-bottom: 4px;
+
+  mat-list {
+    padding: 0px !important;
+
+    mat-list-item {
+      height: 24px !important;
+
+      .unit {
+        text-align: right;
+        width: 20px;
+      }
+    }
+  }
+
+}

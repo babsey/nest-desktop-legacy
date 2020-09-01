@@ -1,0 +1,59 @@
+<mat-menu #modelsMenu="matMenu" class="context-menu">
+  <button mat-menu-item (click)="app.resetModels()">
+    <fa-icon class="menu-icon" icon="undo"></fa-icon>
+    Reset models
+  </button>
+</mat-menu>
+
+<span>
+
+    <mat-toolbar class="navbar" color="primary" style="padding:0">
+      Model
+      <span class="spacer"></span>
+      <button mat-icon-button [matMenuTriggerFor]="modelsMenu">
+        <fa-icon icon="ellipsis-v"></fa-icon>
+      </button>
+    </mat-toolbar>
+
+    <mat-list dense style="padding:0" >
+      <mat-list-item style="margin: 0 -16px">
+        <span style="display:flex; width:100%">
+
+          <button mat-icon-button *ngIf="view=='enabled'" (click)="viewModels('available')">
+            <fa-icon class="icon" icon="filter"></fa-icon>
+          </button>
+          <button mat-icon-button *ngIf="view=='available'" (click)="viewModels('enabled')">
+            <span class="fa-stack" style="line-height:2em">
+              <fa-icon icon="filter" class="fa-stack-1x"></fa-icon>
+              <fa-icon icon="ban" class="fa-stack-2x fa-2x" style="color:Tomato"></fa-icon>
+            </span>
+          </button>
+
+          <span style="width:100%">
+            <mat-form-field floatLabel="never" style="width:100%;height:40px">
+              <input matInput type="text" class="formControl" placeholder="Search model" (keyup)="search($event.target.value)" autocomplete="off" [value]="searchTerm" />
+            </mat-form-field>
+          </span>
+
+        </span>
+      </mat-list-item>
+    </mat-list>
+
+    <div style="height: calc(100vh - 80px); overflow: auto">
+      <mat-nav-list dense class="model-theme model" style="padding:0;">
+        <span [@listAnimation]="filteredModels.length">
+          <ng-container *ngFor="let model of filteredModels">
+            <mat-list-item
+              (click)="modelService.selectModel(model)"
+              routerLink="/model/{{model}}"
+              [class.active]="modelService.isSelected(model)"
+              [class.enabled]="modelService.hasModel(model) && view=='available'"
+              class="model">
+              {{ model }}
+            </mat-list-item>
+          </ng-container>
+        </span>
+      </mat-nav-list>
+    </div>
+
+</span>

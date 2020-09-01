@@ -1,0 +1,27 @@
+<div class="node-selection"
+  [style.border-color]="node.view.color"
+  [style.display]="node.view.isSelected(true) ? '' : 'none'">
+
+  <app-node-toolbar
+    [node]="node"
+  ></app-node-toolbar>
+
+  <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
+
+    <ng-container *ngFor="let param of node.params">
+      <mat-list-option
+        [matTooltip]="param.id"
+        [selected]="param.visible"
+        [value]="param.id"
+        matTooltipPosition="before">
+        <span class="flex">
+          <span class="ellipsis">{{ param.options.label | capitalize }}</span>
+          <span class="flex-spacer"></span>
+          <span class="value">{{ param.value }}</span>
+          <span class="unit">{{ param.options.unit }}</span>
+        </span>
+      </mat-list-option>
+    </ng-container>
+
+  </mat-selection-list>
+</div>

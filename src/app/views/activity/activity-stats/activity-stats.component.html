@@ -1,0 +1,72 @@
+<ng-container [ngSwitch]="selectedActivity===undefined">
+  <ng-container *ngSwitchCase="true">
+    <mat-nav-list dense>
+      <h3 matSubheader>
+        <span class="flex">
+          Id
+          <span class="flex-spacer"></span>
+          Model
+          <span class="flex-spacer"></span>
+          Data size
+        </span>
+      </h3>
+      <ng-container *ngFor="let activity of project.activities">
+        <mat-list-item
+          (click)="select(activity)"
+          style="width:100%;line-height:40px">
+          <span class="flex" style="height:40px">
+            <span>
+              <svg width="40" height="40">
+                <g app-node-shape
+                  [node]="activity.recorder"
+                  [showSelection]="false"
+                  transform="translate(20,20)"
+                ></g>
+              </svg>
+            </span>
+            <span class="flex-spacer"></span>
+            <span>{{ activity.recorder.model.label }}</span>
+            <span class="flex-spacer"></span>
+            <span>{{ activity.recorder.events.senders.length }}</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="false">
+      <span class="dark-theme">
+        <button mat-mini-fab
+          (click)="unselect()"
+          color="primary"
+          style="z-index:1000;position:absolute;top:5px;left:10px">
+          <fa-icon icon="arrow-left"></fa-icon>
+        </button>
+      </span>
+
+    <ng-container [ngSwitch]="selectedActivity.recorder.model.existing">
+
+      <ng-container *ngSwitchCase="'spike_detector'">
+        <app-spike-stats
+          [activity]="selectedActivity"
+          ></app-spike-stats>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'multimeter'">
+        <app-analog-stats
+          [activity]="selectedActivity"
+          [recordFrom]="recordFrom"
+          [selectedRecordFrom]="selectedRecordFrom"
+        ></app-analog-stats>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'voltmeter'">
+        <app-analog-stats
+          [activity]="selectedActivity"
+          [color]="colorSelected()"
+          [selectedRecordFrom]="'V_m'"
+        ></app-analog-stats>
+      </ng-container>
+
+  </ng-container>
+</ng-container>

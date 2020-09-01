@@ -1,0 +1,54 @@
+<app-project-toolbar
+  [project]="appService.data.project">
+</app-project-toolbar>
+
+<span class="project">
+  <mat-sidenav-container
+    autosize
+    hasBackdrop="false"
+    style="height:calc(100vh - 40px); width: calc(100% - 40px)"
+    >
+    <mat-sidenav
+      (closedStart)="onClosedStart($event)"
+      (openedStart)="onOpenedStart($event)"
+      (openedChange)="onOpenedChange($event)"
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [(opened)]="projectService.sidenavOpened"
+      id="sidenav-right"
+      position="end"
+      role="region"
+      >
+      <app-project-sidenav
+        [project]="appService.data.project"
+        [mode]="projectService.sidenavMode"
+      ></app-project-sidenav>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <app-project-sidenav-content
+        [project]="appService.data.project"
+        [mode]="projectService.mode"
+      ></app-project-sidenav-content>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <app-project-sidenav-tabs></app-project-sidenav-tabs>
+</span>
+
+<ng-container *ngIf="isNetworkQuickViewOpened()">
+  <mat-card cdkDrag cdkDragBoundary=".project"
+    style="cursor:pointer; width:540px; height:200px; position:absolute; bottom: 0; z-index:1000; right:40px"
+    >
+    <button mat-icon-button
+      (click)="toggleNetworkQuickView()"
+      style="position:absolute; right:20px; top:20px; z-index:1000">
+      <fa-icon icon="times"></fa-icon>
+    </button>
+    <app-network-sketch
+      [network]="appService.data.project.network"
+      width="540"
+      height="200"
+      [eventTrigger]="false"
+    ></app-network-sketch>
+  </mat-card>
+</ng-container>

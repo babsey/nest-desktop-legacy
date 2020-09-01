@@ -1,0 +1,18 @@
+<div class="panelResizer">
+  <as-split
+    (dragEnd)="dragEnd($event)"
+    [useTransition]="useTransition"
+    direction="vertical"
+    unit="percent"
+    >
+    <ng-container *ngFor="let p of activityChartService.panelOrder">
+      <as-split-area
+        [size]="activityChartService.panel[p].size"
+        [visible]="activityChartService.panelSelected.includes(p)"
+        maxSize="100"
+        minSize="0"
+        >
+      </as-split-area>
+    </ng-container>
+  </as-split>
+</div>

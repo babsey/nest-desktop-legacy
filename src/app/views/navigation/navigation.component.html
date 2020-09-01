@@ -1,0 +1,61 @@
+<div class="navigation">
+  <mat-toolbar style="padding:0; height:40px" color="primary">
+    <button mat-icon-button
+      (click)="appService.toggleSidenav()"
+      [disabled]="!isNavLoaded()"
+      style="height:40px">
+      <fa-icon [icon]="this.appService.sidenavOpened ? 'chevron-left' : 'chevron-right'"></fa-icon>
+    </button>
+  </mat-toolbar>
+
+  <div style="border-right: 1px solid rgba(0,0,0,0.12);z-index:1000; background-color: white;">
+    <div class="light-theme">
+      <button mat-icon-button
+        (click)="onClick($event)"
+        color="primary"
+        matTooltip="Startpage"
+        matTooltipPosition="after"
+        >
+        <fa-icon icon="home"></fa-icon>
+      </button>
+    </div>
+    <div class="project-theme">
+      <button mat-icon-button
+        (click)="onClick($event, 'project')"
+        [disabled]="!appService.data.projectDB"
+        [routerLink]="[{ outlets: { nav: ['project'] } }]"
+        color="primary"
+        matTooltip="Open an existing or create a new project."
+        matTooltipPosition="after"
+        routerLinkActive="mat-mini-fab"
+        >
+        <fa-icon icon="brain"></fa-icon>
+      </button>
+    </div>
+    <div class="model-theme">
+      <button mat-icon-button
+        (click)="onClick($event, 'model')"
+        [disabled]="!appService.data.modelDB"
+        [routerLink]="[{ outlets: { nav: ['model'] } }]"
+        color="primary"
+        matTooltip="List of models"
+        matTooltipPosition="after"
+        routerLinkActive="mat-mini-fab"
+        >
+        <fa-icon icon="square-root-alt"></fa-icon>
+      </button>
+    </div>
+    <div class="config-theme">
+      <button mat-icon-button
+        (click)="onClick($event, 'setting')"
+        [routerLink]="[{ outlets: { nav: ['setting'] } }]"
+        color="primary"
+        matTooltip="List of settings"
+        matTooltipPosition="after"
+        routerLinkActive="mat-mini-fab"
+        >
+         <fa-icon icon="wrench"></fa-icon>
+       </button>
+     </div>
+   </div>
+</div>
