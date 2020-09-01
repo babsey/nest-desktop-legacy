@@ -12,13 +12,14 @@ import { AppComponent } from './views/app.component';
 
 
 @NgModule({
-  declarations: [],
   imports: [
     // NoopAnimationsModule,
     BrowserAnimationsModule,
     BrowserModule,
     ViewsModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent,
+  ],
 })
 export class AppModule {}

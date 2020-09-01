@@ -1,10 +1,3 @@
-<div style="visibility: hidden; position: fixed"
-    [style.left]="contextMenuPosition.x"
-    [style.top]="contextMenuPosition.y"
-    [matMenuTriggerFor]="contextMenu"
-    >
-</div>
-
 <mat-menu #contextMenu="matMenu" class="menu">
   <button mat-menu-item (click)="mask.unmask()">
     <fa-icon class="menu-icon" icon="eraser"></fa-icon> Unmask
@@ -50,7 +43,7 @@
       </mat-list>
 
       <mat-list dense style="padding: 0">
-        <ng-container *ngFor="let spec of mask.config.data[mask.masktype].specs">
+        <ng-container *ngFor="let spec of mask.config[mask.masktype].specs">
           <mat-list-item class="item">
             <app-input-inline
               [(value)]="mask.specs[spec.id]"
@@ -65,10 +58,8 @@
   </span>
 </mat-menu>
 
-<div
+<div appContextMenuTrigger
   (contextmenu)="onContextMenu($event)"
-  (mouseout)="onMouseOut($event)"
-  (mouseover)="onMouseOver($event)"
   [matMenuTriggerFor]="maskMenu"
   class="mask-container flex"
   style="width:100%"

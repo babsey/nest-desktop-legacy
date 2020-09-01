@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpParams, HttpClient } from '@angular/common/http';
 
 import { enterAnimation } from '../../../animations/enter-animation';
 import { listAnimation } from '../../../animations/list-animation';
@@ -21,6 +21,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
   public helptext: any = '';
   public blocks: any[] = [];
   public progress: boolean = false;
+  public content: string = '';
 
   constructor(
     private _appService: AppService,
@@ -36,7 +37,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
   }
 
   requestModelDoc(): void {
-    const urlRoot: string = this._appService.data.nestServer.url;
+    const urlRoot: string = this._appService.app.nestServer.url;
     const data: any = {
       'obj': this.model,
       'return_text': 'true',
@@ -45,11 +46,8 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
     this.helptext = "";
     this.blocks = [];
     setTimeout(() => {
-      this._http.post(urlRoot + '/api/nest/help', data).subscribe(resp => {
-        if (resp == undefined) {
-          this.helptext = '';
-          return
-        }
+      this._http.post(urlRoot + '/api/help', data).subscribe(resp => {
+        if (resp === undefined || resp === null) return
         this.helptext = resp;
         this.progress = false;
         const titles: string[] = ['Synopsis', 'Description', 'Parameters', 'Examples', 'Receives', 'Sends', 'Transmits', 'Remarks', 'References', 'Availability', 'Authors', 'Author', 'FirstVersion', 'SeeAlso', 'Source'];

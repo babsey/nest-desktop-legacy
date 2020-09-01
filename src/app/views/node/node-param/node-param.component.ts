@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
-import { AppService } from '../../../services/app/app.service';
 import { GeneratorService } from '../../../services/generator/generator.service';
 
 import { ModelConfigDialogComponent } from '../../model/model-config-dialog/model-config-dialog.component';
@@ -21,7 +20,6 @@ export class NodeParamComponent implements OnInit {
   contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
-    private _appService: AppService,
     private _generatorService: GeneratorService,
     private _dialog: MatDialog,
   ) { }
@@ -51,14 +49,6 @@ export class NodeParamComponent implements OnInit {
         this.param.value = this._generatorService.generate(d);
       }
     });
-  }
-
-  onMouseOver(event: MouseEvent): void {
-    this._appService.rightClick = true;
-  }
-
-  onMouseOut(event: MouseEvent): void {
-    this._appService.rightClick = false;
   }
 
   onContextMenu(event: MouseEvent): void {

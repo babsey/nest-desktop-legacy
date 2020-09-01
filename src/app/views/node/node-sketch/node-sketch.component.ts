@@ -37,14 +37,14 @@ export class NodeSketchComponent implements OnInit {
     }
   }
 
-  radius(): number {
-    // const radius: number = this.node.config.data.graph.radius.value;
+  get radius(): number {
+    // const radius: number = this.node.config.graph.radius.value;
     const radius: number = 18;
     return this.node.network.view.focusedNode === this.node ? radius + 3 : radius;
   }
 
-  strokeWidth(): number {
-    return this.node.config.data.graph.strokeWidth.value;
+  get strokeWidth(): number {
+    return this.node.config.graph.strokeWidth.value;
   }
 
   connect(sourceNode: Node): void {
@@ -53,6 +53,7 @@ export class NodeSketchComponent implements OnInit {
       target: this.node.idx,
     }
     this.node.network.addConnection(connection);
+    this.node.network.commit();
   }
 
   onClick(event: MouseEvent): void {
@@ -61,7 +62,7 @@ export class NodeSketchComponent implements OnInit {
     const selectedNode: Node = this.node.network.view.selectedNode;
     if (this.eventTrigger && selectedNode && this.node.view.isFocused() && this._networkSketchService.connect) {
       this.connect(selectedNode);
-      if (this._networkSketchService.keyDown == '17') return                     // STRG
+      if (this._networkSketchService.keyDown === '17') return                     // STRG
       this.node.network.view.resetSelection();
       this._networkSketchService.reset();
     } else {
@@ -71,7 +72,7 @@ export class NodeSketchComponent implements OnInit {
   }
 
   dragHandler(): any {
-    const r: number = this.node.config.data.graph.radius.value + 3;
+    const r: number = this.node.config.graph.radius.value + 3;
     return d3.drag()
       .on('drag', (node: any) => {
         this.node.network.view.resetSelection();

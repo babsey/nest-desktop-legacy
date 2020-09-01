@@ -40,7 +40,7 @@ export class ActivityChartControllerComponent implements OnInit {
     this.activityChartService.panelSelected = [];
     setTimeout(() => {
       this.activityChartService.panelSelected = event;
-      setTimeout(() => this._activityGraphService.init.emit(), 100)
+      setTimeout(() => this._activityGraphService.update.emit(), 100)
     }, 1);
   }
 

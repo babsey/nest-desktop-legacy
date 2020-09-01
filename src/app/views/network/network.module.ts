@@ -9,6 +9,8 @@ import * as PlotlyJS from 'plotly.js-cartesian-dist';
 import { PlotlyModule } from 'angular-plotly.js';
 PlotlyModule.plotlyjs = PlotlyJS;
 
+import { AppDirectivesModule } from '../../directives/directives.module';
+
 import { AppFormsModule } from '../forms/forms.module';
 import { ConnectionModule } from '../connection/connection.module';
 import { MaterialModule } from '../material.module';
@@ -54,6 +56,7 @@ import { NetworkSketchSheetComponent } from './network-sketch-sheet/network-sket
     NetworkSketchSheetComponent,
   ],
   imports: [
+    AppDirectivesModule,
     AppFormsModule,
     BrowserAnimationsModule,
     CommonModule,

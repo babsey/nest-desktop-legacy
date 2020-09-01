@@ -29,6 +29,8 @@ const appRoutes: Routes = [
   { path: 'project', component: ProjectComponent },
   { path: 'project/:id', component: ProjectComponent },
   { path: 'project/:id/run', component: ProjectComponent },
+  { path: 'project/:id/:rev', component: ProjectComponent },
+  { path: 'project/:id/:rev/run', component: ProjectComponent },
   { path: 'testsuite', component: TestsuiteComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
@@ -42,8 +44,6 @@ const appRoutes: Routes = [
         enableTracing: false,  // <-- debugging purposes only
       }
     )
-  ],
-  declarations: [
   ],
   exports: [
     RouterModule,

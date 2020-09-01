@@ -7,9 +7,8 @@ import { Node } from '../node/node';
 import { Project } from '../project/project';
 
 
-export class Network {
+export class Network extends Config {
   project: Project;                     // parent
-  config: Config;                       // config
   view: NetworkView;                    // view
   code: NetworkCode;                    // code
 
@@ -17,30 +16,50 @@ export class Network {
   connections: Connection[] = [];       // for nest.Connect
 
   constructor(project: Project, network: any = {}) {
+    super('Network');
     this.project = project;
-    this.config = new Config(this.constructor.name);
     this.code = new NetworkCode(this);
     this.view = new NetworkView(this);
 
     this.nodes = [];
     this.connections = [];
 
-    network.nodes ? network.nodes.forEach(node => this.addNode(node)) : null;
-    network.connections ? network.connections.forEach(connection => this.addConnection(connection)) : null;
+    network.nodes ? network.nodes.forEach((node: any) => this.addNode(node)) : null;
+    network.connections ? network.connections.forEach((connection: any) => this.addConnection(connection)) : null;
 
     this.clean();
   }
 
   get stimulators(): Node[] {
-    return this.nodes.filter(node => node.model.elementType === 'stimulator')
+    return this.nodes.filter((node: Node) => node.model.elementType === 'stimulator')
   }
 
   get neurons(): Node[] {
-    return this.nodes.filter(node => node.model.elementType === 'neuron')
+    return this.nodes.filter((node: Node) => node.model.elementType === 'neuron')
   }
 
   get recorders(): Node[] {
-    return this.nodes.filter(node => node.model.elementType === 'recorder')
+    return this.nodes.filter((node: Node) => node.model.isRecorder())
+  }
+
+  commit(): void {
+    this.project.commitNetwork(this);
+  }
+
+  oldest(): void {
+    this.project.networkOldest();
+  }
+
+  older(): void {
+    this.project.networkOlder();
+  }
+
+  newer(): void {
+    this.project.networkNewer();
+  }
+
+  newest(): void {
+    this.project.networkNewest();
   }
 
   addNode(node: any): void {
@@ -54,25 +73,27 @@ export class Network {
   deleteNode(node: Node): void {
     this.view.resetFocus();
     this.view.resetSelection();
-    this.connections = this.connections.filter(c => (c.source !== node && c.target !== node));
+    this.connections = this.connections.filter((c: Connection) => (c.source !== node && c.target !== node));
     // this.nodes = this.nodes.filter(n => n.idx !== node.idx);
     const idx: number = node.idx;
     this.nodes = this.nodes.slice(0, idx).concat(this.nodes.slice(idx + 1));
     this.clean();
+    this.commit();
   }
 
   deleteConnection(connection: Connection): void {
     this.view.resetFocus();
     this.view.resetSelection();
-    // this.connections = this.connections.filter(c => c.idx !== connection.idx);
+    // this.connections = this.connections.filter((c: Connection) => c.idx !== connection.idx);
     const idx: number = connection.idx;
     this.connections = this.connections.slice(0, idx).concat(this.connections.slice(idx + 1));
     this.clean();
+    this.commit();
   }
 
   clean(): void {
-    this.nodes.forEach(node => node.clean());
-    this.connections.forEach(connection => connection.clean());
+    this.nodes.forEach((node: Node) => node.clean());
+    this.connections.forEach((connection: Connection) => connection.clean());
   }
 
   copy(item: any): any {
@@ -83,18 +104,29 @@ export class Network {
     return new Network(this.project, this);
   }
 
+
   /**
    * Clears the network by deleting every node and every connection.
    */
-  empty() {
-    this.connections.forEach(connection => this.deleteConnection(connection));
-    this.nodes.forEach(node => this.deleteNode(node));
+  empty(): void {
+    this.view.resetFocus();
+    this.view.resetSelection();
+    this.connections = [];
+    this.nodes = [];
+    // this.connections.forEach(connection => this.deleteConnection(connection));
+    // this.nodes.forEach(node => this.deleteNode(node));
+    this.clean();
+    this.commit();
   }
 
-  serialize(to: string): any {
+  isEmpty(): boolean {
+    return this.nodes.length === 0 && this.connections.length === 0;
+  }
+
+  toJSON(target: string = 'db'): any {
     const network: any = {
-      nodes: this.nodes.map(node => node.serialize(to)),
-      connections: this.connections.map(connection => connection.serialize(to)),
+      nodes: this.nodes.map((node: Node) => node.toJSON(target)),
+      connections: this.connections.map((connection: Connection) => connection.toJSON(target)),
     };
     return network;
   }

@@ -19,7 +19,7 @@ export class ProjectCode extends Code {
 
     if (sections.includes('kernel')) {
       this.script += '\n\n# Simulation kernel\n';
-      this.script += this.project.simulation.code.randomSeed();
+      this.script += this.project.simulation.code.setRandomSeed();
       this.script += this.project.simulation.code.setKernelStatus();
     }
 

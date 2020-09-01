@@ -25,26 +25,26 @@ export class ConnectionListComponent implements OnInit {
     if (!this.connection.projections.hasOwnProperty('weights')) {
       return this.formatService.format(1);
     }
-    if (!this.connection.projections.weights.hasOwnProperty('parametertype')) {
+    if (!this.connection.projections.weights.hasOwnProperty('parameterType')) {
       return this.formatService.format(this.connection.projections.weights);
     }
-    if (this.connection.projections.weights.parametertype == 'constant') {
+    if (this.connection.projections.weights.parameterType === 'constant') {
       return this.formatService.format(this.connection.projections.weights.specs.value);
     }
-    return this.connection.projections.weights.parametertype;
+    return this.connection.projections.weights.parameterType;
   }
 
   synDelays(): any {
     if (!this.connection.projections.hasOwnProperty('delays')) {
       return this.formatService.format(1);
     }
-    if (!this.connection.projections.delays.hasOwnProperty('parametertype')) {
+    if (!this.connection.projections.delays.hasOwnProperty('parameterType')) {
       return this.formatService.format(this.connection.projections.delays);
     }
-    if (this.connection.projections.delays.parametertype == 'constant') {
+    if (this.connection.projections.delays.parameterType === 'constant') {
       return this.formatService.format(this.connection.projections.delays.specs.value);
     }
-    return this.connection.projections.delays.parametertype;
+    return this.connection.projections.delays.parameterType;
   }
 
 }

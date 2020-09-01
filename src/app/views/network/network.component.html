@@ -2,8 +2,8 @@
   <mat-sidenav-container class="network-container" hasBackdrop="false">
     <mat-sidenav
       (openedChange)="triggerResize()"
+      [(opened)]="sidenavOpened"
       [mode]="mobileQuery.matches ? 'over' : 'side'"
-      [(opened)]="projectService.sidenavOpened"
       class="network-sidenav controller"
       position="end"
       role="region"
@@ -40,11 +40,11 @@
     <button mat-icon-button
       (click)="toggleSidenav()"
       style="height:40px">
-      <fa-icon [icon]="this.projectService.sidenavOpened ? 'chevron-right' : 'chevron-left'"></fa-icon>
+      <fa-icon [icon]="sidenavOpened ? 'chevron-right' : 'chevron-left'"></fa-icon>
     </button>
     <button mat-icon-button
       (click)="selectController('selection')"
-      [class.mat-fab]="projectService.sidenavOpened && mode === 'selection'"
+      [class.mat-fab]="sidenavOpened && mode === 'selection'"
       matTooltip="Network selection"
       matTooltipPosition="before"
       class="app-button"
@@ -53,7 +53,7 @@
     </button>
     <button mat-icon-button
       (click)="selectController('sketch')"
-      [class.mat-fab]="projectService.sidenavOpened && mode === 'sketch'"
+      [class.mat-fab]="sidenavOpened && mode === 'sketch'"
       matTooltip="Sketch settings"
       matTooltipPosition="before"
       class="app-button"

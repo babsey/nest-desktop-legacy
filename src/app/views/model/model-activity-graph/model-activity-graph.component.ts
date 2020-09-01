@@ -17,7 +17,7 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
 })
 export class ModelActivityGraphComponent implements OnInit {
   @Input() model: string;
-  private project: Project;
+  private _project: Project;
   public graph: ActivityChartGraph;
   public config: any = {
     staticPlot: true,
@@ -38,7 +38,9 @@ export class ModelActivityGraphComponent implements OnInit {
     },
     showlegend: false
   };
-  public style: any = {};
+  public style: any = {
+    width: '100%',
+  };
 
 
   constructor(
@@ -51,13 +53,13 @@ export class ModelActivityGraphComponent implements OnInit {
   }
 
   get activity(): Activity {
-    return this.project.activities[0];
+    return this._project.activities[0];
   }
 
   update(): void {
-    this.project = this._appService.data.createNeuronModelProject(this.model);
-    this._simulationRunService.run(this.project, true).then(() => {
-      this.graph = new ActivityChartGraph(this.project, 'model');
+    this._project = this._appService.app.createNeuronModelProject(this.model);
+    this._simulationRunService.run(this._project, true).then(() => {
+      this.graph = new ActivityChartGraph(this._project, 'model');
     });
   }
 

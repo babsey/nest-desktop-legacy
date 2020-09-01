@@ -17,7 +17,7 @@ export class ProjectSelectionComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log('Simulation selection')
+    // console.log('Ng init project selection')
   }
 
   delete(): void {

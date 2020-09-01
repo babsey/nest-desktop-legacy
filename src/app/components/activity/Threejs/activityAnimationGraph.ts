@@ -51,7 +51,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
     },
     dotSize: 10,
   };
-  
+
   style: any = {};
   data: any[] = [];
 
@@ -115,15 +115,15 @@ export class ActivityAnimationGraph extends ActivityGraph {
   }
 
   plotSpikeData(activity: Activity): void {
-    const times: number[] = activity.recorder.events.times;
+    const times: number[] = activity.events.times;
     const pos: any = activity.getPositionsForSenders();
     this.addFrames(times, pos.x, pos.y, activity.recorder.view.color);
   }
 
   plotAnalogData(activity: Activity): void {
-    const sourceData: number[] = activity.recorder.events['V_m'];
+    const sourceData: number[] = activity.events['V_m'];
     // const rangeData: number[] = [-70., -55.];
-    const times: number[] = activity.recorder.events.times;
+    const times: number[] = activity.events.times;
     const pos: any = activity.getPositionsForSenders();
     this.addFrames(times, pos.x, pos.y, sourceData);
   }
@@ -166,7 +166,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
   updateConfig(): void {
     console.log('Update config in activity animation graph')
     const activities: string[][] = this.project.activities.map(activity =>
-      Object.keys(activity.recorder.events).filter(val => !(['senders', 'times'].includes(val)))
+      Object.keys(activity.events).filter(val => !(['senders', 'times'].includes(val)))
     );
     let sources: any[] = []; 
     sources = sources.concat(...activities);
@@ -180,7 +180,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
         this.config.frames.windowSize = 1;
         this.config.trail.length = 0;
       }
-      if (sources.length == 1) {
+      if (sources.length === 1) {
         this.config.sources = [];
       } else {
         sources.sort();

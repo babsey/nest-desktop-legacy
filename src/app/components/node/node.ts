@@ -9,10 +9,9 @@ import { NodeView } from './nodeView';
 import { Parameter } from '../parameter';
 
 
-export class Node {
+export class Node extends Config {
   network: Network;                 // parent
   idx: number;                      // generative
-  config: Config;
   code: NodeCode;                   // code service for node
   view: NodeView;
 
@@ -25,17 +24,20 @@ export class Node {
 
   // Only recorder node
   recordFrom: string[];             // only for multimeter
-  events: any = {};
   activity: Activity;
 
   constructor(network: any, node: any) {
+    super('Node');
     this.network = network;
     this.idx = network.nodes.length;
-    this.config = new Config(this.constructor.name);
     this.code = new NodeCode(this);
     this.view = new NodeView(this, node.view);
 
     this._modelId = node.model;
+    if (this.model.isRecorder()) {
+      this.activity = new Activity(this);
+    }
+
     this.size = node.size || 1;
     this.initParameters(node);
     this.initSpatial(node.spatial);
@@ -67,18 +69,18 @@ export class Node {
     this.size = 1;
     this.spatial = new NodeSpatial(this);
     this.initParameters();
-    this.network.clean();
     if (this.model.elementType === 'recorder') {
-      this.events = {};
       this.activity = undefined;
     }
+    this.network.clean();
+    this.network.commit();
   }
 
   get recordables(): string[] {
     if (this.model.existing !== 'multimeter') return []
     const targets: Node[] = this.targets;
     if (targets.length === 0) return []
-    const recordables = targets.map(target => target.model.recordables);
+    const recordables = targets.map((target: Node) => target.model.recordables);
     if (recordables.length === 0) return [];
     const recordablesFlat: string[] = [].concat(...recordables);
     const recordablesSet: any[] = [...new Set(recordablesFlat)];
@@ -86,25 +88,17 @@ export class Node {
     return recordablesSet;
   }
 
-  get senders(): number[] {
-    const senders: any[] = [...new Set(this.events['senders'])];
-    if (senders.length > 0) {
-      senders.sort((a: number, b: number) => a - b);
-    }
-    return senders;
-  }
-
   get sources(): Node[] {
     const nodes: Node[] = this.network.connections
-      .filter(connection => connection.target.idx === this.idx)
-      .map(connection => connection.source);
+      .filter((connection: Connection) => connection.target.idx === this.idx)
+      .map((connection: Connection) => connection.source);
     return nodes;
   }
 
   get targets(): Node[] {
     const nodes: Node[] = this.network.connections
-      .filter(connection => connection.source.idx === this.idx)
-      .map(connection => connection.target);
+      .filter((connection: Connection) => connection.source.idx === this.idx)
+      .map((connection: Connection) => connection.target);
     return nodes;
   }
 
@@ -118,17 +112,17 @@ export class Node {
     // Update parameters from model or node
     this.params = [];
     if (this.model && node && node.hasOwnProperty('params')) {
-      this.model.params.forEach(modelParam => {
-        const nodeParam = node.params.find(p => p.id === modelParam.id);
+      this.model.params.forEach((modelParam: Parameter) => {
+        const nodeParam = node.params.find((p: any) => p.id === modelParam.id);
         this.addParameter(nodeParam || modelParam);
       });
     } else if (this.model) {
-      this.model.params.forEach(param => this.addParameter(param));
+      this.model.params.forEach((param: Parameter) => this.addParameter(param));
     } else if (node.hasOwnProperty('params')) {
-      node.params.forEach(param => this.addParameter(param));
+      node.params.forEach((param: Parameter) => this.addParameter(param));
     }
     if (this.model.existing === 'multimeter') {
-      this.recordFrom = node !== null ? node.recordFrom || ['V_m'] : ['V_m'];
+      this.recordFrom = (node !== null) ? node.recordFrom || ['V_m'] : ['V_m'];
     }
   }
 
@@ -137,21 +131,23 @@ export class Node {
   }
 
   hasParameter(paramId: string): boolean {
-    return this.params.find(param => param.id === paramId) !== undefined;
+    return this.params.find((param: Parameter) => param.id === paramId) !== undefined;
   }
 
   getParameter(paramId: string): any {
-    return this.hasParameter(paramId) ? this.params.find(param => param.id === paramId).value : null;
+    if (this.hasParameter(paramId)) {
+      return this.params.find((param: Parameter) => param.id === paramId).value;
+    }
   }
 
   resetParameters(): void {
-    this.params.forEach(param => param.value = param.options.value);
+    this.params.forEach((param: Parameter) => param.value = param.options.value);
   }
 
   setWeights(term: string): void {
     const connections: Connection[] = this.network.connections
-      .filter(connection => connection.source.idx === this.idx &&  connection.target.model.elementType !== 'recorder')
-    connections.forEach(connection => {
+      .filter((connection: Connection) => connection.source.idx === this.idx && connection.target.model.elementType !== 'recorder')
+    connections.forEach((connection: Connection) => {
       const value: number = Math.abs(connection.synapse.weight);
       connection.synapse.weight = (term === 'inhibitory' ? -1 : 1) * value;
     })
@@ -170,7 +166,7 @@ export class Node {
   collectRecordFromTargets(): void {
     if (this.model.existing !== 'multimeter') return
     const recordables = this.recordables;
-    this.recordFrom = (recordables.length > 0) ? this.recordFrom.filter(rec => recordables.includes(rec)) : [];
+    this.recordFrom = (recordables.length > 0) ? this.recordFrom.filter((rec: string) => recordables.includes(rec)) : [];
   }
 
   clone(): Node {
@@ -181,53 +177,36 @@ export class Node {
     this.network.deleteNode(this);
   }
 
-  updateActivity(activity: any): void {
-    console.log('Update activity in recorder')
-    this.events = this.copy(activity['events'][0]);
-    if (this.view.hasEvents()) {
-      if (this.activity === undefined) {
-        this.activity = new Activity(this, activity);
-      } else {
-        this.activity.update(activity);
-      }
-    }
+  copy(item: any): any {
+    return JSON.parse(JSON.stringify(item));
   }
 
-  serialize(to: string): any {
+  toJSON(target: string = 'db'): any {
     const node: any = {
       model: this.modelId,
     };
-    if (to === 'simulator') {
+    if (target === 'simulator') {
       node['n'] = this.size;
       node['element_type'] = this.model.elementType;
       node['params'] = {};
       this.params
-        .filter(p => p.visible)
-        .forEach(p => node.params[p.id] = p.value);
+        .filter((param: Parameter) => param.visible)
+        .forEach((param: Parameter) => node.params[param.id] = param.value);
       if (this.model.existing === 'multimeter' && this.recordFrom.length > 0) {
         node.params['record_from'] = this.recordFrom;
       }
     } else {
       node['size'] = this.size;
-      node['view'] = this.view.serialize();
-      node['params'] = this.params.map(param => param.serialize());
+      node['view'] = this.view.toJSON();
+      node['params'] = this.params.map((param: Parameter) => param.toJSON());
       if (this.model.existing === 'multimeter') {
         node['recordFrom'] = this.recordFrom;
       }
     }
     if (this.spatial.hasPositions()) {
-      node['spatial'] = this.spatial.serialize(to);
+      node['spatial'] = this.spatial.toJSON(target);
     }
     return node;
-  }
-
-  // download raw data of the simulator
-  downloadEvents(): void {
-    this.network.project.app.download(this.events, 'events');
-  }
-
-  copy(item: any): any {
-    return JSON.parse(JSON.stringify(item));
   }
 
 }

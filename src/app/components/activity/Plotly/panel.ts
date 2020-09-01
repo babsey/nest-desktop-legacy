@@ -2,9 +2,10 @@ import * as math from 'mathjs';
 
 import { Activity } from '../activity';
 import { ActivityChartGraph } from './activityChartGraph';
+import { Config } from '../../config';
 
 
-export class Panel {
+export class Panel extends Config {
   graph: ActivityChartGraph;        // parent
 
   private _data: any[] = [];
@@ -15,7 +16,8 @@ export class Panel {
     }
   };
 
-  constructor(graph: ActivityChartGraph) {
+  constructor(name: string, graph: ActivityChartGraph) {
+    super(name);
     this.graph = graph;
   }
 

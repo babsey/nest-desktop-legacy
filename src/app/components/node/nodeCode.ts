@@ -1,7 +1,7 @@
 import { Code } from '../code';
 import { Node } from './node';
-// import { Parameter } from './parameter';
-// import { ParameterRandom } from './parameterRandom';
+import { Parameter } from '../parameter';
+// import { ParameterRandom } from '../parameterRandom';
 
 
 export class NodeCode extends Code {
@@ -16,10 +16,20 @@ export class NodeCode extends Code {
     return this.node.view.label;
   }
 
+  get version(): string {
+    return this.node.network.project.app.nestServer.simulatorVersion;
+  }
+
   create(): string {
     let script: string = '';
-    script += this.label + ' = nest.Create("' + this.node.modelId + '", ' + this.node.size;
+    script += `${this.label} = nest.Create("${this.node.modelId}"`;
+    if (!this.node.spatial.hasPositions() || this.node.spatial.isRandom()) {
+      script += `, ${this.node.size}`;
+    }
     script += this.nodeParams();
+    if (!this.version.startsWith('2.') && this.node.spatial.hasPositions()) {
+      script += this.nodeSpatial();
+    }
     script += ')';
     return script + '\n';
   }
@@ -27,22 +37,28 @@ export class NodeCode extends Code {
   getActivity(): string {
     const model: string = this.node.model ? this.node.model.existing : this.node.modelId;
     let script: string = '{';
-    if (this.node.network.project.app.nestServer.simulatorVersion.startsWith('2.')) {
-      script += this._(2) + '"events": nest.GetStatus(' + this.label + ', "events"),';        // NEST 2
+    // Make it backward compatible with older NEST Server.
+    if (this.version.startsWith('2.')) {
+      script += this._(2) + `"events": nest.GetStatus(${this.label}, "events")[0],`;        // NEST 2
+      if (model === 'spike_detector') {
+        script += this._(2) + `"nodeIds": nest.GetStatus(nest.GetConnections(None, ${this.label}),  "source"),`;
+      } else {
+        script += this._(2) + `"nodeIds": nest.GetStatus(nest.GetConnections(${this.label}), "target")`;
+      }
     } else {
-      script += this._(2) + '"events": ' + this.label + '.get("events"),';                    // NEST 3
-    }
-    if (model === 'spike_detector') {
-      script += this._(2) + '"nodeIds": nest.GetStatus(nest.GetConnections(None, ' + this.label + '),  "source"),';
-    } else {
-      script += this._(2) + '"nodeIds": nest.GetStatus(nest.GetConnections(' + this.label + '), "target")';
+      script += this._(2) + `"events": ${this.label}.get("events"),`;                    // NEST 3
+      if (model === 'spike_detector') {
+        script += this._(2) + `"nodeIds": list(nest.GetConnections(None, ${this.label}).sources()),`;
+      } else {
+        script += this._(2) + `"nodeIds": list(nest.GetConnections(${this.label}).targets())`;
+      }
     }
     script += this._() + '}';
     return script;
   }
 
   isRandom(value: any): boolean {
-    return value.constructor === Object && value.hasOwnProperty('parametertype');
+    return value.constructor === Object && value.hasOwnProperty('parameterType');
   }
 
   XOR(a: boolean, b: boolean): boolean {
@@ -54,31 +70,36 @@ export class NodeCode extends Code {
     if (this.node.params === undefined || this.node.params.length === 0) return script;
     const paramsList: string[] = [];
     this.node.params
-      .filter(param => param.visible)
-      .map(param => {
-        paramsList.push(this._() + '"' + param.id + '": ' + this.format(param.value));
-          // } else if (this.isRandom(param)) {
-          //   if (param.parametertype == 'constant') {
-          //     paramsList.push(this._() + '"' + param.id + '": ' + this.format(param.specs.value));
-          //   } else {
-          //     if (param.specs === undefined) return
-          //     if (Object.entries(param.specs).length === 0) return
-          //     const values = Object.keys(specs)
-          //       .filter(spec => !this.XOR(params[param].parametertype == 'uniform', ['min', 'max'].includes(spec)))
-          //       .map(spec => this.format(specs[spec]))
-          //     let random: string = 'nest.random.' + params[param].parametertype + '(' + values.join(', ') + ')';
-          //     paramsList.push(this._() + '"' + param + '": ' + random)
-          //   }
-        // } else {
-        // }
-      })
-      if (this.node.model.existing === 'multimeter') {
-        paramsList.push(this._() + '"record_from": [' + this.node.recordFrom.map(record => '"' + record + '"').join(',') + ']');
-      }
+      .filter((param: Parameter) => param.visible)
+      .forEach((param: Parameter) => paramsList.push(
+        this._() + `"${param.id}": ${this.format(param.value)}`
+      ))
+    if (this.node.model.existing === 'multimeter') {
+      const recordFrom: string[] = this.node.recordFrom.map(record => '"' + record + '"');
+      paramsList.push(this._() + `"record_from": [${recordFrom.join(',')}]`);
+    }
     if (paramsList.length > 0) {
       script += ', params={';
       script += paramsList.join(',')
       script += this.end() + '}';
+    }
+    return script;
+  }
+
+  nodeSpatial(): string {
+    let script: string = '';
+    script += ', positions=';
+    const positions = this.node.spatial.toJSON();
+    if (this.node.spatial.positions.constructor.name === 'FreePositions') {
+      if (false && positions.pos.length > 0) {
+        script += `nest.spatial.free([${positions.pos.map(p => {
+          return "[" + p[0].toFixed(2) + "," + p[1].toFixed(2) + "]"
+        }).join(",")}])`;
+      } else {
+        script += `nest.spatial.free(nest.random.uniform(-0.5, 0.5), num_dimensions=2)`
+      }
+    } else {
+      script += `nest.spatial.grid(${JSON.stringify(positions.shape)})`;
     }
     return script;
   }

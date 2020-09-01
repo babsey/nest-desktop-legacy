@@ -49,8 +49,8 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
   update(): void {
     this._times = Object.create(null);
     this.activity.nodeIds.forEach(id => this._times[id] = [])
-    this.activity.recorder.events.senders.forEach((sender, idx) => {
-      this._times[sender].push(this.activity.recorder.events.times[idx]);
+    this.activity.events.senders.forEach((sender, idx) => {
+      this._times[sender].push(this.activity.events.times[idx]);
     });
     this._stats = this.activity.nodeIds.map(id => {
       const isi: number[] = this.isi(this._times[id]);

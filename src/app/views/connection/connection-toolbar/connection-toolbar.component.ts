@@ -3,8 +3,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 
 import { Connection } from '../../../components/connection/connection';
 
-import { AppService } from '../../../services/app/app.service';
-
 
 @Component({
   selector: 'app-connection-toolbar',
@@ -17,19 +15,10 @@ export class ConnectionToolbarComponent implements OnInit {
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
 
-  constructor(
-    private _appService: AppService,
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
-  }
-
-  onMouseOver(event: MouseEvent): void {
-    this._appService.rightClick = true;
-  }
-
-  onMouseOut(event: MouseEvent): void {
-    this._appService.rightClick = false;
   }
 
   onContextMenu(event: MouseEvent): void {

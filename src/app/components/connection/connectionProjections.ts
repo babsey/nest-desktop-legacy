@@ -1,12 +1,16 @@
-import { Config } from '../config'
+import { Config } from '../config';
 import { Connection } from './connection';
 
 
-export class ConnectionProjections {
-  config: Config;
+enum ConnectionType {
+  divergent,
+  convergent,
+}
+
+export class ConnectionProjections extends Config {
   connection: Connection;
 
-  connectionType: string;
+  connectionType: ConnectionType;
   numberOfConnections: number;
   kernel: any;
   weights: any;
@@ -16,7 +20,7 @@ export class ConnectionProjections {
   allowOversizedMask: boolean;
 
   constructor(connection: Connection, projections: any = {}) {
-    this.config = new Config(this.constructor.name);
+    super('ConnectionProjections');
     this.connection = connection;
 
     this.connectionType = projections.connectionType || 'convergent';
@@ -33,17 +37,17 @@ export class ConnectionProjections {
     this.weights = 1;
       this.delays = 1;
       this.kernel = 1;
-      this.connectionType = 'convergent';
+      this.connectionType = ConnectionType.convergent;
       this.numberOfConnections = 1;
   }
 
-  serialize(to: string) {
+  toJSON(target: string = 'db') {
     const projections: any = {
       kernel: this.kernel,
       weights: this.weights,
       delays: this.delays,
     };
-    if (to === 'stimulator') {
+    if (target === 'simulator') {
       projections['number_of_connections'] = this.numberOfConnections;
       projections['connection_type'] = this.connectionType;
       projections['allow_autapses'] = this.allowAutapses;

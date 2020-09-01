@@ -4,8 +4,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 
 import { Connection } from '../../../components/connection/connection';
 
-import { AppService } from '../../../services/app/app.service';
-
 import { ModelConfigDialogComponent } from '../../model/model-config-dialog/model-config-dialog.component';
 
 
@@ -25,7 +23,6 @@ export class ConnectionParamComponent implements OnInit {
   contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
-    private _appService: AppService,
     private _dialog: MatDialog,
   ) { }
 
@@ -45,7 +42,7 @@ export class ConnectionParamComponent implements OnInit {
   }
 
   setRandom(): void {
-    this.value = { parametertype: 'constant', specs: { value: this.value } };
+    this.value = { parameterType: 'constant', specs: { value: this.value } };
   }
 
   isNumber(): boolean {
@@ -58,14 +55,6 @@ export class ConnectionParamComponent implements OnInit {
 
   onValueChange(value: any): void {
     this.valueChange.emit(value)
-  }
-
-  onMouseOver(event: MouseEvent): void {
-    this._appService.rightClick = true;
-  }
-
-  onMouseOut(event: MouseEvent): void {
-    this._appService.rightClick = false;
   }
 
   onContextMenu(event: MouseEvent): void {

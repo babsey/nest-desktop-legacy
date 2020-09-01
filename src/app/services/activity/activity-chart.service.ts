@@ -8,7 +8,6 @@ import * as PlotlyJS from 'plotly.js-cartesian-dist';
   providedIn: 'root'
 })
 export class ActivityChartService {
-  private _config: any = {};
   public binsize: any = 10.;
   public barmode: string = 'overlay';
   public barnorm: string = '';
@@ -35,10 +34,6 @@ export class ActivityChartService {
   };
 
   constructor() {
-    let configJSON = localStorage.getItem('network-config');
-    if (configJSON) {
-      this._config = JSON.parse(configJSON);
-    }
     this.panelInit()
   }
 
@@ -75,16 +70,16 @@ export class ActivityChartService {
     })
 
     this.panelSelected.map((p, i) => {
-      if (p == 'input') {
+      if (p === 'input') {
         this.panel[p].size = [1, 1, 1, 1][numPanels - 1];
       }
-      if (p == 'analog') {
+      if (p === 'analog') {
         this.panel[p].size = [1, 1, 2, 2][numPanels - 1];
       }
-      if (p == 'spike') {
+      if (p === 'spike') {
         this.panel[p].size = [1, 4, 2, 2][numPanels - 1];
       }
-      if (p == 'histogram') {
+      if (p === 'histogram') {
         this.panel[p].size = [1, 1, 1, 1][numPanels - 1];
       }
     })

@@ -34,7 +34,7 @@ export class ScatterAnimation {
     this._geometry = new THREE.SphereGeometry(0.002);
     this._grid = new THREE.GridHelper(1, 10);
     this.id = id;
-    
+
     this._scene = new THREE.Scene();
     this._stats = new STATS();
 

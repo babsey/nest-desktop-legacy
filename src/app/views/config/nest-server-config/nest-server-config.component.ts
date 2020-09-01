@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NESTServer } from '../../../components/nestServer';
+import { NESTServer } from '../../../components/server/nestServer';
 
 
 @Component({
@@ -19,18 +19,22 @@ export class NestServerConfigComponent implements OnInit {
   }
 
   get config(): any {
-    return this.nestServer.config.data;
+    return this.nestServer.config;
+  }
+
+  set config(value: any) {
+    this.nestServer.config = value;
   }
 
   onSelectionChange(event: any): void {
     let config = this.config;
     config[event.option.value] = event.option.selected;
-    this.nestServer.config.data = config;
+    this.config = config;
   }
 
   onChange(event: any): void {
     let config = this.config;
     config[event.target.name] = event.target.value;
-    this.nestServer.config.data = config;
+    this.config = config;
   }
 }

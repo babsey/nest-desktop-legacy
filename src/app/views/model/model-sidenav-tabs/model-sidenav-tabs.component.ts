@@ -37,7 +37,7 @@ export class ModelSidenavTabsComponent implements OnInit {
   }
 
   devMode(): boolean {
-    return this._appService.data.config.data.devMode === true;
+    return this._appService.app.config.devMode === true;
   }
 
 }

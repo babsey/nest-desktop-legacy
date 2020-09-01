@@ -19,10 +19,11 @@ export class ProjectNavigationComponent implements OnInit {
   @ViewChild('file', { static: false }) file;
   public selectionList: boolean = false;
   public fileReader = new FileReader();
+  private _projectName: string = '';
 
   constructor(
-    private _router: Router,
     private _appService: AppService,
+    private _router: Router,
   ) {
     this.initFileReader()
   }
@@ -31,16 +32,32 @@ export class ProjectNavigationComponent implements OnInit {
   }
 
   get app(): App {
-    return this._appService.data;
+    return this._appService.app;
+  }
+
+  get project(): Project {
+    return this.app.project;
   }
 
   downloadAllProjects(): void {
     this.app.downloadProjects(this.app.projects.map(project => project.id));
   }
 
+  navigate(id: string): void {
+    let url: string = 'project/' + this.project.id;
+    this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
+  }
+
   newProject(): void {
     this.selectionList = false;
-    this._router.navigate([{ outlets: { primary: 'project/' } }]);
+    this.app.newProject();
+    this.navigate(this.app.project.id);
+  }
+
+  saveProject(): void {
+    this.project.save().then(() => {
+      this.navigate(this.project.id);
+    })
   }
 
   initFileReader(): void {

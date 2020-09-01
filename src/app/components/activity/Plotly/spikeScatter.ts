@@ -6,7 +6,7 @@ import { Panel } from './panel';
 export class SpikeScatter extends Panel {
 
   constructor(graph: ActivityChartGraph) {
-    super(graph);
+    super('SpikeScatter', graph);
     this.layout.yaxis.title = 'Neuron ID';
     this.layout.yaxis.height = 4;
     this.init();
@@ -40,8 +40,8 @@ export class SpikeScatter extends Panel {
     this.init();
     this.activities.forEach(activity => {
       const data: any = this.data.find(d => d.activityIdx === activity.idx);
-      data.x = activity.recorder.events.times;
-      data.y = activity.recorder.events.senders;
+      data.x = activity.events.times;
+      data.y = activity.events.senders;
       data.marker.color = activity.recorder.view.color;
     })
   }

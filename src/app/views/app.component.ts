@@ -18,15 +18,15 @@ export class AppComponent implements OnInit, OnDestroy {
   private _mobileQueryListener: () => void;
 
   constructor(
+    private _appService: AppService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
-    public appService: AppService,
     public router: Router,
   ) {
     this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this.appService.data = new App();
+    this._appService.app = new App();
   }
 
   ngOnInit() {
@@ -34,6 +34,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  get sidenavOpened(): boolean {
+    return this._appService.sidenavOpened;
+  }
+
+  set sidenavOpened(value: boolean) {
+    this._appService.sidenavOpened = value;
+  }
+
+  get rightClick(): boolean {
+    return this._appService.rightClick;
   }
 
   triggerResize(): void {

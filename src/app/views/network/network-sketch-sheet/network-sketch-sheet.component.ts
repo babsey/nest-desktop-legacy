@@ -24,7 +24,7 @@ export class NetworkSketchSheetComponent implements OnInit {
   }
 
   get network(): Network {
-    return this._appService.data.project.network;
+    return this._appService.app.project.network;
   }
 
 }

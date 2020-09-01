@@ -10,10 +10,8 @@
   [matMenuTriggerFor]="nodeMenu"
 ></div>
 
-<span
-  (contextmenu)="onContextMenu($event)"
-  (mouseout)="onMouseOut($event)"
-  (mouseover)="onMouseOver($event)">
+<span appContextMenuTrigger
+  (contextmenu)="onContextMenu($event)">
   <!-- [style.background-image]="node.view.backgroundImage" -->
   <mat-toolbar
     [style.background-color]="node.view.color"
@@ -31,7 +29,6 @@
     </span>
 
     <mat-select
-      (selectionChange)="node.selectModel($event)"
       [(ngModel)]="node.modelId"
       [disabled]="disabled">
       <ng-container *ngFor="let model of models">

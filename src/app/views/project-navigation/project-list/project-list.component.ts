@@ -7,44 +7,49 @@ import { listAnimation } from '../../../animations/list-animation';
 import { App } from '../../../components/app';
 import { Project } from '../../../components/project/project';
 
-import { AppService } from '../../../services/app/app.service';
 
 
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
   styleUrls: ['./project-list.component.scss'],
-  animations: [ listAnimation ],
+  animations: [listAnimation],
 })
 export class ProjectListComponent implements OnInit {
   @Input() app: App;
   public focused: Project;
+  public revisions: number[] = [];
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
-    private _appService: AppService,
     private _router: Router,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
-    console.log('Ng init project list')
+    // console.log('Ng init project list');
   }
 
-  onClick(project: Project): void {
-    const url: string = 'project/' + project.id;
+  navigate(id: string): void {
+    let url: string = 'project/' + id;
     this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
   }
 
-  onMouseOver(event: MouseEvent): void {
-    this._appService.rightClick = true;
+  reloadProject(): void {
+    this.focused.reload().then(() => {
+      this.navigate(this.focused.id);
+    });
   }
 
-  onMouseOut(event: MouseEvent): void {
-    this._appService.rightClick = false;
-    // this.selected = null;
+  duplicateProject(): void {
+    const project: Project = this.focused.duplicate();
+    this.navigate(project.id);
+  }
+
+  loadRevisions(): void {
+    this.app.updateProjectRevisions(this.focused.id);
+    this.navigate(this.focused.id);
   }
 
   onContextMenu(event: MouseEvent, project: Project): void {
@@ -54,5 +59,6 @@ export class ProjectListComponent implements OnInit {
     this.contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();
   }
+
 
 }

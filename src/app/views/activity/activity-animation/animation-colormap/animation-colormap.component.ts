@@ -24,8 +24,7 @@ export class AnimationColormapComponent implements OnInit {
 
   constructor(
     private _activityGraphService: ActivityGraphService,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
   }

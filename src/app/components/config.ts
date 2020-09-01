@@ -1,22 +1,22 @@
 import { environment } from '../../environments/environment';
 
 
-export class Config {
+export class ConfigService {
   private _name: string;
 
   constructor(name: string) {
     this._name = name;
     if (!this.isValid()) {
-      this.upgrade()
+      this.upgrade();
     }
-  }
-
-  get assetData(): any {
-    return require('../../assets/config/' + this._name + '.json');
   }
 
   get itemName(): string {
     return 'nest-desktop-' + this._name;
+  }
+
+  get assetData(): any {
+    return require(`../../assets/config/${this._name}.json`);
   }
 
   get data(): any {
@@ -34,7 +34,17 @@ export class Config {
   set data(value: any) {
     value['version'] = environment.VERSION;           // update version of config in localstorage
     const dataJSON = JSON.stringify(value);           // convert object to string
-    localStorage.setItem(this.itemName, dataJSON);    // save item in localstorage
+    localStorage.setItem(this.itemName, dataJSON);        // save item in localstorage
+  }
+
+  reset(): void {
+    localStorage.removeItem(this.itemName);
+  }
+
+  update(values: any): void {
+    const data: any = this.data;
+    Object.entries(values).forEach(value => data[value[0]] = value[1]);
+    this.data = data;
   }
 
   isReady(): boolean {
@@ -58,13 +68,29 @@ export class Config {
     this.data = storageData;
   }
 
-  update(values: any): void {
-    const data: any = this.data;
-    Object.entries(values).forEach(value => data[value[0]] = value[1])
-    this.data = data;
+}
+
+export class Config {
+  private _config: ConfigService;         // configuration for this object
+
+  constructor(name: string) {
+    this._config = new ConfigService(name);
   }
 
-  reset(): void {
-    localStorage.removeItem(this.itemName)
+  get config(): any {
+    return this._config.data;
   }
+
+  set config(data: any) {
+    this._config.update(data);
+  }
+
+  isConfigReady(): boolean {
+    return this._config.isReady();
+  }
+
+  isConfigValid(): boolean {
+    return this._config.isValid();
+  }
+
 }

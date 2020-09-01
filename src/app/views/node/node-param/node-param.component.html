@@ -25,10 +25,8 @@
   </ng-container>
 </mat-menu>
 
-<span
-  (contextmenu)="onContextMenu($event)"
-  (mouseout)="onMouseOut($event)"
-  (mouseover)="onMouseOver($event)">
+<span appContextMenuTrigger
+  (contextmenu)="onContextMenu($event)">
 
   <ng-container [ngSwitch]="param.options.input">
     <ng-container *ngSwitchCase="'valueInput'">

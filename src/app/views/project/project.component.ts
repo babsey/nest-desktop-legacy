@@ -17,6 +17,7 @@ import { AppService } from '../../services/app/app.service';
 })
 export class ProjectComponent implements OnInit, OnDestroy {
   public projectId: string = '';
+  public projectRev: string = '';
 
   constructor(
     public appService: AppService,
@@ -27,6 +28,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._route.params.subscribe(params => this.projectId = params['id']);
+    this._route.params.subscribe(params => this.projectRev = params['rev']);
   }
 
   ngOnDestroy() {

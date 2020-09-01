@@ -27,10 +27,8 @@
   </ng-container> -->
 </mat-menu>
 
-<span
+<span appContextMenuTrigger
   (contextmenu)="onContextMenu($event)"
-  (mouseout)="onMouseOut($event)"
-  (mouseover)="onMouseOver($event)"
   style="width:100%"
   >
   <ng-container [ngSwitch]="isNumber()">

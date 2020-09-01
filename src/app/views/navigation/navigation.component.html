@@ -22,7 +22,7 @@
     <div class="project-theme">
       <button mat-icon-button
         (click)="onClick($event, 'project')"
-        [disabled]="!appService.data.projectDB"
+        [disabled]="!appService.app.projectDB"
         [routerLink]="[{ outlets: { nav: ['project'] } }]"
         color="primary"
         matTooltip="Open an existing or create a new project."
@@ -35,7 +35,7 @@
     <div class="model-theme">
       <button mat-icon-button
         (click)="onClick($event, 'model')"
-        [disabled]="!appService.data.modelDB"
+        [disabled]="!appService.app.modelDB"
         [routerLink]="[{ outlets: { nav: ['model'] } }]"
         color="primary"
         matTooltip="List of models"

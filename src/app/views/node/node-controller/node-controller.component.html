@@ -7,7 +7,7 @@
     [disabled]="false"
   ></app-node-toolbar>
 
-  <ng-container *ngIf="!node.view.isRecorder()">
+  <ng-container *ngIf="!node.model.isRecorder()">
     <ng-container [ngSwitch]="node.spatial.hasPositions()">
 
       <ng-container *ngSwitchCase="true">
@@ -25,7 +25,7 @@
           <mat-list-item>
             <app-value-slider-inline
               [(value)]="node.size"
-              [options]="node.config.data.size"
+              [options]="node.config.size"
             ></app-value-slider-inline>
           </mat-list-item>
         </mat-list>

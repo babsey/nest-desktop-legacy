@@ -1,14 +1,13 @@
 import { Config } from '../config';
 
-export class ColorSchemes {
-  config: Config;
+export class ColorSchemes extends Config {
 
   constructor( ) {
-    this.config = new Config(this.constructor.name);
+    super('ColorSchemes');
   }
 
   list(): string[] {
-    return Object.keys(this.config.data);
+    return Object.keys(this.config);
   }
 
 }

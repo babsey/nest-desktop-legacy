@@ -21,19 +21,16 @@ import { ActivityGraphService } from '../../../../services/activity/activity-gra
 export class ThreeScatterComponent implements OnInit, OnDestroy {
   @Input() graph: ActivityAnimationGraph;
   // @Input() config: any = {};
-  private _data: any[] = [];
+  private _scene: ScatterAnimation;
   private _subscriptionInit: any;
   private _subscriptionUpdate: any;
-  public scene: ScatterAnimation;
 
   constructor(
     private _activityGraphService: ActivityGraphService,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
     console.log('Ng init Three scatter')
-    this._subscriptionInit = this._activityGraphService.init.subscribe(() => this.init());
     this._subscriptionUpdate = this._activityGraphService.update.subscribe(() => this.update());
     this.init();
   }
@@ -41,7 +38,6 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     console.log('Ng destroy Three scatter');
     this.clear();
-    this._subscriptionInit.unsubscribe();
     this._subscriptionUpdate.unsubscribe();
   }
 
@@ -49,26 +45,28 @@ export class ThreeScatterComponent implements OnInit, OnDestroy {
     console.log('Init Three scatter');
     this.clear();
     setTimeout(() => {
-      this.scene = new ScatterAnimation(this.graph, 'activityAnimationContainer');
-    }, 100)
+      this._scene = new ScatterAnimation(this.graph, 'activityAnimationContainer');
+    }, 100);
   }
 
   clear() {
     console.log('Clear Three scatter');
-    if (this.scene) {
-      this.scene.stop();
-      this.scene.clear();
+    if (this._scene) {
+      this._scene.stop();
+      this._scene.clear();
     }
   }
 
   update() {
     console.log('Update Three scatter');
-    this.scene.frameUpdate()
+    this._scene.frameUpdate();
   }
 
   @HostListener('window:resize', [])
   resize(): void {
-    this.scene.resize();
+    if (this._scene) {
+      this._scene.resize();
+    }
   }
 
 }

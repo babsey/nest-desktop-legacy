@@ -1,8 +1,10 @@
 import * as objectHash from 'object-hash';
 import { environment } from '../../../environments/environment';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Activity } from '../activity/activity';
 import { App } from '../app';
+import { Config } from '../config';
 import { Model } from '../model/model';
 import { Network } from '../network/network';
 import { Node } from '../node/node';
@@ -10,18 +12,20 @@ import { ProjectCode } from './projectCode';
 import { Simulation } from '../simulation/simulation';
 
 
-export class Project {
+export class Project extends Config {
   app: App;                             // parent
 
   // Database instances
-  private _id: string;                          // id of the database
-  createdAt: string;                    // when it is created in database
-  updatedAt: string;                    // when it is updated in database
+  private _id: string;                  // id of the project
+  private _rev: string;                 // rev of the project
+  createdAt: string;                    // when is it created in database
+  updatedAt: string;                    // when is it updated in database
 
   // Project instance variables
   name: string;                         // project name
   description: string;                  // description about the project
   hash: string;                         // obsolete: hash of serialized network
+
   // user: string;                      // obsolete?
   // group: string;                     // obsolete?
 
@@ -30,15 +34,19 @@ export class Project {
   simulation: Simulation;               // settings for the simulation
   code: ProjectCode;                    // code script for NEST Server
 
+  private _networkRevisions: any[] = [];         // network history
+  private _networkRevisionIdx: number = -1;      // Index of the network history;
+
   constructor(
     app: App,
     project: any = {},
   ) {
-    // console.log(project)
+    super('Project');
     this.app = app;
 
-    this._id = project._id;
-    this.createdAt = project.createdAt;
+    this._id = project._id || uuidv4();
+    this._rev = project._rev || '';
+    this.createdAt = project.createdAt || new Date();
     this.updatedAt = project.updatedAt;
 
     this.name = project.name || '';
@@ -59,33 +67,11 @@ export class Project {
     return this._id;
   }
 
-  get activities(): Activity[] {
-    const recorders: Node[] = this.network.nodes.filter(node => (node.model.elementType === 'recorder' && node.activity !== undefined));
-    return recorders.map(recorder => recorder.activity);
+  get rev(): string {
+    return this._rev;
   }
 
-  initNetwork(network: any = {}): void {
-    this.network = new Network(this, network);
-  }
-
-  initSimulation(simulation: any = {}): void {
-    this.simulation = new Simulation(this, simulation);
-  }
-
-  updateActivities(data: any): void {
-    // console.log('Update activities')
-    this.simulation.kernel['time'] = data.kernel['time'];
-    // Update recorded activity
-    data['activities'].forEach((activity, idx) => {
-      const recNode: Node = this.network.recorders[idx];
-      recNode.updateActivity(activity);
-    })
-  }
-
-  hasActivities(): boolean {
-    return this.activities.length > 0;
-  }
-
+  // Make the old projects compatible.
   backwardCompatible(project: any): any {
     if (Object.keys(project).length === 0) {
       return {};
@@ -104,31 +90,87 @@ export class Project {
     return projectUpgraded;
   }
 
-  upgradeSimulation(project: any): any {
-    const simulation: any = {
-      time: project.simulation.time,
-      randomSeed: project.simulation.random_seed,
-      kernel: project.simulation.kernel,
-    };
-    return simulation;
+  // Is the current project selected?
+  isSelected(): boolean {
+    return this.id === this.app.project.id;
   }
 
+  // Save the current project.
+  save(): Promise<any> {
+    return this.app.saveProject(this);
+  }
+
+  // Clone a new project of this current project.
+  clone(): Project {
+    const newProject = new Project(this.app, this.toJSON());
+    newProject._id = uuidv4();
+    newProject.updatedAt = '';
+    return newProject;
+  }
+
+  // Clone this current project and add it to the list.
+  duplicate(): Project {
+    const newProject: Project = this.clone();
+    this.app.projects.unshift(newProject);
+    return newProject;
+  }
+
+  // Delete this current project from the list and database.
+  delete(): void {
+    this.app.deleteProject(this.id);
+  }
+
+  // Download this current project.
+  download(): void {
+    this.app.downloadProject(this.toJSON('file'));
+  }
+
+  // Reload this current project.
+  reload(): Promise<any> {
+    return this.app.reloadProject(this);
+  }
+
+  /*
+  Project revisions
+  */
+
+  // Load revisions of the current project from the database.
+  revisions(): Promise<any> {
+    return this.app.projectDB.revisions(this.id);
+  }
+
+  // Is the current revised project selected?
+  isRevisionSelected(): boolean {
+    return this.rev === this.app.project.rev;
+  }
+
+  /*
+  Networks
+  */
+
+  // Create a new network.
+  initNetwork(network: any = {}): void {
+    this.network = new Network(this, network);
+    this.initNetworkHistory();
+  }
+
+  // Make network compatible
   upgradeNetwork(project: any): any {
     const network: any = {
       nodes: [],
       connections: [],
     }
-    if (Object.keys(project).length == 0) return network
+    if (Object.keys(project).length === 0) return network
 
     project.app.nodes.forEach(appNode => {
       const simNode: any = project.simulation.collections[appNode.idx];
       const simModel: any = project.simulation.models[simNode.model];
       const appModel: any = project.app.models[simNode.model];
-      const params: any[] = Object.entries(simModel.params).map(p => {
+      const params: any[] = Object.entries(simModel.params).map((param: any[]) => {
         return {
-          id: p[0],
-          value: p[1],
-          visible: appModel ? appModel.display.includes(p[0]) : false,
+          id: param[0],
+          value: param[1],
+          visible: appModel ? appModel.display.includes(param[0]) : false,
         }
       });
       const view: any = {
@@ -175,15 +217,15 @@ export class Project {
       if (simLink.hasOwnProperty('conn_spec')) {
         connection['rule'] = simLink.conn_spec.rule || 'all_to_all';
         connection['params'] = Object.entries(simLink.conn_spec)
-          .filter(spec => spec[0] != 'rule')
-          .map(param => { return { id: param[0], value: param[1] } })
+          .filter((spec: any[]) => spec[0] != 'rule')
+          .map((param: any[]) => { return { id: param[0], value: param[1] } })
       }
       const synapse: any = {
         params: [],
       };
       const synModel: Model = this.app.getModel(synapse.model || 'static_synapse');
       if (simLink.hasOwnProperty('syn_spec')) {
-        synModel.params.forEach(modelParam => {
+        synModel.params.forEach((modelParam: any) => {
           const simParam: any = simLink.syn_spec[modelParam.id];
           const param: any = {
             id: modelParam.id,
@@ -200,58 +242,150 @@ export class Project {
     return network
   }
 
-  isSelected(): boolean {
-    return this._id === this.app.project._id;
+  // Get revision index of the network history.
+  get networkRevisionIdx(): number {
+    return this._networkRevisionIdx;
   }
 
-  save(): Promise<any> {
-    return this.app.saveProject(this);
+  // Get list of network history.
+  get networkRevisions(): any[] {
+    return this._networkRevisions;
   }
 
-  clone(): Project {
-    return new Project(this.app, this.serialize('db'));
+  // Clear network history and commit the current network.
+  initNetworkHistory(): void {
+    this.clearNetworkHistory();
+    this.commitNetwork(this.network);
   }
 
-  duplicate(): void {
-    const newProject: Project = this.clone();
-    newProject._id = '';
-    this.app.saveProject(newProject).then(doc => {
-      newProject._id = doc.id;
-      newProject.updatedAt = JSON.stringify(new Date());
-      this.app.projects.unshift(newProject);
-    });
+  // Clear network history list.
+  clearNetworkHistory(): void {
+    this._networkRevisions = [];
+    this._networkRevisionIdx = -1;
   }
 
-  clean(): void {
-    this.hash = objectHash(this.serialize('simulator'));
+  // Add network to the history list.
+  commitNetwork(network: Network): void {
+    this._networkRevisions = this._networkRevisions.slice(0, this._networkRevisionIdx + 1);
+    this._networkRevisions.push(network.toJSON());
+    this._networkRevisionIdx = this._networkRevisions.length - 1;
   }
 
-  delete(): void {
-    this.app.deleteProject(this.id);
+  // Load network from the history list.
+  checkoutNetwork(): void {
+    if (this._networkRevisionIdx >= this._networkRevisions.length) {
+      this._networkRevisionIdx = this._networkRevisions.length - 1;
+    }
+    const network: any = this._networkRevisions[this._networkRevisionIdx];
+    this.network = new Network(this, network);
   }
 
-  download(): void {
-    this.app.downloadProject(this.serialize('file'));
+  // Go to the older network.
+  networkOlder(): void {
+    if (this._networkRevisionIdx > 0) {
+      this._networkRevisionIdx--;
+    }
+    this.checkoutNetwork();
   }
 
-  serialize(to: string): any {
-    const project: any = {
-      network: this.network.serialize(to),
-      simulation: this.simulation.serialize(to),
+  // Go to the oldest network.
+  networkOldest(): void {
+    this._networkRevisionIdx = 0;
+    this.checkoutNetwork();
+  }
+
+  // Go to the newer network.
+  networkNewer(): void {
+    if (this._networkRevisionIdx < this._networkRevisions.length) {
+      this._networkRevisionIdx++;
+    }
+    this.checkoutNetwork();
+  }
+
+  // Go to the newest network.
+  networkNewest(): void {
+    this._networkRevisionIdx = this._networkRevisions.length - 1;
+    this.checkoutNetwork();
+  }
+
+  /*
+  Simulation
+  */
+
+  // Create a new simulation.
+  initSimulation(simulation: any = {}): void {
+    this.simulation = new Simulation(this, simulation);
+  }
+
+  // Make simulation compatible.
+  upgradeSimulation(project: any): any {
+    const simulation: any = {
+      time: project.simulation.time,
+      randomSeed: project.simulation.random_seed,
+      kernel: project.simulation.kernel,
     };
-    if (to === 'db' || to === 'file') {
-      project['createdAt'] = this.createdAt;
-      project['updatedAt'] = this.updatedAt;
+    return simulation;
+  }
 
-      project['name'] = this.name;
-      project['description'] = this.description;
-      project['hash'] = this.hash;
-      project['version'] = this.app.version;
+  /*
+  Activities
+  */
+
+  // Get a list of activities.
+  get activities(): Activity[] {
+    return this.network ? this.network.recorders.map((recorder: Node) => recorder.activity) : [];
+  }
+
+  // Update activities in recorder nodes after simulation.
+  updateActivities(data: any): void {
+    console.log('Update activities')
+    this.simulation.kernel['time'] = data.kernel['time'];
+    // Update recorded activity
+    data['activities'].forEach((activity: any, idx: number) => {
+      this.activities[idx].update(activity);
+    })
+  }
+
+  // Check if the project has activities.
+  hasActivities(): boolean {
+    return this.activities.length > 0 ? this.activities.some((activity: Activity) => activity.hasEvents()) : false;
+  }
+
+  /*
+  Serialization
+  */
+
+  // Update hash of this project.
+  clean(): void {
+    this.hash = objectHash(this.toJSON('simulator'));
+  }
+
+  // Is the hash equal to caluclated hash.
+  isHashEqual(): boolean {
+    return this.hash === objectHash(this.toJSON('simulator'));
+  }
+
+  // Serialize this project for database or simulator.
+  toJSON(target: string = 'db'): any {
+    // this.hash = objectHash(this.network.toJSON('simulator'));
+    const project: any = {
+      name: this.name,
+      network: this.network.toJSON(target),
+      simulation: this.simulation.toJSON(target),
+    };
+    if (target === 'db') {
+      const meta: any = {
+        _id: this.id,
+        createdAt: this.createdAt,
+        description: this.description,
+        hash: this.hash,
+        updatedAt: this.updatedAt,
+        version: this.app.version,
+      };
+      return { ...project, ...meta };
+    } else {
+      return project;
     }
-    if (to === 'db') {
-      project['_id'] = this.id;                 // Question: When you give your project to someone, is it necessary, that ids of the same project are identical.
-    }
-    return project;
   }
 
 }

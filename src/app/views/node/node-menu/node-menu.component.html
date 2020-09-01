@@ -26,7 +26,7 @@
     Colorize node
   </button>
 
-  <ng-container *ngIf="!node.view.isRecorder()">
+  <ng-container *ngIf="!node.model.isRecorder()">
   <button mat-menu-item class="menu-item" [matMenuTriggerFor]="synWeightMenu">
     <fa-icon class="menu-icon" icon="dumbbell"></fa-icon> Set synapse weight
   </button>
@@ -57,11 +57,11 @@
     <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete node
   </button>
 
-  <ng-container *ngIf="node.model.elementType === 'recorder'">
+  <ng-container *ngIf="node.model.isRecorder()">
     <button mat-menu-item
       class="menu-item"
-      (click)="node.downloadEvents()"
-      [disabled]="!node.view.hasEvents()">
+      (click)="node.activity.downloadEvents()"
+      [disabled]="!node.activity.hasEvents()">
       <fa-icon class="menu-icon" icon="download"></fa-icon> Download events
     </button>
   </ng-container>

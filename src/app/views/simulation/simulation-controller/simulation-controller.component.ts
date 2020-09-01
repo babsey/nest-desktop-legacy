@@ -16,11 +16,10 @@ export class SimulationControllerComponent implements OnInit {
 
   constructor(
     public simulationRunService: SimulationRunService,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
-    this.params = this.simulation.config.data.params || [];
+    this.params = this.simulation.config.params || [];
   }
 
   onChange(value: any, id: string): void {

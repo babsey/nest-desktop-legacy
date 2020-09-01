@@ -24,9 +24,9 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('Ng Init activity chart view')
-    this._subscriptionInit = this.activityGraphService.init.subscribe(() => this.init());
+    this._subscriptionInit = this.activityGraphService.init.subscribe((project: Project) => this.init(project));
     this._subscriptionUpdate = this.activityGraphService.update.subscribe(() => this.update());
-    this.init();
+    this.init(this.project);
   }
 
   ngOnDestroy() {
@@ -39,16 +39,16 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
     return this.plotRef['plotEl'].nativeElement;
   }
 
-  init(): void {
-    console.log('Init activity chart view');
-    this.activityGraphService.graph = new ActivityChartGraph(this.project);
+  init(project: Project): void {
+    console.log('Init activity chart view for ' + project.name);
+    this.activityGraphService.graph = new ActivityChartGraph(project);
   }
 
   update(): void {
-    console.log('Update activity chart view');
+    console.log('Update activity chart view for ' + this.project.name);
     this.activityGraphService.graph.update();
     // this.activities.map(activity => {
-    //   var recordables = Object.keys(activity.recorder.events).filter(d => !['times', 'senders'].includes(d));
+    //   var recordables = Object.keys(activity.events).filter(d => !['times', 'senders'].includes(d));
     //   if (activity.hasSpikeData() && recordables.length === 0) {
     //     this.plotSpikeData(activity)
     //   } else {
@@ -57,7 +57,7 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
     // })
 
     // var panel = this._activityChartService.panel['spike'];
-    // var yaxis = 'yaxis' + (panel.yaxis == 1 ? '' : panel.yaxis);
+    // var yaxis = 'yaxis' + (panel.yaxis === 1 ? '' : panel.yaxis);
     // if (this.graph.layout.hasOwnProperty(yaxis)) {
     //   if (this.graph.layout[yaxis].hasOwnProperty('range')) {
     //     this.graph.layout[yaxis].range[0] -= 1;
@@ -79,10 +79,10 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
   }
 
   onSelect(event: any): void {
-    // var histograms = this.graph.data.filter(d => d.type == 'histogram' && d.source == 'x');
+    // var histograms = this.graph.data.filter(d => d.type === 'histogram' && d.source === 'x');
     // histograms.forEach(h => {
-    //   var x = this.activities[h.idx].recorder.events.times;
-    //   var points = event.points.filter(p => p.data.idx == h.idx);
+    //   var x = this.activities[h.idx].events.times;
+    //   var points = event.points.filter(p => p.data.idx === h.idx);
     //   h.x = points.map(p => x[p.pointIndex]);
     // })
   }

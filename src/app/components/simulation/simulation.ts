@@ -4,9 +4,8 @@ import { SimulationKernel } from './simulationKernel';
 import { SimulationCode } from './simulationCode';
 
 
-export class Simulation {
+export class Simulation extends Config {
   project: Project;                     // parent
-  config: Config;
   code: SimulationCode;
 
   time: number;                         // simulation time
@@ -17,8 +16,8 @@ export class Simulation {
     project: Project,
     simulation: any = {},
   ) {
-    this.project = project,
-    this.config = new Config(this.constructor.name);
+    super('Simulation');
+    this.project = project;
     this.kernel = new SimulationKernel(this, simulation.kernel);
     this.code = new SimulationCode(this);
 
@@ -26,19 +25,17 @@ export class Simulation {
     this.randomSeed = parseInt(simulation.randomSeed) || 0;
   }
 
-  serialize(to: string): any {
+  toJSON(target: string = 'db'): any {
     const simulation: any = {
-      kernel: this.kernel.serialize(to),
+      kernel: this.kernel.toJSON(target),
       time: this.time,
     }
-    if (to === 'simulator') {
+    if (target === 'simulator') {
       simulation['random_seed'] = this.randomSeed;
     } else {
       simulation['randomSeed'] = this.randomSeed;
     }
     return simulation;
   }
-
-
 
 }

@@ -3,6 +3,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Network } from '../../../components/network/network';
 import { Project } from '../../../components/project/project';
 
+import { ProjectService } from '../../../services/project/project.service';
+
 
 @Component({
   selector: 'app-project-sidenav',
@@ -11,11 +13,16 @@ import { Project } from '../../../components/project/project';
 })
 export class ProjectSidenavComponent implements OnInit {
   @Input() project: Project;
-  @Input() mode: string;
 
-  constructor() { }
+  constructor(
+    private _projectService: ProjectService,
+  ) { }
 
   ngOnInit() {
+  }
+
+  get mode(): string {
+    return this._projectService.sidenavMode;
   }
 
 }

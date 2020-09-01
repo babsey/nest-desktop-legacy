@@ -50,7 +50,7 @@ export class NetworkView {
   set selectedElementType(elementType: string | null ) {
     this.resetSelection();
     this._selectedElementType = elementType;
-    // this._selectedElementType = this._selectedElementType == elementType ? null : elementType;
+    // this._selectedElementType = this._selectedElementType === elementType ? null : elementType;
   }
 
   get selectedNode(): Node | null {
@@ -60,15 +60,15 @@ export class NetworkView {
   set selectedNode(node: Node | null ) {
     this._selectedElementType = null;
     this._selectedConnection = null;
-    this._selectedNode = this._selectedNode === node ? null : node;
+    this._selectedNode = (this._selectedNode === node) ? null : node;
   }
 
   get colors(): string[] {
-    return this.network.config.data.color.cycle;
+    return this.network.config.color.cycle;
   }
 
   set colors(value: string[]) {
-    const color: any = this.network.config.data.color;
+    const color: any = this.network.config.color;
     color.cycle = value;
     this.network.config.update({ color: color });
   }
@@ -89,7 +89,7 @@ export class NetworkView {
   }
 
   hasPositions(): boolean {
-    return this.network.nodes.some(node => node.spatial.hasPositions());
+    return this.network.nodes.some((node: Node) => node.spatial.hasPositions());
   }
 
   //
@@ -106,8 +106,8 @@ export class NetworkView {
     } else if (this.selectedConnection) {
       if (!withConnection) return false;
       const connections: Connection[] = node.network.connections
-        .filter(connection => connection.source.idx === node.idx || connection.target.idx === node.idx);
-      return connections.some(connection => connection === this.selectedConnection);
+        .filter((connection: Connection) => connection.source.idx === node.idx || connection.target.idx === node.idx);
+      return connections.some((connection: Connection) => connection === this.selectedConnection);
     }
     return unselected;
   }

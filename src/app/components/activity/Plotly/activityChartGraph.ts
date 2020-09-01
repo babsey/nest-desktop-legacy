@@ -117,13 +117,13 @@ export class ActivityChartGraph extends ActivityGraph {
   //     if (panel.constructor.name === 'AnalogLines' && panel.elementType === 'stimulator') {
   //       panel.size = [1, 1, 1, 1][numPanels - 1];
   //     }
-  //     if (p == 'analog') {
+  //     if (p === 'analog') {
   //       this.panel[p].size = [1, 1, 2, 2][numPanels - 1];
   //     }
-  //     if (p == 'spike') {
+  //     if (p === 'spike') {
   //       this.panel[p].size = [1, 4, 2, 2][numPanels - 1];
   //     }
-  //     if (p == 'histogram') {
+  //     if (p === 'histogram') {
   //       this.panel[p].size = [1, 1, 1, 1][numPanels - 1];
   //     }
   //   })

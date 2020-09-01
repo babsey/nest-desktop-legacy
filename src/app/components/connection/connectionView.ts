@@ -22,7 +22,7 @@ export class ConnectionView {
   colorWeight(): string {
     const value: number = this.connection.synapse.weight;
     if (value === 0) return 'black';
-    return value > 0 ? this.colorExcitation : this.colorInhibition;
+    return (value > 0) ? this.colorExcitation : this.colorInhibition;
   }
 
   isSelected(): boolean {
@@ -80,15 +80,15 @@ export class ConnectionView {
     const source: any = this.connection.source.view.position,
       target: any = this.connection.target.view.position,
       config: any = {
-        radius: this.connection.source.config.data.graph.radius.value,
-        ellipticalArc: this.connection.config.data.graph.ellipticalArc.value,
-        xAxisRotation: this.connection.config.data.graph.xAxisRotation.value,
+        radius: this.connection.source.config.graph.radius.value,
+        ellipticalArc: this.connection.config.graph.ellipticalArc.value,
+        xAxisRotation: this.connection.config.graph.xAxisRotation.value,
       };
     return drawPath(source, target, config);
   };
 
   getRuleParams(): any[] {
-    const rule: any = this.connection.config.data.rules.find(rule => rule.value === this.connection.rule);
+    const rule: any = this.connection.config.rules.find((rule: any) => rule.value === this.connection.rule);
     return this.copy(rule.params) || [];
   }
 
@@ -98,7 +98,7 @@ export class ConnectionView {
 
   getRuleParamConfig(id: string): any {
     const params: any[] = this.getRuleParams();
-    return params.find(param => param.id === id) || {};
+    return params.find((param: any) => param.id === id) || {};
   }
 
 }

@@ -13,7 +13,6 @@ import { MaterialModule } from '../material.module';
 import { AppFormsModule } from '../forms/forms.module';
 
 import { SimulationCodeEditorComponent } from './simulation-code-editor/simulation-code-editor.component';
-import { SimulationConfigComponent } from './simulation-config/simulation-config.component';
 
 import { KernelControllerComponent } from './kernel-controller/kernel-controller.component';
 import { SimulationControllerComponent } from './simulation-controller/simulation-controller.component';
@@ -23,13 +22,11 @@ import { SimulationControllerComponent } from './simulation-controller/simulatio
   declarations: [
     KernelControllerComponent,
     SimulationCodeEditorComponent,
-    SimulationConfigComponent,
     SimulationControllerComponent,
   ],
   exports: [
     KernelControllerComponent,
     SimulationCodeEditorComponent,
-    SimulationConfigComponent,
     SimulationControllerComponent,
   ],
   imports: [

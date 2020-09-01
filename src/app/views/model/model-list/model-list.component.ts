@@ -18,11 +18,10 @@ import { ModelService } from '../../../services/model/model.service';
 })
 export class ModelListComponent implements OnInit, OnDestroy {
   private _subscription: any;
-  public availableModels: string[] = [];
-  public enabledModels: string[] = [];
+  public models: string[] = [];
   public filteredModels: string[] = [];
   public searchTerm: string = '';
-  public view: string = 'available';
+  public view: string = 'enabled';
 
   constructor(
     private _http: HttpClient,
@@ -32,7 +31,7 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscription = this.modelService.update.subscribe((): void => this.update());
-    setTimeout(() => this.update(), 1000);
+    this.update();
   }
 
   ngOnDestroy() {
@@ -40,14 +39,13 @@ export class ModelListComponent implements OnInit, OnDestroy {
   }
 
   get app(): App {
-    return this._appService.data;
+    return this._appService.app;
   }
 
   update(): void {
-    this.enabledModels = this.app.filterModels().map(model => model.id);
     const urlRoot: string = this.app.nestServer.url;
-    this._http.get(urlRoot + '/api/nest/Models').subscribe(resp => {
-      this.availableModels = Object.entries(resp).map(entry => entry[1]);
+    this._http.get(urlRoot + '/api/Models').subscribe(resp => {
+      this.models = Object.entries(resp).map(entry => entry[1]);
       this.filterModels();
     })
   }
@@ -65,17 +63,12 @@ export class ModelListComponent implements OnInit, OnDestroy {
   }
 
   filterModels(): void {
-    this.filteredModels = this.view === 'available' ? this.availableModels : this.enabledModels;
+    this.filteredModels = this.models;
     this.filterModelsBySearch();
   }
 
   search(query: string): void {
     this.searchTerm = query;
-    this.filterModels();
-  }
-
-  viewModels(view: string): void {
-    this.view = view;
     this.filterModels();
   }
 

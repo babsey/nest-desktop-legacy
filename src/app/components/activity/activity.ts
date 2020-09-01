@@ -4,18 +4,17 @@ import { Node } from '../node/node';
 
 export class Activity {
   recorder: Node;                       // parent
-  // config: Config;                       // config
   idx: number;                          // generative
 
   // Information of the recorded nodes;
+  events: any = {};
   nodeIds: number[] = [];
   nodePositions: number[][] = [];       // if spatial
 
-  constructor(recorder: Node, activity: any = {}) {
+  constructor(recorder: Node, activity: any = { events: {}, nodeIds: [], nodePositions: [] }) {
     this.recorder = recorder;
-    // this.config = new Config(this.constructor.name);
     this.idx = this.recorder.network.project.activities.length;
-    this.update(activity)
+    this.update(activity);
   }
 
   get elementTypes(): string[] {
@@ -26,9 +25,26 @@ export class Activity {
     return this.recorder.network.project.simulation.kernel.time;
   }
 
+  get senders(): number[] {
+    const senders: any[] = [...new Set(this.events['senders'])];
+    if (senders.length > 0) {
+      senders.sort((a: number, b: number) => a - b);
+    }
+    return senders;
+  }
+
+  get nEvents(): number {
+    return this.events.hasOwnProperty('times') ? this.events.times.length : 0
+  }
+
+  hasEvents(): boolean {
+    return this.nEvents > 0;
+  }
+
   update(activity: any): void {
-    this.nodeIds = activity.nodeIds !== undefined ? activity.nodeIds : [];
-    this.nodePositions = activity.nodePositions !== undefined ? activity.nodePositions : [];
+    this.events = activity.events || {};
+    this.nodeIds = activity.nodeIds || [];
+    this.nodePositions = activity.nodePositions || [];
   }
 
   hasAnalogData(): boolean {
@@ -46,7 +62,7 @@ export class Activity {
   getPositionsForSenders(): any {
     const x: number[] = [],
       y: number[] = [];
-    this.recorder.events.senders.map(sender => {
+    this.events.senders.map((sender: number) => {
       const pos: number[] = this.nodePositions[this.nodeIds.indexOf(sender)];
       if (pos) {
         x.push(pos[0]);
@@ -57,12 +73,16 @@ export class Activity {
   }
 
   download(): void {
-    this.recorder.network.project.app.download(this.serialize(), 'activity');
+    this.recorder.network.project.app.download(this, 'activity');
   }
 
-  serialize(): any {
+  downloadEvents(): void {
+    this.recorder.network.project.app.download(this.events, 'events');
+  }
+
+  toJSON(): any {
     const activity: any = {
-      events: this.recorder.events,
+      events: this.events,
       nodeIds: this.nodeIds,
       nodePositions: this.nodePositions,
     };

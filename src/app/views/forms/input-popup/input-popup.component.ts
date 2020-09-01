@@ -19,7 +19,7 @@ export class InputPopupComponent implements OnInit {
 
   onValueChange(value: any): void {
     // console.log('Change param in param input')
-    if (value == undefined || value == '') {
+    if (value === undefined || value === '') {
       value = this.options.value;
     }
     this.inputChange.emit(value)

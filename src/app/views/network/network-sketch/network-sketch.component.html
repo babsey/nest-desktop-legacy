@@ -26,7 +26,7 @@
   [style.width]="width + 'px'"
   [style.height]="height + 'px'">
 
-  <svg
+  <svg appContextMenuTrigger
     (mouseenter)="onSVGEnter($event)"
     (mouseover)="onSVGOver($event)"
     (mouseleave)="onSVGLeave($event)"
@@ -57,13 +57,13 @@
         class="dragline"
         d="M0,0L0,0"
         stroke-linecap="round"
-        [style.display]="_networkSketchService.viewDragline ? '' : 'none'"
+        [style.display]="viewDragline ? '' : 'none'"
         >
       </svg:path>
       <svg:path
         class="dragline mask"
         d="M0,0L0,0"
-        [style.display]="_networkSketchService.viewDragline ? '' : 'none'"
+        [style.display]="viewDragline ? '' : 'none'"
         >
       </svg:path>
     </svg:g>
@@ -96,11 +96,52 @@
   <ng-container *ngIf="eventTrigger">
     <span style="position:absolute; left:10px; bottom:10px; display:flex; line-height:40px; height:40px">
       <button mat-icon-button
-        (click)="clearDialog()"
-        matTooltip="Clear network configuration"
+        (click)="network.empty();"
+        [disabled]="network.isEmpty()"
+        matTooltip="Erase network"
         matTooltipPosition="above">
-        <fa-icon icon="trash-alt"></fa-icon>
+        <fa-icon icon="eraser"></fa-icon>
       </button>
+      <button mat-icon-button
+        (click)="network.oldest()"
+        [disabled]="countBefore() <= 0"
+        matTooltip="Go to oldest network"
+        matTooltipPosition="above">
+        <fa-icon icon="step-backward"></fa-icon>
+      </button>
+      <button mat-icon-button
+        (click)="network.older()"
+        [disabled]="countBefore() <= 0"
+        [matBadge]="countBefore()"
+        [matBadgeHidden]="countBefore() <= 0"
+        matBadgeSize="small"
+        matTooltip="Go to older network"
+        matTooltipPosition="above">
+        <fa-icon icon="undo"></fa-icon>
+      </button>
+      <button mat-icon-button
+        (click)="network.newer()"
+        [disabled]="countAfter() <= 0"
+        [matBadge]="countAfter()"
+        [matBadgeHidden]="countAfter() <= 0"
+        matBadgeSize="small"
+        matTooltip="Go to newer network"
+        matTooltipPosition="above">
+        <fa-icon icon="redo"></fa-icon>
+      </button>
+      <button mat-icon-button
+        (click)="network.newest()"
+        [disabled]="countAfter() <= 0"
+        matTooltip="Go to newest network"
+        matTooltipPosition="above">
+        <fa-icon icon="step-forward"></fa-icon>
+      </button>
+      <!-- <button mat-icon-button
+        (click)="network.project.reload()"
+        matTooltip="Reload project"
+        matTooltipPosition="above">
+        <fa-icon icon="redo"></fa-icon>
+      </button> -->
     </span>
   </ng-container>
 

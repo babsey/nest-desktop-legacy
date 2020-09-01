@@ -1,4 +1,5 @@
 {
+  "autoRandomSeed": false,
   "params": [{
     "id": "randomSeed",
     "label": "seed of random number generator",

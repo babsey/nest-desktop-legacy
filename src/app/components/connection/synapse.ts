@@ -1,5 +1,5 @@
-import { Model } from '../model/model';
 import { Connection } from './connection';
+import { Model } from '../model/model';
 import { Parameter } from '../parameter';
 import { SynapseCode } from './synapseCode';
 
@@ -43,17 +43,17 @@ export class Synapse {
   }
 
   get weight(): number {
-    const weight: any = this.params.find(param => param.id === 'weight');
+    const weight: any = this.params.find((param: Parameter) => param.id === 'weight');
     return weight ? weight.value : 1;
   }
 
   set weight(value: number) {
-    const weight: any = this.params.find(param => param.id === 'weight');
+    const weight: any = this.params.find((param: Parameter) => param.id === 'weight');
     weight.value = value;
   }
 
   get delay(): number {
-    const delay: any = this.params.find(param => param.id === 'delay');
+    const delay: any = this.params.find((param: Parameter) => param.id === 'delay');
     return delay ? delay.value : 1;
   }
 
@@ -62,7 +62,7 @@ export class Synapse {
     this.params = [];
     if (this.model && synapse && synapse.hasOwnProperty('params')) {
       this.model.params.forEach(modelParam => {
-        const synParam = synapse.params.find(p => p.id === modelParam.id);
+        const synParam = synapse.params.find((param: Parameter) => param.id === modelParam.id);
         this.addParameter(synParam || modelParam);
       });
     } else if (this.model) {
@@ -80,18 +80,18 @@ export class Synapse {
     this.weight = -1 * this.weight;
   }
 
-  serialize(to: string): any {
+  toJSON(target: string = 'db'): any {
     const synapse: any = {
       model: this.modelId,
     }
 
-    if (to === 'simulator') {
+    if (target === 'simulator') {
       // Collect specifications of the synapse
       this.params
-        .filter(synParam => synParam.visible === undefined || synParam.visible)
-        .forEach(synParam => synapse[synParam.id] = synParam.value);
+        .filter((param: Parameter) => param.visible === undefined || param.visible)
+        .forEach((param: Parameter) => synapse[param.id] = param.value);
     } else {
-      synapse['params'] = this.params.map(param => param.serialize())
+      synapse['params'] = this.params.map((param: Parameter) => param.toJSON())
     }
 
     return synapse;

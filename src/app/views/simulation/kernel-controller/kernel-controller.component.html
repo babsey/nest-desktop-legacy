@@ -5,9 +5,8 @@
     </mat-list-item>
     <mat-list-item *ngFor="let param of params">
       <app-ticks-slider-inline
-        (valueChange)="onChange($event)"
-        [options]="param"
         [(value)]="kernel[param.id]"
+        [options]="param"
       ></app-ticks-slider-inline>
     </mat-list-item>
   </mat-list>

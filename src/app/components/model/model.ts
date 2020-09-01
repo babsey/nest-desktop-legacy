@@ -4,17 +4,24 @@ import { Parameter } from '../parameter';
 import { ModelCode } from './modelCode';
 
 
+enum ElementType {
+  neuron = 'neuron',
+  recorder = 'recorder',
+  stimulator = 'stimulator',
+  synapse = 'synapse',
+}
+
 export class Model {
   app: App;                             // parent
   idx: number;                          // generative
-  code: ModelCode;
+  code: ModelCode;                      // code for model
 
-  id: string;
-  existing: string;
-  elementType: string;
-  label: string;
-  params: Parameter[] = [];
-  recordables: string[];
+  id: string;                           // model id
+  existing: string;                     // existing model in NEST
+  elementType: ElementType;             // element type of the model
+  label: string;                        // model label for view
+  params: Parameter[] = [];             // model parameters
+  recordables: string[];                // recordables for multimeter
 
   constructor(app: App, model: any) {
     this.app = app;
@@ -25,7 +32,7 @@ export class Model {
     this.elementType = model.elementType || model.element_type;
     this.existing = model.existing || model.id;
     this.label = model.label || '';
-    model.params.forEach(param => this.addParameter(param));
+    model.params.forEach((param: any) => this.addParameter(param));
     this.recordables = model.recordables || [];
   }
 
@@ -49,19 +56,31 @@ export class Model {
     return new Model(this.app, this);
   }
 
-  serialize(to: string): any {
+  isNeuron(): boolean {
+    return this.elementType === 'neuron';
+  }
+
+  isRecorder(): boolean {
+    return this.elementType === 'recorder';
+  }
+
+  isStimulator(): boolean {
+    return this.elementType === 'stimulator';
+  }
+
+  toJSON(target: string = 'db'): any {
     const model: any = {
       existing: this.existing,
     };
-    if (to === 'simulator') {
+    if (target === 'simulator') {
       model['new'] = this.id;
       model['params'] = {};
-      this.params.forEach(p => model.params[p.id] = p.value);
+      this.params.forEach((param: Parameter) => model.params[param.id] = param.value);
     } else {
       model['id'] = this.id;
       model['elementType'] = this.elementType;
       model['label'] = this.label;
-      model['params'] = this.params.map(param => param.serialize());
+      model['params'] = this.params.map((param: Parameter) => param.toJSON());
       if (this.recordables.length > 0) {
         model['recordables'] = this.recordables;
       }

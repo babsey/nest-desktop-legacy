@@ -51,19 +51,19 @@ export class ConnectionSketchComponent implements OnInit {
   }
 
   nodeRadius(): number {
-    return this.connection.source.config.data.graph.radius.value / this.connectionWidth() / Math.PI;
+    return this.connection.source.config.graph.radius.value / this.connectionWidth() / Math.PI;
   }
 
   connectionWidth(): number {
-    return this.connection.config.data.graph.width.value;
+    return this.connection.config.graph.width.value;
   }
 
   connectionOpacity(): number {
-    return this.connection.config.data.graph.opacity.value;
+    return this.connection.config.graph.opacity.value;
   }
 
   terminusOpacity(): number {
-    return this.connection.config.data.graph.terminusOpacity.value;
+    return this.connection.config.graph.terminusOpacity.value;
   }
 
   dashLine(): boolean {

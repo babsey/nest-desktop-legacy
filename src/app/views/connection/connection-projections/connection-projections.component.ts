@@ -18,11 +18,11 @@ export class ConnectionProjectionsComponent implements OnInit {
   }
 
   get config(): any {
-    return this.projections.config.data;
+    return this.projections.config;
   }
 
   onSelectionChange(event: any): void {
-    this.projections[event.option.value] = event.option.selected;
+    this.projections.config[event.option.value] = event.option.selected;
   }
 
 }

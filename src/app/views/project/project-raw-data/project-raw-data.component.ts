@@ -27,7 +27,7 @@ export class ProjectRawDataComponent implements OnInit {
   }
 
   get content(): string {
-    return JSON.stringify(this.project.serialize('db'), null, "\t");
+    return JSON.stringify(this.project, null, "\t");
   }
 
 }

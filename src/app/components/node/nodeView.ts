@@ -1,5 +1,6 @@
 import { Connection } from '../connection/connection';
 import { Node } from './node';
+import { Parameter } from '../parameter';
 
 
 export class NodeView {
@@ -27,7 +28,8 @@ export class NodeView {
       const idx: number = this.node.network.neurons.indexOf(this.node);
       return 'n' + (idx + 1);
     } else {
-      const nodes: Node[] = this.node.network.nodes.filter(node => node.modelId === this.node.modelId);
+      const nodes: Node[] = this.node.network.nodes.filter(
+        (node: Node) => node.modelId === this.node.modelId);
       const idx: number = nodes.indexOf(this.node);
       const label: string[] = this.node.model.id.split('_');
       return label.map(l => l[0]).join('') + (idx + 1);
@@ -45,10 +47,11 @@ export class NodeView {
 
     if (this.node.model.elementType === 'recorder') {
       const connections: Connection[] = this.node.network.connections
-        .filter(connection => (connection.source.idx === this.node.idx || connection.target.idx === this.node.idx));
+        .filter(
+          (connection: Connection) => (connection.source.idx === this.node.idx || connection.target.idx === this.node.idx));
       if (connections.length === 1 && connections[0].source.idx !== connections[0].target.idx) {
         const connection: Connection = connections[0];
-        let node: Node = connection.source.idx === this.node.idx ? connection.target : connection.source;
+        let node: Node = (connection.source.idx === this.node.idx) ? connection.target : connection.source;
         return node.view.color;
       }
     }
@@ -64,11 +67,13 @@ export class NodeView {
 
   get weight(): string {
     if (this.node.model.elementType === 'recorder') return
-    const connections: Connection[] = this.node.network.connections.filter(connection => connection.source.idx === this.node.idx && connection.target.model.elementType !== 'recorder');
+    const connections: Connection[] = this.node.network.connections.filter(
+      (connection: Connection) => connection.source.idx === this.node.idx && connection.target.model.elementType !== 'recorder');
     if (connections.length > 0) {
-      const weights: number[] = connections.map(connection => connection.synapse.weight);
-      if (weights.every(weight => weight > 0)) return 'excitatory';
-      if (weights.every(weight => weight < 0)) return 'inhibitory';
+      const weights: number[] = connections.map(
+        (connection: Connection) => connection.synapse.weight);
+      if (weights.every((weight: number) => weight > 0)) return 'excitatory';
+      if (weights.every((weight: number) => weight < 0)) return 'inhibitory';
     }
   }
 
@@ -80,11 +85,11 @@ export class NodeView {
   }
 
   paramsVisible(): string[] {
-    return this.node.params.filter(param => param.visible).map(param => param.id);
+    return this.node.params.filter((param: Parameter) => param.visible).map(param => param.id);
   }
 
   setLevel(level: number): void {
-    this.node.params.map(param => param.visible = param.options.level <= level)
+    this.node.params.map((param: Parameter) => param.visible = param.options.level <= level)
   }
 
   clean(): void {
@@ -104,14 +109,6 @@ export class NodeView {
 
   isFocused(): boolean {
     return this.node.network.view.isNodeFocused(this.node);
-  }
-
-  isRecorder(): boolean {
-    return this.node.model.elementType == 'recorder';
-  }
-
-  hasEvents(): boolean {
-    return Object.keys(this.node.events).length > 0;
   }
 
   getSquarePoints(radius: number): string {
@@ -142,7 +139,7 @@ export class NodeView {
     return points;
   }
 
-  serialize(): any {
+  toJSON(): any {
     const nodeView: any = {
       color: this._color,
       position: this.position,

@@ -25,7 +25,7 @@ export class LoadingDetailsComponent implements OnInit {
   }
 
   get app(): App {
-    return this._appService.data;
+    return this._appService.app;
   }
 
 }

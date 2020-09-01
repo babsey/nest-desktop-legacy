@@ -18,14 +18,13 @@ export class ActivityAnimationComponent implements OnInit, OnDestroy {
 
   constructor(
     public activityGraphService: ActivityGraphService,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
     console.log('Ng init activity animation view');
-    this._subscriptionInit = this.activityGraphService.init.subscribe(() => this.init());
+    this._subscriptionInit = this.activityGraphService.init.subscribe((project: Project) => this.init(project));
     this._subscriptionUpdate = this.activityGraphService.update.subscribe(() => this.update());
-    this.init();
+    this.init(this.project);
   }
 
   ngOnDestroy() {
@@ -34,9 +33,9 @@ export class ActivityAnimationComponent implements OnInit, OnDestroy {
     this._subscriptionUpdate.unsubscribe();
   }
 
-  init() {
-    console.log('Init activity animation view');
-    this.activityGraphService.graph = new ActivityAnimationGraph(this.project);
+  init(project: Project) {
+    console.log('Init activity animation view for '+ project.name);
+    this.activityGraphService.graph = new ActivityAnimationGraph(project);
   }
 
   update(): void {

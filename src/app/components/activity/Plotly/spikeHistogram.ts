@@ -6,7 +6,7 @@ import { Panel } from './panel';
 export class SpikeHistogram extends Panel {
 
   constructor(graph: ActivityChartGraph) {
-    super(graph);
+    super('SpikeHistogram', graph);
     this.layout.yaxis.title = 'Spike count';
     this.init();
   }
@@ -53,7 +53,7 @@ export class SpikeHistogram extends Panel {
       const start: number = 0;
       const end: number = activity.endtime;
       const size: number = data.xbins.size;
-      data.x = activity.recorder.events.times;
+      data.x = activity.events.times;
       data.xbins.end = end + size;
       data.marker.line.width = (end - start) / size > 100 ? 0 : 1;
       data.marker.color = activity.recorder.view.color;

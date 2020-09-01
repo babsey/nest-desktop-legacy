@@ -41,13 +41,13 @@
       </mat-form-field>
     </mat-list-item>
 
-    <mat-list-item *ngIf="options.input == 'valueSlider'">
+    <mat-list-item *ngIf="options.input === 'valueSlider'">
       <mat-form-field>
         <input matInput type="number" placeholder="Minimum value" name="min" [(ngModel)]="options.min">
       </mat-form-field>
     </mat-list-item>
 
-    <mat-list-item *ngIf="options.input == 'valueSlider'">
+    <mat-list-item *ngIf="options.input === 'valueSlider'">
       <mat-form-field>
         <input matInput type="number" placeholder="Maximum value" name="max" [(ngModel)]="options.max">
       </mat-form-field>
@@ -59,7 +59,7 @@
       </mat-form-field>
     </mat-list-item>
 
-    <mat-list-item *ngIf="options.input == 'tickSlider'">
+    <mat-list-item *ngIf="options.input === 'tickSlider'">
       <mat-form-field>
         <input matInput placeholder="Tick values" name="ticks" [(ngModel)]="options.ticks" (change)="valueChanged($event)">
       </mat-form-field>

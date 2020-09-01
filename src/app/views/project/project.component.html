@@ -1,5 +1,8 @@
-<ng-container *ngIf="appService.data.ready; else loading">
-  <app-project-container [id]="projectId"></app-project-container>
+<ng-container *ngIf="appService.app.ready; else loading">
+  <app-project-container
+    [id]="projectId"
+    [rev]="projectRev"
+  ></app-project-container>
 </ng-container>
 
 <ng-template #loading>

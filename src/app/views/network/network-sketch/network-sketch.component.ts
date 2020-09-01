@@ -8,7 +8,6 @@ import { Connection } from '../../../components/connection/connection';
 import { Network } from '../../../components/network/network';
 import { Node } from '../../../components/node/node';
 
-import { AppService } from '../../../services/app/app.service';
 import { NetworkSketchService } from '../../../services/network/network-sketch.service';
 
 import { NetworkClearDialogComponent } from '../network-clear-dialog/network-clear-dialog.component';
@@ -31,18 +30,11 @@ export class NetworkSketchComponent implements OnInit {
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
 
   constructor(
-    private _appService: AppService,
-    private _networkSketchService: NetworkSketchService,
-    private _elementRef: ElementRef,
     private _dialog: MatDialog,
+    private _elementRef: ElementRef,
+    private _networkSketchService: NetworkSketchService,
   ) {
     this._selector = d3.select(_elementRef.nativeElement);
-  }
-
-  private clearDialog() {
-    if (confirm('Do you really want to clear/empty your network?')) {
-      this.network.empty();
-    }
   }
 
   ngOnInit() {
@@ -59,9 +51,20 @@ export class NetworkSketchComponent implements OnInit {
     })
   }
 
+  get viewDragline(): boolean {
+    return this._networkSketchService.viewDragline;
+  }
+
+  countBefore(): number {
+    return this.network.project.networkRevisionIdx;
+  }
+
+  countAfter(): number {
+    return this.network.project.networkRevisions.length - this.network.project.networkRevisionIdx - 1;
+  }
+
   onSVGEnter(event: MouseEvent): void {
     if (!this.eventTrigger) return;
-    this._appService.rightClick = true;
     this._networkSketchService.viewDragline = true;
   }
 
@@ -70,7 +73,6 @@ export class NetworkSketchComponent implements OnInit {
   }
 
   onSVGLeave(event: MouseEvent): void {
-    this._appService.rightClick = false;
     this.network.view.resetFocus();
     this._networkSketchService.viewDragline = false;
   }

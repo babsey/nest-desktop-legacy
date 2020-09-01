@@ -1,27 +1,27 @@
 import { Config } from '../config';
 import { ConnectionCode } from './connectionCode';
-import { ConnectionView } from './connectionView';
 import { ConnectionMask } from './connectionMask';
 import { ConnectionProjections } from './connectionProjections';
+import { ConnectionView } from './connectionView';
 import { Model } from '../model/model';
 import { Network } from '../network/network';
 import { Node } from '../node/node';
+import { Parameter } from '../parameter';
 import { Synapse } from './synapse';
 
 
 enum Rule {
-    AllToAll = "all_to_all",
-    FixedIndegree = "fixed_indegree",
-    FixedOutdegree = "fixed_outdegree",
-    FixedTotalNumber = "fixed_total_number",
-    OneToOne = "one_to_one",
-    PairwiseBernoulli = "pairwise_bernoulli"
+  AllToAll = "all_to_all",
+  FixedIndegree = "fixed_indegree",
+  FixedOutdegree = "fixed_outdegree",
+  FixedTotalNumber = "fixed_total_number",
+  OneToOne = "one_to_one",
+  PairwiseBernoulli = "pairwise_bernoulli"
 }
 
 
-export class Connection {
+export class Connection extends Config {
   public network: Network;                     // parent
-  public config: Config;                       // config
   public code: ConnectionCode;
   public view: ConnectionView;
   private _idx: number;                         // generative
@@ -41,9 +41,9 @@ export class Connection {
 
 
   constructor(network: any, connection: any) {
+    super('Connection');
     this.network = network;
     this.idx = network.connections.length;
-    this.config = new Config(this.constructor.name);
     this.code = new ConnectionCode(this);
     this.view = new ConnectionView(this);
 
@@ -136,31 +136,31 @@ export class Connection {
     this.network.deleteConnection(this);
   }
 
-  serialize(to: string): any {
+  toJSON(target: string = 'db'): any {
     const connection: any = {
       source: this._source,
       target: this._target,
     }
 
-    if (to === 'simulator') {
+    if (target === 'simulator') {
       // Collect specifications of the connection
       connection['conn_spec'] = {
         rule: this._rule,
       };
-      this.params.forEach(param => connection.conn_spec[param.id] = param.value);
-      if (this.mask.masktype !== 'none') {
-        connection.conn_spec['mask'] = this.mask.serialize(to);
+      this.params.forEach((param: Parameter) => connection.conn_spec[param.id] = param.value);
+      if (this.mask.hasMask()) {
+        connection.conn_spec['mask'] = this.mask.toJSON(target);
       }
-      connection['syn_spec'] = this.synapse.serialize(to);     // Collect specifications of the synapse
+      connection['syn_spec'] = this.synapse.toJSON(target);     // Collect specifications of the synapse
     } else {
       connection['rule'] = this._rule;
       connection['params'] = this.params;
-      connection['mask'] = this.mask.serialize(to);
-      connection['synapse'] = this.synapse.serialize(to);
+      connection['mask'] = this.mask.toJSON(target);
+      connection['synapse'] = this.synapse.toJSON(target);
     }
 
     if (this.isBothSpatial()) {
-      connection['projections'] = this.projections.serialize(to);
+      connection['projections'] = this.projections.toJSON(target);
     }
 
     return connection;

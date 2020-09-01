@@ -2,8 +2,15 @@ import { Config } from '../config'
 import { Connection } from './connection';
 
 
-export class ConnectionMask {
-  config: Config;
+enum MaskType {
+  circular = 'circular',
+  doughnut = 'doughnut',
+  elliptical = 'elliptical',
+  none = 'none',
+  rectangular = 'rectangular',
+}
+
+export class ConnectionMask extends Config {
   connection: Connection;
   graph: any = {
     data: [],
@@ -13,25 +20,33 @@ export class ConnectionMask {
     },
     style: { position: 'relative', width: '100%', height: '100%' }
   };
-  masktype: string;
+  masktype: MaskType;
   specs: any;
 
   constructor(connection: Connection, mask: any = {}) {
-    this.config = new Config(this.constructor.name);
+    super('ConnectionMask');
     this.connection = connection;
-    this.masktype = mask.masktype || 'none';
+    this.masktype = mask.masktype || MaskType.none;
     this.specs = mask.specs || {};
   }
 
+  get config(): any {
+    return this.config.data;
+  }
+
   list(): string[] {
-    return Object.keys(this.config.data);
+    return Object.keys(this.config);
+  }
+
+  hasMask(): boolean {
+    return this.masktype !== 'none';
   }
 
   unmask(): void {
-    this.masktype = 'none';
+    this.masktype = MaskType.none;
   }
 
-  select(value: string): void {
+  select(value: MaskType): void {
     if (value === 'none') {
       this.unmask()
     } else {
@@ -170,9 +185,9 @@ export class ConnectionMask {
     }]
   }
 
-  serialize(to: string) {
+  toJSON(target: string = 'db') {
     const mask: any = {};
-    if (to === 'simulator') {
+    if (target === 'simulator') {
       mask[this.masktype] = this.specs;
     } else {
       mask['masktype'] = this.masktype;

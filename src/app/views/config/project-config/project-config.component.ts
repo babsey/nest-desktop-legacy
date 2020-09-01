@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Config } from '../../../components/config';
+import { ConfigService } from '../../../components/config';
 
 
 @Component({
@@ -9,10 +9,10 @@ import { Config } from '../../../components/config';
   styleUrls: ['./project-config.component.scss']
 })
 export class ProjectConfigComponent implements OnInit {
-  private _config: Config;
+  private _config: ConfigService;
 
   constructor() {
-    this._config = new Config('App');
+    this._config = new ConfigService('App');
    }
 
   ngOnInit() {
@@ -22,10 +22,14 @@ export class ProjectConfigComponent implements OnInit {
     return this._config.data;
   }
 
+  set config(value: any) {
+    this._config.update(value);
+  }
+
   onChange(event: any): void {
-    let config: any = this.config;
-    config.databases.project[event.target.name] = event.target.value;
-    this._config.data = config;
+    const data: any = {};
+    data[event.target.name] = event.target.value;
+    this.config = data;
   }
 
 }

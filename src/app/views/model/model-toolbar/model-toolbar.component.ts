@@ -35,20 +35,20 @@ export class ModelToolbarComponent implements OnInit {
     if (this.modelService.defaults.hasOwnProperty('recordables')) {
       model['recordables'] = this.modelService.defaults.recordables;
     }
-    this.appService.data.addModel(model);
+    this.appService.app.addModel(model);
     this.modelService.update.emit();
   }
 
   deleteModel(): void {
     const model: string = this.modelService.selectedModel;
-    this.appService.data.deleteModel(model);
+    this.appService.app.deleteModel(model);
     this.modelService.update.emit();
   }
 
   saveModel(): void {
-    const model: Model = this.appService.data.getModel(this.modelService.selectedModel);
+    const model: Model = this.appService.app.getModel(this.modelService.selectedModel);
     if (model) {
-      this.appService.data.saveModel(model.serialize('db'));
+      this.appService.app.saveModel(model);
     }
   }
 

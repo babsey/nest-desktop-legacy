@@ -3,6 +3,8 @@ import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@
 import { Node } from '../../../components/node/node';
 import { Project } from '../../../components/project/project';
 
+import { ProjectService } from '../../../services/project/project.service';
+
 
 @Component({
   selector: 'app-project-sidenav-content',
@@ -11,15 +13,20 @@ import { Project } from '../../../components/project/project';
 })
 export class ProjectSidenavContentComponent implements OnInit {
   @Input() project: Project;
-  @Input() mode: string;
   @ViewChild('content', { static: false }) content: ElementRef;
   public width: number = 12;
   public height: number = 12;
 
-  constructor() { }
+  constructor(
+    private _projectService: ProjectService,
+  ) { }
 
   ngOnInit() {
     setTimeout(() => this.triggerResize(), 10)
+  }
+
+  get mode(): string {
+    return this._projectService.mode;
   }
 
   triggerResize(): void {

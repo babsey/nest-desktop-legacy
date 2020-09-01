@@ -27,7 +27,7 @@
             <span class="flex-spacer"></span>
             <span>{{ activity.recorder.model.label }}</span>
             <span class="flex-spacer"></span>
-            <span>{{ activity.recorder.events.senders.length }}</span>
+            <span>{{ activity.events.senders.length }}</span>
           </span>
         </mat-list-item>
       </ng-container>
@@ -49,7 +49,7 @@
       <ng-container *ngSwitchCase="'spike_detector'">
         <app-spike-stats
           [activity]="selectedActivity"
-          ></app-spike-stats>
+        ></app-spike-stats>
       </ng-container>
 
       <ng-container *ngSwitchCase="'multimeter'">
@@ -63,7 +63,6 @@
       <ng-container *ngSwitchCase="'voltmeter'">
         <app-analog-stats
           [activity]="selectedActivity"
-          [color]="colorSelected()"
           [selectedRecordFrom]="'V_m'"
         ></app-analog-stats>
       </ng-container>

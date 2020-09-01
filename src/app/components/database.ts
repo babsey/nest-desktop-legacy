@@ -56,41 +56,54 @@ export class DatabaseService {
   // CRUD - Create, Read, Update, Delete
 
   create(data: any): any {
-    console.log('Create doc in db');
+    // console.log('Create doc in db');
     data['_id'] = null;
     data['createdAt'] = new Date();
     data['updatedAt'] = new Date();
-    data['version'] = this.app.version;
-    return this.db.post(data)
-      .then(res => res)
+    const dataJSON = data.toJSON();
+    dataJSON['version'] = this.app.version;
+    return this.db.post(dataJSON)
+      .then(res => {
+        data._id = res.id
+        data.createdAt = dataJSON.createdAt;
+        data.updatedAt = dataJSON.updatedAt;
+      })
       .catch(err => err);
   }
 
-  read(id: string): any {
-    console.log('Read doc in db');
-    return this.db.get(id)
+  read(id: string, rev: string = null): any {
+    // console.log('Read doc in db');
+    const options: any = { rev: rev };
+    return this.db.get(id, options)
       .then(doc => doc)
       .catch(err => err);
   }
 
   update(data: any): any {
-    console.log('Update doc in db');
-    data['updatedAt'] = new Date();
-    data['version'] = this.app.version;
-    return this.db.get(data['_id'])
+    // console.log('Update doc in db');
+    return this.db.get(data.id)
       .then(doc => {
-        const keys: string[] = Object.keys(data);
+        data['updatedAt'] = new Date();
+        const dataJSON = data.toJSON();
+        dataJSON['version'] = this.app.version;
+        const keys: string[] = Object.keys(dataJSON);
         keys.filter(k => !k.startsWith('_'))
-          .map(k => doc[k] = data[k])
-        doc['updatedAt'] = new Date();
+          .map(k => doc[k] = dataJSON[k])
         return this.db.put(doc)
           .catch(err => console.log(err));
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        data['updatedAt'] = new Date();
+        data['createdAt'] = new Date();
+        const dataJSON = data.toJSON();
+        dataJSON['version'] = this.app.version;
+        return this.db.put(dataJSON);
+      });
   }
 
   delete(id: string): any {
-    console.log('Delete doc in db');
+    // console.log('Delete doc in db');
     return this.db.get(id)
       .then(doc => this.db.remove(doc));
   }
@@ -103,6 +116,13 @@ export class DatabaseService {
           .map(doc => doc._deleted = true)
         return this.db.bulkDocs(docs)
       })
+  }
+
+  revisions(id: string): any {
+    console.log('Read doc revisions in db');
+    return this.db.get(id, { revs: true })
+      .then(doc => doc._revisions.ids.map((id, idx) => (doc._revisions.start - idx) + "-" + id))
+      .catch(err => err);
   }
 
   // Version

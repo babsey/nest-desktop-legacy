@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
+import { AppDirectivesModule } from '../../directives/directives.module';
 import { AppPipesModule } from '../../pipes/pipes.module';
 
 import { MaterialModule } from '../material.module';
@@ -46,6 +47,7 @@ import { ProjectToolbarComponent } from './project-toolbar/project-toolbar.compo
   ],
   imports: [
     ActivityModule,
+    AppDirectivesModule,
     AppFormsModule,
     AppPipesModule,
     BrowserAnimationsModule,

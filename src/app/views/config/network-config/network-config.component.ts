@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Config } from '../../../components/config';
+import { ConfigService } from '../../../components/config';
 import { ColorSchemes } from '../../../components/network/colorSchemes';
 
 
@@ -10,12 +10,12 @@ import { ColorSchemes } from '../../../components/network/colorSchemes';
   styleUrls: ['./network-config.component.scss']
 })
 export class NetworkConfigComponent implements OnInit {
-  private _config: Config;
+  private _config: ConfigService;
   public colorSchemes: ColorSchemes;
 
   constructor(
   ) {
-    this._config = new Config('Network');
+    this._config = new ConfigService('Network');
     this.colorSchemes = new ColorSchemes();
    }
 
@@ -24,6 +24,10 @@ export class NetworkConfigComponent implements OnInit {
 
   get config(): any {
     return this._config.data;
+  }
+
+  set config(value: any) {
+    this._config.update(value);
   }
 
   selectColor(idx: number, color: string): void {
@@ -35,8 +39,8 @@ export class NetworkConfigComponent implements OnInit {
 
   selectScheme(event: any): void {
     let config: any = this.config;
-    config.color.cycle = Array.apply([], this.colorSchemes.config.data[event.value]);
-    this.config.data = config;
+    config.color.cycle = Array.apply([], this.colorSchemes.config[event.value]);
+    this._config.data = config;
   }
 
 }

@@ -5,7 +5,6 @@ import { forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 import { AppService } from '../app/app.service';
-import { ModelConfigService } from './model-config.service';
 
 
 @Injectable({
@@ -28,7 +27,6 @@ export class ModelService {
 
   constructor(
     private _appService: AppService,
-    private _modelConfigService: ModelConfigService,
     private _http: HttpClient,
   ) {
   }
@@ -42,12 +40,12 @@ export class ModelService {
   }
 
   requestModelDefaults(): void {
-    const urlRoot: string = this._appService.data.nestServer.url;
+    const urlRoot: string = this._appService.app.nestServer.url;
     this.defaults = {};
     this.progress = true;
     const modelId = this.selectedModel;
     setTimeout(() => {
-      this._http.post(urlRoot + '/api/nest/GetDefaults', { model: modelId })
+      this._http.post(urlRoot + '/api/GetDefaults', { model: modelId })
         .subscribe(resp => {
           // console.log(resp)
           this.progress = false;
@@ -70,7 +68,7 @@ export class ModelService {
   }
 
   getSettings(modelId: string): any {
-    return this._appService.data.getModel(modelId) || {};
+    return this._appService.app.getModel(modelId) || {};
   }
 
   isSelected(model: string): boolean {
@@ -78,12 +76,12 @@ export class ModelService {
   }
 
   hasModel(modelId: string = null): boolean {
-    return this._appService.data.hasModel(modelId || this.selectedModel);
+    return this._appService.app.hasModel(modelId || this.selectedModel);
   }
 
   label(modelId: string = null): string {
     modelId = modelId || this.selectedModel;
-    const model: any = this._appService.data.getModel(modelId);
+    const model: any = this._appService.app.getModel(modelId);
     return model.label || modelId;
   }
 

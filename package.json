@@ -48,6 +48,7 @@
     "three": "0.117.1",
     "three-orbitcontrols": "^2.110.3",
     "tslib": "^1.13.0",
+    "uuid": "^8.3.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "^0.10.3"
   },

@@ -26,8 +26,7 @@
 
   <mat-list-item>
     <app-connection-mask
-      (projectionsChange)="onProjectionsChange($event)"
-      [(projections)]="projections.connection.mask"
+      [mask]="projections.connection.mask"
     ></app-connection-mask>
   </mat-list-item>
 
@@ -56,7 +55,7 @@
   </mat-list-option>
 
   <mat-list-option value="allowMultapses"
-    [selected]="connection.projections.allow_multapses">
+    [selected]="projections.allowMultapses">
     {{ config.allowMultapses.label | capitalize }}
   </mat-list-option>
 

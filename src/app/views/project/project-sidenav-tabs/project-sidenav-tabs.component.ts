@@ -35,10 +35,6 @@ export class ProjectSidenavTabsComponent implements OnInit {
     }
   }
 
-  get config(): any {
-    return this.appService.data.config.data;
-  }
-
   isSidenavOpened(): boolean {
     return this._projectService.sidenavOpened;
   }
@@ -50,10 +46,10 @@ export class ProjectSidenavTabsComponent implements OnInit {
       this._projectService.sidenavMode = mode;
       this._projectService.sidenavOpened = true;
     }
-    if (mode == 'codeEditor' && this._projectService.sidenavOpened == true) {
-      this.appService.data.project.code.generate();
+    this._simulationRunService.viewCodeEditor = mode === 'codeEditor';
+    if (mode === 'codeEditor' && this._projectService.sidenavOpened === true) {
+      this.appService.app.project.code.generate();
     }
-    this._simulationRunService.mode = (mode === 'codeEditor' ? 'imperative' : 'declarative');
     setTimeout(() => this.triggerResize(), 500)
   }
 

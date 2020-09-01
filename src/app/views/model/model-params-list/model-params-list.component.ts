@@ -28,7 +28,7 @@ export class ModelParamsListComponent implements OnInit {
   hasParam(paramId: string): boolean {
     if (this.modelService.hasModel(this.model)) {
       const settings: any = this.modelService.getSettings(this.model);
-      return settings.params.filter(param => param.id == paramId).length > 0;
+      return settings.params.filter(param => param.id === paramId).length > 0;
     }
     return false
   }

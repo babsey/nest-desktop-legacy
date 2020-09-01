@@ -10,7 +10,7 @@ import { Project } from '../../components/project/project';
 })
 export class AppService {
   public rightClick: boolean = false;
-  public data: App;
+  public app: App;
   public change: EventEmitter<any> = new EventEmitter();
   public sidenavOpened: boolean = false;
 
@@ -18,9 +18,13 @@ export class AppService {
     private _snackBar: MatSnackBar,
   ) {}
 
+  get config(): any {
+    return this.app === undefined ? {} : this.app.config;
+  }
+
   upload(projects: Project[]): void {
     // console.log('Upload projects')
-    this.data.addProjects(projects).then(resp => {
+    this.app.addProjects(projects).then((resp: any) => {
       this._snackBar.open('Projects uploaded successfully.', null, {
         duration: 2000,
       });

@@ -17,7 +17,7 @@ export class KernelControllerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.params = this.kernel.config.data.params || [];
+    this.params = this.kernel.config.params || [];
   }
 
 }

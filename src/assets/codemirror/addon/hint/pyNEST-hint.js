@@ -2,9 +2,9 @@
 // Distributed under an MIT license: https://codemirror.net/LICENSE
 
 (function(mod) {
-  if (typeof exports == "object" && typeof module == "object") // CommonJS
+  if (typeof exports === "object" && typeof module === "object") // CommonJS
     mod(require("../../../../../node_modules/codemirror/lib/codemirror"));
-  else if (typeof define == "function" && define.amd) // AMD
+  else if (typeof define === "function" && define.amd) // AMD
     define(["../../../../../node_modules/codemirror/lib/codemirror"], mod);
   else // Plain browser env
     mod(CodeMirror);
@@ -35,7 +35,7 @@
 
     if (!/^[\w$_]*$/.test(token.string)) {
         token = tprop = {start: cur.ch, end: cur.ch, string: "", state: token.state,
-                         className: token.string == ":" ? "python-type" : null};
+                         className: token.string === ":" ? "python-type" : null};
     }
 
     if (!context) var context = [];
@@ -60,7 +60,7 @@
   function getCompletions(token, context) {
     let found = [], start = token.string;
     function maybeAdd(str) {
-      if (str.lastIndexOf(start, 0) == 0 && !arrayContains(found, str)) found.push(str);
+      if (str.lastIndexOf(start, 0) === 0 && !arrayContains(found, str)) found.push(str);
     }
 
     function gatherCompletions(_obj) {
@@ -72,11 +72,11 @@
       // find in the current environment.
       let obj = context.pop(), base;
 
-      if (obj.type == 'property')
+      if (obj.type === 'property')
          base = obj.string;
-      else if(obj.type == "variable")
+      else if(obj.type === "variable")
           base = obj.string;
-      else if(obj.type == "variable-3")
+      else if(obj.type === "variable-3")
           base = ":" + obj.string;
 
       while (base != null && context.length)

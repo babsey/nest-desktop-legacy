@@ -1,9 +1,7 @@
 import { Config } from './config';
 
 
-export class ParameterRandom {
-  config: Config;
-
+export class ParameterRandom extends Config {
   distribution: string;
   specs: any;
   defaults: any = {
@@ -14,12 +12,12 @@ export class ParameterRandom {
   }
 
   constructor(random: any) {
-    this.config = new Config(this.constructor.name);
+    super('ParameterRandom');
     this.distribution = random.distribution || 'uniform';
     this.specs = random.specs || this.defaults[random.distribution];
   }
 
-  serialize(to: string): any {
+  toJSON(): any {
     const specs: any = {};
     Object.keys(this.defaults[this.distribution]).map(param => {
       if (this.specs.hasOwnProperty(param)) {

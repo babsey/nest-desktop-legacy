@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 import { enterAnimation } from '../../../animations/enter-animation';
 
 import { Project } from '../../../components/project/project';
 
-import { AppService } from '../../../services/app/app.service';
 import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
 import { ProjectService } from '../../../services/project/project.service';
 
@@ -14,43 +14,65 @@ import { ProjectService } from '../../../services/project/project.service';
   selector: 'app-project-toolbar',
   templateUrl: './project-toolbar.component.html',
   styleUrls: ['./project-toolbar.component.scss'],
-  animations: [ enterAnimation ],
+  animations: [enterAnimation],
 })
 export class ProjectToolbarComponent implements OnInit {
   @Input() project: Project;
+
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
-    private _appService: AppService,
-    public simulationRunService: SimulationRunService,
-    public projectService: ProjectService,
+    private _projectService: ProjectService,
+    private _router: Router,
+    private _simulationRunService: SimulationRunService,
   ) { }
 
   ngOnInit() {
   }
 
-  run(force: boolean = false): void {
-    this.projectService.mode = 'activityExplorer';
-    this.simulationRunService.run(this.project, force)
+  get running(): boolean {
+    return this._simulationRunService.running;
+  }
+
+  duplicateProject(): void {
+    const project: Project = this.project.duplicate();
+    this.navigate(project.id);
+  }
+
+  navigate(id: string): void {
+    let url: string = 'project/' + id;
+    this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
+  }
+
+  run(): void {
+    this.selectMode('activityExplorer');
+    this._simulationRunService.run(this.project, true)
   }
 
   configSimulation(): void {
-    this.projectService.mode = 'activityExplorer';
-    this.projectService.sidenavMode = 'simulation';
+    this.selectMode('activityExplorer');
+    this._projectService.sidenavMode = 'simulation';
+  }
+
+  selectMode(mode: string): void {
+    this._projectService.selectMode(mode);
+  }
+
+  isMode(mode: string): boolean {
+    return this._projectService.isMode(mode);
   }
 
   onSelectionChange(event: any): void {
-    this.simulationRunService.config[event.option.value] = event.option.selected;
-    this.simulationRunService.saveConfig();
-  }
-
-  onMouseOver(event: MouseEvent): void {
-    this._appService.rightClick = true;
-  }
-
-  onMouseOut(event: MouseEvent): void {
-    this._appService.rightClick = false;
+    const configKey: string = event.option.value;
+    const configValue: boolean = event.option.selected;
+    const configData: any = new Object();
+    configData[configKey] = configValue;
+    if (configKey === 'autoRandomSeed') {
+      this.project.simulation.config = configData;
+    } else {
+      this.project.config = configData;
+    }
   }
 
   onContextMenu(event: MouseEvent): void {

@@ -21,56 +21,74 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
   animations: [enterAnimation],
 })
 export class ProjectContainerComponent implements OnInit, OnDestroy {
-  @Input() id: string = '';
+  @Input() id: string;
+  @Input() rev: string;
   private _mobileQueryListener: () => void;
   public mobileQuery: MediaQueryList;
 
   constructor(
     private _activityGraphService: ActivityGraphService,
-    private _modelService: ModelService,
-    private _simulationRunService: SimulationRunService,
+    private _appService: AppService,
     private _bottomSheet: MatBottomSheet,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
+    private _modelService: ModelService,
+    private _projectService: ProjectService,
     private _route: ActivatedRoute,
     private _router: Router,
-    public appService: AppService,
-    public projectService: ProjectService,
+    private _simulationRunService: SimulationRunService,
   ) {
     this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   ngOnChanges() {
-    console.log('Project container on changes');
+    // console.log('Project container on changes');
     if (this.id === undefined) {
-      this.projectService.mode = 'networkEditor';
+      this._projectService.mode = 'networkEditor';
     }
-    this.update();
+    setTimeout(() => this.update(), 1);
   }
 
   ngOnDestroy() {
     this._bottomSheet.dismiss();
   }
 
+  get project(): Project {
+    return this._appService.app.project;
+  }
+
+  get sidenavOpened(): boolean {
+    return this._projectService.sidenavOpened;
+  }
+
+  set sidenavOpened(value: boolean) {
+    this._projectService.sidenavOpened = value;
+  }
+
   update(): void {
-    console.log('Project container update');
+    // console.log('Project container update');
     if (this.id) {
-      this.appService.data.initProject(this.id).then(() => {
-        this._activityGraphService.init.emit();
-        if (this._router.url.includes('run') || this._simulationRunService.config['runAfterLoad']) {
-          this.projectService.mode = 'activityExplorer';
-          this._simulationRunService.run(this.appService.data.project, true)
+      this._appService.app.initProject(this.id, this.rev).then(() => {
+        this._activityGraphService.init.emit(this.project);
+        if (
+          this._router.url.includes('run') || this.project.config['runAfterLoad'] &&
+          !this.project.hasActivities()
+        ) {
+          this._projectService.mode = 'activityExplorer';
+          this._simulationRunService.run(this.project, true)
         }
       }).catch(() => {
         this._router.navigate([{ outlets: { primary: 'project/' } }]);
       })
     } else {
-      this.appService.data.initProject();
-      this._activityGraphService.init.emit();
+      this._appService.app.initProject().then(() => {
+        this._activityGraphService.init.emit(this.project);
+      });
     }
   }
 
@@ -79,22 +97,22 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
   }
 
   toggleNetworkQuickView(): void {
-    this.projectService.networkQuickView = !this.projectService.networkQuickView;
+    this._projectService.networkQuickView = !this._projectService.networkQuickView;
   }
 
   isNetworkQuickViewOpened(): boolean {
-    return this.projectService.networkQuickView;
+    return this._projectService.networkQuickView;
   }
 
   onOpenedStart(event: any): void {
-    if (this.projectService.mode == 'labBook') {
-      this.projectService.mode = 'networkEditor';
+    if (this._projectService.mode === 'labBook') {
+      this._projectService.mode = 'networkEditor';
     }
   }
 
   onClosedStart(event: any): void {
-    if (this.projectService.mode == 'networkEditor') {
-      this.projectService.mode = 'labBook';
+    if (this._projectService.mode === 'networkEditor') {
+      this._projectService.mode = 'labBook';
     }
   }
 

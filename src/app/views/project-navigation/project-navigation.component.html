@@ -15,7 +15,7 @@
   </button>
   <button mat-menu-item (click)="app.resetProjects()">
     <fa-icon class="menu-icon" icon="trash-alt"></fa-icon>
-    Delete all projects
+    Reset projects
   </button>
   <button mat-menu-item (click)="app.resetDatabases()">
     <fa-icon class="menu-icon" icon="trash-alt"></fa-icon>
@@ -44,34 +44,34 @@
 
       <mat-form-field floatLabel="never" style="width:100%; height:40px">
         <input matInput
-          [(ngModel)]="app.project.name"
+          [(ngModel)]="project.name"
+          autocomplete="off"
           class="formControl"
           placeholder="Project name"
-          type="text"
-        />
+          type="text"/>
         <span matSuffix>
           <button mat-icon-button
-            (click)="app.project.name = ''"
-            [style.display]="app.project.name ? '' : 'none'"
+            (click)="project.name = ''"
+            [style.display]="project.name ? '' : 'none'"
             aria-label="Clear"
-            class="button"
-            >
+            class="button">
             <fa-icon icon="times"></fa-icon>
           </button>
         </span>
       </mat-form-field>
 
       <button mat-icon-button
-        (click)="app.project.save()"
-        [style.display]="app.project.name ? '' : 'none'"
+        (click)="saveProject()"
+        [disabled]="project.isHashEqual() && project.updatedAt !== ''"
+        [matTooltip]="project.isHashEqual() && project.updatedAt !== '' ? 'This project is unchanged' : 'Save the current project'"
+        [style.display]="project.name ? '' : 'none'"
         class="list-icon"
-        matTooltip="Save the current project"
         >
         <fa-icon icon="save" class="fa-lg"></fa-icon>
       </button>
     </mat-list-item>
 
-    <mat-list-item class="simulation">
+    <mat-list-item class="simulation" [style.display]="app.projectRevisions.length === 0 ? '' : 'none'">
       <span matLine class="flex searchItem">
         <fa-icon class="icon" icon="search"></fa-icon>
         <span style="flex-grow:1">
@@ -99,24 +99,30 @@
     </mat-list-item>
   </mat-list>
 
-  <div style="height: calc(100vh - 160px); overflow: auto">
-    <ng-container [ngSwitch]="selectionList" class="project-theme">
+  <div class="project-theme" style="height: calc(100vh - 160px); overflow: auto">
 
-      <ng-container *ngSwitchCase="false">
+    <ng-container *ngIf="!selectionList">
+
+      <ng-container *ngIf="app.projectRevisions.length > 0">
+        <app-project-revision-list
+        [app]="app"
+        ></app-project-revision-list>
+      </ng-container>
+
+      <ng-container *ngIf="app.projectRevisions.length === 0">
         <app-project-list
           [app]="app"
-          class="project-theme"
         ></app-project-list>
       </ng-container>
 
-      <ng-container *ngSwitchCase="true">
-        <app-project-selection
-          [app]="app"
-          class="project-theme"
-        ></app-project-selection>
-      </ng-container>
-
     </ng-container>
+
+    <ng-container  *ngIf="selectionList">
+      <app-project-selection
+        [app]="app"
+      ></app-project-selection>
+    </ng-container>
+
   </div>
 
   <app-log></app-log>
@@ -126,7 +132,7 @@
 <ng-template #empty>
   <input matInput
     class="formControl"
-    placeholder="Name of the simulation"
+    placeholder="Name of the Project"
     type="text"
   />
 </ng-template>

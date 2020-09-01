@@ -22,11 +22,11 @@ export class LogComponent implements OnInit {
   }
 
   get config(): any {
-    return this.appService.data.config.data;
+    return this.appService.app.config;
   }
 
   setTime(time: Date): void {
-    this.logService.time == time;
+    this.logService.time === time;
   }
 
   isTime(time: Date): boolean {

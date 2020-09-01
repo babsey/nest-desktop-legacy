@@ -9,6 +9,7 @@ import * as PlotlyJS from 'plotly.js-cartesian-dist';
 import { PlotlyModule } from 'angular-plotly.js';
 PlotlyModule.plotlyjs = PlotlyJS;
 
+import { AppDirectivesModule } from '../../directives/directives.module';
 import { AppPipesModule } from '../../pipes/pipes.module';
 
 import { MaterialModule } from '../material.module';
@@ -50,6 +51,7 @@ import { NodeToolbarComponent } from './node-toolbar/node-toolbar.component';
     NodeToolbarComponent,
   ],
   imports: [
+    AppDirectivesModule,
     AppFormsModule,
     AppPipesModule,
     BrowserAnimationsModule,

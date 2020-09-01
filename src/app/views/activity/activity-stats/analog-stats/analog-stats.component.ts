@@ -45,11 +45,11 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
   }
 
   update(): void {
-    if (this.selectedRecordFrom == undefined) return
-    const activityData: number[] = this.activity.recorder.events[this.selectedRecordFrom];
+    if (this.selectedRecordFrom === undefined) return
+    const activityData: number[] = this.activity.events[this.selectedRecordFrom];
     const data = Object.create(null);
     this.activity.nodeIds.forEach(id => data[id] = [])
-    this.activity.recorder.events.senders.forEach((sender, idx) => {
+    this.activity.events.senders.forEach((sender, idx) => {
       data[sender].push(activityData[idx]);
     });
     const stats: AnalogStatsElement[] = this.activity.nodeIds.map(id => {
@@ -69,7 +69,7 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
   }
 
   mean(element: string): number {
-    if (this.dataSource == undefined) return 0
+    if (this.dataSource === undefined) return 0
 
     const data: any[] = this.dataSource.filteredData;
     return data.map(t => t[element]).reduce((acc, value) => acc + value, 0) / data.length;

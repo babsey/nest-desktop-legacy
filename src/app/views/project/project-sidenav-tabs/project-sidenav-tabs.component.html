@@ -51,7 +51,7 @@
     <fa-icon icon="code"></fa-icon>
   </button>
 
-  <ng-container *ngIf="config.devMode">
+  <ng-container *ngIf="appService.config.devMode">
     <button mat-icon-button
       (click)="selectMode('rawData')"
       [class.mat-fab]="isMode('rawData')"
@@ -62,7 +62,7 @@
       JSON
     </button>
 
-    <button mat-icon-button
+    <!-- <button mat-icon-button
       (click)="selectMode('sketchSettings')"
       [class.mat-fab]="isMode('sketchSettings')"
       matTooltip="Sketch settings"
@@ -70,7 +70,7 @@
       class="app-button"
       >
       <fa-icon icon="bezier-curve"></fa-icon>
-    </button>
+    </button> -->
   </ng-container>
 
   <ng-container *ngIf="activityGraphService.graph">
@@ -96,7 +96,7 @@
     </button>
   </ng-container>
 
-  <button mat-icon-button *ngIf="appService.data.project.hasActivities()"
+  <button mat-icon-button *ngIf="appService.app.project.hasActivities()"
     (click)="selectMode('stats')"
     [class.mat-fab]="isMode('stats')"
     matTooltip="Simulation stats"

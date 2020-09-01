@@ -52,7 +52,7 @@
             <mat-list-item class="list-item">
                 <app-value-slider-inline
                   [(value)]="node.size"
-                  [options]="node.config.data.size"
+                  [options]="node.config.size"
                   style="width:100%"
                   (valueChange)="update()"
                 ></app-value-slider-inline>
@@ -65,7 +65,7 @@
             <mat-list-item class="list-item">
               <app-value-slider-inline
                 [(value)]="node.spatial.positions.rows"
-                [options]="node.spatial.config.data.rows"
+                [options]="node.spatial.config.rows"
                 style="width:100%"
                 (valueChange)="update()">
               </app-value-slider-inline>
@@ -73,7 +73,7 @@
             <mat-list-item class="list-item">
               <app-value-slider-inline
                 [(value)]="node.spatial.positions.columns"
-                [options]="node.spatial.config.data.columns"
+                [options]="node.spatial.config.columns"
                 style="width:100%"
                 (valueChange)="update()">
               </app-value-slider-inline>
@@ -96,7 +96,7 @@
         <mat-list-item class="list-item">
           <app-array-input-popup
           [(value)]="node.spatial.positions.center"
-          [options]="node.spatial.config.data.center"
+          [options]="node.spatial.config.center"
           style="width:100%"
           (valueChange)="update()">
         </app-array-input-popup>
@@ -104,7 +104,7 @@
         <mat-list-item class="list-item">
           <app-array-input-popup
           [(value)]="node.spatial.positions.extent"
-          [options]="node.spatial.config.data.extent"
+          [options]="node.spatial.config.extent"
           style="width:100%"
           (valueChange)="update()">
         </app-array-input-popup>
@@ -112,7 +112,7 @@
         <mat-list-item class="list-item">
           <app-array-input-popup
           [(value)]="node.spatial.positions.values"
-          [options]="node.spatial.config.data.positions"
+          [options]="node.spatial.config.positions"
           style="width:100%">
         </app-array-input-popup>
         </mat-list-item>

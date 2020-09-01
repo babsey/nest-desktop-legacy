@@ -6,7 +6,6 @@ import { enterAnimation } from '../../animations/enter-animation';
 
 import { Network } from '../../components/network/network';
 
-import { NetworkSketchService } from '../../services/network/network-sketch.service';
 import { ProjectService } from '../../services/project/project.service';
 
 
@@ -19,19 +18,18 @@ import { ProjectService } from '../../services/project/project.service';
 export class NetworkComponent implements OnInit, AfterViewInit {
   @Input() network: Network;
   @ViewChild('content', { static: false }) content: ElementRef;
+  private _mobileQueryListener: () => void;
   public width: number = 600;
   public height: number = 400;
   public mode: string = 'selection';
   public mobileQuery: MediaQueryList;
-  private _mobileQueryListener: () => void;
 
   constructor(
-    private _networkSketchService: NetworkSketchService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
+    private _projectService: ProjectService,
     private _route: ActivatedRoute,
     private _router: Router,
-    public projectService: ProjectService,
   ) {
     this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
@@ -48,16 +46,24 @@ export class NetworkComponent implements OnInit, AfterViewInit {
     }, 1)
   }
 
+  get sidenavOpened(): boolean {
+    return this._projectService.sidenavOpened;
+  }
+
+  set sidenavOpened(value: boolean) {
+    this._projectService.sidenavOpened = value;
+  }
+
   toggleSidenav(): void {
-    this.projectService.sidenavOpened = !this.projectService.sidenavOpened;
+    this.sidenavOpened = !this.sidenavOpened;
   }
 
   selectController(mode: string): void {
-    if (this.mode == mode) {
-      this.projectService.sidenavOpened = !this.projectService.sidenavOpened;
+    if (this.mode === mode) {
+      this.sidenavOpened = !this.sidenavOpened;
     } else {
       this.mode = mode;
-      this.projectService.sidenavOpened = true;
+      this.sidenavOpened = true;
     }
   }
 

@@ -14,6 +14,13 @@ import { AppService } from '../../../services/app/app.service';
 export class ConnectionMaskComponent implements OnInit {
   @Input() mask: ConnectionMask;
   public showPlot: boolean = false;
+  public maskOptions: any = [
+    { value: 'none', label: 'none' },
+    { value: 'rectangular', label: 'rectangular' },
+    { value: 'circular', label: 'circular' },
+    { value: 'doughnut', label: 'doughnut' },
+    { value: 'elliptical', label: 'elliptical' }
+  ];
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -23,14 +30,6 @@ export class ConnectionMaskComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  }
-
-  onMouseOver(even: MouseEvent): void {
-    this._appService.rightClick = true;
-  }
-
-  onMouseOut(event: MouseEvent): void {
-    this._appService.rightClick = false;
   }
 
   onContextMenu(event: MouseEvent): void {

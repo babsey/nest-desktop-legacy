@@ -6,14 +6,14 @@ import { Panel } from './panel';
 export class AnalogLines extends Panel {
 
   constructor(graph: ActivityChartGraph) {
-    super(graph);
+    super('AnalogLines', graph);
     this.init();
   }
 
   init(): void {
     this.data = [];
     this.activities.map(activity => {
-      const recordables: string[] = Object.keys(activity.recorder.events).filter(d => !['times', 'senders'].includes(d));
+      const recordables: string[] = Object.keys(activity.events).filter(d => !['times', 'senders'].includes(d));
       recordables.forEach(recordFrom => {
         if (recordFrom === 'V_m') {
           this.addSpikeThresholdLine(activity);
@@ -31,7 +31,7 @@ export class AnalogLines extends Panel {
   update(): void {
     this.init();
     this.activities.forEach(activity => {
-      const recordables: string[] = Object.keys(activity.recorder.events)
+      const recordables: string[] = Object.keys(activity.events)
         .filter(d => !['times', 'senders'].includes(d));
       recordables.forEach(recordFrom => {
         if (recordFrom === 'V_m') {
@@ -106,14 +106,14 @@ export class AnalogLines extends Panel {
 
   updateSingleLine(activity: Activity, recordFrom: string): void {
     const data: any = this.data.find(d => d.activityIdx === activity.idx && d.id === recordFrom);
-    data.x = activity.recorder.events.times;
-    data.y = activity.recorder.events[recordFrom];
-    data.name = recordFrom + ' of ' + activity.recorder.senders[0];
+    data.x = activity.events.times;
+    data.y = activity.events[recordFrom];
+    data.name = recordFrom + ' of ' + activity.senders[0];
     data.line.color = activity.recorder.view.color;
   }
 
   addMultipleLines(activity: Activity, recordFrom: string): void {
-    activity.recorder.senders.slice(0,100).forEach((sender, idx) => {
+    activity.senders.slice(0,100).forEach((sender, idx) => {
       this.data.push({
         activityIdx: activity.idx,
         legendgroup: recordFrom + '_group',
@@ -135,15 +135,15 @@ export class AnalogLines extends Panel {
 
   updateMultipleLines(activity: Activity, recordFrom: string): void {
     const data: any = this.data.filter(d => d.activityIdx === activity.idx && d.legendgroup === recordFrom + '_group');
-    const senders: number[] = activity.recorder.senders.slice(0,100);
+    const senders: number[] = activity.senders.slice(0,100);
     const events: any[] = senders.map(sender => { return { x: [], y: [] } });
 
-    activity.recorder.events.senders.forEach((sender: number, idx: number) => {
-      if (!activity.recorder.events.hasOwnProperty(recordFrom)) return
+    activity.events.senders.forEach((sender: number, idx: number) => {
+      if (!activity.events.hasOwnProperty(recordFrom)) return
       const senderIdx: number = senders.indexOf(sender);
       if (senderIdx === -1) return
-      events[senderIdx].x.push(activity.recorder.events.times[idx]);
-      events[senderIdx].y.push(activity.recorder.events[recordFrom][idx]);
+      events[senderIdx].x.push(activity.events.times[idx]);
+      events[senderIdx].y.push(activity.events[recordFrom][idx]);
       events[senderIdx]['name'] = recordFrom + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']';
     })
 
@@ -194,15 +194,24 @@ export class AnalogLines extends Panel {
   }
 
   updateAverageLine(activity: Activity, recordFrom: string): void {
+<<<<<<< HEAD
     const data: any[] = this.data.filter(d => d.activityIdx === activity.idx && d.legendgroup === recordFrom + '_avg');
     const senders: number[] = activity.recorder.senders;
     const events: any[] = senders.map(sender => { return { x: [], y: [] } });
 
     activity.recorder.events.senders.forEach((sender: number, idx: number) => {
       if (!activity.recorder.events.hasOwnProperty(recordFrom)) return
+=======
+    const data: any = this.data.filter(d => d.activityIdx === activity.idx && d.legendgroup === recordFrom + '_avg');
+    const senders: number[] = activity.senders;
+    const events: any[] = senders.map(sender => { return { x: [], y: [] } });
+
+    activity.events.senders.forEach((sender, idx) => {
+      if (!activity.events.hasOwnProperty(recordFrom)) return
+>>>>>>> 59d2024... Big Bang Commit (BBC)
       const senderIdx: number = senders.indexOf(sender);
-      events[senderIdx].x.push(activity.recorder.events.times[idx]);
-      events[senderIdx].y.push(activity.recorder.events[recordFrom][idx]);
+      events[senderIdx].x.push(activity.events.times[idx]);
+      events[senderIdx].y.push(activity.events[recordFrom][idx]);
       events[senderIdx]['name'] = recordFrom + ' of [' + senders[0] + ' - ' + senders[senders.length - 1] + ']';
     })
 

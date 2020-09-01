@@ -1,5 +1,7 @@
 import { Code } from '../code';
+import { Connection } from '../connection/connection';
 import { Network } from './network';
+import { Node } from '../node/node';
 
 
 export class NetworkCode extends Code {
@@ -12,13 +14,13 @@ export class NetworkCode extends Code {
 
   createNodes(): string {
     let script: string = '';
-    this.network.nodes.forEach(node => script += node.code.create());
+    this.network.nodes.forEach((node: Node) => script += node.code.create());
     return script;
   }
 
   connectNodes(): string {
     let script: string = '';
-    this.network.connections.forEach(connection => script += connection.code.connect());
+    this.network.connections.forEach((connection: Connection) => script += connection.code.connect());
     return script;
   }
 
@@ -27,7 +29,7 @@ export class NetworkCode extends Code {
     script += 'response = {';
     script += this._() + '"kernel": {"time": nest.GetKernelStatus("time")},'
     script += this._() + '"activities": [';
-    const activities: string[] = this.network.recorders.map(node => node.code.getActivity());
+    const activities: string[] = this.network.recorders.map((node: Node) => node.code.getActivity());
     script += activities.join(',');
     script += ']';
     script += this.end() + '}';

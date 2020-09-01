@@ -18,28 +18,28 @@
     style="padding:0"
     >
     <mat-list-option
-      [selected]="simulationRunService.config['showSnackBar']"
+      [selected]="project.config['showSnackBar']"
       value="showSnackBar"
       class="mat-menu-item">
       <span>Show simulation message</span>
     </mat-list-option>
     <mat-list-option
-      [selected]="simulationRunService.config['autoRandomSeed']"
-      value="autoRandomSeed"
-      class="mat-menu-item">
-      <span>Randomize seed</span>
-    </mat-list-option>
-    <mat-list-option
-      [selected]="simulationRunService.config['runAfterChange']"
+      [selected]="project.config['runAfterChange']"
       value="runAfterChange"
       class="mat-menu-item">
       <span>Simulate after change</span>
     </mat-list-option>
     <mat-list-option
-      [selected]="simulationRunService.config['runAfterLoad']"
+      [selected]="project.config['runAfterLoad']"
       value="runAfterLoad"
       class="mat-menu-item">
       <span>Simulate after load</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="project.simulation.config['autoRandomSeed']"
+      value="autoRandomSeed"
+      class="mat-menu-item">
+      <span>Randomize seed</span>
     </mat-list-option>
   </mat-selection-list>
 
@@ -60,8 +60,8 @@
     <span class="no-print">
       <span class="flex" style="width: 200px">
         <button mat-icon-button
-          (click)="projectService.selectMode('networkEditor')"
-          [class.active]="projectService.isMode('networkEditor')"
+          (click)="selectMode('networkEditor')"
+          [class.active]="isMode('networkEditor')"
           matTooltip="Construct network"
           >
           <span class="fa-stack">
@@ -70,8 +70,8 @@
           </span>
         </button>
         <button mat-icon-button
-          (click)="projectService.selectMode('activityExplorer')"
-          [class.active]="projectService.isMode('activityExplorer')"
+          (click)="selectMode('activityExplorer')"
+          [class.active]="isMode('activityExplorer')"
           matTooltip="Explore activity"
           >
           <span class="fa-stack">
@@ -80,8 +80,8 @@
           </span>
         </button>
         <button mat-icon-button
-          (click)="projectService.selectMode('labBook')"
-          [class.active]="projectService.isMode('labBook')"
+          (click)="selectMode('labBook')"
+          [class.active]="isMode('labBook')"
           matTooltip="View network summary"
           >
           <span class="fa-stack">
@@ -98,19 +98,24 @@
 
     <span class="flex-spacer"></span>
 
-    <mat-form-field style="font-size:12px; width:60px; display: none">
-      <mat-select [(value)]="simulationRunService.mode">
-        <mat-option value="object">declarative</mat-option>
-        <mat-option value="code">imperative</mat-option>
-      </mat-select>
-    </mat-form-field>
-
     <button mat-icon-button
-      (click)="run(true)"
+      (click)="duplicateProject()"
       (contextmenu)="onContextMenu($event)"
-      (mouseout)="onMouseOut($event)"
-      (mouseover)="onMouseOver($event)"
-      [disabled]="simulationRunService.running"
+      matTooltip="Duplicate current project"
+      class="no-print"
+      style="width:128px"
+      >
+      <fa-icon
+        icon="clone"
+        style="margin:0 8px"
+      ></fa-icon>
+      Duplicate
+    </button>
+
+    <button mat-icon-button appContextMenuTrigger
+      (click)="run()"
+      (contextmenu)="onContextMenu($event)"
+      [disabled]="running"
       matTooltip="Simulate"
       class="no-print"
       style="width:128px"
@@ -118,8 +123,8 @@
       <fa-icon
         icon="play"
         style="margin:0 8px"
-        ></fa-icon>
-        Simulate
+      ></fa-icon>
+      Simulate
     </button>
   </mat-toolbar>
 </span>

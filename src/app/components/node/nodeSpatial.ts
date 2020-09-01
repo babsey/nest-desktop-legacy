@@ -8,7 +8,7 @@ export class FreePositions {
   spatial: NodeSpatial;
   values: number[][] = [];
 
-  // arguments for nest.spatial.FreePositions
+  // arguments for nest.spatial.free
   pos: any;
   center: number[];               // FreePositions has no argument for center in NEST 3.
   extent: number[];
@@ -42,12 +42,12 @@ export class FreePositions {
     });
   }
 
-  serialize(to: string): any {
+  toJSON(target: string = 'db'): any {
     const positions: any = {
       center: this.center,
       extent: this.extent,
     }
-    if (to === 'simulator') {
+    if (target === 'simulator') {
       positions['positions'] = this.pos;
       positions['edge_wrap'] = this.edgeWrap;
       positions['num_dimensions'] = this.numDimensions;
@@ -66,7 +66,7 @@ export class GridPositions {
   spatial: NodeSpatial;
   values: number[][];
 
-  // arguments for nest.spatial.GridPositions
+  // arguments for nest.spatial.grid
   shape: number[];
   center: number[];
   extent: number[];
@@ -102,7 +102,7 @@ export class GridPositions {
 
   range(min: number, max: number, size: number): number[] {
     const step: number = (max - min) / size / 2;
-    return math.range(min, max, step)['_data'].filter((v, i) => i % 2 == 1)
+    return math.range(min, max, step)['_data'].filter((v: number, i: number) => i % 2 === 1)
   }
 
   generate(): void {
@@ -116,15 +116,15 @@ export class GridPositions {
     const X: number[] = this.range(minX, maxX, this.shape[0]);
     const Y: number[] = this.range(minY, maxY, this.shape[1]);
     this.values = [];
-    X.forEach(x => Y.forEach(y => this.values.push([this.round(x), this.round(y)])))
+    X.forEach((x: number) => Y.forEach((y: number) => this.values.push([this.round(x), this.round(y)])))
   }
 
-  serialize(to): any {
+  toJSON(target: string = 'db'): any {
     const positions: any = {
       center: this.center,
       extent: this.extent,
     }
-    if (to === 'simulator') {
+    if (target === 'simulator') {
       positions['rows'] = this.rows;
       positions['columns'] = this.columns;
       positions['edge_wrap'] = this.edgeWrap;
@@ -138,14 +138,13 @@ export class GridPositions {
 }
 
 
-export class NodeSpatial {
+export class NodeSpatial extends Config {
   node: Node;
-  config: Config;
   positions: FreePositions | GridPositions;
 
   constructor(node: Node, spatial: any = {}) {
+    super('NodeSpatial');
     this.node = node;
-    this.config = new Config(this.constructor.name);
     this.initPositions(spatial);
   }
 
@@ -167,8 +166,12 @@ export class NodeSpatial {
     return this.positions !== undefined;
   }
 
-  serialize(to): any {
-    return this.positions.serialize(to);
+  isRandom(): boolean {
+    return this.hasPositions() && this.positions.constructor.name === 'FreePositions'
+  }
+
+  toJSON(target: string = 'db'): any {
+    return this.positions.toJSON(target);
   }
 
 }

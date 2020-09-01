@@ -62,7 +62,7 @@ export class Parameter {
     return param;
   }
 
-  serialize(): any {
+  toJSON(): any {
     const params: any = {
       id: this.id,
       value: this.value,
