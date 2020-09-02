@@ -51,7 +51,7 @@
     <fa-icon icon="code"></fa-icon>
   </button>
 
-  <ng-container *ngIf="appService.config.devMode">
+  <ng-container *ngIf="appService.app.config.devMode">
     <button mat-icon-button
       (click)="selectMode('rawData')"
       [class.mat-fab]="isMode('rawData')"

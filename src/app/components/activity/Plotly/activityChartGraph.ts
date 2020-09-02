@@ -96,17 +96,17 @@ export class ActivityChartGraph extends ActivityGraph {
   }
 
   init(mode: string): void {
-    console.log('Init activity chart');
+    // console.log('Init activity chart');
     this.panels = mode === 'model' ? [new ModelAnalogLines(this)] : this.registerPanels.map(panel => panel[1](this));
   }
 
   update(): void {
-    console.log('Update activity chart');
+    // console.log('Update activity chart');
     this.panels.forEach(panel => panel.update());
   }
 
   updateColor(): void {
-    console.log('Update color in activity chart');
+    // console.log('Update color in activity chart');
     this.panels.forEach(panel => panel.updateColor());
   }
 

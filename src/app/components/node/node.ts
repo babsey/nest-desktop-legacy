@@ -18,7 +18,7 @@ export class Node extends Config {
   // Arguments for nest.Create
   private _modelId: string;
   size: number;
-  params: Parameter[] = [];
+  private _params: Parameter[] = [];
   spatial: NodeSpatial;
   positions: number[][] = [];
 
@@ -76,6 +76,14 @@ export class Node extends Config {
     this.network.commit();
   }
 
+  get params(): Parameter[] {
+    return this._params;
+  }
+
+  get filteredParams(): Parameter[] {
+    return this.params.filter((param: Parameter) => param.visible);
+  }
+
   get recordables(): string[] {
     if (this.model.existing !== 'multimeter') return []
     const targets: Node[] = this.targets;
@@ -110,7 +118,7 @@ export class Node extends Config {
 
   initParameters(node: any = null): void {
     // Update parameters from model or node
-    this.params = [];
+    this._params = [];
     if (this.model && node && node.hasOwnProperty('params')) {
       this.model.params.forEach((modelParam: Parameter) => {
         const nodeParam = node.params.find((p: any) => p.id === modelParam.id);

@@ -2,8 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Simulation } from '../../../components/simulation/simulation';
 
-import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
-
 
 @Component({
   selector: 'app-simulation-controller',
@@ -15,7 +13,6 @@ export class SimulationControllerComponent implements OnInit {
   public params: any[];
 
   constructor(
-    public simulationRunService: SimulationRunService,
   ) { }
 
   ngOnInit() {
@@ -24,14 +21,18 @@ export class SimulationControllerComponent implements OnInit {
 
   onChange(value: any, id: string): void {
     if (id === 'randomSeed') {
-      this.simulationRunService.config['autoRandomSeed'] = false;
-      this.simulationRunService.saveConfig()
+      this.simulation.config = {'autoRandomSeed': false};
     }
   }
 
   onSelectionChange(event: any): void {
-    this.simulationRunService.config[event.option.value] = event.option.selected;
-    this.simulationRunService.saveConfig()
+    const config: any = {};
+    config[event.option.value] = event.option.selected;
+    if (event.option.value === 'autoRandomSeed') {
+      this.simulation.config = config;
+    } else {
+      this.simulation.project.config = config;
+    }
   }
 
 }

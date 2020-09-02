@@ -13,31 +13,56 @@ enum ElementType {
 
 export class Model {
   app: App;                             // parent
-  idx: number;                          // generative
   code: ModelCode;                      // code for model
 
-  id: string;                           // model id
-  existing: string;                     // existing model in NEST
-  elementType: ElementType;             // element type of the model
-  label: string;                        // model label for view
-  params: Parameter[] = [];             // model parameters
+  private _id: string;                           // model id
+  private _idx: number;                          // generative
+  private _elementType: ElementType;             // element type of the model
+  private _existing: string;                     // existing model in NEST
+  private _label: string;                        // model label for view
+  private _params: Parameter[] = [];             // model parameters
   recordables: string[];                // recordables for multimeter
 
   constructor(app: App, model: any) {
     this.app = app;
-    this.idx = this.app.models.length;
     this.code = new ModelCode(this);
 
-    this.id = model.id;
-    this.elementType = model.elementType || model.element_type;
-    this.existing = model.existing || model.id;
+    this._id = model.id;
+    this._idx = this.app.models.length;
+    this._elementType = model.elementType || model.element_type;
+    this._existing = model.existing || model.id;
+
     this.label = model.label || '';
     model.params.forEach((param: any) => this.addParameter(param));
     this.recordables = model.recordables || [];
   }
 
+  get id(): string {
+    return this._id;
+  }
+
+  get elementType(): string {
+    return this._elementType;
+  }
+
+  get existing(): string {
+    return this._existing;
+  }
+
+  get label(): string {
+    return this._label;
+  }
+
+  set label(value: string) {
+    this._label = value;
+  }
+
   get model(): Model {
     return this;
+  }
+
+  get params(): Parameter[] {
+    return this._params;
   }
 
   get value(): string {
@@ -45,11 +70,33 @@ export class Model {
   }
 
   addParameter(param: any): void {
-    this.params.push(new Parameter(this, param));
+    this._params.push(new Parameter(this, param));
+  }
+
+  newParameter(paramId: string, value: any): void {
+    const param: any = {
+      id: paramId,
+      label: paramId,
+      value: value,
+      level: 1,
+      input: 'valueSlider',
+      min: 0,
+      max: 100,
+      step: 1
+    };
+    if (Array.isArray(value)) {
+      param.input = 'arrayInput';
+    }
+    this.addParameter(param);
+    this._params.sort((a: any, b: any) => a.id - b.id);
+  }
+
+  removeParameter(paramId: string): void {
+    this._params = this.params.filter((param: Parameter) => param.id != paramId);
   }
 
   clean(): void {
-    this.idx = this.app.models.indexOf(this);
+    this._idx = this.app.models.indexOf(this);
   }
 
   clone(): Model {

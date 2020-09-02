@@ -23,14 +23,14 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('Ng Init activity chart view')
+    // console.log('Ng Init activity chart view')
     this._subscriptionInit = this.activityGraphService.init.subscribe((project: Project) => this.init(project));
     this._subscriptionUpdate = this.activityGraphService.update.subscribe(() => this.update());
     this.init(this.project);
   }
 
   ngOnDestroy() {
-    console.log('Ng destroy activity chart view');
+    // console.log('Ng destroy activity chart view');
     this._subscriptionInit.unsubscribe();
     this._subscriptionUpdate.unsubscribe();
   }
@@ -40,12 +40,12 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
   }
 
   init(project: Project): void {
-    console.log('Init activity chart view for ' + project.name);
+    // console.log('Init activity chart view for ' + project.name);
     this.activityGraphService.graph = new ActivityChartGraph(project);
   }
 
   update(): void {
-    console.log('Update activity chart view for ' + this.project.name);
+    // console.log('Update activity chart view for ' + this.project.name);
     this.activityGraphService.graph.update();
     // this.activities.map(activity => {
     //   var recordables = Object.keys(activity.events).filter(d => !['times', 'senders'].includes(d));

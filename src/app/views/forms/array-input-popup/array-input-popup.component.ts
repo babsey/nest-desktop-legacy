@@ -31,7 +31,7 @@ export class ArrayInputPopupComponent implements OnInit {
 
   onChange(valueJSON: string): void {
     // console.log('Change value of array input')
-    var value = JSON.parse(valueJSON) || [];
+    const value: any = JSON.parse(valueJSON) || [];
     this.valueChange.emit(value);
   }
 

@@ -15,7 +15,7 @@ import { ModelConfigDialogComponent } from '../model-config-dialog/model-config-
   styleUrls: ['./model-param.component.scss']
 })
 export class ModelParamComponent implements OnInit {
-  @Input() model: string;
+  @Input() modelId: string;
   @Input() options: any;
   @Input() value: any;
   @Input() view: string;
@@ -40,11 +40,11 @@ export class ModelParamComponent implements OnInit {
   }
 
   openConfigDialog(): void {
-    if (this.options.id && this.model) {
+    if (this.options.id && this.modelId) {
       this._dialog.open(ModelConfigDialogComponent, {
         data: {
           param: this.options.id,
-          model: this.model,
+          model: this.modelId,
         }
       });
     }

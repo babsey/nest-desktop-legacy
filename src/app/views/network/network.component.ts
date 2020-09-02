@@ -73,7 +73,7 @@ export class NetworkComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize', [])
   resize(): void {
-    var element = this.content['elementRef'].nativeElement;
+    const element = this.content['elementRef'].nativeElement;
     this.height = element.clientHeight;
     this.width = element.clientWidth;
   }

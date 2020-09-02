@@ -18,10 +18,10 @@ import { ModelService } from '../../../services/model/model.service';
 })
 export class ModelListComponent implements OnInit, OnDestroy {
   private _subscription: any;
-  public models: string[] = [];
-  public filteredModels: string[] = [];
-  public searchTerm: string = '';
-  public view: string = 'enabled';
+  private _models: string[] = [];
+  private _filteredModels: string[] = [];
+  private _searchTerm: string = '';
+  private _view: string = 'enabled';
 
   constructor(
     private _http: HttpClient,
@@ -42,10 +42,26 @@ export class ModelListComponent implements OnInit, OnDestroy {
     return this._appService.app;
   }
 
+  get filteredModels(): string[] {
+    return this._filteredModels;
+  }
+
+  get searchTerm(): string {
+    return this._searchTerm;
+  }
+
+  get view(): string {
+    return this._view;
+  }
+
+  set view(value: string) {
+    this._view = value;
+  }
+
   update(): void {
     const urlRoot: string = this.app.nestServer.url;
     this._http.get(urlRoot + '/api/Models').subscribe(resp => {
-      this.models = Object.entries(resp).map(entry => entry[1]);
+      this._models = Object.entries(resp).map(entry => entry[1]);
       this.filterModels();
     })
   }
@@ -58,17 +74,17 @@ export class ModelListComponent implements OnInit, OnDestroy {
           result.push(model);
         }
       }
-      this.filteredModels = result;
+      this._filteredModels = result;
     }
   }
 
   filterModels(): void {
-    this.filteredModels = this.models;
+    this._filteredModels = this._models;
     this.filterModelsBySearch();
   }
 
   search(query: string): void {
-    this.searchTerm = query;
+    this._searchTerm = query;
     this.filterModels();
   }
 

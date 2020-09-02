@@ -16,10 +16,8 @@ export class AppService {
 
   constructor(
     private _snackBar: MatSnackBar,
-  ) {}
-
-  get config(): any {
-    return this.app === undefined ? {} : this.app.config;
+  ) {
+    this.app = new App();
   }
 
   upload(projects: Project[]): void {

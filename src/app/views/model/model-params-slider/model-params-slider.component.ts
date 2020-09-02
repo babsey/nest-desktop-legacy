@@ -11,15 +11,15 @@ import { ModelService } from '../../../services/model/model.service';
   styleUrls: ['./model-params-slider.component.scss']
 })
 export class ModelParamsSliderComponent implements OnInit, OnChanges {
-  @Input() model: any = {};
-  public settings: Model;
+  @Input() modelId: string = '';
+  private model: Model;
 
   constructor(
     private _modelService: ModelService,
   ) { }
 
   ngOnInit() {
-    this.settings = this._modelService.getSettings(this.model);
+    this.model = this._modelService.getModel(this.modelId);
   }
 
   ngOnChanges() {

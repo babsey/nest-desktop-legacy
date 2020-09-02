@@ -61,14 +61,14 @@ export class Synapse {
     // Update parameters from model or node
     this.params = [];
     if (this.model && synapse && synapse.hasOwnProperty('params')) {
-      this.model.params.forEach(modelParam => {
+      this.model.params.forEach((modelParam: Parameter) => {
         const synParam = synapse.params.find((param: Parameter) => param.id === modelParam.id);
         this.addParameter(synParam || modelParam);
       });
     } else if (this.model) {
-      this.model.params.forEach(param => this.addParameter(param));
+      this.model.params.forEach((param: Parameter) => this.addParameter(param));
     } else if (synapse.hasOwnProperty('params')) {
-      synapse.params.forEach(param => this.addParameter(param));
+      synapse.params.forEach((param: Parameter) => this.addParameter(param));
     }
   }
 

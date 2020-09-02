@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { listAnimation } from '../../../animations/list-animation';
 
+import { Model } from '../../../components/model/model';
+
 import { ModelService } from '../../../services/model/model.service';
 
 
@@ -14,21 +16,28 @@ import { ModelService } from '../../../services/model/model.service';
   ]
 })
 export class ModelParamsListComponent implements OnInit {
-  @Input() model: string = '';
-  public objectKeys = Object.keys;
+  @Input() modelId: string = '';
 
   constructor(
-    public modelService: ModelService,
+    private _modelService: ModelService,
   ) {
   }
 
   ngOnInit() {
   }
 
+  get defaults(): any[] {
+    return this._modelService.defaults;
+  }
+
+  get defaultsKeys(): string[] {
+    return Object.keys(this.defaults);
+  }
+
   hasParam(paramId: string): boolean {
-    if (this.modelService.hasModel(this.model)) {
-      const settings: any = this.modelService.getSettings(this.model);
-      return settings.params.filter(param => param.id === paramId).length > 0;
+    if (this._modelService.hasModel(this.modelId)) {
+      const model: Model = this._modelService.getModel(this.modelId);
+      return model.params.filter((param: any) => param.id === paramId).length > 0;
     }
     return false
   }

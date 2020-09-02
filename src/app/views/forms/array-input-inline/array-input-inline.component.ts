@@ -32,8 +32,8 @@ export class ArrayInputInlineComponent implements OnInit {
 
   onChange(event: any): void {
     // console.log('Change value of array input')
-    var valueJSON = event.target.value;
-    var value = JSON.parse(valueJSON) || [];
+    const valueJSON: string = event.target.value;
+    const value: any = JSON.parse(valueJSON) || [];
     this.valueChange.emit(value);
   }
 

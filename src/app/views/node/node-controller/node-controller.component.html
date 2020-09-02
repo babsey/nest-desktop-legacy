@@ -35,8 +35,9 @@
   </ng-container>
 
   <mat-list dense>
-    <ng-container *ngFor="let param of node.params">
-      <mat-list-item [style.display]="param.visible ? '' : 'None'" >
+    <ng-container *ngFor="let param of node.filteredParams">
+      <!-- <mat-list-item [style.display]="param.visible ? '' : 'None'" > -->
+      <mat-list-item>
         <app-node-param [param]="param"></app-node-param>
       </mat-list-item>
     </ng-container>

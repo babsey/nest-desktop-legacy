@@ -20,7 +20,7 @@ export class ModelComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    let paramMap = this._route.snapshot.paramMap;
+    let paramMap: any = this._route.snapshot.paramMap;
     this.modelService.selectedModel = paramMap.get('model');
   }
 
@@ -32,16 +32,11 @@ export class ModelComponent implements OnInit, OnDestroy {
     return this.modelService.selectedModel;
   }
 
-  get model(): any {
-    // return this._modelService.getSettings(this.modelId);
-    return this.modelService.defaults;
-  }
-
   get elementType(): string {
-    return this.model.element_type;
+    return this.modelService.defaults.element_type;
   }
 
   get recordables(): string {
-    return this.model.recordables || [];
+    return this.modelService.defaults.recordables || [];
   }
 }

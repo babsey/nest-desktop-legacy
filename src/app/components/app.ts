@@ -126,8 +126,8 @@ export class App extends Config {
     return this.models.find(model => model.id === modelId) !== undefined;
   }
 
-  getModel(modelId: string): Model | any {
-    return this.models.find(model => model.id === modelId) || { id: modelId, params: [] };
+  getModel(modelId: string): Model {
+    return this.models.find(model => model.id === modelId) || new Model(this, { id: modelId, params: [] });
   }
 
   addModel(data: any): Promise<any> {

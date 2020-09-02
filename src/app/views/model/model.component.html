@@ -3,31 +3,31 @@
 <span id="model">
   <ng-container *ngIf="!modelService.progress; else loading">
     <span class="flex" [@enterAnimation]>
-      <mat-sidenav-container>
 
+      <mat-sidenav-container>
         <mat-sidenav
-          role="region"
+          [opened]="true"
           mode="side"
           position="end"
-          [opened]="true">
+          role="region">
 
           <ng-container [ngSwitch]="modelService.sidenavMode">
             <ng-container *ngSwitchCase="'list'">
               <app-model-params-list
-                [model]="modelId"
+                [modelId]="modelId"
                 class="modelParameters"
               ></app-model-params-list>
             </ng-container>
             <ng-container *ngSwitchCase="'selection'">
               <app-model-params-selection-list
-                [model]="modelId"
+                [modelId]="modelId"
                 class="modelParameters"
               ></app-model-params-selection-list>
             </ng-container>
             <ng-container *ngSwitchCase="'slider'">
               <ng-container *ngIf="modelService.hasModel()">
                 <app-model-params-slider
-                  [model]="modelId"
+                  [modelId]="modelId"
                 ></app-model-params-slider>
               </ng-container>
             </ng-container>
@@ -38,12 +38,12 @@
         <mat-sidenav-content>
           <mat-card *ngIf="elementType === 'neuron' && recordables.includes('V_m')">
             <app-model-activity-graph
-              [model]="modelId"
+              [modelId]="modelId"
             ></app-model-activity-graph>
           </mat-card>
 
           <app-model-documentation
-            [model]="modelId"
+            [modelId]="modelId"
           ></app-model-documentation>
         </mat-sidenav-content>
 

@@ -9,8 +9,8 @@
 
   <mat-list dense>
     <span [@listAnimation]="node.params.length">
-      <ng-container *ngFor="let param of node.params">
-        <mat-list-item [style.display]="param.visible ? '' : 'none'">
+      <ng-container *ngFor="let param of node.filteredParams">
+        <mat-list-item>
           <span class="flex">
             <span class="ellipsis">{{ param.options.label | capitalize }}</span>
             <span class="flex-spacer"></span>

@@ -10,19 +10,12 @@ import { ActivityGraphService } from '../activity/activity-graph.service';
 import { LogService } from '../log/log.service';
 
 
-var STORAGE_NAME = 'simulation-config';
-
 @Injectable({
   providedIn: 'root'
 })
 export class SimulationRunService {
   private _project: Project;
   private _snackBarRef: any;
-  public config: Object = {
-    runAfterLoad: true,
-    runAfterChange: true,
-    autoRandomSeed: false,
-  }
   public running: boolean = false;
   public viewCodeEditor: boolean = false;
 
@@ -33,22 +26,11 @@ export class SimulationRunService {
     private _snackBar: MatSnackBar,
     private _toastr: ToastrService,
   ) {
-    const configJSON: string = localStorage.getItem(STORAGE_NAME);
-    if (configJSON) {
-      this.config = JSON.parse(configJSON)
-    } else {
-      this.saveConfig()
-    }
-  }
-
-  saveConfig(): void {
-    const configJSON: string = JSON.stringify(this.config);
-    localStorage.setItem(STORAGE_NAME, configJSON);
   }
 
   run(project: Project, force: boolean = false): Promise<any> {
     if (this.running) return
-    if (!(force || this.config['runAfterChange'])) return
+    if (!(force || project.config['runAfterChange'])) return
 
     this._logService.reset();
 
@@ -62,7 +44,7 @@ export class SimulationRunService {
     }
 
     this.running = true;
-    if (this.config['showSnackBar']) {
+    if (project.config['showSnackBar']) {
       this._snackBarRef = this._snackBar.open('The simulation is running. Please wait.', null, {});
     }
 

@@ -1,8 +1,10 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+
+import { App } from '../../components/app';
+import { Model } from '../../components/model/model';
 
 import { AppService } from '../app/app.service';
 
@@ -12,18 +14,11 @@ import { AppService } from '../app/app.service';
 })
 export class ModelService {
   private _defaults: any = {};
-  public sidenavMode: string = 'list';
-  public sidenavOpened: boolean = true;
-  public params: string = 'list';
-  public enabledModel: boolean = false;
-  public selectedModel: string = '';                      // Important: it has to be string;
-  public status: any = {
-    ready: false,
-    valid: false,
-  };
-  public version: string;
-  public progress: boolean = false;
-  public update: EventEmitter<any> = new EventEmitter();
+  private _progress: boolean = false;
+  private _selectedModel: string = '';     // Important: it has to be string;
+  private _sidenavMode: string = 'list';
+  private _sidenavOpened: boolean = true;
+  private _update: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private _appService: AppService,
@@ -31,26 +26,58 @@ export class ModelService {
   ) {
   }
 
+  get app(): App {
+    return this._appService.app;
+  }
+
   get defaults(): any {
     return this._defaults;
   }
 
-  set defaults(value: any) {
-    this._defaults = value;
+  get progress(): boolean {
+    return this._progress;
+  }
+
+  get selectedModel(): string {
+    return this._selectedModel;
+  }
+
+  set selectedModel(value: string) {
+    this._selectedModel = value;
+  }
+
+  get sidenavMode(): string {
+    return this._sidenavMode;
+  }
+
+  set sidenavMode(value: string) {
+    this._sidenavMode = value;
+  }
+
+  get sidenavOpened(): boolean {
+    return this._sidenavOpened;
+  }
+
+  set sidenavOpened(value: boolean) {
+    this._sidenavOpened = value;
+  }
+
+  get update(): EventEmitter<any> {
+    return this._update;
   }
 
   requestModelDefaults(): void {
-    const urlRoot: string = this._appService.app.nestServer.url;
-    this.defaults = {};
-    this.progress = true;
-    const modelId = this.selectedModel;
+    const urlRoot: string = this.app.nestServer.url;
+    this._defaults = {};
+    this._progress = true;
+    const modelId: string = this.selectedModel;
     setTimeout(() => {
       this._http.post(urlRoot + '/api/GetDefaults', { model: modelId })
-        .subscribe(resp => {
+        .subscribe((resp: any) => {
           // console.log(resp)
-          this.progress = false;
-          this.defaults = resp;
-        }, err => {
+          this._progress = false;
+          this._defaults = resp;
+        }, (err: any) => {
           console.log(err)
         })
     }, 500)
@@ -61,28 +88,56 @@ export class ModelService {
     setTimeout(() => {
       this.selectedModel = modelId;
       if (!this.selectedModel) {
-        this.sidenavMode = 'list';
+        this._sidenavMode = 'list';
       }
       this.requestModelDefaults();
     }, 1)
-  }
-
-  getSettings(modelId: string): any {
-    return this._appService.app.getModel(modelId) || {};
   }
 
   isSelected(model: string): boolean {
     return this.selectedModel === model;
   }
 
-  hasModel(modelId: string = null): boolean {
-    return this._appService.app.hasModel(modelId || this.selectedModel);
-  }
-
   label(modelId: string = null): string {
     modelId = modelId || this.selectedModel;
-    const model: any = this._appService.app.getModel(modelId);
+    const model: any = this.app.getModel(modelId);
     return model.label || modelId;
+  }
+
+  getModel(modelId: string): Model {
+    return this.app.getModel(modelId);
+  }
+
+  hasModel(modelId: string = null): boolean {
+    return this.app.hasModel(modelId || this.selectedModel);
+  }
+
+  addModel(): void {
+    const modelId: string = this.selectedModel;
+    const model: any = {
+      id: modelId,
+      elementType: this.defaults.element_type,
+      label: modelId,
+      params: [],
+    };
+    if (this.defaults.hasOwnProperty('recordables')) {
+      model['recordables'] = this.defaults.recordables;
+    }
+    this.app.addModel(model);
+    this.update.emit();
+  }
+
+  deleteModel(): void {
+    this.app.deleteModel(this.selectedModel);
+    this._selectedModel = '';
+    this.update.emit();
+  }
+
+  saveModel(): void {
+    const model: Model = this.app.getModel(this.selectedModel);
+    if (model) {
+      this.app.saveModel(model);
+    }
   }
 
 }

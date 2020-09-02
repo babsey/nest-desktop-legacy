@@ -16,7 +16,7 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
   styleUrls: ['./model-activity-graph.component.scss'],
 })
 export class ModelActivityGraphComponent implements OnInit {
-  @Input() model: string;
+  @Input() modelId: string;
   private _project: Project;
   public graph: ActivityChartGraph;
   public config: any = {
@@ -57,7 +57,7 @@ export class ModelActivityGraphComponent implements OnInit {
   }
 
   update(): void {
-    this._project = this._appService.app.createNeuronModelProject(this.model);
+    this._project = this._appService.app.createNeuronModelProject(this.modelId);
     this._simulationRunService.run(this._project, true).then(() => {
       this.graph = new ActivityChartGraph(this._project, 'model');
     });

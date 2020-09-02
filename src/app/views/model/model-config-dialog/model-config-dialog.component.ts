@@ -1,6 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { Model } from '../../../components/model/model';
+import { Parameter } from '../../../components/parameter';
+
 import { ModelService } from '../../../services/model/model.service';
 
 
@@ -22,15 +25,15 @@ export class ModelConfigDialogComponent implements OnInit {
 
   ngOnInit() {
     // console.log(this.data)
-    const modelSettings: any = this.modelService.getSettings(this.data.model);
-    this._idx = modelSettings.params.map(param => param.id).indexOf(this.data.param);
-    this.options = Object.assign({}, modelSettings.params[this._idx]);
+    const model: Model = this.modelService.getModel(this.data.model);
+    this._idx = model.params.map((param: Parameter) => param.id).indexOf(this.data.param);
+    this.options = Object.assign({}, model.params[this._idx]);
     // this.options = params;
   }
 
   valueChanged(event: any): void {
-    var value = event.target.value;
-    var ticks = value.split(',');
+    const value: string = event.target.value;
+    let ticks: any[] = value.split(',');
     ticks = ticks.map(d => parseFloat(d));
     this.options.ticks = ticks;
   }
@@ -40,8 +43,8 @@ export class ModelConfigDialogComponent implements OnInit {
   }
 
   onSave(): void {
-    const modelSettings: any = this.modelService.getSettings(this.data.model);
-    modelSettings.params[this._idx] = this.options;
+    const model: Model = this.modelService.getModel(this.data.model);
+    model.params[this._idx] = this.options;
     // this._modelService.save(this.options);
     this.dialogRef.close();
   }
