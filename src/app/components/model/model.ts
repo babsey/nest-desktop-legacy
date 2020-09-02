@@ -115,6 +115,10 @@ export class Model {
     return this.elementType === 'stimulator';
   }
 
+  save(): void {
+    this.app.saveModel(this);
+  }
+
   toJSON(target: string = 'db'): any {
     const model: any = {
       existing: this.existing,

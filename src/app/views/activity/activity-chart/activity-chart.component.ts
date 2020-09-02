@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@ang
 import { ActivityChartGraph } from '../../../components/activity/Plotly/activityChartGraph';
 import { Project } from '../../../components/project/project';
 
-import { ActivityGraphService } from '../../../services/activity/activity-graph.service';
+import { ActivityChartService } from '../../../services/activity/activity-chart.service';
 
 
 @Component({
@@ -18,14 +18,13 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
   private _subscriptionInit: any;
 
   constructor(
-    public activityGraphService: ActivityGraphService,
-  ) {
-  }
+    private _activityChartService: ActivityChartService,
+  ) { }
 
   ngOnInit() {
     // console.log('Ng Init activity chart view')
-    this._subscriptionInit = this.activityGraphService.init.subscribe((project: Project) => this.init(project));
-    this._subscriptionUpdate = this.activityGraphService.update.subscribe(() => this.update());
+    this._subscriptionInit = this._activityChartService.init.subscribe((project: Project) => this.init(project));
+    this._subscriptionUpdate = this._activityChartService.update.subscribe(() => this.update());
     this.init(this.project);
   }
 
@@ -39,14 +38,18 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
     return this.plotRef['plotEl'].nativeElement;
   }
 
+  get graph(): ActivityChartGraph {
+    return this._activityChartService.graph;
+  }
+
   init(project: Project): void {
     // console.log('Init activity chart view for ' + project.name);
-    this.activityGraphService.graph = new ActivityChartGraph(project);
+    this._activityChartService.graph = new ActivityChartGraph(project);
   }
 
   update(): void {
     // console.log('Update activity chart view for ' + this.project.name);
-    this.activityGraphService.graph.update();
+    this._activityChartService.graph.update();
     // this.activities.map(activity => {
     //   var recordables = Object.keys(activity.events).filter(d => !['times', 'senders'].includes(d));
     //   if (activity.hasSpikeData() && recordables.length === 0) {

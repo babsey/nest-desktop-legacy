@@ -12,8 +12,7 @@
     [class.mat-fab]="isMode('networkSelection')"
     matTooltip="Network selection"
     matTooltipPosition="before"
-    class="app-button"
-    >
+    class="app-button">
     <fa-icon icon="tasks"></fa-icon>
   </button>
 
@@ -32,8 +31,7 @@
     [class.mat-fab]="isMode('simulation')"
     matTooltip="Simulation settings"
     matTooltipPosition="before"
-    class="app-button"
-    >
+    class="app-button">
     <!-- <fa-icon icon="wrench"></fa-icon> -->
     <span class="fa-stack" style="line-height:2em">
       <fa-icon icon="cog" class="fa-stack-1x"></fa-icon>
@@ -46,19 +44,17 @@
     [class.mat-fab]="isMode('codeEditor')"
     matTooltip="Script code"
     matTooltipPosition="before"
-    class="app-button"
-    >
+    class="app-button">
     <fa-icon icon="code"></fa-icon>
   </button>
 
-  <ng-container *ngIf="appService.app.config.devMode">
+  <ng-container *ngIf="app.config.devMode">
     <button mat-icon-button
       (click)="selectMode('rawData')"
       [class.mat-fab]="isMode('rawData')"
       matTooltip="Raw data"
       matTooltipPosition="before"
-      class="app-button"
-      >
+      class="app-button">
       JSON
     </button>
 
@@ -73,38 +69,38 @@
     </button> -->
   </ng-container>
 
-  <ng-container *ngIf="activityGraphService.graph">
+  <ng-container *ngIf="app.project.hasActivities()">
+
     <button mat-icon-button
       (click)="selectMode('activityController')"
       [class.mat-fab]="isMode('activityController')"
       matTooltip="Activity controller"
       matTooltipPosition="before"
-      class="app-button"
-      >
-      <!-- <fa-icon icon="braille"></fa-icon> -->
+      class="app-button">
       <span class="fa-stack" style="line-height:2em">
-        <ng-container [ngSwitch]="activityGraphService.graph.constructor.name">
-          <ng-container *ngSwitchCase="'ActivityChartGraph'">
+        <ng-container [ngSwitch]="graphMode">
+          <ng-container *ngSwitchCase="'chart'">
             <fa-icon icon="chart-line" class="fa-stack-1x"></fa-icon>
           </ng-container>
-          <ng-container *ngSwitchCase="'ActivityAnimationGraph'">
+          <ng-container *ngSwitchCase="'animation'">
             <fa-icon icon="braille" class="fa-stack-1x"></fa-icon>
           </ng-container>
         </ng-container>
         <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top: 11px; left: -14px"></fa-icon>
       </span>
     </button>
+
+    <button mat-icon-button
+      (click)="selectMode('stats')"
+      [class.mat-fab]="isMode('stats')"
+      matTooltip="Simulation stats"
+      matTooltipPosition="before"
+      class="app-button">
+      <fa-icon icon="poll"></fa-icon>
+    </button>
+
   </ng-container>
 
-  <button mat-icon-button *ngIf="appService.app.project.hasActivities()"
-    (click)="selectMode('stats')"
-    [class.mat-fab]="isMode('stats')"
-    matTooltip="Simulation stats"
-    matTooltipPosition="before"
-    class="app-button"
-    >
-    <fa-icon icon="poll"></fa-icon>
-  </button>
 
   <span class="flex-spacer"></span>
 
@@ -113,8 +109,7 @@
     [class.mat-fab]="isNetworkQuickViewOpened()"
     [style.display]="mobileQuery.matches ? 'none' : ''"
     matTooltip="Quick view network sketch"
-    matTooltipPosition="before"
-    >
+    matTooltipPosition="before">
     <span>
       <fa-icon icon="shapes" rotate="90"></fa-icon>
     </span>

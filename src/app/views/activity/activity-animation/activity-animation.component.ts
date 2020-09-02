@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ActivityAnimationGraph } from '../../../components/activity/Threejs/activityAnimationGraph';
 import { Project } from '../../../components/project/project';
 
-import { ActivityGraphService } from '../../../services/activity/activity-graph.service';
+import { ActivityAnimationService } from '../../../services/activity/activity-animation.service';
 
 
 @Component({
@@ -17,29 +17,33 @@ export class ActivityAnimationComponent implements OnInit, OnDestroy {
   private _subscriptionUpdate: any;
 
   constructor(
-    public activityGraphService: ActivityGraphService,
+    private _activityAnimationService: ActivityAnimationService,
   ) { }
 
   ngOnInit() {
-    console.log('Ng init activity animation view');
-    this._subscriptionInit = this.activityGraphService.init.subscribe((project: Project) => this.init(project));
-    this._subscriptionUpdate = this.activityGraphService.update.subscribe(() => this.update());
+    // console.log('Ng init activity animation view');
+    this._subscriptionInit = this._activityAnimationService.init.subscribe((project: Project) => this.init(project));
+    this._subscriptionUpdate = this._activityAnimationService.update.subscribe(() => this.update());
     this.init(this.project);
   }
 
   ngOnDestroy() {
-    console.log('Ng destroy activity animation view');
+    // console.log('Ng destroy activity animation view');
     this._subscriptionInit.unsubscribe();
     this._subscriptionUpdate.unsubscribe();
   }
 
-  init(project: Project) {
-    console.log('Init activity animation view for '+ project.name);
-    this.activityGraphService.graph = new ActivityAnimationGraph(project);
+  get graph(): ActivityAnimationGraph {
+    return this._activityAnimationService.graph;
+  }
+
+  init(project: Project): void {
+    // console.log('Init activity animation view for '+ project.name);
+    this._activityAnimationService.graph = new ActivityAnimationGraph(project);
   }
 
   update(): void {
-    console.log('Update activity animation view');
-    this.activityGraphService.graph.update();
+    // console.log('Update activity animation view');
+    this.graph.update();
   }
 }

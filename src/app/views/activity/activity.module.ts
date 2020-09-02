@@ -18,49 +18,46 @@ import { NodeModule } from '../node/node.module';
 
 import { ActivityGraphComponent } from './activity-graph/activity-graph.component';
 
-import { ActivityControllerComponent } from './activity-controller/activity-controller.component';
-import { ActivityAnimationControllerComponent } from './activity-controller/activity-animation-controller/activity-animation-controller.component';
-import { ActivityChartControllerComponent } from './activity-controller/activity-chart-controller/activity-chart-controller.component';
-
 import { ActivityChartComponent } from './activity-chart/activity-chart.component';
+import { ActivityChartControllerComponent } from './activity-chart/activity-chart-controller/activity-chart-controller.component';
 import { ActivityChartSplitControllerComponent } from './activity-chart/activity-chart-split-controller/activity-chart-split-controller.component';
 
-import { AnimationColormapComponent } from './activity-animation/animation-colormap/animation-colormap.component';
 import { ActivityAnimationComponent } from './activity-animation/activity-animation.component';
-import { ThreeScatterComponent } from './activity-animation/three-scatter/three-scatter.component';
+import { ActivityAnimationSceneComponent } from './activity-animation/activity-animation-scene/activity-animation-scene.component';
+import { ActivityAnimationControllerComponent } from './activity-animation/activity-animation-controller/activity-animation-controller.component';
+import { ActivityAnimationColormapComponent } from './activity-animation/activity-animation-colormap/activity-animation-colormap.component';
 
 import { SpikeStatsComponent } from './activity-stats/spike-stats/spike-stats.component';
 import { ActivityStatsComponent } from './activity-stats/activity-stats.component';
 import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats.component';
 
+
 @NgModule({
   declarations: [
+    ActivityAnimationColormapComponent,
     ActivityAnimationComponent,
+    ActivityAnimationControllerComponent,
+    ActivityAnimationSceneComponent,
     ActivityChartComponent,
     ActivityChartControllerComponent,
     ActivityChartSplitControllerComponent,
-    ActivityControllerComponent,
     ActivityGraphComponent,
     ActivityStatsComponent,
     AnalogStatsComponent,
-    AnimationColormapComponent,
-    ActivityAnimationControllerComponent,
     SpikeStatsComponent,
-    ThreeScatterComponent,
   ],
   exports: [
+    ActivityAnimationColormapComponent,
     ActivityAnimationComponent,
+    ActivityAnimationControllerComponent,
+    ActivityAnimationSceneComponent,
     ActivityChartComponent,
     ActivityChartControllerComponent,
     ActivityChartSplitControllerComponent,
-    ActivityControllerComponent,
     ActivityGraphComponent,
     ActivityStatsComponent,
     AnalogStatsComponent,
-    AnimationColormapComponent,
-    ActivityAnimationControllerComponent,
     SpikeStatsComponent,
-    ThreeScatterComponent,
   ],
   imports: [
     AngularSplitModule.forRoot(),

@@ -4,6 +4,11 @@ import { Panel } from './panel';
 
 
 export class SpikeHistogram extends Panel {
+  public state: any = {
+    binsize: 10.0,
+    barmode: 'overlay',
+    barnorm: '',
+  };
 
   constructor(graph: ActivityChartGraph) {
     super('SpikeHistogram', graph);
@@ -29,11 +34,6 @@ export class SpikeHistogram extends Panel {
         visible: true,
         showlegend: false,
         opacity: .6,
-        xbins: {
-          start: 0,
-          end: 1000,
-          size: 50,
-        },
         marker: {
           color: 'black',
           line: {
@@ -52,9 +52,8 @@ export class SpikeHistogram extends Panel {
       const data: any = this.data.find(d => d.activityIdx === activity.idx);
       const start: number = 0;
       const end: number = activity.endtime;
-      const size: number = data.xbins.size;
+      const size: number = this.state.binsize;
       data.x = activity.events.times;
-      data.xbins.end = end + size;
       data.marker.line.width = (end - start) / size > 100 ? 0 : 1;
       data.marker.color = activity.recorder.view.color;
     })

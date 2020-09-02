@@ -1,7 +1,8 @@
+import { Config } from '../config';
 import { Project } from '../project/project';
 
 
-// Parent object for Plotly/ActivityChartGraph and Threejs/ActivityAnimationGraph
+// Parent for Plotly/ActivityChartGraph and Threejs/ActivityAnimationGraph
 export class ActivityGraph {
   project: Project;
 

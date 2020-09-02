@@ -74,7 +74,12 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     // console.log('Project container update');
     if (this.id) {
       this._appService.app.initProject(this.id, this.rev).then(() => {
-        this._activityGraphService.init.emit(this.project);
+        if (this.project.hasSpatialActivities()) {
+          this._activityGraphService.init(this.project);
+        } else {
+          this._activityGraphService.mode = 'chart';
+        }
+
         if (
           this._router.url.includes('run') || this.project.config['runAfterLoad'] &&
           !this.project.hasActivities()
@@ -87,7 +92,7 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
       })
     } else {
       this._appService.app.initProject().then(() => {
-        this._activityGraphService.init.emit(this.project);
+        this._activityGraphService.init(this.project);
       });
     }
   }

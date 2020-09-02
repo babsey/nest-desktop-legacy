@@ -338,7 +338,7 @@ export class Project extends Config {
 
   // Update activities in recorder nodes after simulation.
   updateActivities(data: any): void {
-    console.log('Update activities')
+    // console.log('Update activities')
     this.simulation.kernel['time'] = data.kernel['time'];
     // Update recorded activity
     data['activities'].forEach((activity: any, idx: number) => {
@@ -349,6 +349,11 @@ export class Project extends Config {
   // Check if the project has activities.
   hasActivities(): boolean {
     return this.activities.length > 0 ? this.activities.some((activity: Activity) => activity.hasEvents()) : false;
+  }
+
+  // Check if the project has activities.
+  hasSpatialActivities(): boolean {
+    return this.activities.length > 0 ? this.activities.some((activity: Activity) => activity.hasEvents() && activity.nodePositions.length > 0) : false;
   }
 
   /*

@@ -7,70 +7,76 @@ import { Project } from '../../project/project';
 
 export class ActivityAnimationGraph extends ActivityGraph {
   private _frames: any[] = [];
-  layout: any = {
-    extent: [
-      [-1, 0],
-      [-.5, .5],
-      [.5, -.5]
-    ]
-  };
+  layout: any = {};
+  frameIdx: number = 0;
 
   source: string = 'spike';
   sources: any[] = [];
-
-  config: any = {
-    camera: {
-      position: {
-        x: 16,
-        y: 0,
-        z: 0,
-      },
-      distance: 24,
-      rotation: {
-        theta: 0,
-        speed: 0
-      },
-      control: true,
-    },
-    colorMap: {
-      min: -70,
-      max: -55,
-      scale: 'spectral',
-    },
-    frames: {
-      sampleRate: 1,
-      speed: 1,
-      idx: 0,
-      rate: 30,
-      windowSize: 1,
-    },
-    trail: {
-      mode: 'off',
-      length: 10,
-      fading: false,
-    },
-    dotSize: 10,
-  };
-
   style: any = {};
   data: any[] = [];
 
   trailModes: string[] = ['off', 'growing', 'shrinking', 'temporal'];
-  colorScales: any = {
-    'spectral': d3.interpolateSpectral,
-    // 'turbo': d3.interpolateTurbo,
-    'viridis': d3.interpolateViridis,
-    'inferno': d3.interpolateInferno,
-    'magma': d3.interpolateMagma,
-    'plasma': d3.interpolatePlasma,
-    // 'cividis': d3.interpolateCividis,
-    'warm': d3.interpolateWarm,
-    'cool': d3.interpolateCool,
-    'cubehelix': d3.interpolateCubehelixDefault,
-  };
+  colorScales: any;
+  config: any;
 
   constructor(project: Project, config: any = {}) {
     super(project);
+
+    this.layout = {
+      extent: [
+        [-1, 0],
+        [-.5, .5],
+        [.5, -.5]
+      ]
+    };
+
+    this.colorScales = {
+      'spectral': d3.interpolateSpectral,
+      // 'turbo': d3.interpolateTurbo,
+      'viridis': d3.interpolateViridis,
+      'inferno': d3.interpolateInferno,
+      'magma': d3.interpolateMagma,
+      'plasma': d3.interpolatePlasma,
+      // 'cividis': d3.interpolateCividis,
+      'warm': d3.interpolateWarm,
+      'cool': d3.interpolateCool,
+      'cubehelix': d3.interpolateCubehelixDefault,
+    };
+
+    this.config = {
+      camera: {
+        position: {
+          x: 16,
+          y: 0,
+          z: 0,
+        },
+        distance: 24,
+        rotation: {
+          theta: 0,
+          speed: 0
+        },
+        control: true,
+      },
+      colorMap: {
+        min: -70,
+        max: -55,
+        scale: 'spectral',
+      },
+      frames: {
+        sampleRate: 1,
+        speed: 1,
+        rate: 30,
+        windowSize: 1,
+      },
+      trail: {
+        mode: 'off',
+        length: 10,
+        fading: false,
+      },
+      dotSize: 10,
+    };
+
+
     this.init();
     this.update();
   }
@@ -80,16 +86,16 @@ export class ActivityAnimationGraph extends ActivityGraph {
   }
 
   getFrame(): any[] {
-    return this.frames[this.config.frames.idx] || { data: [] };
+    return this.frames[this.frameIdx] || { data: [] };
   }
 
   init(): void {
-    console.log('Init activity animation');
+    // console.log('Init activity animation');
     this._frames = [];
   }
 
   update(): void {
-    console.log('Update activity animation');
+    // console.log('Update activity animation');
     this._frames = [];
     this.project.activities.forEach(activity => {
       if (activity.recorder.model.existing === 'spike_detector') {
@@ -164,11 +170,11 @@ export class ActivityAnimationGraph extends ActivityGraph {
   }
 
   updateConfig(): void {
-    console.log('Update config in activity animation graph')
+    // console.log('Update config in activity animation graph')
     const activities: string[][] = this.project.activities.map(activity =>
       Object.keys(activity.events).filter(val => !(['senders', 'times'].includes(val)))
     );
-    let sources: any[] = []; 
+    let sources: any[] = [];
     sources = sources.concat(...activities);
     if (sources.length === 0) {
       this.source = 'spike';

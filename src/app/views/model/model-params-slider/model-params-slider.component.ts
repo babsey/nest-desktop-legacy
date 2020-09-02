@@ -12,20 +12,25 @@ import { ModelService } from '../../../services/model/model.service';
 })
 export class ModelParamsSliderComponent implements OnInit, OnChanges {
   @Input() modelId: string = '';
-  private model: Model;
+  private _model: Model;
 
   constructor(
     private _modelService: ModelService,
   ) { }
 
   ngOnInit() {
-    this.model = this._modelService.getModel(this.modelId);
+    this._model = this._modelService.getModel(this.modelId);
   }
 
   ngOnChanges() {
   }
 
+  get model(): Model {
+    return this._model;
+  }
+
   save(): void {
+    this.model.save();
   }
 
 }

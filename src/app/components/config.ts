@@ -93,4 +93,8 @@ export class Config {
     return this._config.isValid();
   }
 
+  resetConfig(): void {
+    this.config.reset();
+  }
+
 }

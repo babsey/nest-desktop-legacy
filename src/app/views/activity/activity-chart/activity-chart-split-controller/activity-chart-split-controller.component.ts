@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ActivityChartService } from '../../../../services/activity/activity-chart.service';
+import { ActivityChartPanelService } from '../../../../services/activity/activity-chart-panel.service';
 import { ActivityGraphService } from '../../../../services/activity/activity-graph.service';
 
 
@@ -13,7 +13,7 @@ export class ActivityChartSplitControllerComponent implements OnInit {
   public useTransition: boolean = false;
 
   constructor(
-    public activityChartService: ActivityChartService,
+    public activityChartPanelService: ActivityChartPanelService,
     private _activityGraphService: ActivityGraphService,
   ) { }
 
@@ -21,12 +21,12 @@ export class ActivityChartSplitControllerComponent implements OnInit {
   }
 
   dragEnd(event): void {
-    this.activityChartService.panelOrder
-      .filter(pp => this.activityChartService.panelSelected.includes(pp))
+    this.activityChartPanelService.panelOrder
+      .filter(pp => this.activityChartPanelService.panelSelected.includes(pp))
       .map((p, i) => {
-        this.activityChartService.panel[p].size = Math.round(event.sizes[i]);
+        this.activityChartPanelService.panel[p].size = Math.round(event.sizes[i]);
       })
-    this._activityGraphService.update.emit()
+    // this._activityChartPanelService.update.emit()
   }
 
 }

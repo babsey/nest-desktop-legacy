@@ -68,7 +68,7 @@ export class SimulationRunService {
           });
         }
         project.updateActivities(response['data']);
-        this._activityGraphService.update.emit();
+        this._activityGraphService.update();
         resolve();
       }, error => {
         this.running = false;

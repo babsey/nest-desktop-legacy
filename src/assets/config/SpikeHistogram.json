@@ -1,5 +1,5 @@
 {
-  "barmodes": [{
+  "barmode": [{
       "value": "group",
       "label": "Group"
     },
@@ -12,7 +12,7 @@
       "label": "Stack"
     }
   ],
-  "barnorms": [{
+  "barnorm": [{
       "value": "",
       "label": "Default"
     },
