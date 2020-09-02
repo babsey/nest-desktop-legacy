@@ -1,0 +1,52 @@
+<mat-list dense>
+
+  <mat-selection-list cdkDropList
+    (cdkDropListDropped)="drop($event)"
+    (ngModelChange)="onModelChange($event)"
+    [ngModel]="panelSelected"
+    >
+    <ng-container *ngFor="let panel of panelOrder">
+      <mat-list-option cdkDrag [value]="panel">
+        {{ panel | titlecase }}
+        <p *cdkDragPreview></p>
+      </mat-list-option>
+    </ng-container>
+  </mat-selection-list>
+
+  <ng-container *ngIf="panelSelected.includes('histogram')">
+    <mat-list-item mat-subheader>
+      Histogram
+    </mat-list-item>
+
+    <mat-list-item >
+      <app-select
+        (selectedChange)="onBarmodeChange($event)"
+        [matTooltip]="'Barmode'"
+        [options]="histogram.config.barmode"
+        [(selected)]="histogram.state.barmode"
+        matTooltipPosition="before"
+      ></app-select>
+    </mat-list-item>
+
+    <mat-list-item >
+      <app-select
+        (selectedChange)="onBarnormChange($event)"
+        [matTooltip]="'Barnorm'"
+        [options]="histogram.config.barnorm"
+        [(selected)]="histogram.state.barnorm"
+        matTooltipPosition="before"
+      ></app-select>
+    </mat-list-item>
+
+    <mat-list-item>
+      <app-ticks-slider-inline
+        (valueChange)="onBinsizeChange($event)"
+        [matTooltip]="'Bin size'"
+        [options]="hostogram.config.binsize"
+        [(value)]="histogram.state.binsize"
+        style="width:100%"
+      ></app-ticks-slider-inline>
+    </mat-list-item>
+  </ng-container>
+
+</mat-list>

@@ -1,0 +1,38 @@
+<div class="colormap">
+  <!-- <img src="/assets/img/colorscales/spectral.png"> -->
+  <img src="/assets/img/colorscales/{{colorMap.scale}}.png">
+</div>
+
+
+<span class="flex">
+  <mat-form-field>
+    <input matInput
+      [(ngModel)]="colorMap.min"
+      (change)="onChange($event)"
+      type="number" />
+  </mat-form-field>
+
+  <span class="flex-spacer"></span>
+  <mat-form-field style="width: 120px">
+    <mat-select
+      [(value)]="colorMap.scale"
+      (selectionChange)="onChange($event)">
+      <mat-option *ngFor="let scale of scales" [value]="scale">
+        <img
+          style="position: absolute; left: 0; top: 2px; height:44px; width:100%; z-index:-1"
+          src="/assets/img/colorscales/{{scale}}.png"
+          />
+        <span style="color:white">{{ scale }}</span>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <span class="flex-spacer"></span>
+
+  <mat-form-field>
+    <input matInput
+      [(ngModel)]="colorMap.max"
+      (change)="onChange($event)"
+      style="text-align:right"
+      type="number" />
+  </mat-form-field>
+</span>

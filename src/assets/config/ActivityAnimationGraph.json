@@ -1,0 +1,33 @@
+{
+  "camera": {
+    "position": {
+      "x": 16,
+      "y": 0,
+      "z": 0
+    },
+    "distance": 24,
+    "rotation": {
+      "theta": 0,
+      "speed": 0
+    },
+    "control": true
+  },
+  "colorMap": {
+    "min": -70,
+    "max": -55,
+    "scale": "spectral"
+  },
+  "frames": {
+    "sampleRate": 1,
+    "speed": 1,
+    "idx": 0,
+    "rate": 30,
+    "windowSize": 1
+  },
+  "trail": {
+    "mode": "off",
+    "length": 10,
+    "fading": false
+  },
+  "dotSize": 10
+}
