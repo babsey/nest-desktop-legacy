@@ -64,15 +64,9 @@ export class ProjectToolbarComponent implements OnInit {
   }
 
   onSelectionChange(event: any): void {
-    const configKey: string = event.option.value;
-    const configValue: boolean = event.option.selected;
-    const configData: any = new Object();
-    configData[configKey] = configValue;
-    if (configKey === 'autoRandomSeed') {
-      this.project.simulation.config = configData;
-    } else {
-      this.project.config = configData;
-    }
+    const configData: any = this.project.config;
+    configData[event.option.value] = event.option.selected;
+    this.project.config = configData;
   }
 
   onContextMenu(event: MouseEvent): void {
