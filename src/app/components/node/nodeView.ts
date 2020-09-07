@@ -24,15 +24,18 @@ export class NodeView {
   get label(): string {
     if (this._label) return this._label;
     const elementType: string = this.node.model.elementType;
-    if (elementType === 'neuron') {
+    if (elementType === undefined) {
+      const idx: number = this.node.network.nodes.indexOf(this.node);
+      return 'n' + (idx + 1);
+    } else if (elementType === 'neuron') {
       const idx: number = this.node.network.neurons.indexOf(this.node);
       return 'n' + (idx + 1);
     } else {
       const nodes: Node[] = this.node.network.nodes.filter(
         (node: Node) => node.modelId === this.node.modelId);
       const idx: number = nodes.indexOf(this.node);
-      const label: string[] = this.node.model.id.split('_');
-      return label.map(l => l[0]).join('') + (idx + 1);
+      const label: string[] = this.node.modelId.split('_');
+      return label.map((l: string[]) => l[0]).join('') + (idx + 1);
     }
   }
 
