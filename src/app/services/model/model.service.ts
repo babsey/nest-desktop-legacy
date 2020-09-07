@@ -123,20 +123,22 @@ export class ModelService {
     if (this.defaults.hasOwnProperty('recordables')) {
       model['recordables'] = this.defaults.recordables;
     }
-    this.app.addModel(model);
+    this.app.addModel(model).then(() => this.app.initModels());
     this.update.emit();
   }
 
   deleteModel(): void {
-    this.app.deleteModel(this.selectedModel);
-    this._selectedModel = '';
-    this.update.emit();
+    const model: Model = this.app.getModel(this.selectedModel);
+    if (model) {
+      model.delete().then(() => this.app.initModels());
+      this.update.emit();
+    }
   }
 
   saveModel(): void {
     const model: Model = this.app.getModel(this.selectedModel);
     if (model) {
-      this.app.saveModel(model);
+      model.save();
     }
   }
 

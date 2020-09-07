@@ -36,7 +36,7 @@
         <div class="flex-spacer"></div>
         <ng-container [ngSwitch]="project.isHashEqual() && project.updatedAt !== '' && project.name !== ''">
           <ng-container *ngSwitchCase="true">
-            <app-project-timesince [date]="project.updatedAt"></app-project-timesince>
+            <app-project-timesince [date]="date(project)"></app-project-timesince>
           </ng-container>
           <ng-container *ngSwitchCase="false">
             <fa-icon class="menu-icon" icon="asterisk"></fa-icon>

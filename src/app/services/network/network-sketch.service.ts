@@ -9,16 +9,26 @@ import { drawPath } from '../../components/connection/connectionGraph';
   providedIn: 'root'
 })
 export class NetworkSketchService {
-  public options: any = {
-    width: 0,
-    height: 0,
-  };
-  public keyDown: string = '';
-  public connect: boolean = false;
-  public viewDragline = true;
+  private _connect: boolean = false;
+  private _keyDown: string = '';
 
-  constructor(
-  ) {
+  constructor() {
+  }
+
+  get connect(): boolean {
+    return this._connect;
+  }
+
+  set connect(value: boolean) {
+    this._connect = value;
+  }
+
+  get keyDown(): string {
+    return this._keyDown;
+  }
+
+  set keyDown(value: string) {
+    this._keyDown = value;
   }
 
   reset(): void {
@@ -26,7 +36,6 @@ export class NetworkSketchService {
     selector.selectAll('.dragline').attr('d', 'M0,0L0,0');
     selector.select('.select-panel').attr('transform', 'translate(0,0)')
     selector.selectAll('.select').remove();
-    this.viewDragline = false;
   }
 
   dragLine(source: any, target: any, color: string, isTargetMouse: any = false): void {

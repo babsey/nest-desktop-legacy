@@ -5,30 +5,46 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ProjectService {
-  public mode: string = 'networkEditor';
-  public sidenavMode: string = 'networkSelection';
-  public sidenavOpened: boolean = false;
-  public networkQuickView: boolean = false;
+  private _mode: string = 'networkEditor';
+  private _networkQuickView: boolean = false;
+  private _sidenavMode: string = 'networkSelection';
+  private _sidenavOpened: boolean = false;
 
   constructor() {
   }
 
-  selectMode(mode: string): void {
-    this.mode = mode;
-    this.sidenavOpened = mode !== 'labBook';
-    setTimeout(() => this.triggerResize(), 10);
+  get mode(): string {
+    return this._mode;
   }
 
-  isMode(mode: string): boolean {
-    return this.mode === mode;
+  set mode(value: string) {
+    this._mode = value;
+    this._sidenavOpened = value !== 'labBook';
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 10);
   }
 
-  isSidenavMode(mode: string): boolean {
-    return this.sidenavMode === mode;
+  get networkQuickView(): boolean {
+    return this._networkQuickView;
   }
 
-  triggerResize(): void {
-    window.dispatchEvent(new Event('resize'));
+  set networkQuickView(value: boolean) {
+    this._networkQuickView = value
+  }
+
+  get sidenavMode(): string {
+    return this._sidenavMode;
+  }
+
+  set sidenavMode(value: string) {
+    this._sidenavMode = value;
+  }
+
+  get sidenavOpened(): boolean {
+    return this._sidenavOpened;
+  }
+
+  set sidenavOpened(value: boolean) {
+    this._sidenavOpened = value;
   }
 
 }

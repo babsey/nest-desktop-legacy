@@ -20,8 +20,7 @@ export class ModelParamsListComponent implements OnInit {
 
   constructor(
     private _modelService: ModelService,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
   }

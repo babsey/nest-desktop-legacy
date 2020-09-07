@@ -12,18 +12,34 @@ import { NodeSpatial } from '../../../components/node/nodeSpatial';
 export class NodeSpatialComponent implements OnInit {
   @Input() node: Node;
   @Output() nodeChange: EventEmitter<any> = new EventEmitter();
-  public graph: any = {
+  private _graph: any = {
     data: [],
     layout: {},
   }
-  public showPlot: boolean = false;
-  public positionType: string = 'free';
+  private _showPlot: boolean = false;
+  private _positionType: string = 'free';
 
   constructor(
   ) { }
 
   ngOnInit() {
-    this.positionType = this.node.spatial.positions.constructor.name === 'FreePositions' ? 'free' : 'grid';
+    this._positionType = this.node.spatial.positions.constructor.name === 'FreePositions' ? 'free' : 'grid';
+  }
+
+  get graph(): any {
+    return this._graph;
+  }
+
+  get showPlot(): boolean {
+    return this._showPlot;
+  }
+
+  get positionType(): string {
+    return this._positionType;
+  }
+
+  tiggerPlot(): void {
+    this._showPlot = !this.showPlot;
   }
 
   plot(): void {
@@ -34,7 +50,7 @@ export class NodeSpatialComponent implements OnInit {
       y.push(p[1])
     })
 
-    this.graph.data = [{
+    this._graph.data = [{
       mode: 'markers',
       type: 'scattergl',
       x: x,
@@ -54,7 +70,7 @@ export class NodeSpatialComponent implements OnInit {
     const minY: number = center[1] - extent[1] / 2;
     const maxY: number = center[1] + extent[1] / 2;
 
-    this.graph.layout = {
+    this._graph.layout = {
       xaxis: {
         range: [minX + minX / 100, maxX + maxX / 100],
         title: 'Row',

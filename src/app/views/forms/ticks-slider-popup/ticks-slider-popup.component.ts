@@ -11,7 +11,7 @@ export class TicksSliderPopupComponent implements OnInit, OnChanges {
   @Input() thumbLabel: boolean = false;
   @Input() value: number;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
-  public idx: number;
+  private _idx: number;
 
   constructor() {
   }
@@ -20,7 +20,11 @@ export class TicksSliderPopupComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.idx = this.options.ticks.indexOf(this.value);
+    this._idx = this.options.ticks.indexOf(this.value);
+  }
+
+  get idx(): number {
+    return this._idx;
   }
 
   onChange(event: any): void {

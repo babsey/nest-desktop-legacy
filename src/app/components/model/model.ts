@@ -15,9 +15,10 @@ export class Model {
   app: App;                             // parent
   code: ModelCode;                      // code for model
 
+  private _doc: any;                             // doc data of the database
   private _id: string;                           // model id
   private _idx: number;                          // generative
-  private _elementType: ElementType;             // element type of the model
+  private _elementType: string;                  // element type of the model
   private _existing: string;                     // existing model in NEST
   private _label: string;                        // model label for view
   private _params: Parameter[] = [];             // model parameters
@@ -27,9 +28,10 @@ export class Model {
     this.app = app;
     this.code = new ModelCode(this);
 
+    this._doc = model;
     this._id = model.id;
     this._idx = this.app.models.length;
-    this._elementType = model.elementType || model.element_type;
+    this._elementType = model.elementType !== undefined ? model.elementType : model.element_type;
     this._existing = model.existing || model.id;
 
     this.label = model.label || '';
@@ -69,6 +71,10 @@ export class Model {
     return this.id;
   }
 
+  getParameter(id: string): Parameter {
+    return this._params.find((param: Parameter) => param.id === id);
+  }
+
   addParameter(param: any): void {
     this._params.push(new Parameter(this, param));
   }
@@ -95,6 +101,11 @@ export class Model {
     this._params = this.params.filter((param: Parameter) => param.id != paramId);
   }
 
+  updateParameter(param: any): void {
+    const idx: number = this._params.map((p: Parameter) => p.id).indexOf(param.id);
+    this._params[idx] = new Parameter(this, param);
+  }
+
   clean(): void {
     this._idx = this.app.models.indexOf(this);
   }
@@ -115,8 +126,12 @@ export class Model {
     return this.elementType === 'stimulator';
   }
 
-  save(): void {
-    this.app.saveModel(this);
+  delete(): Promise<any> {
+    return this.app.deleteModel(this._doc._id);
+  }
+
+  save(): Promise<any> {
+    return this.app.saveModel(this);
   }
 
   toJSON(target: string = 'db'): any {

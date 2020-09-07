@@ -24,7 +24,7 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
   @Input() id: string;
   @Input() rev: string;
   private _mobileQueryListener: () => void;
-  public mobileQuery: MediaQueryList;
+  private _mobileQuery: MediaQueryList;
 
   constructor(
     private _activityGraphService: ActivityGraphService,
@@ -38,9 +38,9 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _simulationRunService: SimulationRunService,
   ) {
-    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this._mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit() {
@@ -56,6 +56,10 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._bottomSheet.dismiss();
+  }
+
+  get mobileQuery(): MediaQueryList {
+    return this._mobileQuery;
   }
 
   get project(): Project {
@@ -74,11 +78,10 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     // console.log('Project container update');
     if (this.id) {
       this._appService.app.initProject(this.id, this.rev).then(() => {
-        if (this.project.hasSpatialActivities()) {
-          this._activityGraphService.init(this.project);
-        } else {
+        if (!this.project.hasSpatialActivities()) {
           this._activityGraphService.mode = 'chart';
         }
+        this._activityGraphService.init(this.project);
 
         if (
           this._router.url.includes('run') || this.project.config['runAfterLoad'] &&

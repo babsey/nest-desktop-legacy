@@ -56,11 +56,11 @@ export class ProjectToolbarComponent implements OnInit {
   }
 
   selectMode(mode: string): void {
-    this._projectService.selectMode(mode);
+    this._projectService.mode = mode;
   }
 
   isMode(mode: string): boolean {
-    return this._projectService.isMode(mode);
+    return this._projectService.mode === mode;
   }
 
   onSelectionChange(event: any): void {

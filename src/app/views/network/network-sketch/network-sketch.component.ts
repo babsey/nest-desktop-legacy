@@ -10,8 +10,6 @@ import { Node } from '../../../components/node/node';
 
 import { NetworkSketchService } from '../../../services/network/network-sketch.service';
 
-import { NetworkClearDialogComponent } from '../network-clear-dialog/network-clear-dialog.component';
-
 
 @Component({
   selector: 'app-network-sketch',
@@ -24,9 +22,10 @@ export class NetworkSketchComponent implements OnInit {
   @Input() height: number = 400;
   @Input() eventTrigger: boolean = true;
   private _selector: any;
+  private _viewDragline: boolean
 
-  public contextMenuData: any = { node: null, connection: null };
-  public contextMenuPosition: any = { x: '0px', y: '0px' };
+  private _contextMenuData: any = { node: null, connection: null };
+  private _contextMenuPosition: any = { x: '0px', y: '0px' };
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
 
   constructor(
@@ -51,8 +50,16 @@ export class NetworkSketchComponent implements OnInit {
     })
   }
 
+  get contextMenuPosition(): any {
+    return this._contextMenuPosition;
+  }
+
+  get contextMenuData(): any {
+    return this._contextMenuData;
+  }
+
   get viewDragline(): boolean {
-    return this._networkSketchService.viewDragline;
+    return this._viewDragline;
   }
 
   countBefore(): number {
@@ -65,16 +72,16 @@ export class NetworkSketchComponent implements OnInit {
 
   onSVGEnter(event: MouseEvent): void {
     if (!this.eventTrigger) return;
-    this._networkSketchService.viewDragline = true;
+    this._viewDragline = true;
   }
 
   onSVGOver(event: MouseEvent): void {
-    this._networkSketchService.viewDragline = true;
+    this._viewDragline = true;
   }
 
   onSVGLeave(event: MouseEvent): void {
     this.network.view.resetFocus();
-    this._networkSketchService.viewDragline = false;
+    this._viewDragline = false;
   }
 
   onNodeEnter(event: MouseEvent, node: Node): void {

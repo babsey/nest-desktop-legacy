@@ -1,7 +1,10 @@
 <ng-container *ngIf="config.log">
   <mat-nav-list dense class="logs">
-    <ng-container *ngFor="let log of logService.logs">
-      <mat-list-item (click)="setTime(log[0])" class="log" [class.active]="isTime(log[0])">
+    <ng-container *ngFor="let log of logs">
+      <mat-list-item
+        (click)="setTime(log[0])"
+        [class.active]="isTime(log[0])"
+        class="log">
         <a matLine class="flex">
           <span style="margin-right: 5px;" [ngSwitch]="log[1]">
             <fa-icon *ngSwitchCase="'server'" icon="server"></fa-icon>
@@ -9,7 +12,7 @@
           </span>
           <span>{{ log[2] }}</span>
           <div class="flex-spacer"></div>
-          <span>{{ log[0] | timedelta : logService.time }}</span>
+          <span>{{ log[0] | timedelta : time }}</span>
         </a>
       </mat-list-item>
     </ng-container>

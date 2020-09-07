@@ -4,6 +4,7 @@ import { ActivityChartGraph } from '../../../components/activity/Plotly/activity
 import { Project } from '../../../components/project/project';
 
 import { ActivityChartService } from '../../../services/activity/activity-chart.service';
+import { ActivityStatsService } from '../../../services/activity/activity-stats.service';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
 
   constructor(
     private _activityChartService: ActivityChartService,
+    private _activityStatsService: ActivityStatsService,
   ) { }
 
   ngOnInit() {
@@ -45,10 +47,11 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
   init(project: Project): void {
     // console.log('Init activity chart view for ' + project.name);
     this._activityChartService.graph = new ActivityChartGraph(project);
+    this._activityStatsService.reset();
   }
 
   update(): void {
-    // console.log('Update activity chart view for ' + this.project.name);
+    // console.log('Update activity chart view for');
     this._activityChartService.graph.update();
     // this.activities.map(activity => {
     //   var recordables = Object.keys(activity.events).filter(d => !['times', 'senders'].includes(d));

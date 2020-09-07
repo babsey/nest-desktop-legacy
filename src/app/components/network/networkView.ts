@@ -47,9 +47,9 @@ export class NetworkView {
     return this._selectedElementType;
   }
 
-  set selectedElementType(elementType: string | null ) {
+  set selectedElementType(value: string | null ) {
     this.resetSelection();
-    this._selectedElementType = elementType;
+    this._selectedElementType = value;
     // this._selectedElementType = this._selectedElementType === elementType ? null : elementType;
   }
 

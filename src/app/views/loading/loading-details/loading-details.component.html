@@ -115,10 +115,10 @@
           NEST Server
           <span class="flex-spacer"></span>
           <span>
-            {{ app.nestServer.serverVersion }}
+            {{ state.serverVersion }}
             <app-response-check
-              [ready]="app.nestServer.serverReady"
-              [valid]="app.nestServer.serverValid">
+              [ready]="state.serverReady"
+              [valid]="state.serverValid">
             </app-response-check>
           </span>
         </span>
@@ -129,10 +129,10 @@
           NEST Simulator
           <span class="flex-spacer"></span>
           <span>
-            {{ app.nestServer.simulatorVersion }}
+            {{ state.simulatorVersion }}
             <app-response-check
-              [ready]="app.nestServer.simulatorReady"
-              [valid]="app.nestServer.simulatorValid">
+              [ready]="state.simulatorReady"
+              [valid]="state.simulatorValid">
             </app-response-check>
           </span>
         </span>

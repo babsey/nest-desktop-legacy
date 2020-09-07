@@ -16,22 +16,30 @@ import { ModelService } from '../../../services/model/model.service';
 export class NodeToolbarComponent implements OnInit {
   @Input() node: Node;
   @Input() disabled: boolean = false;
-  public models: Model[] = [];
+  private _models: Model[] = [];
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
-  public contextMenuPosition = { x: '0px', y: '0px' };
+  private _contextMenuPosition: any = { x: '0px', y: '0px' };
 
   constructor(
   ) { }
 
   ngOnInit() {
-    this.models = this.node.models;
+    this._models = this.node.models;
+  }
+
+  get contextMenuPosition(): any {
+    return this._contextMenuPosition;
+  }
+
+  get models(): Model[] {
+    return this._models;
   }
 
   onContextMenu(event: MouseEvent): void {
     event.preventDefault();
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
+    this._contextMenuPosition.x = event.clientX + 'px';
+    this._contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();
   }
 

@@ -10,14 +10,17 @@ import { SimulationKernel } from '../../../components/simulation/simulationKerne
 })
 export class KernelControllerComponent implements OnInit {
   @Input() kernel: SimulationKernel;
-  public params: any[];
+  private _params: any[];
 
-  constructor(
-  ) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.params = this.kernel.config.params || [];
+    this._params = this.kernel.config.params || [];
+  }
+
+  get params(): any[] {
+    return this._params;
   }
 
 }

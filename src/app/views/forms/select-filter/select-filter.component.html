@@ -8,8 +8,7 @@
           autocomplete="off"
           class="search"
           placeholder="search"
-          type="text"
-        >
+          type="text" />
       </mat-form-field>
       <ng-container *ngFor="let option of filteredOptions">
       <mat-option [value]="option.value">{{ (option.label || option.value) | capitalize }}</mat-option>

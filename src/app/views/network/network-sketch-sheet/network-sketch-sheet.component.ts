@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 import { Network } from '../../../components/network/network';
 
@@ -12,19 +12,21 @@ import { AppService } from '../../../services/app/app.service';
   styleUrls: ['./network-sketch-sheet.component.scss']
 })
 export class NetworkSketchSheetComponent implements OnInit {
-  private _subscription: any;
 
   constructor(
     private _appService: AppService,
-    public bottomSheetRef: MatBottomSheetRef<NetworkSketchSheetComponent>,
-  ) {
-  }
+    private _bottomSheetRef: MatBottomSheetRef<NetworkSketchSheetComponent>,
+  ) { }
 
   ngOnInit() {
   }
 
   get network(): Network {
     return this._appService.app.project.network;
+  }
+
+  dismiss(): void {
+    this._bottomSheetRef.dismiss();
   }
 
 }

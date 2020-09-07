@@ -3,7 +3,11 @@
 
     <ng-container *ngIf="plot.show && plot.data.length > 0">
       <span style="width:700px">
-        <plotly-plot [data]="plot.data" [layout]="plot.layout" [config]="plot.config"></plotly-plot>
+        <plotly-plot
+          [data]="plot.data"
+          [layout]="plot.layout"
+          [config]="plot.config"
+        ></plotly-plot>
       </span>
     </ng-container>
 
@@ -12,17 +16,28 @@
       <span class="slider-container" (click)="$event.stopPropagation();">
         <mat-list dense>
           <h3 mat-subheader class="flex">
-            <span class="param-label ellipsis" style="line-height:16px">{{ options.label | capitalize }}</span>
+            <span class="param-label ellipsis" style="line-height:16px">
+              {{ options.label | capitalize }}
+            </span>
             <span class="flex-spacer"></span>
             <span class="project-theme">
               <mat-nav-list dense class="flex" style="padding:0" color="primary">
-                <mat-list-item (click)="selectFunctionType('pdf')" [class.active]="functionType=='pdf'" class="navButton">
+                <mat-list-item
+                  (click)="selectFunctionType('pdf')"
+                  [class.active]="functionType=='pdf'"
+                  class="navButton">
                   <span style="width:32px">PDF</span>
                 </mat-list-item>
-                <mat-list-item (click)="selectFunctionType('cdf')" [class.active]="functionType=='cdf'" class="navButton">
+                <mat-list-item
+                  (click)="selectFunctionType('cdf')"
+                  [class.active]="functionType=='cdf'"
+                  class="navButton">
                   <span style="width:32px">CDF</span>
                 </mat-list-item>
-                <mat-list-item (click)="plot.show=!plot.show" [class.active]="plot.show" class="navButton">
+                <mat-list-item
+                  (click)="plot.show=!plot.show"
+                  [class.active]="plot.show"
+                  class="navButton">
                   <fa-icon icon="chart-line"></fa-icon>
                 </mat-list-item>
               </mat-nav-list>
@@ -75,7 +90,12 @@
 
 <span class="param-container flex" [matMenuTriggerFor]="sliderMenu">
 
-  <span class="param-label ellipsis" matTooltip="{{ options.label | capitalize }}" matTooltipPosition="before">{{ options.label | capitalize }}</span>
+  <span
+    class="param-label ellipsis"
+    matTooltip="{{ options.label | capitalize }}"
+    matTooltipPosition="before">
+    {{ options.label | capitalize }}
+  </span>
   <span class="flex-spacer"></span>
 
   <span>

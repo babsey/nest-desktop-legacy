@@ -9,21 +9,25 @@ import { NESTServer } from '../../../components/server/nestServer';
   styleUrls: ['./nest-server-config.component.scss']
 })
 export class NestServerConfigComponent implements OnInit {
-  public nestServer: NESTServer;
+  private _nestServer: NESTServer;
 
   constructor() {
-    this.nestServer = new NESTServer();
+    this._nestServer = new NESTServer();
   }
 
   ngOnInit() {
   }
 
   get config(): any {
-    return this.nestServer.config;
+    return this._nestServer.config;
   }
 
   set config(value: any) {
-    this.nestServer.config = value;
+    this._nestServer.config = value;
+  }
+
+  get nestServer(): NESTServer {
+    return this._nestServer;
   }
 
   onSelectionChange(event: any): void {

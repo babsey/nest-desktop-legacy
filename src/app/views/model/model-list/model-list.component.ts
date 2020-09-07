@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { listAnimation } from '../../../animations/list-animation';
 
@@ -24,13 +25,14 @@ export class ModelListComponent implements OnInit, OnDestroy {
   private _view: string = 'enabled';
 
   constructor(
-    private _http: HttpClient,
     private _appService: AppService,
-    public modelService: ModelService,
+    private _http: HttpClient,
+    private _modelService: ModelService,
+    private _router: Router,
   ) { }
 
   ngOnInit() {
-    this._subscription = this.modelService.update.subscribe((): void => this.update());
+    this._subscription = this._modelService.update.subscribe((): void => this.update());
     this.update();
   }
 
@@ -58,10 +60,28 @@ export class ModelListComponent implements OnInit, OnDestroy {
     this._view = value;
   }
 
+  hasModel(model: string): boolean {
+    return this._modelService.hasModel(model);
+  }
+
+  isModelSelected(model: string): boolean {
+    return this._modelService.isSelected(model);
+  }
+
+  selectModel(model: string): void {
+    this._modelService.selectModel(model);
+  }
+
+  resetModels(): void {
+    this._router.navigate([{ outlets: { primary: null, nav: 'model' } }]);
+    this._modelService.selectedModel = '';
+    this.app.resetModelDatabase();
+  }
+
   update(): void {
     const urlRoot: string = this.app.nestServer.url;
-    this._http.get(urlRoot + '/api/Models').subscribe(resp => {
-      this._models = Object.entries(resp).map(entry => entry[1]);
+    this._http.get(urlRoot + '/api/Models').subscribe((resp: string[]) => {
+      this._models = resp;
       this.filterModels();
     })
   }

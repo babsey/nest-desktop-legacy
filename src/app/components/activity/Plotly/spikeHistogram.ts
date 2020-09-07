@@ -4,7 +4,7 @@ import { Panel } from './panel';
 
 
 export class SpikeHistogram extends Panel {
-  public state: any = {
+  private _state: any = {
     binsize: 10.0,
     barmode: 'overlay',
     barnorm: '',
@@ -18,6 +18,10 @@ export class SpikeHistogram extends Panel {
 
   get activities(): Activity[] {
     return this.graph.project.activities.filter(activity => activity.recorder.model.existing === 'spike_detector');
+  }
+
+  get state(): any {
+    return this._state;
   }
 
   init(): void {

@@ -14,25 +14,33 @@ import { AppService } from '../services/app/app.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('content', { static: false }) content: ElementRef;
-  public mobileQuery: MediaQueryList;
+  private _mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
   constructor(
     private _appService: AppService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
-    public router: Router,
+    private _router: Router,
   ) {
-    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this._mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit() {
   }
 
   ngOnDestroy() {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this._mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  get mobileQuery(): MediaQueryList {
+    return this._mobileQuery;
+  }
+
+  get router(): Router {
+    return this._router;
   }
 
   get sidenavOpened(): boolean {
@@ -48,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   triggerResize(): void {
-    if (!this.mobileQuery.matches) {
+    if (!this._mobileQuery.matches) {
       window.dispatchEvent(new Event('resize'));
     }
   }

@@ -1,6 +1,8 @@
-<ng-container [ngSwitch]="selectedActivity===undefined">
+<ng-container [ngSwitch]="selectedActivity === undefined">
+
   <ng-container *ngSwitchCase="true">
     <mat-nav-list dense>
+
       <h3 matSubheader>
         <span class="flex">
           Id
@@ -10,9 +12,10 @@
           Data size
         </span>
       </h3>
+
       <ng-container *ngFor="let activity of project.activities">
         <mat-list-item
-          (click)="select(activity)"
+          (click)="selectedActivity = activity"
           style="width:100%;line-height:40px">
           <span class="flex" style="height:40px">
             <span>
@@ -27,22 +30,27 @@
             <span class="flex-spacer"></span>
             <span>{{ activity.recorder.model.label }}</span>
             <span class="flex-spacer"></span>
-            <span>{{ activity.events.senders.length }}</span>
+            <span>
+              <ng-container *ngIf="activity.events.hasOwnProperty('senders')">
+                {{ activity.events.senders.length }}
+              </ng-container>
+            </span>
           </span>
         </mat-list-item>
       </ng-container>
+
     </mat-nav-list>
   </ng-container>
 
   <ng-container *ngSwitchCase="false">
-      <span class="dark-theme">
-        <button mat-mini-fab
-          (click)="unselect()"
-          color="primary"
-          style="z-index:1000;position:absolute;top:5px;left:10px">
-          <fa-icon icon="arrow-left"></fa-icon>
-        </button>
-      </span>
+    <span class="dark-theme">
+      <button mat-mini-fab
+        (click)="unselect()"
+        color="primary"
+        style="z-index:1000;position:absolute;top:5px;left:10px">
+        <fa-icon icon="arrow-left"></fa-icon>
+      </button>
+    </span>
 
     <ng-container [ngSwitch]="selectedActivity.recorder.model.existing">
 
@@ -66,6 +74,8 @@
           [selectedRecordFrom]="'V_m'"
         ></app-analog-stats>
       </ng-container>
+
+    </ng-container>
 
   </ng-container>
 </ng-container>

@@ -11,9 +11,9 @@ import { ProjectCode } from '../../../components/project/projectCode';
 })
 export class SimulationCodeEditorComponent implements OnInit {
   @Input() code: ProjectCode;
-  public selected: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
-  public blocks: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
-  public options: any = {
+  private _selected: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
+  private _blocks: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
+  private _options: any = {
     cursorBlinkRate: 700,
     foldGutter: true,
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
@@ -37,8 +37,20 @@ export class SimulationCodeEditorComponent implements OnInit {
   ngOnInit() {
   }
 
+  get blocks(): string[] {
+    return this._blocks;
+  }
+
+  get options(): any {
+    return this._options;
+  }
+
+  get selected(): any {
+    return this._selected;
+  }
+
   copyCode(): void {
-    let selBox = document.createElement('textarea');
+    const selBox: any = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';
     selBox.style.top = '0';
@@ -53,20 +65,20 @@ export class SimulationCodeEditorComponent implements OnInit {
 
   showHint(cm) {
     // https://stackoverflow.com/questions/41953077/codemirror-editor-show-hint-after-specific-key-pattern-like
-    var currentCursorPosition = cm.getCursor();
+    const currentCursorPosition: any = cm.getCursor();
     cm.replaceRange('.', currentCursorPosition);
-    var backwardCursorPosition = {
+    const backwardCursorPosition: any = {
       line: currentCursorPosition.line,
       ch: currentCursorPosition.ch - 4
     };
-    var backwardCharacter = cm.getRange(backwardCursorPosition, currentCursorPosition);
+    const backwardCharacter: string = cm.getRange(backwardCursorPosition, currentCursorPosition);
     if (backwardCharacter === 'nest') {
       cm.showHint()
     }
   }
 
   onChange(event) {
-    this.selected = event.value;
+    this._selected = event.value;
     this.code.generate(this.selected);
   }
 }

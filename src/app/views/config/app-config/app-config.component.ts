@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ConfigService } from '../../../components/config';
+import { Config } from '../../../components/config';
 
 
 @Component({
@@ -9,23 +9,23 @@ import { ConfigService } from '../../../components/config';
   styleUrls: ['./app-config.component.scss']
 })
 export class AppConfigComponent implements OnInit {
-  private _config: ConfigService;
+  private _config: Config;
 
   constructor () {
-    this._config = new ConfigService('App');
+    this._config = new Config('App');
   }
 
   ngOnInit() {
   }
 
   get config(): any {
-    return this._config.data;
+    return this._config.config;
   }
 
   onSelectionChange(event: any): void {
     const config: any = this.config;
     config[event.option.value] = event.option.selected;
-    this._config.data = config;
+    this._config.config = config;
   }
 
 }

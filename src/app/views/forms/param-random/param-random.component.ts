@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as math from 'mathjs';
 import { MatDialog } from '@angular/material/dialog';
 
-import { ConfigService } from '../../../components/config';
+import { Config } from '../../../components/config';
 
 import { DistributionService } from '../../../services/distribution/distribution.service';
 
@@ -16,66 +16,87 @@ export class ParamRandomComponent implements OnInit {
   @Input() options: any = {};
   @Input() value: any;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
-  private _config: ConfigService;
-  public plot: any = {
-    show: false,
-    data: [],
-    layout: {},
-    config: {
-      staticPlot: true,
-    }
-  }
-  public functionType: string = 'pdf';
-
-  public parameterTypes: any[] = [
-    {
-      name: 'Constant',
-      options: [
-        { value: 'constant', label: 'constant', specs: ['value'] },
-      ]
-    }, {
-      name: 'Distance',
-      options: [
-        { value: 'linear', label: 'linear', specs: ['a', 'c'] },
-        { value: 'exponential', label: 'exponential', specs: ['a', 'c', 'tau'] },
-        { value: 'gaussian', label: 'gaussian', specs: ['p_center', 'mean', 'sigma', 'c'] },
-        { value: 'gamma', label: 'gamma', specs: ['kappa', 'theta'] },
-        { value: 'gaussian2D', label: 'gaussian 2D', specs: ['p_center', 'mean_x', 'mean_y', 'sigma_x', 'sigma_y', 'rho', 'c'] },
-      ]
-    }, {
-      name: 'Value',
-      options: [
-        { value: 'uniform', label: 'uniform', specs: ['min', 'max'] },
-        { value: 'normal', label: 'normal', specs: ['mean', 'sigma', 'min', 'max'] },
-        { value: 'lognormal', label: 'log normal', specs: ['mu', 'sigma', 'min', 'max'] },
-      ]
-    }
-  ];
-  public selectedParameterType = this.findParameterType('constant');
+  private _config: Config;
+  private _functionType: string;
+  private _parameterTypes: any[];
+  private _plot: any;
+  private _selectedParameterType: any;
 
   constructor(
     private _dialog: MatDialog,
     private _distributionService: DistributionService,
   ) {
-    this._config = new ConfigService('ParameterRandom');
+    this._config = new Config('ParameterRandom');
+    this._functionType = 'pdf';
+    this._parameterTypes = [
+      {
+        name: 'Constant',
+        options: [
+          { value: 'constant', label: 'constant', specs: ['value'] },
+        ]
+      }, {
+        name: 'Distance',
+        options: [
+          { value: 'linear', label: 'linear', specs: ['a', 'c'] },
+          { value: 'exponential', label: 'exponential', specs: ['a', 'c', 'tau'] },
+          { value: 'gaussian', label: 'gaussian', specs: ['p_center', 'mean', 'sigma', 'c'] },
+          { value: 'gamma', label: 'gamma', specs: ['kappa', 'theta'] },
+          { value: 'gaussian2D', label: 'gaussian 2D', specs: ['p_center', 'mean_x', 'mean_y', 'sigma_x', 'sigma_y', 'rho', 'c'] },
+        ]
+      }, {
+        name: 'Value',
+        options: [
+          { value: 'uniform', label: 'uniform', specs: ['min', 'max'] },
+          { value: 'normal', label: 'normal', specs: ['mean', 'sigma', 'min', 'max'] },
+          { value: 'lognormal', label: 'log normal', specs: ['mu', 'sigma', 'min', 'max'] },
+        ]
+      }
+    ];
+    this._plot = {
+      show: false,
+      data: [],
+      layout: {},
+      config: {
+        staticPlot: true,
+      }
+    };
+    this._selectedParameterType = this.findParameterType('constant')
   }
 
   ngOnInit() {
-
     if (this.isObject(this.value)) {
-      this.selectedParameterType = this.findParameterType(this.value.parameterType);
+      this._selectedParameterType = this.findParameterType(this.value.parameterType);
     }
-    this.plotting()
+    this.plotting();
   }
 
   get config(): any {
-    return this._config.data;
+    return this._config.config;
   }
 
-  flatten(values: any): any { return values.reduce((a, b) => a.concat(Array.isArray(b) ? this.flatten(b) : b), []) }
+  get functionType(): string {
+    return this._functionType;
+  }
+
+  get parameterTypes(): any[] {
+    return this._parameterTypes;
+  }
+
+  get plot(): any {
+    return this._plot;
+  }
+
+  get selectedParameterType(): any {
+    return this._selectedParameterType;
+  }
+
+  flatten(values: any): any {
+    return values.reduce(
+      (a: any, b: any) => a.concat(Array.isArray(b) ? this.flatten(b) : b), [])
+  }
 
   findParameterType(parameterType: any): any {
-    var parameterTypes = this.parameterTypes.map(group => group.options);
+    let parameterTypes: any = this._parameterTypes.map(group => group.options);
     parameterTypes = this.flatten(parameterTypes);
     return parameterTypes.find(p => p.value === parameterType);
   }
@@ -89,14 +110,14 @@ export class ParamRandomComponent implements OnInit {
   }
 
   selectFunctionType(ftype: string): void {
-    this.functionType = ftype;
+    this._functionType = ftype;
     this.plot();
   }
 
   cumsum(d: number[]): number[] {
-    var new_array = [];
-    d.reduce(function(a, b, i) { return new_array[i] = a + b; }, 0);
-    return new_array;
+    const newArray: number[] = [];
+    d.reduce(function(a, b, i) { return newArray[i] = a + b; }, 0);
+    return newArray;
   }
 
   plotting(): void {
@@ -166,8 +187,10 @@ export class ParamRandomComponent implements OnInit {
 
   onSelectedChange(event: any): void {
     this.value = { parameterType: event, specs: {} };
-    this.selectedParameterType = this.findParameterType(this.value.parameterType);
-    this.selectedParameterType.specs.map(spec => this.value.specs[spec] = this.paramSpecs(spec).value || 0.);
+    this._selectedParameterType = this.findParameterType(this.value.parameterType);
+    this.selectedParameterType.specs.forEach((spec: string) => {
+      this.value.specs[spec] = this.paramSpecs(spec).value || 0.
+    });
     this.plotting();
     this.valueChange.emit(this.value);
   }

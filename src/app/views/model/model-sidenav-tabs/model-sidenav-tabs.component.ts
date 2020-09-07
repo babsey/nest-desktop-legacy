@@ -11,33 +11,45 @@ import { ModelService } from '../../../services/model/model.service';
   styleUrls: ['./model-sidenav-tabs.component.scss']
 })
 export class ModelSidenavTabsComponent implements OnInit {
-  public mobileQuery: MediaQueryList;
+  private _mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
   constructor(
     private _appService: AppService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
-    public modelService: ModelService,
+    private _modelService: ModelService,
   ) {
-    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this._mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit() {
   }
 
-  triggerResize(): void {
-    window.dispatchEvent(new Event('resize'));
+  get mobileQuery(): MediaQueryList {
+    return this._mobileQuery;
   }
 
   toggleSidenav(): void {
-    this.modelService.sidenavOpened = !this.modelService.sidenavOpened;
+    this._modelService.sidenavOpened = !this._modelService.sidenavOpened;
   }
 
-  devMode(): boolean {
-    return this._appService.app.config.devMode === true;
+  setSidenavMode(mode: string): void {
+    this._modelService.sidenavMode = mode;
+  }
+
+  isSidenavMode(mode: string): boolean {
+    return this._modelService.sidenavMode === mode;
+  }
+
+  isSidenavOpened(): boolean {
+    return this._modelService.sidenavOpened;
+  }
+
+  hasModel(): boolean {
+    return this._modelService.hasModel();
   }
 
 }

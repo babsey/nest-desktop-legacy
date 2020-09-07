@@ -13,13 +13,17 @@ export class SelectFilterComponent implements OnInit {
   @Input() placeholder: string = '';
   @Input() selected: any = {};
   @Output() selectedChange: EventEmitter<any> = new EventEmitter();
-  public filteredOptions: string[] = [];
+  private _filteredOptions: string[] = [];
 
   constructor() {
   }
 
   ngOnInit() {
-    this.filteredOptions = this.options;
+    this._filteredOptions = this.options;
+  }
+
+  get filteredOptions(): string[] {
+    return this._filteredOptions;
   }
 
   search(query: string): void {
@@ -29,7 +33,7 @@ export class SelectFilterComponent implements OnInit {
         result.push(option)
       }
     }
-    this.filteredOptions = result;
+    this._filteredOptions = result;
   }
 
   onSelectionChange(): void {

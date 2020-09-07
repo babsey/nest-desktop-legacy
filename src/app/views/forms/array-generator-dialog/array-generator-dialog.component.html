@@ -5,7 +5,9 @@
     <tr>
       <td>
         <mat-form-field class="select">
-          <mat-select placeholder="Generator type" [(ngModel)]="generatorService.options.type">
+          <mat-select
+            [(ngModel)]="options.type"
+            placeholder="Generator type" >
             <mat-option value="fill">Fill with a number</mat-option>
             <mat-option value="range">Ranged numbers</mat-option>
             <mat-option value="linspace">Linear spaced numbers</mat-option>
@@ -21,7 +23,12 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Value</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.value" placeholder="0" value="0" defaultValue="0"/>
+          <input matInput
+            [(ngModel)]="options.value"
+            defaultValue="0"
+            placeholder="0"
+            type="number"
+            value="0" />
         </mat-form-field>
       </td>
     </tr>
@@ -30,7 +37,12 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Start</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.start" placeholder="0" value="0" defaultValue="0"/>
+          <input matInput
+            [(ngModel)]="options.start"
+            defaultValue="0"
+            placeholder="0"
+            type="number"
+            value="0" />
         </mat-form-field>
       </td>
     </tr>
@@ -39,7 +51,11 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>End</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.end" placeholder="-1" defaultValue="-1" />
+          <input matInput
+            [(ngModel)]="options.end"
+            defaultValue="-1"
+            placeholder="-1"
+            type="number" />
         </mat-form-field>
       </td>
     </tr>
@@ -48,7 +64,12 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Minimum</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.min" placeholder="0" value="0" defaultValue="0"/>
+          <input matInput
+            [(ngModel)]="options.min"
+            defaultValue="0"
+            placeholder="0"
+            type="number"
+            value="0" />
         </mat-form-field>
       </td>
     </tr>
@@ -57,7 +78,11 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Maximum</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.max" placeholder="-1" defaultValue="-1" />
+          <input matInput
+            [(ngModel)]="options.max"
+            defaultValue="-1"
+            placeholder="-1"
+            type="number" />
         </mat-form-field>
       </td>
     </tr>
@@ -66,7 +91,11 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Mean</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.mu" placeholder="0" defaultValue="0" />
+          <input matInput
+            [(ngModel)]="options.mu"
+            defaultValue="0"
+            placeholder="0"
+            type="number" />
         </mat-form-field>
       </td>
     </tr>
@@ -75,7 +104,11 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Standard deviation</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.sigma" placeholder="1" defaultValue="1" />
+          <input matInput
+            [(ngModel)]="options.sigma"
+            defaultValue="1"
+            placeholder="1"
+            type="number" />
         </mat-form-field>
       </td>
     </tr>
@@ -84,7 +117,11 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Step</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.step" placeholder="1" defaultValue="1" />
+          <input matInput
+            [(ngModel)]="options.step"
+            defaultValue="1"
+            placeholder="1"
+            type="number" />
         </mat-form-field>
       </td>
     </tr>
@@ -93,14 +130,21 @@
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Size</mat-label>
-          <input matInput type="number" [(ngModel)]="generatorService.options.size" placeholder="1" defaultValue="1" />
+          <input matInput
+            [(ngModel)]="options.size"
+            defaultValue="1"
+            placeholder="1"
+            type="number" />
         </mat-form-field>
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.options.type.indexOf('random') != -1">
+    <tr *ngIf="options.type.indexOf('random') != -1">
       <td>
-        <mat-slide-toggle [(ngModel)]="generatorService.options.sort">Sort numbers</mat-slide-toggle>
+        <mat-slide-toggle
+          [(ngModel)]="generatorService.options.sort">
+          Sort numbers
+        </mat-slide-toggle>
       </td>
     </tr>
   </table>
@@ -108,5 +152,8 @@
 
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="generatorService.options" cdkFocusInitial>Generate</button>
+  <button mat-button cdkFocusInitial
+    [mat-dialog-close]="options">
+    Generate
+  </button>
 </div>

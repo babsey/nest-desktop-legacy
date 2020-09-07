@@ -28,7 +28,6 @@ import { LoadingComponent } from './loading/loading.component';
 import { LoadingDetailsComponent } from './loading/loading-details/loading-details.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { StartpageComponent } from './startpage/startpage.component';
-import { TestsuiteComponent } from './testsuite/testsuite.component';
 import { ValidationCheckComponent } from './loading/validation-check/validation-check.component';
 import { ResponseCheckComponent } from './loading/response-check/response-check.component';
 
@@ -40,7 +39,6 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
     LoadingDetailsComponent,
     PageNotFoundComponent,
     StartpageComponent,
-    TestsuiteComponent,
     EmptyPageComponent,
     ValidationCheckComponent,
     ResponseCheckComponent,

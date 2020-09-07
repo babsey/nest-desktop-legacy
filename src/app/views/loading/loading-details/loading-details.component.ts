@@ -18,7 +18,7 @@ export class LoadingDetailsComponent implements OnInit {
 
   constructor(
     private _appService: AppService,
-    public router: Router,
+    private _router: Router,
   ) { }
 
   ngOnInit() {
@@ -26,6 +26,14 @@ export class LoadingDetailsComponent implements OnInit {
 
   get app(): App {
     return this._appService.app;
+  }
+
+  get router(): Router {
+    return this._router;
+  }
+
+  get state(): any {
+    return this._appService.app.nestServer.state;
   }
 
 }

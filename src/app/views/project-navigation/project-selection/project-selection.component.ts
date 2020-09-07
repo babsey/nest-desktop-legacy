@@ -11,13 +11,21 @@ import { Project } from '../../../components/project/project';
 })
 export class ProjectSelectionComponent implements OnInit {
   @Input() app: App;
-  public selected: string[];              // Project ids
+  private _selected: string[];              // Project ids
 
   constructor() {
   }
 
   ngOnInit() {
     // console.log('Ng init project selection')
+  }
+
+  get selected(): string[] {
+    return this._selected;
+  }
+
+  set selected(value: string[]) {
+    this._selected = value;
   }
 
   delete(): void {

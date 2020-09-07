@@ -21,9 +21,9 @@ enum Rule {
 
 
 export class Connection extends Config {
-  public network: Network;                     // parent
-  public code: ConnectionCode;
-  public view: ConnectionView;
+  private _network: Network;                     // parent
+  private _code: ConnectionCode;
+  private _view: ConnectionView;
   private _idx: number;                         // generative
 
   // arguments for nest.Connect
@@ -42,10 +42,10 @@ export class Connection extends Config {
 
   constructor(network: any, connection: any) {
     super('Connection');
-    this.network = network;
-    this.idx = network.connections.length;
-    this.code = new ConnectionCode(this);
-    this.view = new ConnectionView(this);
+    this._network = network;
+    this._idx = network.connections.length;
+    this._code = new ConnectionCode(this);
+    this._view = new ConnectionView(this);
 
     this._source = connection.source;
     this._target = connection.target;
@@ -62,8 +62,12 @@ export class Connection extends Config {
     return this._idx;
   }
 
-  set idx(value: number) {
-    this._idx = value;
+  get code(): ConnectionCode {
+    return this._code;
+  }
+
+  get network(): Network {
+    return this._network;
   }
 
   get source(): Node {
@@ -80,6 +84,10 @@ export class Connection extends Config {
 
   set target(node: Node) {
     this._target = node.idx;
+  }
+
+  get view(): ConnectionView {
+    return this._view;
   }
 
   get model(): Model {
@@ -104,7 +112,7 @@ export class Connection extends Config {
   }
 
   clean(): void {
-    this.idx = this.network.connections.indexOf(this);
+    this._idx = this.network.connections.indexOf(this);
   }
 
   isBothSpatial(): boolean {

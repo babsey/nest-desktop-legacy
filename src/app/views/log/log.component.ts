@@ -13,24 +13,36 @@ import { LogService } from '../../services/log/log.service';
 export class LogComponent implements OnInit {
 
   constructor(
-    public logService: LogService,
-    public appService: AppService,
-    public router: Router,
+    private _appService: AppService,
+    private _logService: LogService,
+    private _router: Router,
   ) { }
 
   ngOnInit() {
   }
 
   get config(): any {
-    return this.appService.app.config;
+    return this._appService.app.config;
+  }
+
+  get logs(): any[] {
+    return this._logService.logs;
+  }
+
+  get router(): Router {
+    return this._router;
+  }
+
+  get time(): Date {
+    return this._logService.time;
   }
 
   setTime(time: Date): void {
-    this.logService.time === time;
+    this._logService.time = time;
   }
 
   isTime(time: Date): boolean {
-    return this.logService.time === time
+    return this._logService.time === time
   }
 
 }

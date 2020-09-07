@@ -18,7 +18,6 @@ import { ModelModule } from '../model/model.module';
 import { NodeModule } from '../node/node.module';
 
 import { BackgroundSketchComponent } from './network-sketch/background-sketch/background-sketch.component';
-import { NetworkClearDialogComponent } from './network-clear-dialog/network-clear-dialog.component';
 import { NetworkComponent } from './network.component';
 import { NetworkControllerComponent } from './network-controller/network-controller.component';
 import { NetworkListComponent } from './network-list/network-list.component';
@@ -31,7 +30,6 @@ import { NetworkSketchSheetComponent } from './network-sketch-sheet/network-sket
 @NgModule({
   declarations: [
     BackgroundSketchComponent,
-    NetworkClearDialogComponent,
     NetworkComponent,
     NetworkControllerComponent,
     NetworkListComponent,
@@ -41,12 +39,10 @@ import { NetworkSketchSheetComponent } from './network-sketch-sheet/network-sket
     NetworkSketchSheetComponent,
   ],
   entryComponents: [
-    NetworkClearDialogComponent,
     NetworkSketchSheetComponent,
   ],
   exports: [
     BackgroundSketchComponent,
-    NetworkClearDialogComponent,
     NetworkComponent,
     NetworkControllerComponent,
     NetworkListComponent,

@@ -22,9 +22,8 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
   @Input() activity: Activity;
   @Input() recordFrom: string[] = [];
   @Input() selectedRecordFrom: string;
-
-  public displayedColumns: string[] = ['id', 'mean', 'std'];
-  public dataSource: MatTableDataSource<any>;
+  private _dataSource: MatTableDataSource<any>;
+  private _displayedColumns: string[] = ['id', 'mean', 'std'];
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -44,6 +43,18 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
     return this.activity.recorder.view.color;
   }
 
+  get dataSource(): MatTableDataSource<any> {
+    return this._dataSource;
+  }
+
+  get displayedColumns(): string[] {
+    return this._displayedColumns;
+  }
+
+  set displayedColumns(value: string[]) {
+    this._displayedColumns = value;
+  }
+
   update(): void {
     if (this.selectedRecordFrom === undefined) return
     const activityData: number[] = this.activity.events[this.selectedRecordFrom];
@@ -60,8 +71,8 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
         std: d.length > 0 ? this._mathService.deviation(d) : 0,
       }
     })
-    this.dataSource = new MatTableDataSource(stats);
-    this.dataSource.sort = this.sort;
+    this._dataSource = new MatTableDataSource(stats);
+    this._dataSource.sort = this.sort;
   }
 
   height(): number {

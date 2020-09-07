@@ -10,7 +10,7 @@ import { Project } from '../../../components/project/project';
 })
 export class ProjectRawDataComponent implements OnInit {
   @Input() project: Project;
-  public options: any = {
+  private _options: any = {
     cursorBlinkRate: 700,
     foldGutter: true,
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
@@ -28,6 +28,10 @@ export class ProjectRawDataComponent implements OnInit {
 
   get content(): string {
     return JSON.stringify(this.project, null, "\t");
+  }
+
+  get options(): any {
+    return this._options;
   }
 
 }

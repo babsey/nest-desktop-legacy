@@ -5,29 +5,28 @@
       <span class="flex-spacer"></span>
       <span style="display:flex">
         <input readonly
-          class="slider-input"
-          type="number"
-          [ngModel]="value"
-          [defaultValue]="options.value"
-          [placeholder]="options.value"
-          [min]="options.min"
-          [max]="options.max"
-          [step]="options.step"
           (change)="onChange($event)"
-        >
+          [defaultValue]="options.value"
+          [max]="options.max"
+          [min]="options.min"
+          [ngModel]="value"
+          [placeholder]="options.value"
+          [step]="options.step"
+          class="slider-input"
+          type="number" />
         <span class="param-unit">{{ options.unit }}</span>
       </span>
     </div>
 
     <mat-slider class="slider"
+      (change)="onChange($event)"
+      [displayWith]="displayWith(options.ticks)"
+      [max]="options.ticks.length-1"
       [ngModel]="idx"
       min="0"
-      [max]="options.ticks.length-1"
       step="1"
       tickInterval="1"
-      [displayWith]="displayWith(options.ticks)"
-      (change)="onChange($event)"
-      ></mat-slider>
+    ></mat-slider>
     <span class="slider-ticklabels">
       <ng-container *ngFor="let tick of options.ticks">
         <span style="width:10px">{{ tick }}</span>

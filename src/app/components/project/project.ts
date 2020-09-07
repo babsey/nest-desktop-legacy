@@ -134,11 +134,6 @@ export class Project extends Config {
   Project revisions
   */
 
-  // Load revisions of the current project from the database.
-  revisions(): Promise<any> {
-    return this.app.projectDB.revisions(this.id);
-  }
-
   // Is the current revised project selected?
   isRevisionSelected(): boolean {
     return this.rev === this.app.project.rev;

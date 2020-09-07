@@ -7,7 +7,7 @@ import { MathService } from '../math/math.service';
   providedIn: 'root'
 })
 export class GeneratorService {
-  public options: any = {
+  private _options: any = {
     type: 'fill',
     start: 0,
     end: -1,
@@ -19,7 +19,7 @@ export class GeneratorService {
     size: 1,
     sort: true,
   }
-  public inputs: any = {
+  private _inputs: any = {
     fill: ['value', 'size'],
     range: ['start', 'end', 'step'],
     linspace: ['start', 'end', 'size'],
@@ -32,8 +32,12 @@ export class GeneratorService {
     private _mathService: MathService,
   ) { }
 
+  get options(): any {
+    return this._options;
+  }
+
   view(param: string): boolean {
-    return this.inputs[this.options.type].includes(param)
+    return this._inputs[this._options.type].includes(param)
   }
 
   generate(d: any): number[] {

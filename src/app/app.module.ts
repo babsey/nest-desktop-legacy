@@ -13,8 +13,8 @@ import { AppComponent } from './views/app.component';
 
 @NgModule({
   imports: [
-    // NoopAnimationsModule,
-    BrowserAnimationsModule,
+    NoopAnimationsModule,
+    // BrowserAnimationsModule,
     BrowserModule,
     ViewsModule,
   ],

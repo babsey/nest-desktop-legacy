@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./config.component.scss']
 })
 export class ConfigComponent implements OnInit, OnDestroy {
+  private _currentSection = 'nest-server';
   private _subscription: any;
-  public currentSection = 'nest-server';
 
   constructor(
     private _route: ActivatedRoute,
@@ -20,14 +20,18 @@ export class ConfigComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._subscription = this._route.params.subscribe(params => {
       if ('setting' in params) {
-        this.currentSection = params['setting'];
+        this._currentSection = params['setting'];
         setTimeout(() => document.querySelector('#' + this.currentSection).scrollIntoView({ behavior: 'smooth'}), 100);
       }
     });
   }
 
   ngOnDestroy() {
-    this._subscription.unsubscribe()
+    this._subscription.unsubscribe();
+  }
+
+  get currentSection(): string {
+    return this._currentSection;
   }
 
   navigate(sectionId: string): void {

@@ -6,22 +6,21 @@
 
   <div class="slider-content">
     <mat-slider
-      class="slider"
-      [ngModel]="idx"
-      min="0"
+      (change)="onChange($event)"
+      [displayWith]="displayWith()"
       [max]="options.ticks.length-1"
+      [ngModel]="idx"
+      class="slider"
+      min="0"
       step="1"
       tickInterval="1"
-      [displayWith]="displayWith()"
-      (change)="onChange($event)"
     ></mat-slider>
 
     <mat-form-field class="slider-input" floatLabel="never">
       <input matInput readonly
         [ngModel]="value"
         [placeholder]="options.value"
-        tabindex="-1"
-        >
+        tabindex="-1">
     </mat-form-field>
   </div>
 </div>

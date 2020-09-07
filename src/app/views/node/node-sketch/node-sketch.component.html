@@ -1,13 +1,13 @@
 <svg:g app-node-shape
   (click)="onClick($event)"
-  (mouseout)="isDisabled=false"
+  (mouseout)="enable()"
   [node]="node"
   [radius]="radius"
   [strokeWidth]="strokeWidth"
   [matTooltip]="node.model.label || node.modelId"
   [matTooltipShowDelay]="500"
   [matTooltipHideDelay]="200"
-  [matTooltipDisabled]="isDisabled"
+  [matTooltipDisabled]="isDisabled()"
   [attr.transform]="'translate('+ node.view.position.x + ',' + node.view.position.y + ')'"
   class="node"
 ></svg:g>

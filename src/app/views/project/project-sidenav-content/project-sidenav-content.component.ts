@@ -14,31 +14,37 @@ import { ProjectService } from '../../../services/project/project.service';
 export class ProjectSidenavContentComponent implements OnInit {
   @Input() project: Project;
   @ViewChild('content', { static: false }) content: ElementRef;
-  public width: number = 12;
-  public height: number = 12;
+  private _height: number = 12;
+  private _width: number = 12;
 
   constructor(
     private _projectService: ProjectService,
   ) { }
 
   ngOnInit() {
-    setTimeout(() => this.triggerResize(), 10)
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 10)
+  }
+
+  get height(): number {
+    return this._height;
   }
 
   get mode(): string {
     return this._projectService.mode;
   }
 
-  triggerResize(): void {
-    window.dispatchEvent(new Event('resize'));
+  get width(): number {
+    return this._width;
   }
 
   @HostListener('window:resize', [])
   resize(): void {
     if (this.content === undefined) return
     const element: any = this.content.nativeElement;
-    this.width = element.clientWidth;
-    this.height = element.clientHeight;
+    this._width = element.clientWidth;
+    this._height = element.clientHeight;
   }
 
 }

@@ -30,10 +30,6 @@ export class ConnectionMask extends Config {
     this.specs = mask.specs || {};
   }
 
-  get config(): any {
-    return this.config.data;
-  }
-
   list(): string[] {
     return Object.keys(this.config);
   }

@@ -14,10 +14,14 @@ import { AppService } from '../../services/app/app.service';
 export class StartpageComponent implements OnInit {
 
   constructor(
-    public appService: AppService,
+    private _appService: AppService,
   ) { }
 
   ngOnInit() {
+  }
+
+  get version(): string {
+    return this._appService.app.version;
   }
 
 }

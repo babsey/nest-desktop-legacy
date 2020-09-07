@@ -16,8 +16,8 @@ export class NodeCode extends Code {
     return this.node.view.label;
   }
 
-  get version(): string {
-    return this.node.network.project.app.nestServer.simulatorVersion;
+  get simulatorVersion(): string {
+    return this.node.network.project.app.nestServer.state.simulatorVersion;
   }
 
   create(): string {
@@ -27,7 +27,7 @@ export class NodeCode extends Code {
       script += `, ${this.node.size}`;
     }
     script += this.nodeParams();
-    if (!this.version.startsWith('2.') && this.node.spatial.hasPositions()) {
+    if (!this.simulatorVersion.startsWith('2.') && this.node.spatial.hasPositions()) {
       script += this.nodeSpatial();
     }
     script += ')';
@@ -38,7 +38,7 @@ export class NodeCode extends Code {
     const model: string = this.node.model ? this.node.model.existing : this.node.modelId;
     let script: string = '{';
     // Make it backward compatible with older NEST Server.
-    if (this.version.startsWith('2.')) {
+    if (this.simulatorVersion.startsWith('2.')) {
       script += this._(2) + `"events": nest.GetStatus(${this.label}, "events")[0],`;        // NEST 2
       if (model === 'spike_detector') {
         script += this._(2) + `"nodeIds": nest.GetStatus(nest.GetConnections(None, ${this.label}),  "source"),`;
@@ -71,9 +71,9 @@ export class NodeCode extends Code {
     const paramsList: string[] = [];
     this.node.params
       .filter((param: Parameter) => param.visible)
-      .forEach((param: Parameter) => paramsList.push(
-        this._() + `"${param.id}": ${this.format(param.value)}`
-      ))
+      .forEach((param: Parameter) => {
+        paramsList.push(this._() + `"${param.id}": ${this.format(param.value)}`)
+      })
     if (this.node.model.existing === 'multimeter') {
       const recordFrom: string[] = this.node.recordFrom.map(record => '"' + record + '"');
       paramsList.push(this._() + `"record_from": [${recordFrom.join(',')}]`);

@@ -10,18 +10,22 @@ import { Simulation } from '../../../components/simulation/simulation';
 })
 export class SimulationControllerComponent implements OnInit {
   @Input() simulation: Simulation;
-  public params: any[];
+  private _params: any[];
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
-    this.params = this.simulation.config.params || [];
+    this._params = this.simulation.config.params || [];
+  }
+
+  get params(): any[] {
+    return this._params;
   }
 
   onChange(value: any, id: string): void {
     if (id === 'randomSeed') {
-      this.simulation.config = {'autoRandomSeed': false};
+      this.simulation.config = { 'autoRandomSeed': false };
     }
   }
 

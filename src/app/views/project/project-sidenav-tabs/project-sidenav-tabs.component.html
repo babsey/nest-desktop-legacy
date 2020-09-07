@@ -69,38 +69,34 @@
     </button> -->
   </ng-container>
 
-  <ng-container *ngIf="app.project.hasActivities()">
-
-    <button mat-icon-button
-      (click)="selectMode('activityController')"
-      [class.mat-fab]="isMode('activityController')"
-      matTooltip="Activity controller"
-      matTooltipPosition="before"
-      class="app-button">
-      <span class="fa-stack" style="line-height:2em">
-        <ng-container [ngSwitch]="graphMode">
-          <ng-container *ngSwitchCase="'chart'">
-            <fa-icon icon="chart-line" class="fa-stack-1x"></fa-icon>
-          </ng-container>
-          <ng-container *ngSwitchCase="'animation'">
-            <fa-icon icon="braille" class="fa-stack-1x"></fa-icon>
-          </ng-container>
+  <button mat-icon-button
+    (click)="selectMode('activityController')"
+    [class.mat-fab]="isMode('activityController')"
+    [disabled]="!app.project.hasActivities()"
+    matTooltip="Activity controller"
+    matTooltipPosition="before"
+    class="app-button">
+    <span class="fa-stack" style="line-height:2em">
+      <ng-container [ngSwitch]="graphMode">
+        <ng-container *ngSwitchCase="'chart'">
+          <fa-icon icon="chart-line" class="fa-stack-1x"></fa-icon>
         </ng-container>
-        <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top: 11px; left: -14px"></fa-icon>
-      </span>
-    </button>
+        <ng-container *ngSwitchCase="'animation'">
+          <fa-icon icon="braille" class="fa-stack-1x"></fa-icon>
+        </ng-container>
+      </ng-container>
+      <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top: 11px; left: -14px"></fa-icon>
+    </span>
+  </button>
 
-    <button mat-icon-button
-      (click)="selectMode('stats')"
-      [class.mat-fab]="isMode('stats')"
-      matTooltip="Simulation stats"
-      matTooltipPosition="before"
-      class="app-button">
-      <fa-icon icon="poll"></fa-icon>
-    </button>
-
-  </ng-container>
-
+  <button mat-icon-button
+    (click)="selectMode('stats')"
+    [class.mat-fab]="isMode('stats')"
+    matTooltip="Simulation stats"
+    matTooltipPosition="before"
+    class="app-button">
+    <fa-icon icon="poll"></fa-icon>
+  </button>
 
   <span class="flex-spacer"></span>
 

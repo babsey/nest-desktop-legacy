@@ -11,12 +11,20 @@ import { ActivityChartService } from './activity-chart.service';
   providedIn: 'root'
 })
 export class ActivityGraphService {
-  public mode: string = 'chart';
+  private _mode: string = 'chart';
 
   constructor(
     private _activityAnimationService: ActivityAnimationService,
     private _activityChartService: ActivityChartService,
   ) { }
+
+  get mode(): string {
+    return this._mode;
+  }
+
+  set mode(value: string) {
+    this._mode = value;
+  }
 
   init(project: Project): void {
     if (this.mode === 'chart') {

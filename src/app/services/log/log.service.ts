@@ -4,18 +4,31 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LogService {
-  public logs: any = [];
-  public time = new Date();
+  private _logs: any[] = [];
+  private _time = new Date();
 
-  constructor() { }
+  constructor() {
+  }
+
+  get logs(): any[] {
+    return this._logs;
+  }
+
+  get time(): Date {
+    return this._time;
+  }
+
+  set time(value: Date) {
+    this._time = value
+  }
 
   reset(): void {
-    this.time = new Date();
-    this.logs = [[this.time, 'client', 'Start log']]
+    this._time = new Date();
+    this._logs = [[this.time, 'client', 'Start log']]
   }
 
   log(message: string): void {
-    this.logs.push([new Date(), 'client', message])
+    this._logs.push([new Date(), 'client', message])
   }
 
 }

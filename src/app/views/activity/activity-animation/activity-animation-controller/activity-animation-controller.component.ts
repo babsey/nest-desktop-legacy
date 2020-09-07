@@ -12,7 +12,7 @@ import { ActivityAnimationService } from '../../../../services/activity/activity
   styleUrls: ['./activity-animation-controller.component.scss']
 })
 export class ActivityAnimationControllerComponent implements OnInit {
-  public trailModes: string[] = ['off', 'growing', 'shrinking', 'temporal'];
+  private _trailModes: string[] = ['off', 'growing', 'shrinking', 'temporal'];
 
   constructor(
     private _activityAnimationService: ActivityAnimationService,
@@ -23,6 +23,10 @@ export class ActivityAnimationControllerComponent implements OnInit {
 
   get graph(): ActivityAnimationGraph {
     return this._activityAnimationService.graph;
+  }
+
+  get trailModes(): string[] {
+    return this._trailModes;
   }
 
   increment(): void {

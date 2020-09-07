@@ -44,12 +44,12 @@ export class Panel extends Config {
     });
   }
 
-  public get data(): any[] {
+  get data(): any[] {
     return this._data;
   }
 
-  public set data(newData: any[]) {
-    this._data = newData;
+  set data(value: any[]) {
+    this._data = value;
   }
 
 }

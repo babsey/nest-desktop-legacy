@@ -19,7 +19,7 @@ export class NodeSketchComponent implements OnInit {
   @Input() height: number;
   @Input() width: number;
   private _selector: any;
-  public isDisabled: boolean = false;
+  private _disabled: boolean = false;
 
   constructor(
     private _networkSketchService: NetworkSketchService,
@@ -47,6 +47,14 @@ export class NodeSketchComponent implements OnInit {
     return this.node.config.graph.strokeWidth.value;
   }
 
+  isDisabled(): boolean {
+    return this._disabled;
+  }
+
+  enable(): void {
+    this._disabled = false;
+  }
+
   connect(sourceNode: Node): void {
     const connection: any = {
       source: sourceNode.idx,
@@ -58,7 +66,7 @@ export class NodeSketchComponent implements OnInit {
 
   onClick(event: MouseEvent): void {
     // console.log('Click node')
-    this.isDisabled = true;
+    this._disabled = true;
     const selectedNode: Node = this.node.network.view.selectedNode;
     if (this.eventTrigger && selectedNode && this.node.view.isFocused() && this._networkSketchService.connect) {
       this.connect(selectedNode);

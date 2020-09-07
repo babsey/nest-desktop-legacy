@@ -10,21 +10,32 @@ import { ActivityGraphService } from '../../../../services/activity/activity-gra
   styleUrls: ['./activity-chart-split-controller.component.scss']
 })
 export class ActivityChartSplitControllerComponent implements OnInit {
-  public useTransition: boolean = false;
 
   constructor(
-    public activityChartPanelService: ActivityChartPanelService,
+    private _activityChartPanelService: ActivityChartPanelService,
     private _activityGraphService: ActivityGraphService,
   ) { }
 
   ngOnInit() {
   }
 
+  get panelOrder(): string[] {
+    return this._activityChartPanelService.panelOrder;
+  }
+
+  get panel(): any {
+    return this._activityChartPanelService.panel;
+  }
+
+  get panelSelected(): string[] {
+    return this._activityChartPanelService.panelSelected;
+  }
+
   dragEnd(event): void {
-    this.activityChartPanelService.panelOrder
-      .filter(pp => this.activityChartPanelService.panelSelected.includes(pp))
-      .map((p, i) => {
-        this.activityChartPanelService.panel[p].size = Math.round(event.sizes[i]);
+    this.panelOrder
+      .filter((panel: string) => this.panelSelected.includes(panel))
+      .forEach((panel: string, idx: number) => {
+        this.panel[panel].size = Math.round(event.sizes[idx]);
       })
     // this._activityChartPanelService.update.emit()
   }

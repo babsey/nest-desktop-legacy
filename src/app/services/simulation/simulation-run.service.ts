@@ -16,8 +16,8 @@ import { LogService } from '../log/log.service';
 export class SimulationRunService {
   private _project: Project;
   private _snackBarRef: any;
-  public running: boolean = false;
-  public viewCodeEditor: boolean = false;
+  private _running: boolean = false;
+  private _viewCodeEditor: boolean = false;
 
   constructor(
     private _activityGraphService: ActivityGraphService,
@@ -25,7 +25,14 @@ export class SimulationRunService {
     private _http: HttpClient,
     private _snackBar: MatSnackBar,
     private _toastr: ToastrService,
-  ) {
+  ) { }
+
+  get running(): boolean {
+    return this._running;
+  }
+
+  set viewCodeEditor(value: boolean) {
+    this._viewCodeEditor = value;
   }
 
   run(project: Project, force: boolean = false): Promise<any> {
@@ -34,7 +41,7 @@ export class SimulationRunService {
 
     this._logService.reset();
 
-    if (!this.viewCodeEditor) {
+    if (!this._viewCodeEditor) {
       if (project.simulation.config['autoRandomSeed']) {
         this._logService.log('Randomize seed');
         const seed: number = Math.random() * 1000;
@@ -43,7 +50,7 @@ export class SimulationRunService {
       project.code.generate();
     }
 
-    this.running = true;
+    this._running = true;
     if (project.config['showSnackBar']) {
       this._snackBarRef = this._snackBar.open('The simulation is running. Please wait.', null, {});
     }
@@ -51,13 +58,13 @@ export class SimulationRunService {
     const url: string = project.app.nestServer.url;
     this._logService.log('Run simulation on server');
 
-    const request: any = (!project.app.nestServer.simulatorVersion.startsWith('2.') || this.viewCodeEditor) ?
+    const request: any = (!project.app.nestServer.state.simulatorVersion.startsWith('2.') || this._viewCodeEditor) ?
       this._http.post(url + '/exec', { source: project.code.script, return: 'response' }) :
       this._http.post(url + '/script/simulation/run', project.toJSON('simulator'));
 
     return new Promise((resolve, reject) => {
       request.subscribe(response => {
-        this.running = false;
+        this._running = false;
         if (this._snackBarRef) {
           this._snackBarRef.dismiss();
         }
@@ -71,7 +78,7 @@ export class SimulationRunService {
         this._activityGraphService.update();
         resolve();
       }, error => {
-        this.running = false;
+        this._running = false;
         if (this._snackBarRef) {
           this._snackBarRef.dismiss();
         }

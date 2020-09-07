@@ -18,11 +18,11 @@ import { ProjectService } from '../../services/project/project.service';
 export class NetworkComponent implements OnInit, AfterViewInit {
   @Input() network: Network;
   @ViewChild('content', { static: false }) content: ElementRef;
+  private _height: number = 400;
+  private _mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
-  public width: number = 600;
-  public height: number = 400;
-  public mode: string = 'selection';
-  public mobileQuery: MediaQueryList;
+  private _mode: string = 'selection';
+  private _width: number = 600;
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
@@ -31,9 +31,9 @@ export class NetworkComponent implements OnInit, AfterViewInit {
     private _route: ActivatedRoute,
     private _router: Router,
   ) {
-    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this._mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit() {
@@ -46,24 +46,36 @@ export class NetworkComponent implements OnInit, AfterViewInit {
     }, 1)
   }
 
+  get height(): number {
+    return this._height;
+  }
+
+  get mobileQuery(): MediaQueryList {
+    return this._mobileQuery;
+  }
+
+  get mode(): string {
+    return this._mode;
+  }
+
   get sidenavOpened(): boolean {
     return this._projectService.sidenavOpened;
   }
 
-  set sidenavOpened(value: boolean) {
-    this._projectService.sidenavOpened = value;
+  get width(): number {
+    return this._width;
   }
 
   toggleSidenav(): void {
-    this.sidenavOpened = !this.sidenavOpened;
+    this._projectService.sidenavOpened = !this._projectService.sidenavOpened;
   }
 
   selectController(mode: string): void {
     if (this.mode === mode) {
-      this.sidenavOpened = !this.sidenavOpened;
+      this._projectService.sidenavOpened = !this._projectService.sidenavOpened;
     } else {
-      this.mode = mode;
-      this.sidenavOpened = true;
+      this._mode = mode;
+      this._projectService.sidenavOpened = true;
     }
   }
 
@@ -73,9 +85,9 @@ export class NetworkComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize', [])
   resize(): void {
-    const element = this.content['elementRef'].nativeElement;
-    this.height = element.clientHeight;
-    this.width = element.clientWidth;
+    const element: any = this.content['elementRef'].nativeElement;
+    this._height = element.clientHeight;
+    this._width = element.clientWidth;
   }
 
 }

@@ -18,17 +18,11 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
 export class ModelActivityGraphComponent implements OnInit {
   @Input() modelId: string;
   private _project: Project;
-  public graph: ActivityChartGraph;
-  public config: any = {
+  private _graph: ActivityChartGraph;
+  private _config: any = {
     staticPlot: true,
   };
-  public data: any[] = [{
-    mode: 'lines',
-    type: 'scatter',
-    x: [0, 1],
-    y: [1, 0]
-  }];
-  public layout: any = {
+  private _layout: any = {
     title: 'Neuronal response to spike inputs',
     xaxis: {
       title: 'Time [ms]'
@@ -36,9 +30,9 @@ export class ModelActivityGraphComponent implements OnInit {
     yaxis: {
       title: 'Membrane potential [mV]'
     },
-    showlegend: false
+    showlegend: false,
   };
-  public style: any = {
+  private _style: any = {
     width: '100%',
   };
 
@@ -56,10 +50,26 @@ export class ModelActivityGraphComponent implements OnInit {
     return this._project.activities[0];
   }
 
+  get config(): any {
+    return this._config;
+  }
+
+  get data(): any[] {
+    return this._graph ? this._graph.data : [];
+  }
+
+  get layout(): any {
+    return this._layout;
+  }
+
+  get style(): any {
+    return this._style;
+  }
+
   update(): void {
     this._project = this._appService.app.createNeuronModelProject(this.modelId);
     this._simulationRunService.run(this._project, true).then(() => {
-      this.graph = new ActivityChartGraph(this._project, 'model');
+      this._graph = new ActivityChartGraph(this._project, 'model');
     });
   }
 

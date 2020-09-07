@@ -16,27 +16,39 @@ export class ModelComponent implements OnInit, OnDestroy {
 
   constructor(
     private _route: ActivatedRoute,
-    public modelService: ModelService,
+    private _modelService: ModelService,
   ) { }
 
   ngOnInit() {
     let paramMap: any = this._route.snapshot.paramMap;
-    this.modelService.selectedModel = paramMap.get('model');
+    this._modelService.selectedModel = paramMap.get('model');
   }
 
   ngOnDestroy() {
     // this._modelService.selectedModel = '';
   }
 
-  get modelId(): string {
-    return this.modelService.selectedModel;
+  get elementType(): string {
+    return this._modelService.defaults.element_type;
   }
 
-  get elementType(): string {
-    return this.modelService.defaults.element_type;
+  get modelId(): string {
+    return this._modelService.selectedModel;
+  }
+
+  get progress(): boolean {
+    return this._modelService.progress;
   }
 
   get recordables(): string {
-    return this.modelService.defaults.recordables || [];
+    return this._modelService.defaults.recordables || [];
+  }
+
+  get sidenavMode(): string {
+    return this._modelService.sidenavMode;
+  }
+
+  hasModel(): boolean {
+    return this._modelService.hasModel();
   }
 }

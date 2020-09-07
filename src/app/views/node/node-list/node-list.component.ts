@@ -20,11 +20,14 @@ export class NodeListComponent implements OnInit {
   @Input() selective: boolean = false;
 
   constructor(
-    public formatService: FormatService,
-  ) {
-  }
+    private _formatService: FormatService,
+  ) { }
 
   ngOnInit() {
+  }
+
+  format(value: number): string {
+    return this._formatService.format(value);
   }
 
 }

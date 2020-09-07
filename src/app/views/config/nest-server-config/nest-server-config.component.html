@@ -14,9 +14,15 @@
         <span class="flex-spacer"></span>
         <span style="margin: 0 8px">
           <mat-chip-list dense>
-            <mat-chip selected="true" *ngIf="!nestServer.serverReady">Server is not running</mat-chip>
-            <mat-chip selected="true" *ngIf="nestServer.serverReady">Server {{ nestServer.serverVersion }}</mat-chip>
-            <mat-chip selected="true" *ngIf="nestServer.simulatorReady">Simulator {{ nestServer.simulatorVersion }}</mat-chip>
+            <mat-chip *ngIf="!nestServer.state.serverReady" selected="true">
+              Server is not running
+            </mat-chip>
+            <mat-chip *ngIf="nestServer.state.serverReady" selected="true">
+              Server {{ nestServer.state.serverVersion }}
+            </mat-chip>
+            <mat-chip *ngIf="nestServer.state.simulatorReady" selected="true">
+              Simulator {{ nestServer.state.simulatorVersion }}
+            </mat-chip>
           </mat-chip-list>
         </span>
       </span>
@@ -26,8 +32,8 @@
   <mat-selection-list (selectionChange)="onSelectionChange($event)">
     <mat-list-option
       [selected]="config.custom"
-      value="custom"
-    >Custom settings
+      value="custom">
+      Custom settings
     </mat-list-option>
   </mat-selection-list>
 
@@ -38,7 +44,7 @@
           (change)="onChange($event)"
           [value]="config.protocol"
           name="protocol"
-          placeholder="Protocol">
+          placeholder="Protocol" />
       </mat-form-field>
     </mat-list-item>
 
@@ -48,7 +54,7 @@
         (change)="onChange($event)"
         [value]="config.hostname"
         name="hostname"
-        placeholder="Hostname">
+        placeholder="Hostname" />
       </mat-form-field>
     </mat-list-item>
 
@@ -58,7 +64,7 @@
         (change)="onChange($event)"
         [value]="config.port"
         name="port"
-        placeholder="Port">
+        placeholder="Port" />
       </mat-form-field>
     </mat-list-item>
   </mat-list>

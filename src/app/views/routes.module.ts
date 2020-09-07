@@ -12,7 +12,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProjectComponent } from './project/project.component';
 import { ProjectNavigationComponent } from './project-navigation/project-navigation.component';
 import { StartpageComponent } from './startpage/startpage.component';
-import { TestsuiteComponent } from './testsuite/testsuite.component';
 
 
 const appRoutes: Routes = [
@@ -31,7 +30,6 @@ const appRoutes: Routes = [
   { path: 'project/:id/run', component: ProjectComponent },
   { path: 'project/:id/:rev', component: ProjectComponent },
   { path: 'project/:id/:rev/run', component: ProjectComponent },
-  { path: 'testsuite', component: TestsuiteComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 

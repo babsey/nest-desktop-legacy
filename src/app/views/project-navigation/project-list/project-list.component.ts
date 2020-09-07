@@ -17,8 +17,7 @@ import { Project } from '../../../components/project/project';
 })
 export class ProjectListComponent implements OnInit {
   @Input() app: App;
-  public focused: Project;
-  public revisions: number[] = [];
+  private _focused: Project;
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -29,6 +28,14 @@ export class ProjectListComponent implements OnInit {
 
   ngOnInit() {
     // console.log('Ng init project list');
+  }
+
+  get focused(): Project {
+    return this._focused;
+  }
+
+  date(project: Project): string {
+    return project.updatedAt || project.createdAt;
   }
 
   navigate(id: string): void {
@@ -54,7 +61,7 @@ export class ProjectListComponent implements OnInit {
 
   onContextMenu(event: MouseEvent, project: Project): void {
     event.preventDefault();
-    this.focused = project;
+    this._focused = project;
     this.contextMenuPosition.x = event.clientX + 'px';
     this.contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();

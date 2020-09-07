@@ -9,7 +9,7 @@ import { ActivityAnimationService } from '../../../../services/activity/activity
   styleUrls: ['./activity-animation-colormap.component.scss']
 })
 export class ActivityAnimationColormapComponent implements OnInit {
-  public scales: string[] = [
+  private _scales: string[] = [
     'spectral',
     // 'turbo',
     'viridis',
@@ -31,6 +31,10 @@ export class ActivityAnimationColormapComponent implements OnInit {
 
   get colorMap(): any {
     return this._activityAnimationService.graph.config.colorMap;
+  }
+
+  get scales(): string[] {
+    return this._scales;
   }
 
   onChange(event: any): void {

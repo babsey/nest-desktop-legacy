@@ -24,7 +24,10 @@
           <span class="flex-spacer"></span>
           <span class="project-theme">
             <mat-nav-list dense color="primary" class="flex" style="padding:0">
-              <mat-list-item (click)="showPlot=!showPlot" [class.active]="showPlot" class="navButton">
+              <mat-list-item
+                (click)="showPlot=!showPlot"
+                [class.active]="showPlot"
+                class="navButton">
                 <fa-icon icon="crop-alt"></fa-icon>
               </mat-list-item>
             </mat-nav-list>
@@ -34,7 +37,7 @@
         <mat-list-item>
           <app-select
             (selectedChange)="mask.select($event)"
-            [options]="maskOptions"
+            [options]="options"
             [selected]="mask.masktype"
             matTooltipPosition="before"
             style="height:40px;line-height:48px"

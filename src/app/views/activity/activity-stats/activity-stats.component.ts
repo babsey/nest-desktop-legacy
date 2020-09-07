@@ -7,6 +7,9 @@ import { Activity } from '../../../components/activity/activity';
 import { Model } from '../../../components/model/model';
 import { Project } from '../../../components/project/project';
 
+import { ActivityStatsService } from '../../../services/activity/activity-stats.service';
+
+
 
 @Component({
   selector: 'app-activity-stats',
@@ -15,28 +18,41 @@ import { Project } from '../../../components/project/project';
 })
 export class ActivityStatsComponent implements OnInit {
   @Input() project: Project;
-  public selectedActivity: Activity;
-  public recordFrom: string[] = ['V_m'];
-  public selectedRecord: string = 'V_m';
+  private _recordFrom: string[] = ['V_m'];
+  private _selectedRecord: string = 'V_m';
 
   constructor(
+    private _activityStatsService: ActivityStatsService,
   ) { }
 
   ngOnInit() {
   }
 
-  select(activity: Activity): void {
-    this.selectedActivity = activity;
+  get recordFrom(): string[] {
+    return this._recordFrom;
+  }
+
+  get selectedActivity(): Activity {
+    return this._activityStatsService.selectedActivity;
+  }
+
+  set selectedActivity(activity: Activity) {
+    this.unselect();
+    this._activityStatsService.selectedActivity = activity;
     if (activity.recorder.model.existing === 'multimeter') {
-      this.recordFrom = activity.recorder.getParameter('record_from').value || ['V_m'];
-      this.selectedRecord = this.recordFrom[0];
+      this._recordFrom = activity.recorder.getParameter('record_from').value || ['V_m'];
+      this._selectedRecord = this.recordFrom[0];
     }
   }
 
+  get selectedRecord(): string {
+    return this._selectedRecord;
+  }
+
   unselect(): void {
-    this.selectedActivity = undefined;
-    this.recordFrom = ['V_m'];
-    this.selectedRecord = 'V_m';
+    this._activityStatsService.reset();
+    this._recordFrom = ['V_m'];
+    this._selectedRecord = 'V_m';
   }
 
 }

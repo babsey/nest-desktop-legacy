@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ConfigService } from '../../../components/config';
+import { Config } from '../../../components/config';
 
 
 @Component({
@@ -9,17 +9,17 @@ import { ConfigService } from '../../../components/config';
   styleUrls: ['./activity-graph-config.component.scss']
 })
 export class ActivityGraphConfigComponent implements OnInit {
-  private _config: ConfigService;
+  private _config: Config;
 
   constructor() {
-    this._config = new ConfigService('ActivityChartGraph');
+    this._config = new Config('ActivityChartGraph');
   }
 
   ngOnInit() {
   }
 
   get config(): any {
-    return this._config.data;
+    return this._config.config;
   }
 
 }

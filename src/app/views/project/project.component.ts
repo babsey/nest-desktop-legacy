@@ -16,23 +16,34 @@ import { AppService } from '../../services/app/app.service';
   animations: [enterAnimation],
 })
 export class ProjectComponent implements OnInit, OnDestroy {
-  public projectId: string = '';
-  public projectRev: string = '';
+  private _projectId: string = '';
+  private _projectRev: string = '';
 
   constructor(
-    public appService: AppService,
+    private _appService: AppService,
     private _bottomSheet: MatBottomSheet,
     private _route: ActivatedRoute,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
-    this._route.params.subscribe(params => this.projectId = params['id']);
-    this._route.params.subscribe(params => this.projectRev = params['rev']);
+    this._route.params.subscribe(params => this._projectId = params['id']);
+    this._route.params.subscribe(params => this._projectRev = params['rev']);
   }
 
   ngOnDestroy() {
     this._bottomSheet.dismiss();
+  }
+
+  get projectId(): string {
+    return this._projectId;
+  }
+
+  get projectRev(): string {
+    return this._projectRev;
+  }
+
+  isAppReady(): boolean {
+    return this._appService.app.ready;
   }
 
 }

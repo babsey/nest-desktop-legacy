@@ -17,7 +17,7 @@ export class Node extends Config {
 
   // Arguments for nest.Create
   private _modelId: string;
-  size: number;
+  private _size: number;
   private _params: Parameter[] = [];
   spatial: NodeSpatial;
   positions: number[][] = [];
@@ -38,13 +38,9 @@ export class Node extends Config {
       this.activity = new Activity(this);
     }
 
-    this.size = node.size || 1;
+    this._size = node.size || 1;
     this.initParameters(node);
     this.initSpatial(node.spatial);
-  }
-
-  get n(): number {
-    return this.size;
   }
 
   get model(): Model {
@@ -76,6 +72,10 @@ export class Node extends Config {
     this.network.commit();
   }
 
+  get n(): number {
+    return this._size;
+  }
+
   get params(): Parameter[] {
     return this._params;
   }
@@ -94,6 +94,14 @@ export class Node extends Config {
     const recordablesSet: any[] = [...new Set(recordablesFlat)];
     recordablesSet.sort((a: number, b: number) => a - b);
     return recordablesSet;
+  }
+
+  get size(): number {
+    return this._size;
+  }
+
+  set size(value: number) {
+    this._size = value;
   }
 
   get sources(): Node[] {

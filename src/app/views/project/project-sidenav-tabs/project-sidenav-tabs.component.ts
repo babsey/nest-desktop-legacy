@@ -15,7 +15,7 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
   styleUrls: ['./project-sidenav-tabs.component.scss']
 })
 export class ProjectSidenavTabsComponent implements OnInit {
-  public mobileQuery: MediaQueryList;
+  private _mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
   constructor(
@@ -26,9 +26,9 @@ export class ProjectSidenavTabsComponent implements OnInit {
     private _projectService: ProjectService,
     private _simulationRunService: SimulationRunService,
   ) {
-    this.mobileQuery = _media.matchMedia('(max-width: 1023px)');
+    this._mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this._mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit() {
@@ -43,6 +43,10 @@ export class ProjectSidenavTabsComponent implements OnInit {
 
   get graphMode(): string {
     return this._activityGraphService.mode;
+  }
+
+  get mobileQuery(): MediaQueryList {
+    return this._mobileQuery;
   }
 
   isSidenavOpened(): boolean {
@@ -64,7 +68,7 @@ export class ProjectSidenavTabsComponent implements OnInit {
   }
 
   isMode(mode: string): boolean {
-    return this._projectService.sidenavOpened && this._projectService.isSidenavMode(mode);
+    return this._projectService.sidenavOpened && this._projectService.sidenavMode === mode;
   }
 
   triggerResize(): void {

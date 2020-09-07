@@ -15,20 +15,20 @@ export class ActivityAnimationScene {
   private _controls: OrbitControls;
   private _geometry: THREE.SphereGeometry;
   private _grid: THREE.GridHelper;
+  private _renderer: THREE.WebGLRenderer;
   private _scene: THREE.Scene;
   private _stats: STATS;
   private _useStats: boolean = false;
-  public renderer: THREE.WebGLRenderer;
 
   constructor(graph: ActivityAnimationGraph, id: string) {
     this._animationFrameIdx = -1;
     this._camera = new THREE.PerspectiveCamera(5, 1, 1, 10000);
-    this.renderer = new THREE.WebGLRenderer({
+    this._renderer = new THREE.WebGLRenderer({
       antialias: true,
     });
     this._controls = new OrbitControls(
       this._camera,
-      this.renderer.domElement
+      this._renderer.domElement
     );
     this.graph = graph;
     this._geometry = new THREE.SphereGeometry(0.002);
@@ -65,13 +65,13 @@ export class ActivityAnimationScene {
     this._grid.geometry.rotateZ(Math.PI / 2);
     this._scene.add(this._grid);
 
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(
+    this._renderer.setPixelRatio(window.devicePixelRatio);
+    this._renderer.setSize(
       this.container.clientWidth,
       this.container.clientHeight
     );
     this.resize();
-    this.container.appendChild(this.renderer.domElement);
+    this.container.appendChild(this._renderer.domElement);
 
     this._controls.rotateSpeed = 1;
     this._controls.zoomSpeed = 1.2;
@@ -82,7 +82,7 @@ export class ActivityAnimationScene {
 
   clear() {
     try {
-      this.container.removeChild(this.renderer.domElement);
+      this.container.removeChild(this._renderer.domElement);
     } catch { }
     while (this._scene.children.length > 0) {
       this._scene.remove(this._scene.children[0]);
@@ -131,7 +131,7 @@ export class ActivityAnimationScene {
         }
       }, 1000 / frames.rate);
 
-      _this.renderer.render(_this._scene, _this._camera);
+      _this._renderer.render(_this._scene, _this._camera);
     }
 
     render();
@@ -269,8 +269,8 @@ export class ActivityAnimationScene {
   resize(): void {
     this._camera.aspect = this.aspect;
     this._camera.updateProjectionMatrix();
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-    this.renderer.render(this._scene, this._camera);
+    this._renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+    this._renderer.render(this._scene, this._camera);
   }
 
 }

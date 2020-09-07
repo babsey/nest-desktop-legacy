@@ -10,10 +10,14 @@ import { Router } from '@angular/router';
 export class HelpListComponent implements OnInit {
 
   constructor(
-    public router: Router,
+    private _router: Router,
   ) { }
 
   ngOnInit() {
+  }
+
+  get router(): Router {
+    return this._router;
   }
 
   navigate(path: string): void {

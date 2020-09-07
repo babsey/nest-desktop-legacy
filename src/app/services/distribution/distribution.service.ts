@@ -7,10 +7,10 @@ import * as math from 'mathjs';
   providedIn: 'root'
 })
 export class DistributionService {
-  public pdf: any = {};
+  private _pdf: any;
 
   constructor() {
-    this.pdf = {
+    this._pdf = {
       linear: this.linear,
       exponential: this.exponential,
       gaussian: this.gaussian,
@@ -20,6 +20,10 @@ export class DistributionService {
       normal: this.normal,
       lognormal: this.lognormal,
     };
+  }
+
+  get pdf(): any {
+    return this._pdf;
   }
 
   linear(xarr: number[], specs: any): number[] {

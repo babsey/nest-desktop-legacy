@@ -1,7 +1,7 @@
 <mat-menu #modelsMenu="matMenu" class="context-menu">
-  <button mat-menu-item (click)="app.resetModels()">
+  <button mat-menu-item (click)="resetModels()">
     <fa-icon class="menu-icon" icon="undo"></fa-icon>
-    Reset models
+    Reset model database
   </button>
 </mat-menu>
 
@@ -51,13 +51,13 @@
   <mat-nav-list dense class="model-theme model" style="padding:0;">
     <span [@listAnimation]="filteredModels.length">
       <ng-container *ngFor="let model of filteredModels">
-        <ng-container *ngIf="modelService.hasModel(model) || view === 'available'">
+        <ng-container *ngIf="hasModel(model) || view === 'available'">
           <mat-list-item
-            (click)="modelService.selectModel(model)"
-            routerLink="/model/{{model}}"
-            [class.active]="modelService.isSelected(model)"
-            [class.enabled]="modelService.hasModel(model) && view === 'available'"
-            class="model">
+            (click)="selectModel(model)"
+            [class.active]="isModelSelected(model)"
+            [class.enabled]="hasModel(model) && view === 'available'"
+            class="model"
+            routerLink="/model/{{model}}">
             {{ model }}
           </mat-list-item>
         </ng-container>

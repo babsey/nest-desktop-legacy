@@ -22,11 +22,10 @@ export interface SpikeStatsElement {
 })
 export class SpikeStatsComponent implements OnInit, OnChanges {
   @Input() activity: Activity;
+  private _dataSource: MatTableDataSource<any>;
+  private _displayedColumns: string[] = ['id', 'count', 'isi_mean', 'isi_std', 'cv_isi'];
   private _stats: SpikeStatsElement[];
   private _times: any;
-
-  public displayedColumns: string[] = ['id', 'count', 'isi_mean', 'isi_std', 'cv_isi'];
-  public dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -44,6 +43,18 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
 
   get color(): string {
     return this.activity.recorder.view.color;
+  }
+
+  get dataSource(): MatTableDataSource<any> {
+    return this._dataSource;
+  }
+
+  get displayedColumns(): string[] {
+    return this._displayedColumns;
+  }
+
+  set displayedColumns(value: string[]) {
+    this._displayedColumns = value;
   }
 
   update(): void {
@@ -64,8 +75,8 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
         cv_isi: isi_mean > 0 ? isi_std / isi_mean : 0,
       }
     })
-    this.dataSource = new MatTableDataSource(this._stats);
-    this.dataSource.sort = this.sort;
+    this._dataSource = new MatTableDataSource(this._stats);
+    this._dataSource.sort = this.sort;
   }
 
   height(): number {

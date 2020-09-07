@@ -17,8 +17,8 @@ import { AppService } from '../../services/app/app.service';
 })
 export class ProjectNavigationComponent implements OnInit {
   @ViewChild('file', { static: false }) file;
-  public selectionList: boolean = false;
-  public fileReader = new FileReader();
+  private _selectionList: boolean = false;
+  private _fileReader = new FileReader();
   private _projectName: string = '';
 
   constructor(
@@ -39,6 +39,10 @@ export class ProjectNavigationComponent implements OnInit {
     return this.app.project;
   }
 
+  get selectionList(): boolean {
+    return this._selectionList;
+  }
+
   downloadAllProjects(): void {
     this.app.downloadProjects(this.app.projects.map(project => project.id));
   }
@@ -49,7 +53,7 @@ export class ProjectNavigationComponent implements OnInit {
   }
 
   newProject(): void {
-    this.selectionList = false;
+    this._selectionList = false;
     this.app.newProject();
     this.navigate(this.app.project.id);
   }
@@ -61,10 +65,10 @@ export class ProjectNavigationComponent implements OnInit {
   }
 
   initFileReader(): void {
-    this.fileReader.addEventListener("load", event => {
+    this._fileReader.addEventListener("load", event => {
       const result: any = JSON.parse(event['target']['result'] as string);
       const data: any[] = result.hasOwnProperty("_id") ? [result] : result;
-      const projects: Project[] = data.map(d => new Project(this.app, d));
+      const projects: Project[] = data.map((project: any) => new Project(this.app, project));
       this._appService.upload(projects);
     });
   }
@@ -74,7 +78,7 @@ export class ProjectNavigationComponent implements OnInit {
   }
 
   onFileAdded(): void {
-    this.fileReader.readAsText(this.file.nativeElement.files[0]);
+    this._fileReader.readAsText(this.file.nativeElement.files[0]);
   }
 
 }

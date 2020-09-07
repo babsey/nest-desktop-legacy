@@ -4,8 +4,7 @@
       (selectionChange)="onSelectionChange()"
       [(ngModel)]="selected"
       [disabled]="disabled"
-      [placeholder]="placeholder"
-      >
+      [placeholder]="placeholder">
       <ng-container *ngFor="let option of options">
         <mat-option [value]="option.value">
           {{ (option.label || option.value) | capitalize }}

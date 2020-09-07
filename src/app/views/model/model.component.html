@@ -1,7 +1,7 @@
 <app-model-toolbar></app-model-toolbar>
 
 <span id="model">
-  <ng-container *ngIf="!modelService.progress; else loading">
+  <ng-container *ngIf="!progress; else loading">
     <span class="flex" [@enterAnimation]>
 
       <mat-sidenav-container>
@@ -11,7 +11,7 @@
           position="end"
           role="region">
 
-          <ng-container [ngSwitch]="modelService.sidenavMode">
+          <ng-container [ngSwitch]="sidenavMode">
             <ng-container *ngSwitchCase="'list'">
               <app-model-params-list
                 [modelId]="modelId"
@@ -25,7 +25,7 @@
               ></app-model-params-selection-list>
             </ng-container>
             <ng-container *ngSwitchCase="'slider'">
-              <ng-container *ngIf="modelService.hasModel()">
+              <ng-container *ngIf="hasModel()">
                 <app-model-params-slider
                   [modelId]="modelId"
                 ></app-model-params-slider>

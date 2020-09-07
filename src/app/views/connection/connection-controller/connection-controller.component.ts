@@ -10,13 +10,13 @@ import { Connection } from '../../../components/connection/connection';
 })
 export class ConnectionControllerComponent implements OnInit {
   @Input() connection: Connection;
-  public connRules: any[] = [];
-  public synModels: any[] = [];
-  public srcIdxOptions: any = {
+  private _connRules: any[] = [];
+  private _synModels: any[] = [];
+  private _srcIdxOptions: any = {
     label: 'Source Indices',
     value: []
   };
-  public tgtIdxOptions: any = {
+  private _tgtIdxOptions: any = {
     label: 'Target Indices',
     value: []
   };
@@ -28,9 +28,25 @@ export class ConnectionControllerComponent implements OnInit {
     // console.log('Update connection controller')
     if (this.connection === undefined) return
     if (!this.connection.hasProjections()) {
-      this.connRules = this.connection.config.rules;
-      this.synModels = this.connection.network.project.app.filterModels('synapse');
+      this._connRules = this.connection.config.rules;
+      this._synModels = this.connection.network.project.app.filterModels('synapse');
     }
+  }
+
+  get connRules(): any[] {
+    return this._connRules;
+  }
+
+  get synModels(): any[] {
+    return this._synModels;
+  }
+
+  get srcIdxOptions(): any {
+    return this._srcIdxOptions;
+  }
+
+  get tgtIdxOptions(): any {
+    return this._tgtIdxOptions;
   }
 
 }

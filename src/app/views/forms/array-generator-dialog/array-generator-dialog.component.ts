@@ -12,15 +12,19 @@ import { GeneratorService } from '../../../services/generator/generator.service'
 export class ArrayGeneratorDialogComponent implements OnInit {
 
   constructor(
-    public dialogRef: MatDialogRef<ArrayGeneratorDialogComponent>,
-    public generatorService: GeneratorService,
+    private _dialogRef: MatDialogRef<ArrayGeneratorDialogComponent>,
+    private _generatorService: GeneratorService,
   ) { }
 
   ngOnInit() {
   }
 
+  get options(): any {
+    return this._generatorService.options;
+  }
+
   onNoClick(): void {
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 
 }

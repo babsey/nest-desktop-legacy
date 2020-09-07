@@ -15,7 +15,7 @@ export class ConnectionListComponent implements OnInit {
   @Input() selective: boolean = false;
 
   constructor(
-    public formatService: FormatService,
+    private _formatService: FormatService,
   ) { }
 
   ngOnInit() {
@@ -23,26 +23,26 @@ export class ConnectionListComponent implements OnInit {
 
   synWeights(): any {
     if (!this.connection.projections.hasOwnProperty('weights')) {
-      return this.formatService.format(1);
+      return this._formatService.format(1);
     }
     if (!this.connection.projections.weights.hasOwnProperty('parameterType')) {
-      return this.formatService.format(this.connection.projections.weights);
+      return this._formatService.format(this.connection.projections.weights);
     }
     if (this.connection.projections.weights.parameterType === 'constant') {
-      return this.formatService.format(this.connection.projections.weights.specs.value);
+      return this._formatService.format(this.connection.projections.weights.specs.value);
     }
     return this.connection.projections.weights.parameterType;
   }
 
   synDelays(): any {
     if (!this.connection.projections.hasOwnProperty('delays')) {
-      return this.formatService.format(1);
+      return this._formatService.format(1);
     }
     if (!this.connection.projections.delays.hasOwnProperty('parameterType')) {
-      return this.formatService.format(this.connection.projections.delays);
+      return this._formatService.format(this.connection.projections.delays);
     }
     if (this.connection.projections.delays.parameterType === 'constant') {
-      return this.formatService.format(this.connection.projections.delays.specs.value);
+      return this._formatService.format(this.connection.projections.delays.specs.value);
     }
     return this.connection.projections.delays.parameterType;
   }

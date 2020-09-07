@@ -1,4 +1,4 @@
-<ng-container *ngIf="appService.app.ready; else loading">
+<ng-container *ngIf="isAppReady(); else loading">
   <app-project-container
     [id]="projectId"
     [rev]="projectRev"
@@ -13,7 +13,7 @@
         class="fa-lg fa-spin"
         style="display:inline-block"
       ></fa-icon>
-      <span style="margin-left: 8px">App data is loading.</span>
+      <span style="margin-left: 8px">App is loading.</span>
     </span>
   </div>
 </ng-template>

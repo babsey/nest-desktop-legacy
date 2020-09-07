@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ConfigService } from '../../../components/config';
+import { Config } from '../../../components/config';
 
 
 @Component({
@@ -9,27 +9,27 @@ import { ConfigService } from '../../../components/config';
   styleUrls: ['./project-config.component.scss']
 })
 export class ProjectConfigComponent implements OnInit {
-  private _config: ConfigService;
+  private _config: Config;
 
   constructor() {
-    this._config = new ConfigService('App');
+    this._config = new Config('App');
    }
 
   ngOnInit() {
   }
 
   get config(): any {
-    return this._config.data;
+    return this._config.config;
   }
 
   set config(value: any) {
-    this._config.update(value);
+    this._config.updateConfig(value);
   }
 
   onChange(event: any): void {
     const data: any = {};
     data[event.target.name] = event.target.value;
-    this.config = data;
+    this._config.updateConfig(data);
   }
 
 }

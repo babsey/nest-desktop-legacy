@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Model } from '../../../components/model/model';
-import { Parameter } from '../../../components/parameter';
 
 import { ModelService } from '../../../services/model/model.service';
 
@@ -13,40 +12,43 @@ import { ModelService } from '../../../services/model/model.service';
   styleUrls: ['./model-config-dialog.component.scss']
 })
 export class ModelConfigDialogComponent implements OnInit {
-  public options: any;
-  private _idx: number;
+  private _model: Model
+  private _param: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public modelService: ModelService,
-    public dialogRef: MatDialogRef<ModelConfigDialogComponent>,
-  ) {
-  }
+    @Inject(MAT_DIALOG_DATA) private _data: any,
+    private _dialogRef: MatDialogRef<ModelConfigDialogComponent>,
+    private _modelService: ModelService,
+  ) { }
 
   ngOnInit() {
-    // console.log(this.data)
-    const model: Model = this.modelService.getModel(this.data.model);
-    this._idx = model.params.map((param: Parameter) => param.id).indexOf(this.data.param);
-    this.options = Object.assign({}, model.params[this._idx]);
-    // this.options = params;
+    this._model = this._data.model;
+    this._param = Object.assign({}, this._model.getParameter(this._data.param));
+  }
+
+  get model(): Model {
+    return this._model;
+  }
+
+  get param(): any {
+    return this._param;
+  }
+
+  cancel(): void {
+    this._dialogRef.close();
+  }
+
+  save(): void {
+    this._model.updateParameter(this._param);
+    // this._model.save();
+    this._dialogRef.close();
   }
 
   valueChanged(event: any): void {
     const value: string = event.target.value;
     let ticks: any[] = value.split(',');
-    ticks = ticks.map(d => parseFloat(d));
-    this.options.ticks = ticks;
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  onSave(): void {
-    const model: Model = this.modelService.getModel(this.data.model);
-    model.params[this._idx] = this.options;
-    // this._modelService.save(this.options);
-    this.dialogRef.close();
+    ticks = ticks.map((tick: string) => parseFloat(tick));
+    this._param.ticks = ticks;
   }
 
 }

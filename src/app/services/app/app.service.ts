@@ -9,15 +9,47 @@ import { Project } from '../../components/project/project';
   providedIn: 'root'
 })
 export class AppService {
-  public rightClick: boolean = false;
-  public app: App;
-  public change: EventEmitter<any> = new EventEmitter();
-  public sidenavOpened: boolean = false;
+  private _rightClick: boolean = false;
+  private _app: App;
+  private _change: EventEmitter<any> = new EventEmitter();
+  private _sidenavOpened: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
   ) {
     this.app = new App();
+  }
+
+  get app(): App {
+    return this._app;
+  }
+
+  set app(value: App) {
+    this._app = value;
+  }
+
+  get change(): EventEmitter<any> {
+    return this._change;
+  }
+
+  get rightClick(): boolean {
+    return this._rightClick;
+  }
+
+  set rightClick(value: boolean) {
+    this._rightClick = value;
+  }
+
+  get sidenavOpened(): boolean {
+    return this._sidenavOpened;
+  }
+
+  set sidenavOpened(value: boolean) {
+    this._sidenavOpened = value;
+  }
+
+  toggleSidenav(): void {
+    this.sidenavOpened = !this.sidenavOpened;
   }
 
   upload(projects: Project[]): void {
@@ -30,10 +62,6 @@ export class AppService {
     }).catch(err => {
       this._snackBar.open(err, 'Ok');
     });
-  }
-
-  toggleSidenav(): void {
-    this.sidenavOpened = !this.sidenavOpened;
   }
 
 }

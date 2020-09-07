@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ConfigService } from '../../../components/config';
+import { Config } from '../../../components/config';
 
 
 @Component({
@@ -9,23 +9,27 @@ import { ConfigService } from '../../../components/config';
   styleUrls: ['./model-config.component.scss']
 })
 export class ModelConfigComponent implements OnInit {
-  private _config: ConfigService;
+  private _config: Config;
 
   constructor() {
-    this._config = new ConfigService('App');
+    this._config = new Config('App');
    }
 
   ngOnInit() {
   }
 
   get config(): any {
-    return this._config.data;
+    return this._config.config;
+  }
+
+  set config(value: any) {
+    this._config.updateConfig(value);
   }
 
   onChange(event: any): void {
     let config: any = this.config;
     config.databases.model[event.target.name] = event.target.value;
-    this._config.data = config;
+    this._config.config = config;
   }
 
 }

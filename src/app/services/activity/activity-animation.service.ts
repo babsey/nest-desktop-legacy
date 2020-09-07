@@ -7,11 +7,28 @@ import { ActivityAnimationGraph } from '../../components/activity/Threejs/activi
   providedIn: 'root'
 })
 export class ActivityAnimationService {
-  public init: EventEmitter<any> = new EventEmitter();
-  public update: EventEmitter<any> = new EventEmitter();
-  public graph: ActivityAnimationGraph;
+  private _graph: ActivityAnimationGraph;
+  private _init: EventEmitter<any> = new EventEmitter();
+  private _update: EventEmitter<any> = new EventEmitter();
 
   constructor() {
   }
+
+  get init(): EventEmitter<any> {
+    return this._init;
+  }
+
+  get graph(): ActivityAnimationGraph {
+    return this._graph;
+  }
+
+  set graph(value: ActivityAnimationGraph) {
+    this._graph = value;
+  }
+
+  get update(): EventEmitter<any> {
+    return this._update;
+  }
+
 
 }

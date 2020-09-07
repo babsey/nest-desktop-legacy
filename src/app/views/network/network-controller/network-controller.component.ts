@@ -10,7 +10,7 @@ import { Network } from '../../../components/network/network';
 })
 export class NetworkControllerComponent implements OnInit {
   @Input() network: Network;
-  public options: any = {
+  private _options: any = {
     min: 0, max: 100, label: 'test',
   };
 
@@ -18,6 +18,10 @@ export class NetworkControllerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  get options(): any {
+    return this._options;
   }
 
 }

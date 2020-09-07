@@ -5,45 +5,20 @@ import { environment } from '../../../environments/environment';
 
 
 export class NESTServer extends Config {
-  public http: HttpClient;
-
-  public serverReady: boolean = false;
-  public serverVersion: string = '';
-  public serverValid: boolean = false;
-
-  public simulatorReady: boolean = false;
-  public simulatorVersion: string = '';
-  public simulatorValid: boolean = false;
-
+  private _http: HttpClient;
+  private _state: any = {
+    serverReady: false,
+    serverVersion: '',
+    serverValid: false,
+    simulatorReady: false,
+    simulatorVersion: '',
+    simulatorValid: false,
+  }
 
   constructor() {
     super('NESTServer');
-    this.http = new HttpClient();
+    this._http = new HttpClient();
     this.check();
-  }
-
-  get protocol(): string {
-    return this.config.protocol || window.location.protocol;
-  }
-
-  set protocol(value: string) {
-    this.config = { protocol: value };
-  }
-
-  get hostname(): string {
-    return this.config.hostname || window.location.hostname || 'localhost';
-  }
-
-  set hostname(value: string) {
-    this.config = { hostname: value };
-  }
-
-  get port(): string {
-    return this.config.port;
-  }
-
-  set port(value: string) {
-    this.config = { port: value };
   }
 
   get host(): string {
@@ -54,6 +29,38 @@ export class NESTServer extends Config {
     const values: string[] = value.split(':');
     this.hostname = values[0];
     this.port = values[1];
+  }
+
+  get hostname(): string {
+    return this.config.hostname || window.location.hostname || 'localhost';
+  }
+
+  set hostname(value: string) {
+    this.updateConfig({ hostname: value });
+  }
+
+  get http(): HttpClient {
+    return this._http;
+  }
+
+  get port(): string {
+    return this.config.port;
+  }
+
+  set port(value: string) {
+    this.updateConfig({ port: value });
+  }
+
+  get protocol(): string {
+    return this.config.protocol || window.location.protocol;
+  }
+
+  set protocol(value: string) {
+    this.updateConfig({ protocol: value });
+  }
+
+  get state(): any {
+    return this._state;
   }
 
   get url(): string {
@@ -117,18 +124,18 @@ export class NESTServer extends Config {
     const appVersion: string[] = environment.VERSION.split('.');
 
     if (info.hasOwnProperty('server')) {
-      this.serverReady = true;
-      this.serverVersion = info['server']['version'];
-      const serverVersion: string[] = this.serverVersion.split('.');
-      this.serverValid = appVersion[0] === serverVersion[0] && appVersion[1] === serverVersion[1];
+      this._state.serverReady = true;
+      this._state.serverVersion = info['server']['version'];
+      const serverVersion: string[] = this._state.serverVersion.split('.');
+      this._state.serverValid = appVersion[0] === serverVersion[0] && appVersion[1] === serverVersion[1];
     }
 
     if (info.hasOwnProperty('simulator')) {
-      this.simulatorReady = true;
-      this.simulatorVersion = info['simulator']['version'];
-      const simulatorVersion: string[] = this.simulatorVersion.split('.');
+      this._state.simulatorReady = true;
+      this._state.simulatorVersion = info['simulator']['version'];
+      const simulatorVersion: string[] = this._state.simulatorVersion.split('.');
       if (simulatorVersion.length === 3) {
-        this.simulatorValid = simulatorVersion[0] === '2' && simulatorVersion[1] >= '18';
+        this._state.simulatorValid = simulatorVersion[0] === '2' && simulatorVersion[1] >= '18';
       }
     }
   }

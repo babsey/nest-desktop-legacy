@@ -3,7 +3,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 
 import { ConnectionMask } from '../../../components/connection/connectionMask';
 
-import { AppService } from '../../../services/app/app.service';
 
 
 @Component({
@@ -13,8 +12,8 @@ import { AppService } from '../../../services/app/app.service';
 })
 export class ConnectionMaskComponent implements OnInit {
   @Input() mask: ConnectionMask;
-  public showPlot: boolean = false;
-  public maskOptions: any = [
+  private _showPlot: boolean = false;
+  private _options: any = [
     { value: 'none', label: 'none' },
     { value: 'rectangular', label: 'rectangular' },
     { value: 'circular', label: 'circular' },
@@ -26,10 +25,21 @@ export class ConnectionMaskComponent implements OnInit {
   contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
-    private _appService: AppService,
   ) { }
 
   ngOnInit() {
+  }
+
+  get options(): any {
+    return this._options;
+  }
+
+  get showPlot(): boolean {
+    return this._showPlot;
+  }
+
+  set showPlot(value: boolean) {
+    this._showPlot = value;
   }
 
   onContextMenu(event: MouseEvent): void {

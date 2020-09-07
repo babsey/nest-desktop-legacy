@@ -9,23 +9,27 @@ import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 })
 export class ProjectTimesinceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() date: string;
-  public value: string;
+  private _value: string;
   private _intervalId: any;
 
   constructor( ) {
    }
 
   ngOnInit() {
-    this._intervalId = setInterval(() => {this.value = this.timer()}, 60*1000);
-    this.value = this.timer();
+    this._intervalId = setInterval(() => {this._value = this.timer()}, 60*1000);
+    this._value = this.timer();
   }
 
   ngOnChanges() {
-    this.value = this.timer();
+    this._value = this.timer();
   }
 
   ngOnDestroy() {
     clearInterval(this._intervalId);
+  }
+
+  get value(): string {
+    return this._value;
   }
 
   timer(): string {

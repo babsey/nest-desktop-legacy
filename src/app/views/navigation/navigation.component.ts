@@ -4,6 +4,8 @@ import { MdePopoverTrigger } from '@material-extended/mde';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { App } from '../../components/app';
+
 import { AppService } from '../../services/app/app.service';
 
 
@@ -15,30 +17,41 @@ import { AppService } from '../../services/app/app.service';
 export class NavigationComponent implements OnInit {
 
   constructor(
+    private _appService: AppService,
     private _route: ActivatedRoute,
-    public appService: AppService,
-    public router: Router,
-  ) {
-  }
+    private _router: Router,
+  ) { }
 
   ngOnInit() {
-    this.appService.sidenavOpened = this.isNavLoaded();
+    this._appService.sidenavOpened = this.isNavLoaded();
+  }
+
+  get app(): App {
+    return this._appService.app;
   }
 
   isNavLoaded(mode: string = ''): boolean {
     return window.location.href.includes('nav:' + mode)
   }
 
+  isSidenavOpened(): boolean {
+    return this._appService.sidenavOpened;
+  }
+
+  toggleSidenav(): void {
+    this._appService.toggleSidenav();
+  }
+
   onClick(event: MouseEvent, mode: string = ''): void {
-    if (this.isNavLoaded(mode) || (mode && !this.appService.sidenavOpened)) {
-      this.appService.toggleSidenav();
+    if (this.isNavLoaded(mode) || (mode && !this._appService.sidenavOpened)) {
+      this._appService.toggleSidenav();
     }
-    if (this.appService.sidenavOpened && mode) {
-      this.router.navigate([{ outlets: { nav: mode } }]);
+    if (this._appService.sidenavOpened && mode) {
+      this._router.navigate([{ outlets: { nav: mode } }]);
     } else if (mode) {
-      this.router.navigate([{ outlets: { nav: null } }]);
+      this._router.navigate([{ outlets: { nav: null } }]);
     } else {
-      this.router.navigate([{ outlets: { primary: null, nav: null } }]);
+      this._router.navigate([{ outlets: { primary: null, nav: null } }]);
     }
   }
 }

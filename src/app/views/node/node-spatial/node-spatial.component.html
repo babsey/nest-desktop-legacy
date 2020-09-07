@@ -2,18 +2,16 @@
   #spatialMenu="matMenu"
   class="spatial-menu"
   overlapTrigger="true"
-  xPosition="before"
-  >
+  xPosition="before">
   <span class="flex" (click)="$event.stopPropagation();">
 
     <ng-container *ngIf="showPlot">
       <span style="width:700px; height:500px">
         <plotly-plot
-        [data]="graph.data"
-        [layout]="graph.layout"
-        [style]="{position: 'relative', width: '100%', height: '100%'}"
-        [useResizeHandler]="true"
-        >
+          [data]="graph.data"
+          [layout]="graph.layout"
+          [style]="{position: 'relative', width: '100%', height: '100%'}"
+          [useResizeHandler]="true">
         </plotly-plot>
       </span>
     </ng-container>
@@ -25,7 +23,10 @@
           <span class="flex-spacer"></span>
           <span class="project-theme">
             <mat-nav-list dense class="flex" style="padding:0" color="primary">
-              <mat-list-item (click)="showPlot=!showPlot" [class.active]="showPlot" class="navButton">
+              <mat-list-item
+                (click)="tiggerPlot()"
+                [class.active]="showPlot"
+                class="navButton">
                 <fa-icon icon="braille"></fa-icon>
               </mat-list-item>
             </mat-nav-list>

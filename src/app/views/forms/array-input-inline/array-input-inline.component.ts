@@ -15,7 +15,7 @@ export class ArrayInputInlineComponent implements OnInit {
   @Input() options: any;
   @Input() value: any;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
-  public active: boolean = false;
+  private _active: boolean = false;
 
   constructor(
     private _generatorService: GeneratorService,
@@ -24,6 +24,14 @@ export class ArrayInputInlineComponent implements OnInit {
 
   ngOnInit() {
     // console.log('Init array input')
+  }
+
+  get active(): boolean {
+    return this._active;
+  }
+
+  set active(value: boolean) {
+    this._active = value;
   }
 
   stringify(value: any): string {
