@@ -114,7 +114,7 @@ export class ActivityChartGraph extends ActivityGraph {
   //   var numPanels = this.panels.length;
   //
   //   this.panels.forEach(panel => {
-  //     if (panel.constructor.name === 'AnalogLines' && panel.elementType === 'stimulator') {
+  //     if (panel.name === 'AnalogLines' && panel.elementType === 'stimulator') {
   //       panel.size = [1, 1, 1, 1][numPanels - 1];
   //     }
   //     if (p === 'analog') {

@@ -19,7 +19,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('value')">
+    <tr *ngIf="view('value')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Value</mat-label>
@@ -33,7 +33,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('start')">
+    <tr *ngIf="view('start')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Start</mat-label>
@@ -47,7 +47,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('end')">
+    <tr *ngIf="view('end')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>End</mat-label>
@@ -60,7 +60,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('min')">
+    <tr *ngIf="view('min')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Minimum</mat-label>
@@ -74,7 +74,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('max')">
+    <tr *ngIf="view('max')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Maximum</mat-label>
@@ -87,7 +87,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('mu')">
+    <tr *ngIf="view('mu')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Mean</mat-label>
@@ -100,7 +100,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('sigma')">
+    <tr *ngIf="view('sigma')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Standard deviation</mat-label>
@@ -113,7 +113,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('step')">
+    <tr *ngIf="view('step')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Step</mat-label>
@@ -126,7 +126,7 @@
       </td>
     </tr>
 
-    <tr *ngIf="generatorService.view('size')">
+    <tr *ngIf="view('size')">
       <td>
         <mat-form-field floatLabel="always">
           <mat-label>Size</mat-label>
@@ -142,7 +142,7 @@
     <tr *ngIf="options.type.indexOf('random') != -1">
       <td>
         <mat-slide-toggle
-          [(ngModel)]="generatorService.options.sort">
+          [(ngModel)]="options.sort">
           Sort numbers
         </mat-slide-toggle>
       </td>

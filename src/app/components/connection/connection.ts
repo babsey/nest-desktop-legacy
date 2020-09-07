@@ -25,6 +25,7 @@ export class Connection extends Config {
   private _code: ConnectionCode;
   private _view: ConnectionView;
   private _idx: number;                         // generative
+  private _name: string = 'connection';
 
   // arguments for nest.Connect
   private _source: number;                      // Node index
@@ -56,6 +57,10 @@ export class Connection extends Config {
     this.mask = new ConnectionMask(this, connection.mask);
     this.projections = new ConnectionProjections(this, connection.projections);
     this.synapse = new Synapse(this, connection.synapse);
+  }
+
+  get name(): string {
+    return this._name;
   }
 
   get idx(): number {

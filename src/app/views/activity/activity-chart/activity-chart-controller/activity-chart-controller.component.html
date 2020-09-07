@@ -1,6 +1,6 @@
 <mat-list dense>
 
-  <mat-selection-list cdkDropList
+  <!-- <mat-selection-list cdkDropList
     (cdkDropListDropped)="drop($event)"
     (ngModelChange)="onModelChange($event)"
     [ngModel]="panelSelected"
@@ -11,7 +11,7 @@
         <p *cdkDragPreview></p>
       </mat-list-option>
     </ng-container>
-  </mat-selection-list>
+  </mat-selection-list> -->
 
   <ng-container *ngIf="panelSelected.includes('histogram')">
     <mat-list-item mat-subheader>
@@ -42,7 +42,7 @@
       <app-ticks-slider-inline
         (valueChange)="onBinsizeChange($event)"
         [matTooltip]="'Bin size'"
-        [options]="hostogram.config.binsize"
+        [options]="histogram.config.binsize"
         [(value)]="histogram.state.binsize"
         style="width:100%"
       ></app-ticks-slider-inline>

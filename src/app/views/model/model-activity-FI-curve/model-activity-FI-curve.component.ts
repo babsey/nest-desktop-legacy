@@ -59,7 +59,7 @@ export class ModelActivityFICurveComponent implements OnInit {
   }
 
   get data(): any[] {
-    return this._graph.data;
+    return this._graph ? this._graph.data : [];
   }
 
   get layout(): any {

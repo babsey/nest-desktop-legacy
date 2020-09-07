@@ -43,6 +43,10 @@ export class ProjectNavigationComponent implements OnInit {
     return this._selectionList;
   }
 
+  set selectionList(value: boolean) {
+    this._selectionList = value;
+  }
+
   downloadAllProjects(): void {
     this.app.downloadProjects(this.app.projects.map(project => project.id));
   }

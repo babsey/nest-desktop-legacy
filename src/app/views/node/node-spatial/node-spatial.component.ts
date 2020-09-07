@@ -23,7 +23,7 @@ export class NodeSpatialComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this._positionType = this.node.spatial.positions.constructor.name === 'FreePositions' ? 'free' : 'grid';
+    this._positionType = this.node.spatial.positions.name;
   }
 
   get graph(): any {
@@ -34,12 +34,16 @@ export class NodeSpatialComponent implements OnInit {
     return this._showPlot;
   }
 
+  set showPlot(value: boolean) {
+    this._showPlot = value;
+  }
+
   get positionType(): string {
     return this._positionType;
   }
 
-  tiggerPlot(): void {
-    this._showPlot = !this.showPlot;
+  set positionType(value: string) {
+    this._positionType = value;
   }
 
   plot(): void {

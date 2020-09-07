@@ -67,7 +67,7 @@ export class Parameter {
       id: this.id,
       value: this.value,
     };
-    if (this.parent.constructor.name === 'Model') {
+    if (this.parent.name === 'model') {
       params['input'] = this.input;
       params['label'] = this.label;
       params['unit'] = this.unit;

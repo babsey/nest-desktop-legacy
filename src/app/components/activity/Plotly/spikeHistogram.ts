@@ -9,11 +9,16 @@ export class SpikeHistogram extends Panel {
     barmode: 'overlay',
     barnorm: '',
   };
+  private _name: string = 'SpikeHistogram';
 
   constructor(graph: ActivityChartGraph) {
     super('SpikeHistogram', graph);
     this.layout.yaxis.title = 'Spike count';
     this.init();
+  }
+
+  get name(): string {
+    return this._name;
   }
 
   get activities(): Activity[] {

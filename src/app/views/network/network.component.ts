@@ -62,6 +62,10 @@ export class NetworkComponent implements OnInit, AfterViewInit {
     return this._projectService.sidenavOpened;
   }
 
+  set sidenavOpened(value: boolean) {
+    this._projectService.sidenavOpened = value;
+  }
+
   get width(): number {
     return this._width;
   }

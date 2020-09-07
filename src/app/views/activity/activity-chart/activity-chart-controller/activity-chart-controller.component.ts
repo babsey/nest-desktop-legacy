@@ -29,7 +29,7 @@ export class ActivityChartControllerComponent implements OnInit {
   }
 
   get histogram(): any {
-    return this._activityChartService.graph.panels.find((panel: any) => panel.constructor.name === 'SpikeHistogram');
+    return this._activityChartService.graph.panels.find((panel: any) => panel.name === 'SpikeHistogram');
   }
 
   drop(event: CdkDragDrop<string[]>): void {

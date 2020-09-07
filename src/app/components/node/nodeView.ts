@@ -35,7 +35,7 @@ export class NodeView {
         (node: Node) => node.modelId === this.node.modelId);
       const idx: number = nodes.indexOf(this.node);
       const label: string[] = this.node.modelId.split('_');
-      return label.map((l: string[]) => l[0]).join('') + (idx + 1);
+      return label.map((l: string) => l[0]).join('') + (idx + 1);
     }
   }
 

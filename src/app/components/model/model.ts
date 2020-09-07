@@ -14,6 +14,7 @@ enum ElementType {
 export class Model {
   app: App;                             // parent
   code: ModelCode;                      // code for model
+  private _name: string = 'model';
 
   private _doc: any;                             // doc data of the database
   private _id: string;                           // model id
@@ -37,6 +38,10 @@ export class Model {
     this.label = model.label || '';
     model.params.forEach((param: any) => this.addParameter(param));
     this.recordables = model.recordables || [];
+  }
+
+  get name(): string {
+    return this._name;
   }
 
   get id(): string {

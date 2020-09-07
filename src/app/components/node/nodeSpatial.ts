@@ -7,6 +7,7 @@ import { Node } from './node';
 export class FreePositions {
   spatial: NodeSpatial;
   values: number[][] = [];
+  private _name: string = 'free';
 
   // arguments for nest.spatial.free
   pos: any;
@@ -15,6 +16,9 @@ export class FreePositions {
   edgeWrap: boolean;
   numDimensions: number[];
 
+  rows?: number;
+  columns?: number;
+
   constructor(spatial: NodeSpatial, positions: any = {}) {
     this.spatial = spatial;
     this.pos = positions.pos;
@@ -22,6 +26,10 @@ export class FreePositions {
     this.extent = positions.extent || [1, 1];
     this.edgeWrap = positions.edgeWrap || false;
     this.numDimensions = positions.numDimensions || 2;
+  }
+
+  get name(): string {
+    return this._name;
   }
 
   round(value: number): number {
@@ -65,6 +73,7 @@ export class FreePositions {
 export class GridPositions {
   spatial: NodeSpatial;
   values: number[][];
+  private _name: string = 'grid';
 
   // arguments for nest.spatial.grid
   shape: number[];
@@ -78,6 +87,10 @@ export class GridPositions {
     this.center = positions.center || [0, 0];
     this.extent = positions.extent || [1, 1];
     this.edgeWrap = positions.edgeWrap || false;
+  }
+
+  get name(): string {
+    return this._name;
   }
 
   get rows(): number {
@@ -167,7 +180,7 @@ export class NodeSpatial extends Config {
   }
 
   isRandom(): boolean {
-    return this.hasPositions() && this.positions.constructor.name === 'FreePositions'
+    return this.hasPositions() && this.positions.name === 'free'
   }
 
   toJSON(target: string = 'db'): any {

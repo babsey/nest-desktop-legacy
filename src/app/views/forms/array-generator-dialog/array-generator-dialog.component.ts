@@ -23,6 +23,10 @@ export class ArrayGeneratorDialogComponent implements OnInit {
     return this._generatorService.options;
   }
 
+  view(mode: string): boolean {
+    return this._generatorService.view(mode);
+  }
+
   onNoClick(): void {
     this._dialogRef.close();
   }

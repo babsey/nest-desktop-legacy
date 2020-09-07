@@ -90,7 +90,7 @@ export class NodeCode extends Code {
     let script: string = '';
     script += ', positions=';
     const positions = this.node.spatial.toJSON();
-    if (this.node.spatial.positions.constructor.name === 'FreePositions') {
+    if (this.node.spatial.positions.name === 'free') {
       if (false && positions.pos.length > 0) {
         script += `nest.spatial.free([${positions.pos.map(p => {
           return "[" + p[0].toFixed(2) + "," + p[1].toFixed(2) + "]"

@@ -14,6 +14,7 @@ export class Node extends Config {
   idx: number;                      // generative
   code: NodeCode;                   // code service for node
   view: NodeView;
+  private _name: string = 'node';
 
   // Arguments for nest.Create
   private _modelId: string;
@@ -41,6 +42,10 @@ export class Node extends Config {
     this._size = node.size || 1;
     this.initParameters(node);
     this.initSpatial(node.spatial);
+  }
+
+  get name(): string {
+    return this._name;
   }
 
   get model(): Model {
