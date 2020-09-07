@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { App } from '../../../components/app';
 import { Model } from '../../../components/model/model';
@@ -15,7 +15,7 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
   templateUrl: './model-activity-graph.component.html',
   styleUrls: ['./model-activity-graph.component.scss'],
 })
-export class ModelActivityGraphComponent implements OnInit {
+export class ModelActivityGraphComponent implements OnInit, OnDestroy {
   @Input() modelId: string;
   private _project: Project;
   private _graph: ActivityChartGraph;
@@ -46,6 +46,10 @@ export class ModelActivityGraphComponent implements OnInit {
     this.update();
   }
 
+  ngOnDestroy() {
+    this._graph = undefined;
+  }
+
   get activity(): Activity {
     return this._project.activities[0];
   }
@@ -67,10 +71,12 @@ export class ModelActivityGraphComponent implements OnInit {
   }
 
   update(): void {
-    this._project = this._appService.app.createNeuronModelProject(this.modelId);
-    this._simulationRunService.run(this._project, true).then(() => {
-      this._graph = new ActivityChartGraph(this._project, 'model');
-    });
+    if (this.modelId) {
+      this._project = this._appService.app.createNeuronModelProject(this.modelId);
+      this._simulationRunService.run(this._project, true).then(() => {
+        this._graph = new ActivityChartGraph(this._project, 'model');
+      });
+    }
   }
 
 }
