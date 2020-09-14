@@ -66,6 +66,10 @@ export class Model {
     return this._label;
   }
 
+  set label(value: string) {
+    this._label = value;
+  }
+
   get model(): Model {
     return this;
   }
