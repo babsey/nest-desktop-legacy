@@ -24,22 +24,26 @@ export class Network extends Config {
     this.nodes = [];
     this.connections = [];
 
-    network.nodes ? network.nodes.forEach((node: any) => this.addNode(node)) : null;
-    network.connections ? network.connections.forEach((connection: any) => this.addConnection(connection)) : null;
+    if (network.nodes) {
+      network.nodes.forEach((node: any) => this.addNode(node));
+    }
+    if (network.connections) {
+      network.connections.forEach((connection: any) => this.addConnection(connection));
+    }
 
     this.clean();
   }
 
   get stimulators(): Node[] {
-    return this.nodes.filter((node: Node) => node.model.elementType === 'stimulator')
+    return this.nodes.filter((node: Node) => node.model.elementType === 'stimulator');
   }
 
   get neurons(): Node[] {
-    return this.nodes.filter((node: Node) => node.model.elementType === 'neuron')
+    return this.nodes.filter((node: Node) => node.model.elementType === 'neuron');
   }
 
   get recorders(): Node[] {
-    return this.nodes.filter((node: Node) => node.model.isRecorder())
+    return this.nodes.filter((node: Node) => node.model.isRecorder());
   }
 
   commit(): void {
@@ -74,11 +78,10 @@ export class Network extends Config {
     this.view.resetFocus();
     this.view.resetSelection();
     this.connections = this.connections.filter((c: Connection) => (c.source !== node && c.target !== node));
-    // this.nodes = this.nodes.filter(n => n.idx !== node.idx);
+    // this.nodes = this.nodes.filter((n: Node) => n.idx !== node.idx);
     const idx: number = node.idx;
     this.nodes = this.nodes.slice(0, idx).concat(this.nodes.slice(idx + 1));
     this.clean();
-    this.commit();
   }
 
   deleteConnection(connection: Connection): void {
@@ -88,7 +91,6 @@ export class Network extends Config {
     const idx: number = connection.idx;
     this.connections = this.connections.slice(0, idx).concat(this.connections.slice(idx + 1));
     this.clean();
-    this.commit();
   }
 
   clean(): void {
@@ -113,8 +115,8 @@ export class Network extends Config {
     this.view.resetSelection();
     this.connections = [];
     this.nodes = [];
-    // this.connections.forEach(connection => this.deleteConnection(connection));
-    // this.nodes.forEach(node => this.deleteNode(node));
+    // this.connections.forEach((connection: Connection) => this.deleteConnection(connection));
+    // this.nodes.forEach((node: Node) => this.deleteNode(node));
     this.clean();
     this.commit();
   }

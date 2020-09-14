@@ -2,20 +2,20 @@
   "autoRandomSeed": false,
   "params": [{
     "id": "randomSeed",
-    "label": "seed of random number generator",
-    "value": 0,
     "input": "valueSlider",
+    "label": "seed of random number generator",
     "max": 1000,
     "min": 0,
-    "step": 1
+    "step": 1,
+    "value": 0
   }, {
     "id": "time",
-    "label": "simulation time",
-    "unit": "ms",
-    "value": 1000,
     "input": "valueSlider",
+    "label": "simulation time",
     "max": 2000,
     "min": 0,
-    "step": 10
+    "step": 10,
+    "unit": "ms",
+    "value": 1000
   }]
 }

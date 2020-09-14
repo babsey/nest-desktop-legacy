@@ -42,9 +42,9 @@ export class NodeParamComponent implements OnInit {
     const dialogRef = this._dialog.open(ArrayGeneratorDialogComponent);
     dialogRef.afterClosed().subscribe(d => {
       if (d) {
-        d.end = d.end != -1 ? d.end : 1000.;
-        d.max = d.max != -1 ? d.max : 1000.;
-        let resolution = 0.1;
+        d.end = d.end !== -1 ? d.end : 1000.;
+        d.max = d.max !== -1 ? d.max : 1000.;
+        const resolution = 0.1;
         d.toFixed = resolution >= 1 ? -1 : String(resolution).split('.')[1].length;
         this.param.value = this._generatorService.generate(d);
       }
@@ -59,7 +59,7 @@ export class NodeParamComponent implements OnInit {
   }
 
   onFactorClick(factor) {
-    alert(factor)
+    alert(factor);
   }
 
 }

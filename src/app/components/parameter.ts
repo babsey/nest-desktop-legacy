@@ -58,7 +58,7 @@ export class Parameter {
 
   get options(): any {
     const model: Model = this.parent.model;
-    const param: Parameter = model ? model.params.find(param => param.id === this.id) : null;
+    const param: Parameter = model ? model.params.find((p: Parameter) => p.id === this.id) : null;
     return param;
   }
 
@@ -67,7 +67,7 @@ export class Parameter {
       id: this.id,
       value: this.value,
     };
-    if (this.parent.name === 'model') {
+    if (this.parent.name === 'Model') {
       params['input'] = this.input;
       params['label'] = this.label;
       params['unit'] = this.unit;

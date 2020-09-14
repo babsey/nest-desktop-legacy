@@ -14,7 +14,7 @@ enum ElementType {
 export class Model {
   app: App;                             // parent
   code: ModelCode;                      // code for model
-  private _name: string = 'model';
+  private _name = 'Model';
 
   private _doc: any;                             // doc data of the database
   private _id: string;                           // model id
@@ -103,7 +103,7 @@ export class Model {
   }
 
   removeParameter(paramId: string): void {
-    this._params = this.params.filter((param: Parameter) => param.id != paramId);
+    this._params = this.params.filter((param: Parameter) => param.id !== paramId);
   }
 
   updateParameter(param: any): void {

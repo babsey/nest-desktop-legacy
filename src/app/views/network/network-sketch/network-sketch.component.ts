@@ -47,7 +47,7 @@ export class NetworkSketchComponent implements OnInit {
       this._networkSketchService.keyDown = '';
     }).on('keydown', () => {
       this._networkSketchService.keyDown = d3.event.keyCode;
-    })
+    });
   }
 
   get contextMenuPosition(): any {
@@ -71,7 +71,7 @@ export class NetworkSketchComponent implements OnInit {
   }
 
   onSVGEnter(event: MouseEvent): void {
-    if (!this.eventTrigger) return;
+    if (!this.eventTrigger) { return; }
     this._viewDragline = true;
   }
 

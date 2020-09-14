@@ -7,27 +7,27 @@
     },
     "distance": 24,
     "rotation": {
-      "theta": 0,
-      "speed": 0
+      "speed": 0,
+      "theta": 0
     },
     "control": true
   },
   "colorMap": {
-    "min": -70,
     "max": -55,
+    "min": -70,
     "scale": "spectral"
   },
+  "dotSize": 10,
   "frames": {
-    "sampleRate": 1,
-    "speed": 1,
     "idx": 0,
     "rate": 30,
+    "sampleRate": 1,
+    "speed": 1,
     "windowSize": 1
   },
   "trail": {
-    "mode": "off",
+    "fading": false,
     "length": 10,
-    "fading": false
-  },
-  "dotSize": 10
+    "mode": "off"
+  }
 }

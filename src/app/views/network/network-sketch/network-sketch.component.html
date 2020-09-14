@@ -58,14 +58,12 @@
         d="M0,0L0,0"
         stroke-linecap="round"
         [style.display]="viewDragline ? '' : 'none'"
-        >
-      </svg:path>
+      ></svg:path>
       <svg:path
         class="dragline mask"
         d="M0,0L0,0"
         [style.display]="viewDragline ? '' : 'none'"
-        >
-      </svg:path>
+      ></svg:path>
     </svg:g>
 
     <ng-container *ngFor="let node of network.nodes">
@@ -79,7 +77,7 @@
         [node]="node"
         [width]="(width-10)"
         transform="translate(1,1)"
-        ></g>
+      ></g>
     </ng-container>
 
     <svg:g class="select-panel">
@@ -87,7 +85,13 @@
         class="tooltip"
         style="visibility:hidden;"
         transform="translate(0, -45)">
-        <svg:rect fill="white" fill-opacity="0.75" width="50" height="12" transform="translate(-25,-10)"></svg:rect>
+        <svg:rect
+          fill-opacity="0.75"
+          fill="white"
+          height="12"
+          transform="translate(-25,-10)"
+          width="50"
+        ></svg:rect>
         <svg:text class="label"></svg:text>
       </svg:g>
     </svg:g>

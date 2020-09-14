@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
-import { ActivityAnimationGraph } from '../../../components/activity/Threejs/activityAnimationGraph';
+import { ActivityAnimationGraph } from '../../../components/activity/activityAnimationGraph';
 import { Project } from '../../../components/project/project';
 
 import { ActivityAnimationService } from '../../../services/activity/activity-animation.service';

@@ -10,7 +10,6 @@ import { Project } from '../../../components/project/project';
 import { ActivityStatsService } from '../../../services/activity/activity-stats.service';
 
 
-
 @Component({
   selector: 'app-activity-stats',
   templateUrl: './activity-stats.component.html',

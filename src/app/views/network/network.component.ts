@@ -42,8 +42,8 @@ export class NetworkComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.resize()
-    }, 1)
+      this.resize();
+    }, 1);
   }
 
   get height(): number {

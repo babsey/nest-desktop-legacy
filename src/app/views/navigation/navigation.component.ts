@@ -31,7 +31,7 @@ export class NavigationComponent implements OnInit {
   }
 
   isNavLoaded(mode: string = ''): boolean {
-    return window.location.href.includes('nav:' + mode)
+    return window.location.href.includes('nav:' + mode);
   }
 
   isSidenavOpened(): boolean {

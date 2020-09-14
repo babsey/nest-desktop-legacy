@@ -52,7 +52,7 @@
     </span>
   </mat-list-item>
 
-  <mat-list-item *ngIf="graph.hasAnalogData()">
+  <mat-list-item *ngIf="graph.hasAnyAnalogData()">
     <app-activity-animation-colormap style="width:100%"></app-activity-animation-colormap>
   </mat-list-item>
 
@@ -75,7 +75,7 @@
       [max]="10"
       class="slider"
       style="width:240px"
-      [disabled]="graph.hasAnalogData()"
+      [disabled]="graph.hasAnyAnalogData()"
     ></mat-slider>
     <span class="flex-spacer"></span>
     <span class="value">
@@ -144,7 +144,7 @@
       [step]="sampleRate()"
       class="slider"
       style="width:240px"
-      [disabled]="graph.hasAnalogData()"
+      [disabled]="graph.hasAnyAnalogData()"
     ></mat-slider>
     <span class="flex-spacer"></span>
     <span class="value">
@@ -162,7 +162,7 @@
       <mat-select
         (selectionChange)="onAnimationChange($event)"
         [(value)]="graph.config.trail.mode"
-        [disabled]="graph.hasAnalogData()"
+        [disabled]="graph.hasAnyAnalogData()"
         >
         <ng-container *ngFor="let trailMode of trailModes">
           <mat-option [value]="trailMode">{{ trailMode }}</mat-option>
@@ -181,7 +181,7 @@
       [step]="sampleRate()"
       class="slider"
       style="width:240px"
-      [disabled]="graph.hasAnalogData()"
+      [disabled]="graph.hasAnyAnalogData()"
     ></mat-slider>
     <span class="flex-spacer"></span>
     <span class="value">
@@ -194,7 +194,7 @@
     <mat-checkbox
       (change)="onAnimationChange($event)"
       [(ngModel)]="graph.config.trail.fading"
-      [disabled]="graph.hasAnalogData()"
+      [disabled]="graph.hasAnyAnalogData()"
       >
       Trail fading
     </mat-checkbox>

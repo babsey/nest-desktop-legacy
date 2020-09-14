@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { App } from '../../../components/app';
 import { Model } from '../../../components/model/model';
 import { Project } from '../../../components/project/project';
 import { Activity } from '../../../components/activity/activity';
-import { ActivityChartGraph } from '../../../components/activity/Plotly/activityChartGraph';
+import { ActivityChartGraph } from '../../../components/activity/activityChartGraph';
+import { AnalogSignalPlotPanel } from '../../../components/activity/plotPanels/analogSignalPlotPanel';
 
 import { AppService } from '../../../services/app/app.service';
 import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
@@ -15,10 +16,9 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
   templateUrl: './model-activity-graph.component.html',
   styleUrls: ['./model-activity-graph.component.scss'],
 })
-export class ModelActivityGraphComponent implements OnInit, OnDestroy {
+export class ModelActivityGraphComponent implements OnInit {
   @Input() modelId: string;
   private _project: Project;
-  private _graph: ActivityChartGraph;
   private _config: any = {
     staticPlot: true,
   };
@@ -35,7 +35,9 @@ export class ModelActivityGraphComponent implements OnInit, OnDestroy {
   private _style: any = {
     width: '100%',
   };
-
+  private _registerPanels: any[] = [
+    (graph: ActivityChartGraph) => new AnalogSignalPlotPanel(graph),
+  ];
 
   constructor(
     private _appService: AppService,
@@ -46,20 +48,12 @@ export class ModelActivityGraphComponent implements OnInit, OnDestroy {
     this.update();
   }
 
-  ngOnDestroy() {
-    this._graph = undefined;
-  }
-
-  get activity(): Activity {
-    return this._project.activities[0];
-  }
-
   get config(): any {
     return this._config;
   }
 
   get data(): any[] {
-    return this._graph ? this._graph.data : [];
+    return this._project.activityGraph.data;
   }
 
   get layout(): any {
@@ -73,9 +67,7 @@ export class ModelActivityGraphComponent implements OnInit, OnDestroy {
   update(): void {
     if (this.modelId) {
       this._project = this._appService.app.createNeuronModelProject(this.modelId);
-      this._simulationRunService.run(this._project, true).then(() => {
-        this._graph = new ActivityChartGraph(this._project, 'model');
-      });
+      this._simulationRunService.run(this._project, true);
     }
   }
 

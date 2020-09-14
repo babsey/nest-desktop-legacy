@@ -16,7 +16,7 @@ export class MathService {
   range(start: number, end: number = null, step: number = null): number[] {
     if (!end) {
       return Array.from({ length: start }, (val: number, index: number) => index);
-    } if (!step) {
+    } else if (!step) {
       return Array.from({ length: end - start }, (val: number, index: number) => start + index);
     } else {
       return Array.from({ length: Math.ceil((end - start) / step) }, (val: number, index: number) => start + (index * step));
@@ -25,7 +25,7 @@ export class MathService {
 
   linspace(start: number, end: number, size: number): number[] {
     const step: number = (end - start) / (size - 1);
-    return this.range(start, end + step, step)
+    return this.range(start, end + step, step);
   }
 
   randomInt(min: number, max: number): number {

@@ -8,7 +8,7 @@
     orient="auto">
     <svg:path
       [style.stroke]="color"
-      [style.strokeWidth.px]=".3"
+      [style.strokeWidth.px]=".4"
       fill="transparent"
       d="M1,1L3,2L1,3"
     ></svg:path>
@@ -23,7 +23,7 @@
     orient="auto">
     <svg:path
       [style.stroke]="color"
-      [style.strokeWidth.px]=".3"
+      [style.strokeWidth.px]=".4"
       fill="white"
       d="M1,1L3,2L1,3L1,1L3,2"
     ></svg:path>
@@ -38,7 +38,7 @@
     orient="auto">
     <svg:circle
       [attr.stroke]="color"
-      [style.strokeWidth.px]=".3"
+      [style.strokeWidth.px]=".4"
       fill="white"
       r=1
       transform="translate(2,2)"
@@ -63,7 +63,7 @@
   [attr.d]="connection.view.drawPath()"
   class="connection"
   stroke="transparent"
-  [style.stroke-width.px]="connectionWidth() * 3"
+  [style.stroke-width.px]="connectionWidth() * 2"
   [style.marker-end]="markerEnd()"
   [style.opacity]="opacity() ? 1 : terminusOpacity()"
 ></svg:path>

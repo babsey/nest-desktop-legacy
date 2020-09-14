@@ -19,20 +19,20 @@ export class ConnectionMenuComponent implements OnInit {
 
   customSources(): void {
     this.connection.rule = 'all_to_all';
-    this.connection['src_idx'] = [];
+    this.connection.srcIdx = [];
   }
 
   allSources(): void {
-    delete this.connection['src_idx'];
+    this.connection.srcIdx = undefined;
   }
 
   customTargets(): void {
     this.connection.rule = 'all_to_all';
-    this.connection['tgt_idx'] = [];
+    this.connection.tgtIdx = [];
   }
 
   allTargets(): void {
-    delete this.connection['tgt_idx'];
+    this.connection.tgtIdx = undefined;
   }
 
   deleteConnection(): void {

@@ -11,14 +11,16 @@ export class Activity {
   nodeIds: number[] = [];
   nodePositions: number[][] = [];       // if spatial
 
-  constructor(recorder: Node, activity: any = { events: {}, nodeIds: [], nodePositions: [] }) {
+  constructor(
+    recorder: Node,
+    activity: any = { events: {}, nodeIds: [], nodePositions: [] }
+  ) {
     this.recorder = recorder;
-    this.idx = this.recorder.network.project.activities.length;
     this.update(activity);
   }
 
   get elementTypes(): string[] {
-    return this.recorder.nodes.map(node => node.model.elementType);
+    return this.recorder.nodes.map((node: Node) => node.model.elementType);
   }
 
   get endtime(): number {
@@ -26,7 +28,7 @@ export class Activity {
   }
 
   get senders(): number[] {
-    const senders: any[] = [...new Set(this.events['senders'])];
+    const senders: any[] = [...new Set(this.events.senders)];
     if (senders.length > 0) {
       senders.sort((a: number, b: number) => a - b);
     }
@@ -34,7 +36,7 @@ export class Activity {
   }
 
   get nEvents(): number {
-    return this.events.hasOwnProperty('times') ? this.events.times.length : 0
+    return this.events.hasOwnProperty('times') ? this.events.times.length : 0;
   }
 
   hasEvents(): boolean {
@@ -48,11 +50,15 @@ export class Activity {
   }
 
   hasAnalogData(): boolean {
-    return ['voltmeter', 'multimeter'].includes(this.recorder.model.existing) && this.elementTypes.includes('neuron');
+    return ['voltmeter', 'multimeter'].includes(this.recorder.model.existing);
   }
 
-  hasInputData(): boolean {
-    return ['voltmeter', 'multimeter'].includes(this.recorder.model.existing) && this.elementTypes.includes('stimulator');
+  hasInputAnalogData(): boolean {
+    return this.hasAnalogData() && this.elementTypes.includes('stimulator');
+  }
+
+  hasNeuronAnalogData(): boolean {
+    return this.hasAnalogData() && this.elementTypes.includes('neuron');
   }
 
   hasSpikeData(): boolean {
@@ -60,8 +66,8 @@ export class Activity {
   }
 
   getPositionsForSenders(): any {
-    const x: number[] = [],
-      y: number[] = [];
+    const x: number[] = [];
+    const y: number[] = [];
     this.events.senders.map((sender: number) => {
       const pos: number[] = this.nodePositions[this.nodeIds.indexOf(sender)];
       if (pos) {

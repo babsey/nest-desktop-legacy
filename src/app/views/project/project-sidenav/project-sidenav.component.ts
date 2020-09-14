@@ -31,8 +31,4 @@ export class ProjectSidenavComponent implements OnInit {
     return this._activityGraphService.mode;
   }
 
-  isGraphLoaded(): boolean {
-    return this._activityGraphService.isGraphLoaded();
-  }
-
 }

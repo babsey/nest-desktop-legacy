@@ -11,7 +11,7 @@ import { ActivityChartService } from './activity-chart.service';
   providedIn: 'root'
 })
 export class ActivityGraphService {
-  private _mode: string = 'chart';
+  private _mode = 'chart';
 
   constructor(
     private _activityAnimationService: ActivityAnimationService,
@@ -24,30 +24,6 @@ export class ActivityGraphService {
 
   set mode(value: string) {
     this._mode = value;
-  }
-
-  init(project: Project): void {
-    if (this.mode === 'chart') {
-      this._activityChartService.init.emit(project);
-    } else if (this.mode === 'animation') {
-      this._activityAnimationService.init.emit(project);
-    }
-  }
-
-  update(): void {
-    if (this.mode === 'chart') {
-      this._activityChartService.update.emit();
-    } else if (this.mode === 'animation') {
-      this._activityAnimationService.update.emit();
-    }
-  }
-
-  isGraphLoaded(): boolean {
-    if (this.mode === 'chart') {
-      return this._activityChartService.graph !== undefined;
-    } else {
-      return this._activityAnimationService.graph !== undefined;
-    }
   }
 
 }

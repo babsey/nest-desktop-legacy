@@ -27,10 +27,10 @@ export class SelectFilterComponent implements OnInit {
   }
 
   search(query: string): void {
-    let result: string[] = [];
-    for (let option of this.options) {
+    const result: string[] = [];
+    for (const option of this.options) {
       if (option.label.toLowerCase().indexOf(query.toLowerCase()) > -1) {
-        result.push(option)
+        result.push(option);
       }
     }
     this._filteredOptions = result;

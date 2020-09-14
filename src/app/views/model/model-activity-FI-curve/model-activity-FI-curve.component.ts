@@ -4,7 +4,7 @@ import { App } from '../../../components/app';
 import { Model } from '../../../components/model/model';
 import { Project } from '../../../components/project/project';
 import { Activity } from '../../../components/activity/activity';
-import { ActivityChartGraph } from '../../../components/activity/Plotly/activityChartGraph';
+import { ActivityChartGraph } from '../../../components/activity/activityChartGraph';
 
 import { AppService } from '../../../services/app/app.service';
 import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
@@ -73,7 +73,7 @@ export class ModelActivityFICurveComponent implements OnInit {
   update(): void {
     this._project = this._appService.app.createNeuronModelProject(this.model);
     this._simulationRunService.run(this._project, true).then(() => {
-      this._graph = new ActivityChartGraph(this._project, 'model');
+      this._graph = new ActivityChartGraph(this._project);
     });
   }
 

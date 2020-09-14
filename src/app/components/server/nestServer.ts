@@ -1,4 +1,4 @@
-import { Config } from '../config'
+import { Config } from '../config';
 import { HttpClient } from './httpClient';
 
 import { environment } from '../../../environments/environment';
@@ -13,7 +13,7 @@ export class NESTServer extends Config {
     simulatorReady: false,
     simulatorVersion: '',
     simulatorValid: false,
-  }
+  };
 
   constructor() {
     super('NESTServer');
@@ -78,18 +78,18 @@ export class NESTServer extends Config {
     if (this.config.hostname) {
       const start: any = new Date().getTime();
       this.http.get(this.url)
-        .then(resp => {
+        .then((resp: any) => {
           const end: any = new Date().getTime();
           const duration: any = end - start;
-          console.log('Pong responds in ' + duration + ' ms')
-          this.oidcLoginFailed(resp)
-          this.checkVersion(JSON.parse(resp['response']))
+          // console.log('Pong responds in ' + duration + ' ms')
+          this.oidcLoginFailed(resp);
+          this.checkVersion(JSON.parse(resp['response']));
         })
-        .catch(error => {
-          console.log(error)
+        .catch((error: any) => {
+          console.log(error);
           // this.seek()
-          this.oidcLoginFailed(error)
-        })
+          this.oidcLoginFailed(error);
+        });
     } else {
       this.seek();
     }
@@ -103,23 +103,23 @@ export class NESTServer extends Config {
       hostname + '/server',
       hostname + ':' + (this.port || '5000'),
     ];
-    const hostPromises: any[] = hosts.map(host =>
+    const hostPromises: any[] = hosts.map((host: string) =>
       new Promise((resolve, reject) => {
         const url: string = protocol + '//' + host;
         this.http.get(url)
-          .then(resp => {
+          .then((resp: any) => {
             this.url = url;
             this.checkVersion(resp['body']);
             resolve(true);
           })
-          .catch(error => console.log(error))
+          .catch((err: any) => console.log(err));
       })
-    )
+    );
     Promise.all(hostPromises);
   }
 
   checkVersion(info): void {
-    if (info === undefined) return
+    if (info === undefined) { return; }
     // console.log('Fetch info', info)
     const appVersion: string[] = environment.VERSION.split('.');
 
@@ -142,7 +142,7 @@ export class NESTServer extends Config {
 
   // TODO: not a permament solution
   oidcLoginFailed(resp): void {
-    if (resp['ok'] === false && resp['url'] === "https://services.humanbrainproject.eu/oidc/login") {
+    if (resp['ok'] === false && resp['url'] === 'https://services.humanbrainproject.eu/oidc/login') {
       window.location.reload();
     }
   }

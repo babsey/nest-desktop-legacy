@@ -20,10 +20,10 @@ export class ModelComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    let paramMap: any = this._route.snapshot.paramMap;
+    const paramMap: any = this._route.snapshot.paramMap;
     setTimeout(() => {
       this._modelService.selectedModel = paramMap.get('model');
-    }, 1)
+    }, 1);
   }
 
   ngOnDestroy() {

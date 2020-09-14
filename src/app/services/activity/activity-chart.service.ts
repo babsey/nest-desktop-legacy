@@ -1,15 +1,16 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { ActivityChartGraph } from '../../components/activity/Plotly/activityChartGraph';
+import { ActivityChartGraph } from '../../components/activity/activityChartGraph';
+import { ActivityGraphPanel } from '../../components/activity/plotPanels/activityGraphPanel';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivityChartService {
-  private _graph: ActivityChartGraph;
   private _init: EventEmitter<any> = new EventEmitter();
   private _update: EventEmitter<any> = new EventEmitter();
+  private _selectedPanel: ActivityGraphPanel;
 
   constructor() {
   }
@@ -18,16 +19,16 @@ export class ActivityChartService {
     return this._init;
   }
 
-  get graph(): ActivityChartGraph {
-    return this._graph;
-  }
-
-  set graph(value: ActivityChartGraph) {
-    this._graph = value;
-  }
-
   get update(): EventEmitter<any> {
     return this._update;
+  }
+
+  get selectedPanel(): ActivityGraphPanel {
+    return this._selectedPanel;
+  }
+
+  set selectedPanel(value: ActivityGraphPanel) {
+    this._selectedPanel = value;
   }
 
 }

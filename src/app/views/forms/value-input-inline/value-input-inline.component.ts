@@ -18,9 +18,9 @@ export class ValueInputInlineComponent implements OnInit {
   }
 
   onChange(value: any): void {
-    let isString = typeof(value) === 'string' && value.length > 0;
+    const isString = typeof(value) === 'string' && value.length > 0;
     this.value =  isString ? Number(value) : this.options.value;
-    this.valueChange.emit(this.value)
+    this.valueChange.emit(this.value);
   }
 
 }

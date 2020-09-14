@@ -1,34 +1,58 @@
-<mat-list dense>
 
-  <!-- <mat-selection-list cdkDropList
-    (cdkDropListDropped)="drop($event)"
-    (ngModelChange)="onModelChange($event)"
-    [ngModel]="panelSelected"
-    >
-    <ng-container *ngFor="let panel of panelOrder">
-      <mat-list-option cdkDrag [value]="panel">
-        {{ panel | titlecase }}
-        <p *cdkDragPreview></p>
-      </mat-list-option>
+<mat-menu #panel="matMenu">
+  <ng-container *ngFor="let panel of graph.panelsAll">
+    <ng-container *ngIf="!panel.visible">
+      <button mat-menu-item (click)="addPanel(panel.id)">
+        <fa-icon mat-list-icon [icon]="panel.icon"></fa-icon>
+        {{ panel.label | capitalize }}
+      </button>
     </ng-container>
-  </mat-selection-list> -->
+  </ng-container>
+</mat-menu>
 
-  <ng-container *ngIf="panelSelected.includes('histogram')">
+<mat-nav-list dense cdkDropList
+  (cdkDropListDropped)="movePanel($event)">
+  <h3 mat-subheader class="flex">
+    <p mat-line>Panel</p>
+    <div class="flex-spacer"></div>
+    <button mat-icon-button
+      [matMenuTriggerFor]="panel"
+      [disabled]="graph.panels.length === graph.panelsAll.length">
+      <fa-icon icon="plus"></fa-icon>
+    </button>
+  </h3>
+  <mat-divider></mat-divider>
+
+  <ng-container *ngFor="let panel of graph.panels">
+    <mat-list-item cdkDrag (click)="selectPanel(panel.id)">
+      <fa-icon mat-list-icon [icon]="panel.icon"></fa-icon>
+      <p mat-line>{{ panel.label | capitalize }}</p>
+      <button mat-icon-button (click)="removePanel(panel.id)">
+        <fa-icon icon="times"></fa-icon>
+      </button>
+      <p *cdkDragPreview></p>
+    </mat-list-item>
+  </ng-container>
+
+  <mat-divider></mat-divider>
+</mat-nav-list>
+
+<ng-container *ngIf="selectedPanel">
+  <mat-list dense>
     <mat-list-item mat-subheader>
-      Histogram
+      {{ selectedPanel.label | capitalize }}
     </mat-list-item>
 
-    <mat-list-item >
+    <!-- <mat-list-item>
+      {{ histogram.config.barmode | json }}
       <app-select
-        (selectedChange)="onBarmodeChange($event)"
-        [matTooltip]="'Barmode'"
         [options]="histogram.config.barmode"
-        [(selected)]="histogram.state.barmode"
+        matTooltip="Barmode"
         matTooltipPosition="before"
       ></app-select>
-    </mat-list-item>
+    </mat-list-item> -->
 
-    <mat-list-item >
+    <!-- <mat-list-item >
       <app-select
         (selectedChange)="onBarnormChange($event)"
         [matTooltip]="'Barnorm'"
@@ -36,17 +60,31 @@
         [(selected)]="histogram.state.barnorm"
         matTooltipPosition="before"
       ></app-select>
-    </mat-list-item>
+    </mat-list-item> -->
 
-    <mat-list-item>
+    <mat-list-item *ngIf="selectedPanel.config.bins">
       <app-ticks-slider-inline
-        (valueChange)="onBinsizeChange($event)"
-        [matTooltip]="'Bin size'"
-        [options]="histogram.config.binsize"
-        [(value)]="histogram.state.binsize"
+        (valueChange)="onChange($event)"
+        [matTooltip]="'Bins'"
+        [options]="selectedPanel.config.bins"
+        [(value)]="selectedPanel.state.bins"
         style="width:100%"
       ></app-ticks-slider-inline>
     </mat-list-item>
-  </ng-container>
 
-</mat-list>
+    <mat-list-item *ngIf="selectedPanel.config.binsize">
+      <app-ticks-slider-inline
+        (valueChange)="onChange($event)"
+        [matTooltip]="'Bin size'"
+        [options]="selectedPanel.config.binsize"
+        [(value)]="selectedPanel.state.binsize"
+        style="width:100%"
+      ></app-ticks-slider-inline>
+    </mat-list-item>
+  </mat-list>
+</ng-container>
+
+<!-- <ngx-codemirror
+  [ngModel]="code"
+  [options]="options"
+></ngx-codemirror> -->

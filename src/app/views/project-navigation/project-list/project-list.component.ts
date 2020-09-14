@@ -39,7 +39,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   navigate(id: string): void {
-    let url: string = 'project/' + id;
+    const url: string = 'project/' + id;
     this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
   }
 

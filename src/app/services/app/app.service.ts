@@ -9,10 +9,10 @@ import { Project } from '../../components/project/project';
   providedIn: 'root'
 })
 export class AppService {
-  private _rightClick: boolean = false;
+  private _rightClick = false;
   private _app: App;
   private _change: EventEmitter<any> = new EventEmitter();
-  private _sidenavOpened: boolean = false;
+  private _sidenavOpened = false;
 
   constructor(
     private _snackBar: MatSnackBar,

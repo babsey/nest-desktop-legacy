@@ -9,11 +9,11 @@ export class FormatService {
 
   format(val: any): any {
     if (Number.isInteger(val)) {
-      return parseFloat(val).toFixed(1)
+      return parseFloat(val).toFixed(1);
     } else if (Array.isArray(val)) {
-      return '[' + String(val.map(v => this.format(v))) + ']'
+      return `[${String(val.map((v: any) => this.format(v)))}]`;
     } else {
-      return val
+      return val;
     }
   }
 

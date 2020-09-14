@@ -15,8 +15,7 @@
   <mat-selection-list dense
     (click)="$event.stopPropagation()"
     (selectionChange)="onSelectionChange($event)"
-    style="padding:0"
-    >
+    style="padding:0">
     <mat-list-option
       [selected]="project.config['showSnackBar']"
       value="showSnackBar"
@@ -46,7 +45,7 @@
   <mat-nav-list dense style="padding:0">
     <mat-list-item class="mat-menu-item" (click)="project.download()">
       <fa-icon class="menu-icon" icon="download"></fa-icon>
-      <ng-container [ngSwitch]="project.hasActivities()">
+      <ng-container [ngSwitch]="project.hasActivities">
         <span *ngSwitchCase="false"> Download data</span>
         <span *ngSwitchCase="true"> Download data and records</span>
       </ng-container>
@@ -98,7 +97,7 @@
 
     <span class="flex-spacer"></span>
 
-    <button mat-icon-button
+    <button mat-button
       (click)="duplicateProject()"
       (contextmenu)="onContextMenu($event)"
       matTooltip="Duplicate current project"
@@ -112,18 +111,24 @@
       Duplicate
     </button>
 
-    <button mat-icon-button appContextMenuTrigger
+    <button mat-button appContextMenuTrigger
       (click)="run()"
       (contextmenu)="onContextMenu($event)"
       [disabled]="running"
       matTooltip="Simulate"
       class="no-print"
-      style="width:128px"
-      >
+      style="width:128px">
+      <span
+      matBadge="!"
+      [matBadgeHidden]="project.getHash() === project.activityGraph.hash"
+      matBadgeColor="warn"
+      matBadgePosition="below before"
+      MatBadgeSize="small">
       <fa-icon
         icon="play"
         style="margin:0 8px"
       ></fa-icon>
+      </span>
       Simulate
     </button>
   </mat-toolbar>

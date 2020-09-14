@@ -14,10 +14,10 @@ import { AppService } from '../app/app.service';
 })
 export class ModelService {
   private _defaults: any = {};
-  private _progress: boolean = false;
-  private _selectedModel: string = '';     // Important: it has to be string;
-  private _sidenavMode: string = 'list';
-  private _sidenavOpened: boolean = true;
+  private _progress = false;
+  private _selectedModel = '';     // Important: it has to be string;
+  private _sidenavMode = 'list';
+  private _sidenavOpened = true;
   private _update: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -78,9 +78,9 @@ export class ModelService {
           this._progress = false;
           this._defaults = resp;
         }, (err: any) => {
-          console.log(err)
-        })
-    }, 500)
+          console.log(err);
+        });
+    }, 500);
   }
 
   selectModel(modelId: string): void {
@@ -91,7 +91,7 @@ export class ModelService {
         this._sidenavMode = 'list';
       }
       this.requestModelDefaults();
-    }, 1)
+    }, 1);
   }
 
   isSelected(model: string): boolean {

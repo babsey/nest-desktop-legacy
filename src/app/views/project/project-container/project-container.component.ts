@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy, OnChanges, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MediaMatcher } from '@angular/cdk/layout';
@@ -7,6 +7,7 @@ import { enterAnimation } from '../../../animations/enter-animation';
 
 import { Project } from '../../../components/project/project';
 
+import { ActivityChartService } from '../../../services/activity/activity-chart.service';
 import { ActivityGraphService } from '../../../services/activity/activity-graph.service';
 import { AppService } from '../../../services/app/app.service';
 import { ModelService } from '../../../services/model/model.service';
@@ -20,13 +21,14 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
   styleUrls: ['./project-container.component.scss'],
   animations: [enterAnimation],
 })
-export class ProjectContainerComponent implements OnInit, OnDestroy {
+export class ProjectContainerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() id: string;
   @Input() rev: string;
   private _mobileQueryListener: () => void;
   private _mobileQuery: MediaQueryList;
 
   constructor(
+    private _activityChartService: ActivityChartService,
     private _activityGraphService: ActivityGraphService,
     private _appService: AppService,
     private _bottomSheet: MatBottomSheet,
@@ -78,25 +80,23 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     // console.log('Project container update');
     if (this.id) {
       this._appService.app.initProject(this.id, this.rev).then(() => {
-        if (!this.project.hasSpatialActivities()) {
+        if (!this.project.hasSpatialActivities) {
           this._activityGraphService.mode = 'chart';
         }
-        this._activityGraphService.init(this.project);
+        this._activityChartService.selectedPanel = undefined;
+        // this._activityGraphService.init();
 
         if (
-          this._router.url.includes('run') || this.project.config['runAfterLoad'] &&
-          !this.project.hasActivities()
+          this._router.url.includes('run') || this.project.config.runAfterLoad &&
+          !this.project.hasActivities && this._projectService.mode === 'activityExplorer'
         ) {
-          this._projectService.mode = 'activityExplorer';
-          this._simulationRunService.run(this.project, true)
+          this._simulationRunService.run(this.project, true);
         }
       }).catch(() => {
         this._router.navigate([{ outlets: { primary: 'project/' } }]);
-      })
-    } else {
-      this._appService.app.initProject().then(() => {
-        this._activityGraphService.init(this.project);
       });
+    } else {
+      this._appService.app.initProject();
     }
   }
 
@@ -112,20 +112,8 @@ export class ProjectContainerComponent implements OnInit, OnDestroy {
     return this._projectService.networkQuickView;
   }
 
-  onOpenedStart(event: any): void {
-    if (this._projectService.mode === 'labBook') {
-      this._projectService.mode = 'networkEditor';
-    }
-  }
-
-  onClosedStart(event: any): void {
-    if (this._projectService.mode === 'networkEditor') {
-      this._projectService.mode = 'labBook';
-    }
-  }
-
   onOpenedChange(event: any): void {
-    setTimeout(() => this.triggerResize(), 10)
+    setTimeout(() => this.triggerResize(), 10);
   }
 
 }

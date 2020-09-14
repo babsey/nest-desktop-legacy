@@ -19,16 +19,16 @@ export class LogService {
   }
 
   set time(value: Date) {
-    this._time = value
+    this._time = value;
   }
 
   reset(): void {
     this._time = new Date();
-    this._logs = [[this.time, 'client', 'Start log']]
+    this._logs = [[this.time, 'client', 'Start log']];
   }
 
   log(message: string): void {
-    this._logs.push([new Date(), 'client', message])
+    this._logs.push([new Date(), 'client', message]);
   }
 
 }

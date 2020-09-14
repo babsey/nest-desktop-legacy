@@ -22,14 +22,14 @@ export class Simulation extends Config {
     this.code = new SimulationCode(this);
 
     this.time = parseFloat(simulation.time) || 1000.;
-    this.randomSeed = parseInt(simulation.randomSeed) || 0;
+    this.randomSeed = parseInt(simulation.randomSeed, 0) || 0;
   }
 
   toJSON(target: string = 'db'): any {
     const simulation: any = {
       kernel: this.kernel.toJSON(target),
       time: this.time,
-    }
+    };
     if (target === 'simulator') {
       simulation['random_seed'] = this.randomSeed;
     } else {

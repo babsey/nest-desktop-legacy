@@ -25,7 +25,7 @@ export class ConnectionCode extends Code {
     const connSpecList: string[] = [this._() + `"rule": "${this.connection.rule}"`];
     this.connection.params.forEach((param: Parameter) => connSpecList.push(this._() + `"${param.id}": ${param.value}`));
 
-    let script: string = ', conn_spec={';
+    let script = ', conn_spec={';
     script += connSpecList.join(',');
     script += this.end() + '}';
     return script;
@@ -39,7 +39,7 @@ export class ConnectionCode extends Code {
       [sourceNode, targetNode] = [targetNode, sourceNode];
     }
 
-    let script: string = '';
+    let script = '';
     script += `nest.Connect(${this.sourceLabel}, ${this.targetLabel}`;
     script += this.connSpec();
     script += this.connection.synapse.code.synSpec();

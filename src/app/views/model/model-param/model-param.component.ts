@@ -55,27 +55,27 @@ export class ModelParamComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(d => {
       if (d) {
-        d.end = d.end != -1 ? d.end : 1000.;
-        d.max = d.max != -1 ? d.max : 1000.;
-        let resolution = 0.1;
+        d.end = d.end !== -1 ? d.end : 1000.;
+        d.max = d.max !== -1 ? d.max : 1000.;
+        const resolution = 0.1;
         d.toFixed = resolution >= 1 ? -1 : String(resolution).split('.')[1].length;
         this.value = this._generatorService.generate(d);
-        this.valueChange.emit(this.value)
+        this.valueChange.emit(this.value);
       }
     });
   }
 
   hideParam(param: string): void {
-    this.paramHide.emit(param)
+    this.paramHide.emit(param);
   }
 
   onValueChange(value: any): void {
     // console.log('Node param on value change')
-    this.valueChange.emit(value) // Important to use value and not this.value
+    this.valueChange.emit(value); // Important to use value and not this.value
   }
 
   onValueClick(): void {
-    this.valueClick.emit()
+    this.valueClick.emit();
   }
 
   onContextMenu(event: MouseEvent): void {
@@ -86,7 +86,7 @@ export class ModelParamComponent implements OnInit {
   }
 
   onFactorClick(factor) {
-    alert(factor)
+    alert(factor);
   }
 
 }

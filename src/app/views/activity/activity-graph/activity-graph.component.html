@@ -1,5 +1,5 @@
 <ng-container *ngIf="project.network.recorders.length > 0; else noRecorder">
-  <ng-container *ngIf="project.hasActivities(); else noActivity">
+  <ng-container *ngIf="project.hasActivities; else noActivity">
 
     <span
       *ngIf="project.network.view.hasPositions()"

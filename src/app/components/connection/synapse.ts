@@ -15,7 +15,7 @@ export class Synapse {
   constructor(connection: any, synapse: any) {
     this.connection = connection;
     this.code = new SynapseCode(this);
-    this._modelId = "";
+    this._modelId = '';
 
     if (synapse !== undefined && synapse.params.length > 0) {
       this._modelId = synapse.model || 'static_synapse';
@@ -78,12 +78,13 @@ export class Synapse {
 
   inverseWeight(): void {
     this.weight = -1 * this.weight;
+    this.connection.network.commit();
   }
 
   toJSON(target: string = 'db'): any {
     const synapse: any = {
       model: this.modelId,
-    }
+    };
 
     if (target === 'simulator') {
       // Collect specifications of the synapse
@@ -91,7 +92,7 @@ export class Synapse {
         .filter((param: Parameter) => param.visible === undefined || param.visible)
         .forEach((param: Parameter) => synapse[param.id] = param.value);
     } else {
-      synapse['params'] = this.params.map((param: Parameter) => param.toJSON())
+      synapse['params'] = this.params.map((param: Parameter) => param.toJSON());
     }
 
     return synapse;

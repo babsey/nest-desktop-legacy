@@ -8,15 +8,17 @@ import { Project } from './project/project';
 import { environment } from '../../environments/environment';
 
 
-const pad = function(num: number, size: number = 2): string {
-  let s: string = num + "";
-  while (s.length < size) s = "0" + s;
+const pad = (num: number, size: number = 2): string => {
+  let s: string = num + '';
+  while (s.length < size) {
+    s = '0' + s;
+  }
   return s;
-}
+};
 
 export class App extends Config {
   private _version: string;
-  private _ready: boolean = false;
+  private _ready = false;
   view: AppView;
 
   // NEST model e.g. neuron, synapse, stimulator, recorder
@@ -71,12 +73,12 @@ export class App extends Config {
   }
 
   isDatabaseValid(): boolean {
-    if (!this.isDatabaseReady()) return false;
+    if (!this.isDatabaseReady()) { return false; }
     return (this.modelDB.isValid() && this.projectDB.isValid());
   }
 
   isDataReady(): boolean {
-    return (this.models.length > 0 && this.projects.length > 0)
+    return (this.models.length > 0 && this.projects.length > 0);
   }
 
   resetDatabases(): void {
@@ -109,35 +111,35 @@ export class App extends Config {
     this.models = [];
     this.modelDB = new DatabaseService(this, 'nest-desktop-model');
     return this.modelDB.count().then((count: number) => {
-      console.log('Models in db: ', count)
+      console.log('Models in db:', count);
       if (count === 0) {
         return this.loadModelsFromFiles().then(() => this.initModels());
       } else {
-        return this.updateModels()
+        return this.updateModels();
       }
-    })
+    });
   }
 
   loadModelsFromFiles(): Promise<any> {
     // console.log('Load models from files');
     let promise: Promise<any> = Promise.resolve();
     this.config.models.forEach((file: string) => {
-      console.log('Load model from file:', file)
+      console.log('Load model from file:', file);
       const data: any = require('../../assets/models/' + file + '.json');
       promise = promise.then(() => this.addModel(data));
-    })
+    });
     return promise;
   }
 
   filterModels(elementType: string = null): Model[] {
-    if (elementType === null) return this.models;
+    if (elementType === null) { return this.models; }
     return this.models.filter((model: Model) => model.elementType === elementType);
   }
 
   updateModels(): Promise<any> {
     return this.modelDB.list('id').then((models: any[]) =>
       models.forEach((model: any) => {
-        this.models.push(new Model(this, model))
+        this.models.push(new Model(this, model));
       })
     );
   }
@@ -183,7 +185,7 @@ export class App extends Config {
   addProjects(data: any[]): Promise<any> {
     const projects: any[] = data.map((project: any) =>
       new Promise((resolve, reject) => {
-        this.addProject(project).then(() => resolve())
+        this.addProject(project).then(() => resolve());
       }));
     return Promise.all(projects);
   }
@@ -197,7 +199,7 @@ export class App extends Config {
   downloadProjects(projectIds: string[]): void {
     const projects: Project[] = this.projects.filter((project: Project) =>
       projectIds.includes(project.id));
-    const data: any[] = projects.map((project: Project) => project.toJSON())
+    const data: any[] = projects.map((project: Project) => project.toJSON());
     this.download(data, 'projects');
   }
 
@@ -208,13 +210,13 @@ export class App extends Config {
     this.projectRevisions = [];
     this.projectDB = new DatabaseService(this, 'nest-desktop-project');
     return this.projectDB.count().then((count: number) => {
-      console.log('Projects in db:', count)
+      console.log('Projects in db:', count);
       if (count > 0) {
         return this.updateProjects();
       } else {
         return this.loadProjectsFromFiles();
       }
-    })
+    });
   }
 
   // Load projects from files and adds them to list and database.
@@ -222,25 +224,24 @@ export class App extends Config {
     // console.log('Load projects from files');
     let promise: Promise<any> = Promise.resolve();
     this.config.projects.forEach((file: string) => {
-      console.log('Load project from file:', file)
+      console.log('Load project from file:', file);
       const data: any = require('../../assets/projects/' + file + '.json');
       promise = promise.then(() => this.addProject(data));
-    })
+    });
     return promise;
   }
 
   // Load projects from database and then update list
   updateProjects(): Promise<any> {
     return this.projectDB.list('createdAt', true).then((projects: any[]) =>
-      this.projects = projects.map((project: any) => new Project(this, project)
-      )
+      this.projects = projects.map((project: any) => new Project(this, project))
     );
   }
 
   // Load project revision from database and then update revision list
   updateProjectRevisions(id: string = null): Promise<any> {
     this.projectRevisions = [];
-    if (id === null) return
+    if (id === null) { return; }
     return this.projectDB.revisions(id)
       .then((revIds: string[]) =>
         revIds.forEach((rev: string) =>
@@ -272,7 +273,7 @@ export class App extends Config {
   // Download project from the list.
   downloadProject(projectId: string): void {
     // console.log('Download project:', projectId)
-    const project: Project = this.projects.find((project: Project) => project.id === projectId);
+    const project: Project = this.projects.find((p: Project) => p.id === projectId);
     this.download(project.toJSON('file'), 'projects');
   }
 
@@ -283,18 +284,20 @@ export class App extends Config {
       try {
         if (id && rev) {
           this.project = this.projectRevisions.find(
-            project => (project.id === id && project.rev === rev))
+            (project: Project) => (project.id === id && project.rev === rev));
         } else if (id) {
-          this.project = this.projects.find((project: Project) => project.id === id)
+          this.project = this.projects.find(
+            (project: Project) => project.id === id);
         } else {
           this.newProject();
         }
-        resolve(true)
+        resolve(true);
       } catch {
+        console.log('Error in project initialization');
         this.newProject();
-        reject(true)
+        reject(true);
       }
-    })
+    });
   }
 
   // Create a new project and add it to the list but not to the database.
@@ -308,8 +311,8 @@ export class App extends Config {
     return this.projectDB.read(project.id).then((doc: any) => {
       this.project = new Project(this, doc);
       const idx: number = this.projects.map((p: Project) => p.id).indexOf(project.id);
-      this.projects[idx] = this.project
-    })
+      this.projects[idx] = this.project;
+    });
   }
 
   // Save the project in the database and then update the list.
@@ -330,7 +333,7 @@ export class App extends Config {
 
   // Add project to the top of the list.
   updateProject(project: Project): void {
-    this.unloadProject(project)
+    this.unloadProject(project);
     this.projects.unshift(project);
   }
 
@@ -341,8 +344,8 @@ export class App extends Config {
   download(data: any, filenameSuffix: string = '') {
     const dataJSON: string = JSON.stringify(data);
     const element: any = document.createElement('a');
-    element.setAttribute('href', "data:text/json;charset=UTF-8," + encodeURIComponent(dataJSON));
-    element.setAttribute('download', "nest-desktop-" + filenameSuffix + "-" + this.datetime + ".json");
+    element.setAttribute('href', 'data:text/json;charset=UTF-8,' + encodeURIComponent(dataJSON));
+    element.setAttribute('download', `nest-desktop-${filenameSuffix}-${this.datetime}.json`);
     element.style.display = 'none';
     document.body.appendChild(element);
     element.click();

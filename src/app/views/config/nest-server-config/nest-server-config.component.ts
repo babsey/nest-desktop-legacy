@@ -31,13 +31,13 @@ export class NestServerConfigComponent implements OnInit {
   }
 
   onSelectionChange(event: any): void {
-    let config = this.config;
+    const config = this.config;
     config[event.option.value] = event.option.selected;
     this.config = config;
   }
 
   onChange(event: any): void {
-    let config = this.config;
+    const config = this.config;
     config[event.target.name] = event.target.value;
     this.config = config;
   }

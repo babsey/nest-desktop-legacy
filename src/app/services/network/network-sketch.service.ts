@@ -9,8 +9,8 @@ import { drawPath } from '../../components/connection/connectionGraph';
   providedIn: 'root'
 })
 export class NetworkSketchService {
-  private _connect: boolean = false;
-  private _keyDown: string = '';
+  private _connect = false;
+  private _keyDown = '';
 
   constructor() {
   }
@@ -34,7 +34,7 @@ export class NetworkSketchService {
   reset(): void {
     const selector: any = d3.selectAll('.network-sketch');
     selector.selectAll('.dragline').attr('d', 'M0,0L0,0');
-    selector.select('.select-panel').attr('transform', 'translate(0,0)')
+    selector.select('.select-panel').attr('transform', 'translate(0,0)');
     selector.selectAll('.select').remove();
   }
 

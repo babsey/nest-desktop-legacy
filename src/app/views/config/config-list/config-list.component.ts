@@ -24,7 +24,7 @@ export class ConfigListComponent implements OnInit {
   }
 
   isActive(path: string): boolean {
-    return this._router.url.includes('/setting/' + path)
+    return this._router.url.includes('/setting/' + path);
   }
 
   reset(): void {

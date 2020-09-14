@@ -4,15 +4,15 @@ import { drawPath } from './connectionGraph';
 
 export class ConnectionView {
   connection: Connection;                         // parent
-  colorExcitation: string = '#595289'; //'#467ab3';
-  colorInhibition: string = '#AF143C'; //'#b34846';
+  private _colorExcitation = '#595289'; // '#467ab3';
+  private _colorInhibition = '#AF143C'; // '#b34846';
 
   constructor(connection: Connection) {
     this.connection = connection;
   }
 
   get backgroundImage(): string {
-    const bg: string = 'white'; //'#fafafa';
+    const bg = 'white'; // '#fafafa';
     const srcColor: string = this.connection.source.view.color;
     const tgtColor: string = this.connection.target.view.color;
     const gradient: string = ['120deg', srcColor, srcColor, bg, bg, tgtColor, tgtColor].join(', ');
@@ -21,8 +21,8 @@ export class ConnectionView {
 
   colorWeight(): string {
     const value: number = this.connection.synapse.weight;
-    if (value === 0) return 'black';
-    return (value > 0) ? this.colorExcitation : this.colorInhibition;
+    if (value === 0) { return 'black'; }
+    return (value > 0) ? this._colorExcitation : this._colorInhibition;
   }
 
   isSelected(): boolean {
@@ -34,17 +34,15 @@ export class ConnectionView {
   }
 
   distance(): number {
-    if (this.connection.source === this.connection.target) {
-      return 0;
-    };
-    const source: any = this.connection.source.view.position,
-      target: any = this.connection.target.view.position;
-    const x1: number = source.x,
-      y1: number = source.y,
-      x2: number = target.x,
-      y2: number = target.y;
-    const dx: number = x2 - x1,
-      dy: number = y2 - y1;
+    if (this.connection.source === this.connection.target) { return 0; }
+    const source: any = this.connection.source.view.position;
+    const target: any = this.connection.target.view.position;
+    const x1: number = source.x;
+    const y1: number = source.y;
+    const x2: number = target.x;
+    const y2: number = target.y;
+    const dx: number = x2 - x1;
+    const dy: number = y2 - y1;
     return Math.sqrt(dx * dx + dy * dy);
   }
 
@@ -73,22 +71,22 @@ export class ConnectionView {
   }
 
   connectSpikeDetector(): boolean {
-    return this.connection.target.model.existing === "spike_detector";
+    return this.connection.target.model.existing === 'spike_detector';
   }
 
   drawPath(): string {
-    const source: any = this.connection.source.view.position,
-      target: any = this.connection.target.view.position,
-      config: any = {
+    const source: any = this.connection.source.view.position;
+    const target: any = this.connection.target.view.position;
+    const config: any = {
         radius: this.connection.source.config.graph.radius.value,
         ellipticalArc: this.connection.config.graph.ellipticalArc.value,
         xAxisRotation: this.connection.config.graph.xAxisRotation.value,
       };
     return drawPath(source, target, config);
-  };
+  }
 
   getRuleParams(): any[] {
-    const rule: any = this.connection.config.rules.find((rule: any) => rule.value === this.connection.rule);
+    const rule: any = this.connection.config.rules.find((r: any) => r.value === this.connection.rule);
     return this.copy(rule.params) || [];
   }
 

@@ -11,12 +11,12 @@ import { Synapse } from './synapse';
 
 
 enum Rule {
-  AllToAll = "all_to_all",
-  FixedIndegree = "fixed_indegree",
-  FixedOutdegree = "fixed_outdegree",
-  FixedTotalNumber = "fixed_total_number",
-  OneToOne = "one_to_one",
-  PairwiseBernoulli = "pairwise_bernoulli"
+  AllToAll = 'all_to_all',
+  FixedIndegree = 'fixed_indegree',
+  FixedOutdegree = 'fixed_outdegree',
+  FixedTotalNumber = 'fixed_total_number',
+  OneToOne = 'one_to_one',
+  PairwiseBernoulli = 'pairwise_bernoulli'
 }
 
 
@@ -25,7 +25,7 @@ export class Connection extends Config {
   private _code: ConnectionCode;
   private _view: ConnectionView;
   private _idx: number;                         // generative
-  private _name: string = 'connection';
+  private _name = 'Connection';
 
   // arguments for nest.Connect
   private _source: number;                      // Node index
@@ -37,8 +37,8 @@ export class Connection extends Config {
   mask: ConnectionMask;
   synapse: Synapse;
 
-  src_idx?: number[];
-  tgt_idx?: number[];
+  srcIdx?: number[];
+  tgtIdx?: number[];
 
 
   constructor(network: any, connection: any) {
@@ -110,6 +110,7 @@ export class Connection extends Config {
 
   reverse(): void {
     [this.source, this.target] = [this.target, this.source];
+    this.network.commit();
   }
 
   select(): void {
@@ -129,31 +130,33 @@ export class Connection extends Config {
   }
 
   reset(): void {
-    this.src_idx = undefined;
-    this.tgt_idx = undefined;
+    this.srcIdx = undefined;
+    this.tgtIdx = undefined;
     this.rule = Rule.AllToAll;
     this.synapse.modelId = 'static_synapse';
     this.projections.reset();
     this.mask.unmask();
+    this.network.commit();
   }
 
   hasSourceIndices(): boolean {
-    return this.src_idx !== undefined;
+    return this.srcIdx !== undefined;
   }
 
   hasTargetIndices(): boolean {
-    return this.tgt_idx !== undefined;
+    return this.tgtIdx !== undefined;
   }
 
   delete(): void {
     this.network.deleteConnection(this);
+    this.network.commit();
   }
 
   toJSON(target: string = 'db'): any {
     const connection: any = {
       source: this._source,
       target: this._target,
-    }
+    };
 
     if (target === 'simulator') {
       // Collect specifications of the connection

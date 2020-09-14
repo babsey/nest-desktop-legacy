@@ -5,10 +5,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ProjectService {
-  private _mode: string = 'networkEditor';
-  private _networkQuickView: boolean = false;
-  private _sidenavMode: string = 'networkSelection';
-  private _sidenavOpened: boolean = false;
+  private _mode = 'networkEditor';
+  private _networkQuickView = false;
+  private _sidenavMode = 'networkSelection';
+  private _sidenavOpened = false;
 
   constructor() {
   }
@@ -19,7 +19,9 @@ export class ProjectService {
 
   set mode(value: string) {
     this._mode = value;
-    this._sidenavOpened = value !== 'labBook';
+    if (this.mode === 'labBook') {
+      this._sidenavOpened = false;
+    }
     setTimeout(() => window.dispatchEvent(new Event('resize')), 10);
   }
 
@@ -28,7 +30,7 @@ export class ProjectService {
   }
 
   set networkQuickView(value: boolean) {
-    this._networkQuickView = value
+    this._networkQuickView = value;
   }
 
   get sidenavMode(): string {

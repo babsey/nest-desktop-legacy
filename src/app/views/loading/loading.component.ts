@@ -34,7 +34,7 @@ export class LoadingComponent implements OnInit {
       const nav: string | null = window.location.href.includes('nav:') ?  null : 'app';
       this.router.navigate([{ outlets: { primary: null, nav: nav } }]);
       this._appService.toggleSidenav();
-    }, 10)
+    }, 10);
   }
 
 }

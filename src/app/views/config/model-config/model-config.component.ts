@@ -27,7 +27,7 @@ export class ModelConfigComponent implements OnInit {
   }
 
   onChange(event: any): void {
-    let config: any = this.config;
+    const config: any = this.config;
     config.databases.model[event.target.name] = event.target.value;
     this._config.config = config;
   }

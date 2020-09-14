@@ -5,7 +5,7 @@ import { Model } from '../../../components/model/model';
 import { Node } from '../../../components/node/node';
 import { Project } from '../../../components/project/project';
 
-import { ModelService } from '../../../services/model/model.service';
+import { ActivityChartService } from '../../../services/activity/activity-chart.service';
 
 
 @Component({
@@ -22,6 +22,7 @@ export class NodeToolbarComponent implements OnInit {
   private _contextMenuPosition: any = { x: '0px', y: '0px' };
 
   constructor(
+    private _activityChartService: ActivityChartService,
   ) { }
 
   ngOnInit() {
@@ -41,6 +42,10 @@ export class NodeToolbarComponent implements OnInit {
     this._contextMenuPosition.x = event.clientX + 'px';
     this._contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();
+  }
+
+  selectModel(): void {
+    this._activityChartService.init.emit();
   }
 
 }

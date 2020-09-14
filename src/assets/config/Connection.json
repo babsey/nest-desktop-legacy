@@ -51,36 +51,36 @@
     "label": "fixed indegree",
     "params": [{
       "id": "indegree",
-      "label": "indegree",
-      "value": 1,
       "input": "valueSlider",
+      "label": "indegree",
       "max": 100,
       "min": 1,
-      "step": 1
+      "step": 1,
+      "value": 1
     }]
   }, {
     "value": "fixed_outdegree",
     "label": "fixed outdegree",
     "params": [{
       "id": "outdegree",
-      "label": "outdegree",
-      "value": 1,
       "input": "valueSlider",
+      "label": "outdegree",
       "max": 100,
       "min": 1,
-      "step": 1
+      "step": 1,
+      "value": 1
     }]
   }, {
     "value": "fixed_total_number",
     "label": "fixed total number",
     "params": [{
       "id": "N",
-      "label": "N",
-      "value": 1,
       "input": "valueSlider",
+      "label": "N",
       "max": 1000,
       "min": 1,
-      "step": 1
+      "step": 1,
+      "value": 1
     }]
   }, {
     "value": "one_to_one",
@@ -92,12 +92,12 @@
     "label": "pairwise Bernoulli",
     "params": [{
       "id": "p",
-      "label": "p",
-      "value": 0.1,
       "input": "valueSlider",
+      "label": "p",
       "max": 0.99,
       "min": 0.01,
-      "step": 0.01
+      "step": 0.01,
+      "value": 0.1
     }]
   }]
 }

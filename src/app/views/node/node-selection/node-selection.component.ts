@@ -3,6 +3,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 
 import { Model } from '../../../components/model/model';
 import { Node } from '../../../components/node/node';
+import { Parameter } from '../../../components/parameter';
 import { Project } from '../../../components/project/project';
 
 
@@ -25,7 +26,7 @@ export class NodeSelectionComponent implements OnInit {
   onSelectionChange(event: MouseEvent) {
     const value = event['option'].value;
     const selected = event['option'].selected;
-    this.node.params.find(param => param.id === value).visible = selected;
+    this.node.params.find((param: Parameter) => param.id === value).visible = selected;
   }
 
 }

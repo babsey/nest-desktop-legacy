@@ -42,7 +42,7 @@ export class LogComponent implements OnInit {
   }
 
   isTime(time: Date): boolean {
-    return this._logService.time === time
+    return this._logService.time === time;
   }
 
 }

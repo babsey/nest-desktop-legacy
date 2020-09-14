@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AngularSplitModule } from 'angular-split';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -20,7 +21,6 @@ import { ActivityGraphComponent } from './activity-graph/activity-graph.componen
 
 import { ActivityChartComponent } from './activity-chart/activity-chart.component';
 import { ActivityChartControllerComponent } from './activity-chart/activity-chart-controller/activity-chart-controller.component';
-import { ActivityChartSplitControllerComponent } from './activity-chart/activity-chart-split-controller/activity-chart-split-controller.component';
 
 import { ActivityAnimationComponent } from './activity-animation/activity-animation.component';
 import { ActivityAnimationSceneComponent } from './activity-animation/activity-animation-scene/activity-animation-scene.component';
@@ -40,7 +40,6 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     ActivityAnimationSceneComponent,
     ActivityChartComponent,
     ActivityChartControllerComponent,
-    ActivityChartSplitControllerComponent,
     ActivityGraphComponent,
     ActivityStatsComponent,
     AnalogStatsComponent,
@@ -53,7 +52,6 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     ActivityAnimationSceneComponent,
     ActivityChartComponent,
     ActivityChartControllerComponent,
-    ActivityChartSplitControllerComponent,
     ActivityGraphComponent,
     ActivityStatsComponent,
     AnalogStatsComponent,
@@ -63,6 +61,7 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     AngularSplitModule.forRoot(),
     AppFormsModule,
     AppPipesModule,
+    CodemirrorModule,
     CommonModule,
     DragDropModule,
     FontAwesomeModule,

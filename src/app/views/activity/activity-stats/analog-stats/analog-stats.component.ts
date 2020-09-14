@@ -32,11 +32,11 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
-    this.update()
+    this.update();
   }
 
   ngOnChanges() {
-    this.update()
+    this.update();
   }
 
   get color(): string {
@@ -56,21 +56,21 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
   }
 
   update(): void {
-    if (this.selectedRecordFrom === undefined) return
+    if (this.selectedRecordFrom === undefined) { return; }
     const activityData: number[] = this.activity.events[this.selectedRecordFrom];
     const data = Object.create(null);
-    this.activity.nodeIds.forEach(id => data[id] = [])
-    this.activity.events.senders.forEach((sender, idx) => {
+    this.activity.nodeIds.forEach((id: number) => data[id] = []);
+    this.activity.events.senders.forEach((sender: number, idx: number) => {
       data[sender].push(activityData[idx]);
     });
-    const stats: AnalogStatsElement[] = this.activity.nodeIds.map(id => {
+    const stats: AnalogStatsElement[] = this.activity.nodeIds.map((id: number) => {
       const d: number[] = data[id];
       return {
         id: id,
         mean: d.length > 0 ? this._mathService.mean(d) : 0,
         std: d.length > 0 ? this._mathService.deviation(d) : 0,
-      }
-    })
+      };
+    });
     this._dataSource = new MatTableDataSource(stats);
     this._dataSource.sort = this.sort;
   }
@@ -80,10 +80,9 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
   }
 
   mean(element: string): number {
-    if (this.dataSource === undefined) return 0
-
+    if (this.dataSource === undefined) { return 0; }
     const data: any[] = this.dataSource.filteredData;
-    return data.map(t => t[element]).reduce((acc, value) => acc + value, 0) / data.length;
+    return data.map((t: any) => t[element]).reduce((acc, value) => acc + value, 0) / data.length;
   }
 
 }

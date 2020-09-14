@@ -15,9 +15,9 @@ export class ResponseCheckComponent implements OnInit {
   }
 
   icon(): string {
-    if (!this.response) return 'circle-notch';
-    if (!this.ready) return 'times';
-    return this.valid ? 'check' : 'exclamation'
+    if (!this.response) { return 'circle-notch'; }
+    if (!this.ready) { return 'times'; }
+    return this.valid ? 'check' : 'exclamation';
   }
 
   get response(): boolean {

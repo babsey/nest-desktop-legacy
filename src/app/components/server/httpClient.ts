@@ -11,7 +11,7 @@ export class HttpClient {
   get(url: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this._oReq = new XMLHttpRequest();
-      this._oReq.open("GET", url, /*async*/true);
+      this._oReq.open('GET', url, /*async*/true);
       this._oReq.setRequestHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token, content-type');
       this._oReq.setRequestHeader('Access-Control-Allow-Origin', '*');
       this._oReq.setRequestHeader('Content-Type', 'application/json');
@@ -31,34 +31,34 @@ export class HttpClient {
 
         if (this._oReq.readyState === 4) {
           // console.log('Request ended.');
-          resolve(this._oReq)
+          resolve(this._oReq);
         }
       };
 
-      // this._oReq.addEventListener("progress", event => console.log("progress", event));
-      // this._oReq.addEventListener("load", event => console.log("lead", event));
-      // this._oReq.addEventListener("error", event => console.log("error", event));
-      // this._oReq.addEventListener("abort", event => console.log("abort", event));
+      // this._oReq.addEventListener('progress', event => console.log('progress', event));
+      // this._oReq.addEventListener('load', event => console.log('lead', event));
+      // this._oReq.addEventListener('error', event => console.log('error', event));
+      // this._oReq.addEventListener('abort', event => console.log('abort', event));
 
       try {
         this._oReq.send(null);
       } catch (exception) {
-        console.log(exception)
+        console.log(exception);
         // this is expected
-        reject(this._oReq)
+        reject(this._oReq);
       }
-    })
+    });
   }
 
   post(url: string, data: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this._oReq = new XMLHttpRequest();
-      this._oReq.open("POST", url, /*async*/true);
+      this._oReq.open('POST', url, /*async*/true);
       this._oReq.setRequestHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token, content-type');
       this._oReq.setRequestHeader('Access-Control-Allow-Origin', '*');
       this._oReq.setRequestHeader('Content-Type', 'application/json');
       this._oReq.setRequestHeader('Access-Control-Allow-Methods', 'POST');
-      this._oReq.timeout = 10000
+      this._oReq.timeout = 10000;
       this._oReq.responseType = 'json';
       this._oReq.onreadystatechange = () => {
         if (this._oReq.readyState === 1) {
@@ -79,19 +79,19 @@ export class HttpClient {
         }
       };
 
-      // this._oReq.addEventListener("progress", event => console.log("progress", event));
-      // this._oReq.addEventListener("load", event => console.log("lead", event));
-      // this._oReq.addEventListener("error", event => console.log("error", event));
-      // this._oReq.addEventListener("abort", event => console.log("abort", event));
+      // this._oReq.addEventListener('progress', event => console.log('progress', event));
+      // this._oReq.addEventListener('load', event => console.log('lead', event));
+      // this._oReq.addEventListener('error', event => console.log('error', event));
+      // this._oReq.addEventListener('abort', event => console.log('abort', event));
 
       try {
         this._oReq.send(data);
       } catch (exception) {
-        console.log(exception)
+        console.log(exception);
         // this is expected
-        reject(Error('Error'))
+        reject(Error('Error'));
       }
-    })
+    });
   }
 
 }

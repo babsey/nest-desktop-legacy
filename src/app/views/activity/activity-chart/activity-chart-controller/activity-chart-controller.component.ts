@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import CodeMirror from 'codemirror';
+
+import { Project } from '../../../../components/project/project';
+import { ActivityChartGraph } from '../../../../components/activity/activityChartGraph';
+import { ActivityGraphPanel } from '../../../../components/activity/plotPanels/activityGraphPanel';
+import { SpikeTimesHistogramPanel } from '../../../../components/activity/plotPanels/spikeTimesHistogramPanel';
 
 import { ActivityChartService } from '../../../../services/activity/activity-chart.service';
-import { ActivityChartPanelService } from '../../../../services/activity/activity-chart-panel.service';
 
 
 @Component({
@@ -11,61 +16,79 @@ import { ActivityChartPanelService } from '../../../../services/activity/activit
   styleUrls: ['./activity-chart-controller.component.scss']
 })
 export class ActivityChartControllerComponent implements OnInit {
+  @Input() project: Project;
+  private _options: any = {
+    cursorBlinkRate: 700,
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    hintOptions: {
+      completeSingle: false,
+      hintWords: []
+    },
+    lineNumbers: true,
+    lineWrapping: true,
+    mode: 'python',
+    styleActiveLine: true,
+    extraKeys: {
+      "Ctrl-Space": "autocomplete",
+    }
+  };
+  private _selectedPanel: ActivityGraphPanel;
 
   constructor(
-    private _activityChartPanelService: ActivityChartPanelService,
     private _activityChartService: ActivityChartService,
   ) { }
 
   ngOnInit() {
   }
 
-  get panelSelected(): string[] {
-    return this._activityChartPanelService.panelSelected;
+  get code(): string {
+    return JSON.stringify(this.graph.data, null, 2);
   }
 
-  get panelOrder(): string[] {
-    return this._activityChartPanelService.panelOrder;
+  get graph(): ActivityChartGraph {
+    return this.project.activityGraph;
   }
 
-  get histogram(): any {
-    return this._activityChartService.graph.panels.find((panel: any) => panel.name === 'SpikeHistogram');
+  get options(): any {
+    return this._options;
   }
 
-  drop(event: CdkDragDrop<string[]>): void {
-    moveItemInArray(this.panelOrder, event.previousIndex, event.currentIndex);
-    this.panelOrder.map((p,i) => {
-      const yaxisIdx: number = (this.panelOrder.length - i);
-      this._activityChartPanelService.panel[p]['yaxis'] = yaxisIdx;
-    })
-    const panelSelected: string[] = this.panelSelected;
-    this._activityChartPanelService.panelSelected = [];
-    setTimeout(() => {
-      this._activityChartPanelService.panelSelected = panelSelected;
-      setTimeout(() => this._activityChartService.update.emit(), 100)
-    }, 1);
-
+  get panelsVisible(): string[] {
+    return this.graph.panelsVisible;
   }
 
-  onModelChange(event): void {
-    this._activityChartPanelService.panelSelected = [];
-    setTimeout(() => {
-      this._activityChartPanelService.panelSelected = event;
-      setTimeout(() => this._activityChartService.update.emit(), 100)
-    }, 1);
+  set panelsVisible(value: string[]) {
+    // console.log('Set visible panels for', this.project.name, value);
+    this.graph.panelsVisible = value;
   }
 
-  onBinsizeChange(value: number): void {
+  get selectedPanel(): ActivityGraphPanel {
+    return this._activityChartService.selectedPanel;
+  }
+
+  selectPanel(panelId: string): void {
+    this._activityChartService.selectedPanel = this.graph.panelsAll.find((panel: any) => panel.id === panelId);
+  }
+
+  movePanel(event: CdkDragDrop<string[]>): void {
+    moveItemInArray(this.graph.panelsAll, event.previousIndex, event.currentIndex);
     this._activityChartService.update.emit();
   }
 
-  onBarmodeChange(value: string): void {
-    this._activityChartService.update.emit();
+  removePanel(panelId: string) {
+    this.graph.panelsVisible = this.graph.panelsVisible.filter((id: string) => id !== panelId);
+    this.graph.update();
   }
 
-  onBarnormChange(value: string): void {
-    this.histogram.state.barmode = 'stack';
-    this._activityChartService.update.emit();
+  addPanel(panelId: string) {
+    this.graph.panelsVisible.push(panelId);
+    this.graph.panelsVisible = this.graph.panelsVisible;
+    this.graph.update();
+  }
+
+  onChange(value: number): void {
+    setTimeout(() => this.selectedPanel.update(), 100);
   }
 
 }

@@ -25,7 +25,7 @@ export class ProjectNavigationComponent implements OnInit {
     private _appService: AppService,
     private _router: Router,
   ) {
-    this.initFileReader()
+    this.initFileReader();
   }
 
   ngOnInit() {
@@ -48,7 +48,7 @@ export class ProjectNavigationComponent implements OnInit {
   }
 
   downloadAllProjects(): void {
-    this.app.downloadProjects(this.app.projects.map(project => project.id));
+    this.app.downloadProjects(this.app.projects.map((project: Project) => project.id));
   }
 
   navigate(id: string): void {
@@ -65,13 +65,13 @@ export class ProjectNavigationComponent implements OnInit {
   saveProject(): void {
     this.project.save().then(() => {
       this.navigate(this.project.id);
-    })
+    });
   }
 
   initFileReader(): void {
-    this._fileReader.addEventListener("load", event => {
+    this._fileReader.addEventListener('load', event => {
       const result: any = JSON.parse(event['target']['result'] as string);
-      const data: any[] = result.hasOwnProperty("_id") ? [result] : result;
+      const data: any[] = result.hasOwnProperty('_id') ? [result] : result;
       const projects: Project[] = data.map((project: any) => new Project(this.app, project));
       this._appService.upload(projects);
     });

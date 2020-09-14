@@ -6,3 +6,8 @@
   padding-right: 10px;
   cursor: move;
 }
+
+::ng-deep .CodeMirror {
+  height: 100%;
+  width: 520px;
+}

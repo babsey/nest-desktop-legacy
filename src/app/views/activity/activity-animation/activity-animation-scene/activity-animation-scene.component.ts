@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, HostListener } from '@angular/core';
 
-import { ActivityAnimationGraph } from '../../../../components/activity/Threejs/activityAnimationGraph';
-import { ActivityAnimationScene } from '../../../../components/activity/Threejs/activityAnimationScene';
+import { ActivityAnimationGraph } from '../../../../components/activity/activityAnimationGraph';
+import { ActivityScatterAnimationScene } from '../../../../components/activity/animationScenes/activityScatterAnimationScene';
 
 import { ActivityAnimationService } from '../../../../services/activity/activity-animation.service';
 
@@ -15,7 +15,7 @@ import { ActivityAnimationService } from '../../../../services/activity/activity
 export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
   @Input() graph: ActivityAnimationGraph;
   // @Input() config: any = {};
-  private _scene: ActivityAnimationScene;
+  private _scene: ActivityScatterAnimationScene;
   private _subscriptionInit: any;
   private _subscriptionUpdate: any;
 
@@ -42,10 +42,10 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
   }
 
   init(): void {
-    // console.log('Init Three scatter');
+    // console.log('Init activity scatter animation scene');
     this.clear();
     setTimeout(() => {
-      this._scene = new ActivityAnimationScene(this.graph, 'activityAnimationScene');
+      this._scene = new ActivityScatterAnimationScene(this.graph, 'activityScatterAnimationScene');
     }, 100);
   }
 
@@ -59,7 +59,7 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
 
   update(): void {
     // console.log('Update Three scatter');
-    this._scene.frameUpdate();
+    this._scene.frameUpdate(this.graph.frames);
   }
 
   onMouseDown(event: MouseEvent): void {

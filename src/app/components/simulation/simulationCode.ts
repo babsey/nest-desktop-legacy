@@ -11,13 +11,12 @@ export class SimulationCode extends Code {
   }
 
   setRandomSeed(): string {
-    let script: string = '';
-    script += 'np.random.seed(' + this.simulation.randomSeed + ')\n';
-    return script;
+    const script = `np.random.seed(${this.simulation.randomSeed})`;
+    return script + '\n';
   }
 
   setKernelStatus(): string {
-    let script: string = '';
+    let script = '';
     script += 'nest.SetKernelStatus({';
     script += this._() + `"local_num_threads": ${this.simulation.kernel.localNumThreads},`;
     script += this._() + `"resolution": ${this.simulation.kernel.resolution.toFixed(1)},`;
@@ -27,7 +26,7 @@ export class SimulationCode extends Code {
   }
 
   simulate(): string {
-    let script: string = `nest.Simulate(${this.simulation.time.toFixed(1)})`;
+    const script = `nest.Simulate(${this.simulation.time.toFixed(1)})`;
     return script + '\n';
   }
 

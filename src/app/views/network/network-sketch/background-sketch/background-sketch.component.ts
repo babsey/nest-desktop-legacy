@@ -31,12 +31,12 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.init()
-    this.resize()
+    this.init();
+    this.resize();
   }
 
   ngOnChanges() {
-    this.resize()
+    this.resize();
   }
 
   init(): void {
@@ -65,12 +65,12 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
     })
       .on('click', () => this.reset())
       .on('contextmenu', function() {
-        if (!_this.eventTrigger) return
+        if (!_this.eventTrigger) { return; }
         d3.event.preventDefault();
         _this.reset();
 
-        if (!_this.eventTrigger) return
-        if (_this.network.view.selectedNode || _this.network.view.selectedConnection) return
+        if (!_this.eventTrigger) { return; }
+        if (_this.network.view.selectedNode || _this.network.view.selectedConnection) { return; }
         const colors: string[] = _this.network.view.colors;
 
         const point: number[] = d3.mouse(this);
@@ -99,7 +99,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
           .outerRadius(40);
 
         elementTypes.forEach((d, i) => {
-          selectPanel.append('svg:path').attr('class', "select " + d)
+          selectPanel.append('svg:path').attr('class', 'select ' + d)
             .datum({
               startAngle: Math.PI * i * 2 / 3,
               endAngle: Math.PI * (i + 1) * 2 / 3,
@@ -114,7 +114,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
                 .select('.label').text(d);
 
               if (!_this.network.view.selectedNode || d !== 'stimulator') {
-                d3.select(this).style('fill', () => colors[_this.network.nodes.length % colors.length])
+                d3.select(this).style('fill', () => colors[_this.network.nodes.length % colors.length]);
               }
             })
             .on('mouseout', function() {
@@ -123,8 +123,8 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
             })
             .on('mouseup', () => {
               _this.reset();
-              _this.create(d, point)
-              // console.log('Node change')
+              _this.create(d, point);
+              // console.log('Node change');
             });
 
           const f: number = (i * 2 / 3) + (1 / 3);
@@ -134,8 +134,8 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
             .attr('dx', Math.sin(Math.PI * f) * 28)
             .attr('dy', -Math.cos(Math.PI * f) * 28 + 5)
             .text(d.slice(0, 1).toUpperCase());
-        })
-      })
+        });
+      });
   }
 
   reset(): void {
@@ -149,7 +149,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
       neuron: 'iaf_psc_alpha',
       recorder: 'voltmeter',
       stimulator: 'dc_generator',
-    }
+    };
     const node: any = {
       model: defaultModels[elementType],
       view: {

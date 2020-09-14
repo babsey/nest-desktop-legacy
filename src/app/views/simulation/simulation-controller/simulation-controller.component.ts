@@ -25,7 +25,7 @@ export class SimulationControllerComponent implements OnInit {
 
   onChange(value: any, id: string): void {
     if (id === 'randomSeed') {
-      this.simulation.config = { 'autoRandomSeed': false };
+      this.simulation.config = { autoRandomSeed: false };
     }
   }
 

@@ -28,7 +28,7 @@ export class Config {
   }
 
   set config(value: any) {
-    value['version'] = environment.VERSION;           // update version of config in localstorage
+    value.version = environment.VERSION;           // update version of config in localstorage
     const dataJSON = JSON.stringify(value);           // convert object to string
     localStorage.setItem(this.configItemName, dataJSON);        // save item in localstorage
   }
@@ -53,18 +53,18 @@ export class Config {
 
   updateConfig(value: any): void {
     const data: any = this.config;
-    Object.entries(value).forEach(v => data[v[0]] = v[1]);
+    Object.entries(value).forEach((v: any) => data[v[0]] = v[1]);
     this.config = data;
   }
 
   upgradeConfig(): void {
     const assetData: any = this.assetConfig;
     const storageData: any = this.config;
-    Object.entries(assetData).forEach(entry => {
+    Object.entries(assetData).forEach((entry: any) => {
       if (!storageData.hasOwnProperty(entry[0])) {
         storageData[entry[0]] = entry[1];
       }
-    })
+    });
     this.config = storageData;
   }
 

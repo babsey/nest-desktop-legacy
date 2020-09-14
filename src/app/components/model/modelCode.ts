@@ -12,7 +12,7 @@ export class ModelCode extends Code {
   }
 
   copyModel(): string {
-    let script: string = '';
+    let script = '';
     script += `nest.CopyModel("${this.model.existing}", "${this.model.id}"`;
     script += this.modelParams();
     script += ')';
@@ -20,22 +20,22 @@ export class ModelCode extends Code {
   }
 
   modelParams(): string {
-    let script: string = '';
-    if (this.model.params === undefined || this.model.params.length === 0) return script;
+    let script = '';
+    if (this.model.params === undefined || this.model.params.length === 0) { return script; }
     const paramsList: string[] = [];
     this.model.params
       .filter((param: Parameter) => param.visible)
       .map((param: Parameter) => {
         if (param.id === 'record_from') {
-          const record_from: string[] = param.value.map((val: string) => '"' + val + '"');
-          paramsList.push(this._() + `"${param.id}": [${record_from.join(',')}]`);
+          const recordFrom: string[] = param.value.map((val: string) => `"${val}"`);
+          paramsList.push(this._() + `"${param.id}": [${recordFrom.join(',')}]`);
         } else {
           paramsList.push(this._() + `"${param.id}": ${this.format(param.value)}`);
         }
-      })
+      });
     if (paramsList.length > 0) {
       script += ', params={';
-      script += paramsList.join(',')
+      script += paramsList.join(',');
       script += this.end() + '}';
     }
     return script;

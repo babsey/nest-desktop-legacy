@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Node } from '../../../components/node/node';
-import * as NodeGraph from '../../../components/node/nodeGraph';
 
 
 @Component({
@@ -22,14 +21,12 @@ export class NodeShapeComponent implements OnInit {
   ngOnInit() {
   }
 
-  points(shape: string) {
-    if (shape === 'layer') {
-      return NodeGraph.getLayerPoints(this.radius);
-    } else if (shape === 'triangle') {
-      return NodeGraph.getTrianglePoints(this.radius);
-    } else {
-      return NodeGraph.getSquarePoints(this.radius);
-    }
+  get dy(): string {
+    return (this.node.view.weight === 'inhibitory' && this.node.model.elementType === 'neuron') ? '.4em' : '.7em';
+  }
+
+  get points(): string {
+    return this.node.view.getPoints(this.radius);
   }
 
 }

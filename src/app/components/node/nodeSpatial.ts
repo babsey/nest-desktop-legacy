@@ -7,7 +7,7 @@ import { Node } from './node';
 export class FreePositions {
   spatial: NodeSpatial;
   values: number[][] = [];
-  private _name: string = 'free';
+  private _name = 'free';
 
   // arguments for nest.spatial.free
   pos: any;
@@ -37,10 +37,10 @@ export class FreePositions {
   }
 
   generate(): void {
-    const minX: number = -1 * this.extent[0] / 2,
-      maxX: number = this.extent[0] / 2,
-      minY: number = -1 * this.extent[1] / 2,
-      maxY: number = this.extent[1] / 2;
+    const minX: number = -1 * this.extent[0] / 2;
+    const maxX: number = this.extent[0] / 2;
+    const minY: number = -1 * this.extent[1] / 2;
+    const maxY: number = this.extent[1] / 2;
     // console.log(center,extent,minX,maxX,minY,maxY,length)
 
     this.values = Array.from({ length: this.spatial.node.size }, () => {
@@ -54,7 +54,7 @@ export class FreePositions {
     const positions: any = {
       center: this.center,
       extent: this.extent,
-    }
+    };
     if (target === 'simulator') {
       positions['positions'] = this.pos;
       positions['edge_wrap'] = this.edgeWrap;
@@ -73,7 +73,7 @@ export class FreePositions {
 export class GridPositions {
   spatial: NodeSpatial;
   values: number[][];
-  private _name: string = 'grid';
+  private _name = 'grid';
 
   // arguments for nest.spatial.grid
   shape: number[];
@@ -115,28 +115,29 @@ export class GridPositions {
 
   range(min: number, max: number, size: number): number[] {
     const step: number = (max - min) / size / 2;
-    return math.range(min, max, step)['_data'].filter((v: number, i: number) => i % 2 === 1)
+    return math.range(min, max, step)['_data'].filter((v: number, i: number) => i % 2 === 1);
   }
 
   generate(): void {
-    const minX: number = this.center[0] - this.extent[0] / 2,
-      maxX: number = this.center[0] + this.extent[0] / 2,
-      minY: number = this.center[1] - this.extent[1] / 2,
-      maxY: number = this.center[1] + this.extent[1] / 2;
+    const minX: number = this.center[0] - this.extent[0] / 2;
+    const maxX: number = this.center[0] + this.extent[0] / 2;
+    const minY: number = this.center[1] - this.extent[1] / 2;
+    const maxY: number = this.center[1] + this.extent[1] / 2;
 
     // console.log(center,extent,minX,maxX,minY,maxY,rows,columns)
 
     const X: number[] = this.range(minX, maxX, this.shape[0]);
     const Y: number[] = this.range(minY, maxY, this.shape[1]);
     this.values = [];
-    X.forEach((x: number) => Y.forEach((y: number) => this.values.push([this.round(x), this.round(y)])))
+    X.forEach((x: number) =>
+      Y.forEach((y: number) => this.values.push([this.round(x), this.round(y)])));
   }
 
   toJSON(target: string = 'db'): any {
     const positions: any = {
       center: this.center,
       extent: this.extent,
-    }
+    };
     if (target === 'simulator') {
       positions['rows'] = this.rows;
       positions['columns'] = this.columns;
@@ -180,7 +181,7 @@ export class NodeSpatial extends Config {
   }
 
   isRandom(): boolean {
-    return this.hasPositions() && this.positions.name === 'free'
+    return this.hasPositions() && this.positions.name === 'free';
   }
 
   toJSON(target: string = 'db'): any {

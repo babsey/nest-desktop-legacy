@@ -25,7 +25,7 @@ export class ProjectCode extends Code {
 
     // if (sections.includes('models')) {
     //   this.script += '\n\n# Copy models\n';
-    //   this.project.models.forEach(model => this.script += model.code.copyModel())
+    //   this.project.models.forEach((model: Model) => this.script += model.code.copyModel());
     // }
 
     if (sections.includes('nodes')) {
@@ -48,7 +48,7 @@ export class ProjectCode extends Code {
   }
 
   importModules(): string {
-    let script: string = '';
+    let script = '';
     script += 'import nest\n';
     script += 'import numpy as np\n';
     return script + '\n';

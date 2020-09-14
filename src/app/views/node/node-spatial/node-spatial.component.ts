@@ -15,7 +15,7 @@ export class NodeSpatialComponent implements OnInit {
   private _graph: any = {
     data: [],
     layout: {},
-  }
+  };
   private _showPlot: boolean = false;
   private _positionType: string = 'free';
 
@@ -50,9 +50,9 @@ export class NodeSpatialComponent implements OnInit {
     const x: number[] = [];
     const y: number[] = [];
     this.node.spatial.positions.values.map(p => {
-      x.push(p[0])
-      y.push(p[1])
-    })
+      x.push(p[0]);
+      y.push(p[1]);
+    });
 
     this._graph.data = [{
       mode: 'markers',
@@ -65,7 +65,7 @@ export class NodeSpatialComponent implements OnInit {
         color: 'black',
         size: 5,
       }
-    }]
+    }];
 
     const extent: number[] = this.node.spatial.positions.extent || [1, 1];
     const center: number[] = this.node.spatial.positions.center || [0, 0];
@@ -88,14 +88,14 @@ export class NodeSpatialComponent implements OnInit {
   }
 
   update(): void {
-    console.log(this.node)
+    console.log(this.node);
     this.node.spatial.positions.generate();
     this.plot();
   }
 
   onPositionTypeChange(event: any): void {
-    console.log(this.positionType, event)
-    const config: any = (this.positionType === 'free') ? {'pos': []} : {'shape': [1,1]};
+    console.log(this.positionType, event);
+    const config: any = (this.positionType === 'free') ? { pos: [] } : { shape: [1, 1] };
     this.node.spatial = new NodeSpatial(this.node, config);
     this.update();
   }

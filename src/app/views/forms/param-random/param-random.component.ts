@@ -60,7 +60,7 @@ export class ParamRandomComponent implements OnInit {
         staticPlot: true,
       }
     };
-    this._selectedParameterType = this.findParameterType('constant')
+    this._selectedParameterType = this.findParameterType('constant');
   }
 
   ngOnInit() {
@@ -92,7 +92,7 @@ export class ParamRandomComponent implements OnInit {
 
   flatten(values: any): any {
     return values.reduce(
-      (a: any, b: any) => a.concat(Array.isArray(b) ? this.flatten(b) : b), [])
+      (a: any, b: any) => a.concat(Array.isArray(b) ? this.flatten(b) : b), []);
   }
 
   findParameterType(parameterType: any): any {
@@ -116,34 +116,34 @@ export class ParamRandomComponent implements OnInit {
 
   cumsum(d: number[]): number[] {
     const newArray: number[] = [];
-    d.reduce(function(a, b, i) { return newArray[i] = a + b; }, 0);
+    d.reduce((a, b, i) => newArray[i] = a + b, 0);
     return newArray;
   }
 
   plotting(): void {
     this.plot.data = [];
-    this.plot.layout['title'] = '';
-    if (this.value === undefined) return
-    var value = this.value;
-    if (!this._distributionService.pdf.hasOwnProperty(value.parameterType)) return
+    this.plot.layout.title = '';
+    if (this.value === undefined) { return; }
+    const value = this.value;
+    if (!this._distributionService.pdf.hasOwnProperty(value.parameterType)) { return; }
 
-    var dx = 0.001;
-    var xmin: any = 0;
-    var xmax: any = 1.;
+    const dx = 0.001;
+    let xmin: any = 0;
+    let xmax: any = 1.;
     if (['uniform', 'normal', 'lognormal'].includes(value.parameterType)) {
       xmin = value.specs.min;
       xmax = value.specs.max;
     }
-    var x: any;
-    var y: any;
-    var z: any;
+    let x: any;
+    let y: any;
+    let z: any;
 
     if (value.parameterType === 'gaussian2D') {
       x = math.range(-.5, .5, .01);
       y = math.range(-.5, .5, .01);
       z = this._distributionService.pdf[value.parameterType](x._data, y._data, value.specs);
       this.plot.data = [{
-        type: 'contour', //'heatmap',
+        type: 'contour', // 'heatmap',
         x: x._data,
         y: y._data,
         z: z,
@@ -165,7 +165,7 @@ export class ParamRandomComponent implements OnInit {
       x = math.range(xmin, xmax, dx);
       y = this._distributionService.pdf[value.parameterType](x._data, value.specs);
       if (this.functionType === 'cdf') { // || ['uniform', 'normal', 'lognormal'].includes(value.parameterType)) {
-        var ysum = math.sum(y);
+        const ysum: number = math.sum(y);
         y = y.map(yi => yi / ysum);
         y = this.cumsum(y);
       }
@@ -189,14 +189,14 @@ export class ParamRandomComponent implements OnInit {
     this.value = { parameterType: event, specs: {} };
     this._selectedParameterType = this.findParameterType(this.value.parameterType);
     this.selectedParameterType.specs.forEach((spec: string) => {
-      this.value.specs[spec] = this.paramSpecs(spec).value || 0.
+      this.value.specs[spec] = this.paramSpecs(spec).value || 0.;
     });
     this.plotting();
     this.valueChange.emit(this.value);
   }
 
   onValueChange(value: any): void {
-    this.plotting()
+    this.plotting();
     this.valueChange.emit(this.value);
   }
 

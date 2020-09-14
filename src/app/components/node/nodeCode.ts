@@ -21,7 +21,7 @@ export class NodeCode extends Code {
   }
 
   create(): string {
-    let script: string = '';
+    let script = '';
     script += `${this.label} = nest.Create("${this.node.modelId}"`;
     if (!this.node.spatial.hasPositions() || this.node.spatial.isRandom()) {
       script += `, ${this.node.size}`;
@@ -35,8 +35,8 @@ export class NodeCode extends Code {
   }
 
   getActivity(): string {
+    let script = '{';
     const model: string = this.node.model ? this.node.model.existing : this.node.modelId;
-    let script: string = '{';
     // Make it backward compatible with older NEST Server.
     if (this.simulatorVersion.startsWith('2.')) {
       script += this._(2) + `"events": nest.GetStatus(${this.label}, "events")[0],`;        // NEST 2
@@ -66,37 +66,35 @@ export class NodeCode extends Code {
   }
 
   nodeParams(): string {
-    let script: string = '';
-    if (this.node.params === undefined || this.node.params.length === 0) return script;
+    let script = '';
+    if (this.node.params === undefined || this.node.params.length === 0) { return script; }
     const paramsList: string[] = [];
     this.node.params
       .filter((param: Parameter) => param.visible)
       .forEach((param: Parameter) => {
-        paramsList.push(this._() + `"${param.id}": ${this.format(param.value)}`)
-      })
+        paramsList.push(this._() + `"${param.id}": ${this.format(param.value)}`);
+      });
     if (this.node.model.existing === 'multimeter') {
-      const recordFrom: string[] = this.node.recordFrom.map(record => '"' + record + '"');
+      const recordFrom: string[] = this.node.recordFrom.map((record: string) => '"' + record + '"');
       paramsList.push(this._() + `"record_from": [${recordFrom.join(',')}]`);
     }
     if (paramsList.length > 0) {
       script += ', params={';
-      script += paramsList.join(',')
+      script += paramsList.join(',');
       script += this.end() + '}';
     }
     return script;
   }
 
   nodeSpatial(): string {
-    let script: string = '';
+    let script = '';
     script += ', positions=';
     const positions = this.node.spatial.toJSON();
     if (this.node.spatial.positions.name === 'free') {
       if (false && positions.pos.length > 0) {
-        script += `nest.spatial.free([${positions.pos.map(p => {
-          return "[" + p[0].toFixed(2) + "," + p[1].toFixed(2) + "]"
-        }).join(",")}])`;
+        script += `nest.spatial.free([${positions.pos.map((p: number[]) => `[${p[0].toFixed(2)},${p[1].toFixed(2)}]`).join(',')}])`;
       } else {
-        script += `nest.spatial.free(nest.random.uniform(-0.5, 0.5), num_dimensions=2)`
+        script += `nest.spatial.free(nest.random.uniform(-0.5, 0.5), num_dimensions=2)`;
       }
     } else {
       script += `nest.spatial.grid(${JSON.stringify(positions.shape)})`;

@@ -51,16 +51,16 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="'activityController'">
-        <ng-container *ngIf="graphMode === 'chart' && isGraphLoaded()">
-          <app-activity-chart-controller></app-activity-chart-controller>
+        <ng-container *ngIf="graphMode === 'chart'">
+          <app-activity-chart-controller [project]="project"></app-activity-chart-controller>
         </ng-container>
 
-        <ng-container *ngIf="graphMode === 'animation' && isGraphLoaded()">
+        <ng-container *ngIf="graphMode === 'animation'">
           <app-activity-animation-controller></app-activity-animation-controller>
         </ng-container>
       </ng-container>
 
-      <ng-container *ngSwitchCase="'stats'">
+      <ng-container *ngSwitchCase="'activityStats'">
         <app-activity-stats
           [project]="project"
         ></app-activity-stats>

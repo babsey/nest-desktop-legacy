@@ -23,7 +23,7 @@ export class SynapseCode extends Code {
         this._() + `"${param.id}": ${this.format(param.value)}`
       ));
 
-    let script: string = '';
+    let script = '';
     if (synSpecList.length > 0) {
       script += ', syn_spec={';
       script += synSpecList.join(',');

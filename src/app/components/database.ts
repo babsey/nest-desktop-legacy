@@ -7,8 +7,8 @@ import { App } from './app';
 export class DatabaseService {
   app: App;
   db: PouchDB;
-  private _valid: boolean = false;
-  private _ready: boolean = false;
+  private _valid = false;
+  private _ready = false;
   version: string;
 
   constructor(
@@ -89,8 +89,8 @@ export class DatabaseService {
         keys.filter((key: string) => !key.startsWith('_'))
           .forEach((key: string) => doc[key] = dataJSON[key]);
         return this.db.put(doc)
-          .then((doc: any) => {
-            // console.log(doc)
+          .then((d: any) => {
+            // console.log(d);
             data.updatedAt = dataJSON.updatedAt;
           })
           .catch((err: any) => console.log(err));
@@ -111,8 +111,8 @@ export class DatabaseService {
     return this.list()
       .then((docs: any[]) => {
         docs.filter((doc: any) => ids.includes(doc._id))
-          .forEach((doc: any) => doc._deleted = true)
-        return this.db.bulkDocs(docs)
+          .forEach((doc: any) => doc._deleted = true);
+        return this.db.bulkDocs(docs);
       })
   }
 
@@ -120,8 +120,8 @@ export class DatabaseService {
     console.log('Read doc revisions in db');
     return this.db.get(id, { revs: true })
       .then((doc: any) =>
-        doc._revisions.ids.map((id: string, idx: number) =>
-          (doc._revisions.start - idx) + "-" + id))
+        doc._revisions.ids.map((revId: string, idx: number) =>
+          (doc._revisions.start - idx) + '-' + revId))
       .catch((err: any) => err);
   }
 
@@ -136,19 +136,19 @@ export class DatabaseService {
     return this.db.put({
       _id: '_local/version',
       version: this.app.version,
-    })
+    });
   }
 
   checkVersion(): void {
     this.getVersion()
       .then((version: string) => {
         const dbVersion: string[] = version.split('.');
-        const appVersion: string[] = this.app.version.split('.')
+        const appVersion: string[] = this.app.version.split('.');
         this._valid = appVersion[0] === dbVersion[0] && appVersion[1] === dbVersion[1];
       })
       .catch((err: any) => {
         this.setVersion().then(() => this.checkVersion());
-      })
+      });
   }
 
 }

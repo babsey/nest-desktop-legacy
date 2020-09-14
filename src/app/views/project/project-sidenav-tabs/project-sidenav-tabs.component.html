@@ -72,7 +72,7 @@
   <button mat-icon-button
     (click)="selectMode('activityController')"
     [class.mat-fab]="isMode('activityController')"
-    [disabled]="!app.project.hasActivities()"
+    [disabled]="!app.project.hasActivities"
     matTooltip="Activity controller"
     matTooltipPosition="before"
     class="app-button">
@@ -90,9 +90,9 @@
   </button>
 
   <button mat-icon-button
-    (click)="selectMode('stats')"
-    [class.mat-fab]="isMode('stats')"
-    matTooltip="Simulation stats"
+    (click)="selectMode('activityStats')"
+    [class.mat-fab]="isMode('activityStats')"
+    matTooltip="Activity statistics"
     matTooltipPosition="before"
     class="app-button">
     <fa-icon icon="poll"></fa-icon>

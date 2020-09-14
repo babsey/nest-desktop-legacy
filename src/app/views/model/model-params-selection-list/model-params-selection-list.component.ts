@@ -38,7 +38,7 @@ export class ModelParamsSelectionListComponent implements OnInit {
       const model: Model = this._modelService.getModel(this.modelId);
       return model.params.filter((param: Parameter) => param.id === id).length > 0;
     }
-    return false
+    return false;
   }
 
   changeParam(event: any): void {

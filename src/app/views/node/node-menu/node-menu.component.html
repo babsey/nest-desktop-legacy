@@ -57,7 +57,7 @@
     <fa-icon class="menu-icon" icon="trash-alt"></fa-icon> Delete node
   </button>
 
-  <ng-container *ngIf="node.model.isRecorder()">
+  <ng-container *ngIf="node.model.isRecorder() && node.activity">
     <button mat-menu-item
       class="menu-item"
       (click)="node.activity.downloadEvents()"

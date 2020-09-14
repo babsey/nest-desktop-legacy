@@ -13,7 +13,7 @@ export class ProjectRawDataComponent implements OnInit {
   private _options: any = {
     cursorBlinkRate: 700,
     foldGutter: true,
-    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
     lineNumbers: true,
     lineWrapping: true,
     readOnly: true,
@@ -27,7 +27,7 @@ export class ProjectRawDataComponent implements OnInit {
   }
 
   get content(): string {
-    return JSON.stringify(this.project, null, "\t");
+    return JSON.stringify(this.project, null, '\t');
   }
 
   get options(): any {

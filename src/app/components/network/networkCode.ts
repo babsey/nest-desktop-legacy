@@ -27,7 +27,7 @@ export class NetworkCode extends Code {
   getActivities(): string {
     let script: string = '';
     script += 'response = {';
-    script += this._() + '"kernel": {"time": nest.GetKernelStatus("time")},'
+    script += this._() + '"kernel": {"time": nest.GetKernelStatus("time")},';
     script += this._() + '"activities": [';
     const activities: string[] = this.network.recorders.map((node: Node) => node.code.getActivity());
     script += activities.join(',');

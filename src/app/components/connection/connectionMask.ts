@@ -1,4 +1,4 @@
-import { Config } from '../config'
+import { Config } from '../config';
 import { Connection } from './connection';
 
 
@@ -44,7 +44,7 @@ export class ConnectionMask extends Config {
 
   select(value: MaskType): void {
     if (value === 'none') {
-      this.unmask()
+      this.unmask();
     } else {
       this.masktype = value;
       this.specs = {};
@@ -59,7 +59,7 @@ export class ConnectionMask extends Config {
 
   draw(): void {
     this.graph.layout['shapes'] = [];
-    if (this.masktype === undefined) return
+    if (this.masktype === undefined) { return; }
     switch (this.masktype) {
       case 'rectangular':
         this.drawRect();
@@ -90,7 +90,7 @@ export class ConnectionMask extends Config {
       line: {
         color: 'blue',
       }
-    }]
+    }];
   }
 
   drawCircle(): void {
@@ -107,7 +107,7 @@ export class ConnectionMask extends Config {
       line: {
         color: 'blue',
       }
-    }]
+    }];
   }
 
   drawDoughnut(): void {
@@ -161,7 +161,7 @@ export class ConnectionMask extends Config {
       //     width: 1,
       //     color: 'black',
       //   }
-    }]
+    }];
   }
 
   drawEllipsis(): void {
@@ -178,7 +178,7 @@ export class ConnectionMask extends Config {
       line: {
         color: 'blue',
       }
-    }]
+    }];
   }
 
   toJSON(target: string = 'db') {

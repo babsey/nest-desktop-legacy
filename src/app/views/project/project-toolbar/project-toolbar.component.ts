@@ -41,13 +41,13 @@ export class ProjectToolbarComponent implements OnInit {
   }
 
   navigate(id: string): void {
-    let url: string = 'project/' + id;
+    const url: string = 'project/' + id;
     this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
   }
 
   run(): void {
     this.selectMode('activityExplorer');
-    this._simulationRunService.run(this.project, true)
+    this._simulationRunService.run(this.project, true);
   }
 
   configSimulation(): void {

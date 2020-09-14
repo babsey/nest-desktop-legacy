@@ -24,11 +24,11 @@ export class NetworkView {
     this._focusedConnection = connection;
   }
 
-  get focusedNode(): Node | null  {
+  get focusedNode(): Node | null {
     return this._focusedNode;
   }
 
-  set focusedNode(node: Node | null ) {
+  set focusedNode(node: Node | null) {
     this._focusedConnection = null;
     this._focusedNode = node;
   }
@@ -37,7 +37,7 @@ export class NetworkView {
     return this._selectedConnection;
   }
 
-  set selectedConnection(connection: Connection | null ) {
+  set selectedConnection(connection: Connection | null) {
     this._selectedElementType = null;
     this._selectedNode = null;
     this._selectedConnection = this._selectedConnection === connection ? null : connection;
@@ -47,7 +47,7 @@ export class NetworkView {
     return this._selectedElementType;
   }
 
-  set selectedElementType(value: string | null ) {
+  set selectedElementType(value: string | null) {
     this.resetSelection();
     this._selectedElementType = value;
     // this._selectedElementType = this._selectedElementType === elementType ? null : elementType;
@@ -57,7 +57,7 @@ export class NetworkView {
     return this._selectedNode;
   }
 
-  set selectedNode(node: Node | null ) {
+  set selectedNode(node: Node | null) {
     this._selectedElementType = null;
     this._selectedConnection = null;
     this._selectedNode = (this._selectedNode === node) ? null : node;
@@ -84,7 +84,7 @@ export class NetworkView {
   }
 
   isElementTypeSelected(elementType: string): boolean {
-    if (this.selectedElementType === null) return true;
+    if (this.selectedElementType === null) { return true; }
     return this.selectedElementType === elementType;
   }
 
@@ -104,7 +104,7 @@ export class NetworkView {
     if (this.selectedNode) {
       return this.selectedNode === node;
     } else if (this.selectedConnection) {
-      if (!withConnection) return false;
+      if (!withConnection) { return false; }
       const connections: Connection[] = node.network.connections
         .filter((connection: Connection) => connection.source.idx === node.idx || connection.target.idx === node.idx);
       return connections.some((connection: Connection) => connection === this.selectedConnection);

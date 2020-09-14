@@ -33,7 +33,7 @@ export class TicksSliderPopupComponent implements OnInit, OnChanges {
   }
 
   displayWith(ticks: any[]): any {
-    return (idx: number): string[] => ticks[idx]
+    return (idx: number): string[] => ticks[idx];
   }
 
   setDefaultValue(): void {

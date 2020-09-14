@@ -38,7 +38,7 @@ export class ModelParamsListComponent implements OnInit {
       const model: Model = this._modelService.getModel(this.modelId);
       return model.params.filter((param: any) => param.id === paramId).length > 0;
     }
-    return false
+    return false;
   }
 
 }

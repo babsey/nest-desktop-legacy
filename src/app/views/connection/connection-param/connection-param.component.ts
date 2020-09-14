@@ -37,7 +37,7 @@ export class ConnectionParamComponent implements OnInit {
   addFactor(): void {
     const param = this.connection.synapse['params'].find(param => param.id === this.options.id);
     if (param) {
-      param['factors'].push('g')
+      param['factors'].push('g');
     }
   }
 
@@ -50,11 +50,11 @@ export class ConnectionParamComponent implements OnInit {
   }
 
   onFactorClick(factor): void {
-    console.log(factor)
+    console.log(factor);
   }
 
   onValueChange(value: any): void {
-    this.valueChange.emit(value)
+    this.valueChange.emit(value);
   }
 
   onContextMenu(event: MouseEvent): void {

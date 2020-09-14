@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { ActivityAnimationGraph } from '../../components/activity/Threejs/activityAnimationGraph';
+import { ActivityAnimationGraph } from '../../components/activity/activityAnimationGraph';
 
 
 @Injectable({

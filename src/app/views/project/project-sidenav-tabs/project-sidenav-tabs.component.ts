@@ -33,7 +33,7 @@ export class ProjectSidenavTabsComponent implements OnInit {
 
   ngOnInit() {
     if (['stats'].includes(this._projectService.sidenavMode)) {
-      this._projectService.sidenavMode = 'networkController'
+      this._projectService.sidenavMode = 'networkController';
     }
   }
 
@@ -64,15 +64,11 @@ export class ProjectSidenavTabsComponent implements OnInit {
     if (mode === 'codeEditor' && this._projectService.sidenavOpened === true) {
       this.app.project.code.generate();
     }
-    setTimeout(() => this.triggerResize(), 500)
+    // setTimeout(() => this.triggerResize(), 500);
   }
 
   isMode(mode: string): boolean {
-    return this._projectService.sidenavOpened && this._projectService.sidenavMode === mode;
-  }
-
-  triggerResize(): void {
-    window.dispatchEvent(new Event('resize'));
+    return this._projectService.sidenavMode === mode;
   }
 
   toggleSidenav(): void {
@@ -86,5 +82,10 @@ export class ProjectSidenavTabsComponent implements OnInit {
   isNetworkQuickViewOpened(): boolean {
     return this._projectService.networkQuickView;
   }
+
+  triggerResize(): void {
+    window.dispatchEvent(new Event('resize'));
+  }
+
 
 }

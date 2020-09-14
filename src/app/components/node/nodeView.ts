@@ -1,6 +1,7 @@
 import { Connection } from '../connection/connection';
 import { Node } from './node';
 import { Parameter } from '../parameter';
+import * as NodeGraph from './nodeGraph';
 
 
 export class NodeView {
@@ -22,7 +23,7 @@ export class NodeView {
   }
 
   get label(): string {
-    if (this._label) return this._label;
+    if (this._label) { return this._label; }
     const elementType: string = this.node.model.elementType;
     if (elementType === undefined) {
       const idx: number = this.node.network.nodes.indexOf(this.node);
@@ -54,7 +55,7 @@ export class NodeView {
           (connection: Connection) => (connection.source.idx === this.node.idx || connection.target.idx === this.node.idx));
       if (connections.length === 1 && connections[0].source.idx !== connections[0].target.idx) {
         const connection: Connection = connections[0];
-        let node: Node = (connection.source.idx === this.node.idx) ? connection.target : connection.source;
+        const node: Node = (connection.source.idx === this.node.idx) ? connection.target : connection.source;
         return node.view.color;
       }
     }
@@ -69,22 +70,44 @@ export class NodeView {
   }
 
   get weight(): string {
-    if (this.node.model.elementType === 'recorder') return
+    if (this.node.model.elementType === 'recorder') { return; }
     const connections: Connection[] = this.node.network.connections.filter(
       (connection: Connection) => connection.source.idx === this.node.idx && connection.target.model.elementType !== 'recorder');
     if (connections.length > 0) {
       const weights: number[] = connections.map(
         (connection: Connection) => connection.synapse.weight);
-      if (weights.every((weight: number) => weight > 0)) return 'excitatory';
-      if (weights.every((weight: number) => weight < 0)) return 'inhibitory';
+      if (weights.every((weight: number) => weight > 0)) { return 'excitatory'; }
+      if (weights.every((weight: number) => weight < 0)) { return 'inhibitory'; }
     }
   }
 
   get backgroundImage(): string {
-    const bg: string = '#fafafa';
+    const bg = '#fafafa';
     const color: string = this.color;
     const gradient: string = ['90deg', color, color, bg].join(', ');
     return 'linear-gradient(' + gradient + ')';
+  }
+
+  getPoints(radius: number): string {
+    switch (this.node.model.elementType) {
+      case 'stimulator':
+        return NodeGraph.getPoints('hexagon', radius);
+        break;
+      case 'recorder':
+        return NodeGraph.getPoints('rectangle', radius);
+        break;
+      case 'neuron':
+        if (this.weight === 'excitatory') {
+          return NodeGraph.getPoints('triangle', radius);
+        } else if (this.weight === 'inhibitory') {
+          return NodeGraph.getPoints('circle', radius);
+        } else {
+          return NodeGraph.getPoints('square', radius);
+        }
+        break;
+      default:
+        return NodeGraph.getPoints('', radius);
+    }
   }
 
   paramsVisible(): string[] {
@@ -92,7 +115,7 @@ export class NodeView {
   }
 
   setLevel(level: number): void {
-    this.node.params.map((param: Parameter) => param.visible = param.options.level <= level)
+    this.node.params.map((param: Parameter) => param.visible = param.options.level <= level);
   }
 
   clean(): void {
@@ -107,39 +130,11 @@ export class NodeView {
   }
 
   isSelected(unselected: boolean = false): boolean {
-    return this.node.network.view.isNodeSelected(this.node, unselected)
+    return this.node.network.view.isNodeSelected(this.node, unselected);
   }
 
   isFocused(): boolean {
     return this.node.network.view.isNodeFocused(this.node);
-  }
-
-  getSquarePoints(radius: number): string {
-    const a: number = radius / 2. * Math.sqrt(Math.PI);
-    const points: string = [[-a, -a].join(','), [a, -a].join(','), [a, a].join(','), [-a, a].join(',')].join(' ');
-    return points;
-  }
-
-  anglePoint(deg: number, radius: number, y0: number = 0): number[] {
-    const radian: number = deg / 180 * Math.PI;
-    return [Math.cos(radian) * radius, y0 + Math.sin(radian) * radius];
-  }
-
-  getTrianglePoints(radius: number): string {
-    const a: number = radius * Math.sqrt(Math.PI / 2);
-    const p0: number[] = this.anglePoint(-90, a, 4);
-    const p1: number[] = this.anglePoint(-210, a, 4);
-    const p2: number[] = this.anglePoint(-330, a, 4);
-    // const points: string = [[-x,y].join(','),[2*x,0].join(','),[-x,-y].join(',')].join(',');
-    const points: string = [p0.join(','), p1.join(','), p2.join(',')].join(',');
-    return points;
-  }
-
-  getLayerPoints(radius: number): string {
-    const a: number = radius + 4;
-    const b: number = radius - 4;
-    const points: string = [[a, 0].join(','), [0, b].join(','), [-a, 0].join(','), [0, -b].join(',')].join(' ');
-    return points;
   }
 
   toJSON(): any {

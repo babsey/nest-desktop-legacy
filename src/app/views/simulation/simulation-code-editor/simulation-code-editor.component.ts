@@ -16,17 +16,17 @@ export class SimulationCodeEditorComponent implements OnInit {
   private _options: any = {
     cursorBlinkRate: 700,
     foldGutter: true,
-    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
     hintOptions: {
       completeSingle: false,
-      hintWords: ['Babsey']
+      hintWords: []
     },
     lineNumbers: true,
     lineWrapping: true,
     mode: 'python',
     styleActiveLine: true,
     extraKeys: {
-      "Ctrl-Space": "autocomplete",
+      'Ctrl-Space': 'autocomplete',
       "'.'": this.showHint,
     }
   };
@@ -73,7 +73,7 @@ export class SimulationCodeEditorComponent implements OnInit {
     };
     const backwardCharacter: string = cm.getRange(backwardCursorPosition, currentCursorPosition);
     if (backwardCharacter === 'nest') {
-      cm.showHint()
+      cm.showHint();
     }
   }
 

@@ -25,7 +25,7 @@ export class HelpListComponent implements OnInit {
   }
 
   isActive(path: string): boolean {
-    return this.router.url.includes('help/' + path)
+    return this.router.url.includes('help/' + path);
   }
 
 }

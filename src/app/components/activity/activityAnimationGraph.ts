@@ -1,16 +1,16 @@
 import * as d3 from 'd3';
 
-import { Activity } from '../activity';
-import { ActivityGraph } from '../activityGraph';
-import { Project } from '../../project/project';
+import { Activity } from './activity';
+import { ActivityGraph } from './activityGraph';
+import { Project } from '../project/project';
 
 
 export class ActivityAnimationGraph extends ActivityGraph {
   private _frames: any[] = [];
   layout: any = {};
-  frameIdx: number = 0;
+  frameIdx = 0;
 
-  source: string = 'spike';
+  source = 'spike';
   sources: any[] = [];
   style: any = {};
   data: any[] = [];
@@ -31,16 +31,16 @@ export class ActivityAnimationGraph extends ActivityGraph {
     };
 
     this.colorScales = {
-      'spectral': d3.interpolateSpectral,
-      // 'turbo': d3.interpolateTurbo,
-      'viridis': d3.interpolateViridis,
-      'inferno': d3.interpolateInferno,
-      'magma': d3.interpolateMagma,
-      'plasma': d3.interpolatePlasma,
-      // 'cividis': d3.interpolateCividis,
-      'warm': d3.interpolateWarm,
-      'cool': d3.interpolateCool,
-      'cubehelix': d3.interpolateCubehelixDefault,
+      spectral: d3.interpolateSpectral,
+      // turbo: d3.interpolateTurbo,
+      viridis: d3.interpolateViridis,
+      inferno: d3.interpolateInferno,
+      magma: d3.interpolateMagma,
+      plasma: d3.interpolatePlasma,
+      // cividis: d3.interpolateCividis,
+      warm: d3.interpolateWarm,
+      cool: d3.interpolateCool,
+      cubehelix: d3.interpolateCubehelixDefault,
     };
 
     this.config = {
@@ -97,17 +97,17 @@ export class ActivityAnimationGraph extends ActivityGraph {
   update(): void {
     // console.log('Update activity animation');
     this._frames = [];
-    this.project.activities.forEach(activity => {
-      if (activity.recorder.model.existing === 'spike_detector') {
+    this.project.activities.forEach((activity: Activity) => {
+      if (activity.hasSpikeData()) {
         this.plotSpikeData(activity);
       } else {
         this.plotAnalogData(activity);
       }
-    })
+    });
   }
 
-  hasAnalogData(): boolean {
-    return this.project.activities.filter(activity => activity.hasAnalogData()).length > 0;
+  hasAnyAnalogData(): boolean {
+    return this.project.activities.some((activity: Activity) => activity.hasAnalogData());
   }
 
   color(value: any): string {
@@ -117,7 +117,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
     const min: number = this.config.colorMap.min;
     const max: number = this.config.colorMap.max;
     const colorScale: any = this.colorScales[this.config.colorMap.scale];
-    return colorScale((value - min) / (max - min))
+    return colorScale((value - min) / (max - min));
   }
 
   plotSpikeData(activity: Activity): void {
@@ -144,35 +144,36 @@ export class ActivityAnimationGraph extends ActivityGraph {
         this._frames.push({
           frame: i,
           data: [],
-        })
+        });
       }
     }
 
     // Add empty data (from individual recorder) for each frame
-    this._frames.forEach(frame => {
+    this._frames.forEach((frame: any) => {
       frame.data.push({
         x: [], y: [], z: [], color: []
-      })
+      });
       frame.data[frame.data.length - 1].idx = frame.data.length - 1;
-    })
+    });
 
     // Add values in data
-    x.map((xi, i) => {
-      const frameIdx: number = Math.floor(xi * sampleRate);
+    x.map((xVal: number, xIdx: number) => {
+      const frameIdx: number = Math.floor(xVal * sampleRate);
       const frame: any = this._frames[frameIdx - 1];
-      if (frame === undefined) return
+      if (frame === undefined) { return; }
       const idx: number = frame.data.length - 1;
-      frame.data[idx].x.push(x[i]);
-      frame.data[idx].y.push(y[i]);
-      frame.data[idx].z.push(z[i]);
-      frame.data[idx].color.push(typeof color === 'string' ? color : color[i]);
-    })
+      frame.data[idx].x.push(x[xIdx]);
+      frame.data[idx].y.push(y[xIdx]);
+      frame.data[idx].z.push(z[xIdx]);
+      frame.data[idx].color.push(typeof color === 'string' ? color : color[xIdx]);
+    });
   }
 
   updateConfig(): void {
     // console.log('Update config in activity animation graph')
-    const activities: string[][] = this.project.activities.map(activity =>
-      Object.keys(activity.events).filter(val => !(['senders', 'times'].includes(val)))
+    const activities: string[][] = this.project.activities.map((activity: Activity) =>
+      Object.keys(activity.events).filter((val: string) =>
+        !(['senders', 'times'].includes(val)))
     );
     let sources: any[] = [];
     sources = sources.concat(...activities);
@@ -190,7 +191,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
         this.config.sources = [];
       } else {
         sources.sort();
-        this.sources = sources.map(source => { return { value: source, label: source } });
+        this.sources = sources.map((source: string) => ({ value: source, label: source }));
       }
     }
   }

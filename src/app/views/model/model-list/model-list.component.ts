@@ -83,14 +83,14 @@ export class ModelListComponent implements OnInit, OnDestroy {
     this._http.get(urlRoot + '/api/Models').subscribe((resp: string[]) => {
       this._models = resp;
       this.filterModels();
-    })
+    });
   }
 
   filterModelsBySearch(): void {
     if (this.searchTerm) {
       const result: string[] = [];
-      for (let model of this.filteredModels) {
-        if (model.toLowerCase().indexOf(this.searchTerm.toLowerCase()) != -1) {
+      for (const model of this.filteredModels) {
+        if (model.toLowerCase().indexOf(this.searchTerm.toLowerCase()) !== -1) {
           result.push(model);
         }
       }

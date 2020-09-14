@@ -16,14 +16,15 @@
       <ng-container *ngFor="let activity of project.activities">
         <mat-list-item
           (click)="selectedActivity = activity"
+          [disabled]="!activity.hasEvents()"
           style="width:100%;line-height:40px">
           <span class="flex" style="height:40px">
             <span>
-              <svg width="40" height="40">
+              <svg width="64" height="40">
                 <g app-node-shape
                   [node]="activity.recorder"
                   [showSelection]="false"
-                  transform="translate(20,20)"
+                  transform="translate(32,16)"
                 ></g>
               </svg>
             </span>

@@ -3,8 +3,8 @@ import { Connection } from './connection';
 
 
 enum ConnectionType {
-  divergent,
   convergent,
+  divergent,
 }
 
 export class ConnectionProjections extends Config {

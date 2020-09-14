@@ -1,5 +1,5 @@
 export function CodeFICurve(model: string): string {
-  let lines: string[] = [];
+  const lines: string[] = [];
   lines.push('nest.ResetKernel()');
   lines.push(`neurons = nest.Create(${model}, 1000)`);
   lines.push('dc = nest.Create("dc_generator", 1000)');

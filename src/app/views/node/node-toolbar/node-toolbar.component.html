@@ -18,7 +18,7 @@
     class="node-toolbar"
     color="primary">
     <span class="node-shape-container">
-      <svg viewBox="0 0 60 60" width="64" height="64" style="margin-top:12px">
+      <svg viewBox="0 0 60 60" width="64" height="64" style="margin-top:4px">
         <g app-node-shape
           (click)="node.view.select()"
           [node]="node"
@@ -29,6 +29,7 @@
     </span>
 
     <mat-select
+      (onSelectionChange)="selectModel()"
       [(ngModel)]="node.modelId"
       [disabled]="disabled">
       <ng-container *ngFor="let model of models">

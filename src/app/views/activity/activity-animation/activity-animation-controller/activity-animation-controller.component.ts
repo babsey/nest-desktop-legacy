@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 
-import { ActivityAnimationGraph } from '../../../../components/activity/Threejs/activityAnimationGraph';
+import { ActivityAnimationGraph } from '../../../../components/activity/activityAnimationGraph';
 
 import { ActivityAnimationService } from '../../../../services/activity/activity-animation.service';
 

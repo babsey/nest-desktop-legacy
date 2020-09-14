@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Activity } from '../activity/activity';
+import { ActivityChartGraph } from '../activity/activityChartGraph';
 import { App } from '../app';
 import { Config } from '../config';
 import { Model } from '../model/model';
@@ -10,6 +11,7 @@ import { Network } from '../network/network';
 import { Node } from '../node/node';
 import { ProjectCode } from './projectCode';
 import { Simulation } from '../simulation/simulation';
+import { upgradeProject } from './projectUpgrade';
 
 
 export class Project extends Config {
@@ -30,12 +32,16 @@ export class Project extends Config {
   // group: string;                     // obsolete?
 
   // Project objects
-  network: Network;                     // network of neurons and devices
-  simulation: Simulation;               // settings for the simulation
-  code: ProjectCode;                    // code script for NEST Server
+  public network: Network;                     // network of neurons and devices
+  public simulation: Simulation;               // settings for the simulation
+  public code: ProjectCode;                    // code script for NEST Server
+  public activityGraph: ActivityChartGraph;
 
   private _networkRevisions: any[] = [];         // network history
-  private _networkRevisionIdx: number = -1;      // Index of the network history;
+  private _networkRevisionIdx = -1;      // Index of the network history;
+
+  private _hasActivities = false;
+  private _hasSpatialActivities = false;
 
   constructor(
     app: App,
@@ -55,12 +61,13 @@ export class Project extends Config {
     // this.user = project.user || '';
     // this.group = project.group || '';
 
-    const projectUpgraded: any = this.backwardCompatible(project);
-    this.initNetwork(projectUpgraded['network'])
-    this.initSimulation(projectUpgraded['simulation']);
+    const projectUpgraded: any = upgradeProject(this.app, project);
+    this.initNetwork(projectUpgraded.network);
+    this.initSimulation(projectUpgraded.simulation);
 
     this.clean();
     this.code = new ProjectCode(this);
+    this.activityGraph = new ActivityChartGraph(this);
   }
 
   get id(): string {
@@ -69,25 +76,6 @@ export class Project extends Config {
 
   get rev(): string {
     return this._rev;
-  }
-
-  // Make the old projects compatible.
-  backwardCompatible(project: any): any {
-    if (Object.keys(project).length === 0) {
-      return {};
-    }
-
-    let valid: boolean = false;       // only true when version is 2.5 or newer
-    if (project.hasOwnProperty('version')) {
-      const version: string[] = project.version.split('.');
-      valid = (Number(version[0]) === 2 && Number(version[1]) >= 5) || Number(version[0]) > 2;
-    }
-
-    const projectUpgraded: any = {
-      network: valid ? project.network : this.upgradeNetwork(project),
-      simulation: valid ? project.simulation : this.upgradeSimulation(project),
-    }
-    return projectUpgraded;
   }
 
   // Is the current project selected?
@@ -149,94 +137,6 @@ export class Project extends Config {
     this.initNetworkHistory();
   }
 
-  // Make network compatible
-  upgradeNetwork(project: any): any {
-    const network: any = {
-      nodes: [],
-      connections: [],
-    }
-    if (Object.keys(project).length === 0) return network
-
-    project.app.nodes.forEach(appNode => {
-      const simNode: any = project.simulation.collections[appNode.idx];
-      const simModel: any = project.simulation.models[simNode.model];
-      const appModel: any = project.app.models[simNode.model];
-      const params: any[] = Object.entries(simModel.params).map((param: any[]) => {
-        return {
-          id: param[0],
-          value: param[1],
-          visible: appModel ? appModel.display.includes(param[0]) : false,
-        }
-      });
-      const view: any = {
-        elementType: simNode.element_type,
-        color: appNode.color,
-        position: appNode.position,
-      }
-      const node: any = {
-        idx: appNode.idx,
-        params: params,
-        size: simNode.n || 1,
-        model: typeof simModel === 'string' ? simModel : simModel.existing,
-        view: view,
-      };
-      if (simNode.hasOwnProperty('spatial')) {
-        node['spatial'] = simNode.spatial;
-        if (node.spatial.hasOwnProperty('rows')) {
-          node.spatial['shape'] = [node.spatial.rows, node.spatial.columns];
-        }
-        if (node.spatial.hasOwnProperty('positions')) {
-          node.spatial['pos'] = node.spatial.positions;
-        }
-      }
-      network.nodes.push(node);
-    })
-
-    // Object.entries(project.simulation.models).map(item => {
-    //   const model: any = this.copy(item[1]);
-    //   model['id'] = item[0];
-    //   model['params'] = Object.entries(model.params).map(p => {
-    //     return {
-    //       id: p[0],
-    //       value: p[1],
-    //     }
-    //   })
-    //   network.models.push(model)
-    // })
-
-    project.simulation.connectomes.forEach(simLink => {
-      const connection: any = {
-        source: simLink.source,
-        target: simLink.target,
-      }
-      if (simLink.hasOwnProperty('conn_spec')) {
-        connection['rule'] = simLink.conn_spec.rule || 'all_to_all';
-        connection['params'] = Object.entries(simLink.conn_spec)
-          .filter((spec: any[]) => spec[0] != 'rule')
-          .map((param: any[]) => { return { id: param[0], value: param[1] } })
-      }
-      const synapse: any = {
-        params: [],
-      };
-      const synModel: Model = this.app.getModel(synapse.model || 'static_synapse');
-      if (simLink.hasOwnProperty('syn_spec')) {
-        synModel.params.forEach((modelParam: any) => {
-          const simParam: any = simLink.syn_spec[modelParam.id];
-          const param: any = {
-            id: modelParam.id,
-            value: simParam !== undefined ? simParam : modelParam.value,
-            visible: simParam !== undefined,
-          };
-          synapse.params.push(param);
-        })
-      }
-      connection['synapse'] = synapse;
-      network.connections.push(connection);
-    })
-
-    return network
-  }
-
   // Get revision index of the network history.
   get networkRevisionIdx(): number {
     return this._networkRevisionIdx;
@@ -264,6 +164,7 @@ export class Project extends Config {
     this._networkRevisions = this._networkRevisions.slice(0, this._networkRevisionIdx + 1);
     this._networkRevisions.push(network.toJSON());
     this._networkRevisionIdx = this._networkRevisions.length - 1;
+    this.updateActivityGraph();     // maybe it is critical point.
   }
 
   // Load network from the history list.
@@ -273,6 +174,7 @@ export class Project extends Config {
     }
     const network: any = this._networkRevisions[this._networkRevisionIdx];
     this.network = new Network(this, network);
+    this.updateActivityGraph();     // maybe it is critical point.
   }
 
   // Go to the older network.
@@ -312,43 +214,51 @@ export class Project extends Config {
     this.simulation = new Simulation(this, simulation);
   }
 
-  // Make simulation compatible.
-  upgradeSimulation(project: any): any {
-    const simulation: any = {
-      time: project.simulation.time,
-      randomSeed: project.simulation.random_seed,
-      kernel: project.simulation.kernel,
-    };
-    return simulation;
-  }
-
   /*
   Activities
   */
 
   // Get a list of activities.
   get activities(): Activity[] {
+    // console.log('Get activities')
     return this.network ? this.network.recorders.map((recorder: Node) => recorder.activity) : [];
+  }
+
+  // Check if the project has activities.
+  get hasActivities(): boolean {
+    return this._hasActivities;
+  }
+
+  // Check if the project has spatial activities.
+  get hasSpatialActivities(): boolean {
+    return this._hasSpatialActivities;
+  }
+
+  updateActivityGraph(): void {
+    if (this.activityGraph) {
+      this.activityGraph.init();
+      this.activityGraph.update();
+    }
   }
 
   // Update activities in recorder nodes after simulation.
   updateActivities(data: any): void {
     // console.log('Update activities')
-    this.simulation.kernel['time'] = data.kernel['time'];
+    this.simulation.kernel.time = data.kernel.time;
     // Update recorded activity
-    data['activities'].forEach((activity: any, idx: number) => {
+    data.activities.forEach((activity: any, idx: number) => {
+      this.activities[idx].idx = idx;
       this.activities[idx].update(activity);
-    })
+    });
+    this.checkActivities();
+    this.activityGraph.update();
   }
 
-  // Check if the project has activities.
-  hasActivities(): boolean {
-    return this.activities.length > 0 ? this.activities.some((activity: Activity) => activity.hasEvents()) : false;
-  }
-
-  // Check if the project has activities.
-  hasSpatialActivities(): boolean {
-    return this.activities.length > 0 ? this.activities.some((activity: Activity) => activity.hasEvents() && activity.nodePositions.length > 0) : false;
+  checkActivities(): void {
+    this._hasActivities = this.activities.length > 0 ? this.activities.some(
+      (activity: Activity) => activity.hasEvents()) : false;
+    this._hasSpatialActivities = this.hasActivities ? this.activities.some(
+      (activity: Activity) => activity.hasEvents() && activity.nodePositions.length > 0) : false;
   }
 
   /*
@@ -357,12 +267,16 @@ export class Project extends Config {
 
   // Update hash of this project.
   clean(): void {
-    this.hash = objectHash(this.toJSON('simulator'));
+    this.hash = this.getHash();
   }
 
   // Is the hash equal to caluclated hash.
   isHashEqual(): boolean {
-    return this.hash === objectHash(this.toJSON('simulator'));
+    return this.hash === this.getHash();
+  }
+
+  getHash(): string {
+    return objectHash(this.toJSON('simulator'));
   }
 
   // Serialize this project for database or simulator.

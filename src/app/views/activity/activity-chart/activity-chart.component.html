@@ -1,10 +1,5 @@
-<ng-container *ngIf="graph">
-  <app-activity-chart-split-controller></app-activity-chart-split-controller>
-
+<ng-container *ngIf="graph.data">
   <plotly-plot #plot
-    (legendDoubleClick)="onLegendDoubleClick($event)"
-    (legendClick)="onLegendClick($event)"
-    (selected)="onSelect($event)"
     [config]="graph.config"
     [data]="graph.data"
     [layout]="graph.layout"

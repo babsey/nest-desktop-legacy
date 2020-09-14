@@ -26,7 +26,7 @@ export class ConnectionControllerComponent implements OnInit {
 
   ngOnInit() {
     // console.log('Update connection controller')
-    if (this.connection === undefined) return
+    if (this.connection === undefined) { return; }
     if (!this.connection.hasProjections()) {
       this._connRules = this.connection.config.rules;
       this._synModels = this.connection.network.project.app.filterModels('synapse');

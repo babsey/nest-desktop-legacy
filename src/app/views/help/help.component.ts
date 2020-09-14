@@ -25,11 +25,11 @@ export class HelpComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._subscription.unsubscribe()
+    this._subscription.unsubscribe();
   }
 
   get help(): string {
-    return this._help
+    return this._help;
   }
 
 }

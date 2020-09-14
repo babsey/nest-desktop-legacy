@@ -22,7 +22,7 @@ export class InputPopupComponent implements OnInit {
     if (value === undefined || value === '') {
       value = this.options.value;
     }
-    this.inputChange.emit(value)
+    this.inputChange.emit(value);
   }
 
 }

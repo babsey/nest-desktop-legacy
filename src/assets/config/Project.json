@@ -1,5 +1,5 @@
 {
-  "showSnackBar": false,
   "runAfterChange": true,
-  "runAfterLoad": true
+  "runAfterLoad": false,
+  "showSnackBar": false
 }
