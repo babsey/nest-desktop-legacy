@@ -22,11 +22,15 @@ export class NodeShapeComponent implements OnInit {
   }
 
   get dy(): string {
-    return (this.node.view.weight === 'inhibitory' && this.node.model.elementType === 'neuron') ? '.4em' : '.7em';
+    return this.drawCircle() ? '.4em' : '.7em';
   }
 
   get points(): string {
     return this.node.view.getPoints(this.radius);
+  }
+
+  drawCircle(): boolean {
+    return this.node.view.weight === 'inhibitory' && this.node.model.elementType === 'neuron';
   }
 
 }

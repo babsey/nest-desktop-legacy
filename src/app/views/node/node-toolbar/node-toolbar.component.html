@@ -35,6 +35,7 @@
       <ng-container *ngFor="let model of models">
         <mat-option [value]="model.id">
           {{ model.label | capitalize }}
+          <span *ngIf="model.abbreviation"> ({{model.abbreviation}})</span>
         </mat-option>
       </ng-container>
     </mat-select>

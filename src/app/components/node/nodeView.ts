@@ -35,13 +35,9 @@ export class NodeView {
       const nodes: Node[] = this.node.network.nodes.filter(
         (node: Node) => node.modelId === this.node.modelId);
       const idx: number = nodes.indexOf(this.node);
-      const label: string[] = this.node.modelId.split('_');
-      return label.map((l: string) => l[0]).join('') + (idx + 1);
+      const label: string = this.node.model.abbreviation || this.node.modelId.split('_').map((d: string) => d[0]).join('')
+      return label + (idx + 1);
     }
-  }
-
-  set label(value: string) {
-    this._label = value;
   }
 
   get color(): string {

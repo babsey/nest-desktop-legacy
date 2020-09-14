@@ -1,7 +1,8 @@
 {
+  "abbreviation": "dc",
   "id": "dc_generator",
-  "element_type": "stimulator",
-  "label": "direct current (DC)",
+  "elementType": "stimulator",
+  "label": "direct current",
   "recordables": ["I"],
   "params": [{
     "id": "amplitude",

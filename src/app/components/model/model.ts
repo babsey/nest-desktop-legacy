@@ -22,6 +22,7 @@ export class Model {
   private _elementType: string;                  // element type of the model
   private _existing: string;                     // existing model in NEST
   private _label: string;                        // model label for view
+  private _abbreviation: string;
   private _params: Parameter[] = [];             // model parameters
   recordables: string[];                // recordables for multimeter
 
@@ -35,7 +36,8 @@ export class Model {
     this._elementType = model.elementType !== undefined ? model.elementType : model.element_type;
     this._existing = model.existing || model.id;
 
-    this.label = model.label || '';
+    this._label = model.label || '';
+    this._abbreviation = model.abbreviation;
     model.params.forEach((param: any) => this.addParameter(param));
     this.recordables = model.recordables || [];
   }
@@ -56,12 +58,12 @@ export class Model {
     return this._existing;
   }
 
-  get label(): string {
-    return this._label;
+  get abbreviation(): string {
+    return this._abbreviation;
   }
 
-  set label(value: string) {
-    this._label = value;
+  get label(): string {
+    return this._label;
   }
 
   get model(): Model {
@@ -151,6 +153,7 @@ export class Model {
       model['id'] = this.id;
       model['elementType'] = this.elementType;
       model['label'] = this.label;
+      model['abbreviation'] = this.abbreviation;
       model['params'] = this.params.map((param: Parameter) => param.toJSON());
       if (this.recordables.length > 0) {
         model['recordables'] = this.recordables;

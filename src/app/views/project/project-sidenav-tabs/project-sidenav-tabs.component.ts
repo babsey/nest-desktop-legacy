@@ -64,7 +64,7 @@ export class ProjectSidenavTabsComponent implements OnInit {
     if (mode === 'codeEditor' && this._projectService.sidenavOpened === true) {
       this.app.project.code.generate();
     }
-    // setTimeout(() => this.triggerResize(), 500);
+    setTimeout(() => this.triggerResize(), 700);
   }
 
   isMode(mode: string): boolean {

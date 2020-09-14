@@ -15,8 +15,8 @@ export function drawPath(source: any, target: any, config: any = {}): string {
   const ellipticalArc: number = config.ellipticalArc || 2.5;
   const xAxisRotation: number = config.xAxisRotation || 0;
 
-  let drx: number = dr * ellipticalArc; // * 2,
-  let dry: number = dr * ellipticalArc * 2;
+  let drx: number = dr * ellipticalArc * 2;
+  let dry: number = dr * ellipticalArc; // * 2;
   let largeArc = 0; // 1 or 0
   let sweep = 1; // 1 or 0
 
@@ -31,17 +31,17 @@ export function drawPath(source: any, target: any, config: any = {}): string {
     largeArc = 1;
 
     // Change sweep to change orientation of loop.
-    sweep = 1;
+    sweep = 0;
 
     // Make drx and dry different to get an ellipse
     // instead of a circle.
-    drx = 30;
+    drx = 20;
     dry = 10;
 
     y1 -= 6;
 
-    mx2 = x2 + r;
-    my2 = y2 + r - 6;
+    mx2 = x2 + 1;
+    my2 = y2 - r - 4;
 
   } else if (!config.isTargetMouse) {
     const a: number = Math.atan2(dy, dx);

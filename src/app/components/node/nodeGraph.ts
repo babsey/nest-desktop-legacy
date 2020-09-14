@@ -31,10 +31,10 @@ function getRectanglePoints(radius: number): string {
   const p3: number[] = anglePoint(315 + b, a, 4);
   // const points: string = [[-x,y].join(','),[2*x,0].join(','),[-x,-y].join(',')].join(',');
   const points: string = [
-    [p0[0] - b, p0[1]].join(','),
-    [p1[0] - b, p1[1]].join(','),
-    [p2[0] + b, p2[1]].join(','),
-    [p3[0] + b, p3[1]].join(',')].join(',');
+    [p0[0] + b, p0[1]].join(','),
+    [p1[0] + b, p1[1]].join(','),
+    [p2[0] - b, p2[1]].join(','),
+    [p3[0] - b, p3[1]].join(',')].join(',');
   return points;
 }
 
@@ -81,9 +81,6 @@ function getTrianglePoints(radius: number): string {
 
 export function getPoints(shape: string, radius: number): string {
   switch (shape) {
-    case 'circle':
-      return getRhombusPoints(radius);
-      break;
     case 'rectangle':
       return getRectanglePoints(radius);
       break;
