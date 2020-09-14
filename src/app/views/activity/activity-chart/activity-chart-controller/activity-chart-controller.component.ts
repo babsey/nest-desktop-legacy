@@ -20,7 +20,7 @@ export class ActivityChartControllerComponent implements OnInit {
   private _options: any = {
     cursorBlinkRate: 700,
     foldGutter: true,
-    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
     hintOptions: {
       completeSingle: false,
       hintWords: []
@@ -30,7 +30,7 @@ export class ActivityChartControllerComponent implements OnInit {
     mode: 'python',
     styleActiveLine: true,
     extraKeys: {
-      "Ctrl-Space": "autocomplete",
+      'Ctrl-Space': 'autocomplete',
     }
   };
   private _selectedPanel: ActivityGraphPanel;

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 import { Connection } from '../../../components/connection/connection';
+import { Parameter } from '../../../components/parameter';
 
 import { ModelConfigDialogComponent } from '../../model/model-config-dialog/model-config-dialog.component';
 
@@ -14,7 +15,7 @@ import { ModelConfigDialogComponent } from '../../model/model-config-dialog/mode
 })
 export class ConnectionParamComponent implements OnInit {
   @Input() connection: Connection;
-  @Input() random: boolean = true;
+  @Input() random = true;
   @Input() options: any;
   @Input() value: any;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
@@ -35,9 +36,9 @@ export class ConnectionParamComponent implements OnInit {
   }
 
   addFactor(): void {
-    const param = this.connection.synapse['params'].find(param => param.id === this.options.id);
+    const param: Parameter = this.connection.synapse.params.find((p: Parameter) => p.id === this.options.id);
     if (param) {
-      param['factors'].push('g');
+      param.factors.push('g');
     }
   }
 

@@ -15,11 +15,11 @@ import { NetworkSketchService } from '../../../services/network/network-sketch.s
 export class NodeSketchComponent implements OnInit {
   @Input() node: Node;
   @Input() dragable: boolean;
-  @Input() eventTrigger: boolean = true;
+  @Input() eventTrigger = true;
   @Input() height: number;
   @Input() width: number;
   private _selector: any;
-  private _disabled: boolean = false;
+  private _disabled = false;
 
   constructor(
     private _networkSketchService: NetworkSketchService,

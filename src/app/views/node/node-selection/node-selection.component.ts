@@ -14,7 +14,7 @@ import { Project } from '../../../components/project/project';
 })
 export class NodeSelectionComponent implements OnInit {
   @Input() node: Node;
-  @Input() selection: boolean = false;
+  @Input() selection = false;
 
   constructor() {
   }

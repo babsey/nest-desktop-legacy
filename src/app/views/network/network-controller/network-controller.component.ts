@@ -11,7 +11,9 @@ import { Network } from '../../../components/network/network';
 export class NetworkControllerComponent implements OnInit {
   @Input() network: Network;
   private _options: any = {
-    min: 0, max: 100, label: 'test',
+    min: 0,
+    max: 100,
+    label: 'test',
   };
 
   constructor(

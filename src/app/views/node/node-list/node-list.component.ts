@@ -17,7 +17,7 @@ import { FormatService } from '../../../services/format/format.service';
 })
 export class NodeListComponent implements OnInit {
   @Input() node: Node;
-  @Input() selective: boolean = false;
+  @Input() selective = false;
 
   constructor(
     private _formatService: FormatService,

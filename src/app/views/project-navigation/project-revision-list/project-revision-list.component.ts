@@ -27,7 +27,7 @@ export class ProjectRevisionListComponent implements OnInit {
   }
 
   navigate(id: string, rev): void {
-    const url: string = `project/${id}/${rev}`;
+    const url = `project/${id}/${rev}`;
     this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
   }
 

@@ -27,7 +27,7 @@ export class SimulationCodeEditorComponent implements OnInit {
     styleActiveLine: true,
     extraKeys: {
       'Ctrl-Space': 'autocomplete',
-      "'.'": this.showHint,
+      '"."': this.showHint,
     }
   };
 

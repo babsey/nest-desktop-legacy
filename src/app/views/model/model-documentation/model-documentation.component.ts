@@ -17,7 +17,7 @@ import { AppService } from '../../../services/app/app.service';
   ],
 })
 export class ModelDocumentationComponent implements OnInit, OnChanges {
-  @Input() modelId: string = '';
+  @Input() modelId = '';
   private _helptext: any = '';
   private _blocks: any[] = [];
 

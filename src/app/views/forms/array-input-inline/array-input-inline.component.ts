@@ -15,7 +15,7 @@ export class ArrayInputInlineComponent implements OnInit {
   @Input() options: any;
   @Input() value: any;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
-  private _active: boolean = false;
+  private _active = false;
 
   constructor(
     private _generatorService: GeneratorService,

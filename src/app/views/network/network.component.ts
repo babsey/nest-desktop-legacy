@@ -18,11 +18,11 @@ import { ProjectService } from '../../services/project/project.service';
 export class NetworkComponent implements OnInit, AfterViewInit {
   @Input() network: Network;
   @ViewChild('content', { static: false }) content: ElementRef;
-  private _height: number = 400;
+  private _height = 400;
   private _mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
-  private _mode: string = 'selection';
-  private _width: number = 600;
+  private _mode = 'selection';
+  private _width = 600;
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,

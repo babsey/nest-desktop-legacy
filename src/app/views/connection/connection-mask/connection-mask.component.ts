@@ -12,7 +12,7 @@ import { ConnectionMask } from '../../../components/connection/connectionMask';
 })
 export class ConnectionMaskComponent implements OnInit {
   @Input() mask: ConnectionMask;
-  private _showPlot: boolean = false;
+  private _showPlot = false;
   private _options: any = [
     { value: 'none', label: 'none' },
     { value: 'rectangular', label: 'rectangular' },

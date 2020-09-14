@@ -7,10 +7,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./select-optgroup.component.scss'],
 })
 export class SelectOptgroupComponent implements OnInit {
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   @Input() options: any[] = [];
-  @Input() placeholder: string = '';
-  @Input() selected: string = '';
+  @Input() placeholder = '';
+  @Input() selected = '';
   @Output() selectedChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {

@@ -18,7 +18,7 @@ import { ActivityStatsService } from '../../../services/activity/activity-stats.
 export class ActivityStatsComponent implements OnInit {
   @Input() project: Project;
   private _recordFrom: string[] = ['V_m'];
-  private _selectedRecord: string = 'V_m';
+  private _selectedRecord = 'V_m';
 
   constructor(
     private _activityStatsService: ActivityStatsService,

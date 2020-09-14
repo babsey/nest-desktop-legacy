@@ -12,7 +12,7 @@ import { NetworkSketchService } from '../../../services/network/network-sketch.s
 })
 export class NodeMenuComponent implements OnInit {
   @Input() node: Node;
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
 
   constructor(
     private _networkSketchService: NetworkSketchService,

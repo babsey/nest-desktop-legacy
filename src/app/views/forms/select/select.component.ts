@@ -7,9 +7,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./select.component.scss'],
 })
 export class SelectComponent implements OnInit {
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   @Input() options: any[] = [];
-  @Input() placeholder: string = '';
+  @Input() placeholder = '';
   @Input() selected: string;
   @Output() selectedChange: EventEmitter<any> = new EventEmitter();
 

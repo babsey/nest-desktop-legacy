@@ -18,9 +18,9 @@ import { Node } from '../../../components/node/node';
 })
 export class NetworkListComponent implements OnInit {
   @Input() network: Network;
-  @Input() selective: boolean = true;
-  @Input() paramSelective: boolean = true;
-  @Input() columns: boolean = false;
+  @Input() selective = true;
+  @Input() paramSelective = true;
+  @Input() columns = false;
 
   constructor(
   ) { }

@@ -16,8 +16,8 @@ export class NodeSpatialComponent implements OnInit {
     data: [],
     layout: {},
   };
-  private _showPlot: boolean = false;
-  private _positionType: string = 'free';
+  private _showPlot = false;
+  private _positionType = 'free';
 
   constructor(
   ) { }

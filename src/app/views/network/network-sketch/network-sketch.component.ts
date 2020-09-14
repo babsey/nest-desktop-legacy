@@ -17,12 +17,12 @@ import { NetworkSketchService } from '../../../services/network/network-sketch.s
   styleUrls: ['./network-sketch.component.scss']
 })
 export class NetworkSketchComponent implements OnInit {
+  @Input() eventTrigger = true;
+  @Input() height = 400;
   @Input() network: Network;
-  @Input() width: number = 600;
-  @Input() height: number = 400;
-  @Input() eventTrigger: boolean = true;
+  @Input() width = 600;
   private _selector: any;
-  private _viewDragline: boolean
+  private _viewDragline: boolean;
 
   private _contextMenuData: any = { node: null, connection: null };
   private _contextMenuPosition: any = { x: '0px', y: '0px' };

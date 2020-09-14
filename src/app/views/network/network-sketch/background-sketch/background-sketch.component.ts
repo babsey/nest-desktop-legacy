@@ -14,10 +14,10 @@ import { NetworkSketchService } from '../../../../services/network/network-sketc
   styleUrls: ['./background-sketch.component.scss'],
 })
 export class BackgroundSketchComponent implements OnInit, OnChanges {
+  @Input() eventTrigger = true;
+  @Input() height = 400;
   @Input() network: Network;
-  @Input() width: number = 600;
-  @Input() height: number = 400;
-  @Input() eventTrigger: boolean = true;
+  @Input() width = 600;
   private _host: any;
   private _selector: any;
   private _sourceNode: any;

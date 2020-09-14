@@ -12,7 +12,7 @@ import { ModelService } from '../../../services/model/model.service';
   styleUrls: ['./model-params-selection-list.component.scss']
 })
 export class ModelParamsSelectionListComponent implements OnInit {
-  @Input() modelId: string = '';
+  @Input() modelId = '';
 
   constructor(
     private _modelService: ModelService,

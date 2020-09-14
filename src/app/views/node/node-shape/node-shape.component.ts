@@ -10,10 +10,10 @@ import { Node } from '../../../components/node/node';
 })
 export class NodeShapeComponent implements OnInit {
   @Input() node: Node;
-  @Input() radius: number = 18;
-  @Input() strokeWidth: number = 2.5;
-  @Input() labelSize: number = 10;
-  @Input() showSelection: boolean = true;
+  @Input() radius = 18;
+  @Input() strokeWidth = 2.5;
+  @Input() labelSize = 10;
+  @Input() showSelection = true;
 
   constructor(
   ) { }

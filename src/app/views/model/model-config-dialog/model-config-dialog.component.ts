@@ -12,7 +12,7 @@ import { ModelService } from '../../../services/model/model.service';
   styleUrls: ['./model-config-dialog.component.scss']
 })
 export class ModelConfigDialogComponent implements OnInit {
-  private _model: Model
+  private _model: Model;
   private _param: any;
 
   constructor(

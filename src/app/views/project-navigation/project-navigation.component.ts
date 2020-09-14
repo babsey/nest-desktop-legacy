@@ -17,9 +17,9 @@ import { AppService } from '../../services/app/app.service';
 })
 export class ProjectNavigationComponent implements OnInit {
   @ViewChild('file', { static: false }) file;
-  private _selectionList: boolean = false;
+  private _selectionList = false;
   private _fileReader = new FileReader();
-  private _projectName: string = '';
+  private _projectName = '';
 
   constructor(
     private _appService: AppService,
@@ -52,7 +52,7 @@ export class ProjectNavigationComponent implements OnInit {
   }
 
   navigate(id: string): void {
-    let url: string = 'project/' + this.project.id;
+    const url = 'project/' + this.project.id;
     this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
   }
 

@@ -20,7 +20,7 @@ export class ConfigComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._subscription = this._route.params.subscribe(params => {
       if ('setting' in params) {
-        this._currentSection = params['setting'];
+        this._currentSection = params.settings;
         setTimeout(() => document.querySelector('#' + this.currentSection).scrollIntoView({ behavior: 'smooth'}), 100);
       }
     });

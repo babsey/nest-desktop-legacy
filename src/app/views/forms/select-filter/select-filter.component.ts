@@ -7,10 +7,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./select-filter.component.scss'],
 })
 export class SelectFilterComponent implements OnInit {
-  @Input() disabled: boolean = false;
-  @Input() filter: boolean = false;
+  @Input() disabled = false;
+  @Input() filter = false;
   @Input() options: any[] = [];
-  @Input() placeholder: string = '';
+  @Input() placeholder = '';
   @Input() selected: any = {};
   @Output() selectedChange: EventEmitter<any> = new EventEmitter();
   private _filteredOptions: string[] = [];

@@ -11,7 +11,7 @@ import { Config } from '../../../components/config';
 export class AppConfigComponent implements OnInit {
   private _config: Config;
 
-  constructor () {
+  constructor() {
     this._config = new Config('App');
   }
 

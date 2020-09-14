@@ -21,8 +21,8 @@ export class ModelListComponent implements OnInit, OnDestroy {
   private _subscription: any;
   private _models: string[] = [];
   private _filteredModels: string[] = [];
-  private _searchTerm: string = '';
-  private _view: string = 'enabled';
+  private _searchTerm = '';
+  private _view = 'enabled';
 
   constructor(
     private _appService: AppService,

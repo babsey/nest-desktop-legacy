@@ -11,7 +11,7 @@ import { ModelService } from '../../../services/model/model.service';
   styleUrls: ['./model-params-slider.component.scss']
 })
 export class ModelParamsSliderComponent implements OnInit, OnChanges {
-  @Input() modelId: string = '';
+  @Input() modelId = '';
   private _model: Model;
 
   constructor(

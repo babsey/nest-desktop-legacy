@@ -16,7 +16,7 @@ import { ModelService } from '../../../services/model/model.service';
   ]
 })
 export class ModelParamsListComponent implements OnInit {
-  @Input() modelId: string = '';
+  @Input() modelId = '';
 
   constructor(
     private _modelService: ModelService,

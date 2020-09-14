@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./help.component.scss']
 })
 export class HelpComponent implements OnInit, OnDestroy {
-  private _help: string = '';
+  private _help = '';
   private _subscription: any;
 
   constructor(
@@ -17,9 +17,9 @@ export class HelpComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this._subscription = this._route.params.subscribe((params: string[]): void => {
-      if (params.hasOwnProperty('help')) {
-        this._help = params['help'];
+    this._subscription = this._route.params.subscribe((params: any): void => {
+      if ('help' in params) {
+        this._help = params.help;
       }
     });
   }

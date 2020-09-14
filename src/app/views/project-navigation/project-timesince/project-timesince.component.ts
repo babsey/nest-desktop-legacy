@@ -16,7 +16,7 @@ export class ProjectTimesinceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this._intervalId = setInterval(() => { this._value = this.timer() }, 60 * 1000);
+    this._intervalId = setInterval(() => { this._value = this.timer(); }, 60 * 1000);
     this._value = this.timer();
   }
 

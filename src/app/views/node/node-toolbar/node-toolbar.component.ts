@@ -15,7 +15,7 @@ import { ActivityChartService } from '../../../services/activity/activity-chart.
 })
 export class NodeToolbarComponent implements OnInit {
   @Input() node: Node;
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   private _models: Model[] = [];
 
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;

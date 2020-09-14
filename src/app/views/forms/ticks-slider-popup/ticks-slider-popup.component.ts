@@ -8,7 +8,7 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angu
 })
 export class TicksSliderPopupComponent implements OnInit, OnChanges {
   @Input() options: any;
-  @Input() thumbLabel: boolean = false;
+  @Input() thumbLabel = false;
   @Input() value: number;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
   private _idx: number;

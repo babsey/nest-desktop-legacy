@@ -13,11 +13,10 @@ export class NetworkConfigComponent implements OnInit {
   private _config: Config;
   private _colorSchemes: ColorSchemes;
 
-  constructor(
-  ) {
+  constructor() {
     this._config = new Config('Network');
     this._colorSchemes = new ColorSchemes();
-   }
+  }
 
   ngOnInit() {
   }

@@ -12,7 +12,7 @@ import { FormatService } from '../../../services/format/format.service';
 })
 export class ConnectionListComponent implements OnInit {
   @Input() connection: Connection;
-  @Input() selective: boolean = false;
+  @Input() selective = false;
 
   constructor(
     private _formatService: FormatService,
