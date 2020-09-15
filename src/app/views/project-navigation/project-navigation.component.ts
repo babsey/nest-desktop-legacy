@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { enterAnimation } from '../../animations/enter-animation';
@@ -8,6 +9,8 @@ import { Project } from '../../components/project/project';
 
 import { AppService } from '../../services/app/app.service';
 
+import { ProjectDialogComponent } from './project-dialog/project-dialog.component';
+
 
 @Component({
   selector: 'app-project-navigation',
@@ -16,16 +19,14 @@ import { AppService } from '../../services/app/app.service';
   animations: [enterAnimation],
 })
 export class ProjectNavigationComponent implements OnInit {
-  @ViewChild('file', { static: false }) file;
   private _selectionList = false;
-  private _fileReader = new FileReader();
   private _projectName = '';
 
   constructor(
     private _appService: AppService,
+    private _dialog: MatDialog,
     private _router: Router,
   ) {
-    this.initFileReader();
   }
 
   ngOnInit() {
@@ -68,21 +69,11 @@ export class ProjectNavigationComponent implements OnInit {
     });
   }
 
-  initFileReader(): void {
-    this._fileReader.addEventListener('load', event => {
-      const result: any = JSON.parse(event['target']['result'] as string);
-      const data: any[] = result.hasOwnProperty('_id') ? [result] : result;
-      const projects: Project[] = data.map((project: any) => new Project(this.app, project));
-      this._appService.upload(projects);
+  openProjectDialog(): void {
+    const dialogRef = this._dialog.open(ProjectDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
     });
   }
-
-  openUploadDialog(): void {
-    this.file.nativeElement.click();
-  }
-
-  onFileAdded(): void {
-    this._fileReader.readAsText(this.file.nativeElement.files[0]);
-  }
-
 }

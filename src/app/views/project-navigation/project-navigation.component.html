@@ -1,13 +1,12 @@
-<input #file type="file" style="display:none" (change)="onFileAdded()"/>
 
 <mat-menu #projectMenu="matMenu" class="context-menu">
   <button mat-menu-item (click)="selectionList=!selectionList" [class.active]="selectionList">
     <fa-icon class="menu-icon" icon="edit"></fa-icon>
     Manage projects
   </button>
-  <button mat-menu-item (click)="openUploadDialog()">
+  <button mat-menu-item (click)="openProjectDialog()">
     <fa-icon class="menu-icon" icon="upload"></fa-icon>
-    Upload project
+    Upload projects
   </button>
   <button mat-menu-item (click)="downloadAllProjects()">
     <fa-icon class="menu-icon" icon="download"></fa-icon>

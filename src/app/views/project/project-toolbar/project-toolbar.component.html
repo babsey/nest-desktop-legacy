@@ -1,8 +1,7 @@
 <div style="visibility: hidden; position: fixed"
     [style.left]="contextMenuPosition.x"
     [style.top]="contextMenuPosition.y"
-    [matMenuTriggerFor]="projectMenu"
-    >
+    [matMenuTriggerFor]="projectMenu">
 </div>
 
 <mat-menu #projectMenu="matMenu" class="context-menu">
@@ -62,7 +61,7 @@
           (click)="selectMode('networkEditor')"
           [class.active]="isMode('networkEditor')"
           matTooltip="Construct network"
-          >
+          matTooltipShowDelay="1000">
           <span class="fa-stack">
             <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
             <fa-icon icon="pen" class="fa-stack-2x fa-inverse"></fa-icon>
@@ -72,7 +71,7 @@
           (click)="selectMode('activityExplorer')"
           [class.active]="isMode('activityExplorer')"
           matTooltip="Explore activity"
-          >
+          matTooltipShowDelay="1000">
           <span class="fa-stack">
             <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
             <fa-icon icon="play" class="fa-stack-2x fa-inverse"></fa-icon>
@@ -81,8 +80,8 @@
         <button mat-icon-button
           (click)="selectMode('labBook')"
           [class.active]="isMode('labBook')"
-          matTooltip="View network summary"
-          >
+          matTooltip="Lab book"
+          matTooltipShowDelay="1000">
           <span class="fa-stack">
             <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
             <fa-icon icon="eye" class="fa-stack-2x fa-inverse"></fa-icon>
@@ -100,10 +99,10 @@
     <button mat-button
       (click)="duplicateProject()"
       (contextmenu)="onContextMenu($event)"
-      matTooltip="Duplicate current project"
       class="no-print"
-      style="width:128px"
-      >
+      matTooltip="Duplicate current project"
+      matTooltipShowDelay="1000"
+      style="width:128px">
       <fa-icon
         icon="clone"
         style="margin:0 8px"
@@ -115,12 +114,13 @@
       (click)="run()"
       (contextmenu)="onContextMenu($event)"
       [disabled]="running"
-      matTooltip="Simulate"
       class="no-print"
+      matTooltip="Simulate"
+      matTooltipShowDelay="1000"
       style="width:128px">
       <span
-      matBadge="!"
       [matBadgeHidden]="project.getHash() === project.activityGraph.hash"
+      matBadge="!"
       matBadgeColor="warn"
       matBadgePosition="below before"
       MatBadgeSize="small">

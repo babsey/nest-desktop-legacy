@@ -2,18 +2,17 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatMenuTrigger } from '@angular/material/menu';
 
-import { listAnimation } from '../../../animations/list-animation';
+import { colorListAnimation } from '../../../animations/color-list-animation';
 
 import { App } from '../../../components/app';
 import { Project } from '../../../components/project/project';
-
 
 
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
   styleUrls: ['./project-list.component.scss'],
-  animations: [listAnimation],
+  animations: [colorListAnimation],
 })
 export class ProjectListComponent implements OnInit {
   @Input() app: App;
@@ -33,6 +32,7 @@ export class ProjectListComponent implements OnInit {
   get focused(): Project {
     return this._focused;
   }
+
 
   date(project: Project): string {
     return project.updatedAt || project.createdAt;

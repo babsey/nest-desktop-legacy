@@ -21,6 +21,7 @@ import { ProjectNavigationComponent } from './project-navigation.component';
 import { ProjectRevisionListComponent } from './project-revision-list/project-revision-list.component';
 import { ProjectSelectionComponent } from './project-selection/project-selection.component';
 import { ProjectTimesinceComponent } from './project-timesince/project-timesince.component';
+import { ProjectDialogComponent } from './project-dialog/project-dialog.component';
 
 
 
@@ -31,6 +32,7 @@ import { ProjectTimesinceComponent } from './project-timesince/project-timesince
     ProjectRevisionListComponent,
     ProjectSelectionComponent,
     ProjectTimesinceComponent,
+    ProjectDialogComponent,
   ],
   exports: [
     ProjectListComponent,

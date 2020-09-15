@@ -65,7 +65,10 @@ export class DatabaseService {
     return this.db.post(dataJSON)
       .then((res: any) => {
         data._id = res.id;
-        data.createdAt = dataJSON.createdAt;
+        if (!data.createdAt) {
+          data.createdAt = dataJSON.createdAt;
+        }
+        data.updatedAt = undefined;
       })
       .catch((err: any) => console.log(err));
   }
@@ -113,7 +116,7 @@ export class DatabaseService {
         docs.filter((doc: any) => ids.includes(doc._id))
           .forEach((doc: any) => doc._deleted = true);
         return this.db.bulkDocs(docs);
-      })
+      });
   }
 
   revisions(id: string): any {

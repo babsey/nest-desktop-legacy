@@ -4,6 +4,7 @@ import { Model } from '../model/model';
 
 // Make network compatible
 function upgradeNetwork(app: App, project: any): any {
+  console.log('Upgrade network:', project.name);
   const network: any = {
     nodes: [],
     connections: [],
@@ -57,8 +58,8 @@ function upgradeNetwork(app: App, project: any): any {
 
   project.simulation.connectomes.forEach((simLink: any) => {
     const connection: any = {
-      source: simLink.source,
-      target: simLink.target,
+      source: simLink.source !== undefined ? simLink.source : simLink.pre,
+      target: simLink.target !== undefined ? simLink.target : simLink.post,
     };
     if (simLink.hasOwnProperty('conn_spec')) {
       connection['rule'] = simLink.conn_spec.rule || 'all_to_all';
@@ -85,11 +86,13 @@ function upgradeNetwork(app: App, project: any): any {
     network.connections.push(connection);
   });
 
+  console.log(network);
   return network;
 }
 
 // Make simulation compatible.
 function upgradeSimulation(project: any): any {
+  // console.log('Upgrade simulation:', project.name);
   const simulation: any = {
     time: project.simulation.time,
     randomSeed: project.simulation.random_seed,
@@ -101,11 +104,12 @@ function upgradeSimulation(project: any): any {
 
 // Make the old projects compatible.
 export function upgradeProject(app: App, project: any): any {
+  // console.log('Upgrade project:', project.name);
   if (Object.keys(project).length === 0) {
     return {};
   }
 
-  let valid: boolean = false;       // only true when version is 2.5 or newer
+  let valid = false;       // only true when version is 2.5 or newer
   if (project.hasOwnProperty('version')) {
     const version: string[] = project.version.split('.');
     valid = (Number(version[0]) === 2 && Number(version[1]) >= 5) || Number(version[0]) > 2;

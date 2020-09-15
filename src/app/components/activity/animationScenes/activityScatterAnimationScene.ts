@@ -65,11 +65,8 @@ export class ActivityScatterAnimationScene extends ActivityAnimationScene {
       [-0.5, 0.5],
     ];
     const ndim: number = extent.length;
-    const opacity: number = config.hasOwnProperty('opacity')
-      ? config['opacity']
-      : data['opacity'] || 1;
-    const scale: number =
-      this.graph.config.dotSize * (config['scale'] || 1);
+    const opacity: number = config.hasOwnProperty('opacity') ? config.opacity : data.opacity || 1;
+    const scale: number = this.graph.config.dotSize * (config.scale || 1);
 
     const configFrames: any = this.graph.config.frames;
     const trail: any = this.graph.config.trail;

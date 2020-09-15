@@ -18,7 +18,7 @@ export class HelpComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._subscription = this._route.params.subscribe((params: any): void => {
-      if ('help' in params) {
+      if (params.hasOwnProperty('help')) {
         this._help = params.help;
       }
     });

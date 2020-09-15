@@ -183,9 +183,12 @@ export class App extends Config {
 
   // Add projects to list and database.
   addProjects(data: any[]): Promise<any> {
+    console.log('Add projects');
     const projects: any[] = data.map((project: any) =>
       new Promise((resolve, reject) => {
-        this.addProject(project).then(() => resolve());
+        this.addProject(project).then(() => {
+          resolve();
+        });
       }));
     return Promise.all(projects);
   }
@@ -224,7 +227,7 @@ export class App extends Config {
     // console.log('Load projects from files');
     let promise: Promise<any> = Promise.resolve();
     this.config.projects.forEach((file: string) => {
-      console.log('Load project from file:', file);
+      // console.log('Load project from file:', file);
       const data: any = require('../../assets/projects/' + file + '.json');
       promise = promise.then(() => this.addProject(data));
     });
@@ -257,10 +260,9 @@ export class App extends Config {
 
   // Add project to list and database.
   addProject(data: any): Promise<any> {
-    // console.log('Add project:', data.name)
+    // console.log('Add project:', data.name);
     const project: Project = new Project(this, data);
-    project.clean();
-    this.projects.push(project);
+    this.projects.unshift(project);
     return this.projectDB.create(project);
   }
 
@@ -272,7 +274,7 @@ export class App extends Config {
 
   // Download project from the list.
   downloadProject(projectId: string): void {
-    // console.log('Download project:', projectId)
+    // console.log('Download project:', projectId);
     const project: Project = this.projects.find((p: Project) => p.id === projectId);
     this.download(project.toJSON('file'), 'projects');
   }

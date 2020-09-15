@@ -1,5 +1,4 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { App } from '../../components/app';
 import { Project } from '../../components/project/project';
@@ -14,9 +13,7 @@ export class AppService {
   private _change: EventEmitter<any> = new EventEmitter();
   private _sidenavOpened = false;
 
-  constructor(
-    private _snackBar: MatSnackBar,
-  ) {
+  constructor() {
     this.app = new App();
   }
 
@@ -50,18 +47,6 @@ export class AppService {
 
   toggleSidenav(): void {
     this.sidenavOpened = !this.sidenavOpened;
-  }
-
-  upload(projects: Project[]): void {
-    // console.log('Upload projects')
-    this.app.addProjects(projects).then((resp: any) => {
-      this._snackBar.open('Projects uploaded successfully.', null, {
-        duration: 2000,
-      });
-      this.change.emit();
-    }).catch(err => {
-      this._snackBar.open(err, 'Ok');
-    });
   }
 
 }
