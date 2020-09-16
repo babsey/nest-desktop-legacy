@@ -55,10 +55,17 @@
   <div style="height:100%" class="flex">
     <span style="margin:auto">
       <span>
-        <ng-container *ngIf="project.running">
+        <ng-container *ngIf="project.simulation.running">
+          <!-- <div style="margin:auto; width:32px; padding:12px">
+            <mat-spinner
+              diameter="32"
+              mode="indeterminate"
+              strokeWidth="4"
+            ></mat-spinner>
+          </div> -->
           The simulation is currently running. Please wait.
         </ng-container>
-        <ng-container *ngIf="!project.running">
+        <ng-container *ngIf="!project.simulation.running">
           No activity found. Please simulate.
         </ng-container>
       </span>

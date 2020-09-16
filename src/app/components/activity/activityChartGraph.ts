@@ -160,10 +160,10 @@ export class ActivityChartGraph extends ActivityGraph {
       this.layout['yaxis' + (panel.yaxis > 1 ? panel.yaxis : '')] = panel.layout.yaxis;
       this.layout['xaxis' + (panel.xaxis > 1 ? panel.xaxis : '')] = panel.layout.xaxis;
       if (panel.layout.barmode) {
-        this.layout['barmode'] = panel.layout.barmode;
+        this.layout.barmode = panel.layout.barmode;
       }
       panel.data.forEach((data: any) => {
-        data['panelIdx'] = panel.idx;
+        data.panelIdx = panel.idx;
         data.xaxis = 'x' + panel.xaxis;
         data.yaxis = 'y' + panel.yaxis;
         this._data.push(data);

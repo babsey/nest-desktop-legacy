@@ -164,23 +164,23 @@ export class Connection extends Config {
 
     if (target === 'simulator') {
       // Collect specifications of the connection
-      connection['conn_spec'] = {
+      connection.conn_spec = {
         rule: this._rule,
       };
       this.params.forEach((param: Parameter) => connection.conn_spec[param.id] = param.value);
       if (this.mask.hasMask()) {
-        connection.conn_spec['mask'] = this.mask.toJSON(target);
+        connection.conn_spec.mask = this.mask.toJSON(target);
       }
-      connection['syn_spec'] = this.synapse.toJSON(target);     // Collect specifications of the synapse
+      connection.syn_spec = this.synapse.toJSON(target);     // Collect specifications of the synapse
     } else {
-      connection['rule'] = this._rule;
-      connection['params'] = this.params;
-      connection['mask'] = this.mask.toJSON(target);
-      connection['synapse'] = this.synapse.toJSON(target);
+      connection.rule = this._rule;
+      connection.params = this.params;
+      connection.mask = this.mask.toJSON(target);
+      connection.synapse = this.synapse.toJSON(target);
     }
 
     if (this.isBothSpatial()) {
-      connection['projections'] = this.projections.toJSON(target);
+      connection.projections = this.projections.toJSON(target);
     }
 
     return connection;

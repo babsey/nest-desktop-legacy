@@ -80,19 +80,19 @@ export class Parameter {
       value: this.value,
     };
     if (this.parent.name === 'Model') {
-      params['input'] = this.input;
-      params['label'] = this.label;
-      params['unit'] = this.unit;
+      params.input = this.input;
+      params.label = this.label;
+      params.unit = this.unit;
       if (this.input === 'valueSlider') {
-        params['min'] = this.min;
-        params['max'] = this.max;
-        params['step'] = this.step;
+        params.min = this.min;
+        params.max = this.max;
+        params.step = this.step;
       } else if (this.input === 'tickSlider') {
-        params['ticks'] = this.ticks;
+        params.ticks = this.ticks;
       }
     } else {
-      params['visible'] = this.visible;
-      params['factors'] = this.factors;
+      params.visible = this.visible;
+      params.factors = this.factors;
     }
     return params;
   }

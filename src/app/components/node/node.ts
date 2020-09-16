@@ -223,25 +223,25 @@ export class Node extends Config {
       model: this.modelId,
     };
     if (target === 'simulator') {
-      node['n'] = this.size;
-      node['element_type'] = this.model.elementType;
-      node['params'] = {};
+      node.n = this.size;
+      node.element_type = this.model.elementType;
+      node.params = {};
       this.params
         .filter((param: Parameter) => param.visible)
         .forEach((param: Parameter) => node.params[param.id] = param.value);
       if (this.model.existing === 'multimeter' && this.recordFrom.length > 0) {
-        node.params['record_from'] = this.recordFrom;
+        node.params.record_from = this.recordFrom;
       }
     } else {
-      node['size'] = this.size;
-      node['view'] = this.view.toJSON();
-      node['params'] = this.params.map((param: Parameter) => param.toJSON());
+      node.size = this.size;
+      node.view = this.view.toJSON();
+      node.params = this.params.map((param: Parameter) => param.toJSON());
       if (this.model.existing === 'multimeter') {
-        node['recordFrom'] = this.recordFrom;
+        node.recordFrom = this.recordFrom;
       }
     }
     if (this.spatial.hasPositions()) {
-      node['spatial'] = this.spatial.toJSON(target);
+      node.spatial = this.spatial.toJSON(target);
     }
     return node;
   }

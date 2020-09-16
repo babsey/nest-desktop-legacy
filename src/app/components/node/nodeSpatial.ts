@@ -56,13 +56,13 @@ export class FreePositions {
       extent: this.extent,
     };
     if (target === 'simulator') {
-      positions['positions'] = this.pos;
-      positions['edge_wrap'] = this.edgeWrap;
-      positions['num_dimensions'] = this.numDimensions;
+      positions.positions = this.pos;
+      positions.edge_wrap = this.edgeWrap;
+      positions.num_dimensions = this.numDimensions;
     } else {
-      positions['pos'] = this.pos;
-      positions['edgeWrap'] = this.edgeWrap;
-      positions['numDimensions'] = this.numDimensions;
+      positions.pos = this.pos;
+      positions.edgeWrap = this.edgeWrap;
+      positions.numDimensions = this.numDimensions;
     }
     return positions;
   }
@@ -139,12 +139,12 @@ export class GridPositions {
       extent: this.extent,
     };
     if (target === 'simulator') {
-      positions['rows'] = this.rows;
-      positions['columns'] = this.columns;
-      positions['edge_wrap'] = this.edgeWrap;
+      positions.rows = this.rows;
+      positions.columns = this.columns;
+      positions.edge_wrap = this.edgeWrap;
     } else {
-      positions['shape'] = this.shape;
-      positions['edgeWrap'] = this.edgeWrap;
+      positions.shape = this.shape;
+      positions.edgeWrap = this.edgeWrap;
     }
     return positions;
   }

@@ -26,7 +26,7 @@ export class SimulationRunService {
   }
 
   run(project: Project): Promise<any> {
-    if (project.running) { return; }
+    if (project.simulation.running) { return; }
     this._logService.reset();
 
     if (!this._viewCodeEditor) {

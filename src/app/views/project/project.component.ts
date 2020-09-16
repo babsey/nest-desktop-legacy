@@ -42,8 +42,4 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return this._projectRev;
   }
 
-  isAppReady(): boolean {
-    return this._appService.app.ready;
-  }
-
 }

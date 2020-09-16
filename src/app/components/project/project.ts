@@ -37,7 +37,6 @@ export class Project extends Config {
   private _simulation: Simulation;               // settings for the simulation
   private _code: ProjectCode;                    // code script for NEST Server
   private _activityGraph: ActivityChartGraph;
-  private _running = false;
 
   private _networkRevisions: any[] = [];         // network history
   private _networkRevisionIdx = -1;      // Index of the network history;
@@ -195,7 +194,7 @@ export class Project extends Config {
   }
 
   isNetworkChanged(): boolean {
-    return this.getHash() !== this.activityGraph.hash && !this.running;
+    return this.getHash() !== this.activityGraph.hash && !this.simulation.running;
   }
 
   // Clear network history list.
@@ -262,10 +261,6 @@ export class Project extends Config {
   Simulation
   */
 
-  get running(): boolean {
-    return this._running;
-  }
-
   // Create a new simulation.
   initSimulation(simulation: any = {}): void {
     this._simulation = new Simulation(this, simulation);
@@ -273,23 +268,23 @@ export class Project extends Config {
 
   runSimulationScript(): Promise<any> {
     // console.log('Run simulation script');
-    this._running = true;
+    this.simulation.running = true;
     const url: string = this.app.nestServer.url + '/script/simulation/run';
     const data: any = this.toJSON('simulator');
     return this.app.nestServer.http.post(url, data)
       .then((resp: any) => {
-        this._running = false;
+        this.simulation.running = false;
         this.updateActivities(resp.data);
         return resp;
       }).catch((err: any) => {
-        this._running = false;
+        this.simulation.running = false;
         return err;
       });
   }
 
   runSimulationCode(): Promise<any> {
     // console.log('Run simulation code');
-    this._running = true;
+    this.simulation.running = true;
     const url: string = this.app.nestServer.url + '/exec';
     const data: any = {
       source: this.code.script,
@@ -297,11 +292,11 @@ export class Project extends Config {
     };
     return this.app.nestServer.http.post(url, data)
       .then((resp: any) => {
-        this._running = false;
+        this.simulation.running = false;
         this.updateActivities(resp.data);
         return resp;
       }).catch((err: any) => {
-        this._running = false;
+        this.simulation.running = false;
         return err;
       });
   }
@@ -328,7 +323,7 @@ export class Project extends Config {
 
   // Update activities in recorder nodes after simulation.
   updateActivities(data: any): void {
-    console.log('Update activities');
+    // console.log('Update activities');
     this.simulation.kernel.time = data.kernel.time;
     // Update recorded activity
     data.activities.forEach((activity: any, idx: number) => {

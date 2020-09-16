@@ -92,7 +92,7 @@ export class Synapse {
         .filter((param: Parameter) => param.visible === undefined || param.visible)
         .forEach((param: Parameter) => synapse[param.id] = param.value);
     } else {
-      synapse['params'] = this.params.map((param: Parameter) => param.toJSON());
+      synapse.params = this.params.map((param: Parameter) => param.toJSON());
     }
 
     return synapse;

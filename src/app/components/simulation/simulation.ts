@@ -11,6 +11,7 @@ export class Simulation extends Config {
   time: number;                         // simulation time
   randomSeed: number;                   // seed for random renerator of numpy
   kernel: SimulationKernel;             // simulation kernel
+  private _running = false;
 
   constructor(
     project: Project,
@@ -25,15 +26,23 @@ export class Simulation extends Config {
     this.randomSeed = parseInt(simulation.randomSeed, 0) || 0;
   }
 
+  get running(): boolean {
+    return this._running;
+  }
+
+  set running(value: boolean) {
+    this._running = value;
+  }
+
   toJSON(target: string = 'db'): any {
     const simulation: any = {
       kernel: this.kernel.toJSON(target),
       time: this.time,
     };
     if (target === 'simulator') {
-      simulation['random_seed'] = this.randomSeed;
+      simulation.random_seed = this.randomSeed;
     } else {
-      simulation['randomSeed'] = this.randomSeed;
+      simulation.randomSeed = this.randomSeed;
     }
     return simulation;
   }

@@ -1,7 +1,7 @@
-<ng-container *ngIf="project">
+<ng-container *ngIf="isReady(); else loading">
   <app-project-toolbar
-    [project]="project">
-  </app-project-toolbar>
+    [project]="project"
+  ></app-project-toolbar>
 
   <span class="project">
     <mat-sidenav-container
@@ -48,3 +48,18 @@
     </mat-card>
   </ng-container>
 </ng-container>
+
+<ng-template #loading>
+  <div style="width:100%; height:calc(100vh - 40px); display:flex; justify-content:center; align-items:center;">
+    <div style="text-align:center; height:100px">
+      <div style="margin:auto; width:32px; padding:12px">
+        <mat-spinner
+          diameter="32"
+          mode="indeterminate"
+          strokeWidth="4"
+        ></mat-spinner>
+      </div>
+      <div>Project is loading.</div>
+    </div>
+  </div>
+</ng-template>

@@ -1,19 +1,4 @@
-<ng-container *ngIf="isAppReady(); else loading">
-  <app-project-container
-    [id]="projectId"
-    [rev]="projectRev"
-  ></app-project-container>
-</ng-container>
-
-<ng-template #loading>
-  <div style="height: calc(100% - 40px)" class="flex">
-    <span style="margin:auto">
-      <fa-icon
-        icon="compact-disc"
-        class="fa-lg fa-spin"
-        style="display:inline-block"
-      ></fa-icon>
-      <span style="margin-left: 8px">App is loading.</span>
-    </span>
-  </div>
-</ng-template>
+<app-project-container
+  [id]="projectId"
+  [rev]="projectRev"
+></app-project-container>

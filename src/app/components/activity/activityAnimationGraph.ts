@@ -127,7 +127,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
   }
 
   plotAnalogData(activity: Activity): void {
-    const sourceData: number[] = activity.events['V_m'];
+    const sourceData: number[] = activity.events.V_m;
     // const rangeData: number[] = [-70., -55.];
     const times: number[] = activity.events.times;
     const pos: any = activity.getPositionsForSenders();

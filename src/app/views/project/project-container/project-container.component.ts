@@ -76,28 +76,34 @@ export class ProjectContainerComponent implements OnInit, OnChanges, OnDestroy {
     this._projectService.sidenavOpened = value;
   }
 
+  isReady(): boolean {
+    return this._appService.app.projectReady;
+  }
+
   update(): void {
     // console.log('Project container update');
-    if (this.id) {
-      this._appService.app.initProject(this.id, this.rev).then(() => {
-        if (!this.project.hasSpatialActivities) {
-          this._activityGraphService.mode = 'chart';
-        }
-        this._activityChartService.selectedPanel = undefined;
-        // this._activityGraphService.init();
-
-        if (
-          this._router.url.includes('run') || this.project.config.runAfterLoad &&
-          !this.project.hasActivities && this._projectService.mode === 'activityExplorer'
-        ) {
-          this.project.runSimulationScript();
-        }
-      }).catch(() => {
-        this._router.navigate([{ outlets: { primary: 'project/' } }]);
-      });
-    } else {
-      this._appService.app.initProject();
-    }
+    this._appService.app.projectReady = false;
+    setTimeout(() => {
+      if (this.id) {
+        this._appService.app.initProject(this.id, this.rev).then(() => {
+          if (!this.project.hasSpatialActivities) {
+            this._activityGraphService.mode = 'chart';
+          }
+          this._activityChartService.selectedPanel = undefined;
+          // this._activityGraphService.init();
+          if (
+            this._router.url.includes('run') || this.project.config.runAfterLoad &&
+            !this.project.hasActivities && this._projectService.mode === 'activityExplorer'
+          ) {
+            this.project.runSimulationScript();
+          }
+        }).catch(() => {
+          this._router.navigate([{ outlets: { primary: 'project/' } }]);
+        });
+      } else {
+        this._appService.app.initProject();
+      }
+    }, 200);
   }
 
   triggerResize(): void {

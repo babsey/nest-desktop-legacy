@@ -155,19 +155,19 @@ export class Model {
       existing: this.existing,
     };
     if (target === 'simulator') {
-      model['new'] = this.id;
-      model['params'] = {};
+      model.new = this.id;
+      model.params = {};
       this.params.forEach((param: Parameter) => model.params[param.id] = param.value);
     } else {
-      model['id'] = this.id;
-      model['elementType'] = this.elementType;
-      model['label'] = this.label;
-      model['abbreviation'] = this.abbreviation;
-      model['params'] = this.params.map((param: Parameter) => param.toJSON());
+      model.id = this.id;
+      model.elementType = this.elementType;
+      model.label = this.label;
+      model.abbreviation = this.abbreviation;
+      model.params = this.params.map((param: Parameter) => param.toJSON());
       if (this.recordables.length > 0) {
-        model['recordables'] = this.recordables;
+        model.recordables = this.recordables;
       }
-      model['version'] = this.app.version;
+      model.version = this.app.version;
     }
     return model;
   }

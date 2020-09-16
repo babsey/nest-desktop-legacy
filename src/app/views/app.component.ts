@@ -55,6 +55,10 @@ export class AppComponent implements OnInit, OnDestroy {
     return this._appService.rightClick;
   }
 
+  isAppReady(): boolean {
+    return this._appService.app.ready;
+  }
+
   triggerResize(): void {
     if (!this._mobileQuery.matches) {
       window.dispatchEvent(new Event('resize'));

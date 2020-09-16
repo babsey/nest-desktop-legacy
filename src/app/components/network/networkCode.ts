@@ -13,19 +13,19 @@ export class NetworkCode extends Code {
   }
 
   createNodes(): string {
-    let script: string = '';
+    let script = '';
     this.network.nodes.forEach((node: Node) => script += node.code.create());
     return script;
   }
 
   connectNodes(): string {
-    let script: string = '';
+    let script = '';
     this.network.connections.forEach((connection: Connection) => script += connection.code.connect());
     return script;
   }
 
   getActivities(): string {
-    let script: string = '';
+    let script = '';
     script += 'response = {';
     script += this._() + '"kernel": {"time": nest.GetKernelStatus("time")},';
     script += this._() + '"activities": [';

@@ -19,6 +19,7 @@ const pad = (num: number, size: number = 2): string => {
 export class App extends Config {
   private _version: string;
   private _ready = false;
+  private _projectReady = false;
   view: AppView;
 
   // NEST model e.g. neuron, synapse, stimulator, recorder
@@ -50,6 +51,14 @@ export class App extends Config {
 
   get ready(): boolean {
     return this._ready;
+  }
+
+  get projectReady(): boolean {
+    return this._projectReady;
+  }
+
+  set projectReady(value: boolean) {
+    this._projectReady = value;
   }
 
   get version(): string {
@@ -293,10 +302,12 @@ export class App extends Config {
         } else {
           this.newProject();
         }
+        this._projectReady = true;
         resolve(true);
       } catch {
         console.log('Error in project initialization');
         this.newProject();
+        this._projectReady = true;
         reject(true);
       }
     });

@@ -38,24 +38,50 @@
 }
 
 @include keyframes(shake) {
-  2.5%, 22.5% {
-    transform: translate3d(-1px, 0, 0);
+  50%, 75% {
+    transform: translate(0, 0);
   }
 
-  5%, 20% {
-    transform: translate3d(2px, 0, 0);
+  52.5%, 72.5% {
+    transform: translate(-1px, 0);
   }
 
-  7.5%, 12.5%, 17.5% {
-    transform: translate3d(-3px, 0, 0);
+  55%, 70% {
+    transform: translate(2px, 0);
   }
 
-  10%, 15% {
-    transform: translate3d(3px, 0, 0);
+  57.5%, 62.5%, 67.5% {
+    transform: translate(-3px, 0);
+  }
+
+  60%, 65% {
+    transform: translate(3px, 0);
+  }
+}
+
+@include keyframes(bounce) {
+  50%, 75% {
+    transform: scale(1);
+  }
+
+  52.5%, 72.5% {
+    transform: scale(0.95);
+  }
+
+  55%, 70% {
+    transform: scale(1.05);
+  }
+
+  57.5%, 62.5%, 67.5% {
+    transform: scale(1.2);
+  }
+
+  60%, 65% {
+    transform: scale(1.1);
   }
 }
 
 .network-changed {
-  // @include animation('blink 2s infinite');
+  // @include animation('bounce 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
   @include animation('shake 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
 }

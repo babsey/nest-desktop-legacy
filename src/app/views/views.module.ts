@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ToastrModule } from 'ngx-toastr';
 
 // modules
@@ -35,13 +35,13 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
 @NgModule({
   declarations: [
     AppComponent,
+    EmptyPageComponent,
     LoadingComponent,
     LoadingDetailsComponent,
     PageNotFoundComponent,
-    StartpageComponent,
-    EmptyPageComponent,
-    ValidationCheckComponent,
     ResponseCheckComponent,
+    StartpageComponent,
+    ValidationCheckComponent,
   ],
   imports: [
     ActivityModule,

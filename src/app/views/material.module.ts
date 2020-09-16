@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-//Angular Material Components
+// Angular Material Components
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkTableModule } from '@angular/cdk/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -61,6 +61,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     MatPaginatorModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
@@ -96,6 +97,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     MatPaginatorModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,

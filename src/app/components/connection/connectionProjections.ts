@@ -112,17 +112,17 @@ export class ConnectionProjections extends Config {
       delays: this.delays,
     };
     if (target === 'simulator') {
-      projections['number_of_connections'] = this.numberOfConnections;
-      projections['connection_type'] = this.connectionType;
-      projections['allow_autapses'] = this.allowAutapses;
-      projections['allow_multapses'] = this.allowMultapses;
-      projections['allow_oversized_mask'] = this.allowOversizedMask;
+      projections.number_of_connections = this.numberOfConnections;
+      projections.connection_type = this.connectionType;
+      projections.allow_autapses = this.allowAutapses;
+      projections.allow_multapses = this.allowMultapses;
+      projections.allow_oversized_mask = this.allowOversizedMask;
     } else {
-      projections['numberOfConnections'] = this.numberOfConnections;
-      projections['connectionType'] = this.connectionType;
-      projections['allowAutapses'] = this.allowAutapses;
-      projections['allowMultapses'] = this.allowMultapses;
-      projections['allowOversizedMask'] = this.allowOversizedMask;
+      projections.numberOfConnections = this.numberOfConnections;
+      projections.connectionType = this.connectionType;
+      projections.allowAutapses = this.allowAutapses;
+      projections.allowMultapses = this.allowMultapses;
+      projections.allowOversizedMask = this.allowOversizedMask;
     }
     return projections;
   }

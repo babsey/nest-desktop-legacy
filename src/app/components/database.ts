@@ -60,8 +60,8 @@ export class DatabaseService {
   create(data: any): any {
     // console.log('Create doc in db');
     const dataJSON = data.toJSON();
-    dataJSON['version'] = this.app.version;
-    dataJSON['createdAt'] = new Date();
+    dataJSON.version = this.app.version;
+    dataJSON.createdAt = new Date();
     return this.db.post(dataJSON)
       .then((res: any) => {
         data._id = res.id;
@@ -86,8 +86,8 @@ export class DatabaseService {
     return this.db.get(data.id)
       .then((doc: any) => {
         const dataJSON = data.toJSON();
-        dataJSON['version'] = this.app.version;
-        dataJSON['updatedAt'] = new Date();
+        dataJSON.version = this.app.version;
+        dataJSON.updatedAt = new Date();
         const keys: string[] = Object.keys(dataJSON);
         keys.filter((key: string) => !key.startsWith('_'))
           .forEach((key: string) => doc[key] = dataJSON[key]);
@@ -132,7 +132,7 @@ export class DatabaseService {
 
   getVersion(): any {
     return this.db.get('_local/version')
-      .then((doc: any) => doc['version']);
+      .then((doc: any) => doc.version);
   }
 
   setVersion(): any {

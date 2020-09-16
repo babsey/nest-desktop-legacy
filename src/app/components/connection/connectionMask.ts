@@ -58,7 +58,7 @@ export class ConnectionMask extends Config {
   }
 
   draw(): void {
-    this.graph.layout['shapes'] = [];
+    this.graph.layout.shapes = [];
     if (this.masktype === undefined) { return; }
     switch (this.masktype) {
       case 'rectangular':
@@ -77,7 +77,7 @@ export class ConnectionMask extends Config {
   }
 
   drawRect(): void {
-    this.graph.layout['shapes'] = [{
+    this.graph.layout.shapes = [{
       type: 'rect',
       xref: 'x',
       yref: 'y',
@@ -94,7 +94,7 @@ export class ConnectionMask extends Config {
   }
 
   drawCircle(): void {
-    this.graph.layout['shapes'] = [{
+    this.graph.layout.shapes = [{
       type: 'circle',
       xref: 'x',
       yref: 'y',
@@ -111,7 +111,7 @@ export class ConnectionMask extends Config {
   }
 
   drawDoughnut(): void {
-    this.graph.layout['shapes'] = [{
+    this.graph.layout.shapes = [{
       type: 'circle',
       xref: 'x',
       yref: 'y',
@@ -165,7 +165,7 @@ export class ConnectionMask extends Config {
   }
 
   drawEllipsis(): void {
-    this.graph.layout['shapes'] = [{
+    this.graph.layout.shapes = [{
       type: 'circle',
       xref: 'x',
       yref: 'y',
@@ -186,8 +186,8 @@ export class ConnectionMask extends Config {
     if (target === 'simulator') {
       mask[this.masktype] = this.specs;
     } else {
-      mask['masktype'] = this.masktype;
-      mask['specs'] = this.specs;
+      mask.masktype = this.masktype;
+      mask.specs = this.specs;
     }
     return mask;
   }

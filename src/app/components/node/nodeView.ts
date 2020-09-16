@@ -35,7 +35,7 @@ export class NodeView {
       const nodes: Node[] = this.node.network.nodes.filter(
         (node: Node) => node.modelId === this.node.modelId);
       const idx: number = nodes.indexOf(this.node);
-      const label: string = this.node.model.abbreviation || this.node.modelId.split('_').map((d: string) => d[0]).join('')
+      const label: string = this.node.model.abbreviation || this.node.modelId.split('_').map((d: string) => d[0]).join('');
       return label + (idx + 1);
     }
   }

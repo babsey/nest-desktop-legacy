@@ -33,12 +33,12 @@ function upgradeNetwork(app: App, project: any): any {
       view: view,
     };
     if (simNode.hasOwnProperty('spatial')) {
-      node['spatial'] = simNode.spatial;
+      node.spatial = simNode.spatial;
       if (node.spatial.hasOwnProperty('rows')) {
-        node.spatial['shape'] = [node.spatial.rows, node.spatial.columns];
+        node.spatial.shape = [node.spatial.rows, node.spatial.columns];
       }
       if (node.spatial.hasOwnProperty('positions')) {
-        node.spatial['pos'] = node.spatial.positions;
+        node.spatial.pos = node.spatial.positions;
       }
     }
     network.nodes.push(node);
@@ -62,8 +62,8 @@ function upgradeNetwork(app: App, project: any): any {
       target: simLink.target !== undefined ? simLink.target : simLink.post,
     };
     if (simLink.hasOwnProperty('conn_spec')) {
-      connection['rule'] = simLink.conn_spec.rule || 'all_to_all';
-      connection['params'] = Object.entries(simLink.conn_spec)
+      connection.rule = simLink.conn_spec.rule || 'all_to_all';
+      connection.params = Object.entries(simLink.conn_spec)
         .filter((spec: any[]) => spec[0] !== 'rule')
         .map((param: any[]) => ({ id: param[0], value: param[1] }));
     }
@@ -82,7 +82,7 @@ function upgradeNetwork(app: App, project: any): any {
         synapse.params.push(param);
       });
     }
-    connection['synapse'] = synapse;
+    connection.synapse = synapse;
     network.connections.push(connection);
   });
 

@@ -55,16 +55,17 @@
 
 </span>
 
-
 <ng-template #loading>
-  <div style="height: calc(100% - 40px)" class="flex">
-    <span style="margin:auto">
-      <fa-icon
-        icon="compact-disc"
-        class="fa-lg fa-spin"
-        style="display:inline-block"
-      ></fa-icon>
-      <span style="margin-left: 8px">Model is requesting.</span>
-    </span>
+  <div style="width:100%; height:calc(100vh - 40px); display:flex; justify-content:center; align-items:center;">
+    <div style="text-align:center; height:100px">
+      <div style="margin:auto; width:32px; padding:12px">
+        <mat-spinner
+          diameter="32"
+          mode="indeterminate"
+          strokeWidth="4"
+        ></mat-spinner>
+      </div>
+      <div>Model is requesting.</div>
+    </div>
   </div>
 </ng-template>
