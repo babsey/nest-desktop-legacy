@@ -106,11 +106,16 @@ export class Connection extends Config {
   set rule(value: string) {
     this._rule = value;
     this.params = this.view.getRuleParams();
+    this.connectionChanges();
+  }
+
+  connectionChanges(): void {
+    this.network.networkChanges();
   }
 
   reverse(): void {
     [this.source, this.target] = [this.target, this.source];
-    this.network.commit();
+    this.connectionChanges();
   }
 
   select(): void {
@@ -136,7 +141,7 @@ export class Connection extends Config {
     this.synapse.modelId = 'static_synapse';
     this.projections.reset();
     this.mask.unmask();
-    this.network.commit();
+    this.connectionChanges();
   }
 
   hasSourceIndices(): boolean {
@@ -149,7 +154,6 @@ export class Connection extends Config {
 
   delete(): void {
     this.network.deleteConnection(this);
-    this.network.commit();
   }
 
   toJSON(target: string = 'db'): any {

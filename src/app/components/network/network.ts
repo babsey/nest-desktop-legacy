@@ -21,16 +21,7 @@ export class Network extends Config {
     this.code = new NetworkCode(this);
     this.view = new NetworkView(this);
 
-    this.nodes = [];
-    this.connections = [];
-
-    if (network.nodes) {
-      network.nodes.forEach((node: any) => this.addNode(node));
-    }
-    if (network.connections) {
-      network.connections.forEach((connection: any) => this.addConnection(connection));
-    }
-
+    this.update(network);
     this.clean();
   }
 
@@ -46,8 +37,12 @@ export class Network extends Config {
     return this.nodes.filter((node: Node) => node.model.isRecorder());
   }
 
-  commit(): void {
+  networkChanges(): void {
     this.project.commitNetwork(this);
+    this.project.activityGraph.init();
+    if (this.project.config.runAfterChange) {
+      setTimeout(() => this.project.runSimulationScript(), 1);
+    }
   }
 
   oldest(): void {
@@ -82,6 +77,7 @@ export class Network extends Config {
     const idx: number = node.idx;
     this.nodes = this.nodes.slice(0, idx).concat(this.nodes.slice(idx + 1));
     this.clean();
+    this.networkChanges();
   }
 
   deleteConnection(connection: Connection): void {
@@ -91,6 +87,7 @@ export class Network extends Config {
     const idx: number = connection.idx;
     this.connections = this.connections.slice(0, idx).concat(this.connections.slice(idx + 1));
     this.clean();
+    this.networkChanges();
   }
 
   clean(): void {
@@ -106,6 +103,18 @@ export class Network extends Config {
     return new Network(this.project, this);
   }
 
+  update(network: any): void {
+    this.nodes = [];
+    this.connections = [];
+
+    if (network.nodes) {
+      network.nodes.forEach((node: any) => this.addNode(node));
+    }
+    if (network.connections) {
+      network.connections.forEach((connection: any) => this.addConnection(connection));
+    }
+  }
+
 
   /**
    * Clears the network by deleting every node and every connection.
@@ -118,7 +127,7 @@ export class Network extends Config {
     // this.connections.forEach((connection: Connection) => this.deleteConnection(connection));
     // this.nodes.forEach((node: Node) => this.deleteNode(node));
     this.clean();
-    this.commit();
+    this.networkChanges();
   }
 
   isEmpty(): boolean {

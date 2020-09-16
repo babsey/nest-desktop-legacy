@@ -66,11 +66,11 @@ export class Node extends Config {
 
   set modelId(value: string) {
     this._modelId = value;
-    this.size = 1;
+    this._size = 1;
     this.spatial = new NodeSpatial(this);
     this.initParameters();
     this.network.clean();
-    this.network.commit();
+    this.nodeChanges();
     this.initActivity();
     this.network.project.activityGraph.init();
   }
@@ -105,6 +105,7 @@ export class Node extends Config {
 
   set size(value: number) {
     this._size = value;
+    this.nodeChanges();
   }
 
   get sources(): Node[] {
@@ -125,6 +126,10 @@ export class Node extends Config {
     if (this.model.existing === 'spike_detector') { return this.sources; }
     if (['multimeter', 'voltmeter'].includes(this.model.existing)) { return this.targets; }
     return [];
+  }
+
+  nodeChanges(): void {
+    this.network.networkChanges();
   }
 
   initActivity(): void {
@@ -171,8 +176,8 @@ export class Node extends Config {
   }
 
   resetParameters(): void {
-    this.params.forEach((param: Parameter) => param.value = param.options.value);
-    this.network.commit();
+    this.params.forEach((param: Parameter) => param.reset());
+    this.nodeChanges();
   }
 
   setWeights(term: string): void {
@@ -182,7 +187,7 @@ export class Node extends Config {
       const value: number = Math.abs(connection.synapse.weight);
       connection.synapse.weight = (term === 'inhibitory' ? -1 : 1) * value;
     });
-    this.network.commit();
+    this.nodeChanges();
   }
 
   initSpatial(spatial: any = {}) {
@@ -207,7 +212,6 @@ export class Node extends Config {
 
   delete(): void {
     this.network.deleteNode(this);
-    this.network.commit();
   }
 
   copy(item: any): any {

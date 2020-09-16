@@ -10,10 +10,8 @@
 
     <ng-container *ngFor="let param of node.params">
       <mat-list-option
-        [matTooltip]="param.id"
         [selected]="param.visible"
-        [value]="param.id"
-        matTooltipPosition="before">
+        [value]="param.id">
         <span class="flex">
           <span class="ellipsis">{{ param.options.label | capitalize }}</span>
           <span class="flex-spacer"></span>

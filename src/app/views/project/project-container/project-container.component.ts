@@ -90,7 +90,7 @@ export class ProjectContainerComponent implements OnInit, OnChanges, OnDestroy {
           this._router.url.includes('run') || this.project.config.runAfterLoad &&
           !this.project.hasActivities && this._projectService.mode === 'activityExplorer'
         ) {
-          this._simulationRunService.run(this.project, true);
+          this.project.runSimulationScript();
         }
       }).catch(() => {
         this._router.navigate([{ outlets: { primary: 'project/' } }]);

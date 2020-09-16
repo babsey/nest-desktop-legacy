@@ -3,7 +3,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Project } from '../../../components/project/project';
 
 import { ActivityGraphService } from '../../../services/activity/activity-graph.service';
-import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
 
 
 @Component({
@@ -16,7 +15,6 @@ export class ActivityGraphComponent implements OnInit {
 
   constructor(
     private _activityGraphService: ActivityGraphService,
-    private _simulationRunService: SimulationRunService,
   ) { }
 
   ngOnInit() {
@@ -28,10 +26,6 @@ export class ActivityGraphComponent implements OnInit {
 
   set mode(value: string) {
     this._activityGraphService.mode = value;
-  }
-
-  get running(): boolean {
-    return this._simulationRunService.running;
   }
 
 }

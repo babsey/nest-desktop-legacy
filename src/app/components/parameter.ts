@@ -7,7 +7,7 @@ export class Parameter {
   parent: Model | Node | Connection;    // parent
   idx: number;                          // generative
 
-  id: string;
+  private _id: string;
   private _value: any;
 
   // For node and connection
@@ -28,8 +28,8 @@ export class Parameter {
     this.parent = parent;
     this.idx = param.idx || parent.params.length;
 
-    this.id = param.id;
-    this.value = param.value || 0;
+    this._id = param.id;
+    this._value = param.value || 0;
 
     this.visible = param.visible !== undefined ? param.visible : false;
     this.factors = param.factors || [];
@@ -48,18 +48,30 @@ export class Parameter {
     return new Parameter(this.parent, this);
   }
 
+  get id(): string {
+    return this._id;
+  }
+
   get value(): any {
     return this._value;
   }
 
   set value(value: any) {
+    // console.log('Set parameter value');
     this._value = value;
+    if (['Node', 'Connection'].includes(this.parent.name)) {
+      this.parent.network.networkChanges();
+    }
   }
 
   get options(): any {
     const model: Model = this.parent.model;
     const param: Parameter = model ? model.params.find((p: Parameter) => p.id === this.id) : null;
     return param;
+  }
+
+  reset(): void {
+    this._value = this.options.value;
   }
 
   toJSON(): any {

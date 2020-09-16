@@ -1,0 +1,61 @@
+.network-history {
+  position: absolute;
+  right: 300px;
+  z-index: 1000;
+  overflow: visible;
+  width: 160px;
+
+  button {
+    height: 24px;
+    line-height: 24px;
+  }
+}
+
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes #{$animation-name} {
+    @content;
+  }
+  @-moz-keyframes #{$animation-name} {
+    @content;
+  }
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};
+}
+
+@include keyframes(shake) {
+  2.5%, 22.5% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  5%, 20% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  7.5%, 12.5%, 17.5% {
+    transform: translate3d(-3px, 0, 0);
+  }
+
+  10%, 15% {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+
+.network-changed {
+  // @include animation('blink 2s infinite');
+  @include animation('shake 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
+}

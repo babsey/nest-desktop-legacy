@@ -78,7 +78,7 @@ export class Synapse {
 
   inverseWeight(): void {
     this.weight = -1 * this.weight;
-    this.connection.network.commit();
+    this.connection.connectionChanges();
   }
 
   toJSON(target: string = 'db'): any {

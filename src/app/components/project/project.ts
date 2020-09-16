@@ -14,28 +14,30 @@ import { Simulation } from '../simulation/simulation';
 import { upgradeProject } from './projectUpgrade';
 
 
+
 export class Project extends Config {
-  app: App;                             // parent
+  private _app: App;                             // parent
 
   // Database instances
   private _id: string;                  // id of the project
   private _rev: string;                 // rev of the project
-  createdAt: string;                    // when is it created in database
-  updatedAt: string;                    // when is it updated in database
+  private _createdAt: string;                    // when is it created in database
+  private _updatedAt: string;                    // when is it updated in database
 
   // Project instance variables
-  name: string;                         // project name
-  description: string;                  // description about the project
-  hash: string;                         // obsolete: hash of serialized network
+  private _name: string;                         // project name
+  private _description: string;                  // description about the project
+  private _hash: string;                         // obsolete: hash of serialized network
 
   // user: string;                      // obsolete?
   // group: string;                     // obsolete?
 
   // Project objects
-  public network: Network;                     // network of neurons and devices
-  public simulation: Simulation;               // settings for the simulation
-  public code: ProjectCode;                    // code script for NEST Server
-  public activityGraph: ActivityChartGraph;
+  private _network: Network;                     // network of neurons and devices
+  private _simulation: Simulation;               // settings for the simulation
+  private _code: ProjectCode;                    // code script for NEST Server
+  private _activityGraph: ActivityChartGraph;
+  private _running = false;
 
   private _networkRevisions: any[] = [];         // network history
   private _networkRevisionIdx = -1;      // Index of the network history;
@@ -48,34 +50,78 @@ export class Project extends Config {
     project: any = {},
   ) {
     super('Project');
-    this.app = app;
+    this._app = app;
 
     this._id = project._id || uuidv4();
     this._rev = project._rev || '';
-    this.createdAt = project.createdAt || new Date();
-    this.updatedAt = project.updatedAt;
+    this._createdAt = project.createdAt || new Date();
+    this._updatedAt = project.updatedAt;
 
-    this.name = project.name || '';
-    this.description = project.description || '';
-    this.hash = project.hash || '';
+    this._name = project.name || '';
+    this._description = project.description || '';
+    this._hash = project.hash || '';
     // this.user = project.user || '';
     // this.group = project.group || '';
 
     const projectUpgraded: any = upgradeProject(this.app, project);
-    this.initNetwork(projectUpgraded.network);
     this.initSimulation(projectUpgraded.simulation);
+    this.initNetwork(projectUpgraded.network);
 
     this.clean();
-    this.code = new ProjectCode(this);
-    this.activityGraph = new ActivityChartGraph(this);
+    this._code = new ProjectCode(this);
+    this._activityGraph = new ActivityChartGraph(this);
+  }
+
+  get activityGraph(): ActivityChartGraph {
+    return this._activityGraph;
+  }
+
+  get app(): App {
+    return this._app;
+  }
+
+  get code(): ProjectCode {
+    return this._code;
+  }
+
+  get createdAt(): string {
+    return this._createdAt;
+  }
+
+  get description(): string {
+    return this._description;
+  }
+
+  get hash(): string {
+    return this._hash;
   }
 
   get id(): string {
     return this._id;
   }
 
+  get name(): string {
+    return this._name;
+  }
+
+  set name(value: string) {
+    this._name = name;
+  }
+
+  get network(): Network {
+    return this._network;
+  }
+
   get rev(): string {
     return this._rev;
+  }
+
+  get simulation(): Simulation {
+    return this._simulation;
+  }
+
+  get updatedAt(): string {
+    return this._updatedAt;
   }
 
   // Is the current project selected?
@@ -92,7 +138,7 @@ export class Project extends Config {
   clone(): Project {
     const newProject = new Project(this.app, this.toJSON());
     newProject._id = uuidv4();
-    newProject.updatedAt = '';
+    newProject._updatedAt = '';
     return newProject;
   }
 
@@ -131,10 +177,11 @@ export class Project extends Config {
   Networks
   */
 
-  // Create a new network.
+  // Initialize a network.
   initNetwork(network: any = {}): void {
-    this.network = new Network(this, network);
-    this.initNetworkHistory();
+    this.clearNetworkHistory();
+    this._network = new Network(this, network);
+    this.commitNetwork(this.network);
   }
 
   // Get revision index of the network history.
@@ -147,10 +194,8 @@ export class Project extends Config {
     return this._networkRevisions;
   }
 
-  // Clear network history and commit the current network.
-  initNetworkHistory(): void {
-    this.clearNetworkHistory();
-    this.commitNetwork(this.network);
+  isNetworkChanged(): boolean {
+    return this.getHash() !== this.activityGraph.hash && !this.running;
   }
 
   // Clear network history list.
@@ -161,20 +206,28 @@ export class Project extends Config {
 
   // Add network to the history list.
   commitNetwork(network: Network): void {
+    // console.log('Commit network');
+    const maxRev: number = this.config.maxNetworkRevisions || 5;
     this._networkRevisions = this._networkRevisions.slice(0, this._networkRevisionIdx + 1);
+    if (this._networkRevisions.length > maxRev) {
+      this._networkRevisions = this._networkRevisions.slice(this._networkRevisions.length - maxRev);
+    }
     this._networkRevisions.push(network.toJSON());
     this._networkRevisionIdx = this._networkRevisions.length - 1;
-    this.updateActivityGraph();     // maybe it is critical point.
   }
 
   // Load network from the history list.
   checkoutNetwork(): void {
+    // console.log('Checkout network');
     if (this._networkRevisionIdx >= this._networkRevisions.length) {
       this._networkRevisionIdx = this._networkRevisions.length - 1;
     }
     const network: any = this._networkRevisions[this._networkRevisionIdx];
-    this.network = new Network(this, network);
-    this.updateActivityGraph();     // maybe it is critical point.
+    this.network.update(network);
+    this.activityGraph.init();
+    if (this.config.runAfterCheckout) {
+      setTimeout(() => this.runSimulationScript(), 1);
+    }
   }
 
   // Go to the older network.
@@ -209,9 +262,48 @@ export class Project extends Config {
   Simulation
   */
 
+  get running(): boolean {
+    return this._running;
+  }
+
   // Create a new simulation.
   initSimulation(simulation: any = {}): void {
-    this.simulation = new Simulation(this, simulation);
+    this._simulation = new Simulation(this, simulation);
+  }
+
+  runSimulationScript(): Promise<any> {
+    // console.log('Run simulation script');
+    this._running = true;
+    const url: string = this.app.nestServer.url + '/script/simulation/run';
+    const data: any = this.toJSON('simulator');
+    return this.app.nestServer.http.post(url, data)
+      .then((resp: any) => {
+        this._running = false;
+        this.updateActivities(resp.data);
+        return resp;
+      }).catch((err: any) => {
+        this._running = false;
+        return err;
+      });
+  }
+
+  runSimulationCode(): Promise<any> {
+    // console.log('Run simulation code');
+    this._running = true;
+    const url: string = this.app.nestServer.url + '/exec';
+    const data: any = {
+      source: this.code.script,
+      return: 'response'
+    };
+    return this.app.nestServer.http.post(url, data)
+      .then((resp: any) => {
+        this._running = false;
+        this.updateActivities(resp.data);
+        return resp;
+      }).catch((err: any) => {
+        this._running = false;
+        return err;
+      });
   }
 
   /*
@@ -234,16 +326,9 @@ export class Project extends Config {
     return this._hasSpatialActivities;
   }
 
-  updateActivityGraph(): void {
-    if (this.activityGraph) {
-      this.activityGraph.init();
-      this.activityGraph.update();
-    }
-  }
-
   // Update activities in recorder nodes after simulation.
   updateActivities(data: any): void {
-    // console.log('Update activities')
+    console.log('Update activities');
     this.simulation.kernel.time = data.kernel.time;
     // Update recorded activity
     data.activities.forEach((activity: any, idx: number) => {
@@ -267,12 +352,12 @@ export class Project extends Config {
 
   // Update hash of this project.
   clean(): void {
-    this.hash = this.getHash();
+    this._hash = this.getHash();
   }
 
   // Is the hash equal to caluclated hash.
   isHashEqual(): boolean {
-    return this.hash === this.getHash();
+    return this._hash === this.getHash();
   }
 
   getHash(): string {

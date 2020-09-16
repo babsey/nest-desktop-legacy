@@ -75,7 +75,7 @@ export class HttpClient {
 
         if (this._oReq.readyState === 4) {
           // console.log('Request ended.');
-          resolve(this._oReq);
+          resolve(this._oReq.response);
         }
       };
 
@@ -85,7 +85,7 @@ export class HttpClient {
       // this._oReq.addEventListener('abort', event => console.log('abort', event));
 
       try {
-        this._oReq.send(data);
+        this._oReq.send(JSON.stringify(data));
       } catch (exception) {
         console.log(exception);
         // this is expected

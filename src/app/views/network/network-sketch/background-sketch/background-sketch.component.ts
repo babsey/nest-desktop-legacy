@@ -158,7 +158,7 @@ export class BackgroundSketchComponent implements OnInit, OnChanges {
       },
     };
     this.network.addNode(node);
-    this.network.commit();
+    this.network.networkChanges();
   }
 
   resize(): void {

@@ -31,10 +31,6 @@ export class ProjectToolbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  get running(): boolean {
-    return this._simulationRunService.running;
-  }
-
   duplicateProject(): void {
     const project: Project = this.project.duplicate();
     this.navigate(project.id);
@@ -47,8 +43,17 @@ export class ProjectToolbarComponent implements OnInit {
 
   run(): void {
     this.selectMode('activityExplorer');
-    this._simulationRunService.run(this.project, true);
+    this._simulationRunService.run(this.project);
   }
+
+  countBefore(): number {
+    return this.project.networkRevisionIdx;
+  }
+
+  countAfter(): number {
+    return this.project.networkRevisions.length - this.project.networkRevisionIdx - 1;
+  }
+
 
   configSimulation(): void {
     this.selectMode('activityExplorer');

@@ -61,7 +61,7 @@ export class NodeSketchComponent implements OnInit {
       target: this.node.idx,
     };
     this.node.network.addConnection(connection);
-    this.node.network.commit();
+    this.node.network.networkChanges();
   }
 
   onClick(event: MouseEvent): void {

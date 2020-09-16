@@ -1,5 +1,6 @@
 import { App } from '../app';
 import { Config } from '../config';
+import { Network } from '../network/network';
 import { Parameter } from '../parameter';
 import { ModelCode } from './modelCode';
 
@@ -72,6 +73,10 @@ export class Model {
 
   get model(): Model {
     return this;
+  }
+
+  get network(): Network {
+    return ;
   }
 
   get params(): Parameter[] {

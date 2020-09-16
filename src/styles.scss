@@ -87,7 +87,7 @@ app-root {
     flex: 1 1 auto;
   }
 
-  button {
+  .tab-button {
     border-radius: 0;
     width: 64px;
     height: 40px;
@@ -105,7 +105,7 @@ app-root {
     }
   }
 
-  button.active {
+  .tab-button.active {
     background-color: white;
 
     .fa-stack-1x {

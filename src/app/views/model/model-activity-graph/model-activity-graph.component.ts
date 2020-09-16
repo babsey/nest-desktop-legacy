@@ -8,7 +8,6 @@ import { ActivityChartGraph } from '../../../components/activity/activityChartGr
 import { AnalogSignalPlotPanel } from '../../../components/activity/plotPanels/analogSignalPlotPanel';
 
 import { AppService } from '../../../services/app/app.service';
-import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
 
 
 @Component({
@@ -41,7 +40,6 @@ export class ModelActivityGraphComponent implements OnInit {
 
   constructor(
     private _appService: AppService,
-    private _simulationRunService: SimulationRunService,
   ) { }
 
   ngOnInit() {
@@ -67,7 +65,7 @@ export class ModelActivityGraphComponent implements OnInit {
   update(): void {
     if (this.modelId) {
       this._project = this._appService.app.createNeuronModelProject(this.modelId);
-      this._simulationRunService.run(this._project, true);
+      this._project.runSimulationCode();
     }
   }
 
