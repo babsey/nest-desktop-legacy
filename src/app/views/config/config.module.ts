@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MccColorPickerModule } from 'material-community-components';
+import { MccColorPickerModule } from 'material-community-components/color-picker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppPipesModule } from '../../pipes/pipes.module';

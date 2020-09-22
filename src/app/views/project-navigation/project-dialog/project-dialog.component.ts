@@ -47,33 +47,35 @@ export class ProjectDialogComponent implements OnInit {
 
   set selectedProjects(value: number[]) {
     this._selectedProjects = value;
-    console.log(this.selectedProjects);
   }
 
   reset(): void {
+    console.log('Reset project list and index list');
     this._message = 'Select an option to upload projects.';
     this._projects = [];
-    this._selectedProjects = [];
+    this.selectedProjects = [];
   }
 
   initFileReader(): void {
     this._fileReader.addEventListener('load', (event: any) => {
       this.reset();
-      const result: any = JSON.parse(event.target.result as string);
-      const data: any[] = Array.isArray(result) ? result : [result];
-      data.forEach((d: any) => {
-        this._projects.push(d);
-        try {
-          const project: Project = new Project(this.app, d);
-          d.valid = true;
-        } catch (e) {
-          d.valid = false;
-          console.log(e);
-          console.log(d);
-          d.message = e;
-        }
-      });
-      this._message = 'Select projects to add.';
+      setTimeout(() => {
+        const result: any = JSON.parse(event.target.result as string);
+        const data: any[] = Array.isArray(result) ? result : [result];
+        data.forEach((d: any) => {
+          this._projects.push(d);
+          try {
+            const project: Project = new Project(this.app, d);
+            d.valid = true;
+          } catch (e) {
+            d.valid = false;
+            console.log(e);
+            console.log(d);
+            d.message = e;
+          }
+        });
+        this._message = 'Select projects to add.';
+      }, 1);
     });
   }
 

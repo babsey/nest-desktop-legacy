@@ -99,7 +99,7 @@ export class Model {
     const param: any = {
       id: paramId,
       label: paramId,
-      value: value,
+      value,
       level: 1,
       input: 'valueSlider',
       min: 0,

@@ -57,8 +57,8 @@ export class NodeSpatialComponent implements OnInit {
     this._graph.data = [{
       mode: 'markers',
       type: 'scattergl',
-      x: x,
-      y: y,
+      x,
+      y,
       hoverinfo: 'x+y',
       showlegend: false,
       marker: {

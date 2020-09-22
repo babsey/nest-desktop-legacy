@@ -47,7 +47,7 @@
         <span matSuffix>
           <button mat-icon-button
             (click)="project.name = ''"
-            [style.display]="project.name ? '' : 'none'"
+            [style.display]="project.name.length > 0 ? '' : 'none'"
             aria-label="Clear"
             class="button">
             <fa-icon icon="times"></fa-icon>
@@ -59,9 +59,7 @@
         (click)="saveProject()"
         [disabled]="project.isHashEqual() && project.updatedAt !== ''"
         [matTooltip]="project.isHashEqual() && project.updatedAt !== '' ? 'This project is unchanged' : 'Save the current project'"
-        [style.display]="project.name ? '' : 'none'"
-        class="list-icon"
-        >
+        class="list-icon">
         <fa-icon icon="save" class="fa-lg"></fa-icon>
       </button>
     </mat-list-item>

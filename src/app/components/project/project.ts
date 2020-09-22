@@ -104,7 +104,7 @@ export class Project extends Config {
   }
 
   set name(value: string) {
-    this._name = name;
+    this._name = value;
   }
 
   get network(): Network {

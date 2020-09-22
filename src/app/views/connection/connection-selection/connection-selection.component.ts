@@ -15,15 +15,15 @@ export class ConnectionSelectionComponent implements OnInit {
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
-  onSelectionChange(event: MouseEvent) {
-    const value = event['option'].value;
-    const selected = event['option'].selected;
+  onSelectionChange(event: any) {
+    const value: string = event.option.value;
+    const selected: boolean = event.option.selected;
     this.connection.synapse.params.find(param => param.id === value).visible = selected;
   }
 

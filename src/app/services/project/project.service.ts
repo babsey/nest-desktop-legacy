@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 })
 export class ProjectService {
   private _mode = 'networkEditor';
-  private _networkQuickView = false;
   private _sidenavMode = 'networkSelection';
   private _sidenavOpened = false;
 
@@ -23,14 +22,6 @@ export class ProjectService {
       this._sidenavOpened = false;
     }
     setTimeout(() => window.dispatchEvent(new Event('resize')), 10);
-  }
-
-  get networkQuickView(): boolean {
-    return this._networkQuickView;
-  }
-
-  set networkQuickView(value: boolean) {
-    this._networkQuickView = value;
   }
 
   get sidenavMode(): string {

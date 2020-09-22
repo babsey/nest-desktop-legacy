@@ -66,7 +66,7 @@ export class AnalogStatsComponent implements OnInit, OnChanges {
     const stats: AnalogStatsElement[] = this.activity.nodeIds.map((id: number) => {
       const d: number[] = data[id];
       return {
-        id: id,
+        id,
         mean: d.length > 0 ? this._mathService.mean(d) : 0,
         std: d.length > 0 ? this._mathService.deviation(d) : 0,
       };

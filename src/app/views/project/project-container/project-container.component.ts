@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit, OnDestroy, OnChanges, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnChanges, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MediaMatcher } from '@angular/cdk/layout';
 
 import { enterAnimation } from '../../../animations/enter-animation';
@@ -21,7 +20,7 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
   styleUrls: ['./project-container.component.scss'],
   animations: [enterAnimation],
 })
-export class ProjectContainerComponent implements OnInit, OnChanges, OnDestroy {
+export class ProjectContainerComponent implements OnInit, OnChanges {
   @Input() id: string;
   @Input() rev: string;
   private _mobileQueryListener: () => void;
@@ -31,7 +30,6 @@ export class ProjectContainerComponent implements OnInit, OnChanges, OnDestroy {
     private _activityChartService: ActivityChartService,
     private _activityGraphService: ActivityGraphService,
     private _appService: AppService,
-    private _bottomSheet: MatBottomSheet,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
     private _modelService: ModelService,
@@ -54,10 +52,6 @@ export class ProjectContainerComponent implements OnInit, OnChanges, OnDestroy {
       this._projectService.mode = 'networkEditor';
     }
     setTimeout(() => this.update(), 1);
-  }
-
-  ngOnDestroy() {
-    this._bottomSheet.dismiss();
   }
 
   get mobileQuery(): MediaQueryList {
@@ -108,14 +102,6 @@ export class ProjectContainerComponent implements OnInit, OnChanges, OnDestroy {
 
   triggerResize(): void {
     window.dispatchEvent(new Event('resize'));
-  }
-
-  toggleNetworkQuickView(): void {
-    this._projectService.networkQuickView = !this._projectService.networkQuickView;
-  }
-
-  isNetworkQuickViewOpened(): boolean {
-    return this._projectService.networkQuickView;
   }
 
   onOpenedChange(event: any): void {

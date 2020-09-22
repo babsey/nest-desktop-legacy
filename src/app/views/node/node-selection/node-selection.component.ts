@@ -23,9 +23,9 @@ export class NodeSelectionComponent implements OnInit {
     const param = this.node.params[0];
   }
 
-  onSelectionChange(event: MouseEvent) {
-    const value = event['option'].value;
-    const selected = event['option'].selected;
+  onSelectionChange(event: any) {
+    const value: string = event.option.value;
+    const selected: boolean = event.option.selected;
     this.node.params.find((param: Parameter) => param.id === value).visible = selected;
   }
 

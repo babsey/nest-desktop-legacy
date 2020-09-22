@@ -82,6 +82,6 @@
 }
 
 .network-changed {
-  // @include animation('bounce 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
-  @include animation('shake 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
+  @include animation('bounce 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
+  // @include animation('shake 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
 }

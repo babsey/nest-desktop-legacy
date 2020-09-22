@@ -57,14 +57,14 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
         blocks = blocks.filter((block: any) => block[0] !== -1);
         const content: any = {};
         blocks.map((block: string, i: number) => {
-          const start: number = parseInt(block[0]) + 2;
-          const end: number = i < blocks.length - 1 ? parseInt(blocks[i + 1][0]) - 2 : blocks.length;
+          const start: number = parseInt(block[0], 0) + 2;
+          const end: number = i < blocks.length - 1 ? parseInt(blocks[i + 1][0], 0) - 2 : blocks.length;
           content[block[1]] = lines.slice(start, end).join('\n');
         });
         this._blocks = titles.filter((title: string) => content[title])
           .map((title: string) => {
             return {
-              title: title,
+              title,
               content: content[title],
             };
           });

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MdePopoverTrigger } from '@material-extended/mde';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { App } from '../../components/app';

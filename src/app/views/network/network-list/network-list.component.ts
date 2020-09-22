@@ -7,7 +7,6 @@ import { Network } from '../../../components/network/network';
 import { Node } from '../../../components/node/node';
 
 
-
 @Component({
   selector: 'app-network-list',
   templateUrl: './network-list.component.html',

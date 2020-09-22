@@ -31,11 +31,6 @@ export class ProjectToolbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  duplicateProject(): void {
-    const project: Project = this.project.duplicate();
-    this.navigate(project.id);
-  }
-
   navigate(id: string): void {
     const url: string = 'project/' + id;
     this._router.navigate([{ outlets: { primary: url, nav: 'project' } }]);
@@ -53,7 +48,6 @@ export class ProjectToolbarComponent implements OnInit {
   countAfter(): number {
     return this.project.networkRevisions.length - this.project.networkRevisionIdx - 1;
   }
-
 
   configSimulation(): void {
     this.selectMode('activityExplorer');

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { AngularSplitModule } from 'angular-split';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -58,7 +57,6 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     SpikeStatsComponent,
   ],
   imports: [
-    AngularSplitModule.forRoot(),
     AppFormsModule,
     AppPipesModule,
     CodemirrorModule,

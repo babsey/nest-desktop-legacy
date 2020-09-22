@@ -36,7 +36,6 @@
           <div class="flex-spacer"></div>
           <ng-container [ngSwitch]="project.isHashEqual() && project.updatedAt !== '' && project.name !== ''">
             <ng-container *ngSwitchCase="true">
-              <!-- <div>{{ project.updatedAt ? 'u' : 'c' }} </div> -->
               <app-project-timesince [date]="date(project)"></app-project-timesince>
             </ng-container>
             <ng-container *ngSwitchCase="false">

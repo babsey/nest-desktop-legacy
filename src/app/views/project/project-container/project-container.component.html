@@ -30,23 +30,6 @@
 
     <app-project-sidenav-tabs></app-project-sidenav-tabs>
   </span>
-
-  <ng-container *ngIf="isNetworkQuickViewOpened()">
-    <mat-card cdkDrag cdkDragBoundary=".project"
-      style="cursor:pointer; width:540px; height:200px; position:absolute; bottom: 0; z-index:1000; right:40px">
-      <button mat-icon-button
-        (click)="toggleNetworkQuickView()"
-        style="position:absolute; right:20px; top:20px; z-index:1000">
-        <fa-icon icon="times"></fa-icon>
-      </button>
-      <app-network-sketch
-        [network]="project.network"
-        width="540"
-        height="200"
-        [eventTrigger]="false"
-      ></app-network-sketch>
-    </mat-card>
-  </ng-container>
 </ng-container>
 
 <ng-template #loading>

@@ -26,7 +26,7 @@ export class ParameterRandom extends Config {
     });
     return {
       distribution: this.distribution,
-      specs: specs,
+      specs,
     };
   }
 

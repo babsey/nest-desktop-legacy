@@ -68,7 +68,7 @@ export class SpikeStatsComponent implements OnInit, OnChanges {
       const isiMean: number = isi.length > 1 ? this._mathService.mean(isi) : 0;
       const isiStd: number = isi.length > 1 ? this._mathService.deviation(isi) : 0;
       return {
-        id: id,
+        id,
         count: this._times[id].length,
         isi_mean: isiMean,
         isi_std: isiStd,

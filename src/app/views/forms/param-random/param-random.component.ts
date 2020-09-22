@@ -146,7 +146,7 @@ export class ParamRandomComponent implements OnInit {
         type: 'contour', // 'heatmap',
         x: x._data,
         y: y._data,
-        z: z,
+        z,
         line: {
           smoothing: 0.85
         },
@@ -160,7 +160,7 @@ export class ParamRandomComponent implements OnInit {
           title: 'PDF'
         }
       }];
-      this.plot.layout['title'] = this.selectedParameterType.label + ' distribution';
+      this.plot.layout.title = this.selectedParameterType.label + ' distribution';
     } else {
       x = math.range(xmin, xmax, dx);
       y = this._distributionService.pdf[value.parameterType](x._data, value.specs);
@@ -173,14 +173,14 @@ export class ParamRandomComponent implements OnInit {
         fill: 'tozeroy',
         type: 'scatter',
         x: x._data,
-        y: y,
+        y,
       }];
-      this.plot.layout['title'] = this.functionType + ' of ' + this.selectedParameterType.label + ' distribution';
+      this.plot.layout.title = this.functionType + ' of ' + this.selectedParameterType.label + ' distribution';
     }
-    this.plot.layout['xaxis'] = {
+    this.plot.layout.xaxis = {
       title: ['uniform', 'normal', 'lognormal'].includes(value.parameterType) ? 'value' : 'distance',
     };
-    this.plot.layout['yaxis'] = {
+    this.plot.layout.yaxis = {
       title: value.parameterType === 'gaussian2D' ? 'y' : 'value',
     };
   }

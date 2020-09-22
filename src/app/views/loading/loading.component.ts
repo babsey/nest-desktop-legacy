@@ -32,7 +32,7 @@ export class LoadingComponent implements OnInit {
   onClick(event: MouseEvent): void {
     setTimeout(() => {
       const nav: string | null = window.location.href.includes('nav:') ?  null : 'app';
-      this.router.navigate([{ outlets: { primary: null, nav: nav } }]);
+      this.router.navigate([{ outlets: { primary: null, nav } }]);
       this._appService.toggleSidenav();
     }, 10);
   }

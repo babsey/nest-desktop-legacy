@@ -83,7 +83,7 @@ export class NESTServer extends Config {
           const duration: any = end - start;
           // console.log('Pong responds in ' + duration + ' ms')
           this.oidcLoginFailed(resp);
-          this.checkVersion(JSON.parse(resp['response']));
+          this.checkVersion(JSON.parse(resp.response));
         })
         .catch((error: any) => {
           console.log(error);
@@ -109,7 +109,7 @@ export class NESTServer extends Config {
         this.http.get(url)
           .then((resp: any) => {
             this.url = url;
-            this.checkVersion(resp['body']);
+            this.checkVersion(resp.body);
             resolve(true);
           })
           .catch((err: any) => console.log(err));
@@ -125,14 +125,14 @@ export class NESTServer extends Config {
 
     if (info.hasOwnProperty('server')) {
       this._state.serverReady = true;
-      this._state.serverVersion = info['server']['version'];
+      this._state.serverVersion = info.server.version;
       const serverVersion: string[] = this._state.serverVersion.split('.');
       this._state.serverValid = appVersion[0] === serverVersion[0] && appVersion[1] === serverVersion[1];
     }
 
     if (info.hasOwnProperty('simulator')) {
       this._state.simulatorReady = true;
-      this._state.simulatorVersion = info['simulator']['version'];
+      this._state.simulatorVersion = info.simulator.version;
       const simulatorVersion: string[] = this._state.simulatorVersion.split('.');
       if (simulatorVersion.length === 3) {
         this._state.simulatorValid = simulatorVersion[0] === '2' && simulatorVersion[1] >= '18';
@@ -142,7 +142,7 @@ export class NESTServer extends Config {
 
   // TODO: not a permament solution
   oidcLoginFailed(resp): void {
-    if (resp['ok'] === false && resp['url'] === 'https://services.humanbrainproject.eu/oidc/login') {
+    if (resp.ok === false && resp.url === 'https://services.humanbrainproject.eu/oidc/login') {
       window.location.reload();
     }
   }

@@ -121,7 +121,7 @@ export class ModelService {
       params: [],
     };
     if (this.defaults.hasOwnProperty('recordables')) {
-      model['recordables'] = this.defaults.recordables;
+      model.recordables = this.defaults.recordables;
     }
     this.app.addModel(model).then(() => this.app.initModels());
     this.update.emit();

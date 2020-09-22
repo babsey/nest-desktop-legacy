@@ -99,7 +99,7 @@
 
     <span class="flex-spacer"></span>
 
-    <ng-container *ngIf="isMode('activityExplorer')">
+    <ng-container *ngIf="!isMode('labBook')">
       <div class="no-print network-history">
         <button mat-icon-button
           (click)="project.network.oldest()"
@@ -143,28 +143,12 @@
 
     <span class="flex-spacer"></span>
 
-    <button mat-button
-      (click)="duplicateProject()"
-      (contextmenu)="onContextMenu($event)"
-      class="no-print"
-      matTooltip="Duplicate current project"
-      matTooltipShowDelay="1000"
-      style="width:128px">
-      <fa-icon
-        icon="clone"
-        style="margin:0 8px"
-      ></fa-icon>
-      Duplicate
-    </button>
-
     <button mat-button appContextMenuTrigger
       (click)="run()"
       (contextmenu)="onContextMenu($event)"
       [disabled]="project.simulation.running"
       [class.network-changed]="project.isNetworkChanged()"
       class="no-print"
-      matTooltip="Simulate"
-      matTooltipShowDelay="1000"
       style="width:128px">
       <ng-container *ngIf="project.simulation.running">
         <div class="flex" style="height:40px">

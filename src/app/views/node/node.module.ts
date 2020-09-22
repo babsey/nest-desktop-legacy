@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MccColorPickerModule } from 'material-community-components';
+import { MccColorPickerModule } from 'material-community-components/color-picker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import * as PlotlyJS from 'plotly.js-cartesian-dist';

@@ -20,7 +20,6 @@ import { ProjectDialogComponent } from './project-dialog/project-dialog.componen
 })
 export class ProjectNavigationComponent implements OnInit {
   private _selectionList = false;
-  private _projectName = '';
 
   constructor(
     private _appService: AppService,

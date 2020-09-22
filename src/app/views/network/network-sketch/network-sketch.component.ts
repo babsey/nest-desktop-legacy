@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
-import * as d3 from 'd3';
+import { select } from 'd3-selection';
 
 import { Connection } from '../../../components/connection/connection';
 import { Network } from '../../../components/network/network';
@@ -33,20 +33,20 @@ export class NetworkSketchComponent implements OnInit {
     private _elementRef: ElementRef,
     private _networkSketchService: NetworkSketchService,
   ) {
-    this._selector = d3.select(_elementRef.nativeElement);
+    this._selector = select(_elementRef.nativeElement);
   }
 
   ngOnInit() {
     // console.log('Init network sketch')
     // this.history()
-    d3.select('body').on('keyup', () => {
-      if (d3.event.keyCode === '27') {
+    select('body').on('keyup', (event: any) => {
+      if (event.keyCode === '27') {
         this._selector.selectAll('.select').remove();
         this.network.view.resetSelection();
       }
       this._networkSketchService.keyDown = '';
-    }).on('keydown', () => {
-      this._networkSketchService.keyDown = d3.event.keyCode;
+    }).on('keydown', (event: any) => {
+      this._networkSketchService.keyDown = event.keyCode;
     });
   }
 
@@ -99,11 +99,11 @@ export class NetworkSketchComponent implements OnInit {
   }
 
   onContextMenu(event: MouseEvent, node: Node, connection: Connection): void {
-    if (!this.eventTrigger) return
+    if (!this.eventTrigger) { return; }
     event.preventDefault();
     this.network.view.resetFocus();
     this.network.view.resetSelection();
-    if (!this.eventTrigger) return
+    if (!this.eventTrigger) { return; }
     this.contextMenuData.node = node;
     this.contextMenuData.connection = connection;
     this.contextMenuPosition.x = event.clientX + 'px';

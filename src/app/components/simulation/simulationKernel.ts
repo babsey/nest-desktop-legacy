@@ -26,9 +26,9 @@ export class SimulationKernel extends Config {
       resolution: this.resolution,
     };
     if (target === 'simulator') {
-      kernel['local_num_threads'] = kernel.localNumThreads;
+      kernel.local_num_threads = kernel.localNumThreads;
     } else {
-      kernel['localNumThreads'] = kernel.localNumThreads;
+      kernel.localNumThreads = kernel.localNumThreads;
     }
     return kernel;
   }

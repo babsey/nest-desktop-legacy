@@ -70,7 +70,7 @@ export class NetworkView {
   set colors(value: string[]) {
     const color: any = this.network.config.color;
     color.cycle = value;
-    this.network.config.update({ color: color });
+    this.network.config.update({ color });
   }
 
   resetFocus(): void {

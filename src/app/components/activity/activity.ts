@@ -75,7 +75,7 @@ export class Activity {
         y.push(pos[1]);
       }
     });
-    return { x: x, y: y };
+    return { x, y };
   }
 
   download(): void {

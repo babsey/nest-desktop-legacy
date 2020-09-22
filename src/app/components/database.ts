@@ -75,7 +75,7 @@ export class DatabaseService {
 
   read(id: string, rev: string = null): any {
     // console.log('Read doc in db');
-    const options: any = { rev: rev };
+    const options: any = { rev };
     return this.db.get(id, options)
       .then((doc: any) => doc)
       .catch((err: any) => err);

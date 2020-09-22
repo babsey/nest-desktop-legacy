@@ -27,10 +27,10 @@ function upgradeNetwork(app: App, project: any): any {
     };
     const node: any = {
       idx: appNode.idx,
-      params: params,
+      params,
       size: simNode.n || 1,
       model: typeof simModel === 'string' ? simModel : simModel.existing,
-      view: view,
+      view,
     };
     if (simNode.hasOwnProperty('spatial')) {
       node.spatial = simNode.spatial;

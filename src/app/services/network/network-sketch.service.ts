@@ -41,7 +41,7 @@ export class NetworkSketchService {
   dragLine(source: any, target: any, color: string, isTargetMouse: any = false): void {
     const selector = d3.selectAll('.network-sketch');
     selector.selectAll('.dragline')
-      .attr('d', () => drawPath(source, target, { isTargetMouse: isTargetMouse }));
+      .attr('d', () => drawPath(source, target, { isTargetMouse }));
     selector.select('.mask')
       .style('stroke', color);
   }

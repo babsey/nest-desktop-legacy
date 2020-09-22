@@ -75,14 +75,6 @@ export class ProjectSidenavTabsComponent implements OnInit {
     this._projectService.sidenavOpened = !this._projectService.sidenavOpened;
   }
 
-  toggleNetworkQuickView(): void {
-    this._projectService.networkQuickView = !this._projectService.networkQuickView;
-  }
-
-  isNetworkQuickViewOpened(): boolean {
-    return this._projectService.networkQuickView;
-  }
-
   triggerResize(): void {
     window.dispatchEvent(new Event('resize'));
   }
