@@ -15,12 +15,12 @@ Contents
    :caption: User Documentation
 
    user/index
-   user/quickstart
-   user/setup
    user/usage
+   user/setup
    user/command-API
    user/troubleshooting
-   user/use-HBP
+   user/use-ebrains
+
 
 .. toctree::
    :caption: Deployer Documentation
