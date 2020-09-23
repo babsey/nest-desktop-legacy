@@ -6,7 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./validation-check.component.scss']
 })
 export class ValidationCheckComponent implements OnInit {
-  @Input() component: any;
+  @Input() isReady = false;
+  @Input() isValid = false;
 
   constructor() { }
 

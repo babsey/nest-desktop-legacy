@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { enterAnimation } from '../../../animations/enter-animation';
 
 import { App } from '../../../components/app';
+import { Config } from '../../../components/config';
 
 import { AppService } from '../../../services/app/app.service';
 
@@ -15,6 +16,7 @@ import { AppService } from '../../../services/app/app.service';
   animations: [enterAnimation],
 })
 export class LoadingDetailsComponent implements OnInit {
+  public configs: any[];
 
   constructor(
     private _appService: AppService,
@@ -22,6 +24,13 @@ export class LoadingDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.configs = [
+      { name: 'Application', source: new Config('App') },
+      { name: 'NEST Server', source: new Config('NESTServer') },
+      { name: 'Project', source: new Config('Project') },
+      { name: 'Network', source: new Config('Network') },
+      { name: 'Simulation', source: new Config('Simulation') },
+    ];
   }
 
   get app(): App {

@@ -17,6 +17,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "@ctrl/ngx-codemirror",
+              "complex.js",
+              "decimal.js",
+              "fraction.js",
+              "typed-function"
+            ],
             "outputPath": "nest_desktop/app",
             "index": "src/index.html",
             "main": "src/main.ts",
