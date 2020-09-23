@@ -24,8 +24,6 @@
   <span class="nest-theme nest">
     <mat-toolbar class="flex" color="primary">
       NEST Desktop
-      <!-- <span class="flex-spacer"></span>
-      <span class="dense">{{ version }}</span> -->
     </mat-toolbar>
   </span>
 
@@ -42,7 +40,7 @@
         </button>
       </span>
 
-      <ng-container *ngIf="let config of configs">
+      <ng-container *ngFor="let config of configs">
         <mat-list-item role="listitem">
           <span class="flex">
             {{ config.name }}
