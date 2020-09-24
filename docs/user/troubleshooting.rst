@@ -5,8 +5,7 @@ Having trouble getting something working? Got a question that the rest of our do
 Maybe we can help with some answers to commonly asked questions and troublesome spots.
 
 
-Error messages
---------------
+**Error messages**
 
 .. topic:: Server not found
 
@@ -24,8 +23,7 @@ Error messages
 |
 |
 
-Frequently asked questions (FAQ)
---------------------------------
+**Frequently asked questions (FAQ)**
 
 
 .. topic:: NEST Server

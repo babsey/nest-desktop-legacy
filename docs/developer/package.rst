@@ -12,8 +12,7 @@ To build and deploy NEST Desktop on PyPi is a cruical step for the development.
 With it, Docker hub can update NEST Desktop and NEST Server in babsey/nest-desktop image.
 
 
-Steps to build and deploy
--------------------------
+**Steps to build and deploy**
 
 Current work directory: :code:`nest-desktop`.
 
@@ -25,22 +24,22 @@ Then generate app package using yarn. It builds the folder :code:`nest_desktop/a
 
 .. code-block:: bash
 
-   yarn run build
+  yarn run build
 
 Next, remove the folders:
 
 .. code-block:: bash
 
-   rm -rf build/ dist/ nest_desktop.egg-info/
+  rm -rf build/ dist/ nest_desktop.egg-info/
 
 Then generate distribution packages of `nest-desktop` for PyPI:
 
 .. code-block:: bash
 
-   python3 setup.py sdist bdist_wheel
+  python3 setup.py sdist bdist_wheel
 
 Finally, upload `nest-desktop` to PyPI:
 
 .. code-block:: bash
 
-   python3 -m twine upload dist/*
+  python3 -m twine upload dist/*

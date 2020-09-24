@@ -10,31 +10,31 @@ Deploy NEST Desktop on **HBP**
 The documentation shows how to deploy NEST Desktop from docker hub on *HBP* resources.
 
 HBP provides two OpenShift infrastructures
-  * https://openshift-dev.hbp.eu for the development.
-  * https://openshift.hbp.eu for the production.
+
+  * https://okd-dev.hbp.eu for the development.
+  * https://okd.hbp.eu for the production.
 
 .. Note::
    I strongly recommend to use the development page before you push NEST Desktop on ``https://openshift.hbp.eu``.
 
 
-Requirements
-------------
+**Requirements**
 
 * OC Client Tools (https://www.okd.io/download.html#oc-platforms)
 
 
-Step to deploy (in development)
--------------------------------
+**Step to deploy (in development)**
 
-First configure OpenID Connect client for NEST Desktop `here <https://collab.humanbrainproject.eu/#/collab/54/nav/1051>`__.
+First configure OpenID Connect client for NEST Desktop
+`here <https://collab.humanbrainproject.eu/#/collab/54/nav/1051>`__.
 
-You can copy command line from the web console of ``https://openshift-dev.hbp.eu``.
+You can copy command line from the web console of ``https://okd-dev.hbp.eu``.
 
 Login to openshift-dev.hbp.eu:
 
 .. code-block:: bash
 
-   oc login https://openshift-dev.hbp.eu:443 --token=<token>
+   oc login https://okd-dev.hbp.eu:443 --token=<token>
 
 Get status of current project:
 
@@ -47,12 +47,11 @@ Execute the bash script and in the end it shows the IP needed for *HBP* authenti
 
 .. code-block:: bash
 
-   cd infrastructure/openshift-dev.hbp.eu
+   cd infrastructure/okd-dev.hbp.eu
    bash setup-nest-desktop.sh
 
 
-Further usage
-^^^^^^^^^^^^^
+**Further usage**
 
 Scaling up the replicas (pods or nodes):
 
@@ -68,8 +67,7 @@ Monitor log of a pod (Get pod name: :code:`oc get pod`):
    oc exec <pod> -- nest-server log
 
 
-HBP Authentication and redirecting
-----------------------------------
+**HBP Authentication and redirecting**
 
 To access to NEST Desktop on HBP infrastructure, an authentication of *HBP* membership is requested.
 You find the codes on https://github.com/babsey/hbp-auth.
@@ -88,23 +86,16 @@ i.e. OIDC_CLIENT_ID, OIDC_CLIENT_SECRET and CLUSTER_IP of NEST Desktop
 
 
 
-Deploy Production
------------------
+**Deploy Production**
 
 If NEST Desktop is ready for the production, meaning to deploy on apps.hbp.eu.
-Perform all steps same as in Development (apps-dev.hbp.eu).
+Perform all steps same as in the development (apps-dev.hbp.eu).
 
 
-Maintenance
------------
-
-tba
-
-
-Acknowledgements
-----------------
+**Acknowledgements**
 
 Thanks for the help to integrate NEST Desktop on HBP resources:
+
   * Alberto Madonna (Concepting)
   * Collin McMurtrie (Contacting)
   * Fabrice Gaillard (Concepting of user authentication)

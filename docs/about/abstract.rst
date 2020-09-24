@@ -11,7 +11,7 @@ Sebastian Spreizer :sup:`1,2`, Stefan Rotter :sup:`1`, Benjamin Weyers :sup:`3`,
 3. Department IV - Computer Science, Human-Computer Interaction, University of Trier, Trier, Germany
 4. Faculty of Science and Technology, Norwegian University of Life Sciences, Ås, Norway
 
-Email: s.spreizer@fz-juelich.de
+Email: spreizer@uni-trier.de
 
 In the past few years, we have developed a web-based graphical user interface (GUI) for the NEST
 simulation code: NEST Desktop [1]_. This GUI enables the rapid construction, parametrization, and

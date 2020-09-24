@@ -2,30 +2,29 @@ Use NEST Desktop on **EBRAINS**
 ===============================
 
 
-.. image:: ../_static/img/logo/HBP_logo.png
+.. image:: ../_static/img/logo/ebrains-logo.png
    :width: 320px
-   :alt: Human Brain Project
+   :alt: EBRAINS
 
-|
-
-Human Brain Project (HBP) is a research infrastructure for the researchers in neuroscience, computing and brain-related medicine fields. For more information, visit the page of `EBRAINS <https://ebrains.eu/>`__.
+EBRAINS is a platform infrastructure for neuroscience.
+NEST Desktop is available a a prototype online.
+Go to the `description page on EBRAINS <https://ebrains.eu/services/simulation/nest>`__.
 
 .. topic:: Access to NEST Desktop
 
-
-  An *HBP* account is required to access NEST Desktop on *HBP*.
+  .. note:: An *HBP* account is required to access NEST Desktop.
 
   If you have an *HBP* account, follow the link below:
 
   * https://nest-desktop.apps.hbp.eu.
 
-  You will see the login interface of *HBP*. Enter you account name and password,
-  then it directs you to the main page of NEST Desktop.
+  You will see the login interface of *HBP*.
+  Enter you account name and password, then it forwards you to NEST Desktop.
 
 
 .. topic:: Request account of *HBP*
 
-  If you have no *HBP* account, you can ask a member of *HBP* to invite you or request an account here:
+  If you do not have *HBP* account, you can ask a member of *HBP* to invite you or request an account here:
 
   * https://services.humanbrainproject.eu/oidc/login
 
@@ -36,8 +35,9 @@ Human Brain Project (HBP) is a research infrastructure for the researchers in ne
     Sometimes the issue is resolved when you check NEST Server.
 
     If not, the problem lies in cookies and site data for the user authentication of the *HBP*.
-    That cookie expires after a session. This happens when you re-access to ``https://nest-desktop.apps.hbp.eu`` after the browser is closed.
+    That cookie expires after a session.
+    This happens when you re-access to ``https://nest-desktop.apps.hbp.eu`` after the browser is closed.
 
-    The simple solution is to reload the page that you can re-login HBP infrastructure.
+    The simple solution is to reload the page that you can re-login.
 
     A persistent solution is to set the browser configuration that it deletes cookies and site data when the browser is closed (It works in Firefox).

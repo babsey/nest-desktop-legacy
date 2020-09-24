@@ -3,16 +3,18 @@ Past events
 
 .. topic:: 2020
 
-  :18 - 22 July: Tutorial with NESTML at `CNS 2020 <https://www.cnsorg.org/cns-2020-tutorials#T1>`__, online (Melbourne, Australia).
+  :30 September - 1 October: Hand-on Session and Poster at `Bernstein Conference 2020 <https://abstracts.g-node.org/conference/BC20/abstracts#/uuid/f33d04d5-27fc-45b1-9d7a-44e2a0f28360>`__, online (Berlin, Germany).
+  :18 - 22 July: Tutorial with NESTML, presented by Dr. Linssen, at `CNS 2020 <https://www.cnsorg.org/cns-2020-tutorials#T1>`__, online (Melbourne, Australia).
   :29 - 30 June: Talk "NEST Desktop" at `NEST Conference <https://indico-jsc.fz-juelich.de/event/115/>`__ at [NMBU]_, online (As, Norway).
   :2 - 17 June: MSc course "Biophysics of Neurons and Networks" at [BCF]_, online (Freiburg, Germany).
-  :16 April: Virtual presentation and demo at `NeuroMat <https://neuromat.numec.prp.usp.br/content/nmweb/presentations/>`__, online (Sao Paolo, Brazil).
+  :16 April: Presentation and demo at `NeuroMat <https://neuromat.numec.prp.usp.br/content/nmweb/presentations/>`__, online (Sao Paulo, Brazil).
   :3 - 6 February: Talk and Demo/Hand-on session at `HBP Summit and Open Days <https://summit2020.humanbrainproject.eu/>`__ , Athene, Greece.
 
 .. topic:: 2019
 
   :28 November: 2nd HPAC Platform Training, Heidelberg, Germany.
-  :18 - 20 September: Poster/Live presentation at Bernstein Conference, Berlin, Germany.
+  :20 October: Live demo, presented by Prof. Plesser, at HBP Booth at SfN, Chicago, USA.
+  :18 - 20 September: Poster/Live presentation at `Bernstein Conference <https://abstracts.g-node.org/conference/BC19/abstracts#/uuid/6444712d-2467-4e32-8464-a46a7387b4aa>`__, Berlin, Germany.
   :22 July: Talk and Tutorial/Hand-on session at [INM-6]_, Julich, Germany.
   :18 July: NESTML/NEST-desktop integration workshop, [BCF]_, Freiburg, Germany.
   :24 - 25 June: Talk and Tutorial/Hand-on session `"NEST Desktop" <https://indico-jsc.fz-juelich.de/event/92/material/0/0.pdf>`__ at NEST Conference at [NMBU]_, As, Norway.

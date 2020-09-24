@@ -16,15 +16,13 @@ The *bwCloud* is running on OpenStack, an open source platform using pooled virt
 For more information, please follow the link: https://www.redhat.com/en/topics/openstack.
 
 
-Requirements
-------------
+**Requirements**
 
 * Packer (https://www.packer.io/downloads.html)
 * Ansible (https://releases.ansible.com/ansible/)
 
 
-Deploy NEST Desktop
--------------------
+**Deploy NEST Desktop**
 
 1. Download Openstack RC File from the dashboard, follow the steps:
 "Compute" -> "Access & Security" -> "API Access" -> "Download OpenStack RC File"
@@ -45,10 +43,10 @@ Deploy NEST Desktop
    /path/to/packer build nest-desktop.json
 
 
-Acknowledgements
-----------------
+**Acknowledgements**
 
 Thanks for the help to integrate NEST Desktop on *bwCloud*:
+
   * Bernd Wiebelt
   * Jonathan Bauer
   * Michael Janczyk

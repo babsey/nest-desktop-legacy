@@ -1,5 +1,5 @@
-|user| How to use NEST Desktop
-==============================
+|user| How to **use** NEST Desktop
+==================================
 
 .. topic:: Quick start
 

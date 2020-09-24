@@ -60,6 +60,13 @@ In the project menu, you find other methods to upload, download or delete all pr
 The greatest advantage of NEST Simulator is the reproducibility of the activity of the same network, even on other machine.
 At result, NEST Desktop shows the same simulation events on different machines.
 
+
+.. topic:: Project revisions
+
+  You are able to checkout older version of the project data.
+  An item of the context menu shows an option to call a list of project revisions.
+  Since the database contains version control management, it is able to store and load older versions of the project.
+
 |
 
 .. _Construction:
@@ -164,7 +171,7 @@ Here, we explain steps to create and connect nodes.
 
   With network changes it makes a snapshot of the network afterwards and push to the network history list.
   With this network history you can undo or redo the network changes.
-
+  A load from a network from the history is called `checkout network`.
 
 
 

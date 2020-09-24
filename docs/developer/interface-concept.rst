@@ -1,53 +1,43 @@
-The concept of the interface
-============================
+Concept of the interface
+========================
 
 
-Concept of the Layout
----------------------
+.. topic:: General layout concept of the interface.
 
-Next you will see the main page of NEST Desktop with the same concept of the layout for several components:
+  NEST Desktop contains three columns with clear function.
+  Left column shows a navigation to route pages in the primary outlet.
+  Center column renders main content of the page.
+  Right column displays controller content for the modification.
 
-:Left sidebar: Navigation (it can be closed)
-:Center: Main container for the content
-:Right sidebar: Controller if provided and it is also closable.
+.. topic:: Pages
 
-.. image:: ../_static/img/gif/app-sidenav-left.gif
-  :height: 180px
-  :align: left
+  NEST Desktop has three route pages (Project, Model, Settings).
+  Colored buttons located in the left side of the page shows home icon for the start page.
+  Other icons buttons renders the content of the navigation outlet.
+  The brain icon refers to project page, equation icon to model page and wrench icon to setting page.
 
-NEST Desktop provides three route pages (Project, Model, Settings) and
-a view page can be selected by clicking on stacked, colored buttons right adjacent to navigation panel.
+.. topic:: Page colors
 
-The navigation will be rendered according to the selected view page.
-The navigation contains top a navigation header with the name of the module and an icon for the menu,
-and subjacent a content section with a list of navigation items.
+  Project button is summergreen, model button is crail and setting button is sycamore.
+  These color palette were selected at the `colormind website <http://colormind.io/template/material-dashboard/>`__.
 
-By clicking on an item in the navigation triggers loading the content in the main container
-and if provided in the controller panel.
+.. topic:: Navigation outlet (left)
 
+  The navigation content displays a black toolbar in the header showing with the name of the page and an icon for the menu.
+  Subjacent to the header it renders a list of items triggers loading pages in the content outlet.
 
-NEST Desktop follows a clear concept of the page layout which is overlaid by three bars. For the consistence of the page layout each bar has an unambiguous function. Left and right bars are closable and after changing the open status of a side bar the the visualization content in the center bar changes its width format.
+.. topic:: Primary outlet (center)
 
+  The content outlet renders the page content via the URL.
+  The project page displays network editor and activity explorer.
+  The model page shows the detailed information of models which can be used in NEST Simulator.
+  The setting page shows an overview of all settings for various components of the app.
+  The toolbar in the header stretches over center and right bars and it is color-coded by a loaded page.
 
-Left bar
---------
+.. topic:: Controller bar (right)
 
-It is the navigation showing a list of the items which is loaded from individual modules.  A stacked set of buttons (left) renders the content of the navigation and it shows list of the simulations (sketch icon), of the models (square-root icon) and of the settings (wrench icon). When the user click on an item, it loads the content of the center and right bars. The header toolbar stretches over center and right bars and it is color-coded by a loaded page: Project page is summergreen, model is crail and setting page is sycamore. These color palette are generated using deep learning method on the colormind website\footnote{http://colormind.io/template/material-dashboard/}.
-
-
-Center bar
-----------
-
-It provides as router outlets showing the page content of the modules. The project page displays network editor and activity explorer. A model page shows the detailed information of models which can be used in NEST Simulator. Finally, a settings module shows an overview of all settings for application.
-
-
-Right bar
----------
-
-It is the controller which the user is able to change values. The content of the controller is tabbed by several components, e.g. it displays list of nodes and connections.
-
-
-
+  The controller enables users to change values.
+  The network controller displays list of nodes and connections.
 
 .. topic:: Right mouse button
 

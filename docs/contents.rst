@@ -38,7 +38,8 @@ Contents
    developer/interface-concept
    developer/preparation
    developer/source-code
-   developer/package
-   developer/readthedocs
+   developer/icon-description
    developer/semantic-version
+   developer/package
+   developer/doc-workflow
    developer/sources
