@@ -4,13 +4,13 @@ import { MediaMatcher } from '@angular/cdk/layout';
 
 import { enterAnimation } from '../../../animations/enter-animation';
 
+import { App } from '../../../components/app';
 import { Project } from '../../../components/project/project';
 
 import { ActivityChartService } from '../../../services/activity/activity-chart.service';
 import { ActivityGraphService } from '../../../services/activity/activity-graph.service';
 import { AppService } from '../../../services/app/app.service';
 import { ModelService } from '../../../services/model/model.service';
-import { ProjectService } from '../../../services/project/project.service';
 import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
 
 
@@ -33,7 +33,6 @@ export class ProjectContainerComponent implements OnInit, OnChanges {
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
     private _modelService: ModelService,
-    private _projectService: ProjectService,
     private _route: ActivatedRoute,
     private _router: Router,
     private _simulationRunService: SimulationRunService,
@@ -49,7 +48,7 @@ export class ProjectContainerComponent implements OnInit, OnChanges {
   ngOnChanges() {
     // console.log('Project container on changes');
     if (this.id === undefined) {
-      this._projectService.mode = 'networkEditor';
+      this.app.view.project.mode = 'networkEditor';
     }
     setTimeout(() => this.update(), 1);
   }
@@ -58,28 +57,32 @@ export class ProjectContainerComponent implements OnInit, OnChanges {
     return this._mobileQuery;
   }
 
+  get app(): App {
+    return this._appService.app;
+  }
+
   get project(): Project {
     return this._appService.app.project;
   }
 
   get sidenavOpened(): boolean {
-    return this._projectService.sidenavOpened;
+    return this.app.view.project.sidenavOpened;
   }
 
   set sidenavOpened(value: boolean) {
-    this._projectService.sidenavOpened = value;
+    this.app.view.project.sidenavOpened = value;
   }
 
   isReady(): boolean {
-    return this._appService.app.projectReady;
+    return this.app.projectReady;
   }
 
   update(): void {
     // console.log('Project container update');
-    this._appService.app.projectReady = false;
+    this.app.projectReady = false;
     setTimeout(() => {
       if (this.id) {
-        this._appService.app.initProject(this.id, this.rev).then(() => {
+        this.app.initProject(this.id, this.rev).then(() => {
           if (!this.project.hasSpatialActivities) {
             this._activityGraphService.mode = 'chart';
           }
@@ -87,15 +90,15 @@ export class ProjectContainerComponent implements OnInit, OnChanges {
           // this._activityGraphService.init();
           if (
             this._router.url.includes('run') || this.project.config.runAfterLoad &&
-            !this.project.hasActivities && this._projectService.mode === 'activityExplorer'
+            !this.project.hasActivities && this.app.view.project.mode === 'activityExplorer'
           ) {
-            this.project.runSimulationScript();
+            this.project.runSimulation();
           }
         }).catch(() => {
           this._router.navigate([{ outlets: { primary: 'project/' } }]);
         });
       } else {
-        this._appService.app.initProject();
+        this.app.initProject();
       }
     }, 200);
   }

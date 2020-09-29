@@ -5,12 +5,12 @@ import { SimulationCode } from './simulationCode';
 
 
 export class Simulation extends Config {
-  project: Project;                     // parent
-  code: SimulationCode;
+  private _project: Project;                     // parent
+  private _code: SimulationCode;
 
-  time: number;                         // simulation time
-  randomSeed: number;                   // seed for random renerator of numpy
-  kernel: SimulationKernel;             // simulation kernel
+  private _time: number;                         // simulation time
+  private _randomSeed: number;                   // seed for random renerator of numpy
+  private _kernel: SimulationKernel;             // simulation kernel
   private _running = false;
 
   constructor(
@@ -18,12 +18,32 @@ export class Simulation extends Config {
     simulation: any = {},
   ) {
     super('Simulation');
-    this.project = project;
-    this.kernel = new SimulationKernel(this, simulation.kernel);
-    this.code = new SimulationCode(this);
+    this._project = project;
+    this._kernel = new SimulationKernel(this, simulation.kernel);
+    this._code = new SimulationCode(this);
 
-    this.time = parseFloat(simulation.time) || 1000.;
-    this.randomSeed = parseInt(simulation.randomSeed, 0) || 0;
+    this._time = parseFloat(simulation.time) || 1000.;
+    this._randomSeed = parseInt(simulation.randomSeed, 0) || 0;
+  }
+
+  get code(): SimulationCode {
+    return this._code;
+  }
+
+  get kernel(): SimulationKernel {
+    return this._kernel;
+  }
+
+  get project(): Project {
+    return this._project;
+  }
+
+  get randomSeed(): number {
+    return this._randomSeed;
+  }
+
+  set randomSeed(value: number) {
+    this._randomSeed = value;
   }
 
   get running(): boolean {
@@ -34,15 +54,23 @@ export class Simulation extends Config {
     this._running = value;
   }
 
+  get time(): number {
+    return this._time;
+  }
+
+  set time(value: number) {
+    this._time = value;
+  }
+
   toJSON(target: string = 'db'): any {
     const simulation: any = {
-      kernel: this.kernel.toJSON(target),
-      time: this.time,
+      kernel: this._kernel.toJSON(target),
+      time: this._time,
     };
     if (target === 'simulator') {
-      simulation.random_seed = this.randomSeed;
+      simulation.random_seed = this._randomSeed;
     } else {
-      simulation.randomSeed = this.randomSeed;
+      simulation.randomSeed = this._randomSeed;
     }
     return simulation;
   }

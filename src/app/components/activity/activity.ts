@@ -3,54 +3,89 @@ import { Node } from '../node/node';
 
 
 export class Activity {
-  recorder: Node;                       // parent
-  idx: number;                          // generative
+  private _recorder: Node;                       // parent
+  private _idx: number;                          // generative
 
   // Information of the recorded nodes;
-  events: any = {};
-  nodeIds: number[] = [];
-  nodePositions: number[][] = [];       // if spatial
+  private _events: any = {};
+  private _nodeIds: number[] = [];
+  private _nodePositions: number[][] = [];       // if spatial
 
   constructor(
     recorder: Node,
     activity: any = { events: {}, nodeIds: [], nodePositions: [] }
   ) {
-    this.recorder = recorder;
+    this._recorder = recorder;
     this.update(activity);
   }
 
   get elementTypes(): string[] {
-    return this.recorder.nodes.map((node: Node) => node.model.elementType);
+    return this._recorder.nodes.map((node: Node) => node.model.elementType);
   }
 
   get endtime(): number {
-    return this.recorder.network.project.simulation.kernel.time;
+    return this._recorder.network.project.simulation.kernel.time;
+  }
+
+  get events(): any {
+    return this._events;
+  }
+
+  set events(value: any) {
+    this._events = value;
+  }
+
+  get idx(): number {
+    return this._idx;
+  }
+
+  get nEvents(): number {
+    return this._events.hasOwnProperty('times') ? this._events.times.length : 0;
+  }
+
+  get nodeIds(): number[] {
+    return this._nodeIds;
+  }
+
+  set nodeIds(value: number[]) {
+    this._nodeIds = value;
+  }
+
+  get nodePositions(): number[][] {
+    return this._nodePositions;
+  }
+
+  set nodePositions(value: number[][]) {
+    this._nodePositions = value;
+  }
+
+  get recorder(): Node {
+    return this._recorder;
   }
 
   get senders(): number[] {
-    const senders: any[] = [...new Set(this.events.senders)];
+    const senders: any[] = [...new Set(this._events.senders)];
     if (senders.length > 0) {
       senders.sort((a: number, b: number) => a - b);
     }
     return senders;
   }
 
-  get nEvents(): number {
-    return this.events.hasOwnProperty('times') ? this.events.times.length : 0;
-  }
-
   hasEvents(): boolean {
     return this.nEvents > 0;
   }
 
-  update(activity: any): void {
-    this.events = activity.events || {};
-    this.nodeIds = activity.nodeIds || [];
-    this.nodePositions = activity.nodePositions || [];
+  update(activity: any, idx: number = null): void {
+    if (idx !== null) {
+      this._idx = idx;
+    }
+    this._events = activity.events || {};
+    this._nodeIds = activity.nodeIds || [];
+    this._nodePositions = activity.nodePositions || [];
   }
 
   hasAnalogData(): boolean {
-    return ['voltmeter', 'multimeter'].includes(this.recorder.model.existing);
+    return ['voltmeter', 'multimeter'].includes(this._recorder.model.existing);
   }
 
   hasInputAnalogData(): boolean {
@@ -62,14 +97,14 @@ export class Activity {
   }
 
   hasSpikeData(): boolean {
-    return this.recorder.model.existing === 'spike_detector';
+    return this._recorder.model.existing === 'spike_detector';
   }
 
   getPositionsForSenders(): any {
     const x: number[] = [];
     const y: number[] = [];
-    this.events.senders.map((sender: number) => {
-      const pos: number[] = this.nodePositions[this.nodeIds.indexOf(sender)];
+    this._events.senders.map((sender: number) => {
+      const pos: number[] = this._nodePositions[this._nodeIds.indexOf(sender)];
       if (pos) {
         x.push(pos[0]);
         y.push(pos[1]);
@@ -79,18 +114,18 @@ export class Activity {
   }
 
   download(): void {
-    this.recorder.network.project.app.download(this, 'activity');
+    this._recorder.network.project.app.download(this, 'activity');
   }
 
   downloadEvents(): void {
-    this.recorder.network.project.app.download(this.events, 'events');
+    this._recorder.network.project.app.download(this._events, 'events');
   }
 
   toJSON(): any {
     const activity: any = {
-      events: this.events,
-      nodeIds: this.nodeIds,
-      nodePositions: this.nodePositions,
+      events: this._events,
+      nodeIds: this._nodeIds,
+      nodePositions: this._nodePositions,
     };
     return activity;
   }

@@ -12,7 +12,6 @@ import { MaterialModule } from './material.module';
 
 import { ActivityModule } from './activity/activity.module';
 import { ConfigModule } from './config/config.module';
-import { HelpModule } from './help/help.module';
 import { ModelModule } from './model/model.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { NetworkModule } from './network/network.module';
@@ -23,7 +22,6 @@ import { SimulationModule } from './simulation/simulation.module';
 
 // components
 import { AppComponent } from './app.component';
-import { EmptyPageComponent } from './empty-page/empty-page.component';
 import { LoadingComponent } from './loading/loading.component';
 import { LoadingDetailsComponent } from './loading/loading-details/loading-details.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -35,7 +33,6 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
 @NgModule({
   declarations: [
     AppComponent,
-    EmptyPageComponent,
     LoadingComponent,
     LoadingDetailsComponent,
     PageNotFoundComponent,
@@ -49,7 +46,6 @@ import { ResponseCheckComponent } from './loading/response-check/response-check.
     ConfigModule,
     FlexLayoutModule,
     FontAwesomeModule,
-    HelpModule,
     MaterialModule,
     ModelModule,
     NavigationModule,

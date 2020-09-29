@@ -18,36 +18,36 @@ import { ModelModule } from '../model/model.module';
 import { NodeModule } from '../node/node.module';
 
 import { ConnectionControllerComponent } from './connection-controller/connection-controller.component';
+import { ConnectionGraphComponent } from './connection-graph/connection-graph.component';
 import { ConnectionListComponent } from './connection-list/connection-list.component';
-import { ConnectionMenuComponent } from './connection-menu/connection-menu.component';
 import { ConnectionMaskComponent } from './connection-mask/connection-mask.component';
+import { ConnectionMenuComponent } from './connection-menu/connection-menu.component';
 import { ConnectionParamComponent } from './connection-param/connection-param.component';
 import { ConnectionProjectionsComponent } from './connection-projections/connection-projections.component';
 import { ConnectionSelectionComponent } from './connection-selection/connection-selection.component';
-import { ConnectionSketchComponent } from './connection-sketch/connection-sketch.component';
 import { ConnectionToolbarComponent } from './connection-toolbar/connection-toolbar.component';
 
 @NgModule({
   declarations: [
     ConnectionControllerComponent,
-    ConnectionMenuComponent,
+    ConnectionGraphComponent,
     ConnectionListComponent,
     ConnectionMaskComponent,
+    ConnectionMenuComponent,
     ConnectionParamComponent,
     ConnectionProjectionsComponent,
     ConnectionSelectionComponent,
-    ConnectionSketchComponent,
     ConnectionToolbarComponent,
   ],
   exports: [
     ConnectionControllerComponent,
-    ConnectionMenuComponent,
+    ConnectionGraphComponent,
     ConnectionListComponent,
     ConnectionMaskComponent,
+    ConnectionMenuComponent,
     ConnectionParamComponent,
     ConnectionProjectionsComponent,
     ConnectionSelectionComponent,
-    ConnectionSketchComponent,
     ConnectionToolbarComponent,
   ],
   imports: [

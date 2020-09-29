@@ -9,7 +9,12 @@ export class InputAnalogSignalPlotPanel extends AnalogSignalPlotPanel {
     super(graph);
     this.id = 'InputAnalogSignalPlotPanel';
     this.label = 'plot of input analog signals';
+    this.init();
+  }
+
+  init(): void {
     this.activities = this.graph.project.activities.filter((activity: Activity) => activity.hasInputAnalogData());
+    this.data = [];
   }
 
 }

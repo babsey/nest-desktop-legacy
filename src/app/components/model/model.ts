@@ -13,8 +13,8 @@ enum ElementType {
 }
 
 export class Model {
-  app: App;                             // parent
-  code: ModelCode;                      // code for model
+  private _app: App;                             // parent
+  private _code: ModelCode;                      // code for model
   private _name = 'Model';
 
   private _doc: any;                             // doc data of the database
@@ -25,11 +25,11 @@ export class Model {
   private _label: string;                        // model label for view
   private _abbreviation: string;
   private _params: Parameter[] = [];             // model parameters
-  recordables: string[];                // recordables for multimeter
+  private _recordables: string[];                // recordables for multimeter
 
   constructor(app: App, model: any) {
-    this.app = app;
-    this.code = new ModelCode(this);
+    this._app = app;
+    this._code = new ModelCode(this);
 
     this._doc = model;
     this._id = model.id;
@@ -40,15 +40,19 @@ export class Model {
     this._label = model.label || '';
     this._abbreviation = model.abbreviation;
     model.params.forEach((param: any) => this.addParameter(param));
-    this.recordables = model.recordables || [];
+    this._recordables = model.recordables || [];
   }
 
-  get name(): string {
-    return this._name;
+  get abbreviation(): string {
+    return this._abbreviation;
   }
 
-  get id(): string {
-    return this._id;
+  get app(): App {
+    return this._app;
+  }
+
+  get code(): ModelCode {
+    return this._code;
   }
 
   get elementType(): string {
@@ -59,8 +63,8 @@ export class Model {
     return this._existing;
   }
 
-  get abbreviation(): string {
-    return this._abbreviation;
+  get id(): string {
+    return this._id;
   }
 
   get label(): string {
@@ -75,12 +79,20 @@ export class Model {
     return this;
   }
 
+  get name(): string {
+    return this._name;
+  }
+
   get network(): Network {
-    return ;
+    return;
   }
 
   get params(): Parameter[] {
     return this._params;
+  }
+
+  get recordables(): string[] {
+    return this._recordables;
   }
 
   get value(): string {
@@ -123,51 +135,51 @@ export class Model {
   }
 
   clean(): void {
-    this._idx = this.app.models.indexOf(this);
+    this._idx = this._app.models.indexOf(this);
   }
 
   clone(): Model {
-    return new Model(this.app, this);
+    return new Model(this._app, this);
   }
 
   isNeuron(): boolean {
-    return this.elementType === 'neuron';
+    return this._elementType === 'neuron';
   }
 
   isRecorder(): boolean {
-    return this.elementType === 'recorder';
+    return this._elementType === 'recorder';
   }
 
   isStimulator(): boolean {
-    return this.elementType === 'stimulator';
+    return this._elementType === 'stimulator';
   }
 
   delete(): Promise<any> {
-    return this.app.deleteModel(this._doc._id);
+    return this._app.deleteModel(this._doc._id);
   }
 
   save(): Promise<any> {
-    return this.app.saveModel(this);
+    return this._app.saveModel(this);
   }
 
   toJSON(target: string = 'db'): any {
     const model: any = {
-      existing: this.existing,
+      existing: this._existing,
     };
     if (target === 'simulator') {
-      model.new = this.id;
+      model.new = this._id;
       model.params = {};
-      this.params.forEach((param: Parameter) => model.params[param.id] = param.value);
+      this._params.forEach((param: Parameter) => model.params[param.id] = param.value);
     } else {
-      model.id = this.id;
-      model.elementType = this.elementType;
-      model.label = this.label;
-      model.abbreviation = this.abbreviation;
-      model.params = this.params.map((param: Parameter) => param.toJSON());
+      model.id = this._id;
+      model.elementType = this._elementType;
+      model.label = this._label;
+      model.abbreviation = this._abbreviation;
+      model.params = this._params.map((param: Parameter) => param.toJSON());
       if (this.recordables.length > 0) {
-        model.recordables = this.recordables;
+        model.recordables = this._recordables;
       }
-      model.version = this.app.version;
+      model.version = this._app.version;
     }
     return model;
   }

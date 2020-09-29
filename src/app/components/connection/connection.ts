@@ -32,10 +32,10 @@ export class Connection extends Config {
   private _target: number;                      // Node index
   private _rule: string;
 
-  params: any[];
-  projections: ConnectionProjections;           // only for NEST 2, will be deprecated in NEST 3;
-  mask: ConnectionMask;
-  synapse: Synapse;
+  private _params: any[];
+  private _projections: ConnectionProjections;           // only for NEST 2, will be deprecated in NEST 3;
+  private _mask: ConnectionMask;
+  private _synapse: Synapse;
 
   srcIdx?: number[];
   tgtIdx?: number[];
@@ -52,39 +52,69 @@ export class Connection extends Config {
     this._target = connection.target;
 
     this._rule = connection.rule || Rule.AllToAll;
-    this.params = connection.params || [];
+    this._params = connection.params || [];
 
-    this.mask = new ConnectionMask(this, connection.mask);
-    this.projections = new ConnectionProjections(this, connection.projections);
-    this.synapse = new Synapse(this, connection.synapse);
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  get idx(): number {
-    return this._idx;
+    this._mask = new ConnectionMask(this, connection.mask);
+    this._projections = new ConnectionProjections(this, connection.projections);
+    this._synapse = new Synapse(this, connection.synapse);
   }
 
   get code(): ConnectionCode {
     return this._code;
   }
 
+  get idx(): number {
+    return this._idx;
+  }
+
+  get mask(): ConnectionMask {
+    return this._mask;
+  }
+
+  get model(): Model {
+    return this._synapse.model;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
   get network(): Network {
     return this._network;
   }
 
+  get params(): any[] {
+    return this._params;
+  }
+
+  get projections(): ConnectionProjections {
+    return this._projections;
+  }
+
+  get rule(): string {
+    return this._rule;
+  }
+
+  set rule(value: string) {
+    this._rule = value;
+    this._params = this.view.getRuleParams();
+    this.connectionChanges();
+  }
+
   get source(): Node {
-    return this.network.nodes[this._source];
+    return this._network.nodes[this._source];
   }
 
   set source(node: Node) {
     this._source = node.idx;
   }
 
+  get synapse(): Synapse {
+    return this._synapse;
+  }
+
   get target(): Node {
-    return this.network.nodes[this._target];
+    return this._network.nodes[this._target];
   }
 
   set target(node: Node) {
@@ -95,22 +125,8 @@ export class Connection extends Config {
     return this._view;
   }
 
-  get model(): Model {
-    return this.synapse.model;
-  }
-
-  get rule(): string {
-    return this._rule;
-  }
-
-  set rule(value: string) {
-    this._rule = value;
-    this.params = this.view.getRuleParams();
-    this.connectionChanges();
-  }
-
   connectionChanges(): void {
-    this.network.networkChanges();
+    this._network.networkChanges();
   }
 
   reverse(): void {
@@ -119,11 +135,11 @@ export class Connection extends Config {
   }
 
   select(): void {
-    this.network.view.selectedConnection = this;
+    this._network.view.selectedConnection = this;
   }
 
   clean(): void {
-    this._idx = this.network.connections.indexOf(this);
+    this._idx = this._network.connections.indexOf(this);
   }
 
   isBothSpatial(): boolean {
@@ -139,8 +155,8 @@ export class Connection extends Config {
     this.tgtIdx = undefined;
     this.rule = Rule.AllToAll;
     this.synapse.modelId = 'static_synapse';
-    this.projections.reset();
-    this.mask.unmask();
+    this._projections.reset();
+    this._mask.unmask();
     this.connectionChanges();
   }
 
@@ -153,7 +169,7 @@ export class Connection extends Config {
   }
 
   delete(): void {
-    this.network.deleteConnection(this);
+    this._network.deleteConnection(this);
   }
 
   toJSON(target: string = 'db'): any {
@@ -167,20 +183,20 @@ export class Connection extends Config {
       connection.conn_spec = {
         rule: this._rule,
       };
-      this.params.forEach((param: Parameter) => connection.conn_spec[param.id] = param.value);
-      if (this.mask.hasMask()) {
-        connection.conn_spec.mask = this.mask.toJSON(target);
+      this._params.forEach((param: Parameter) => connection.conn_spec[param.id] = param.value);
+      if (this._mask.hasMask()) {
+        connection.conn_spec.mask = this._mask.toJSON(target);
       }
-      connection.syn_spec = this.synapse.toJSON(target);     // Collect specifications of the synapse
+      connection.syn_spec = this._synapse.toJSON(target);     // Collect specifications of the synapse
     } else {
       connection.rule = this._rule;
-      connection.params = this.params;
-      connection.mask = this.mask.toJSON(target);
-      connection.synapse = this.synapse.toJSON(target);
+      connection.params = this._params;
+      connection.mask = this._mask.toJSON(target);
+      connection.synapse = this._synapse.toJSON(target);
     }
 
     if (this.isBothSpatial()) {
-      connection.projections = this.projections.toJSON(target);
+      connection.projections = this._projections.toJSON(target);
     }
 
     return connection;

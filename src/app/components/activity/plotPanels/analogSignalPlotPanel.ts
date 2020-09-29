@@ -14,12 +14,11 @@ export class AnalogSignalPlotPanel extends ActivityGraphPanel {
   }
 
   init(): void {
+    this.activities = this.graph.project.activities.filter((activity: AnalogSignalActivity) => activity.hasAnalogData());
     this.data = [];
   }
 
   update(): void {
-    this.activities = this.graph.project.activities.filter((activity: AnalogSignalActivity) => activity.hasAnalogData());
-
     this.activities.forEach((activity: AnalogSignalActivity) => {
       const recordables: string[] = Object.keys(activity.events)
         .filter((event: string) => !['times', 'senders'].includes(event));
@@ -181,7 +180,7 @@ export class AnalogSignalPlotPanel extends ActivityGraphPanel {
     // white background for average line
     this.data.push({
       activityIdx: activity.idx,
-      recordFrom: recordFrom,
+      recordFrom,
       mode: 'lines',
       type: 'scattergl',
       hoverinfo: 'none',
@@ -198,7 +197,7 @@ export class AnalogSignalPlotPanel extends ActivityGraphPanel {
     // average line
     this.data.push({
       activityIdx: activity.idx,
-      recordFrom: recordFrom,
+      recordFrom,
       mode: 'lines',
       type: 'scattergl',
       name: recordFrom + ' average',

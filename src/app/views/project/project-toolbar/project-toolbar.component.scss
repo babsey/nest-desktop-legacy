@@ -82,6 +82,7 @@
 }
 
 .network-changed {
-  @include animation('bounce 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
-  // @include animation('shake 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
+  color: #C05B58; // #BF9956; //E08854;
+  // @include animation('bounce 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
+  @include animation('shake 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
 }

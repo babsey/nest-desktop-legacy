@@ -7,10 +7,6 @@
 <mat-menu #projectMenu="matMenu" class="context-menu">
   <mat-toolbar class="ellipsis">Project</mat-toolbar>
 
-  <!-- <button mat-menu-item (click)="configSimulation()">
-    <fa-icon icon="cog"></fa-icon> Configure simulation
-  </button> -->
-
   <mat-selection-list dense
     (click)="$event.stopPropagation()"
     (selectionChange)="onSelectionChange($event)"
@@ -59,7 +55,7 @@
       <span class="flex" style="width: 200px">
         <button mat-icon-button
           (click)="selectMode('networkEditor')"
-          [class.active]="isMode('networkEditor')"
+          [class.active]="isActive('networkEditor')"
           class="tab-button"
           matTooltip="Construct network"
           matTooltipShowDelay="1000">
@@ -70,7 +66,7 @@
         </button>
         <button mat-icon-button
           (click)="selectMode('activityExplorer')"
-          [class.active]="isMode('activityExplorer')"
+          [class.active]="isActive('activityExplorer')"
           class="tab-button"
           matTooltip="Explore activity"
           matTooltipShowDelay="1000">
@@ -81,7 +77,7 @@
         </button>
         <button mat-icon-button
           (click)="selectMode('labBook')"
-          [class.active]="isMode('labBook')"
+          [class.active]="isActive('labBook')"
           class="tab-button"
           matTooltip="Lab book"
           matTooltipShowDelay="1000">
@@ -99,7 +95,7 @@
 
     <span class="flex-spacer"></span>
 
-    <ng-container *ngIf="!isMode('labBook')">
+    <ng-container *ngIf="!isActive('labBook')">
       <div class="no-print network-history">
         <button mat-icon-button
           (click)="project.network.oldest()"
@@ -147,7 +143,6 @@
       (click)="run()"
       (contextmenu)="onContextMenu($event)"
       [disabled]="project.simulation.running"
-      [class.network-changed]="project.isNetworkChanged()"
       class="no-print"
       style="width:128px">
       <ng-container *ngIf="project.simulation.running">
@@ -163,10 +158,14 @@
         </div>
       </ng-container>
       <ng-container *ngIf="!project.simulation.running">
-        <fa-icon
-          icon="play"
-          style="margin:0 8px"
-        ></fa-icon>
+        <span
+          [class.network-changed]="project.isNetworkChanged()"
+          style="display: inline-block">
+          <fa-icon
+            icon="play"
+            style="margin:0 8px"
+          ></fa-icon>
+        </span>
         Simulate
       </ng-container>
     </button>

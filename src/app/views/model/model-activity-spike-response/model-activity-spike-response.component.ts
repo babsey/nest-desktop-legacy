@@ -16,7 +16,7 @@ import { AppService } from '../../../services/app/app.service';
   styleUrls: ['./model-activity-spike-response.component.scss'],
 })
 export class ModelActivitySpikeResponseComponent implements OnInit {
-  @Input() model: string;
+  @Input() modelId: string;
   private _project: Project;
   private _config: any = {
     staticPlot: true,
@@ -37,6 +37,7 @@ export class ModelActivitySpikeResponseComponent implements OnInit {
   private _registerPanels: any[] = [
     (graph: ActivityChartGraph) => new AnalogSignalPlotPanel(graph),
   ];
+  private _filename = 'neuron-spike-response';
 
   constructor(
     private _appService: AppService,
@@ -67,8 +68,13 @@ export class ModelActivitySpikeResponseComponent implements OnInit {
   }
 
   update(): void {
-    this._project = this._appService.app.createNeuronModelProject(this.model);
-    this._project.runSimulationCode();
+    if (this.modelId) {
+      this._project = this._appService.app.createProjectFromAssets(this._filename);
+      this._project.network.nodes[1].modelId = this.modelId;
+      this._project.code.generate();
+      this._project.initActivityGraph(this._registerPanels);
+      this._project.runSimulationCode();
+    }
   }
 
 }

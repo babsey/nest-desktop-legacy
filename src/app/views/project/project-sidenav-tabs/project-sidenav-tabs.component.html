@@ -9,7 +9,7 @@
 
   <button mat-icon-button
     (click)="selectMode('networkSelection')"
-    [class.mat-fab]="isMode('networkSelection')"
+    [class.mat-fab]="isActive('networkSelection')"
     class="app-button"
     matTooltip="Network selection"
     matTooltipPosition="before"
@@ -19,7 +19,7 @@
 
   <button mat-icon-button
     (click)="selectMode('networkController')"
-    [class.mat-fab]="isMode('networkController')"
+    [class.mat-fab]="isActive('networkController')"
     class="app-button"
     matTooltip="Network controller"
     matTooltipPosition="before"
@@ -29,7 +29,7 @@
 
   <button mat-icon-button
     (click)="selectMode('simulation')"
-    [class.mat-fab]="isMode('simulation')"
+    [class.mat-fab]="isActive('simulation')"
     class="app-button"
     matTooltip="Simulation settings"
     matTooltipPosition="before"
@@ -43,7 +43,7 @@
 
   <button mat-icon-button
     (click)="selectMode('codeEditor')"
-    [class.mat-fab]="isMode('codeEditor')"
+    [class.mat-fab]="isActive('codeEditor')"
     class="app-button"
     matTooltip="Script code"
     matTooltipPosition="before"
@@ -54,7 +54,7 @@
   <ng-container *ngIf="app.config.devMode">
     <button mat-icon-button
       (click)="selectMode('rawData')"
-      [class.mat-fab]="isMode('rawData')"
+      [class.mat-fab]="isActive('rawData')"
       class="app-button"
       matTooltip="Raw data"
       matTooltipPosition="before"
@@ -63,9 +63,9 @@
     </button>
 
     <!-- <button mat-icon-button
-      (click)="selectMode('sketchSettings')"
-      [class.mat-fab]="isMode('sketchSettings')"
-      matTooltip="Sketch settings"
+      (click)="selectMode('networkGraphSettings')"
+      [class.mat-fab]="isActive('networkGraphSettings')"
+      matTooltip="Network graph settings"
       matTooltipPosition="before"
       class="app-button"
       >
@@ -75,7 +75,7 @@
 
   <button mat-icon-button
     (click)="selectMode('activityController')"
-    [class.mat-fab]="isMode('activityController')"
+    [class.mat-fab]="isActive('activityController')"
     [disabled]="!app.project.hasActivities"
     class="app-button"
     matTooltip="Activity controller"
@@ -96,7 +96,7 @@
 
   <button mat-icon-button
     (click)="selectMode('activityStats')"
-    [class.mat-fab]="isMode('activityStats')"
+    [class.mat-fab]="isActive('activityStats')"
     class="app-button"
     matTooltip="Activity statistics"
     matTooltipPosition="before"

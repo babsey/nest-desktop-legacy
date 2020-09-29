@@ -4,15 +4,15 @@ import { Connection } from './connection/connection';
 
 
 export class Parameter {
-  parent: Model | Node | Connection;    // parent
-  idx: number;                          // generative
+  private _parent: Model | Node | Connection;    // parent
+  private _idx: number;                          // generative
 
   private _id: string;
   private _value: any;
 
   // For node and connection
-  visible: boolean;
-  factors: string[];                    // not functional yet
+  private _visible: boolean;
+  private _factors: string[];                    // not functional yet
 
   // For model
   label: string;
@@ -25,14 +25,14 @@ export class Parameter {
   ticks: any[];
 
   constructor(parent: Model | Node | Connection, param: any) {
-    this.parent = parent;
-    this.idx = param.idx || parent.params.length;
+    this._parent = parent;
+    this._idx = param.idx || parent.params.length;
 
     this._id = param.id;
     this._value = param.value || 0;
 
-    this.visible = param.visible !== undefined ? param.visible : false;
-    this.factors = param.factors || [];
+    this._visible = param.visible !== undefined ? param.visible : false;
+    this._factors = param.factors || [];
 
     this.label = param.label || '';
     this.unit = param.unit || '';
@@ -44,12 +44,26 @@ export class Parameter {
     this.ticks = param.ticks;
   }
 
-  copy(): any {
-    return new Parameter(this.parent, this);
-  }
-
   get id(): string {
     return this._id;
+  }
+
+  get factors(): string[] {
+    return this._factors;
+  }
+
+  // get idx(): number {
+  //   return this._idx;
+  // }
+
+  get options(): any {
+    const model: Model = this._parent.model;
+    const param: Parameter = model ? model.params.find((p: Parameter) => p.id === this.id) : null;
+    return param;
+  }
+
+  get parent(): Model | Node | Connection {
+    return this._parent;
   }
 
   get value(): any {
@@ -59,15 +73,22 @@ export class Parameter {
   set value(value: any) {
     // console.log('Set parameter value');
     this._value = value;
-    if (['Node', 'Connection'].includes(this.parent.name)) {
+    if (['Node', 'Connection'].includes(this._parent.name)) {
       this.parent.network.networkChanges();
     }
+    this.parent.network.project.simulateAfterChange();
   }
 
-  get options(): any {
-    const model: Model = this.parent.model;
-    const param: Parameter = model ? model.params.find((p: Parameter) => p.id === this.id) : null;
-    return param;
+  get visible(): boolean {
+    return this._visible;
+  }
+
+  set visible(value: boolean) {
+    this._visible = value;
+  }
+
+  copy(): any {
+    return new Parameter(this.parent, this);
   }
 
   reset(): void {
@@ -76,10 +97,10 @@ export class Parameter {
 
   toJSON(): any {
     const params: any = {
-      id: this.id,
-      value: this.value,
+      id: this._id,
+      value: this._value,
     };
-    if (this.parent.name === 'Model') {
+    if (this._parent.name === 'Model') {
       params.input = this.input;
       params.label = this.label;
       params.unit = this.unit;
@@ -91,8 +112,8 @@ export class Parameter {
         params.ticks = this.ticks;
       }
     } else {
-      params.visible = this.visible;
-      params.factors = this.factors;
+      params.visible = this._visible;
+      params.factors = this._factors;
     }
     return params;
   }

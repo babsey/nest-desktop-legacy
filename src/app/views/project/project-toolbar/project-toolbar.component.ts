@@ -7,7 +7,6 @@ import { enterAnimation } from '../../../animations/enter-animation';
 import { Project } from '../../../components/project/project';
 
 import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
-import { ProjectService } from '../../../services/project/project.service';
 
 
 @Component({
@@ -23,12 +22,15 @@ export class ProjectToolbarComponent implements OnInit {
   contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
-    private _projectService: ProjectService,
     private _router: Router,
     private _simulationRunService: SimulationRunService,
   ) { }
 
   ngOnInit() {
+  }
+
+  get view(): any {
+    return this.project.app.view.project;
   }
 
   navigate(id: string): void {
@@ -49,17 +51,12 @@ export class ProjectToolbarComponent implements OnInit {
     return this.project.networkRevisions.length - this.project.networkRevisionIdx - 1;
   }
 
-  configSimulation(): void {
-    this.selectMode('activityExplorer');
-    this._projectService.sidenavMode = 'simulation';
-  }
-
   selectMode(mode: string): void {
-    this._projectService.mode = mode;
+    this.project.app.view.selectProjectMode(mode);
   }
 
-  isMode(mode: string): boolean {
-    return this._projectService.mode === mode;
+  isActive(mode: string): boolean {
+    return this.view.mode === mode;
   }
 
   onSelectionChange(event: any): void {

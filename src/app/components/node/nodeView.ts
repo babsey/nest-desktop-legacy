@@ -5,45 +5,25 @@ import * as NodeGraph from './nodeGraph';
 
 
 export class NodeView {
-  node: Node;                 // parent
+  private _node: Node;                 // parent
 
   // for the app
   private _color: any;                   // color of node
   private _label: string;
-  position: any = { x: 0, y: 0 };
+  private _position: any = { x: 0, y: 0 };
 
   // From Simulator
   positions: number[][] = [];
 
 
   constructor(node: Node, view: any) {
-    this.node = node;
+    this._node = node;
     this._color = view.color;
-    this.position = view.position;
-  }
-
-  get label(): string {
-    if (this._label) { return this._label; }
-    const elementType: string = this.node.model.elementType;
-    if (elementType === undefined) {
-      const idx: number = this.node.network.nodes.indexOf(this.node);
-      return 'n' + (idx + 1);
-    } else if (elementType === 'neuron') {
-      const idx: number = this.node.network.neurons.indexOf(this.node);
-      return 'n' + (idx + 1);
-    } else {
-      const nodes: Node[] = this.node.network.nodes.filter(
-        (node: Node) => node.modelId === this.node.modelId);
-      const idx: number = nodes.indexOf(this.node);
-      const label: string = this.node.model.abbreviation || this.node.modelId.split('_').map((d: string) => d[0]).join('');
-      return label + (idx + 1);
-    }
+    this._position = view.position;
   }
 
   get color(): string {
-    if (typeof this._color === 'string') {
-      return this._color;
-    }
+    if (typeof this._color === 'string') { return this._color; }
 
     if (this.node.model.elementType === 'recorder') {
       const connections: Connection[] = this.node.network.connections
@@ -65,10 +45,37 @@ export class NodeView {
     this.node.network.clean();
   }
 
+  get label(): string {
+    if (this._label) { return this._label; }
+
+    const elementType: string = this.node.model.elementType;
+    if (elementType === undefined) {
+      const idx: number = this.node.network.nodes.indexOf(this.node);
+      return 'n' + (idx + 1);
+    } else if (elementType === 'neuron') {
+      const idx: number = this.node.network.neurons.indexOf(this.node);
+      return 'n' + (idx + 1);
+    } else {
+      const nodes: Node[] = this.node.network.nodes.filter(
+        (node: Node) => node.modelId === this.node.modelId);
+      const idx: number = nodes.indexOf(this.node);
+      const label: string = this.node.model.abbreviation || this.node.modelId.split('_').map((d: string) => d[0]).join('');
+      return label + (idx + 1);
+    }
+  }
+
+  get node(): Node {
+    return this._node;
+  }
+
+  get position(): any {
+    return this._position;
+  }
+
   get weight(): string {
-    if (this.node.model.elementType === 'recorder') { return; }
-    const connections: Connection[] = this.node.network.connections.filter(
-      (connection: Connection) => connection.source.idx === this.node.idx && connection.target.model.elementType !== 'recorder');
+    if (this._node.model.elementType === 'recorder') { return; }
+    const connections: Connection[] = this._node.network.connections.filter(
+      (connection: Connection) => connection.source.idx === this._node.idx && connection.target.model.elementType !== 'recorder');
     if (connections.length > 0) {
       const weights: number[] = connections.map(
         (connection: Connection) => connection.synapse.weight);
@@ -85,7 +92,7 @@ export class NodeView {
   }
 
   getPoints(radius: number): string {
-    switch (this.node.model.elementType) {
+    switch (this._node.model.elementType) {
       case 'stimulator':
         return NodeGraph.getPoints('hexagon', radius);
         break;
@@ -93,9 +100,10 @@ export class NodeView {
         return NodeGraph.getPoints('rectangle', radius);
         break;
       case 'neuron':
-        if (this.weight === 'excitatory') {
+        const weight: string = this.weight;
+        if (weight === 'excitatory') {
           return NodeGraph.getPoints('triangle', radius);
-        } else if (this.weight === 'inhibitory') {
+        } else if (weight === 'inhibitory') {
           return NodeGraph.getPoints('circle', radius);
         } else {
           return NodeGraph.getPoints('square', radius);
@@ -107,36 +115,36 @@ export class NodeView {
   }
 
   paramsVisible(): string[] {
-    return this.node.params.filter((param: Parameter) => param.visible).map(param => param.id);
+    return this._node.params.filter((param: Parameter) => param.visible).map(param => param.id);
   }
 
   setLevel(level: number): void {
-    this.node.params.map((param: Parameter) => param.visible = param.options.level <= level);
+    this._node.params.map((param: Parameter) => param.visible = param.options.level <= level);
   }
 
   clean(): void {
   }
 
   select(): void {
-    this.node.network.view.selectedNode = this.node;
+    this._node.network.view.selectedNode = this._node;
   }
 
   focus(): void {
-    this.node.network.view.focusedNode = this.node;
+    this._node.network.view.focusedNode = this._node;
   }
 
   isSelected(unselected: boolean = false): boolean {
-    return this.node.network.view.isNodeSelected(this.node, unselected);
+    return this._node.network.view.isNodeSelected(this._node, unselected);
   }
 
   isFocused(): boolean {
-    return this.node.network.view.isNodeFocused(this.node);
+    return this._node.network.view.isNodeFocused(this._node);
   }
 
   toJSON(): any {
     const nodeView: any = {
       color: this._color,
-      position: this.position,
+      position: this._position,
     };
     return nodeView;
   }

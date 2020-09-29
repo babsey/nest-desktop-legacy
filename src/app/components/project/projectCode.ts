@@ -3,47 +3,55 @@ import { Project } from './project';
 
 
 export class ProjectCode extends Code {
-  project: Project;                           // parent
-  script: string;
+  private _project: Project;                           // parent
+  private _script: string;
 
   constructor(project: Project) {
     super();
-    this.project = project;
+    this._project = project;
     this.generate();
   }
 
+  get script(): string {
+    return this._script;
+  }
+
+  set script(value: string) {
+    this._script = value;
+  }
+
   generate(sections: string[] = ['kernel', 'models', 'nodes', 'connections', 'events']): void {
-    this.script = '';
-    this.script += this.importModules();
-    this.script += 'nest.ResetKernel()\n';
+    this._script = '';
+    this._script += this.importModules();
+    this._script += 'nest.ResetKernel()\n';
 
     if (sections.includes('kernel')) {
-      this.script += '\n\n# Simulation kernel\n';
-      this.script += this.project.simulation.code.setRandomSeed();
-      this.script += this.project.simulation.code.setKernelStatus();
+      this._script += '\n\n# Simulation kernel\n';
+      this._script += this._project.simulation.code.setRandomSeed();
+      this._script += this._project.simulation.code.setKernelStatus();
     }
 
     // if (sections.includes('models')) {
-    //   this.script += '\n\n# Copy models\n';
-    //   this.project.models.forEach((model: Model) => this.script += model.code.copyModel());
+    //   this._script += '\n\n# Copy models\n';
+    //   this.project.models.forEach((model: Model) => this._script += model.code.copyModel());
     // }
 
     if (sections.includes('nodes')) {
-      this.script += '\n\n# Create nodes\n';
-      this.script += this.project.network.code.createNodes();
+      this._script += '\n\n# Create nodes\n';
+      this._script += this._project.network.code.createNodes();
     }
 
     if (sections.includes('connections')) {
-      this.script += '\n\n# Connect nodes\n';
-      this.script += this.project.network.code.connectNodes();
+      this._script += '\n\n# Connect nodes\n';
+      this._script += this._project.network.code.connectNodes();
     }
 
-    this.script += '\n\n# Run simulation\n';
-    this.script += this.project.simulation.code.simulate();
+    this._script += '\n\n# Run simulation\n';
+    this._script += this._project.simulation.code.simulate();
 
     if (sections.includes('events')) {
-      this.script += '\n\n# Collect activities\n';
-      this.script += this.project.network.code.getActivities();
+      this._script += '\n\n# Collect activities\n';
+      this._script += this._project.network.code.getActivities();
     }
   }
 

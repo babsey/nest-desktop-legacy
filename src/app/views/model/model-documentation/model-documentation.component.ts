@@ -41,6 +41,7 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
   requestModelDoc(): void {
     this._helptext = '';
     this._blocks = [];
+    if (!this.modelId) { return; }
     setTimeout(() => {
       const urlRoot: string = this._appService.app.nestServer.url;
       const data: any = {

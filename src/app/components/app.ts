@@ -20,24 +20,25 @@ export class App extends Config {
   private _version: string;
   private _ready = false;
   private _projectReady = false;
-  view: AppView;
+  private _view: AppView;
 
   // NEST model e.g. neuron, synapse, stimulator, recorder
-  modelDB: DatabaseService;
-  models: Model[] = [];
+  private _modelDB: DatabaseService;
+  private _models: Model[] = [];
 
   // Project of neuronal networks
-  projectDB: DatabaseService;
-  projects: Project[] = [];
-  projectRevisions: Project[] = [];
-  project: Project;
+  private _projectDB: DatabaseService;
+  private _projects: Project[] = [];
+  private _projectRevisions: Project[] = [];
+  private _project: Project;
 
-  nestServer: NESTServer = new NESTServer();
+  private _nestServer: NESTServer;
 
   constructor() {
     super('App');
     this._version = environment.VERSION;
-    this.view = new AppView(this);
+    this._view = new AppView(this);
+    this._nestServer = new NESTServer();
     this.init();
   }
 
@@ -49,8 +50,36 @@ export class App extends Config {
     return datetime;
   }
 
+  get models(): Model[] {
+    return this._models;
+  }
+
+  get modelDB(): DatabaseService {
+    return this._modelDB;
+  }
+
+  get nestServer(): NESTServer {
+    return this._nestServer;
+  }
+
   get ready(): boolean {
     return this._ready;
+  }
+
+  get project(): Project {
+    return this._project;
+  }
+
+  get projects(): Project[] {
+    return this._projects;
+  }
+
+  get projectDB(): DatabaseService {
+    return this._projectDB;
+  }
+
+  get projectRevisions(): Project[] {
+    return this._projectRevisions;
   }
 
   get projectReady(): boolean {
@@ -65,8 +94,12 @@ export class App extends Config {
     return this._version;
   }
 
+  get view(): AppView {
+    return this._view;
+  }
+
   init(): Promise<any> {
-    this.project = new Project(this);
+    this._project = new Project(this);
     this._ready = false;
     return this.initModels()
       .then(() => this.initProjects()
@@ -78,16 +111,16 @@ export class App extends Config {
   */
 
   isDatabaseReady(): boolean {
-    return (this.modelDB !== undefined && this.projectDB !== undefined);
+    return (this._modelDB !== undefined && this._projectDB !== undefined);
   }
 
   isDatabaseValid(): boolean {
     if (!this.isDatabaseReady()) { return false; }
-    return (this.modelDB.isValid() && this.projectDB.isValid());
+    return (this._modelDB.isValid() && this._projectDB.isValid());
   }
 
   isDataReady(): boolean {
-    return (this.models.length > 0 && this.projects.length > 0);
+    return (this._models.length > 0 && this._projects.length > 0);
   }
 
   resetDatabases(): void {
@@ -98,15 +131,15 @@ export class App extends Config {
   }
 
   resetModelDatabase(): Promise<any> {
-    this.models = [];
-    return this.modelDB.db.destroy()
+    this._models = [];
+    return this._modelDB.destroy()
       .then(() => this.initModels());
   }
 
   resetProjectDatabase(): Promise<any> {
-    this.project = new Project(this);
-    this.projects = [];
-    return this.projectDB.db.destroy()
+    this._project = new Project(this);
+    this._projects = [];
+    return this._projectDB.destroy()
       .then(() => this.initProjects());
   }
 
@@ -117,10 +150,10 @@ export class App extends Config {
 
   initModels(): Promise<any> {
     // console.log('Initialize models');
-    this.models = [];
-    this.modelDB = new DatabaseService(this, 'nest-desktop-model');
-    return this.modelDB.count().then((count: number) => {
-      console.log('Models in db:', count);
+    this._models = [];
+    this._modelDB = new DatabaseService(this, 'nest-desktop-model');
+    return this._modelDB.count().then((count: number) => {
+      // console.log('Models in db:', count);
       if (count === 0) {
         return this.loadModelsFromFiles().then(() => this.initModels());
       } else {
@@ -141,14 +174,14 @@ export class App extends Config {
   }
 
   filterModels(elementType: string = null): Model[] {
-    if (elementType === null) { return this.models; }
-    return this.models.filter((model: Model) => model.elementType === elementType);
+    if (elementType === null) { return this._models; }
+    return this._models.filter((model: Model) => model.elementType === elementType);
   }
 
   updateModels(): Promise<any> {
-    return this.modelDB.list('id').then((models: any[]) =>
+    return this._modelDB.list('id').then((models: any[]) =>
       models.forEach((model: any) => {
-        this.models.push(new Model(this, model));
+        this._models.push(new Model(this, model));
       })
     );
   }
@@ -160,29 +193,28 @@ export class App extends Config {
   addModel(data: any): Promise<any> {
     // console.log('Add model:', data.id);
     const model: Model = new Model(this, data);
-    return this.modelDB.create(model);
+    return this._modelDB.create(model);
   }
 
   deleteModel(docId: string): Promise<any> {
-    return this.modelDB.delete(docId);
+    return this._modelDB.delete(docId);
   }
 
   getModel(modelId: string): Model {
-    return this.models.find((model: Model) =>
+    return this._models.find((model: Model) =>
       model.id === modelId) || new Model(this, { id: modelId, params: [] });
   }
 
   hasModel(modelId: string): boolean {
-    return this.models.find((model: Model) => model.id === modelId) !== undefined;
+    return this._models.find((model: Model) => model.id === modelId) !== undefined;
   }
 
   saveModel(model: Model): Promise<any> {
-    return this.modelDB.update(model);
+    return this._modelDB.update(model);
   }
 
-  createNeuronModelProject(model: string): Project {
-    const data: any = require('../../assets/projects/neuron-spike-response.json');
-    data.network.nodes[1].model = model;
+  createProjectFromAssets(filename: string): Project {
+    const data: any = require(`../../assets/projects/${filename}.json`);
     return new Project(this, data);
   }
 
@@ -204,12 +236,12 @@ export class App extends Config {
 
   // Delete projects from database and then update the list.
   deleteProjects(projectIds: string[]): Promise<any> {
-    return this.projectDB.deleteBulk(projectIds).then(this.updateProjects());
+    return this._projectDB.deleteBulk(projectIds).then(this.updateProjects());
   }
 
   // Downloads projects from the list.
   downloadProjects(projectIds: string[]): void {
-    const projects: Project[] = this.projects.filter((project: Project) =>
+    const projects: Project[] = this._projects.filter((project: Project) =>
       projectIds.includes(project.id));
     const data: any[] = projects.map((project: Project) => project.toJSON());
     this.download(data, 'projects');
@@ -218,11 +250,11 @@ export class App extends Config {
   // Initialize project list either from database or from files.
   initProjects(): Promise<any> {
     // console.log('Initialize projects');
-    this.projects = [];
-    this.projectRevisions = [];
-    this.projectDB = new DatabaseService(this, 'nest-desktop-project');
-    return this.projectDB.count().then((count: number) => {
-      console.log('Projects in db:', count);
+    this._projects = [];
+    this._projectRevisions = [];
+    this._projectDB = new DatabaseService(this, 'nest-desktop-project');
+    return this._projectDB.count().then((count: number) => {
+      // console.log('Projects in db:', count);
       if (count > 0) {
         return this.updateProjects();
       } else {
@@ -245,20 +277,20 @@ export class App extends Config {
 
   // Load projects from database and then update list
   updateProjects(): Promise<any> {
-    return this.projectDB.list('createdAt', true).then((projects: any[]) =>
-      this.projects = projects.map((project: any) => new Project(this, project))
+    return this._projectDB.list('createdAt', true).then((projects: any[]) =>
+      this._projects = projects.map((project: any) => new Project(this, project))
     );
   }
 
   // Load project revision from database and then update revision list
   updateProjectRevisions(id: string = null): Promise<any> {
-    this.projectRevisions = [];
+    this._projectRevisions = [];
     if (id === null) { return; }
-    return this.projectDB.revisions(id)
+    return this._projectDB.revisions(id)
       .then((revIds: string[]) =>
         revIds.forEach((rev: string) =>
-          this.projectDB.read(id, rev).then((doc: any) =>
-            this.projectRevisions.push(new Project(this, doc)))
+          this._projectDB.read(id, rev).then((doc: any) =>
+            this._projectRevisions.push(new Project(this, doc)))
         )
       );
   }
@@ -271,20 +303,20 @@ export class App extends Config {
   addProject(data: any): Promise<any> {
     // console.log('Add project:', data.name);
     const project: Project = new Project(this, data);
-    this.projects.unshift(project);
-    return this.projectDB.create(project);
+    this._projects.unshift(project);
+    return this._projectDB.create(project);
   }
 
   // Delete project in database and remove it from the list.
   deleteProject(projectId: string): Promise<any> {
     // console.log('Delete project:', projectId);
-    return this.projectDB.delete(projectId).then(this.updateProjects());
+    return this._projectDB.delete(projectId).then(this.updateProjects());
   }
 
   // Download project from the list.
   downloadProject(projectId: string): void {
     // console.log('Download project:', projectId);
-    const project: Project = this.projects.find((p: Project) => p.id === projectId);
+    const project: Project = this._projects.find((p: Project) => p.id === projectId);
     this.download(project.toJSON('file'), 'projects');
   }
 
@@ -294,10 +326,10 @@ export class App extends Config {
     return new Promise((resolve, reject) => {
       try {
         if (id && rev) {
-          this.project = this.projectRevisions.find(
+          this._project = this._projectRevisions.find(
             (project: Project) => (project.id === id && project.rev === rev));
         } else if (id) {
-          this.project = this.projects.find(
+          this._project = this._projects.find(
             (project: Project) => project.id === id);
         } else {
           this.newProject();
@@ -315,16 +347,16 @@ export class App extends Config {
 
   // Create a new project and add it to the list but not to the database.
   newProject(): void {
-    this.project = new Project(this);
-    this.updateProject(this.project);
+    this._project = new Project(this);
+    this.updateProject(this._project);
   }
 
   // Reload the current project in the list from the database.
   reloadProject(project: Project): Promise<any> {
-    return this.projectDB.read(project.id).then((doc: any) => {
-      this.project = new Project(this, doc);
-      const idx: number = this.projects.map((p: Project) => p.id).indexOf(project.id);
-      this.projects[idx] = this.project;
+    return this._projectDB.read(project.id).then((doc: any) => {
+      this._project = new Project(this, doc);
+      const idx: number = this._projects.map((p: Project) => p.id).indexOf(project.id);
+      this._projects[idx] = this._project;
     });
   }
 
@@ -332,22 +364,22 @@ export class App extends Config {
   saveProject(project: Project): Promise<any> {
     // console.log('Save project:', project.name);
     project.clean();
-    const promise: Promise<any> = project.id ? this.projectDB.update(project) : this.projectDB.create(project);
-    return promise.then(() => this.updateProject(this.project));
+    const promise: Promise<any> = project.id ? this._projectDB.update(project) : this._projectDB.create(project);
+    return promise.then(() => this.updateProject(this._project));
   }
 
   // Remove project from the list.
   unloadProject(project: Project): void {
-    const idx: number = this.projects.map((p: Project) => p.id).indexOf(project.id);
+    const idx: number = this._projects.map((p: Project) => p.id).indexOf(project.id);
     if (idx !== -1) {
-      this.projects = this.projects.slice(0, idx).concat(this.projects.slice(idx + 1));
+      this._projects = this._projects.slice(0, idx).concat(this._projects.slice(idx + 1));
     }
   }
 
   // Add project to the top of the list.
   updateProject(project: Project): void {
     this.unloadProject(project);
-    this.projects.unshift(project);
+    this._projects.unshift(project);
   }
 
   /*

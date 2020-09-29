@@ -151,6 +151,10 @@ export class ActivityChartGraph extends ActivityGraph {
     this._panelsVisible = this.panels.map((panel: ActivityGraphPanel) => panel.id);
   }
 
+  initPanels(): void {
+    this._panels.forEach((panel: ActivityGraphPanel) => panel.init());
+  }
+
   update(): void {
     // console.log('Update activity chart graph for', this.project.name);
     this._data = [];

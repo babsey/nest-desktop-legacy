@@ -5,31 +5,74 @@ import { Node } from './node';
 
 
 export class FreePositions {
-  spatial: NodeSpatial;
-  values: number[][] = [];
+  private _spatial: NodeSpatial;
   private _name = 'free';
 
   // arguments for nest.spatial.free
-  pos: any;
-  center: number[];               // FreePositions has no argument for center in NEST 3.
-  extent: number[];
-  edgeWrap: boolean;
-  numDimensions: number[];
+  private _center: number[];               // FreePositions has no argument for center in NEST 3.
+  private _extent: number[];
+  private _edgeWrap: boolean;
+  private _numDimensions: number;
+  private _pos: any;
 
   rows?: number;
   columns?: number;
 
   constructor(spatial: NodeSpatial, positions: any = {}) {
-    this.spatial = spatial;
-    this.pos = positions.pos;
-    this.center = positions.center || [0, 0];
-    this.extent = positions.extent || [1, 1];
-    this.edgeWrap = positions.edgeWrap || false;
-    this.numDimensions = positions.numDimensions || 2;
+    this._spatial = spatial;
+    this._pos = positions.pos;
+    this._center = positions.center || [0, 0];
+    this._extent = positions.extent || [1, 1];
+    this._edgeWrap = positions.edgeWrap || false;
+    this._numDimensions = positions.numDimensions || 2;
+  }
+
+  get center(): number[] {
+    return this._center;
+  }
+
+  set center(value: number[]) {
+    this._center = value;
+  }
+
+  get edgeWrap(): boolean {
+    return this._edgeWrap;
+  }
+
+  set edgeWrap(value: boolean) {
+    this._edgeWrap = value;
+  }
+
+  get extent(): number[] {
+    return this._extent;
+  }
+
+  set extent(value: number[]) {
+    this._extent = value;
   }
 
   get name(): string {
     return this._name;
+  }
+
+  get numDimensions(): number {
+    return this._numDimensions;
+  }
+
+  set numDimensions(value: number) {
+    this._numDimensions = value;
+  }
+
+  get pos(): number[][] {
+    return this._pos;
+  }
+
+  set pos(value: number[][]) {
+    this._pos = value;
+  }
+
+  get spatial(): NodeSpatial {
+    return this._spatial;
   }
 
   round(value: number): number {
@@ -37,13 +80,13 @@ export class FreePositions {
   }
 
   generate(): void {
-    const minX: number = -1 * this.extent[0] / 2;
-    const maxX: number = this.extent[0] / 2;
-    const minY: number = -1 * this.extent[1] / 2;
-    const maxY: number = this.extent[1] / 2;
+    const minX: number = -1 * this._extent[0] / 2;
+    const maxX: number = this._extent[0] / 2;
+    const minY: number = -1 * this._extent[1] / 2;
+    const maxY: number = this._extent[1] / 2;
     // console.log(center,extent,minX,maxX,minY,maxY,length)
 
-    this.values = Array.from({ length: this.spatial.node.size }, () => {
+    this._pos = Array.from({ length: this._spatial.node.size }, () => {
       const x: number = math.random(minX, maxX);
       const y: number = math.random(minY, maxY);
       return [this.round(x), this.round(y)];
@@ -52,17 +95,17 @@ export class FreePositions {
 
   toJSON(target: string = 'db'): any {
     const positions: any = {
-      center: this.center,
-      extent: this.extent,
+      center: this._center,
+      extent: this._extent,
     };
     if (target === 'simulator') {
-      positions.positions = this.pos;
-      positions.edge_wrap = this.edgeWrap;
-      positions.num_dimensions = this.numDimensions;
+      positions.positions = this._pos;
+      positions.edge_wrap = this._edgeWrap;
+      positions.num_dimensions = this._numDimensions;
     } else {
-      positions.pos = this.pos;
-      positions.edgeWrap = this.edgeWrap;
-      positions.numDimensions = this.numDimensions;
+      positions.pos = this._pos;
+      positions.edgeWrap = this._edgeWrap;
+      positions.numDimensions = this._numDimensions;
     }
     return positions;
   }
@@ -71,22 +114,54 @@ export class FreePositions {
 
 
 export class GridPositions {
-  spatial: NodeSpatial;
-  values: number[][];
+  private _spatial: NodeSpatial;
   private _name = 'grid';
 
   // arguments for nest.spatial.grid
-  shape: number[];
-  center: number[];
-  extent: number[];
-  edgeWrap: boolean;
+  private _center: number[];
+  private _edgeWrap: boolean;
+  private _extent: number[];
+  private _pos: number[][];
+  private _shape: number[];
 
   constructor(spatial: NodeSpatial, positions: any = {}) {
-    this.spatial = spatial;
-    this.shape = positions.shape || [1, 1];
-    this.center = positions.center || [0, 0];
-    this.extent = positions.extent || [1, 1];
-    this.edgeWrap = positions.edgeWrap || false;
+    this._spatial = spatial;
+    this._shape = positions.shape || [1, 1];
+    this._center = positions.center || [0, 0];
+    this._extent = positions.extent || [1, 1];
+    this._edgeWrap = positions.edgeWrap || false;
+  }
+
+  get center(): number[] {
+    return this._center;
+  }
+
+  set center(value: number[]) {
+    this._center = value;
+  }
+
+  get columns(): number {
+    return this._shape[1];
+  }
+
+  set columns(value: number) {
+    this._shape[1] = value;
+  }
+
+  get edgeWrap(): boolean {
+    return this._edgeWrap;
+  }
+
+  set edgeWrap(value: boolean) {
+    this._edgeWrap = value;
+  }
+
+  get extent(): number[] {
+    return this._extent;
+  }
+
+  set extent(value: number[]) {
+    this._extent = value;
   }
 
   get name(): string {
@@ -94,19 +169,23 @@ export class GridPositions {
   }
 
   get rows(): number {
-    return this.shape[0];
+    return this._shape[0];
   }
 
   set rows(value: number) {
-    this.shape[0] = value;
+    this._shape[0] = value;
   }
 
-  get columns(): number {
-    return this.shape[1];
+  get pos(): number[][] {
+    return this._pos;
   }
 
-  set columns(value: number) {
-    this.shape[1] = value;
+  set pos(value: number[][]) {
+    this._pos = value;
+  }
+
+  get spatial(): NodeSpatial {
+    return this._spatial;
   }
 
   round(value: number): number {
@@ -115,36 +194,34 @@ export class GridPositions {
 
   range(min: number, max: number, size: number): number[] {
     const step: number = (max - min) / size / 2;
-    return math.range(min, max, step)['_data'].filter((v: number, i: number) => i % 2 === 1);
+    const range: any = math.range(min, max, step);
+    return range._data.filter((v: number, i: number) => i % 2 === 1);
   }
 
   generate(): void {
-    const minX: number = this.center[0] - this.extent[0] / 2;
-    const maxX: number = this.center[0] + this.extent[0] / 2;
-    const minY: number = this.center[1] - this.extent[1] / 2;
-    const maxY: number = this.center[1] + this.extent[1] / 2;
-
-    // console.log(center,extent,minX,maxX,minY,maxY,rows,columns)
-
-    const X: number[] = this.range(minX, maxX, this.shape[0]);
-    const Y: number[] = this.range(minY, maxY, this.shape[1]);
-    this.values = [];
+    const minX: number = this._center[0] - this._extent[0] / 2;
+    const maxX: number = this._center[0] + this._extent[0] / 2;
+    const minY: number = this._center[1] - this._extent[1] / 2;
+    const maxY: number = this._center[1] + this._extent[1] / 2;
+    const X: number[] = this.range(minX, maxX, this.rows);
+    const Y: number[] = this.range(minY, maxY, this.columns);
+    this._pos = [];
     X.forEach((x: number) =>
-      Y.forEach((y: number) => this.values.push([this.round(x), this.round(y)])));
+      Y.forEach((y: number) => this._pos.push([this.round(x), this.round(y)])));
   }
 
   toJSON(target: string = 'db'): any {
     const positions: any = {
-      center: this.center,
-      extent: this.extent,
+      center: this._center,
+      extent: this._extent,
     };
     if (target === 'simulator') {
       positions.rows = this.rows;
       positions.columns = this.columns;
-      positions.edge_wrap = this.edgeWrap;
+      positions.edge_wrap = this._edgeWrap;
     } else {
-      positions.shape = this.shape;
-      positions.edgeWrap = this.edgeWrap;
+      positions.shape = this._shape;
+      positions.edgeWrap = this._edgeWrap;
     }
     return positions;
   }
@@ -154,7 +231,7 @@ export class GridPositions {
 
 export class NodeSpatial extends Config {
   node: Node;
-  positions: FreePositions | GridPositions;
+  private _positions: FreePositions | GridPositions;
 
   constructor(node: Node, spatial: any = {}) {
     super('NodeSpatial');
@@ -162,30 +239,34 @@ export class NodeSpatial extends Config {
     this.initPositions(spatial);
   }
 
+  get positions(): FreePositions | GridPositions {
+    return this._positions;
+  }
+
   initPositions(spatial: any) {
-    this.positions = undefined;
+    this._positions = undefined;
     if (Object.keys(spatial).length > 0) {
       if (spatial.hasOwnProperty('pos')) {
-        this.positions = new FreePositions(this, spatial);
+        this._positions = new FreePositions(this, spatial);
       } else if (spatial.hasOwnProperty('shape')) {
-        this.positions = new GridPositions(this, spatial);
+        this._positions = new GridPositions(this, spatial);
       }
     }
     if (this.hasPositions()) {
-      this.positions.generate();
+      this._positions.generate();
     }
   }
 
   hasPositions(): boolean {
-    return this.positions !== undefined;
+    return this._positions !== undefined;
   }
 
   isRandom(): boolean {
-    return this.hasPositions() && this.positions.name === 'free';
+    return this.hasPositions() && this._positions.name === 'free';
   }
 
   toJSON(target: string = 'db'): any {
-    return this.positions.toJSON(target);
+    return this._positions.toJSON(target);
   }
 
 }

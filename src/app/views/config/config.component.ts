@@ -20,8 +20,8 @@ export class ConfigComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._subscription = this._route.params.subscribe(params => {
       if (params.hasOwnProperty('setting')) {
-        this._currentSection = params.settings;
-        setTimeout(() => document.querySelector('#' + this.currentSection).scrollIntoView({ behavior: 'smooth'}), 100);
+        this._currentSection = params.setting;
+        setTimeout(() => document.querySelector('#' + this._currentSection).scrollIntoView({ behavior: 'smooth'}), 100);
       }
     });
   }
@@ -30,16 +30,12 @@ export class ConfigComponent implements OnInit, OnDestroy {
     this._subscription.unsubscribe();
   }
 
-  get currentSection(): string {
-    return this._currentSection;
-  }
-
   navigate(sectionId: string): void {
     this._router.navigate([{ outlets: { primary: 'setting/' + sectionId, nav: 'setting' } }]);
   }
 
   isActive(sectionId: string): boolean {
-    return this.currentSection === sectionId;
+    return this._currentSection === sectionId;
   }
 
 }

@@ -108,42 +108,42 @@ export class ActivityAnimationScene {
 
   animate(): void {
     // console.log('Animate');
-    let _this = this;
+    const that = this;
     function render(): void {
-      const framesLength: number = _this.graph.frames.length;
-      const frames: any = _this.graph.config.frames;
-      const camera: any = _this.graph.config.camera;
+      const framesLength: number = that.graph.frames.length;
+      const frames: any = that.graph.config.frames;
+      const camera: any = that.graph.config.camera;
 
       setTimeout(() => {
-        _this._animationFrameIdx = requestAnimationFrame(render);
+        that._animationFrameIdx = requestAnimationFrame(render);
 
-        if (_this._stats) {
-          _this._stats.begin();
+        if (that._stats) {
+          that._stats.begin();
         }
 
         const framesSpeed: number = frames.speed;
         if (framesSpeed !== 0) {
-          _this.graph.frameIdx =
-            (_this.graph.frameIdx +
+          that.graph.frameIdx =
+            (that.graph.frameIdx +
               framesSpeed * frames.windowSize +
               framesLength) %
             framesLength;
-          _this.frameUpdate(_this.graph.frames);
+          that.frameUpdate(that.graph.frames);
         }
 
         if (camera.control) {
           if (camera.rotation.speed > 0) {
-            _this.moveCamera();
+            that.moveCamera();
           }
-          _this.updateCameraPosition();
+          that.updateCameraPosition();
         }
 
-        if (_this._stats) {
-          _this._stats.end();
+        if (that._stats) {
+          that._stats.end();
         }
       }, 1000 / frames.rate);
 
-      _this._renderer.render(_this._scene, _this._camera);
+      that._renderer.render(that._scene, that._camera);
     }
 
     render();

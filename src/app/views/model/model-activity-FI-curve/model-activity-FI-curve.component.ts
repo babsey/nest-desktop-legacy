@@ -5,6 +5,7 @@ import { Model } from '../../../components/model/model';
 import { Project } from '../../../components/project/project';
 import { Activity } from '../../../components/activity/activity';
 import { ActivityChartGraph } from '../../../components/activity/activityChartGraph';
+import { AnalogSignalPlotPanel } from '../../../components/activity/plotPanels/analogSignalPlotPanel';
 
 import { AppService } from '../../../services/app/app.service';
 
@@ -15,7 +16,7 @@ import { AppService } from '../../../services/app/app.service';
   styleUrls: ['./model-activity-FI-curve.component.scss'],
 })
 export class ModelActivityFICurveComponent implements OnInit {
-  @Input() model: string;
+  @Input() modelId: string;
   private _project: Project;
   private _graph: ActivityChartGraph;
   private _config: any = {
@@ -38,6 +39,10 @@ export class ModelActivityFICurveComponent implements OnInit {
     showlegend: false
   };
   private _style: any = {};
+  private _registerPanels: any[] = [
+    (graph: ActivityChartGraph) => new AnalogSignalPlotPanel(graph),
+  ];
+  private _filename = 'neuron-spike-response';
 
 
   constructor(
@@ -69,8 +74,13 @@ export class ModelActivityFICurveComponent implements OnInit {
   }
 
   update(): void {
-    this._project = this._appService.app.createNeuronModelProject(this.model);
-    this._project.runSimulationCode();
+    if (this.modelId) {
+      this._project = this._appService.app.createProjectFromAssets(this._filename);
+      this._project.network.nodes[1].modelId = this.modelId;
+      this._project.code.generate();
+      this._project.initActivityGraph(this._registerPanels);
+      this._project.runSimulationCode();
+    }
   }
 
 }

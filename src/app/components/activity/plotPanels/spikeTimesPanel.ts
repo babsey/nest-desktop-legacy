@@ -9,7 +9,12 @@ export class SpikeTimesPanel extends ActivityGraphPanel {
     super(graph, configName);
     this.id = 'SpikeTimesPanel';
     this.label = 'parent panel of spike times';
+    this.init();
+  }
+
+  init(): void {
     this.activities = this.graph.project.activities.filter((activity: SpikeActivity) => activity.hasSpikeData());
+    this.data = [];
   }
 
   updateColor(): void {

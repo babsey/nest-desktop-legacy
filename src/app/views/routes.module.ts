@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ConfigComponent } from './config/config.component';
 import { ConfigListComponent } from './config/config-list/config-list.component';
-import { HelpComponent } from './help/help.component';
-import { HelpListComponent } from './help/help-list/help-list.component';
 import { LoadingDetailsComponent } from './loading/loading-details/loading-details.component';
 import { ModelComponent } from './model/model.component';
 import { ModelListComponent } from './model/model-list/model-list.component';
@@ -20,8 +18,6 @@ const appRoutes: Routes = [
   { path: 'app', component: LoadingDetailsComponent, outlet: 'nav' },
   { path: 'setting', component: ConfigListComponent, outlet: 'nav' },
   { path: 'setting/:setting', component: ConfigComponent },
-  { path: 'help', component: HelpListComponent, outlet: 'nav' },
-  { path: 'help/:help', component: HelpComponent },
   { path: 'model', component: ModelListComponent, outlet: 'nav' },
   { path: 'model/:model', component: ModelComponent },
   { path: 'project', component: ProjectNavigationComponent, outlet: 'nav' },

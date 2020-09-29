@@ -1,0 +1,38 @@
+.network-graph-container {
+  display: block;
+  position: relative;
+
+  .network-graph {
+    margin: 3px;
+    border: 2px dashed lightgrey;
+
+    .dragline {
+      fill: none;
+      opacity: 0.8;
+      stroke: white;
+      stroke-width: 10px;
+      pointer-events: none;
+    }
+
+    .dragline.mask {
+      stroke: black;
+      stroke-width: 2.5px;
+    }
+  }
+}
+
+::ng-deep .network-graph text {
+  pointer-events: none;
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+::ng-deep .network-graph :not(.active) .tooltip {
+  visibility: hidden;
+  z-index: 1000;
+}
+
+::ng-deep .network-graph .active .tooltip {
+  visibility: visible;
+  z-index: 1000;
+}

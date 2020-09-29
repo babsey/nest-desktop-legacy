@@ -66,6 +66,11 @@ export class ModelService {
     return this._update;
   }
 
+  reset(): void {
+    this._selectedModel = '';
+    this._defaults = {};
+  }
+
   requestModelDefaults(): void {
     const urlRoot: string = this.app.nestServer.url;
     this._defaults = {};

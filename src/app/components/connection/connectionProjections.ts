@@ -8,7 +8,7 @@ enum ConnectionType {
 }
 
 export class ConnectionProjections extends Config {
-  connection: Connection;
+  private _connection: Connection;
 
   private _allowAutapses: boolean;
   private _allowMultapses: boolean;
@@ -21,7 +21,7 @@ export class ConnectionProjections extends Config {
 
   constructor(connection: Connection, projections: any = {}) {
     super('ConnectionProjections');
-    this.connection = connection;
+    this._connection = connection;
 
     this._allowAutapses = projections.allowAutapses || false;
     this._allowMultapses = projections.allowMultapses || false;
@@ -55,6 +55,10 @@ export class ConnectionProjections extends Config {
 
   set allowOversizedMask(value: boolean) {
     this._allowOversizedMask = value;
+  }
+
+  get connection(): Connection {
+    return this._connection;
   }
 
   get connectionType(): string {
@@ -107,22 +111,22 @@ export class ConnectionProjections extends Config {
 
   toJSON(target: string = 'db') {
     const projections: any = {
-      kernel: this.kernel,
-      weights: this.weights,
-      delays: this.delays,
+      kernel: this._kernel,
+      weights: this._weights,
+      delays: this._delays,
     };
     if (target === 'simulator') {
-      projections.number_of_connections = this.numberOfConnections;
-      projections.connection_type = this.connectionType;
-      projections.allow_autapses = this.allowAutapses;
-      projections.allow_multapses = this.allowMultapses;
-      projections.allow_oversized_mask = this.allowOversizedMask;
+      projections.number_of_connections = this._numberOfConnections;
+      projections.connection_type = this._connectionType;
+      projections.allow_autapses = this._allowAutapses;
+      projections.allow_multapses = this._allowMultapses;
+      projections.allow_oversized_mask = this._allowOversizedMask;
     } else {
-      projections.numberOfConnections = this.numberOfConnections;
-      projections.connectionType = this.connectionType;
-      projections.allowAutapses = this.allowAutapses;
-      projections.allowMultapses = this.allowMultapses;
-      projections.allowOversizedMask = this.allowOversizedMask;
+      projections.numberOfConnections = this._numberOfConnections;
+      projections.connectionType = this._connectionType;
+      projections.allowAutapses = this._allowAutapses;
+      projections.allowMultapses = this._allowMultapses;
+      projections.allowOversizedMask = this._allowOversizedMask;
     }
     return projections;
   }

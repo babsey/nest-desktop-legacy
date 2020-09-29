@@ -5,29 +5,29 @@ import { Parameter } from '../parameter';
 
 
 export class NodeCode extends Code {
-  node: Node;                           // parent
+  private _node: Node;                           // parent
 
   constructor(node: Node) {
     super();
-    this.node = node;
+    this._node = node;
   }
 
   get label(): string {
-    return this.node.view.label;
+    return this._node.view.label;
   }
 
   get simulatorVersion(): string {
-    return this.node.network.project.app.nestServer.state.simulatorVersion;
+    return this._node.network.project.app.nestServer.state.simulatorVersion;
   }
 
   create(): string {
     let script = '';
-    script += `${this.label} = nest.Create("${this.node.modelId}"`;
-    if (!this.node.spatial.hasPositions() || this.node.spatial.isRandom()) {
-      script += `, ${this.node.size}`;
+    script += `${this.label} = nest.Create("${this._node.modelId}"`;
+    if (!this._node.spatial.hasPositions() || this._node.spatial.isRandom()) {
+      script += `, ${this._node.size}`;
     }
     script += this.nodeParams();
-    if (!this.simulatorVersion.startsWith('2.') && this.node.spatial.hasPositions()) {
+    if (!this.simulatorVersion.startsWith('2.') && this._node.spatial.hasPositions()) {
       script += this.nodeSpatial();
     }
     script += ')';
@@ -36,7 +36,7 @@ export class NodeCode extends Code {
 
   getActivity(): string {
     let script = '{';
-    const model: string = this.node.model ? this.node.model.existing : this.node.modelId;
+    const model: string = this._node.model ? this._node.model.existing : this._node.modelId;
     // Make it backward compatible with older NEST Server.
     if (this.simulatorVersion.startsWith('2.')) {
       script += this._(2) + `"events": nest.GetStatus(${this.label}, "events")[0],`;        // NEST 2
@@ -67,15 +67,15 @@ export class NodeCode extends Code {
 
   nodeParams(): string {
     let script = '';
-    if (this.node.params === undefined || this.node.params.length === 0) { return script; }
+    if (this._node.params === undefined || this._node.params.length === 0) { return script; }
     const paramsList: string[] = [];
-    this.node.params
+    this._node.params
       .filter((param: Parameter) => param.visible)
       .forEach((param: Parameter) => {
         paramsList.push(this._() + `"${param.id}": ${this.format(param.value)}`);
       });
-    if (this.node.model.existing === 'multimeter') {
-      const recordFrom: string[] = this.node.recordFrom.map((record: string) => '"' + record + '"');
+    if (this._node.model.existing === 'multimeter') {
+      const recordFrom: string[] = this._node.recordFrom.map((record: string) => '"' + record + '"');
       paramsList.push(this._() + `"record_from": [${recordFrom.join(',')}]`);
     }
     if (paramsList.length > 0) {
@@ -89,8 +89,8 @@ export class NodeCode extends Code {
   nodeSpatial(): string {
     let script = '';
     script += ', positions=';
-    const positions = this.node.spatial.toJSON();
-    if (this.node.spatial.positions.name === 'free') {
+    const positions = this._node.spatial.toJSON();
+    if (this._node.spatial.positions.name === 'free') {
       if (false && positions.pos.length > 0) {
         script += `nest.spatial.free([${positions.pos.map((p: number[]) => `[${p[0].toFixed(2)},${p[1].toFixed(2)}]`).join(',')}])`;
       } else {

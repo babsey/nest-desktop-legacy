@@ -44,7 +44,7 @@ export class SpikeActivity extends Activity {
       const isiMean: number = isi.length > 1 ? this.getAverage(isi) : 0;
       const isiStd: number = isi.length > 1 ? this.getStandardDeviation(isi) : 0;
       return {
-        id: id,
+        id,
         count: this._times[id].length,
         isi_mean: isiMean,
         isi_std: isiStd,

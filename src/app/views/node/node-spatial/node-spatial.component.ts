@@ -49,7 +49,7 @@ export class NodeSpatialComponent implements OnInit {
   plot(): void {
     const x: number[] = [];
     const y: number[] = [];
-    this.node.spatial.positions.values.map(p => {
+    this.node.spatial.positions.pos.map(p => {
       x.push(p[0]);
       y.push(p[1]);
     });
@@ -83,7 +83,7 @@ export class NodeSpatialComponent implements OnInit {
         range: [minY + minY / 100, maxY + maxY / 100],
         title: 'Column',
       },
-      title: 'Positions'
+      title: 'Positions',
     };
   }
 
@@ -96,7 +96,7 @@ export class NodeSpatialComponent implements OnInit {
   onPositionTypeChange(event: any): void {
     console.log(this.positionType, event);
     const config: any = (this.positionType === 'free') ? { pos: [] } : { shape: [1, 1] };
-    this.node.spatial = new NodeSpatial(this.node, config);
+    this.node.initSpatial(config);
     this.update();
   }
 

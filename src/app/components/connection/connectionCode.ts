@@ -6,24 +6,24 @@ import { Parameter } from '../parameter';
 
 
 export class ConnectionCode extends Code {
-  connection: Connection;                 // parent
+  private _connection: Connection;                 // parent
 
   constructor(connection: Connection) {
     super();
-    this.connection = connection;
+    this._connection = connection;
   }
 
   get sourceLabel(): string {
-    return this.connection.source.code.label;
+    return this._connection.source.code.label;
   }
 
   get targetLabel(): string {
-    return this.connection.target.code.label;
+    return this._connection.target.code.label;
   }
 
   connSpec(): string {
-    const connSpecList: string[] = [this._() + `"rule": "${this.connection.rule}"`];
-    this.connection.params.forEach((param: Parameter) => connSpecList.push(this._() + `"${param.id}": ${param.value}`));
+    const connSpecList: string[] = [this._() + `"rule": "${this._connection.rule}"`];
+    this._connection.params.forEach((param: Parameter) => connSpecList.push(this._() + `"${param.id}": ${param.value}`));
 
     let script = ', conn_spec={';
     script += connSpecList.join(',');
@@ -32,8 +32,8 @@ export class ConnectionCode extends Code {
   }
 
   connect(): string {
-    let sourceNode: Node = this.connection.source;
-    let targetNode: Node = this.connection.target;
+    let sourceNode: Node = this._connection.source;
+    let targetNode: Node = this._connection.target;
     const targetModel: Model = targetNode.model;
     if (['multimeter', 'voltmeter'].includes(targetModel.id)) {
       [sourceNode, targetNode] = [targetNode, sourceNode];
@@ -42,7 +42,7 @@ export class ConnectionCode extends Code {
     let script = '';
     script += `nest.Connect(${this.sourceLabel}, ${this.targetLabel}`;
     script += this.connSpec();
-    script += this.connection.synapse.code.synSpec();
+    script += this._connection.synapse.code.synSpec();
     script += ')';
     return script + '\n';
   }

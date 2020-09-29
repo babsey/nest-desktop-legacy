@@ -4,7 +4,7 @@ import { Model } from '../model/model';
 
 // Make network compatible
 function upgradeNetwork(app: App, project: any): any {
-  console.log('Upgrade network:', project.name);
+  // console.log('Upgrade network:', project.name);
   const network: any = {
     nodes: [],
     connections: [],
@@ -86,7 +86,7 @@ function upgradeNetwork(app: App, project: any): any {
     network.connections.push(connection);
   });
 
-  console.log(network);
+  // console.log(network);
   return network;
 }
 

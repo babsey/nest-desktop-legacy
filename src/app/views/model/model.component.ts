@@ -23,11 +23,12 @@ export class ModelComponent implements OnInit, OnDestroy {
     const paramMap: any = this._route.snapshot.paramMap;
     setTimeout(() => {
       this._modelService.selectedModel = paramMap.get('model');
+      this._modelService.requestModelDefaults();
     }, 1);
   }
 
   ngOnDestroy() {
-    // this._modelService.selectedModel = '';
+    this._modelService.reset();
   }
 
   get elementType(): string {

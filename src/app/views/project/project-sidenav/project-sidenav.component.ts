@@ -4,7 +4,6 @@ import { Network } from '../../../components/network/network';
 import { Project } from '../../../components/project/project';
 
 import { ActivityGraphService } from '../../../services/activity/activity-graph.service';
-import { ProjectService } from '../../../services/project/project.service';
 
 
 @Component({
@@ -17,14 +16,13 @@ export class ProjectSidenavComponent implements OnInit {
 
   constructor(
     private _activityGraphService: ActivityGraphService,
-    private _projectService: ProjectService,
   ) { }
 
   ngOnInit() {
   }
 
   get mode(): string {
-    return this._projectService.sidenavMode;
+    return this.project.app.view.project.sidenavMode;
   }
 
   get graphMode(): string {

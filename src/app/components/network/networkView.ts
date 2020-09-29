@@ -4,7 +4,7 @@ import { Node } from '../node/node';
 
 
 export class NetworkView {
-  network: Network;                    // parent
+  private _network: Network;                    // parent
   private _focusedConnection: Connection | null = null;
   private _focusedNode: Node | null = null;
   private _selectedConnection: Connection | null = null;
@@ -12,7 +12,7 @@ export class NetworkView {
   private _selectedNode: Node | null = null;
 
   constructor(network: Network) {
-    this.network = network;
+    this._network = network;
   }
 
   get focusedConnection(): Connection | null {
@@ -64,13 +64,13 @@ export class NetworkView {
   }
 
   get colors(): string[] {
-    return this.network.config.color.cycle;
+    return this._network.config.color.cycle;
   }
 
   set colors(value: string[]) {
-    const color: any = this.network.config.color;
+    const color: any = this._network.config.color;
     color.cycle = value;
-    this.network.config.update({ color });
+    this._network.config.update({ color });
   }
 
   resetFocus(): void {
@@ -84,12 +84,12 @@ export class NetworkView {
   }
 
   isElementTypeSelected(elementType: string): boolean {
-    if (this.selectedElementType === null) { return true; }
-    return this.selectedElementType === elementType;
+    if (this._selectedElementType === null) { return true; }
+    return this._selectedElementType === elementType;
   }
 
   hasPositions(): boolean {
-    return this.network.nodes.some((node: Node) => node.spatial.hasPositions());
+    return this._network.nodes.some((node: Node) => node.spatial.hasPositions());
   }
 
   //

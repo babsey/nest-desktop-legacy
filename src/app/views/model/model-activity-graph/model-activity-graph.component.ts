@@ -37,6 +37,7 @@ export class ModelActivityGraphComponent implements OnInit {
   private _registerPanels: any[] = [
     (graph: ActivityChartGraph) => new AnalogSignalPlotPanel(graph),
   ];
+  private _filename = 'neuron-spike-response';
 
   constructor(
     private _appService: AppService,
@@ -64,7 +65,10 @@ export class ModelActivityGraphComponent implements OnInit {
 
   update(): void {
     if (this.modelId) {
-      this._project = this._appService.app.createNeuronModelProject(this.modelId);
+      this._project = this._appService.app.createProjectFromAssets(this._filename);
+      this._project.network.nodes[1].modelId = this.modelId;
+      this._project.code.generate();
+      this._project.initActivityGraph(this._registerPanels);
       this._project.runSimulationCode();
     }
   }

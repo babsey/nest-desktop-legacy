@@ -4,16 +4,16 @@ import { Parameter } from '../parameter';
 
 
 export class ModelCode extends Code {
-  model: Model;
+  private _model: Model;
 
   constructor(model: Model) {
     super();
-    this.model = model;
+    this._model = model;
   }
 
   copyModel(): string {
     let script = '';
-    script += `nest.CopyModel("${this.model.existing}", "${this.model.id}"`;
+    script += `nest.CopyModel("${this._model.existing}", "${this._model.id}"`;
     script += this.modelParams();
     script += ')';
     return script + '\n';
@@ -21,9 +21,9 @@ export class ModelCode extends Code {
 
   modelParams(): string {
     let script = '';
-    if (this.model.params === undefined || this.model.params.length === 0) { return script; }
+    if (this._model.params === undefined || this._model.params.length === 0) { return script; }
     const paramsList: string[] = [];
-    this.model.params
+    this._model.params
       .filter((param: Parameter) => param.visible)
       .map((param: Parameter) => {
         if (param.id === 'record_from') {

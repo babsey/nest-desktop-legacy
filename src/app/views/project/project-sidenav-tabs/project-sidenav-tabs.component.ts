@@ -5,7 +5,6 @@ import { App } from '../../../components/app';
 
 import { ActivityGraphService } from '../../../services/activity/activity-graph.service';
 import { AppService } from '../../../services/app/app.service';
-import { ProjectService } from '../../../services/project/project.service';
 import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
 
 
@@ -23,7 +22,6 @@ export class ProjectSidenavTabsComponent implements OnInit {
     private _appService: AppService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _media: MediaMatcher,
-    private _projectService: ProjectService,
     private _simulationRunService: SimulationRunService,
   ) {
     this._mobileQuery = _media.matchMedia('(max-width: 1023px)');
@@ -32,8 +30,8 @@ export class ProjectSidenavTabsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (['stats'].includes(this._projectService.sidenavMode)) {
-      this._projectService.sidenavMode = 'networkController';
+    if (['stats'].includes(this.view.sidenavMode)) {
+      this.view.sidenavMode = 'networkController';
     }
   }
 
@@ -49,30 +47,25 @@ export class ProjectSidenavTabsComponent implements OnInit {
     return this._mobileQuery;
   }
 
+  get view(): any {
+    return this.app.view.project;
+  }
+
   isSidenavOpened(): boolean {
-    return this._projectService.sidenavOpened;
+    return this.view.sidenavOpened;
   }
 
   selectMode(mode: string): void {
-    if (this._projectService.sidenavMode === mode) {
-      this._projectService.sidenavOpened = !this._projectService.sidenavOpened;
-    } else {
-      this._projectService.sidenavMode = mode;
-      this._projectService.sidenavOpened = true;
-    }
-    this._simulationRunService.viewCodeEditor = mode === 'codeEditor';
-    if (mode === 'codeEditor' && this._projectService.sidenavOpened === true) {
-      this.app.project.code.generate();
-    }
+    this.app.view.selectProjectSidenav(mode);
     setTimeout(() => this.triggerResize(), 700);
   }
 
-  isMode(mode: string): boolean {
-    return this._projectService.sidenavMode === mode;
+  isActive(mode: string): boolean {
+    return this.view.sidenavMode === mode && this.view.sidenavOpened;
   }
 
   toggleSidenav(): void {
-    this._projectService.sidenavOpened = !this._projectService.sidenavOpened;
+    this.view.sidenavOpened = !this.view.sidenavOpened;
   }
 
   triggerResize(): void {

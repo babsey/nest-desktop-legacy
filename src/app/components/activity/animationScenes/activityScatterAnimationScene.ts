@@ -49,8 +49,8 @@ export class ActivityScatterAnimationScene extends ActivityAnimationScene {
         }
         frame.data.forEach((d: any) =>
           this.dataUpdate(d, {
-            opacity: opacity,
-            scale: scale,
+            opacity,
+            scale,
           })
         );
       }
@@ -77,7 +77,7 @@ export class ActivityScatterAnimationScene extends ActivityAnimationScene {
         {
           color: this.graph.color(data.color[i]),
           transparent: true,
-          opacity: opacity,
+          opacity,
         }
       );
       const object: THREE.Mesh = new THREE.Mesh(

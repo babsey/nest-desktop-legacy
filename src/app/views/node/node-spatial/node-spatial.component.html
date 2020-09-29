@@ -112,7 +112,7 @@
         </mat-list-item>
         <mat-list-item class="list-item">
           <app-array-input-popup
-          [(value)]="node.spatial.positions.values"
+          [(value)]="node.spatial.positions.pos"
           [options]="node.spatial.config.positions"
           style="width:100%">
         </app-array-input-popup>
@@ -131,5 +131,5 @@
   (click)="plot()">
   <span class="label">{{ positionType | capitalize }} positions</span>
   <span class="flex-spacer"></span>
-  <span>{{ node.spatial.positions.values.length }}</span>
+  <span>{{ node.spatial.positions.pos.length }}</span>
 </div>

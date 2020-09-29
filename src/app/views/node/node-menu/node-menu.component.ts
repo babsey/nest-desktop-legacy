@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Node } from '../../../components/node/node';
 
-import { NetworkSketchService } from '../../../services/network/network-sketch.service';
+import { NetworkGraphService } from '../../../services/network/network-graph.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class NodeMenuComponent implements OnInit {
   @Input() disabled = false;
 
   constructor(
-    private _networkSketchService: NetworkSketchService,
+    private _networkGraphService: NetworkGraphService,
   ) { }
 
   ngOnInit() {

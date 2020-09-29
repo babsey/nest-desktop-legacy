@@ -3,32 +3,56 @@ import { Simulation } from './simulation';
 
 
 export class SimulationKernel extends Config {
-  simulation: Simulation;               // parent
+  private _simulation: Simulation;               // parent
 
-  time: number;                         // endtime of the simulation
-  resolution: number;                   // time resolution of simulation steps
-  localNumThreads: number;              // number of threads
+  private _time: number;                         // endtime of the simulation
+  private _resolution: number;                   // time resolution of simulation steps
+  private _localNumThreads: number;              // number of threads
 
   constructor(
     simulation: Simulation,
     kernel: any = {},
   ) {
     super('SimulationKernel');
-    this.simulation = simulation;
+    this._simulation = simulation;
 
-    this.time = 0;
-    this.resolution = kernel.resolution || 1;
-    this.localNumThreads = kernel.localNumThreads || 1;
+    this._time = 0;
+    this._resolution = kernel.resolution || 1;
+    this._localNumThreads = kernel.localNumThreads || 1;
+  }
+
+  get localNumThreads(): number {
+    return this._localNumThreads;
+  }
+
+  set localNumThreads(value: number) {
+    this._localNumThreads = value;
+  }
+
+  get resolution(): number {
+    return this._resolution;
+  }
+
+  set resolution(value: number) {
+    this._resolution = value;
+  }
+
+  get time(): number {
+    return this._time;
+  }
+
+  set time(value: number) {
+    this._time = value;
   }
 
   toJSON(target: string = 'db'): any {
     const kernel: any = {
-      resolution: this.resolution,
+      resolution: this._resolution,
     };
     if (target === 'simulator') {
-      kernel.local_num_threads = kernel.localNumThreads;
+      kernel.local_num_threads = this._localNumThreads;
     } else {
-      kernel.localNumThreads = kernel.localNumThreads;
+      kernel.localNumThreads = this._localNumThreads;
     }
     return kernel;
   }

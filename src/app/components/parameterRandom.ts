@@ -2,9 +2,9 @@ import { Config } from './config';
 
 
 export class ParameterRandom extends Config {
-  distribution: string;
-  specs: any;
-  defaults: any = {
+  private _distribution: string;
+  private _specs: any;
+  private _defaults: any = {
     exponential: { beta: 1 },
     uniform: { min: 0, max: 1 },
     normal: { mean: 0, std: 1 },
@@ -13,19 +13,31 @@ export class ParameterRandom extends Config {
 
   constructor(random: any) {
     super('ParameterRandom');
-    this.distribution = random.distribution || 'uniform';
-    this.specs = random.specs || this.defaults[random.distribution];
+    this._distribution = random.distribution || 'uniform';
+    this._specs = random.specs || this._defaults[random.distribution];
+  }
+
+  get defaults(): any {
+    return this._defaults;
+  }
+
+  get distribution(): string {
+    return this._distribution;
+  }
+
+  get specs(): any {
+    return this._specs;
   }
 
   toJSON(): any {
     const specs: any = {};
-    Object.keys(this.defaults[this.distribution]).map((param: string) => {
-      if (this.specs.hasOwnProperty(param)) {
-        specs[param] = parseFloat(this.specs[param]);
+    Object.keys(this._defaults[this._distribution]).map((param: string) => {
+      if (this._specs.hasOwnProperty(param)) {
+        specs[param] = parseFloat(this._specs[param]);
       }
     });
     return {
-      distribution: this.distribution,
+      distribution: this._distribution,
       specs,
     };
   }
