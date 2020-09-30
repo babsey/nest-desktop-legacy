@@ -1,0 +1,43 @@
+<mat-menu #sliderMenu="matMenu" class="slider-menu" overlapTrigger="true">
+  <span class="slider-container" (click)="$event.stopPropagation();">
+    <div class="slider-header flex">
+      <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
+      <span class="flex-spacer"></span>
+      <span style="display:flex">
+        <input readonly
+          (change)="onChange($event)"
+          [defaultValue]="options.value"
+          [max]="options.max"
+          [min]="options.min"
+          [ngModel]="value"
+          [placeholder]="options.value"
+          [step]="options.step"
+          class="slider-input"
+          type="number" />
+        <span class="param-unit">{{ options.unit }}</span>
+      </span>
+    </div>
+
+    <mat-slider class="slider"
+      (change)="onChange($event)"
+      [displayWith]="displayWith(options.ticks)"
+      [max]="options.ticks.length-1"
+      [ngModel]="idx"
+      min="0"
+      step="1"
+      tickInterval="1"
+    ></mat-slider>
+    <span class="slider-ticklabels">
+      <ng-container *ngFor="let tick of options.ticks">
+        <span style="width:10px">{{ tick }}</span>
+      </ng-container>
+    </span>
+  </span>
+</mat-menu>
+
+<span class="param-container flex" [matMenuTriggerFor]="sliderMenu">
+  <span class="param-label ellipsis" matTooltip="{{ options.label | capitalize }}" matTooltipPosition="before">{{ options.label | capitalize }}</span>
+  <span class="flex-spacer"></span>
+  {{ value || options.value }}
+  <span class="param-unit">{{ options.unit }}</span>
+</span>

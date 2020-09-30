@@ -24,7 +24,7 @@ From: ubuntu:20.04
   python3-pip \
   wget
 
-  pip3 install nest-desktop==2.4.*
+  pip3 install nest-desktop==2.5.*
 
   cd /tmp/
   VERSION=2.20.0

@@ -1,0 +1,12 @@
+:host {
+  height: 100vh;
+
+  .project {
+    display: flex;
+    width: 100%;
+  }
+}
+
+::ng-deep .project .mat-drawer-inner-container {
+  overflow-x: hidden
+}

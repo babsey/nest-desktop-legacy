@@ -1,0 +1,33 @@
+<div class="flex button-toolbar"
+  style="flex-direction:column; height:calc(100vh - 40px)">
+
+  <button mat-icon-button disabled
+    (click)="toggleSidenav()"
+    style="height:40px">
+    <fa-icon [icon]="isSidenavOpened() ? 'chevron-right' : 'chevron-left'"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="setSidenavMode('list')"
+    [class.mat-fab]="isSidenavMode('list')"
+    matTooltip="List parameters">
+    <fa-icon icon="list"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="setSidenavMode('selection')"
+    [class.mat-fab]="isSidenavMode('selection')"
+    [disabled]="!hasModel()"
+    matTooltip="Select parameters">
+    <fa-icon icon="tasks"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="setSidenavMode('slider')"
+    [class.mat-fab]="isSidenavMode('slider')"
+    [disabled]="!hasModel()"
+    matTooltip="Configure parameters">
+    <fa-icon icon="sliders-h"></fa-icon>
+  </button>
+
+</div>

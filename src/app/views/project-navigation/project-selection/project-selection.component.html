@@ -1,0 +1,31 @@
+<mat-selection-list dense [(ngModel)]="selected" style="padding:0">
+  <ng-container *ngFor="let project of app.view.filteredProjects">
+    <mat-list-option [value]="project.id">
+      {{ project.name }}
+    </mat-list-option>
+  </ng-container>
+</mat-selection-list>
+
+<ng-container *ngIf="selected !== undefined && selected.length !== 0">
+  <mat-list dense>
+    <mat-list-item>
+      <span class="flex">
+        <span>Selected project</span>
+        <span class="flex-spacer"></span>
+        <span>{{ selected.length }}</span>
+      </span>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-divider></mat-divider>
+
+  <mat-nav-list dense>
+    <mat-list-item (click)="delete()">
+      <span>Delete</span>
+    </mat-list-item>
+
+    <mat-list-item (click)="download()">
+      <span>Download</span>
+    </mat-list-item>
+  </mat-nav-list>
+</ng-container>

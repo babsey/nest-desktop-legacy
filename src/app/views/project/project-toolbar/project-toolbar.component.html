@@ -1,0 +1,173 @@
+<div style="visibility: hidden; position: fixed"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="projectMenu">
+</div>
+
+<mat-menu #projectMenu="matMenu" class="context-menu">
+  <mat-toolbar class="ellipsis">Project</mat-toolbar>
+
+  <mat-selection-list dense
+    (click)="$event.stopPropagation()"
+    (selectionChange)="onSelectionChange($event)"
+    style="padding:0">
+    <mat-list-option
+      [selected]="project.config['showSnackBar']"
+      value="showSnackBar"
+      class="mat-menu-item">
+      <span>Show simulation message</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="project.config['runAfterChange']"
+      value="runAfterChange"
+      class="mat-menu-item">
+      <span>Simulate after change</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="project.config['runAfterLoad']"
+      value="runAfterLoad"
+      class="mat-menu-item">
+      <span>Simulate after load</span>
+    </mat-list-option>
+    <mat-list-option
+      [selected]="project.config['runAfterCheckout']"
+      value="runAfterCheckout"
+      class="mat-menu-item">
+      <span>Simulate after checkout</span>
+    </mat-list-option>
+  </mat-selection-list>
+
+  <mat-nav-list dense style="padding:0">
+    <mat-list-item class="mat-menu-item" (click)="project.download()">
+      <fa-icon class="menu-icon" icon="download"></fa-icon>
+      <ng-container [ngSwitch]="project.hasActivities">
+        <span *ngSwitchCase="false"> Download data</span>
+        <span *ngSwitchCase="true"> Download data and records</span>
+      </ng-container>
+    </mat-list-item>
+  </mat-nav-list>
+
+</mat-menu>
+
+<span class="project-theme">
+  <mat-toolbar class="navbar flex" color="primary" style="padding:0">
+    <span class="no-print">
+      <span class="flex" style="width: 200px">
+        <button mat-icon-button
+          (click)="selectMode('networkEditor')"
+          [class.active]="isActive('networkEditor')"
+          class="tab-button"
+          matTooltip="Construct network"
+          matTooltipShowDelay="1000">
+          <span class="fa-stack">
+            <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+            <fa-icon icon="pen" class="fa-stack-2x fa-inverse"></fa-icon>
+          </span>
+        </button>
+        <button mat-icon-button
+          (click)="selectMode('activityExplorer')"
+          [class.active]="isActive('activityExplorer')"
+          class="tab-button"
+          matTooltip="Explore activity"
+          matTooltipShowDelay="1000">
+          <span class="fa-stack">
+            <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+            <fa-icon icon="play" class="fa-stack-2x fa-inverse"></fa-icon>
+          </span>
+        </button>
+        <button mat-icon-button
+          (click)="selectMode('labBook')"
+          [class.active]="isActive('labBook')"
+          class="tab-button"
+          matTooltip="Lab book"
+          matTooltipShowDelay="1000">
+          <span class="fa-stack">
+            <fa-icon icon="brain" class="fa-stack-1x fa-lg"></fa-icon>
+            <fa-icon icon="eye" class="fa-stack-2x fa-inverse"></fa-icon>
+          </span>
+        </button>
+      </span>
+    </span>
+
+    <span class="title" [@enterAnimation]>
+      {{ project.name }}
+    </span>
+
+    <span class="flex-spacer"></span>
+
+    <ng-container *ngIf="!isActive('labBook')">
+      <div class="no-print network-history">
+        <button mat-icon-button
+          (click)="project.network.oldest()"
+          [disabled]="countBefore() <= 0"
+          matTooltip="Go to oldest network"
+          matTooltipShowDelay="1000">
+          <fa-icon icon="step-backward"></fa-icon>
+        </button>
+        <button mat-icon-button
+          (click)="project.network.older()"
+          [disabled]="countBefore() <= 0"
+          [matBadge]="countBefore()"
+          [matBadgeHidden]="countBefore() <= 0"
+          matBadgePosition="above"
+          matBadgeSize="small"
+          matTooltip="Go to older network"
+          matTooltipShowDelay="1000">
+          <fa-icon icon="undo"></fa-icon>
+        </button>
+        <button mat-icon-button
+          (click)="project.network.newer()"
+          [disabled]="countAfter() <= 0"
+          [matBadge]="countAfter()"
+          [matBadgeHidden]="countAfter() <= 0"
+          matBadgePosition="above"
+          matBadgeSize="small"
+          matTooltip="Go to newer network"
+          matTooltipShowDelay="1000">
+          <fa-icon icon="redo"></fa-icon>
+        </button>
+        <button mat-icon-button
+          (click)="project.network.newest()"
+          [disabled]="countAfter() <= 0"
+          class="rev-button"
+          matTooltip="Go to newest network"
+          matTooltipShowDelay="1000">
+          <fa-icon icon="step-forward"></fa-icon>
+        </button>
+      </div>
+    </ng-container>
+
+    <span class="flex-spacer"></span>
+
+    <button mat-button appContextMenuTrigger
+      (click)="run()"
+      (contextmenu)="onContextMenu($event)"
+      [disabled]="project.simulation.running"
+      class="no-print"
+      style="width:128px">
+      <ng-container *ngIf="project.simulation.running">
+        <div class="flex" style="height:40px">
+          <span style="margin:auto">
+            <mat-spinner
+              diameter="20"
+              mode="indeterminate"
+              strokeWidth="2"
+              color="accent"
+            ></mat-spinner>
+          </span>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!project.simulation.running">
+        <span
+          [class.network-changed]="project.isNetworkChanged()"
+          style="display: inline-block">
+          <fa-icon
+            icon="play"
+            style="margin:0 8px"
+          ></fa-icon>
+        </span>
+        Simulate
+      </ng-container>
+    </button>
+  </mat-toolbar>
+</span>

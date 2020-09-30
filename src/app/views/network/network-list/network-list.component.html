@@ -1,0 +1,27 @@
+<span [attr.class]="columns ? 'flex': ''">
+  <span style="width:50%; padding: 0 4px">
+    <span [@listAnimation]="network.nodes.length">
+      <ng-container *ngFor="let node of network.nodes">
+        <ng-container *ngIf="nodeDisplay(node)">
+          <app-node-list
+            [node]="node"
+            [selective]="paramSelective"
+          ></app-node-list>
+        </ng-container>
+      </ng-container>
+    </span>
+  </span>
+
+  <span style="width:50%; padding: 0 4px">
+    <span [@listAnimation]="network.connections.length">
+      <ng-container *ngFor="let connection of network.connections">
+        <ng-container *ngIf="connectionDisplay(connection)">
+          <app-connection-list
+            [connection]="connection"
+            [selective]="paramSelective"
+          ></app-connection-list>
+        </ng-container>
+      </ng-container>
+    </span>
+  </span>
+</span>

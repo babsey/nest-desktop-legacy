@@ -1,0 +1,48 @@
+<ng-container *ngIf="isReady(); else loading">
+  <app-project-toolbar
+    [project]="project"
+  ></app-project-toolbar>
+
+  <span class="project">
+    <mat-sidenav-container
+      autosize
+      hasBackdrop="false"
+      style="height:calc(100vh - 40px); width: calc(100% - 40px)">
+      <mat-sidenav
+        (openedChange)="onOpenedChange($event)"
+        [mode]="mobileQuery.matches ? 'over' : 'side'"
+        [(opened)]="sidenavOpened"
+        id="sidenav-right"
+        position="end"
+        role="region"
+        style="transition:none">
+        <app-project-sidenav
+          [project]="project"
+        ></app-project-sidenav>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
+        <app-project-content
+          [project]="project"
+        ></app-project-content>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+
+    <app-project-sidenav-tabs></app-project-sidenav-tabs>
+  </span>
+</ng-container>
+
+<ng-template #loading>
+  <div style="width:100%; height:calc(100vh - 40px); display:flex; justify-content:center; align-items:center;">
+    <div style="text-align:center; height:100px">
+      <div style="margin:auto; width:32px; padding:12px">
+        <mat-spinner
+          diameter="32"
+          mode="indeterminate"
+          strokeWidth="4"
+        ></mat-spinner>
+      </div>
+      <div>Project is loading.</div>
+    </div>
+  </div>
+</ng-template>

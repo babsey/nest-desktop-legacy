@@ -1,0 +1,21 @@
+.connection-selection {
+  border-left: 4px solid black;
+  border-right: 4px solid black;
+  
+  mat-selection-list {
+    padding: 0;
+
+    mat-list-option {
+      height: 32px;
+      line-height: 32px;
+
+      .value {
+        margin: 0 4px;
+      }
+
+      .unit {
+        margin-right: -10px;
+      }
+    }
+  }
+}

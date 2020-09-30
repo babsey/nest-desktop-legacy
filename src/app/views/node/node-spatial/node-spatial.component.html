@@ -1,0 +1,135 @@
+<mat-menu
+  #spatialMenu="matMenu"
+  class="spatial-menu"
+  overlapTrigger="true"
+  xPosition="before">
+  <span class="flex" (click)="$event.stopPropagation();">
+
+    <ng-container *ngIf="showPlot">
+      <span style="width:700px; height:500px">
+        <plotly-plot
+          [data]="graph.data"
+          [layout]="graph.layout"
+          [style]="{position: 'relative', width: '100%', height: '100%'}"
+          [useResizeHandler]="true">
+        </plotly-plot>
+      </span>
+    </ng-container>
+
+    <span style="width:280px">
+      <mat-list dense style="padding:0">
+        <h3 mat-subheader class="flex">
+          <span class="param-label ellipsis" style="line-height:16px">Spatial</span>
+          <span class="flex-spacer"></span>
+          <span class="project-theme">
+            <mat-nav-list dense class="flex" style="padding:0" color="primary">
+              <mat-list-item
+                (click)="showPlot=!showPlot"
+                [class.active]="showPlot"
+                class="navButton">
+                <fa-icon icon="braille"></fa-icon>
+              </mat-list-item>
+            </mat-nav-list>
+          </span>
+        </h3>
+      </mat-list>
+
+      <mat-list dense style="padding:0">
+        <mat-list-item class="list-item">
+          <mat-form-field class="form-field">
+            <mat-select
+              [(ngModel)]="positionType"
+              (selectionChange)="onPositionTypeChange($event)">
+              <mat-option value="grid">Grid positions</mat-option>
+              <mat-option value="free">Free positions</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-list-item>
+      </mat-list>
+
+      <ng-container [ngSwitch]="positionType">
+        <ng-container *ngSwitchCase="'free'">
+          <mat-list dense style="padding:0">
+            <mat-list-item class="list-item">
+                <app-value-slider-inline
+                  [(value)]="node.size"
+                  [options]="node.config.size"
+                  style="width:100%"
+                  (valueChange)="update()"
+                ></app-value-slider-inline>
+            </mat-list-item>
+          </mat-list>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'grid'">
+          <mat-nav-list dense style="padding: 0">
+            <mat-list-item class="list-item">
+              <app-value-slider-inline
+                [(value)]="node.spatial.positions.rows"
+                [options]="node.spatial.config.rows"
+                style="width:100%"
+                (valueChange)="update()">
+              </app-value-slider-inline>
+            </mat-list-item>
+            <mat-list-item class="list-item">
+              <app-value-slider-inline
+                [(value)]="node.spatial.positions.columns"
+                [options]="node.spatial.config.columns"
+                style="width:100%"
+                (valueChange)="update()">
+              </app-value-slider-inline>
+            </mat-list-item>
+          </mat-nav-list>
+        </ng-container>
+      </ng-container>
+
+      <mat-selection-list dense style="padding:0"
+        (selectionChange)="OnPositionParamChange($event)">
+        <mat-list-option
+          [selected]="node.spatial.positions.edgeWrap['edgeWrap']"
+          class="list-item"
+          value="edgeWrap">
+          Wrapped edges
+        </mat-list-option>
+      </mat-selection-list>
+
+      <mat-nav-list dense style="padding: 0">
+        <mat-list-item class="list-item">
+          <app-array-input-popup
+          [(value)]="node.spatial.positions.center"
+          [options]="node.spatial.config.center"
+          style="width:100%"
+          (valueChange)="update()">
+        </app-array-input-popup>
+        </mat-list-item>
+        <mat-list-item class="list-item">
+          <app-array-input-popup
+          [(value)]="node.spatial.positions.extent"
+          [options]="node.spatial.config.extent"
+          style="width:100%"
+          (valueChange)="update()">
+        </app-array-input-popup>
+        </mat-list-item>
+        <mat-list-item class="list-item">
+          <app-array-input-popup
+          [(value)]="node.spatial.positions.pos"
+          [options]="node.spatial.config.positions"
+          style="width:100%">
+        </app-array-input-popup>
+        </mat-list-item>
+
+        <mat-list-item class="list-item" (click)="update()">
+          Generate positions
+        </mat-list-item>
+      </mat-nav-list>
+    </span>
+  </span>
+</mat-menu>
+
+<div class="spatial-container flex"
+  [matMenuTriggerFor]="spatialMenu"
+  (click)="plot()">
+  <span class="label">{{ positionType | capitalize }} positions</span>
+  <span class="flex-spacer"></span>
+  <span>{{ node.spatial.positions.pos.length }}</span>
+</div>

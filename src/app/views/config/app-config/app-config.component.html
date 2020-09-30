@@ -1,0 +1,29 @@
+<mat-toolbar class="config-section-toolbar" color="primary">
+  Application settings
+</mat-toolbar>
+
+<mat-selection-list
+  color="primary"
+  (selectionChange)="onSelectionChange($event)">
+  <mat-list-option
+    [selected]="config.loading"
+    value="loading">
+    Show loading page
+  </mat-list-option>
+  <mat-list-option
+    [selected]="config.autoStart"
+    [disabled]="!config.loading"
+    value="autoStart">
+    Auto start
+  </mat-list-option>
+  <mat-list-option
+    [selected]="config.log"
+    value="log">
+    Log
+  </mat-list-option>
+  <mat-list-option
+    [selected]="config.devMode"
+    value="devMode">
+    Development mode
+  </mat-list-option>
+</mat-selection-list>

@@ -1,0 +1,119 @@
+<mat-menu #sliderMenu="matMenu" class="param-slider-menu" overlapTrigger="true" xPosition="before" (click)="$event.stopPropagation();">
+  <span class="flex">
+
+    <ng-container *ngIf="plot.show && plot.data.length > 0">
+      <span style="width:700px">
+        <plotly-plot
+          [data]="plot.data"
+          [layout]="plot.layout"
+          [config]="plot.config"
+        ></plotly-plot>
+      </span>
+    </ng-container>
+
+    <span style="width:300px">
+
+      <span class="slider-container" (click)="$event.stopPropagation();">
+        <mat-list dense>
+          <h3 mat-subheader class="flex">
+            <span class="param-label ellipsis" style="line-height:16px">
+              {{ options.label | capitalize }}
+            </span>
+            <span class="flex-spacer"></span>
+            <span class="project-theme">
+              <mat-nav-list dense class="flex" style="padding:0" color="primary">
+                <mat-list-item
+                  (click)="selectFunctionType('pdf')"
+                  [class.active]="functionType=='pdf'"
+                  class="navButton">
+                  <span style="width:32px">PDF</span>
+                </mat-list-item>
+                <mat-list-item
+                  (click)="selectFunctionType('cdf')"
+                  [class.active]="functionType=='cdf'"
+                  class="navButton">
+                  <span style="width:32px">CDF</span>
+                </mat-list-item>
+                <mat-list-item
+                  (click)="plot.show=!plot.show"
+                  [class.active]="plot.show"
+                  class="navButton">
+                  <fa-icon icon="chart-line"></fa-icon>
+                </mat-list-item>
+              </mat-nav-list>
+            </span>
+          </h3>
+        </mat-list>
+
+        <!-- <div class="slider-header flex">
+          <span class="param-label ellipsis">{{ options.label | capitalize }}</span>
+          <span class="flex-spacer"></span>
+          <span>
+            <mat-nav-list dense style="display:flex; padding:0; width:100%">
+              <mat-list-item (click)="selectFunctionType('pdf')" [class.active]="functionType=='pdf'" class="navButton">
+                <span style="padding:0 6px;">PDF</span>
+              </mat-list-item>
+              <mat-list-item (click)="selectFunctionType('cdf')" [class.active]="functionType=='cdf'" class="navButton">
+                <span style="padding:0 6px;">CDF</span>
+              </mat-list-item>
+              <mat-list-item (click)="showPlot=!showPlot" [class.active]="showPlot" class="navButton">
+                <fa-icon icon="chart-line"></fa-icon>
+              </mat-list-item>
+            </mat-nav-list>
+          </span>
+        </div> -->
+
+        <mat-list dense>
+          <mat-list-item>
+            <app-select-optgroup
+              (selectedChange)="onSelectedChange($event)"
+              [selected]="selectedParameterType.value"
+              [options]="parameterTypes"
+            ></app-select-optgroup>
+          </mat-list-item>
+
+          <ng-container *ngFor="let spec of selectedParameterType.specs">
+            <mat-list-item>
+              <app-value-slider-inline
+                [(value)]="value.specs[spec]"
+                [options]="paramSpecs(spec)"
+                (valueChange)="onValueChange($event)"
+              ></app-value-slider-inline>
+            </mat-list-item>
+          </ng-container>
+        </mat-list>
+
+      </span>
+    </span>
+  </span>
+</mat-menu>
+
+<span class="param-container flex" [matMenuTriggerFor]="sliderMenu">
+
+  <span
+    class="param-label ellipsis"
+    matTooltip="{{ options.label | capitalize }}"
+    matTooltipPosition="before">
+    {{ options.label | capitalize }}
+  </span>
+  <span class="flex-spacer"></span>
+
+  <span>
+    <ng-container *ngIf="value!=undefined; else elseOptionValue">
+      <ng-container *ngIf="isObject(value); else elseValue">
+        <ng-container *ngIf="value.parameterType !== 'constant'; else elseParamValue">
+          {{ value.parameterType | capitalize }}
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-template #elseValue>{{ value }}</ng-template>
+    <ng-template #elseParamValue>{{ value.specs.value }}</ng-template>
+    <ng-template #elseOptionValue>{{ options.value }}</ng-template>
+  </span>
+
+  <ng-container *ngIf="!isObject(value) || value.parameterType === 'constant'">
+    <span class="param-unit">
+      {{ options.unit }}
+    </span>
+  </ng-container>
+</span>

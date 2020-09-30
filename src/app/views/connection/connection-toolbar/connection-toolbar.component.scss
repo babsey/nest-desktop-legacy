@@ -1,0 +1,20 @@
+:host {
+  width: 100%;
+}
+
+.connection-toolbar {
+  padding: 0;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+
+  .mat-list {
+    padding: 0;
+  }
+}
+//
+// ::ng-deep .connection-toolbar .mat-list-item-content {
+//   padding: 0 8px !important;
+// }

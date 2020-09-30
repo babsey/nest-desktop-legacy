@@ -1,4 +1,5 @@
 {
+  "abbreviation": "mm",
   "id": "multimeter",
   "element_type": "recorder",
   "label": "multimeter",

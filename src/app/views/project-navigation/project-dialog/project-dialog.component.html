@@ -1,0 +1,46 @@
+<input #file type="file" style="display:none" (change)="onFileAdded()"/>
+
+<span mat-dialog-subtitle>{{ message }}</span>
+
+<mat-dialog-content class="mat-typography" style="width:600px">
+  <mat-selection-list dense [(ngModel)]="selectedProjects">
+    <ng-container *ngFor="let project of projects; let idx = index">
+      <ng-container *ngIf="project.name">
+        <mat-list-option
+          [attr.title]="project.message"
+          [disabled]="!isValid(project)"
+          [value]="idx">
+          <span class="flex">
+            <span style="width:25px">
+              <div *ngIf="isValid(project)"
+                style="color: green">
+                <fa-icon icon="check"></fa-icon>
+              </div>
+              <div *ngIf="!isValid(project)"
+                style=" color: red">
+                <fa-icon icon="exclamation"></fa-icon>
+              </div>
+            </span>
+            <span style="width:275px">
+              <span>{{ project.name }}</span>
+            </span>
+            <span class="flex-spacer"></span>
+            <span>
+              <span style="margin-right: 8px" [attr.title]="project._id">{{ project._id.slice(0,6) }}</span>
+              <span *ngIf="project.version">(v{{ project.version }})</span>
+            </span>
+            <span class="flex-spacer"></span>
+            <span>{{ (project.updatedAt || project.createdAt) | date }}</span>
+          </span>
+        </mat-list-option>
+      </ng-container>
+    </ng-container>
+  </mat-selection-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="fromDatabase()">From old database</button>
+  <button mat-button (click)="openUploadDialog()">From file</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button mat-dialog-close [disabled]="selectedProjects.length === 0" (click)="addProjects()">Add</button>
+</mat-dialog-actions>

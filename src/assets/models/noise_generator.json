@@ -1,4 +1,5 @@
 {
+  "abbreviation": "gwn",
   "id": "noise_generator",
   "element_type": "stimulator",
   "label": "Gaussian white noise",

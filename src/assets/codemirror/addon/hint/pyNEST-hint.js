@@ -2,22 +2,22 @@
 // Distributed under an MIT license: https://codemirror.net/LICENSE
 
 (function(mod) {
-  if (typeof exports == "object" && typeof module == "object") // CommonJS
+  if (typeof exports === "object" && typeof module === "object") // CommonJS
     mod(require("../../../../../node_modules/codemirror/lib/codemirror"));
-  else if (typeof define == "function" && define.amd) // AMD
+  else if (typeof define === "function" && define.amd) // AMD
     define(["../../../../../node_modules/codemirror/lib/codemirror"], mod);
   else // Plain browser env
     mod(CodeMirror);
 })(function(CodeMirror) {
-  var Pos = CodeMirror.Pos;
+  let Pos = CodeMirror.Pos;
 
   function forEach(arr, f) {
-    for (var i = 0, e = arr.length; i < e; ++i) f(arr[i]);
+    for (let i = 0, e = arr.length; i < e; ++i) f(arr[i]);
   }
 
   function arrayContains(arr, item) {
     if (!Array.prototype.indexOf) {
-      var i = arr.length;
+      let i = arr.length;
       while (i--) {
         if (arr[i] === item) {
           return true;
@@ -30,18 +30,18 @@
 
   function scriptHint(editor, _keywords, getToken) {
     // Find the token at the cursor
-    var cur = editor.getCursor(), token = getToken(editor, cur), tprop = token;
+    let cur = editor.getCursor(), token = getToken(editor, cur), tprop = token;
     // If it's not a 'word-style' token, ignore the token.
 
     if (!/^[\w$_]*$/.test(token.string)) {
         token = tprop = {start: cur.ch, end: cur.ch, string: "", state: token.state,
-                         className: token.string == ":" ? "python-type" : null};
+                         className: token.string === ":" ? "python-type" : null};
     }
 
     if (!context) var context = [];
     context.push(tprop);
 
-    var completionList = getCompletions(token, context);
+    let completionList = getCompletions(token, context);
     completionList = completionList.sort();
 
     return {list: completionList,
@@ -54,13 +54,13 @@
   }
   CodeMirror.registerHelper("hint", "python", pythonHint);
 
-  var pyNESTBuiltins = "Connect CopyModel Create GetConnections GetDefaults GetKernelStatus GetStatus Install Models ResetKernel SetDefaults SetKernelStatus SetStatus Simulate ";
-  var pyNESTFunctions = pyNESTBuiltins.split(" ").join("() ").split(" ");
+  let pyNESTBuiltins = "Connect CopyModel Create GetConnections GetDefaults GetKernelStatus GetStatus Install Models ResetKernel SetDefaults SetKernelStatus SetStatus Simulate ";
+  let pyNESTFunctions = pyNESTBuiltins.split(" ").join("() ").split(" ");
 
   function getCompletions(token, context) {
-    var found = [], start = token.string;
+    let found = [], start = token.string;
     function maybeAdd(str) {
-      if (str.lastIndexOf(start, 0) == 0 && !arrayContains(found, str)) found.push(str);
+      if (str.lastIndexOf(start, 0) === 0 && !arrayContains(found, str)) found.push(str);
     }
 
     function gatherCompletions(_obj) {
@@ -70,13 +70,13 @@
     if (context) {
       // If this is a property, see if it belongs to some object we can
       // find in the current environment.
-      var obj = context.pop(), base;
+      let obj = context.pop(), base;
 
-      if (obj.type == 'property')
+      if (obj.type === 'property')
          base = obj.string;
-      else if(obj.type == "variable")
+      else if(obj.type === "variable")
           base = obj.string;
-      else if(obj.type == "variable-3")
+      else if(obj.type === "variable-3")
           base = ":" + obj.string;
 
       while (base != null && context.length)

@@ -1,0 +1,49 @@
+<div style="visibility: hidden; position: fixed"
+  [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y"
+  [matMenuTriggerFor]="projectMenu">
+</div>
+
+<mat-menu #projectMenu="matMenu" class="context-menu">
+  <!-- <mat-toolbar class="ellipsis">{{ focused.name }}</mat-toolbar> -->
+  <button mat-menu-item class="menu-item" (click)="reloadProject()">
+    <fa-icon class="menu-icon" icon="redo-alt"></fa-icon> Reload
+  </button>
+  <button mat-menu-item class="menu-item" (click)="duplicateProject()">
+    <fa-icon class="menu-icon" icon="clone"></fa-icon> Duplicate
+  </button>
+  <button mat-menu-item class="menu-item" (click)="loadRevisions()">
+    <fa-icon class="menu-icon" icon="history"></fa-icon> Revisions
+  </button>
+  <button mat-menu-item class="menu-item" (click)="focused.download()">
+    <fa-icon class="menu-icon" icon="download"></fa-icon> Download
+  </button>
+  <button mat-menu-item class="menu-item" (click)="focused.delete()">
+    <fa-icon class="menu-icon" icon="trash"></fa-icon> Delete
+  </button>
+</mat-menu>
+
+<mat-nav-list dense style="padding:0">
+  <span [@colorListAnimation]="app.view.filteredProjects.length">
+    <ng-container *ngFor="let project of app.view.filteredProjects">
+      <mat-list-item appContextMenuTrigger
+        (click)="navigate(project.id)"
+        (contextmenu)="onContextMenu($event, project)"
+        [class.active]="project.isSelected()"
+        class="project">
+        <span class="flex">
+          <span>{{ project.name }}</span>
+          <div class="flex-spacer"></div>
+          <ng-container [ngSwitch]="project.isHashEqual() && project.updatedAt !== '' && project.name !== ''">
+            <ng-container *ngSwitchCase="true">
+              <app-project-timesince [date]="date(project)"></app-project-timesince>
+            </ng-container>
+            <ng-container *ngSwitchCase="false">
+              <fa-icon class="menu-icon" icon="asterisk"></fa-icon>
+            </ng-container>
+          </ng-container>
+        </span>
+        </mat-list-item>
+    </ng-container>
+  </span>
+</mat-nav-list>

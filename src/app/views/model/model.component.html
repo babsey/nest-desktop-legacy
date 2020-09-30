@@ -1,0 +1,71 @@
+<app-model-toolbar></app-model-toolbar>
+
+<span id="model">
+  <ng-container *ngIf="!progress; else loading">
+    <span class="flex" [@enterAnimation]>
+
+      <mat-sidenav-container>
+        <mat-sidenav
+          [opened]="true"
+          mode="side"
+          position="end"
+          role="region">
+
+          <ng-container [ngSwitch]="sidenavMode">
+            <ng-container *ngSwitchCase="'list'">
+              <app-model-params-list
+                [modelId]="modelId"
+                class="modelParameters"
+              ></app-model-params-list>
+            </ng-container>
+            <ng-container *ngSwitchCase="'selection'">
+              <app-model-params-selection-list
+                [modelId]="modelId"
+                class="modelParameters"
+              ></app-model-params-selection-list>
+            </ng-container>
+            <ng-container *ngSwitchCase="'slider'">
+              <ng-container *ngIf="hasModel()">
+                <app-model-params-slider
+                  [modelId]="modelId"
+                ></app-model-params-slider>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+          <mat-card *ngIf="elementType === 'neuron' && recordables.includes('V_m')">
+            <app-model-activity-graph
+              [modelId]="modelId"
+            ></app-model-activity-graph>
+          </mat-card>
+
+          <app-model-documentation
+            [modelId]="modelId"
+          ></app-model-documentation>
+        </mat-sidenav-content>
+
+      </mat-sidenav-container>
+
+      <app-model-sidenav-tabs></app-model-sidenav-tabs>
+    </span>
+  </ng-container>
+
+</span>
+
+<ng-template #loading>
+  <div style="width:100%; height:calc(100vh - 40px); display:flex; justify-content:center; align-items:center;">
+    <div style="text-align:center; height:100px">
+      <div style="margin:auto; width:32px; padding:12px">
+        <mat-spinner
+          diameter="32"
+          mode="indeterminate"
+          strokeWidth="4"
+        ></mat-spinner>
+      </div>
+      <div>Model is requesting.</div>
+    </div>
+  </div>
+</ng-template>
