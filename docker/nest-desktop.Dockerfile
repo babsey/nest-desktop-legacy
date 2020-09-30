@@ -19,7 +19,7 @@ COPY package.json /tmp/
 
 # install nest-desktop and nest-server
 RUN export LC_CTYPE=C.UTF-8 && \
-    python3 -m pip install nest-desktop==2.4.*
+    python3 -m pip install nest-server==2.5.0rc1 nest-desktop==2.5.0.rc1
 
 EXPOSE 5000 8000
 WORKDIR /home/nest
