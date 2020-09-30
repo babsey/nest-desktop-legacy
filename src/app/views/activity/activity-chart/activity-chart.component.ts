@@ -15,10 +15,10 @@ import { ActivityStatsService } from '../../../services/activity/activity-stats.
 export class ActivityChartComponent implements OnInit, OnDestroy {
   @Input() project: Project;
   @ViewChild('plot', { static: true }) plotRef: ElementRef;
-  private _subscriptionUpdate: any;
-  private _subscriptionInit: any;
   private _config: any;
   private _style: any;
+  private _subscriptionInit: any;
+  private _subscriptionUpdate: any;
 
   constructor(
     private _activityChartService: ActivityChartService,

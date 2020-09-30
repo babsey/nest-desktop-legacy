@@ -33,7 +33,6 @@ export class ActivityChartControllerComponent implements OnInit {
       'Ctrl-Space': 'autocomplete',
     }
   };
-  private _selectedPanel: ActivityGraphPanel;
 
   constructor(
     private _activityChartService: ActivityChartService,
@@ -67,8 +66,10 @@ export class ActivityChartControllerComponent implements OnInit {
     return this._activityChartService.selectedPanel;
   }
 
-  selectPanel(panelId: string): void {
-    this._activityChartService.selectedPanel = this.graph.panelsAll.find((panel: any) => panel.id === panelId);
+  selectPanel(panelName: string): void {
+    this._activityChartService.selectedPanel = this.graph.panelsAll.find(
+      (panel: any) => panel.name === panelName
+    );
   }
 
   movePanel(event: CdkDragDrop<string[]>): void {
@@ -76,13 +77,15 @@ export class ActivityChartControllerComponent implements OnInit {
     this._activityChartService.update.emit();
   }
 
-  removePanel(panelId: string) {
-    this.graph.panelsVisible = this.graph.panelsVisible.filter((id: string) => id !== panelId);
+  removePanel(panelName: string) {
+    this.graph.panelsVisible = this.graph.panelsVisible.filter(
+      (name: string) => name !== panelName
+    );
     this.graph.update();
   }
 
-  addPanel(panelId: string) {
-    this.graph.panelsVisible.push(panelId);
+  addPanel(panelName: string) {
+    this.graph.panelsVisible.push(panelName);
     this.graph.panelsVisible = this.graph.panelsVisible;
     this.graph.update();
   }

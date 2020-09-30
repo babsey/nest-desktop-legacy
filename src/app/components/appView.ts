@@ -3,21 +3,21 @@ import { Project } from './project/project';
 
 export class AppView {
   private _app: App;                       // parent
-  private _project: any;
   private _model: any;
+  private _project: any;
 
   constructor(app: App) {
     this._app = app;
+    this._model = {
+      selectedModel: '',
+      sidenavMode: 'list',
+      sidenavOpened: true,
+    };
     this._project = {
       searchTerm: '',
       mode: 'networkEditor',
       sidenavMode: 'networkSelection',
       sidenavOpened: false,
-    };
-    this._model = {
-      selectedModel: '',
-      sidenavMode: 'list',
-      sidenavOpened: true,
     };
   }
 

@@ -13,7 +13,7 @@ export class SpikeTimesHistogramPanel extends SpikeTimesPanel {
 
   constructor(graph: ActivityChartGraph) {
     super(graph, 'SpikeTimesHistogramPanel');
-    this.id = 'SpikeTimesHistogramPanel';
+    this.name = 'SpikeTimesHistogramPanel';
     this.icon = 'chart-bar';
     this.label = 'histogram of spike times';
     this.layout.yaxis.title = 'Spike count';

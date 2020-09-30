@@ -6,15 +6,12 @@ import { Config } from '../../config';
 
 
 export class ActivityGraphPanel extends Config {
-  private _id = 'ActivityGraphPanel';
-  private _label = 'graph panel of activity';
-  private _graph: ActivityChartGraph;        // parent
-  private _visible = true;
+  private static readonly _name = 'ActivityGraphPanel';
   private _activities: Activity[] = [];
-  private _xaxis = 1;
-  private _icon = 'chart-line';
-
   private _data: any[] = [];
+  private _graph: ActivityChartGraph;        // parent
+  private _icon = 'chart-line';
+  private _label = 'graph panel of activity';
   private _layout: any = {
     xaxis: {
       showgrid: true,
@@ -26,6 +23,9 @@ export class ActivityGraphPanel extends Config {
       height: 1,
     },
   };
+  private _name = '';
+  private _visible = true;
+  private _xaxis = 1;
 
   constructor(graph: ActivityChartGraph, configName: string = null) {
     super(configName || 'ActivityGraphPanel');
@@ -60,12 +60,12 @@ export class ActivityGraphPanel extends Config {
     this._icon = value;
   }
 
-  get id(): string {
-    return this._id;
+  get name(): string {
+    return this._name;
   }
 
-  set id(value: string) {
-    this._id = value;
+  set name(value: string) {
+    this._name = value;
   }
 
   get idx(): number {

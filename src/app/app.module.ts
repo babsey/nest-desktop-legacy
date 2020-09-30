@@ -13,9 +13,9 @@ import { AppComponent } from './views/app.component';
 
 @NgModule({
   imports: [
-    NoopAnimationsModule,
     // BrowserAnimationsModule,
     BrowserModule,
+    NoopAnimationsModule,
     ViewsModule,
   ],
   bootstrap: [

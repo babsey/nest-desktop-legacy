@@ -20,4 +20,8 @@ export class AnalogSignalActivity extends Activity {
     super(recorder, activity);
   }
 
+  clone(): AnalogSignalActivity {
+    return new AnalogSignalActivity(this.recorder, this.toJSON());
+  }
+
 }

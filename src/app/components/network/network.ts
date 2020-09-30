@@ -8,12 +8,11 @@ import { Project } from '../project/project';
 
 
 export class Network extends Config {
+  private _code: NetworkCode;                    // code
+  private _connections: Connection[] = [];       // for nest.Connect
+  private _nodes: Node[] = [];                   // for nest.Create
   private _project: Project;                     // parent
   private _view: NetworkView;                    // view
-  private _code: NetworkCode;                    // code
-
-  private _nodes: Node[] = [];                   // for nest.Create
-  private _connections: Connection[] = [];       // for nest.Connect
 
   constructor(project: Project, network: any = {}) {
     super('Network');
@@ -58,7 +57,9 @@ export class Network extends Config {
   }
 
   networkChanges(): void {
-    this._project.commitNetwork(this);
+    if (this._project.app.view.project.mode === 'networkEditor') {
+      this._project.commitNetwork(this);
+    }
     // this._project.activityGraph.init();
   }
 
@@ -120,21 +121,19 @@ export class Network extends Config {
   }
 
   clone(): Network {
-    return new Network(this._project, this);
+    return new Network(this._project, this.toJSON());
   }
 
   update(network: any): void {
     this._nodes = [];
-    this._connections = [];
-
     if (network.nodes) {
       network.nodes.forEach((node: any) => this.addNode(node));
     }
+    this._connections = [];
     if (network.connections) {
       network.connections.forEach((connection: any) => this.addConnection(connection));
     }
   }
-
 
   /**
    * Clears the network by deleting every node and every connection.
@@ -156,8 +155,8 @@ export class Network extends Config {
 
   toJSON(target: string = 'db'): any {
     const network: any = {
-      nodes: this._nodes.map((node: Node) => node.toJSON(target)),
       connections: this._connections.map((connection: Connection) => connection.toJSON(target)),
+      nodes: this._nodes.map((node: Node) => node.toJSON(target)),
     };
     return network;
   }

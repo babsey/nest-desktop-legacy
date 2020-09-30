@@ -5,16 +5,11 @@ import * as NodeGraph from './nodeGraph';
 
 
 export class NodeView {
-  private _node: Node;                 // parent
-
-  // for the app
   private _color: any;                   // color of node
   private _label: string;
+  private _node: Node;                 // parent
   private _position: any = { x: 0, y: 0 };
-
-  // From Simulator
-  positions: number[][] = [];
-
+  private _positions: number[][] = [];
 
   constructor(node: Node, view: any) {
     this._node = node;
@@ -72,6 +67,14 @@ export class NodeView {
     return this._position;
   }
 
+  get positions(): number[][] {
+    return this._positions;
+  }
+
+  set positions(value: number[][]) {
+    this._positions = value;
+  }
+
   get weight(): string {
     if (this._node.model.elementType === 'recorder') { return; }
     const connections: Connection[] = this._node.network.connections.filter(
@@ -95,10 +98,8 @@ export class NodeView {
     switch (this._node.model.elementType) {
       case 'stimulator':
         return NodeGraph.getPoints('hexagon', radius);
-        break;
       case 'recorder':
         return NodeGraph.getPoints('rectangle', radius);
-        break;
       case 'neuron':
         const weight: string = this.weight;
         if (weight === 'excitatory') {
@@ -108,7 +109,6 @@ export class NodeView {
         } else {
           return NodeGraph.getPoints('square', radius);
         }
-        break;
       default:
         return NodeGraph.getPoints('', radius);
     }

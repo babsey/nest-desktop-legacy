@@ -5,13 +5,12 @@ import { SimulationCode } from './simulationCode';
 
 
 export class Simulation extends Config {
-  private _project: Project;                     // parent
   private _code: SimulationCode;
-
-  private _time: number;                         // simulation time
-  private _randomSeed: number;                   // seed for random renerator of numpy
   private _kernel: SimulationKernel;             // simulation kernel
+  private _project: Project;                     // parent
+  private _randomSeed: number;                   // seed for random renerator of numpy
   private _running = false;
+  private _time: number;                         // simulation time
 
   constructor(
     project: Project,

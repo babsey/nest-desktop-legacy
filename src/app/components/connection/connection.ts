@@ -21,21 +21,19 @@ enum Rule {
 
 
 export class Connection extends Config {
-  private _network: Network;                     // parent
+  private readonly _name = 'Connection';
+
   private _code: ConnectionCode;
-  private _view: ConnectionView;
   private _idx: number;                         // generative
-  private _name = 'Connection';
-
-  // arguments for nest.Connect
-  private _source: number;                      // Node index
-  private _target: number;                      // Node index
-  private _rule: string;
-
-  private _params: any[];
-  private _projections: ConnectionProjections;           // only for NEST 2, will be deprecated in NEST 3;
   private _mask: ConnectionMask;
+  private _network: Network;                     // parent
+  private _params: any[];
+  private _projections: ConnectionProjections;    // only for NEST 2, will be deprecated in NEST 3;
+  private _rule: string;
+  private _source: number;                      // Node index
   private _synapse: Synapse;
+  private _target: number;                      // Node index
+  private _view: ConnectionView;
 
   srcIdx?: number[];
   tgtIdx?: number[];

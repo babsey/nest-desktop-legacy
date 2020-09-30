@@ -59,7 +59,7 @@ export class HttpClient {
       this._oReq.setRequestHeader('Content-Type', 'application/json');
       this._oReq.setRequestHeader('Access-Control-Allow-Methods', 'POST');
       this._oReq.timeout = 10000;
-      this._oReq.responseType = 'json';
+      this._oReq.responseType = 'text';
       this._oReq.onreadystatechange = () => {
         if (this._oReq.readyState === 1) {
           // console.log('Request started.');
@@ -75,7 +75,11 @@ export class HttpClient {
 
         if (this._oReq.readyState === 4) {
           // console.log('Request ended.');
-          resolve(this._oReq.response);
+          if (this._oReq.status === 200) {
+            resolve(JSON.parse(this._oReq.responseText));
+          } else {
+            reject(this._oReq.responseText);
+          }
         }
       };
 

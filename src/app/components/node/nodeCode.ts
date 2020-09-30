@@ -91,7 +91,7 @@ export class NodeCode extends Code {
     script += ', positions=';
     const positions = this._node.spatial.toJSON();
     if (this._node.spatial.positions.name === 'free') {
-      if (false && positions.pos.length > 0) {
+      if (false && positions.pos.length > 0) {                // for NEST 3.0
         script += `nest.spatial.free([${positions.pos.map((p: number[]) => `[${p[0].toFixed(2)},${p[1].toFixed(2)}]`).join(',')}])`;
       } else {
         script += `nest.spatial.free(nest.random.uniform(-0.5, 0.5), num_dimensions=2)`;

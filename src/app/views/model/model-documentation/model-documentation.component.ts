@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { HttpParams, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { enterAnimation } from '../../../animations/enter-animation';
 import { listAnimation } from '../../../animations/list-animation';
@@ -18,8 +18,8 @@ import { AppService } from '../../../services/app/app.service';
 })
 export class ModelDocumentationComponent implements OnInit, OnChanges {
   @Input() modelId = '';
-  private _helptext: any = '';
   private _blocks: any[] = [];
+  private _helptext: any = '';
 
   constructor(
     private _appService: AppService,
@@ -59,7 +59,10 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
         const content: any = {};
         blocks.map((block: string, i: number) => {
           const start: number = parseInt(block[0], 0) + 2;
-          const end: number = i < blocks.length - 1 ? parseInt(blocks[i + 1][0], 0) - 2 : blocks.length;
+          const end: number =
+            i < blocks.length - 1
+              ? parseInt(blocks[i + 1][0], 0) - 2
+              : blocks.length;
           content[block[1]] = lines.slice(start, end).join('\n');
         });
         this._blocks = titles.filter((title: string) => content[title])

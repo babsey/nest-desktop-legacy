@@ -2,7 +2,9 @@ import { App } from '../app';
 import { Model } from '../model/model';
 
 
-// Make network compatible
+/**
+ * Make network compatible
+ */
 function upgradeNetwork(app: App, project: any): any {
   // console.log('Upgrade network:', project.name);
   const network: any = {
@@ -90,7 +92,9 @@ function upgradeNetwork(app: App, project: any): any {
   return network;
 }
 
-// Make simulation compatible.
+/**
+ * Make simulation compatible.
+ */
 function upgradeSimulation(project: any): any {
   // console.log('Upgrade simulation:', project.name);
   const simulation: any = {
@@ -102,7 +106,9 @@ function upgradeSimulation(project: any): any {
 }
 
 
-// Make the old projects compatible.
+/**
+ * Make the old projects compatible.
+ */
 export function upgradeProject(app: App, project: any): any {
   // console.log('Upgrade project:', project.name);
   if (Object.keys(project).length === 0) {

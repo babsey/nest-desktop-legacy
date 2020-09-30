@@ -4,8 +4,8 @@ import { Project } from '../project/project';
 
 // Parent for Plotly/ActivityChartGraph and Threejs/ActivityAnimationGraph
 export class ActivityGraph {
-  private _project: Project;
   private _hash: string;
+  private _project: Project;
 
   constructor(project: Project) {
     this._project = project;

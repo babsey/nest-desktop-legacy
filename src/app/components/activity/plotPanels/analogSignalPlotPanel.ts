@@ -8,7 +8,7 @@ export class AnalogSignalPlotPanel extends ActivityGraphPanel {
 
   constructor(graph: ActivityChartGraph) {
     super(graph);
-    this.id = 'AnalogSignalPlotPanel';
+    this.name = 'AnalogSignalPlotPanel';
     this.label = 'plot of analog signals';
     this.init();
   }

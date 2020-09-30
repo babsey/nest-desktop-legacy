@@ -2,7 +2,7 @@
 <mat-menu #panel="matMenu">
   <ng-container *ngFor="let panel of graph.panelsAll">
     <ng-container *ngIf="!panel.visible">
-      <button mat-menu-item (click)="addPanel(panel.id)">
+      <button mat-menu-item (click)="addPanel(panel.name)">
         <fa-icon mat-list-icon [icon]="panel.icon"></fa-icon>
         {{ panel.label | capitalize }}
       </button>
@@ -24,10 +24,10 @@
   <mat-divider></mat-divider>
 
   <ng-container *ngFor="let panel of graph.panels">
-    <mat-list-item cdkDrag (click)="selectPanel(panel.id)">
+    <mat-list-item cdkDrag (click)="selectPanel(panel.name)">
       <fa-icon mat-list-icon [icon]="panel.icon"></fa-icon>
       <p mat-line>{{ panel.label | capitalize }}</p>
-      <button mat-icon-button (click)="removePanel(panel.id)">
+      <button mat-icon-button (click)="removePanel(panel.name)">
         <fa-icon icon="times"></fa-icon>
       </button>
       <p *cdkDragPreview></p>

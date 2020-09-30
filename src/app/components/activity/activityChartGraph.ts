@@ -20,32 +20,16 @@ export class ActivityChartGraph extends ActivityGraph {
   private _config: any = {};
   private _data: any[] = [];
   private _frames: any[] = [];
-  private _imageButtonOptions: any = {
-    name: 'image_settings',
-    title: 'Edit image settings',
-    icon: PlotlyJS.Icons.pencil,
-    click: (gd: any) => { }
-  };
+  private _imageButtonOptions: any;
   private _layout: any = {};
   private _panels: ActivityGraphPanel[] = [];
-  private _registerPanels: any[] = [
-    (graph: ActivityChartGraph) => new InputAnalogSignalPlotPanel(graph),
-    (graph: ActivityChartGraph) => new NeuronAnalogSignalPlotPanel(graph),
-    (graph: ActivityChartGraph) => new AnalogSignalHistogramPanel(graph),
-    (graph: ActivityChartGraph) => new SpikeTimesRasterPlotPanel(graph),
-    (graph: ActivityChartGraph) => new SpikeTimesHistogramPanel(graph),
-    (graph: ActivityChartGraph) => new SpikeSendersHistogramPanel(graph),
-    (graph: ActivityChartGraph) => new InterSpikeIntervalHistogramPanel(graph),
-    (graph: ActivityChartGraph) => new CVISIHistogramPanel(graph),
-  ];
+  private _registerPanels: any[] = [];
   private _panelsVisible: string[] = [];
   private _style: any = {};
 
   constructor(project: Project, registerPanels: any[] = []) {
     super(project);
-    if (registerPanels.length > 0) {
-      this._registerPanels = registerPanels;
-    }
+
     this._config = {
       scrollZoom: true,
       editable: true,
@@ -78,6 +62,14 @@ export class ActivityChartGraph extends ActivityGraph {
         ['hoverClosestCartesian', 'hoverCompareCartesian']
       ]
     };
+
+    this._imageButtonOptions = {
+      name: 'image_settings',
+      title: 'Edit image settings',
+      icon: PlotlyJS.Icons.pencil,
+      click: (gd: any) => { }
+    };
+
     this._layout = {
       margin: {
         t: 40,
@@ -88,11 +80,28 @@ export class ActivityChartGraph extends ActivityGraph {
         x: 0,
       },
     };
+
     this._style = {
       position: 'relative',
       width: '100%',
       height: 'calc(100vh - 40px)',
     };
+
+    if (registerPanels.length > 0) {
+      this._registerPanels = registerPanels;
+    } else {
+      this._registerPanels = [
+        (graph: ActivityChartGraph) => new InputAnalogSignalPlotPanel(graph),
+        (graph: ActivityChartGraph) => new NeuronAnalogSignalPlotPanel(graph),
+        (graph: ActivityChartGraph) => new AnalogSignalHistogramPanel(graph),
+        (graph: ActivityChartGraph) => new SpikeTimesRasterPlotPanel(graph),
+        (graph: ActivityChartGraph) => new SpikeTimesHistogramPanel(graph),
+        (graph: ActivityChartGraph) => new SpikeSendersHistogramPanel(graph),
+        (graph: ActivityChartGraph) => new InterSpikeIntervalHistogramPanel(graph),
+        (graph: ActivityChartGraph) => new CVISIHistogramPanel(graph),
+      ];
+    }
+
     this.init();
   }
 
@@ -131,7 +140,7 @@ export class ActivityChartGraph extends ActivityGraph {
   set panelsVisible(value: string[]) {
     this._panelsVisible = value;
     this.panelsAll.forEach((panel: ActivityGraphPanel) => {
-      panel.visible = this.panelsVisible.includes(panel.id);
+      panel.visible = this.panelsVisible.includes(panel.name);
     });
   }
 
@@ -148,11 +157,15 @@ export class ActivityChartGraph extends ActivityGraph {
         this._panels.push(panel);
       }
     }
-    this._panelsVisible = this.panels.map((panel: ActivityGraphPanel) => panel.id);
+    this._panelsVisible = this.panels.map((panel: ActivityGraphPanel) => panel.name);
   }
 
   initPanels(): void {
     this._panels.forEach((panel: ActivityGraphPanel) => panel.init());
+  }
+
+  empty(): void {
+    this._data = [];
   }
 
   update(): void {

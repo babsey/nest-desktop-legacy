@@ -17,22 +17,17 @@ const pad = (num: number, size: number = 2): string => {
 };
 
 export class App extends Config {
-  private _version: string;
-  private _ready = false;
-  private _projectReady = false;
-  private _view: AppView;
-
-  // NEST model e.g. neuron, synapse, stimulator, recorder
   private _modelDB: DatabaseService;
   private _models: Model[] = [];
-
-  // Project of neuronal networks
-  private _projectDB: DatabaseService;
-  private _projects: Project[] = [];
-  private _projectRevisions: Project[] = [];
-  private _project: Project;
-
   private _nestServer: NESTServer;
+  private _project: Project;
+  private _projectDB: DatabaseService;
+  private _projectReady = false;
+  private _projectRevisions: Project[] = [];
+  private _projects: Project[] = [];
+  private _ready = false;
+  private _version: string;
+  private _view: AppView;
 
   constructor() {
     super('App');
@@ -213,7 +208,7 @@ export class App extends Config {
     return this._modelDB.update(model);
   }
 
-  createProjectFromAssets(filename: string): Project {
+  initProjectFromAssets(filename: string): Project {
     const data: any = require(`../../assets/projects/${filename}.json`);
     return new Project(this, data);
   }

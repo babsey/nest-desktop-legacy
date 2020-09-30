@@ -26,7 +26,7 @@ export class ProjectSidenavTabsComponent implements OnInit {
   ) {
     this._mobileQuery = _media.matchMedia('(max-width: 1023px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
-    this._mobileQuery.addListener(this._mobileQueryListener);
+    this._mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
 
   ngOnInit() {

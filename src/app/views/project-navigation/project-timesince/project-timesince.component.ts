@@ -9,8 +9,8 @@ import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 })
 export class ProjectTimesinceComponent implements OnInit, OnChanges, OnDestroy {
   @Input() date: string;
-  private _value: string;
   private _intervalId: any;
+  private _value: string;
 
   constructor() {
   }
@@ -43,7 +43,7 @@ export class ProjectTimesinceComponent implements OnInit, OnChanges, OnDestroy {
       hour: 3600,
       minute: 60
     };
-    let counter;
+    let counter: number;
     for (const i in intervals) {
       counter = Math.floor(seconds / intervals[i]);
       if (counter > 0) {

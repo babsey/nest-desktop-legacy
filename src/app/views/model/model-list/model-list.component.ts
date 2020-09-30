@@ -18,10 +18,10 @@ import { ModelService } from '../../../services/model/model.service';
   animations: [ listAnimation ]
 })
 export class ModelListComponent implements OnInit, OnDestroy {
-  private _subscription: any;
-  private _models: string[] = [];
   private _filteredModels: string[] = [];
+  private _models: string[] = [];
   private _searchTerm = '';
+  private _subscription: any;
   private _view = 'enabled';
 
   constructor(

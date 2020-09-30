@@ -83,19 +83,14 @@ export function getPoints(shape: string, radius: number): string {
   switch (shape) {
     case 'rectangle':
       return getRectanglePoints(radius);
-      break;
     case 'rhombus':
       return getRhombusPoints(radius);
-      break;
     case 'hexagon':
       return getHexagonPoints(radius);
-      break;
     case 'square':
       return getSquarePoints(radius);
-      break;
     case 'triangle':
       return getTrianglePoints(radius);
-      break;
     default:
       return getSquarePoints(radius);
   }

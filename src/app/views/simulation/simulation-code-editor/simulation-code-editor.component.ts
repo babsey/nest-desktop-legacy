@@ -11,7 +11,6 @@ import { ProjectCode } from '../../../components/project/projectCode';
 })
 export class SimulationCodeEditorComponent implements OnInit {
   @Input() code: ProjectCode;
-  private _selected: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
   private _blocks: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
   private _options: any = {
     cursorBlinkRate: 700,
@@ -30,6 +29,7 @@ export class SimulationCodeEditorComponent implements OnInit {
       '"."': this.showHint,
     }
   };
+  private _selected: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
 
   constructor(
   ) { }

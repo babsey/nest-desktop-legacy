@@ -7,7 +7,7 @@ export class NeuronAnalogSignalPlotPanel extends AnalogSignalPlotPanel {
 
   constructor(graph: ActivityChartGraph) {
     super(graph);
-    this.id = 'NeuronAnalogSignalPlotPanel';
+    this.name = 'NeuronAnalogSignalPlotPanel';
     this.label = 'plot of neuron analog signals';
     this.layout.yaxis.height = 2;
     this.layout.yaxis.title = 'Membrane potential [mV]';

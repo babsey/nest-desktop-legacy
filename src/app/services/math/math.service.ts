@@ -19,7 +19,10 @@ export class MathService {
     } else if (!step) {
       return Array.from({ length: end - start }, (val: number, index: number) => start + index);
     } else {
-      return Array.from({ length: Math.ceil((end - start) / step) }, (val: number, index: number) => start + (index * step));
+      return Array.from(
+        { length: Math.ceil((end - start) / step) },
+        (val: number, index: number) => start + (index * step)
+      );
     }
   }
 

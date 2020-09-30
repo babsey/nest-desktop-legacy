@@ -7,7 +7,7 @@ export class InputAnalogSignalPlotPanel extends AnalogSignalPlotPanel {
 
   constructor(graph: ActivityChartGraph) {
     super(graph);
-    this.id = 'InputAnalogSignalPlotPanel';
+    this.name = 'InputAnalogSignalPlotPanel';
     this.label = 'plot of input analog signals';
     this.init();
   }

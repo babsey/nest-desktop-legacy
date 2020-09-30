@@ -30,7 +30,10 @@ export class NodeGraphShapeComponent implements OnInit {
   }
 
   drawCircle(): boolean {
-    return this.node.view.weight === 'inhibitory' && this.node.model.elementType === 'neuron';
+    return (
+      this.node.view.weight === 'inhibitory' &&
+      this.node.model.elementType === 'neuron'
+    );
   }
 
 }

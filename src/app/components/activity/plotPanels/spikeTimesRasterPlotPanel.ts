@@ -8,7 +8,7 @@ export class SpikeTimesRasterPlotPanel extends SpikeTimesPanel {
 
   constructor(graph: ActivityChartGraph) {
     super(graph);
-    this.id = 'SpikeTimesRasterPlotPanel';
+    this.name = 'SpikeTimesRasterPlotPanel';
     this.icon = 'ellipsis-h'; // 'chart-scatter';
     this.label = 'raster plot of spike times';
     this.layout.yaxis.title = 'Neuron ID';

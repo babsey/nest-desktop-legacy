@@ -19,8 +19,8 @@ export class NodeGraphComponent implements OnInit {
   @Input() eventTrigger = true;
   @Input() height: number;
   @Input() width: number;
-  private _selector: any;
   private _disabled = false;
+  private _selector: any;
 
   constructor(
     private _networkGraphService: NetworkGraphService,

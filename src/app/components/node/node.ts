@@ -12,39 +12,41 @@ import { Parameter } from '../parameter';
 
 
 export class Node extends Config {
-  private _network: Network;                 // parent
-  private _idx: number;                      // generative
-  private _code: NodeCode;                   // code service for node
-  private _view: NodeView;
-  private _name = 'Node';
+  private readonly _name = 'Node';
 
-  // Arguments for nest.Create
-  private _modelId: string;
-  private _size: number;
-  private _params: Parameter[] = [];
-  private _spatial: NodeSpatial;
-  private _positions: number[][] = [];
-
-  // Only recorder node
-  private _recordFrom: string[];             // only for multimeter
   private _activity: SpikeActivity | AnalogSignalActivity | Activity;
+  private _code: NodeCode;                   // code service for node
+  private _idx: number;                      // generative
+  private _modelId: string;
+  private _network: Network;                 // parent
+  private _params: Parameter[] = [];
+  private _positions: number[][] = [];
+  private _recordFrom: string[];             // only for multimeter
+  private _size: number;
+  private _spatial: NodeSpatial;
+  private _view: NodeView;
 
   constructor(network: any, node: any) {
     super('Node');
-    this._network = network;
     this._idx = network.nodes.length;
+    this._modelId = node.model;
+    this._network = network;
+    this._size = node.size || 1;
+
     this._code = new NodeCode(this);
     this._view = new NodeView(this, node.view);
 
-    this._modelId = node.model;
-    this._size = node.size || 1;
     this.initParameters(node);
     this.initSpatial(node.spatial);
-    this.initActivity();
+    this.initActivity(node.activity);
   }
 
   get activity(): SpikeActivity | AnalogSignalActivity | Activity {
     return this._activity;
+  }
+
+  set activity(value: SpikeActivity | AnalogSignalActivity | Activity) {
+    this._activity = value;
   }
 
   get code(): NodeCode {
@@ -174,14 +176,14 @@ export class Node extends Config {
     this._network.networkChanges();
   }
 
-  initActivity(): void {
+  initActivity(activity: any = {}): void {
     if (!this.model.isRecorder()) { return; }
     if (this.model.existing === 'spike_detector') {
-      this._activity = new SpikeActivity(this);
+      this._activity = new SpikeActivity(this, activity);
     } else if (['voltmeter', 'multimeter'].includes(this.model.existing)) {
-      this._activity = new AnalogSignalActivity(this);
+      this._activity = new AnalogSignalActivity(this, activity);
     } else {
-      this._activity = new Activity(this);
+      this._activity = new Activity(this, activity);
     }
   }
 
@@ -288,6 +290,9 @@ export class Node extends Config {
     }
     if (this._spatial.hasPositions()) {
       node.spatial = this._spatial.toJSON(target);
+    }
+    if (target === 'revision' && this.model.isRecorder()) {
+      node.activity = this._activity.toJSON();
     }
     return node;
   }

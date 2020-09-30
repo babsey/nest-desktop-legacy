@@ -84,4 +84,8 @@ export class SpikeActivity extends Activity {
     return Math.sqrt(this.getVariance(values));
   }
 
+  clone(): SpikeActivity {
+    return new SpikeActivity(this.recorder, this.toJSON());
+  }
+
 }

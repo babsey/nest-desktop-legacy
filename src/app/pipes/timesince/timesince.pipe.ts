@@ -19,7 +19,7 @@ export class TimesincePipe implements PipeTransform {
         minute: 60,
         second: 1,
       };
-      let counter;
+      let counter: number;
       for (const i in intervals) {
         counter = Math.floor(seconds / intervals[i]);
         if (counter > 0) {

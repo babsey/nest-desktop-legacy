@@ -2,14 +2,14 @@ import { Config } from './config';
 
 
 export class ParameterRandom extends Config {
-  private _distribution: string;
-  private _specs: any;
   private _defaults: any = {
     exponential: { beta: 1 },
     uniform: { min: 0, max: 1 },
     normal: { mean: 0, std: 1 },
     lognormal: { mean: 0, std: 1 },
   };
+  private _distribution: string;
+  private _specs: any;
 
   constructor(random: any) {
     super('ParameterRandom');

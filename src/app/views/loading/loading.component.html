@@ -1,29 +1,29 @@
 <button mat-icon-button (click)="onClick($event)">
   <fa-icon
-    class="fa-lg"
-    icon="wrench"
-    [style.opacity]="app.isConfigReady() ? 1 : 0"
     [class.green]="app.isConfigValid()"
     [class.red]="!app.isConfigValid()"
+    [style.opacity]="app.isConfigReady() ? 1 : 0"
+    class="fa-lg"
+    icon="wrench"
   ></fa-icon>
 </button>
 
 <button mat-icon-button (click)="onClick($event)">
   <fa-icon
-    class="fa-lg"
-    icon="database"
     [class.green]="app.isDatabaseValid()"
     [class.red]="!app.isDatabaseValid()"
     [style.opacity]="app.isDatabaseReady() ? 1 : 0.5"
+    class="fa-lg"
+    icon="database"
   ></fa-icon>
 </button>
 
 <button mat-icon-button (click)="onClick($event)">
   <fa-icon
-    class="fa-lg"
-    icon="server"
     [class.green]="app.nestServer.state.simulatorValid"
     [class.red]="!app.nestServer.state.simulatorValid"
     [style.opacity]="app.nestServer.state.serverReady ? 1 : 0.5"
+    class="fa-lg"
+    icon="server"
   ></fa-icon>
 </button>

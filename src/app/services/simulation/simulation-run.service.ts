@@ -35,6 +35,10 @@ export class SimulationRunService {
         this._snackBarRef.dismiss();
       }
       this._logService.log('Response from server');
+      if (project.errorMessage !== '') {
+        project.activityGraph.empty();
+        this.showError(project.errorMessage);
+      }
       if (resp.hasOwnProperty('stdout')) {
         this._snackBarRef = this._snackBar.open(resp.stdout, null, {
           duration: 5000
@@ -46,14 +50,18 @@ export class SimulationRunService {
         this._snackBarRef.dismiss();
       }
       const message: string = err.error;
-      const docUrl = 'https://nest-desktop.readthedocs.io/en/master/user/troubleshooting.html#error-messages';
-      const link: string = '<br><br><a target="_blank" href="' + docUrl + '">See documentation for details.</a>';
-      this._toastr.error(message + link, null, {
-        enableHtml: true,
-        progressBar: true,
-        timeOut: 5000,
-        extendedTimeOut: 3000,
-      });
+      this.showError(message);
+    });
+  }
+
+  showError(message: string): void {
+    const docUrl = 'https://nest-desktop.readthedocs.io/en/master/user/troubleshooting.html#error-messages';
+    const link: string = '<br><br><a target="_blank" href="' + docUrl + '">See documentation for details.</a>';
+    this._toastr.error(message + link, null, {
+      enableHtml: true,
+      progressBar: true,
+      timeOut: 5000,
+      extendedTimeOut: 3000,
     });
   }
 

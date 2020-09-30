@@ -3,10 +3,9 @@ import { drawPath } from './connectionGraph';
 
 
 export class ConnectionView {
-  private _connection: Connection;                         // parent
-
   private _colorExcitation = '#595289'; // '#467ab3';
   private _colorInhibition = '#AF143C'; // '#b34846';
+  private _connection: Connection;                         // parent
 
   constructor(connection: Connection) {
     this._connection = connection;

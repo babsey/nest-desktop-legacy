@@ -8,9 +8,9 @@ import { Project } from '../../components/project/project';
   providedIn: 'root'
 })
 export class AppService {
-  private _rightClick = false;
   private _app: App;
   private _change: EventEmitter<any> = new EventEmitter();
+  private _rightClick = false;
   private _sidenavOpened = false;
 
   constructor() {

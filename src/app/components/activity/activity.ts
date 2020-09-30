@@ -3,17 +3,15 @@ import { Node } from '../node/node';
 
 
 export class Activity {
-  private _recorder: Node;                       // parent
-  private _idx: number;                          // generative
-
-  // Information of the recorded nodes;
   private _events: any = {};
+  private _idx: number;                          // generative
   private _nodeIds: number[] = [];
   private _nodePositions: number[][] = [];       // if spatial
+  private _recorder: Node;                       // parent
 
   constructor(
     recorder: Node,
-    activity: any = { events: {}, nodeIds: [], nodePositions: [] }
+    activity: any = {}
   ) {
     this._recorder = recorder;
     this.update(activity);
@@ -121,13 +119,16 @@ export class Activity {
     this._recorder.network.project.app.download(this._events, 'events');
   }
 
+  clone(): Activity {
+    return new Activity(this.recorder, this.toJSON());
+  }
+
   toJSON(): any {
-    const activity: any = {
+    return {
       events: this._events,
       nodeIds: this._nodeIds,
       nodePositions: this._nodePositions,
     };
-    return activity;
   }
 
 }

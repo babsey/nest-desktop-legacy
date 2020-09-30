@@ -135,7 +135,11 @@ export class NetworkGraphBgComponent implements OnInit, OnChanges {
           const f: number = (i * 2 / 3) + (1 / 3);
           selectPanel.append('svg:text')
             .attr('class', 'select label')
-            .attr('fill', (this.network.view.selectedNode && elementType === 'stimulator') ? '#cccccc' : 'black')
+            .attr('fill',
+              this.network.view.selectedNode && elementType === 'stimulator'
+                ? '#cccccc'
+                : 'black'
+            )
             .attr('dx', Math.sin(Math.PI * f) * 28)
             .attr('dy', -Math.cos(Math.PI * f) * 28 + 5)
             .text(elementType.slice(0, 1).toUpperCase());
@@ -152,7 +156,7 @@ export class NetworkGraphBgComponent implements OnInit, OnChanges {
     this._networkGraphService.reset();
   }
 
-  create(view): void {
+  create(view: any): void {
     // console.log('Create node')
     const defaultModels: any = {
       neuron: 'iaf_psc_alpha',

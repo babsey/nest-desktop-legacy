@@ -8,7 +8,7 @@ export class SpikeSendersHistogramPanel extends SpikeTimesPanel {
 
   constructor(graph: ActivityChartGraph) {
     super(graph);
-    this.id = 'SpikeSendersHistogramPanel';
+    this.name = 'SpikeSendersHistogramPanel';
     this.icon = 'chart-bar';
     this.label = 'histogram of spike senders';
     this.layout.xaxis.title = 'Neuron ID';

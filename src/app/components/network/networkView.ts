@@ -4,9 +4,9 @@ import { Node } from '../node/node';
 
 
 export class NetworkView {
-  private _network: Network;                    // parent
   private _focusedConnection: Connection | null = null;
   private _focusedNode: Node | null = null;
+  private _network: Network;                    // parent
   private _selectedConnection: Connection | null = null;
   private _selectedElementType: string | null = null;
   private _selectedNode: Node | null = null;

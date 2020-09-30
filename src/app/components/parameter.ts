@@ -4,15 +4,12 @@ import { Connection } from './connection/connection';
 
 
 export class Parameter {
-  private _parent: Model | Node | Connection;    // parent
-  private _idx: number;                          // generative
-
-  private _id: string;
-  private _value: any;
-
-  // For node and connection
-  private _visible: boolean;
   private _factors: string[];                    // not functional yet
+  private _id: string;
+  private _idx: number;                          // generative
+  private _parent: Model | Node | Connection;    // parent
+  private _value: any;
+  private _visible: boolean;
 
   // For model
   label: string;

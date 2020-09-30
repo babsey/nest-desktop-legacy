@@ -8,11 +8,11 @@ export class NESTServer extends Config {
   private _http: HttpClient;
   private _state: any = {
     serverReady: false,
-    serverVersion: '',
     serverValid: false,
+    serverVersion: '',
     simulatorReady: false,
-    simulatorVersion: '',
     simulatorValid: false,
+    simulatorVersion: '',
   };
 
   constructor() {
@@ -118,7 +118,7 @@ export class NESTServer extends Config {
     Promise.all(hostPromises);
   }
 
-  checkVersion(info): void {
+  checkVersion(info: any): void {
     if (info === undefined) { return; }
     // console.log('Fetch info', info)
     const appVersion: string[] = environment.VERSION.split('.');
@@ -141,7 +141,7 @@ export class NESTServer extends Config {
   }
 
   // TODO: not a permament solution
-  oidcLoginFailed(resp): void {
+  oidcLoginFailed(resp: any): void {
     if (resp.ok === false && resp.url === 'https://services.humanbrainproject.eu/oidc/login') {
       window.location.reload();
     }

@@ -15,9 +15,9 @@ import { AppService } from '../../../services/app/app.service';
 export class ProjectDialogComponent implements OnInit {
   @ViewChild('file', { static: false }) file;
   private _fileReader = new FileReader();
+  private _message: string;
   private _projects: Project[];
   private _selectedProjects: number[];
-  private _message: string;
 
   constructor(
     private _appService: AppService,
@@ -88,7 +88,9 @@ export class ProjectDialogComponent implements OnInit {
   }
 
   addProjects(): void {
-    const projects: any[] = this.projects.filter((project: any, idx: number) => this.selectedProjects.includes(idx));
+    const projects: any[] = this.projects.filter((project: any, idx: number) =>
+      this.selectedProjects.includes(idx)
+    );
     this.app.addProjects(projects);
   }
 

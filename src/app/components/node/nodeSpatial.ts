@@ -5,21 +5,20 @@ import { Node } from './node';
 
 
 export class FreePositions {
-  private _spatial: NodeSpatial;
-  private _name = 'free';
-
-  // arguments for nest.spatial.free
+  private readonly _name = 'free';
   private _center: number[];               // FreePositions has no argument for center in NEST 3.
-  private _extent: number[];
   private _edgeWrap: boolean;
+  private _extent: number[];
   private _numDimensions: number;
   private _pos: any;
+  private _spatial: NodeSpatial;
 
   rows?: number;
   columns?: number;
 
   constructor(spatial: NodeSpatial, positions: any = {}) {
     this._spatial = spatial;
+
     this._pos = positions.pos;
     this._center = positions.center || [0, 0];
     this._extent = positions.extent || [1, 1];
@@ -114,18 +113,17 @@ export class FreePositions {
 
 
 export class GridPositions {
-  private _spatial: NodeSpatial;
-  private _name = 'grid';
-
-  // arguments for nest.spatial.grid
+  private readonly _name = 'grid';
   private _center: number[];
   private _edgeWrap: boolean;
   private _extent: number[];
   private _pos: number[][];
   private _shape: number[];
+  private _spatial: NodeSpatial;
 
   constructor(spatial: NodeSpatial, positions: any = {}) {
     this._spatial = spatial;
+
     this._shape = positions.shape || [1, 1];
     this._center = positions.center || [0, 0];
     this._extent = positions.extent || [1, 1];

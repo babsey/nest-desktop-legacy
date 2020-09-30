@@ -25,8 +25,10 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // console.log('Ng init Three scatter')
-    this._subscriptionInit = this._activityAnimationService.init.subscribe(() => setTimeout(() => this.init(), 1));
-    this._subscriptionUpdate = this._activityAnimationService.update.subscribe(() => this.update());
+    this._subscriptionInit = this._activityAnimationService.init.subscribe(() =>
+      setTimeout(() => this.init(), 1));
+    this._subscriptionUpdate = this._activityAnimationService.update.subscribe(
+      () => this.update());
     this.init();
   }
 

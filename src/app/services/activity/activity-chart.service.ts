@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { ActivityChartGraph } from '../../components/activity/activityChartGraph';
 import { ActivityGraphPanel } from '../../components/activity/plotPanels/activityGraphPanel';
 
 
@@ -9,8 +8,8 @@ import { ActivityGraphPanel } from '../../components/activity/plotPanels/activit
 })
 export class ActivityChartService {
   private _init: EventEmitter<any> = new EventEmitter();
-  private _update: EventEmitter<any> = new EventEmitter();
   private _selectedPanel: ActivityGraphPanel;
+  private _update: EventEmitter<any> = new EventEmitter();
 
   constructor() {
   }
@@ -19,16 +18,16 @@ export class ActivityChartService {
     return this._init;
   }
 
-  get update(): EventEmitter<any> {
-    return this._update;
-  }
-
   get selectedPanel(): ActivityGraphPanel {
     return this._selectedPanel;
   }
 
   set selectedPanel(value: ActivityGraphPanel) {
     this._selectedPanel = value;
+  }
+
+  get update(): EventEmitter<any> {
+    return this._update;
   }
 
 }

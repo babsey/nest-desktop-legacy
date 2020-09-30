@@ -8,11 +8,10 @@ enum ConnectionType {
 }
 
 export class ConnectionProjections extends Config {
-  private _connection: Connection;
-
   private _allowAutapses: boolean;
   private _allowMultapses: boolean;
   private _allowOversizedMask: boolean;
+  private _connection: Connection;
   private _connectionType: string;
   private _delays: any;
   private _kernel: any;

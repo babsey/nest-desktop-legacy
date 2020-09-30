@@ -67,7 +67,11 @@ export class NetworkGraphComponent implements OnInit {
   }
 
   countAfter(): number {
-    return this.network.project.networkRevisions.length - this.network.project.networkRevisionIdx - 1;
+    return (
+      this.network.project.networkRevisions.length -
+      this.network.project.networkRevisionIdx -
+      1
+    );
   }
 
   onSVGEnter(event: MouseEvent): void {

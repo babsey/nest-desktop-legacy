@@ -7,8 +7,8 @@ import { App } from './app';
 export class DatabaseService {
   private _app: App;
   private _db: PouchDB;
-  private _valid = false;
   private _ready = false;
+  private _valid = false;
   private _version: string;
 
   constructor(

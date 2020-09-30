@@ -6,13 +6,12 @@ import { ActivityAnimationGraph } from '../activityAnimationGraph';
 
 
 export class ActivityAnimationScene {
-  private _graph: ActivityAnimationGraph;                  // parent
-  private _container: any;
-
   private _animationFrameIdx: number;
   private _camera: THREE.PerspectiveCamera;
+  private _container: any;
   private _controls: OrbitControls;
   private _geometry: THREE.SphereGeometry;
+  private _graph: ActivityAnimationGraph;                  // parent
   private _grid: THREE.GridHelper;
   private _renderer: THREE.WebGLRenderer;
   private _scene: THREE.Scene;

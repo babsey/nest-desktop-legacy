@@ -13,17 +13,17 @@ enum ElementType {
 }
 
 export class Model {
+  private readonly _name = 'Model';
+
+  private _abbreviation: string;
   private _app: App;                             // parent
   private _code: ModelCode;                      // code for model
-  private _name = 'Model';
-
   private _doc: any;                             // doc data of the database
-  private _id: string;                           // model id
-  private _idx: number;                          // generative
   private _elementType: string;                  // element type of the model
   private _existing: string;                     // existing model in NEST
+  private _id: string;                           // model id
+  private _idx: number;                          // generative
   private _label: string;                        // model label for view
-  private _abbreviation: string;
   private _params: Parameter[] = [];             // model parameters
   private _recordables: string[];                // recordables for multimeter
 

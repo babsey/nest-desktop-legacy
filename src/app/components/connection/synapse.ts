@@ -5,10 +5,8 @@ import { SynapseCode } from './synapseCode';
 
 
 export class Synapse {
-  private _connection: Connection;                // parent
   private _code: SynapseCode;
-
-  // arguments for synapse in nest.Connect
+  private _connection: Connection;                // parent
   private _modelId: string;
   private _params: Parameter[] = [];
 

@@ -7,7 +7,7 @@ export class SpikeTimesPanel extends ActivityGraphPanel {
 
   constructor(graph: ActivityChartGraph, configName: string = null) {
     super(graph, configName);
-    this.id = 'SpikeTimesPanel';
+    this.name = 'SpikeTimesPanel';
     this.label = 'parent panel of spike times';
     this.init();
   }

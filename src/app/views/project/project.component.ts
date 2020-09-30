@@ -5,8 +5,6 @@ import { enterAnimation } from '../../animations/enter-animation';
 
 import { Project } from '../../components/project/project';
 
-import { AppService } from '../../services/app/app.service';
-
 
 @Component({
   selector: 'app-project',
@@ -19,7 +17,6 @@ export class ProjectComponent implements OnInit {
   private _projectRev = '';
 
   constructor(
-    private _appService: AppService,
     private _route: ActivatedRoute,
   ) { }
 
