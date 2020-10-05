@@ -9,10 +9,7 @@ export class Activity {
   private _nodePositions: number[][] = [];       // if spatial
   private _recorder: Node;                       // parent
 
-  constructor(
-    recorder: Node,
-    activity: any = {}
-  ) {
+  constructor(recorder: Node, activity: any = {}) {
     this._recorder = recorder;
     this.update(activity);
   }
@@ -35,6 +32,10 @@ export class Activity {
 
   get idx(): number {
     return this._idx;
+  }
+
+  set idx(value: number) {
+    this._idx = value;
   }
 
   get nEvents(): number {
@@ -73,10 +74,7 @@ export class Activity {
     return this.nEvents > 0;
   }
 
-  update(activity: any, idx: number = null): void {
-    if (idx !== null) {
-      this._idx = idx;
-    }
+  update(activity: any): void {
     this._events = activity.events || {};
     this._nodeIds = activity.nodeIds || [];
     this._nodePositions = activity.nodePositions || [];

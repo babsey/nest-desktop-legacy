@@ -9,22 +9,24 @@ import { ActivityAnimationService } from '../../../../services/activity/activity
   styleUrls: ['./activity-animation-colormap.component.scss']
 })
 export class ActivityAnimationColormapComponent implements OnInit {
-  private _scales: string[] = [
-    'spectral',
-    // 'turbo',
-    'viridis',
-    'inferno',
-    'magma',
-    'plasma',
-    // 'cividis',
-    'warm',
-    'cool',
-    'cubehelix'
-  ];
+  private _scales: string[];
 
   constructor(
     private _activityAnimationService: ActivityAnimationService,
-  ) { }
+  ) {
+    this._scales = [
+      'spectral',
+      // 'turbo',
+      'viridis',
+      'inferno',
+      'magma',
+      'plasma',
+      // 'cividis',
+      'warm',
+      'cool',
+      'cubehelix'
+    ];
+  }
 
   ngOnInit() {
   }

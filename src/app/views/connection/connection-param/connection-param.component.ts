@@ -15,19 +15,22 @@ import { ModelConfigDialogComponent } from '../../model/model-config-dialog/mode
 })
 export class ConnectionParamComponent implements OnInit {
   @Input() connection: Connection;
-  @Input() random = true;
   @Input() options: any;
+  @Input() random = true;
   @Input() value: any;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
-
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
-  contextMenuPosition = { x: '0px', y: '0px' };
+  private _contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
     private _dialog: MatDialog,
   ) { }
 
   ngOnInit() {
+  }
+
+  get contextMenuPosition(): any {
+    return this._contextMenuPosition;
   }
 
   setDefaultValue(): void {
@@ -60,8 +63,8 @@ export class ConnectionParamComponent implements OnInit {
 
   onContextMenu(event: MouseEvent): void {
     event.preventDefault();
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
+    this._contextMenuPosition.x = event.clientX + 'px';
+    this._contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();
   }
 

@@ -11,8 +11,8 @@ import { Connection } from '../../../components/connection/connection';
 export class ConnectionMenuComponent implements OnInit {
   @Input() connection: Connection;
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

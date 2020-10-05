@@ -12,15 +12,16 @@ import { NodeSpatial } from '../../../components/node/nodeSpatial';
 export class NodeSpatialComponent implements OnInit {
   @Input() node: Node;
   @Output() nodeChange: EventEmitter<any> = new EventEmitter();
-  private _graph: any = {
-    data: [],
-    layout: {},
-  };
-  private _showPlot = false;
+  private _graph: any;
   private _positionType = 'free';
+  private _showPlot = false;
 
-  constructor(
-  ) { }
+  constructor() {
+    this._graph = {
+      data: [],
+      layout: {},
+    };
+  }
 
   ngOnInit() {
     this._positionType = this.node.spatial.positions.name;
@@ -88,13 +89,13 @@ export class NodeSpatialComponent implements OnInit {
   }
 
   update(): void {
-    console.log(this.node);
+    // console.log(this.node);
     this.node.spatial.positions.generate();
     this.plot();
   }
 
   onPositionTypeChange(event: any): void {
-    console.log(this.positionType, event);
+    // console.log(this.positionType, event);
     const config: any = (this.positionType === 'free') ? { pos: [] } : { shape: [1, 1] };
     this.node.initSpatial(config);
     this.update();

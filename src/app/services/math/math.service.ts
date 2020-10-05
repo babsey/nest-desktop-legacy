@@ -7,7 +7,8 @@ import * as d3 from 'd3';
 })
 export class MathService {
 
-  constructor() { }
+  constructor() {
+  }
 
   fill(value: number, size: number): number[] {
     return Array.from({ length: size }, () => value);

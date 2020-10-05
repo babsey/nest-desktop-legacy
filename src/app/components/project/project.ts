@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Activity } from '../activity/activity';
 import { ActivityChartGraph } from '../activity/activityChartGraph';
+import { ActivityAnimationGraph } from '../activity/activityAnimationGraph';
 import { App } from '../app';
 import { Config } from '../config';
 import { Model } from '../model/model';
@@ -17,7 +18,8 @@ import { upgradeProject } from './projectUpgrade';
 
 
 export class Project extends Config {
-  private _activityGraph: ActivityChartGraph;
+  private _activityAnimationGraph: ActivityAnimationGraph;
+  private _activityChartGraph: ActivityChartGraph;
   private _app: App;                             // parent
   private _code: ProjectCode;                    // code script for NEST Server
   private _createdAt: string;                    // when is it created in database
@@ -36,10 +38,7 @@ export class Project extends Config {
   private _updatedAt: string;                    // when is it updated in database
   private _view: ProjectView;
 
-  constructor(
-    app: App,
-    project: any = {},
-  ) {
+  constructor(app: App, project: any = {}) {
     super('Project');
     this._app = app;
     this._view = new ProjectView(this);
@@ -66,8 +65,12 @@ export class Project extends Config {
     this.initActivityGraph();
   }
 
-  get activityGraph(): ActivityChartGraph {
-    return this._activityGraph;
+  get activityAnimationGraph(): ActivityAnimationGraph {
+    return this._activityAnimationGraph;
+  }
+
+  get activityChartGraph(): ActivityChartGraph {
+    return this._activityChartGraph;
   }
 
   get app(): App {
@@ -227,7 +230,7 @@ export class Project extends Config {
   }
 
   isNetworkChanged(): boolean {
-    return this.getHash() !== this._activityGraph.hash && !this._simulation.running;
+    return this.getHash() !== this._activityChartGraph.hash && !this._simulation.running;
   }
 
   /**
@@ -274,9 +277,9 @@ export class Project extends Config {
     const newModels: string[] = this._network.recorders.map((node: Node) => node.modelId);
 
     if (objectHash(JSON.stringify(oldModels)) === objectHash(JSON.stringify(newModels))) {
-      this._activityGraph.initPanels();
+      this._activityChartGraph.initPanels();
     } else {
-      this._activityGraph.init();
+      this._activityChartGraph.init();
     }
     if (this.config.runAfterCheckout) {
       setTimeout(() => this.runSimulationScript(), 1);
@@ -395,25 +398,11 @@ export class Project extends Config {
    */
   get activities(): Activity[] {
     // console.log('Get activities')
-    return this._network ? this._network.recorders.map((recorder: Node) => recorder.activity) : [];
-  }
-
-  /**
-   * Check if the project has activities.
-   */
-  get hasActivities(): boolean {
-    return this._hasActivities;
-  }
-
-  /**
-   * Check if the project has spatial activities.
-   */
-  get hasSpatialActivities(): boolean {
-    return this._hasSpatialActivities;
-  }
-
-  initActivityGraph(panels: any[] = []): void {
-    this._activityGraph = new ActivityChartGraph(this, panels);
+    const activities: Activity[] = this._network ? this._network.recorders.map((recorder: Node) => recorder.activity) : [];
+    activities.forEach((activity: Activity, idx: number) => {
+      activity.idx = idx;
+    });
+    return activities;
   }
 
   /**
@@ -424,12 +413,15 @@ export class Project extends Config {
     // Update recorded activity
     const activities: Activity[] = this.activities;
     data.forEach((activity: any, idx: number) => {
-      activities[idx].update(activity, idx);
+      activities[idx].update(activity);
     });
     this.checkActivities();
-    this._activityGraph.update();
+    this.updateActivityGraph();
   }
 
+  /**
+   * Check whether the project has some events in (spatial) activities.
+   */
   checkActivities(): void {
     const activities: Activity[] = this.activities;
     this._hasActivities = activities.length > 0 ? activities.some(
@@ -437,6 +429,45 @@ export class Project extends Config {
     this._hasSpatialActivities = this.hasActivities ? activities.some(
       (activity: Activity) => activity.hasEvents() && activity.nodePositions.length > 0) : false;
   }
+
+  /**
+   * Does project has events in activities?
+   */
+  get hasActivities(): boolean {
+    return this._hasActivities;
+  }
+
+  /**
+   * Does project has events in spatial activities?
+   */
+  get hasSpatialActivities(): boolean {
+    return this._hasSpatialActivities;
+  }
+
+  /**
+   * Activity graph
+   */
+
+  initActivityGraph(): void {
+    this.initActivityChartGraph();
+  }
+
+  updateActivityGraph(): void {
+    this._activityChartGraph.update();
+  }
+
+  emptyActivityGraph(): void {
+    this._activityChartGraph.empty();
+  }
+
+  initActivityChartGraph(panels: any[] = []): void {
+    if (this._activityChartGraph === undefined) {
+      this._activityChartGraph = new ActivityChartGraph(this, panels);
+    } else {
+      this._activityChartGraph.init(panels);
+    }
+  }
+
 
   /**
    * Serialization

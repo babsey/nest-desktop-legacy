@@ -8,13 +8,9 @@ export class SimulationKernel extends Config {
   private _simulation: Simulation;               // parent
   private _time: number;                         // endtime of the simulation
 
-  constructor(
-    simulation: Simulation,
-    kernel: any = {},
-  ) {
+  constructor(simulation: Simulation, kernel: any = {}) {
     super('SimulationKernel');
     this._simulation = simulation;
-
     this._time = 0;
     this._resolution = kernel.resolution || 1;
     this._localNumThreads = kernel.localNumThreads || 1;

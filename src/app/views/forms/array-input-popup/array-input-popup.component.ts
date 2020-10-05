@@ -17,8 +17,8 @@ export class ArrayInputPopupComponent implements OnInit {
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private _generatorService: GeneratorService,
     private _dialog: MatDialog,
+    private _generatorService: GeneratorService,
   ) { }
 
   ngOnInit() {

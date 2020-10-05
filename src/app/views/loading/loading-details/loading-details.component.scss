@@ -1,11 +1,10 @@
 .loading {
-
   .mat-subheader {
     button {
       font-size: 11px;
       height: 32px;
-      width: 32px;
       line-height: 32px;
+      width: 32px;
     }
   }
 
@@ -16,8 +15,9 @@
 
 .nest {
   mat-toolbar {
-    width: 250px;
-    margin: 5px;
     border-radius: 10px 10px 10px 0;
+    font-weight: 900;
+    margin: 5px;
+    width: 250px;
   }
 }

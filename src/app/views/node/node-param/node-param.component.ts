@@ -15,16 +15,19 @@ import { ArrayGeneratorDialogComponent } from '../../forms/array-generator-dialo
 })
 export class NodeParamComponent implements OnInit {
   @Input() param: any;
-
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
-  contextMenuPosition = { x: '0px', y: '0px' };
+  private _contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
-    private _generatorService: GeneratorService,
     private _dialog: MatDialog,
+    private _generatorService: GeneratorService,
   ) { }
 
   ngOnInit() {
+  }
+
+  get contextMenuPosition(): any {
+    return this._contextMenuPosition;
   }
 
   openConfigDialog(): void {
@@ -53,8 +56,8 @@ export class NodeParamComponent implements OnInit {
 
   onContextMenu(event: MouseEvent): void {
     event.preventDefault();
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
+    this._contextMenuPosition.x = event.clientX + 'px';
+    this._contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();
   }
 

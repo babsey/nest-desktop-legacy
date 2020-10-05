@@ -2,7 +2,7 @@ import { Config } from '../config';
 
 export class ColorSchemes extends Config {
 
-  constructor( ) {
+  constructor() {
     super('ColorSchemes');
   }
 

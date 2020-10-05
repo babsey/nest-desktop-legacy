@@ -30,9 +30,9 @@ export class Connection extends Config {
   private _params: any[];
   private _projections: ConnectionProjections;    // only for NEST 2, will be deprecated in NEST 3;
   private _rule: string;
-  private _source: number;                      // Node index
+  private _sourceIdx: number;                      // Node index
   private _synapse: Synapse;
-  private _target: number;                      // Node index
+  private _targetIdx: number;                      // Node index
   private _view: ConnectionView;
 
   srcIdx?: number[];
@@ -46,8 +46,8 @@ export class Connection extends Config {
     this._code = new ConnectionCode(this);
     this._view = new ConnectionView(this);
 
-    this._source = connection.source;
-    this._target = connection.target;
+    this._sourceIdx = connection.source;
+    this._targetIdx = connection.target;
 
     this._rule = connection.rule || Rule.AllToAll;
     this._params = connection.params || [];
@@ -100,11 +100,15 @@ export class Connection extends Config {
   }
 
   get source(): Node {
-    return this._network.nodes[this._source];
+    return this._network.nodes[this._sourceIdx];
   }
 
   set source(node: Node) {
-    this._source = node.idx;
+    this._sourceIdx = node.idx;
+  }
+
+  get sourceIdx(): number {
+    return this._sourceIdx;
   }
 
   get synapse(): Synapse {
@@ -112,11 +116,15 @@ export class Connection extends Config {
   }
 
   get target(): Node {
-    return this._network.nodes[this._target];
+    return this._network.nodes[this._targetIdx];
   }
 
   set target(node: Node) {
-    this._target = node.idx;
+    this._targetIdx = node.idx;
+  }
+
+  get targetIdx(): number {
+    return this._targetIdx;
   }
 
   get view(): ConnectionView {
@@ -128,7 +136,7 @@ export class Connection extends Config {
   }
 
   reverse(): void {
-    [this.source, this.target] = [this.target, this.source];
+    [this._sourceIdx, this._targetIdx] = [this._targetIdx, this._sourceIdx];
     this.connectionChanges();
   }
 
@@ -172,8 +180,8 @@ export class Connection extends Config {
 
   toJSON(target: string = 'db'): any {
     const connection: any = {
-      source: this._source,
-      target: this._target,
+      source: this._sourceIdx,
+      target: this._targetIdx,
     };
 
     if (target === 'simulator') {

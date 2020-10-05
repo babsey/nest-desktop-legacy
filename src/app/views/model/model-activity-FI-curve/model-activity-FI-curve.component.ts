@@ -15,37 +15,39 @@ import { AppService } from '../../../services/app/app.service';
 })
 export class ModelActivityFICurveComponent implements OnInit {
   @Input() modelId: string;
-  private _config: any = {
-    staticPlot: true,
-  };
-  private _data: any[] = [{
-    mode: 'lines',
-    type: 'scatter',
-    x: [0, 1],
-    y: [1, 0]
-  }];
+  private _config: any;
+  private _data: any[];
   private _filename = 'neuron-spike-response';
   private _graph: ActivityChartGraph;
-  private _layout: any = {
-    title: 'Neuronal response to spike inputs',
-    xaxis: {
-      title: 'Time [ms]'
-    },
-    yaxis: {
-      title: 'Membrane potential [mV]'
-    },
-    showlegend: false
-  };
+  private _layout: any;
   private _project: Project;
-  private _registerPanels: any[] = [
-    (graph: ActivityChartGraph) => new AnalogSignalPlotPanel(graph),
-  ];
-  private _style: any = {};
+  private _registerPanels: any[];
+  private _style: any;
 
 
   constructor(
     private _appService: AppService,
-  ) { }
+  ) {
+    this._config = {
+      staticPlot: true,
+    };
+    this._layout = {
+      title: 'Neuronal response to spike inputs',
+      xaxis: {
+        title: 'Time [ms]'
+      },
+      yaxis: {
+        title: 'Membrane potential [mV]'
+      },
+      showlegend: false
+    };
+    this._registerPanels = [
+      (graph: ActivityChartGraph) => new AnalogSignalPlotPanel(graph),
+    ];
+    this._style = {
+      width: '100%',
+    };
+  }
 
   ngOnInit() {
     this.update();
@@ -60,7 +62,7 @@ export class ModelActivityFICurveComponent implements OnInit {
   }
 
   get data(): any[] {
-    return this._graph ? this._graph.data : [];
+    return this._project.activityChartGraph.data;
   }
 
   get layout(): any {
@@ -76,7 +78,7 @@ export class ModelActivityFICurveComponent implements OnInit {
       this._project = this._appService.app.initProjectFromAssets(this._filename);
       this._project.network.nodes[1].modelId = this.modelId;
       this._project.code.generate();
-      this._project.initActivityGraph(this._registerPanels);
+      this._project.initActivityChartGraph(this._registerPanels);
       this._project.runSimulationCode();
     }
   }

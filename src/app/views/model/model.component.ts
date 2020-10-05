@@ -15,8 +15,8 @@ import { ModelService } from '../../services/model/model.service';
 export class ModelComponent implements OnInit, OnDestroy {
 
   constructor(
-    private _route: ActivatedRoute,
     private _modelService: ModelService,
+    private _route: ActivatedRoute,
   ) { }
 
   ngOnInit() {

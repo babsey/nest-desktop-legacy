@@ -11,8 +11,8 @@ import { Network } from '../../../components/network/network';
 export class NetworkSelectionComponent implements OnInit {
   @Input() network: Network;
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
     // console.log('Init network selection')

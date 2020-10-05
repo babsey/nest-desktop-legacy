@@ -22,8 +22,8 @@ export class ModelConfigDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this._model = this._data.model;
-    this._param = Object.assign({}, this._model.getParameter(this._data.param));
+    this._model = this._modelService.app.getModel(this._data.model);
+    this._param = this._model.getParameter(this._data.param).copy();
   }
 
   get model(): Model {

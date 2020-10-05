@@ -36,7 +36,7 @@ export class SimulationRunService {
       }
       this._logService.log('Response from server');
       if (project.errorMessage !== '') {
-        project.activityGraph.empty();
+        project.emptyActivityGraph();
         this.showError(project.errorMessage);
       }
       if (resp.hasOwnProperty('stdout')) {

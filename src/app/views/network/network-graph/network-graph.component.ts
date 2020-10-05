@@ -21,12 +21,11 @@ export class NetworkGraphComponent implements OnInit {
   @Input() height = 400;
   @Input() network: Network;
   @Input() width = 600;
-  private _selector: any;
-  private _viewDragline: boolean;
-
+  @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   private _contextMenuData: any = { node: null, connection: null };
   private _contextMenuPosition: any = { x: '0px', y: '0px' };
-  @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
+  private _selector: any;
+  private _viewDragline: boolean;
 
   constructor(
     private _dialog: MatDialog,
@@ -108,10 +107,10 @@ export class NetworkGraphComponent implements OnInit {
     this.network.view.resetFocus();
     this.network.view.resetSelection();
     if (!this.eventTrigger) { return; }
-    this.contextMenuData.node = node;
-    this.contextMenuData.connection = connection;
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
+    this._contextMenuData.node = node;
+    this._contextMenuData.connection = connection;
+    this._contextMenuPosition.x = event.clientX + 'px';
+    this._contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();
   }
 

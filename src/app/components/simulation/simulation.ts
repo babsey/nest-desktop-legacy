@@ -12,15 +12,11 @@ export class Simulation extends Config {
   private _running = false;
   private _time: number;                         // simulation time
 
-  constructor(
-    project: Project,
-    simulation: any = {},
-  ) {
+  constructor(project: Project, simulation: any = {}) {
     super('Simulation');
     this._project = project;
     this._kernel = new SimulationKernel(this, simulation.kernel);
     this._code = new SimulationCode(this);
-
     this._time = parseFloat(simulation.time) || 1000.;
     this._randomSeed = parseInt(simulation.randomSeed, 0) || 0;
   }

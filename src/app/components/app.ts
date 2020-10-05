@@ -219,7 +219,7 @@ export class App extends Config {
 
   // Add projects to list and database.
   addProjects(data: any[]): Promise<any> {
-    console.log('Add projects');
+    // console.log('Add projects');
     const projects: any[] = data.map((project: any) =>
       new Promise((resolve, reject) => {
         this.addProject(project).then(() => {

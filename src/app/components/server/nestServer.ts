@@ -108,8 +108,9 @@ export class NESTServer extends Config {
         const url: string = protocol + '//' + host;
         this.http.get(url)
           .then((resp: any) => {
+            console.log(url);
             this.url = url;
-            this.checkVersion(resp.body);
+            this.checkVersion(JSON.parse(resp.response));
             resolve(true);
           })
           .catch((err: any) => console.log(err));

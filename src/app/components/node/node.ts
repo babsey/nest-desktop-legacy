@@ -139,6 +139,7 @@ export class Node extends Config {
 
   set recordFrom(value: string[]) {
     this._recordFrom = value;
+    this.initActivityGraph();
   }
 
   get size(): number {
@@ -152,7 +153,7 @@ export class Node extends Config {
 
   get sources(): Node[] {
     const nodes: Node[] = this._network.connections
-      .filter((connection: Connection) => connection.target.idx === this._idx)
+      .filter((connection: Connection) => connection.targetIdx === this._idx)
       .map((connection: Connection) => connection.source);
     return nodes;
   }
@@ -163,7 +164,7 @@ export class Node extends Config {
 
   get targets(): Node[] {
     const nodes: Node[] = this._network.connections
-      .filter((connection: Connection) => connection.source.idx === this._idx)
+      .filter((connection: Connection) => connection.sourceIdx === this._idx)
       .map((connection: Connection) => connection.target);
     return nodes;
   }
@@ -176,6 +177,9 @@ export class Node extends Config {
     this._network.networkChanges();
   }
 
+  /**
+   * Initialize activity for recorder node
+   */
   initActivity(activity: any = {}): void {
     if (!this.model.isRecorder()) { return; }
     if (this.model.existing === 'spike_detector') {
@@ -188,7 +192,7 @@ export class Node extends Config {
   }
 
   initActivityGraph(): void {
-    this._network.project.activityGraph.init();
+    this._network.project.initActivityGraph();
   }
 
   initParameters(node: any = null): void {

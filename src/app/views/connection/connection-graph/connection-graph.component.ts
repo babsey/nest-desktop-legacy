@@ -14,10 +14,10 @@ import { Node } from '../../../components/node/node';
 })
 export class ConnectionGraphComponent implements OnInit {
   @Input() connection: Connection;
-  @Input() width: number;
   @Input() height: number;
-  private _selector: any;
+  @Input() width: number;
   private _intervalId: any;
+  private _selector: any;
 
   constructor(
     private _elementRef: ElementRef,

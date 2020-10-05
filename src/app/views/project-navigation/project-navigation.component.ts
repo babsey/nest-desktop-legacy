@@ -70,9 +70,8 @@ export class ProjectNavigationComponent implements OnInit {
 
   openProjectDialog(): void {
     const dialogRef = this._dialog.open(ProjectDialogComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
   }
 }

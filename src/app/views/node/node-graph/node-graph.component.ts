@@ -14,10 +14,10 @@ import { NetworkGraphService } from '../../../services/network/network-graph.ser
   styleUrls: ['./node-graph.component.scss'],
 })
 export class NodeGraphComponent implements OnInit {
-  @Input() node: Node;
   @Input() dragable: boolean;
   @Input() eventTrigger = true;
   @Input() height: number;
+  @Input() node: Node;
   @Input() width: number;
   private _disabled = false;
   private _selector: any;

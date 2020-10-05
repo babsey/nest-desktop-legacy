@@ -43,7 +43,7 @@ export class ActivityAnimationComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
-    // console.log('Update activity animation view');
+    console.log('Update activity animation view');
     this.graph.update();
   }
 }

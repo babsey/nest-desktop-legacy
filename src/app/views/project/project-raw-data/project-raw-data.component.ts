@@ -10,17 +10,18 @@ import { Project } from '../../../components/project/project';
 })
 export class ProjectRawDataComponent implements OnInit {
   @Input() project: Project;
-  private _options: any = {
-    cursorBlinkRate: 700,
-    foldGutter: true,
-    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-    lineNumbers: true,
-    lineWrapping: true,
-    readOnly: true,
-    mode: { name: 'javascript', json: true }
-  };
+  private _options: any;
 
   constructor() {
+    this._options = {
+      cursorBlinkRate: 700,
+      foldGutter: true,
+      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+      lineNumbers: true,
+      lineWrapping: true,
+      readOnly: true,
+      mode: { name: 'javascript', json: true }
+    };
   }
 
   ngOnInit() {

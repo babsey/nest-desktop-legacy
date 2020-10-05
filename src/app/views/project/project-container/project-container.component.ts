@@ -23,8 +23,8 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
 export class ProjectContainerComponent implements OnInit, OnChanges {
   @Input() id: string;
   @Input() rev: string;
-  private _mobileQueryListener: () => void;
   private _mobileQuery: MediaQueryList;
+  private _mobileQueryListener: () => void;
 
   constructor(
     private _activityChartService: ActivityChartService,
@@ -86,8 +86,6 @@ export class ProjectContainerComponent implements OnInit, OnChanges {
           if (!this.project.hasSpatialActivities) {
             this._activityGraphService.mode = 'chart';
           }
-          this._activityChartService.selectedPanel = undefined;
-          // this._activityGraphService.init();
           if (
             this._router.url.includes('run') || this.project.config.runAfterLoad &&
             !this.project.hasActivities && this.app.view.project.mode === 'activityExplorer'

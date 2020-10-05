@@ -12,8 +12,8 @@ export class InputInlineComponent implements OnInit {
   @Input() view: string;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

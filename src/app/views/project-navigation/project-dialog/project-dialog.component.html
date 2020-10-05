@@ -7,7 +7,6 @@
     <ng-container *ngFor="let project of projects; let idx = index">
       <ng-container *ngIf="project.name">
         <mat-list-option
-          [attr.title]="project.message"
           [disabled]="!isValid(project)"
           [value]="idx">
           <span class="flex">

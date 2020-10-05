@@ -12,7 +12,8 @@ export class InputPopupComponent implements OnInit {
   @Input() view: string;
   @Output() inputChange: EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

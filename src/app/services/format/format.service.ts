@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class FormatService {
 
-  constructor() { }
+  constructor() {
+  }
 
   format(val: any): any {
     if (Number.isInteger(val)) {

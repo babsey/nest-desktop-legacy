@@ -6,31 +6,20 @@ import { Project } from '../project/project';
 
 
 export class ActivityAnimationGraph extends ActivityGraph {
+  private _colorScales: any;
+  private _config: any;
+  private _frameIdx = 0;
   private _frames: any[] = [];
-  layout: any = {};
-  frameIdx = 0;
-
-  source = 'spike';
-  sources: any[] = [];
-  style: any = {};
-  data: any[] = [];
-
-  trailModes: string[] = ['off', 'growing', 'shrinking', 'temporal'];
-  colorScales: any;
-  config: any;
+  private _layout: any = {};
+  private _source = 'spike';
+  private _sources: any[] = [];
+  private _style: any = {};
+  private _trailModes: string[];
 
   constructor(project: Project, config: any = {}) {
     super(project);
 
-    this.layout = {
-      extent: [
-        [-1, 0],
-        [-.5, .5],
-        [.5, -.5]
-      ]
-    };
-
-    this.colorScales = {
+    this._colorScales = {
       spectral: d3.interpolateSpectral,
       // turbo: d3.interpolateTurbo,
       viridis: d3.interpolateViridis,
@@ -76,17 +65,66 @@ export class ActivityAnimationGraph extends ActivityGraph {
       dotSize: 10,
     };
 
+    this._layout = {
+      extent: [
+        [-1, 0],
+        [-.5, .5],
+        [.5, -.5]
+      ]
+    };
+
+    this._trailModes = ['off', 'growing', 'shrinking', 'temporal'];
 
     this.init();
     this.update();
+  }
+
+  get colorScales(): any {
+    return this._colorScales;
+  }
+
+  get config(): any {
+    return this._config;
+  }
+
+  set config(value: any) {
+    this._config = value;
+  }
+
+  get frameIdx(): number {
+    return this._frameIdx;
+  }
+
+  set frameIdx(value: number) {
+    this._frameIdx = value;
   }
 
   get frames(): any[] {
     return this._frames;
   }
 
+  get layout(): any {
+    return this._layout;
+  }
+
+  get source(): string {
+    return this._source;
+  }
+
+  set source(value: string) {
+    this._source = value;
+  }
+
+  get sources(): string[] {
+    return this._sources;
+  }
+
+  get style(): any {
+    return this._style;
+  }
+
   getFrame(): any[] {
-    return this.frames[this.frameIdx] || { data: [] };
+    return this.frames[this._frameIdx] || { data: [] };
   }
 
   init(): void {
@@ -114,9 +152,9 @@ export class ActivityAnimationGraph extends ActivityGraph {
     if (typeof value === 'string') {
       return value;
     }
-    const min: number = this.config.colorMap.min;
-    const max: number = this.config.colorMap.max;
-    const colorScale: any = this.colorScales[this.config.colorMap.scale];
+    const min: number = this._config.colorMap.min;
+    const max: number = this._config.colorMap.max;
+    const colorScale: any = this._colorScales[this._config.colorMap.scale];
     return colorScale((value - min) / (max - min));
   }
 
@@ -135,11 +173,11 @@ export class ActivityAnimationGraph extends ActivityGraph {
   }
 
   addFrames(x: number[], y: number[], z: number[], color: string | number[]): void {
-    const sampleRate: number = this.config.frames.sampleRate;
+    const sampleRate: number = this._config.frames.sampleRate;
     const nframes: number = this.endtime * sampleRate;
 
     // Add empty frames if not existed
-    if (this.frames.length === 0) {
+    if (this._frames.length === 0) {
       for (let i = 0; i < nframes - 1; i++) {
         this._frames.push({
           frame: i,
@@ -178,20 +216,20 @@ export class ActivityAnimationGraph extends ActivityGraph {
     let sources: any[] = [];
     sources = sources.concat(...activities);
     if (sources.length === 0) {
-      this.source = 'spike';
-      this.sources = [];
+      this._source = 'spike';
+      this._sources = [];
     } else {
-      if (this.source === 'spike') {
-        this.source = sources.includes('V_m') ? 'V_m' : sources[0];
-        this.config.frames.sampleRate = 1;
-        this.config.frames.windowSize = 1;
-        this.config.trail.length = 0;
+      if (this._source === 'spike') {
+        this._source = sources.includes('V_m') ? 'V_m' : sources[0];
+        this._config.frames.sampleRate = 1;
+        this._config.frames.windowSize = 1;
+        this._config.trail.length = 0;
       }
       if (sources.length === 1) {
-        this.config.sources = [];
+        this._config.sources = [];
       } else {
         sources.sort();
-        this.sources = sources.map((source: string) => ({ value: source, label: source }));
+        this._sources = sources.map((source: string) => ({ value: source, label: source }));
       }
     }
   }

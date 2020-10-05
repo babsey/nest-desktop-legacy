@@ -10,12 +10,12 @@ import { ColorSchemes } from '../../../components/network/colorSchemes';
   styleUrls: ['./network-config.component.scss']
 })
 export class NetworkConfigComponent implements OnInit {
-  private _config: Config;
   private _colorSchemes: ColorSchemes;
+  private _config: Config;
 
   constructor() {
-    this._config = new Config('Network');
     this._colorSchemes = new ColorSchemes();
+    this._config = new Config('Network');
   }
 
   ngOnInit() {

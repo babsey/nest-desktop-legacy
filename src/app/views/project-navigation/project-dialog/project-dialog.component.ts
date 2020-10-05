@@ -50,7 +50,7 @@ export class ProjectDialogComponent implements OnInit {
   }
 
   reset(): void {
-    console.log('Reset project list and index list');
+    // console.log('Reset project list and index list');
     this._message = 'Select an option to upload projects.';
     this._projects = [];
     this.selectedProjects = [];
@@ -69,9 +69,8 @@ export class ProjectDialogComponent implements OnInit {
             d.valid = true;
           } catch (e) {
             d.valid = false;
-            console.log(e);
-            console.log(d);
             d.message = e;
+            console.log(d.name, d._id.slice(0, 6), e);
           }
         });
         this._message = 'Select projects to add.';

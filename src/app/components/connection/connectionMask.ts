@@ -12,20 +12,21 @@ enum MaskType {
 
 export class ConnectionMask extends Config {
   private _connection: Connection;
-  private _graph: any = {
-    data: [],
-    layout: {
-      xaxis: { range: [-.55, .55] },
-      yaxis: { range: [-.55, .55] }
-    },
-    style: { position: 'relative', width: '100%', height: '100%' }
-  };
+  private _graph: any;
   private _masktype: MaskType;
   private _specs: any;
 
   constructor(connection: Connection, mask: any = {}) {
     super('ConnectionMask');
     this._connection = connection;
+    this._graph = {
+      data: [],
+      layout: {
+        xaxis: { range: [-.55, .55] },
+        yaxis: { range: [-.55, .55] }
+      },
+      style: { position: 'relative', width: '100%', height: '100%' }
+    };
     this._masktype = mask.masktype || MaskType.none;
     this._specs = mask.specs || {};
   }

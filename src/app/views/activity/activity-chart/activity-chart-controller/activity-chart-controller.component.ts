@@ -17,26 +17,28 @@ import { ActivityChartService } from '../../../../services/activity/activity-cha
 })
 export class ActivityChartControllerComponent implements OnInit {
   @Input() project: Project;
-  private _options: any = {
-    cursorBlinkRate: 700,
-    foldGutter: true,
-    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-    hintOptions: {
-      completeSingle: false,
-      hintWords: []
-    },
-    lineNumbers: true,
-    lineWrapping: true,
-    mode: 'python',
-    styleActiveLine: true,
-    extraKeys: {
-      'Ctrl-Space': 'autocomplete',
-    }
-  };
+  private _options: any;
 
   constructor(
     private _activityChartService: ActivityChartService,
-  ) { }
+  ) {
+    this._options = {
+      cursorBlinkRate: 700,
+      foldGutter: true,
+      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+      hintOptions: {
+        completeSingle: false,
+        hintWords: []
+      },
+      lineNumbers: true,
+      lineWrapping: true,
+      mode: 'python',
+      styleActiveLine: true,
+      extraKeys: {
+        'Ctrl-Space': 'autocomplete',
+      }
+    };
+  }
 
   ngOnInit() {
   }
@@ -46,7 +48,7 @@ export class ActivityChartControllerComponent implements OnInit {
   }
 
   get graph(): ActivityChartGraph {
-    return this.project.activityGraph;
+    return this.project.activityChartGraph;
   }
 
   get options(): any {

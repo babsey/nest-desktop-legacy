@@ -7,8 +7,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./value-slider-inline.component.scss']
 })
 export class ValueSliderInlineComponent implements OnInit {
-  @Input() value: number;
   @Input() options: any;
+  @Input() value: number;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {

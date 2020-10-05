@@ -60,6 +60,9 @@ export class Network extends Config {
     if (this._project.app.view.project.mode === 'networkEditor') {
       this._project.commitNetwork(this);
     }
+    if (this._project.app.view.project.sidenavMode === 'codeEditor') {
+      this._project.code.generate();
+    }
     // this._project.activityGraph.init();
   }
 
@@ -132,6 +135,9 @@ export class Network extends Config {
     this._connections = [];
     if (network.connections) {
       network.connections.forEach((connection: any) => this.addConnection(connection));
+    }
+    if (this._project.app.view.project.sidenavMode === 'codeEditor') {
+      this._project.code.generate();
     }
   }
 

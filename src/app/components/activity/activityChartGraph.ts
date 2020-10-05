@@ -87,22 +87,18 @@ export class ActivityChartGraph extends ActivityGraph {
       height: 'calc(100vh - 40px)',
     };
 
-    if (registerPanels.length > 0) {
-      this._registerPanels = registerPanels;
-    } else {
-      this._registerPanels = [
-        (graph: ActivityChartGraph) => new InputAnalogSignalPlotPanel(graph),
-        (graph: ActivityChartGraph) => new NeuronAnalogSignalPlotPanel(graph),
-        (graph: ActivityChartGraph) => new AnalogSignalHistogramPanel(graph),
-        (graph: ActivityChartGraph) => new SpikeTimesRasterPlotPanel(graph),
-        (graph: ActivityChartGraph) => new SpikeTimesHistogramPanel(graph),
-        (graph: ActivityChartGraph) => new SpikeSendersHistogramPanel(graph),
-        (graph: ActivityChartGraph) => new InterSpikeIntervalHistogramPanel(graph),
-        (graph: ActivityChartGraph) => new CVISIHistogramPanel(graph),
-      ];
-    }
+    this._registerPanels = [
+      (graph: ActivityChartGraph) => new InputAnalogSignalPlotPanel(graph),
+      (graph: ActivityChartGraph) => new NeuronAnalogSignalPlotPanel(graph),
+      (graph: ActivityChartGraph) => new AnalogSignalHistogramPanel(graph),
+      (graph: ActivityChartGraph) => new SpikeTimesRasterPlotPanel(graph),
+      (graph: ActivityChartGraph) => new SpikeTimesHistogramPanel(graph),
+      (graph: ActivityChartGraph) => new SpikeSendersHistogramPanel(graph),
+      (graph: ActivityChartGraph) => new InterSpikeIntervalHistogramPanel(graph),
+      (graph: ActivityChartGraph) => new CVISIHistogramPanel(graph),
+    ];
 
-    this.init();
+    this.init(registerPanels);
   }
 
   get config(): any {
@@ -148,8 +144,12 @@ export class ActivityChartGraph extends ActivityGraph {
     return this._style;
   }
 
-  init(): void {
+  init(registerPanels: any[] = []): void {
     // console.log('Init activity chart graph for', this.project.name);
+    if (registerPanels.length > 0) {
+      this._registerPanels = registerPanels;
+    }
+
     this._panels = [];
     for (const registerPanel of this._registerPanels) {
       const panel: ActivityGraphPanel = registerPanel(this);

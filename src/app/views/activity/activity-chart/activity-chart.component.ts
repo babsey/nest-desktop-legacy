@@ -43,18 +43,18 @@ export class ActivityChartComponent implements OnInit, OnDestroy {
   }
 
   get graph(): ActivityChartGraph {
-    return this.project.activityGraph;
+    return this.project.activityChartGraph;
   }
 
   init(): void {
     // console.log('Init activity chart view for ', project.id, this.project.id);
     this._activityStatsService.reset();
-    this.project.activityGraph.init();
+    this.graph.init();
   }
 
   update(): void {
     // console.log('Update activity chart view for', this.project.name);
-    this.project.activityGraph.update();
+    this.graph.update();
   }
 
 }

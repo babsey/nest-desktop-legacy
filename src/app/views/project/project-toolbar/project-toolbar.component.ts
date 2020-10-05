@@ -17,9 +17,8 @@ import { SimulationRunService } from '../../../services/simulation/simulation-ru
 })
 export class ProjectToolbarComponent implements OnInit {
   @Input() project: Project;
-
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
-  contextMenuPosition = { x: '0px', y: '0px' };
+  private _contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
     private _router: Router,
@@ -27,6 +26,10 @@ export class ProjectToolbarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  get contextMenuPosition(): any {
+    return this._contextMenuPosition;
   }
 
   get view(): any {
@@ -67,8 +70,8 @@ export class ProjectToolbarComponent implements OnInit {
 
   onContextMenu(event: MouseEvent): void {
     event.preventDefault();
-    this.contextMenuPosition.x = event.clientX + 'px';
-    this.contextMenuPosition.y = event.clientY + 'px';
+    this._contextMenuPosition.x = event.clientX + 'px';
+    this._contextMenuPosition.y = event.clientY + 'px';
     this.contextMenu.openMenu();
   }
 

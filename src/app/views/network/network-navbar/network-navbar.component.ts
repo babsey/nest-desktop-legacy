@@ -11,8 +11,8 @@ import { Network } from '../../../components/network/network';
 export class NetworkNavbarComponent implements OnInit {
   @Input() network: Network;
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

@@ -18,8 +18,8 @@ export class ArrayInputInlineComponent implements OnInit {
   private _active = false;
 
   constructor(
-    private _generatorService: GeneratorService,
     private _dialog: MatDialog,
+    private _generatorService: GeneratorService,
   ) { }
 
   ngOnInit() {

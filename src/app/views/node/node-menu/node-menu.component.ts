@@ -11,8 +11,8 @@ import { NetworkGraphService } from '../../../services/network/network-graph.ser
   styleUrls: ['./node-menu.component.scss']
 })
 export class NodeMenuComponent implements OnInit {
-  @Input() node: Node;
   @Input() disabled = false;
+  @Input() node: Node;
 
   constructor(
     private _networkGraphService: NetworkGraphService,

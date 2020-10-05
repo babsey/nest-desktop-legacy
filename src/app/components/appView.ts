@@ -2,11 +2,15 @@ import { App } from './app';
 import { Project } from './project/project';
 
 export class AppView {
+  private _activity: any;
   private _app: App;                       // parent
   private _model: any;
   private _project: any;
 
   constructor(app: App) {
+    this._activity = {
+      graphMode: 'chart',
+    };
     this._app = app;
     this._model = {
       selectedModel: '',
@@ -19,6 +23,10 @@ export class AppView {
       sidenavMode: 'networkSelection',
       sidenavOpened: false,
     };
+  }
+
+  get activity(): any {
+    return this._activity;
   }
 
   get filteredProjects(): Project[] {

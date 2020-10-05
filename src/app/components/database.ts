@@ -11,11 +11,7 @@ export class DatabaseService {
   private _valid = false;
   private _version: string;
 
-  constructor(
-    app: App,
-    url: string,
-    options: any = {},
-  ) {
+  constructor(app: App, url: string, options: any = {}) {
     this._app = app;
     this._db = new PouchDB(url, options);
     this.getVersion().then((version: string) => { this._version = version; });

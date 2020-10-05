@@ -11,42 +11,33 @@ import { ProjectCode } from '../../../components/project/projectCode';
 })
 export class SimulationCodeEditorComponent implements OnInit {
   @Input() code: ProjectCode;
-  private _blocks: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
-  private _options: any = {
-    cursorBlinkRate: 700,
-    foldGutter: true,
-    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-    hintOptions: {
-      completeSingle: false,
-      hintWords: []
-    },
-    lineNumbers: true,
-    lineWrapping: true,
-    mode: 'python',
-    styleActiveLine: true,
-    extraKeys: {
-      'Ctrl-Space': 'autocomplete',
-      '"."': this.showHint,
-    }
-  };
-  private _selected: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
+  private _options: any;
 
-  constructor(
-  ) { }
+  constructor() {
+    this._options = {
+      cursorBlinkRate: 700,
+      foldGutter: true,
+      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+      hintOptions: {
+        completeSingle: false,
+        hintWords: []
+      },
+      lineNumbers: true,
+      lineWrapping: true,
+      mode: 'python',
+      styleActiveLine: true,
+      extraKeys: {
+        'Ctrl-Space': 'autocomplete',
+        '"."': this.showHint,
+      }
+    };
+  }
 
   ngOnInit() {
   }
 
-  get blocks(): string[] {
-    return this._blocks;
-  }
-
   get options(): any {
     return this._options;
-  }
-
-  get selected(): any {
-    return this._selected;
   }
 
   copyCode(): void {
@@ -75,10 +66,5 @@ export class SimulationCodeEditorComponent implements OnInit {
     if (backwardCharacter === 'nest') {
       cm.showHint();
     }
-  }
-
-  onChange(event) {
-    this._selected = event.value;
-    this.code.generate(this.selected);
   }
 }

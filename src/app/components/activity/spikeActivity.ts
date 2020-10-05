@@ -7,17 +7,7 @@ export class SpikeActivity extends Activity {
   private _times: any;
   private _stats: any[];
 
-  constructor(
-    recorder: Node,
-    activity: any = {
-      events: {
-        senders: [],
-        times: [],
-      },
-      nodeIds: [],
-      nodePositions: []
-    }
-  ) {
+  constructor(recorder: Node, activity: any = {}) {
     super(recorder, activity);
   }
 

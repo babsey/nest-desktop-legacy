@@ -16,10 +16,10 @@ import { Node } from '../../../components/node/node';
   ]
 })
 export class NetworkListComponent implements OnInit {
-  @Input() network: Network;
-  @Input() selective = true;
-  @Input() paramSelective = true;
   @Input() columns = false;
+  @Input() network: Network;
+  @Input() paramSelective = true;
+  @Input() selective = true;
 
   constructor(
   ) { }

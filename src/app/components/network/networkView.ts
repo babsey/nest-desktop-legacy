@@ -4,43 +4,43 @@ import { Node } from '../node/node';
 
 
 export class NetworkView {
-  private _focusedConnection: Connection | null = null;
-  private _focusedNode: Node | null = null;
+  private _focusedConnection: number | null = null;
+  private _focusedNode: number | null = null;
   private _network: Network;                    // parent
-  private _selectedConnection: Connection | null = null;
+  private _selectedConnection: number | null = null;
   private _selectedElementType: string | null = null;
-  private _selectedNode: Node | null = null;
+  private _selectedNode: number | null = null;
 
   constructor(network: Network) {
     this._network = network;
   }
 
   get focusedConnection(): Connection | null {
-    return this._focusedConnection;
+    return this._network.connections[this._focusedConnection];
   }
 
   set focusedConnection(connection: Connection | null) {
     this._focusedNode = null;
-    this._focusedConnection = connection;
+    this._focusedConnection = connection.idx;
   }
 
   get focusedNode(): Node | null {
-    return this._focusedNode;
+    return this._network.nodes[this._focusedNode];
   }
 
   set focusedNode(node: Node | null) {
     this._focusedConnection = null;
-    this._focusedNode = node;
+    this._focusedNode = node.idx;
   }
 
   get selectedConnection(): Connection | null {
-    return this._selectedConnection;
+    return this._network.connections[this._selectedConnection];
   }
 
   set selectedConnection(connection: Connection | null) {
     this._selectedElementType = null;
     this._selectedNode = null;
-    this._selectedConnection = this._selectedConnection === connection ? null : connection;
+    this._selectedConnection = this._selectedConnection === connection.idx ? null : connection.idx;
   }
 
   get selectedElementType(): string | null {
@@ -54,13 +54,13 @@ export class NetworkView {
   }
 
   get selectedNode(): Node | null {
-    return this._selectedNode;
+    return this._network.nodes[this._selectedNode];
   }
 
   set selectedNode(node: Node | null) {
     this._selectedElementType = null;
     this._selectedConnection = null;
-    this._selectedNode = (this._selectedNode === node) ? null : node;
+    this._selectedNode = (this._selectedNode === node.idx) ? null : node.idx;
   }
 
   get colors(): string[] {
@@ -97,16 +97,16 @@ export class NetworkView {
   //
 
   isNodeFocused(node: Node): boolean {
-    return this.focusedNode === node;
+    return this._focusedNode === node.idx;
   }
 
   isNodeSelected(node: Node, unselected: boolean = true, withConnection: boolean = true): boolean {
-    if (this.selectedNode) {
-      return this.selectedNode === node;
-    } else if (this.selectedConnection) {
+    if (this._selectedNode !== null) {
+      return this._selectedNode === node.idx;
+    } else if (this._selectedConnection !== null) {
       if (!withConnection) { return false; }
       const connections: Connection[] = node.network.connections
-        .filter((connection: Connection) => connection.source.idx === node.idx || connection.target.idx === node.idx);
+        .filter((connection: Connection) => connection.sourceIdx === node.idx || connection.targetIdx === node.idx);
       return connections.some((connection: Connection) => connection === this.selectedConnection);
     }
     return unselected;
@@ -118,19 +118,19 @@ export class NetworkView {
   //
 
   isConnectionFocused(connection: Connection, unselected: boolean = true): boolean {
-    if (this.focusedConnection) {
-      return this.focusedConnection === connection;
-    } else if (this.focusedNode) {
-      return this.focusedNode.idx === connection.source.idx;
+    if (this._focusedConnection !== null) {
+      return this._focusedConnection === connection.idx;
+    } else if (this._focusedNode !== null) {
+      return this._focusedNode === connection.sourceIdx;
     }
     return unselected;
   }
 
   isConnectionSelected(connection: Connection, unselected: boolean = true): boolean {
-    if (this.selectedConnection) {
-      return this.selectedConnection === connection;
-    } else if (this.selectedNode) {
-      return this.selectedNode.idx === connection.source.idx;
+    if (this._selectedConnection !== null) {
+      return this._selectedConnection === connection.idx;
+    } else if (this._selectedNode !== null) {
+      return this._selectedNode === connection.sourceIdx;
     }
     return unselected;
   }

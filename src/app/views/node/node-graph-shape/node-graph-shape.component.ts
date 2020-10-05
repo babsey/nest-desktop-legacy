@@ -9,14 +9,14 @@ import { Node } from '../../../components/node/node';
   styleUrls: ['./node-graph-shape.component.scss']
 })
 export class NodeGraphShapeComponent implements OnInit {
+  @Input() labelSize = 10;
   @Input() node: Node;
   @Input() radius = 18;
-  @Input() strokeWidth = 2.5;
-  @Input() labelSize = 10;
   @Input() showSelection = true;
+  @Input() strokeWidth = 2.5;
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

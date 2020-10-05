@@ -11,8 +11,8 @@ import { ConnectionProjections } from '../../../components/connection/connection
 export class ConnectionProjectionsComponent implements OnInit {
   @Input() projections: ConnectionProjections;
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

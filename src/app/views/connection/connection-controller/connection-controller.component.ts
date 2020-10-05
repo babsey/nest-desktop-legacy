@@ -12,17 +12,19 @@ export class ConnectionControllerComponent implements OnInit {
   @Input() connection: Connection;
   private _connRules: any[] = [];
   private _synModels: any[] = [];
-  private _srcIdxOptions: any = {
-    label: 'Source Indices',
-    value: []
-  };
-  private _tgtIdxOptions: any = {
-    label: 'Target Indices',
-    value: []
-  };
+  private _srcIdxOptions: any;
+  private _tgtIdxOptions: any;
 
-  constructor(
-  ) { }
+  constructor() {
+    this._srcIdxOptions = {
+      label: 'Source Indices',
+      value: []
+    };
+    this._tgtIdxOptions = {
+      label: 'Target Indices',
+      value: []
+    };
+  }
 
   ngOnInit() {
     // console.log('Update connection controller')

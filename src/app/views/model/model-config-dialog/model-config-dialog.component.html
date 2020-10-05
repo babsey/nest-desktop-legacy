@@ -1,7 +1,7 @@
 <div mat-dialog-content class="params-config">
   <ng-container *ngIf="param">
     <mat-list dense>
-      
+
       <h3 mat-subheader>{{ param.id }}</h3>
 
       <mat-list-item>
@@ -14,10 +14,13 @@
       </mat-list-item>
 
       <mat-list-item>
-        <app-ticks-slider-inline
-          [(value)]="param.level"
-          [options]="{label:'Visibility level', ticks:['rookie', 'beginner', 'advanced', 'expert']}">
-        </app-ticks-slider-inline>
+        <input matInput
+          [(ngModel)]="param.level"
+          name="Level"
+          min="1"
+          max="4"
+          placeholder="Minimum value"
+          type="number" />
       </mat-list-item>
 
       <mat-list-item>

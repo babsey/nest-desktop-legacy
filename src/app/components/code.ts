@@ -6,7 +6,7 @@ export class Code {
     recorder: 'rec',
   };
 
-  constructor( ) {
+  constructor() {
   }
 
   _(n: number = 1): string {

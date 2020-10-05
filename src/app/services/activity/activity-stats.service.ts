@@ -9,8 +9,8 @@ import { Activity } from '../../components/activity/activity';
 export class ActivityStatsService {
   private _selectedActivity: Activity;
 
-  constructor(
-  ) { }
+  constructor() {
+  }
 
   get selectedActivity(): Activity {
     return this._selectedActivity;

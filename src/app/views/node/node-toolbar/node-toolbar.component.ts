@@ -14,12 +14,11 @@ import { ActivityChartService } from '../../../services/activity/activity-chart.
   styleUrls: ['./node-toolbar.component.scss']
 })
 export class NodeToolbarComponent implements OnInit {
-  @Input() node: Node;
   @Input() disabled = false;
-  private _models: Model[] = [];
-
+  @Input() node: Node;
   @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
   private _contextMenuPosition: any = { x: '0px', y: '0px' };
+  private _models: Model[] = [];
 
   constructor(
     private _activityChartService: ActivityChartService,

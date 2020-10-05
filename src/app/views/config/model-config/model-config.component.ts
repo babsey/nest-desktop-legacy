@@ -13,7 +13,7 @@ export class ModelConfigComponent implements OnInit {
 
   constructor() {
     this._config = new Config('App');
-   }
+  }
 
   ngOnInit() {
   }
