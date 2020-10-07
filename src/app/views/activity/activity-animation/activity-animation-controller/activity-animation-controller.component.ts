@@ -12,7 +12,7 @@ import { ActivityAnimationService } from '../../../../services/activity/activity
   styleUrls: ['./activity-animation-controller.component.scss']
 })
 export class ActivityAnimationControllerComponent implements OnInit {
-  private _trailModes: string[] = ['off', 'growing', 'shrinking', 'temporal'];
+  private _trailModes: string[] = ['off', 'growing', 'shrinking'];
 
   constructor(
     private _activityAnimationService: ActivityAnimationService,
@@ -29,16 +29,8 @@ export class ActivityAnimationControllerComponent implements OnInit {
     return this._trailModes;
   }
 
-  increment(): void {
-    this.graph.config.frames.speed += 1;
-  }
-
   hideIncrementBadge(): boolean {
     return this.graph.config.frames.speed < 2;
-  }
-
-  decrement(): void {
-    this.graph.config.frames.speed -= 1;
   }
 
   hideDecrementBadge(): boolean {
@@ -63,34 +55,14 @@ export class ActivityAnimationControllerComponent implements OnInit {
     this.graph.config.camera.control = true;
   }
 
-  backplay(): void {
-    this.graph.config.frames.speed = -1;
-  }
-
-  backstep(): void {
-    const frames: any = this.graph.config.frames;
-    const framesLength: number = this.graph.frames.length;
-    frames.speed = 0;
-    this.graph.frameIdx = (this.graph.frameIdx - 1 + framesLength) % framesLength;
-  }
-
-  stop(): void {
-    this.graph.config.frames.speed = 0;
-  }
-
-  play(): void {
-    this.graph.config.frames.speed = 1;
-  }
-
   step(): void {
-    const frames: any = this.graph.config.frames;
-    const framesLength: number = this.graph.frames.length;
-    frames.speed = 0;
-    this.graph.frameIdx = (this.graph.frameIdx + 1) % framesLength;
+    this.graph.step();
+    this._activityAnimationService.update.emit();
   }
 
-  reset(): void {
-    this.graph.config.frames.windowSize = 10;
+  stepBackward(): void {
+    this.graph.stepBackward();
+    this._activityAnimationService.update.emit();
   }
 
 }

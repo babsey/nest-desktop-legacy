@@ -1,5 +1,6 @@
 import { Config } from '../config';
 import { Connection } from './connection';
+import { ProjectionParameter } from './projectionParameter';
 
 
 enum ConnectionType {
@@ -8,52 +9,40 @@ enum ConnectionType {
 }
 
 export class ConnectionProjections extends Config {
-  private _allowAutapses: boolean;
-  private _allowMultapses: boolean;
-  private _allowOversizedMask: boolean;
+  private _allowAutapses: ProjectionParameter;
+  private _allowMultapses: ProjectionParameter;
+  private _allowOversizedMask: ProjectionParameter;
   private _connection: Connection;
   private _connectionType: string;
-  private _delays: any;
-  private _kernel: any;
-  private _numberOfConnections: number;
-  private _weights: any;
+  private _delays: ProjectionParameter;
+  private _kernel: ProjectionParameter;
+  private _numberOfConnections: ProjectionParameter;
+  private _weights: ProjectionParameter;
 
   constructor(connection: Connection, projections: any = {}) {
     super('ConnectionProjections');
     this._connection = connection;
 
-    this._allowAutapses = projections.allowAutapses || false;
-    this._allowMultapses = projections.allowMultapses || false;
-    this._allowOversizedMask = projections.allowOversizedMask || false;
-    this._connectionType = projections.connectionType || 'convergent';
-    this._delays = projections.delays || 1;
-    this._kernel = projections.kernel || 1;
-    this._numberOfConnections = projections.numberOfConnections || 1;
-    this._weights = projections.weights || 1;
+    this._connectionType = projections.connectionType;
+    this._allowAutapses = this.initParameter('allowAutapses', projections.allowAutapses);
+    this._allowMultapses = this.initParameter('allowMultapses', projections.allowMultapses);
+    this._allowOversizedMask = this.initParameter('allowOversizedMask', projections.allowOversizedMask);
+    this._delays = this.initParameter('delays', projections.delays);
+    this._kernel = this.initParameter('kernel', projections.kernel);
+    this._numberOfConnections = this.initParameter('numberOfConnections', projections.numberOfConnections);
+    this._weights = this.initParameter('weights', projections.weights);
   }
 
-  get allowAutapses(): boolean {
+  get allowAutapses(): ProjectionParameter {
     return this._allowAutapses;
   }
 
-  set allowAutapses(value: boolean) {
-    this._allowAutapses = value;
-  }
-
-  get allowMultapses(): boolean {
+  get allowMultapses(): ProjectionParameter {
     return this._allowMultapses;
   }
 
-  set allowMultapses(value: boolean) {
-    this._allowMultapses = value;
-  }
-
-  get allowOversizedMask(): boolean {
+  get allowOversizedMask(): ProjectionParameter {
     return this._allowOversizedMask;
-  }
-
-  set allowOversizedMask(value: boolean) {
-    this._allowOversizedMask = value;
   }
 
   get connection(): Connection {
@@ -68,64 +57,81 @@ export class ConnectionProjections extends Config {
     this._connectionType = value;
   }
 
-  get delays(): any {
+  get delays(): ProjectionParameter {
     return this._delays;
   }
 
-  set delays(value: any) {
-    this._delays = value;
-  }
-
-  get numberOfConnections(): number {
+  get numberOfConnections(): ProjectionParameter {
     return this._numberOfConnections;
   }
 
-  set numberOfConnections(value: number) {
-    this._numberOfConnections = value;
-  }
-
-  get kernel(): any {
+  get kernel(): ProjectionParameter {
     return this._kernel;
   }
 
-  set kernel(value: any) {
-    this._kernel = value;
+  get params(): ProjectionParameter[] {
+    return [this._kernel, this._numberOfConnections, this._weights, this._delays];
   }
 
-  get weights(): any {
+  get weights(): ProjectionParameter {
     return this._weights;
   }
 
-  set weights(value: any) {
-    this._weights = value;
+  initParameter(id, value): ProjectionParameter {
+    let options: any;
+    if (typeof value === 'object') {
+      options = value;
+    } else {
+      options = this.config[id];
+      if (value !== undefined) {
+        options.value = value;
+      }
+    }
+    return new ProjectionParameter(this, options);
   }
 
   reset(): void {
     this._connectionType = 'convergent';
-    this._delays = 1;
-    this._kernel = 1;
-    this._numberOfConnections = 1;
-    this._weights = 1;
+    this._delays.reset();
+    this._kernel.reset();
+    this._numberOfConnections.reset();
+    this._weights.reset();
   }
 
   toJSON(target: string = 'db') {
-    const projections: any = {
-      kernel: this._kernel,
-      weights: this._weights,
-      delays: this._delays,
-    };
+    const projections: any = {};
     if (target === 'simulator') {
-      projections.number_of_connections = this._numberOfConnections;
       projections.connection_type = this._connectionType;
-      projections.allow_autapses = this._allowAutapses;
-      projections.allow_multapses = this._allowMultapses;
-      projections.allow_oversized_mask = this._allowOversizedMask;
+      if (this._allowAutapses.visible) {
+        projections.allow_autapses = this._allowAutapses.value;
+      }
+      if (this._allowMultapses.visible) {
+        projections.allow_multapses = this._allowMultapses.value;
+      }
+      if (this._allowOversizedMask.visible) {
+        projections.allow_oversized_mask = this._allowOversizedMask.value;
+      }
+      if (this._delays.visible) {
+        projections.delays = this._delays.value;
+      }
+      if (this._kernel.visible) {
+        projections.kernel = this._kernel.value;
+      }
+      if (this._numberOfConnections.visible) {
+        projections.number_of_connections = this._numberOfConnections.value;
+      }
+      if (this._weights.visible) {
+        projections.weights = this._weights.value;
+      }
     } else {
-      projections.numberOfConnections = this._numberOfConnections;
       projections.connectionType = this._connectionType;
-      projections.allowAutapses = this._allowAutapses;
-      projections.allowMultapses = this._allowMultapses;
-      projections.allowOversizedMask = this._allowOversizedMask;
+      projections.allowAutapses = this._allowAutapses.toJSON();
+      projections.allowMultapses = this._allowMultapses.toJSON();
+      projections.allowOversizedMask = this._allowOversizedMask.toJSON();
+      projections.delays = this._delays.toJSON();
+      projections.kernel = this._kernel.toJSON();
+      projections.numberOfConnections = this._numberOfConnections.toJSON();
+      projections.weights = this._weights.toJSON();
     }
     return projections;
   }

@@ -7,7 +7,7 @@
     [connection]="connection"
   ></app-connection-toolbar>
 
-  <ng-container [ngSwitch]="connection.hasProjections()">
+  <ng-container [ngSwitch]="connection.isBothSpatial()">
 
     <ng-container *ngSwitchCase="true">
       <app-connection-projections

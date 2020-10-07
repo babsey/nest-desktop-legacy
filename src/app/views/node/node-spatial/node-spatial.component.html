@@ -51,6 +51,14 @@
         <ng-container *ngSwitchCase="'free'">
           <mat-list dense style="padding:0">
             <mat-list-item class="list-item">
+              <app-ticks-slider-inline
+                  [(value)]="node.spatial.positions.numDimensions"
+                  [options]="numDimensionsOptions"
+                  style="width:100%"
+                  (valueChange)="update()"
+              ></app-ticks-slider-inline>
+            </mat-list-item>
+            <mat-list-item class="list-item">
                 <app-value-slider-inline
                   [(value)]="node.size"
                   [options]="node.config.size"

@@ -20,10 +20,10 @@ export class FreePositions {
     this._spatial = spatial;
 
     this._pos = positions.pos;
+    this._numDimensions = positions.numDimensions || 2;
     this._center = positions.center || [0, 0];
     this._extent = positions.extent || [1, 1];
     this._edgeWrap = positions.edgeWrap || false;
-    this._numDimensions = positions.numDimensions || 2;
   }
 
   get center(): number[] {
@@ -60,6 +60,8 @@ export class FreePositions {
 
   set numDimensions(value: number) {
     this._numDimensions = value;
+    this._center = new Array(this._numDimensions).fill(0);
+    this._extent = new Array(this._numDimensions).fill(1);
   }
 
   get pos(): number[][] {
@@ -83,12 +85,19 @@ export class FreePositions {
     const maxX: number = this._extent[0] / 2;
     const minY: number = -1 * this._extent[1] / 2;
     const maxY: number = this._extent[1] / 2;
+    const minZ: number = -1 * this._extent[2] / 2;
+    const maxZ: number = this._extent[2] / 2;
     // console.log(center,extent,minX,maxX,minY,maxY,length)
 
     this._pos = Array.from({ length: this._spatial.node.size }, () => {
       const x: number = math.random(minX, maxX);
       const y: number = math.random(minY, maxY);
-      return [this.round(x), this.round(y)];
+      const pos: number[] = [this.round(x), this.round(y)];
+      if (this._numDimensions === 3) {
+        const z: number = math.random(minZ, maxZ);
+        pos.push(this.round(z));
+      }
+      return pos;
     });
   }
 
@@ -184,6 +193,13 @@ export class GridPositions {
 
   get spatial(): NodeSpatial {
     return this._spatial;
+  }
+
+  get numDimensions(): number {
+    return 2;
+  }
+
+  set numDimensions(value: number) {
   }
 
   round(value: number): number {

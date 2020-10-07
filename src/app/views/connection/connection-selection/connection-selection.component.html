@@ -8,52 +8,8 @@
     [connection]="connection"
   ></app-connection-toolbar>
 
-  <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
-
-    <ng-container *ngIf="connection.isBothSpatial()">
-      <mat-list-option value="connection_type">
-        <span class="flex">
-          <span class="ellipsis">Connection type</span>
-        </span>
-      </mat-list-option>
-
-      <mat-list-option value="kernel">
-        <span class="flex">
-          <span class="ellipsis">Kernel</span>
-        </span>
-      </mat-list-option>
-
-      <mat-list-option value="number_of_connections">
-        <span class="flex">
-          <span class="ellipsis">Number of connections</span>
-        </span>
-      </mat-list-option>
-
-      <mat-list-option value="mask">
-        <span class="flex">
-          <span class="ellipsis">Mask</span>
-        </span>
-      </mat-list-option>
-
-      <mat-list-option value="weights">
-        <span class="flex">
-          <span class="ellipsis">Weights</span>
-          <span class="flex-spacer"></span>
-          <span>pA</span>
-        </span>
-      </mat-list-option>
-
-      <mat-list-option value="delays">
-        <span class="flex">
-          <span class="ellipsis">Delays</span>
-          <span class="flex-spacer"></span>
-          <span>ms</span>
-        </span>
-      </mat-list-option>
-    </ng-container>
-
-    <ng-container *ngIf="!connection.isBothSpatial() && !connection.view.connectRecorder()">
-
+  <ng-container *ngIf="!connection.isBothSpatial() && !connection.view.connectRecorder()">
+    <mat-selection-list dense (selectionChange)="onSynapseSelectionChange($event)">
       <ng-container *ngFor="let synParam of connection.synapse.params">
         <mat-list-option
           [matTooltip]="synParam.id"
@@ -68,8 +24,54 @@
           </span>
         </mat-list-option>
       </ng-container>
+    </mat-selection-list>
+  </ng-container>
 
-    </ng-container>
-  </mat-selection-list>
+  <ng-container *ngIf="connection.isBothSpatial()">
+    <mat-selection-list dense (selectionChange)="onProjectionSelectionChange($event)">
+
+      <mat-list-option
+        [selected]="connection.projections.kernel.visible"
+        value="kernel">
+        <span class="flex">
+          <span class="ellipsis">Kernel</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option
+        [selected]="connection.projections.numberOfConnections.visible"
+        value="numberOfConnections">
+        <span class="flex">
+          <span class="ellipsis">Number of connections</span>
+        </span>
+      </mat-list-option>
+
+      <!-- <mat-list-option value="mask">
+        <span class="flex">
+          <span class="ellipsis">Mask</span>
+        </span>
+      </mat-list-option> -->
+
+      <mat-list-option
+        [selected]="connection.projections.weights.visible"
+        value="weights">
+        <span class="flex">
+          <span class="ellipsis">Weights</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.projections.weights.value }} pA</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option
+        [selected]="connection.projections.delays.visible"
+        value="delays">
+        <span class="flex">
+          <span class="ellipsis">Delays</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.projections.delays.value }} ms</span>
+        </span>
+      </mat-list-option>
+    </mat-selection-list>
+  </ng-container>
 
 </div>

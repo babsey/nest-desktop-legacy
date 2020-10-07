@@ -43,7 +43,7 @@
   },
   "simulation": {
     "kernel": {
-      "resolution": 0.1
+      "resolution": 1.0
     },
     "models": {
       "stimulator-a": {

@@ -30,5 +30,4 @@ export class ActivityAnimationService {
     return this._update;
   }
 
-
 }

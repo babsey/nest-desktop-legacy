@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-
-import { ActivityAnimationService } from '../../../../services/activity/activity-animation.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 
 @Component({
@@ -9,30 +7,55 @@ import { ActivityAnimationService } from '../../../../services/activity/activity
   styleUrls: ['./activity-animation-colormap.component.scss']
 })
 export class ActivityAnimationColormapComponent implements OnInit {
+  @Input() colorMap: any;
+  @Output() colorMapChanges: EventEmitter<any> = new EventEmitter();
   private _scales: string[];
 
-  constructor(
-    private _activityAnimationService: ActivityAnimationService,
-  ) {
+
+  constructor() {
     this._scales = [
-      'spectral',
-      // 'turbo',
-      'viridis',
-      'inferno',
-      'magma',
-      'plasma',
-      // 'cividis',
-      'warm',
-      'cool',
-      'cubehelix'
+      'BrBG',
+      'PRGn',
+      'PiYG',
+      'PuOr',
+      'RdBu',
+      'RdGy',
+      'RdYlBu',
+      'RdYlGn',
+      'Spectral',
+      'Blues',
+      'Greens',
+      'Greys',
+      'Oranges',
+      'Purples',
+      'Reds',
+      'Turbo',
+      'Viridis',
+      'Inferno',
+      'Magma',
+      'Plasma',
+      'Cividis',
+      'Warm',
+      'Cool',
+      'CubehelixDefault',
+      'BuGn',
+      'BuPu',
+      'GnBu',
+      'OrRd',
+      'PuBuGn',
+      'PuBu',
+      'PuRd',
+      'RdPu',
+      'YlGnBu',
+      'YlGn',
+      'YlOrBr',
+      'YlOrRd',
+      'Rainbow',
+      'Sinebow',
     ];
   }
 
   ngOnInit() {
-  }
-
-  get colorMap(): any {
-    return this._activityAnimationService.graph.config.colorMap;
   }
 
   get scales(): string[] {
@@ -40,7 +63,7 @@ export class ActivityAnimationColormapComponent implements OnInit {
   }
 
   onChange(event: any): void {
-    this._activityAnimationService.update.emit();
+    this.colorMapChanges.emit(this.colorMap);
   }
 
 }

@@ -44,7 +44,7 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
   }
 
   init(): void {
-    // console.log('Init activity scatter animation scene');
+    // console.log('Init activity animation scene');
     this.clear();
     setTimeout(() => {
       this._scene = new ActivityScatterAnimationScene(this.graph, 'activityScatterAnimationScene');
@@ -52,7 +52,7 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
   }
 
   clear(): void {
-    // console.log('Clear Three scatter');
+    // console.log('Clear activity animation scene');
     if (this._scene) {
       this._scene.stop();
       this._scene.clear();
@@ -60,17 +60,18 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
-    // console.log('Update Three scatter');
-    this._scene.frameUpdate(this.graph.frames);
+    // console.log('Update activity animation scene');
+    this.graph.update();
+    this._scene.update();
   }
 
   onMouseDown(event: MouseEvent): void {
-    this.config.camera.control = false;
+    this.config.control = false;
   }
 
   onDblClick(event: MouseEvent): void {
     this.config.camera.rotation.theta = 0;
-    this.config.camera.control = true;
+    this.config.control = true;
   }
 
   @HostListener('window:resize', [])

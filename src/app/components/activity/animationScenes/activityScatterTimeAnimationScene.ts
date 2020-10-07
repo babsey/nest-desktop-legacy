@@ -4,7 +4,7 @@ import { ActivityAnimationGraph } from '../activityAnimationGraph';
 import { ActivityAnimationScene } from './activityAnimationScene';
 
 
-export class ActivityScatterAnimationScene extends ActivityAnimationScene {
+export class ActivityScatterTimeAnimationScene extends ActivityAnimationScene {
 
   constructor(graph: ActivityAnimationGraph, containerId: string) {
     super(graph, containerId);
@@ -77,7 +77,13 @@ export class ActivityScatterAnimationScene extends ActivityAnimationScene {
         material
       );
 
-      object.position.x = data.x[i] + layerOffset.x * data.idx;
+      let x: number;
+      if (trail.mode === 'temporal') {
+        x = (data.time - data.times[i]) / configFrames.windowSize;
+      } else {
+        x = data.x[i] + layerOffset.x * data.idx;
+      }
+      object.position.x = x;
       object.position.y = data.y[i] + layerOffset.y * data.idx;
       if (ndim > 2) {
         object.position.z = data.z[i] + layerOffset.z * data.idx;
