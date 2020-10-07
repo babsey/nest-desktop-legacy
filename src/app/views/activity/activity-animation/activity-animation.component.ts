@@ -13,8 +13,8 @@ import { ActivityAnimationService } from '../../../services/activity/activity-an
 })
 export class ActivityAnimationComponent implements OnInit, OnDestroy {
   @Input() project: Project;
-  private _subscriptionInit: any;
-  private _subscriptionUpdate: any;
+  // private _subscriptionInit: any;
+  // private _subscriptionUpdate: any;
 
   constructor(
     private _activityAnimationService: ActivityAnimationService,
@@ -22,28 +22,29 @@ export class ActivityAnimationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // console.log('Ng init activity animation view');
-    this._subscriptionInit = this._activityAnimationService.init.subscribe((project: Project) => this.init(project));
-    this._subscriptionUpdate = this._activityAnimationService.update.subscribe(() => this.update());
-    this.init(this.project);
+    // this._subscriptionInit = this._activityAnimationService.init.subscribe((project: Project) => this.init(project));
+    // this._subscriptionUpdate = this._activityAnimationService.update.subscribe(() => this.update());
+    // this.init();
+    this._activityAnimationService.graph = new ActivityAnimationGraph(this.project);
   }
 
   ngOnDestroy() {
     // console.log('Ng destroy activity animation view');
-    this._subscriptionInit.unsubscribe();
-    this._subscriptionUpdate.unsubscribe();
+    // this._subscriptionInit.unsubscribe();
+    // this._subscriptionUpdate.unsubscribe();
   }
 
   get graph(): ActivityAnimationGraph {
     return this._activityAnimationService.graph;
   }
 
-  init(project: Project): void {
-    // console.log('Init activity animation view for '+ project.name);
-    this._activityAnimationService.graph = new ActivityAnimationGraph(project);
-  }
+  // init(): void {
+  //   // console.log('Init activity animation view for '+ project.name);
+  //   this._activityAnimationService.graph = new ActivityAnimationGraph(this.project);
+  // }
 
-  update(): void {
-    console.log('Update activity animation view');
-    this.graph.update();
-  }
+  // update(): void {
+  //   // console.log('Update activity animation view');
+  //   this.graph.update();
+  // }
 }

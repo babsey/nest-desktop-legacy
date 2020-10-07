@@ -8,6 +8,7 @@ import { ActivityAnimationGraph } from '../activityAnimationGraph';
 export class ActivityAnimationScene {
   private _animationFrameIdx: number;
   private _camera: THREE.PerspectiveCamera;
+  private _clippingPlanes: THREE.Plane[] = [];
   private _container: any;
   private _controls: OrbitControls;
   private _geometry: THREE.SphereGeometry;
@@ -16,7 +17,7 @@ export class ActivityAnimationScene {
   private _renderer: THREE.WebGLRenderer;
   private _scene: THREE.Scene;
   private _stats: STATS;
-  private _useStats = false;
+  private _useStats = true;
 
   constructor(graph: ActivityAnimationGraph, containerId: string) {
     this._container = document.getElementById(containerId);
@@ -66,15 +67,13 @@ export class ActivityAnimationScene {
   }
 
   init(): void {
-    // console.log('Init animation scatter scene');
+    console.log('Init animation scene');
     this._scene.background = new THREE.Color(0xfefefe);
 
     this.updateCameraPosition();
     this._scene.add(this._camera);
-
-    this._grid.position.x = 0.5;
-    this._grid.geometry.rotateZ(Math.PI / 2);
-    this._scene.add(this._grid);
+    this.addAxesHelper();
+    this.addHelpers();
 
     this._renderer.setPixelRatio(window.devicePixelRatio);
     this._renderer.setSize(
@@ -91,6 +90,57 @@ export class ActivityAnimationScene {
     this.animate();
   }
 
+  update(): void {
+    console.log('Update animation scene');
+    this.stop();
+    this.animate();
+    this.graph.play();
+  }
+
+  addAxesHelper(): void {
+    const axesHelper: THREE.AxesHelper = new THREE.AxesHelper(0.1);
+    this._scene.add(axesHelper);
+  }
+
+  addHelpers(): void {
+    this._clippingPlanes.push(new THREE.Plane(new THREE.Vector3(-1, 0, 0), 1));
+    this._clippingPlanes.push(new THREE.Plane(new THREE.Vector3(0, -1, 0), 1));
+    this._clippingPlanes.push(new THREE.Plane(new THREE.Vector3(0, 0, -1), 1));
+
+    const helpers: THREE.Group = new THREE.Group();
+    helpers.add(new THREE.PlaneHelper(this._clippingPlanes[0], 2, 0xff0000));
+    helpers.add(new THREE.PlaneHelper(this._clippingPlanes[1], 2, 0x00ff00));
+    helpers.add(new THREE.PlaneHelper(this._clippingPlanes[2], 2, 0x0000ff));
+    helpers.visible = false;
+    this.scene.add(helpers);
+  }
+
+  addGrid(): void {
+    const flat = this._graph.numDimensions === 2;
+    const grid: THREE.Group = new THREE.Group();
+    const divisions = 10;
+    const scale: any = { x: 1, y: 1, z: 1 };
+
+    if (!flat) {
+      const gridX: THREE.GridHelper = new THREE.GridHelper(1, divisions);
+      gridX.geometry.rotateZ(Math.PI / 2);
+      gridX.position.x = - scale.x / 2;
+      grid.add(gridX);
+    }
+
+    const gridY: THREE.GridHelper = new THREE.GridHelper(1, divisions);
+    gridY.position.y = flat ? 0 : (-scale.y / 2);
+    grid.add(gridY);
+
+    if (!flat) {
+      const gridZ: THREE.GridHelper = new THREE.GridHelper(1, divisions);
+      gridZ.geometry.rotateX(Math.PI / 2);
+      gridZ.position.z = - scale.z / 2;
+      grid.add(gridZ);
+    }
+    this._scene.add(grid);
+  }
+
   clear() {
     try {
       this.container.removeChild(this._renderer.domElement);
@@ -101,60 +151,62 @@ export class ActivityAnimationScene {
   }
 
   stop(): void {
+    console.log('Stop animation');
     this.graph.stop();
     cancelAnimationFrame(this._animationFrameIdx);
   }
 
   animate(): void {
-    // console.log('Animate');
+    console.log('Start animation');
     const that = this;
     function render(): void {
-      const framesLength: number = that.graph.frames.length;
-      const frames: any = that.graph.config.frames;
-      const camera: any = that.graph.config.camera;
+      const framesLength: number = that._graph.frames.length;
+      const frames: any = that._graph.config.frames;
+      const camera: any = that._graph.config.camera;
 
       setTimeout(() => {
         that._animationFrameIdx = requestAnimationFrame(render);
+      }, 1000 / 50);
 
-        if (that._stats) {
-          that._stats.begin();
-        }
+      if (that._stats) {
+        that._stats.begin();
+      }
 
-        const framesSpeed: number = frames.speed;
-        if (framesSpeed !== 0) {
-          that.graph.frameIdx =
-            (that.graph.frameIdx +
-              framesSpeed * frames.windowSize +
-              framesLength) %
-            framesLength;
-          that.frameUpdate(that.graph.frames);
-        }
+      const framesSpeed: number = frames.speed;
+      if (framesSpeed !== 0) {
+        that._graph.frameIdx =
+          (that._graph.frameIdx +
+            framesSpeed * frames.windowSize +
+            framesLength) %
+          framesLength;
+        that.renderFrame();
+      }
 
-        if (camera.control) {
-          if (camera.rotation.speed > 0) {
-            that.moveCamera();
-          }
-          that.updateCameraPosition();
+      if (false && that._graph.config.control) {
+        if (camera.rotation.speed > 0) {
+          that.moveCamera();
         }
+        that.updateCameraPosition();
+      }
 
-        if (that._stats) {
-          that._stats.end();
-        }
-      }, 1000 / frames.rate);
+      if (that._stats) {
+        that._stats.end();
+      }
 
       that._renderer.render(that._scene, that._camera);
     }
 
     render();
-    this.frameUpdate(this.graph.frames);
   }
 
-  frameUpdate(frames: any[] = []): void {
-    if (frames.length === 0) { return; }
+  cleanScene(): void {
+    this._scene.children
+      .slice(3)
+      .map((object: any) => this._scene.remove(object));
+    this.addGrid();
   }
 
-  dataUpdate(data: any, config: any = {}): void {
-    if (data === undefined) { return; }
+  renderFrame(): void {
   }
 
   updateCameraPosition(): void {
@@ -175,7 +227,7 @@ export class ActivityAnimationScene {
     camera.rotation.theta += camera.rotation.speed;
     camera.rotation.theta = camera.rotation.theta % 360;
     const thetaRad: number = this.degToRad(camera.rotation.theta);
-    position.y = camera.distance / 2 * Math.sin(thetaRad);
+    position.x = camera.distance / 2 * Math.sin(thetaRad);
     position.z = camera.distance * Math.sin(thetaRad / 2);
     this._camera.lookAt(this._scene.position);
   }

@@ -3,7 +3,7 @@
     <span class="flex" style="margin: 0 -15px">
       <span class="flex-spacer"></span>
       <button mat-icon-button
-        (click)="decrement()"
+        (click)="graph.decrement()"
         [class.mat-icon-button]="graph.config.frames.speed >= -1"
         [class.mat-mini-fab]="graph.config.frames.speed < -1"
         [matBadgeHidden]="hideDecrementBadge()"
@@ -12,21 +12,19 @@
         <fa-icon icon="backward"></fa-icon>
       </button>
       <button mat-icon-button
-        (click)="backplay()"
+        (click)="graph.backplay()"
         [class.mat-icon-button]="graph.config.frames.speed !== -1"
-        [class.mat-mini-fab]="graph.config.frames.speed === -1"
-        >
+        [class.mat-mini-fab]="graph.config.frames.speed === -1">
         <fa-icon icon="play" rotate="180"></fa-icon>
       </button>
       <button mat-icon-button
-        (click)="backstep()">
+        (click)="stepBackward()">
         <fa-icon icon="step-backward"></fa-icon>
       </button>
       <button
-        (click)="stop()"
+        (click)="graph.stop()"
         [class.mat-icon-button]="graph.config.frames.speed !== 0"
-        [class.mat-mini-fab]="graph.config.frames.speed === 0"
-        >
+        [class.mat-mini-fab]="graph.config.frames.speed === 0">
         <fa-icon icon="pause"></fa-icon>
       </button>
       <button mat-icon-button
@@ -34,13 +32,13 @@
         <fa-icon icon="step-forward"></fa-icon>
       </button>
       <button mat-icon-button
-        (click)="play()"
+        (click)="graph.play()"
         [class.mat-icon-button]="graph.config.frames.speed !== 1"
         [class.mat-mini-fab]="graph.config.frames.speed === 1">
         <fa-icon icon="play"></fa-icon>
       </button>
       <button mat-icon-button
-        (click)="increment()"
+        (click)="graph.increment()"
         [class.mat-icon-button]="graph.config.frames.speed <= 1"
         [class.mat-mini-fab]="graph.config.frames.speed > 1"
         [matBadgeHidden]="hideIncrementBadge()"
@@ -52,9 +50,10 @@
     </span>
   </mat-list-item>
 
-  <mat-list-item *ngIf="graph.hasAnyAnalogData()">
-    <app-activity-animation-colormap style="width:100%"></app-activity-animation-colormap>
-  </mat-list-item>
+  <app-activity-animation-colormap
+    [(colorMap)]="graph.config.colorMap"
+    style="width:100%"
+  ></app-activity-animation-colormap>
 
   <mat-list-item *ngIf="graph.sources.length > 0">
     <app-select
@@ -70,7 +69,7 @@
     <span class="label">Sample rate</span>
     <mat-slider
       (change)="onChange($event)"
-      [(value)]="graph.config.frames.sampleRate"
+      [(value)]="graph.config.sampleRate"
       [min]="1"
       [max]="10"
       class="slider"
@@ -79,15 +78,15 @@
     ></mat-slider>
     <span class="flex-spacer"></span>
     <span class="value">
-      {{ graph.config.frames.sampleRate }}
+      {{ graph.config.sampleRate }}
     </span>
   </mat-list-item>
 
-  <mat-list-item class="flex item">
+  <!-- <mat-list-item class="flex item">
     <span class="label">Frame Rate</span>
     <mat-slider
       (change)="onAnimationChange($event)"
-      [(value)]="graph.config.frames.rate"
+      [(value)]="graph.config.frameRate"
       [min]="1"
       [max]="50"
       class="slider"
@@ -95,9 +94,9 @@
     ></mat-slider>
     <span class="flex-spacer"></span>
     <span class="value">
-      {{ graph.config.frames.rate }} fps
+      {{ graph.config.frameRate }} fps
     </span>
-  </mat-list-item>
+  </mat-list-item> -->
 
   <mat-list-item class="flex item">
     <span class="label">Time step</span>
@@ -162,8 +161,7 @@
       <mat-select
         (selectionChange)="onAnimationChange($event)"
         [(value)]="graph.config.trail.mode"
-        [disabled]="graph.hasAnyAnalogData()"
-        >
+        [disabled]="graph.hasAnyAnalogData()">
         <ng-container *ngFor="let trailMode of trailModes">
           <mat-option [value]="trailMode">{{ trailMode }}</mat-option>
         </ng-container>
@@ -194,8 +192,7 @@
     <mat-checkbox
       (change)="onAnimationChange($event)"
       [(ngModel)]="graph.config.trail.fading"
-      [disabled]="graph.hasAnyAnalogData()"
-      >
+      [disabled]="graph.hasAnyAnalogData()">
       Trail fading
     </mat-checkbox>
   </mat-list-item>
@@ -204,12 +201,14 @@
     Camera
   </mat-list-item>
 
-  <mat-list-item class="flex item" (click)="graph.config.camera.control=true">
+  <mat-list-item
+    (click)="graph.config.control=true"
+    class="flex item">
     <span class="label">Camera Position x</span>
     <mat-slider
       (change)="onCameraChange()"
       [(value)]="graph.config.camera.position.x"
-      [disabled]="!graph.config.camera.control"
+      [disabled]="!graph.config.control"
       [min]="-40"
       [max]="40"
       class="slider"
@@ -221,13 +220,15 @@
     </span>
   </mat-list-item>
 
-  <mat-list-item class="flex item" (click)="graph.config.camera.control=true">
+  <mat-list-item
+    (click)="graph.config.control = true"
+    class="flex item">
     <span class="label">Camera Position y</span>
     <span style="width:240px">
       <mat-slider
         (change)="onCameraChange()"
         [(value)]="graph.config.camera.position.y"
-        [disabled]="!graph.config.camera.control"
+        [disabled]="!graph.config.control"
         [min]="-40"
         [max]="40"
         class="slider"
@@ -240,13 +241,15 @@
     </span>
   </mat-list-item>
 
-  <mat-list-item class="flex item" (click)="graph.config.camera.control=true">
+  <mat-list-item
+  (click)="graph.config.control=true"
+  class="flex item">
     <span class="label">Camera Position z</span>
     <span style="width:240px">
       <mat-slider
         (change)="onCameraChange()"
         [(value)]="graph.config.camera.position.z"
-        [disabled]="!graph.config.camera.control"
+        [disabled]="!graph.config.control"
         [min]="-40"
         [max]="40"
         class="slider"

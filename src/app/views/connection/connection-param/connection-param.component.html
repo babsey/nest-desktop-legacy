@@ -2,8 +2,7 @@
     [style.left]="contextMenuPosition.x"
     [style.top]="contextMenuPosition.y"
     [matMenuTriggerFor]="contextMenu"
-    >
-</div>
+></div>
 
 <mat-menu #contextMenu="matMenu" class="context-menu">
   <mat-toolbar class="ellipsis">{{ options.label | capitalize }}</mat-toolbar>
@@ -29,8 +28,7 @@
 
 <span appContextMenuTrigger
   (contextmenu)="onContextMenu($event)"
-  style="width:100%"
-  >
+  style="width:100%">
   <ng-container [ngSwitch]="isNumber()">
     <ng-container *ngSwitchCase="true">
       <ng-container *ngIf="connection.hasOwnProperty('params')">

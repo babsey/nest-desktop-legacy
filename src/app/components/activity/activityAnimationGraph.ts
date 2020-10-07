@@ -6,7 +6,6 @@ import { Project } from '../project/project';
 
 
 export class ActivityAnimationGraph extends ActivityGraph {
-  private _colorScales: any;
   private _config: any;
   private _frameIdx = 0;
   private _frames: any[] = [];
@@ -15,42 +14,41 @@ export class ActivityAnimationGraph extends ActivityGraph {
   private _sources: any[] = [];
   private _style: any = {};
   private _trailModes: string[];
+  private _numDimensions = 2;
 
   constructor(project: Project, config: any = {}) {
     super(project);
 
-    this._colorScales = {
-      spectral: d3.interpolateSpectral,
-      // turbo: d3.interpolateTurbo,
-      viridis: d3.interpolateViridis,
-      inferno: d3.interpolateInferno,
-      magma: d3.interpolateMagma,
-      plasma: d3.interpolatePlasma,
-      // cividis: d3.interpolateCividis,
-      warm: d3.interpolateWarm,
-      cool: d3.interpolateCool,
-      cubehelix: d3.interpolateCubehelixDefault,
-    };
-
     this.config = {
+      control: true,
       camera: {
         position: {
           x: 16,
-          y: 0,
-          z: 0,
+          y: 8,
+          z: 8,
         },
-        distance: 24,
+        distance: 12,
         rotation: {
           theta: 0,
           speed: 0
         },
         control: true,
       },
+      layer: {
+        offset: {
+          x: 0,
+          y: 0,
+          z: 0
+        }
+      },
       colorMap: {
         min: -70,
         max: -55,
-        scale: 'spectral',
+        reverse: false,
+        scale: 'Spectral',
       },
+      sampleRate: 1,
+      frameRate: 30,
       frames: {
         sampleRate: 1,
         speed: 1,
@@ -73,14 +71,10 @@ export class ActivityAnimationGraph extends ActivityGraph {
       ]
     };
 
-    this._trailModes = ['off', 'growing', 'shrinking', 'temporal'];
+    this._trailModes = ['off', 'growing', 'shrinking'];
 
     this.init();
     this.update();
-  }
-
-  get colorScales(): any {
-    return this._colorScales;
   }
 
   get config(): any {
@@ -89,6 +83,14 @@ export class ActivityAnimationGraph extends ActivityGraph {
 
   set config(value: any) {
     this._config = value;
+  }
+
+  get numDimensions(): number {
+    return this._numDimensions;
+  }
+
+  get frame(): any {
+    return this.frames[this._frameIdx] || { data: [] };
   }
 
   get frameIdx(): number {
@@ -123,23 +125,22 @@ export class ActivityAnimationGraph extends ActivityGraph {
     return this._style;
   }
 
-  getFrame(): any[] {
-    return this.frames[this._frameIdx] || { data: [] };
-  }
-
   init(): void {
     // console.log('Init activity animation');
     this._frames = [];
   }
 
   update(): void {
-    // console.log('Update activity animation');
+    console.log('Update activity animation');
     this._frames = [];
     this.project.activities.forEach((activity: Activity) => {
       if (activity.hasSpikeData()) {
         this.plotSpikeData(activity);
       } else {
         this.plotAnalogData(activity);
+      }
+      if (activity.nodePositions[0].length > 2) {
+        this._numDimensions = 3;
       }
     });
   }
@@ -154,25 +155,27 @@ export class ActivityAnimationGraph extends ActivityGraph {
     }
     const min: number = this._config.colorMap.min;
     const max: number = this._config.colorMap.max;
-    const colorScale: any = this._colorScales[this._config.colorMap.scale];
-    return colorScale((value - min) / (max - min));
+    const x: number = (value - min) / (max - min);
+    const colorScale: any = d3['interpolate' + this._config.colorMap.scale];
+    return colorScale((this._config.colorMap.reverse ? 1 - x : x));
   }
 
   plotSpikeData(activity: Activity): void {
     const times: number[] = activity.events.times;
     const pos: any = activity.getPositionsForSenders();
-    this.addFrames(times, pos.x, pos.y, activity.recorder.view.color);
+    const color: string = activity.recorder.view.color;
+    this.addFrames(times, pos, color);
   }
 
   plotAnalogData(activity: Activity): void {
-    const sourceData: number[] = activity.events.V_m;
     // const rangeData: number[] = [-70., -55.];
     const times: number[] = activity.events.times;
     const pos: any = activity.getPositionsForSenders();
-    this.addFrames(times, pos.x, pos.y, sourceData);
+    const color: number[] = activity.events.V_m;
+    this.addFrames(times, pos, color);
   }
 
-  addFrames(x: number[], y: number[], z: number[], color: string | number[]): void {
+  addFrames(times: number[], pos: any, color: string | number[]): void {
     const sampleRate: number = this._config.frames.sampleRate;
     const nframes: number = this.endtime * sampleRate;
 
@@ -189,20 +192,21 @@ export class ActivityAnimationGraph extends ActivityGraph {
     // Add empty data (from individual recorder) for each frame
     this._frames.forEach((frame: any) => {
       frame.data.push({
-        x: [], y: [], z: [], color: []
+        times: [], x: [], y: [], z: [], color: []
       });
       frame.data[frame.data.length - 1].idx = frame.data.length - 1;
     });
 
     // Add values in data
-    x.map((xVal: number, xIdx: number) => {
+    times.map((xVal: number, xIdx: number) => {
       const frameIdx: number = Math.floor(xVal * sampleRate);
       const frame: any = this._frames[frameIdx - 1];
       if (frame === undefined) { return; }
       const idx: number = frame.data.length - 1;
-      frame.data[idx].x.push(x[xIdx]);
-      frame.data[idx].y.push(y[xIdx]);
-      frame.data[idx].z.push(z[xIdx]);
+      frame.data[idx].times.push(times[xIdx]);
+      frame.data[idx].x.push(pos.x[xIdx]);
+      frame.data[idx].y.push(pos.y[xIdx]);
+      frame.data[idx].z.push(pos.z[xIdx]);
       frame.data[idx].color.push(typeof color === 'string' ? color : color[xIdx]);
     });
   }
@@ -238,12 +242,36 @@ export class ActivityAnimationGraph extends ActivityGraph {
     return self.indexOf(values) === index;
   }
 
+  increment(): void {
+    this.config.frames.speed += 1;
+  }
+
+  decrement(): void {
+    this.config.frames.speed -= 1;
+  }
+
   stop(): void {
     this.config.frames.speed = 0;
   }
 
   play(): void {
     this.config.frames.speed = 1;
+  }
+
+  backplay(): void {
+    this.config.frames.speed = -1;
+  }
+
+  stepBackward(): void {
+    this.stop();
+    const framesLength: number = this._frames.length;
+    this._frameIdx = (this._frameIdx - 1 + framesLength) % framesLength;
+  }
+
+  step(): void {
+    this.stop();
+    const framesLength: number = this._frames.length;
+    this._frameIdx = (this._frameIdx + 1) % framesLength;
   }
 
 }

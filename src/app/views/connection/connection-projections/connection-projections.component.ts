@@ -10,15 +10,21 @@ import { ConnectionProjections } from '../../../components/connection/connection
 })
 export class ConnectionProjectionsComponent implements OnInit {
   @Input() projections: ConnectionProjections;
+  private _connectionTypes: any[];
 
   constructor() {
   }
 
   ngOnInit() {
+    this._connectionTypes = this.config.connectionTypes;
   }
 
   get config(): any {
     return this.projections.config;
+  }
+
+  get connectionTypes(): any[] {
+    return this._connectionTypes;
   }
 
   onSelectionChange(event: any): void {

@@ -15,6 +15,7 @@ export class NodeSpatialComponent implements OnInit {
   private _graph: any;
   private _positionType = 'free';
   private _showPlot = false;
+  public numDimensionsOptions: any = {ticks: [2, 3], label: 'Number of dimensions', value: 2};
 
   constructor() {
     this._graph = {
@@ -50,9 +51,14 @@ export class NodeSpatialComponent implements OnInit {
   plot(): void {
     const x: number[] = [];
     const y: number[] = [];
+    const z: number[] = [];
+
     this.node.spatial.positions.pos.map(p => {
       x.push(p[0]);
       y.push(p[1]);
+      if (p.length === 3) {
+        z.push(p[2]);
+      }
     });
 
     this._graph.data = [{
@@ -60,6 +66,7 @@ export class NodeSpatialComponent implements OnInit {
       type: 'scattergl',
       x,
       y,
+      z,
       hoverinfo: 'x+y',
       showlegend: false,
       marker: {

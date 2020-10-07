@@ -99,14 +99,17 @@ export class Activity {
   getPositionsForSenders(): any {
     const x: number[] = [];
     const y: number[] = [];
+    const z: number[] = [];
     this._events.senders.map((sender: number) => {
       const pos: number[] = this._nodePositions[this._nodeIds.indexOf(sender)];
       if (pos) {
-        x.push(pos[0]);
-        y.push(pos[1]);
+        const numDimensions = pos.length;
+        x.push(numDimensions === 3 ? pos[0] : pos[0]);
+        y.push(numDimensions === 3 ? pos[1] : 0);
+        z.push(numDimensions === 3 ? pos[2] : pos[1]);
       }
     });
-    return { x, y };
+    return { x, y, z };
   }
 
   download(): void {

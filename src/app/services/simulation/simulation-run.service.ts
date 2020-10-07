@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { Project } from '../../components/project/project';
 
+import { ActivityAnimationService } from '../activity/activity-animation.service';
 import { LogService } from '../log/log.service';
 
 
@@ -14,6 +15,7 @@ export class SimulationRunService {
   private _snackBarRef: any;
 
   constructor(
+    private _activityAnimationService: ActivityAnimationService,
     private _logService: LogService,
     private _snackBar: MatSnackBar,
     private _toastr: ToastrService,
@@ -44,6 +46,7 @@ export class SimulationRunService {
           duration: 5000
         });
       }
+      this._activityAnimationService.update.emit();
     }).catch((err: any) => {
       console.log(err);
       if (this._snackBarRef) {

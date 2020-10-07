@@ -2,57 +2,64 @@
   <mat-list-item>
     <app-select
       [(selected)]="projections.connectionType"
-      [options]="config.connectionType"
+      [options]="connectionTypes"
     ></app-select>
   </mat-list-item>
-</mat-list>
 
-<mat-list dense>
-  <mat-list-item>
-    <app-connection-param
-      [(value)]="projections.kernel"
-      [connection]="projections.connection"
-      [options]="config.kernel"
-    ></app-connection-param>
-  </mat-list-item>
+  <ng-container *ngIf="projections.kernel.visible">
+    <mat-list-item>
+      <app-connection-param
+        [(value)]="projections.kernel.value"
+        [connection]="projections.connection"
+        [options]="projections.kernel"
+      ></app-connection-param>
+    </mat-list-item>
+  </ng-container>
 
-  <mat-list-item>
-    <app-connection-param
-      [(value)]="projections.numberOfConnections"
-      [connection]="projections.connection"
-      [options]="config.numberOfConnections"
-    ></app-connection-param>
-  </mat-list-item>
+  <ng-container *ngIf="projections.numberOfConnections.visible">
+    <mat-list-item>
+      <app-connection-param
+        [(value)]="projections.numberOfConnections.value"
+        [connection]="projections.connection"
+        [options]="projections.numberOfConnections"
+      ></app-connection-param>
+    </mat-list-item>
+  </ng-container>
 
-  <mat-list-item>
+  <!-- <mat-list-item>
     <app-connection-mask
       [mask]="projections.connection.mask"
     ></app-connection-mask>
-  </mat-list-item>
+  </mat-list-item> -->
 
-  <mat-list-item>
-    <app-connection-param
-      [(value)]="projections.weights"
-      [connection]="projections.connection"
-      [options]="config.weights"
-    ></app-connection-param>
-  </mat-list-item>
+  <ng-container *ngIf="projections.weights.visible">
+    <mat-list-item>
+      <app-connection-param
+        [(value)]="projections.weights.value"
+        [connection]="projections.connection"
+        [options]="projections.weights"
+      ></app-connection-param>
+    </mat-list-item>
+  </ng-container>
 
-  <mat-list-item>
-    <app-connection-param
-      [(value)]="projections.delays"
-      [connection]="projections.connection"
-      [options]="config.delays"
-    ></app-connection-param>
-  </mat-list-item>
+  <ng-container *ngIf="projections.delays.visible">
+    <mat-list-item>
+      <app-connection-param
+        [(value)]="projections.delays.value"
+        [connection]="projections.connection"
+        [options]="projections.delays"
+      ></app-connection-param>
+    </mat-list-item>
+  </ng-container>
 
 </mat-list>
 
-<mat-selection-list dense (selectionChange)="onSelectionChange($event)">
-  <mat-list-option value="allowAutapses"
-    [selected]="projections.allowAutapses">
-    {{ config.allowAutapses.label | capitalize }}
-  </mat-list-option>
+<!-- <mat-selection-list dense (selectionChange)="onSelectionChange($event)">
+    <mat-list-option
+      [selected]="projections.allowAutapses"
+      value="allowAutapses">
+      {{ config.allowAutapses.label | capitalize }}
+    </mat-list-option>
 
   <mat-list-option value="allowMultapses"
     [selected]="projections.allowMultapses">
@@ -63,4 +70,4 @@
     [selected]="projections.allowOversizedMask">
     {{ config.allowOversizedMask.label | capitalize }}
   </mat-list-option>
-</mat-selection-list>
+</mat-selection-list> -->

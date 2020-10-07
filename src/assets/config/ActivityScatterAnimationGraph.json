@@ -15,6 +15,7 @@
   "colorMap": {
     "max": -55,
     "min": -70,
+    "reverse": false,
     "scale": "spectral"
   },
   "dotSize": 10,
