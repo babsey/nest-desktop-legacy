@@ -16,16 +16,15 @@
     </mat-form-field>
 
     <span class="flex-spacer"></span>
-    <mat-form-field style="width: 120px">
+    <mat-form-field style="width: 160px">
       <mat-select
         (selectionChange)="onChange($event)"
         [(value)]="colorMap.scale">
         <mat-option *ngFor="let scale of scales" [value]="scale">
           <img
             [style.transform]="colorMap.reverse ? 'scaleX(-1)': null"
-            style="position: absolute; left: 0; top: 2px; height:44px; width:100%; z-index:-1"
             src="/assets/img/colorscales/{{scale}}.png"
-          />
+            style="position: absolute; left: 0; top: 2px; height:44px; width:100%; z-index:-1" />
           <span style="color:white">
             {{ scale }}
             <span *ngIf="colorMap.reverse"> (r)</span>
@@ -50,7 +49,7 @@
     <mat-checkbox
       (change)="onChange($event)"
       [(ngModel)]="colorMap.reverse">
-      Reverse colormap
+      Reverse colorscale
     </mat-checkbox>
   </mat-list-item>
 </ng-container>

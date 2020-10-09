@@ -29,6 +29,7 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
       setTimeout(() => this.init(), 1));
     this._subscriptionUpdate = this._activityAnimationService.update.subscribe(
       () => this.update());
+
     this.init();
   }
 
@@ -40,15 +41,13 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
   }
 
   get config(): any {
-    return this.graph.config;
+    return this._scene.graph.config;
   }
 
   init(): void {
     // console.log('Init activity animation scene');
     this.clear();
-    setTimeout(() => {
-      this._scene = new ActivityScatterAnimationScene(this.graph, 'activityScatterAnimationScene');
-    }, 100);
+    this._scene = new ActivityScatterAnimationScene(this.graph, 'activityAnimationScene');
   }
 
   clear(): void {
@@ -61,17 +60,12 @@ export class ActivityAnimationSceneComponent implements OnInit, OnDestroy {
 
   update(): void {
     // console.log('Update activity animation scene');
-    this.graph.update();
+    this._scene.graph.update();
     this._scene.update();
   }
 
-  onMouseDown(event: MouseEvent): void {
-    this.config.control = false;
-  }
-
   onDblClick(event: MouseEvent): void {
-    this.config.camera.rotation.theta = 0;
-    this.config.control = true;
+    this._scene.updateCameraPosition();
   }
 
   @HostListener('window:resize', [])

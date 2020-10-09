@@ -18,38 +18,6 @@ export class ActivityScatterTimeAnimationScene extends ActivityAnimationScene {
     }
   }
 
-  renderTrail(): void {
-    const trail: any = this.graph.config.trail;
-    if (trail.mode === 'off') { return; }
-
-    let ratio: number;
-    let scale: number;
-    let opacity: number;
-    for (let trailIdx = 0; trailIdx < trail.length; trailIdx++) {
-      const frame: any = this.graph.frames[this.graph.frameIdx - trailIdx];
-      if (frame) {
-        ratio = trailIdx / (trail.length + 1);
-        opacity = 1 - (trail.fading ? ratio : 0);
-        switch (trail.mode) {
-          case 'growing':
-            scale = 1 + ratio;
-            break;
-          case 'shrinking':
-            scale = 1 - ratio;
-            break;
-          default:
-            scale = 1;
-        }
-        frame.data.forEach((data: any) =>
-          this.renderScatter(data, {
-            opacity,
-            scale,
-          })
-        );
-      }
-    }
-  }
-
   renderScatter(data: any, options: any = {}): void {
     if (data === undefined) { return; }
 
@@ -94,6 +62,38 @@ export class ActivityScatterTimeAnimationScene extends ActivityAnimationScene {
         object.scale.z = scale;
       }
       this.scene.add(object);
+    }
+  }
+
+  renderTrail(): void {
+    const trail: any = this.graph.config.trail;
+    if (trail.mode === 'off') { return; }
+
+    let ratio: number;
+    let scale: number;
+    let opacity: number;
+    for (let trailIdx = 0; trailIdx < trail.length; trailIdx++) {
+      const frame: any = this.graph.frames[this.graph.frameIdx - trailIdx];
+      if (frame) {
+        ratio = trailIdx / (trail.length + 1);
+        opacity = 1 - (trail.fading ? ratio : 0);
+        switch (trail.mode) {
+          case 'growing':
+            scale = 1 + ratio;
+            break;
+          case 'shrinking':
+            scale = 1 - ratio;
+            break;
+          default:
+            scale = 1;
+        }
+        frame.data.forEach((data: any) =>
+          this.renderScatter(data, {
+            opacity,
+            scale,
+          })
+        );
+      }
     }
   }
 

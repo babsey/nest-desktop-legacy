@@ -58,7 +58,7 @@ export class NodeCode extends Code {
   }
 
   isRandom(value: any): boolean {
-    return value.constructor === Object && value.hasOwnProperty('parameterType');
+    return value.constructor === Object && value.hasOwnProperty('parametertype');
   }
 
   XOR(a: boolean, b: boolean): boolean {

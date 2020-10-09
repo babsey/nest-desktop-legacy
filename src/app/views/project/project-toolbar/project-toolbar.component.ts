@@ -6,6 +6,7 @@ import { enterAnimation } from '../../../animations/enter-animation';
 
 import { Project } from '../../../components/project/project';
 
+import { ActivityAnimationService } from '../../../services/activity/activity-animation.service';
 import { SimulationRunService } from '../../../services/simulation/simulation-run.service';
 
 
@@ -21,6 +22,7 @@ export class ProjectToolbarComponent implements OnInit {
   private _contextMenuPosition = { x: '0px', y: '0px' };
 
   constructor(
+    private _activityAnimationService: ActivityAnimationService,
     private _router: Router,
     private _simulationRunService: SimulationRunService,
   ) { }
@@ -44,6 +46,26 @@ export class ProjectToolbarComponent implements OnInit {
   run(): void {
     this.selectMode('activityExplorer');
     this._simulationRunService.run(this.project);
+  }
+
+  oldest(): void {
+    this.project.network.oldest();
+    this._activityAnimationService.update.emit();
+  }
+
+  older(): void {
+    this.project.network.older();
+    this._activityAnimationService.update.emit();
+  }
+
+  newer(): void {
+    this.project.network.newer();
+    this._activityAnimationService.update.emit();
+  }
+
+  newest(): void {
+    this.project.network.newest();
+    this._activityAnimationService.update.emit();
   }
 
   countBefore(): number {

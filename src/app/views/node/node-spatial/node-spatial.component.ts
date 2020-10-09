@@ -13,14 +13,19 @@ export class NodeSpatialComponent implements OnInit {
   @Input() node: Node;
   @Output() nodeChange: EventEmitter<any> = new EventEmitter();
   private _graph: any;
+  private _numDimensionsOptions: any;
   private _positionType = 'free';
   private _showPlot = false;
-  public numDimensionsOptions: any = {ticks: [2, 3], label: 'Number of dimensions', value: 2};
 
   constructor() {
     this._graph = {
       data: [],
       layout: {},
+    };
+    this._numDimensionsOptions = {
+      ticks: [2, 3],
+      label: 'Number of dimensions',
+      value: 2
     };
   }
 
@@ -30,6 +35,10 @@ export class NodeSpatialComponent implements OnInit {
 
   get graph(): any {
     return this._graph;
+  }
+
+  get numDimensionsOptions(): any {
+    return this._numDimensionsOptions;
   }
 
   get showPlot(): boolean {
@@ -63,7 +72,7 @@ export class NodeSpatialComponent implements OnInit {
 
     this._graph.data = [{
       mode: 'markers',
-      type: 'scattergl',
+      type: (z.length > 0 ? 'scatter3d' : 'scattergl'),
       x,
       y,
       z,

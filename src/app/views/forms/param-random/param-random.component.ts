@@ -18,9 +18,9 @@ export class ParamRandomComponent implements OnInit {
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
   private _config: Config;
   private _functionType: string;
-  private _parameterTypes: any[];
+  private _parametertypes: any[];
   private _plot: any;
-  private _selectedParameterType: any;
+  private _selectedParametertype: any;
 
   constructor(
     private _dialog: MatDialog,
@@ -28,7 +28,7 @@ export class ParamRandomComponent implements OnInit {
   ) {
     this._config = new Config('ParameterRandom');
     this._functionType = 'pdf';
-    this._parameterTypes = [
+    this._parametertypes = [
       {
         name: 'Constant',
         options: [
@@ -60,12 +60,12 @@ export class ParamRandomComponent implements OnInit {
         staticPlot: true,
       }
     };
-    this._selectedParameterType = this.findParameterType('constant');
+    this._selectedParametertype = this.findParametertype('constant');
   }
 
   ngOnInit() {
     if (this.isObject(this.value)) {
-      this._selectedParameterType = this.findParameterType(this.value.parameterType);
+      this._selectedParametertype = this.findParametertype(this.value.parametertype);
     }
     this.plotting();
   }
@@ -78,16 +78,16 @@ export class ParamRandomComponent implements OnInit {
     return this._functionType;
   }
 
-  get parameterTypes(): any[] {
-    return this._parameterTypes;
+  get parametertypes(): any[] {
+    return this._parametertypes;
   }
 
   get plot(): any {
     return this._plot;
   }
 
-  get selectedParameterType(): any {
-    return this._selectedParameterType;
+  get selectedParametertype(): any {
+    return this._selectedParametertype;
   }
 
   flatten(values: any): any {
@@ -95,10 +95,10 @@ export class ParamRandomComponent implements OnInit {
       (a: any, b: any) => a.concat(Array.isArray(b) ? this.flatten(b) : b), []);
   }
 
-  findParameterType(parameterType: any): any {
-    let parameterTypes: any = this._parameterTypes.map(group => group.options);
-    parameterTypes = this.flatten(parameterTypes);
-    return parameterTypes.find(p => p.value === parameterType);
+  findParametertype(parametertype: any): any {
+    let parametertypes: any = this._parametertypes.map(group => group.options);
+    parametertypes = this.flatten(parametertypes);
+    return parametertypes.find(p => p.value === parametertype);
   }
 
   isObject(value: any): boolean {
@@ -125,12 +125,12 @@ export class ParamRandomComponent implements OnInit {
     this.plot.layout.title = '';
     if (this.value === undefined) { return; }
     const value = this.value;
-    if (!this._distributionService.pdf.hasOwnProperty(value.parameterType)) { return; }
+    if (!this._distributionService.pdf.hasOwnProperty(value.parametertype)) { return; }
 
     const dx = 0.001;
     let xmin: any = 0;
     let xmax: any = 1.;
-    if (['uniform', 'normal', 'lognormal'].includes(value.parameterType)) {
+    if (['uniform', 'normal', 'lognormal'].includes(value.parametertype)) {
       xmin = value.specs.min;
       xmax = value.specs.max;
     }
@@ -138,10 +138,10 @@ export class ParamRandomComponent implements OnInit {
     let y: any;
     let z: any;
 
-    if (value.parameterType === 'gaussian2D') {
+    if (value.parametertype === 'gaussian2D') {
       x = math.range(-.5, .5, .01);
       y = math.range(-.5, .5, .01);
-      z = this._distributionService.pdf[value.parameterType](x._data, y._data, value.specs);
+      z = this._distributionService.pdf[value.parametertype](x._data, y._data, value.specs);
       this.plot.data = [{
         type: 'contour', // 'heatmap',
         x: x._data,
@@ -160,11 +160,11 @@ export class ParamRandomComponent implements OnInit {
           title: 'PDF'
         }
       }];
-      this.plot.layout.title = this.selectedParameterType.label + ' distribution';
+      this.plot.layout.title = this.selectedParametertype.label + ' distribution';
     } else {
       x = math.range(xmin, xmax, dx);
-      y = this._distributionService.pdf[value.parameterType](x._data, value.specs);
-      if (this.functionType === 'cdf') { // || ['uniform', 'normal', 'lognormal'].includes(value.parameterType)) {
+      y = this._distributionService.pdf[value.parametertype](x._data, value.specs);
+      if (this.functionType === 'cdf') { // || ['uniform', 'normal', 'lognormal'].includes(value.parametertype)) {
         const ysum: number = math.sum(y);
         y = y.map(yi => yi / ysum);
         y = this.cumsum(y);
@@ -175,20 +175,20 @@ export class ParamRandomComponent implements OnInit {
         x: x._data,
         y,
       }];
-      this.plot.layout.title = this.functionType + ' of ' + this.selectedParameterType.label + ' distribution';
+      this.plot.layout.title = this.functionType + ' of ' + this.selectedParametertype.label + ' distribution';
     }
     this.plot.layout.xaxis = {
-      title: ['uniform', 'normal', 'lognormal'].includes(value.parameterType) ? 'value' : 'distance',
+      title: ['uniform', 'normal', 'lognormal'].includes(value.parametertype) ? 'value' : 'distance',
     };
     this.plot.layout.yaxis = {
-      title: value.parameterType === 'gaussian2D' ? 'y' : 'value',
+      title: value.parametertype === 'gaussian2D' ? 'y' : 'value',
     };
   }
 
   onSelectedChange(event: any): void {
-    this.value = { parameterType: event, specs: {} };
-    this._selectedParameterType = this.findParameterType(this.value.parameterType);
-    this.selectedParameterType.specs.forEach((spec: string) => {
+    this.value = { parametertype: event, specs: {} };
+    this._selectedParametertype = this.findParametertype(this.value.parametertype);
+    this.selectedParametertype.specs.forEach((spec: string) => {
       this.value.specs[spec] = this.paramSpecs(spec).value || 0.;
     });
     this.plotting();

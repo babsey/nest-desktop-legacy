@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Node } from '../../../components/node/node';
 
-import { NetworkGraphService } from '../../../services/network/network-graph.service';
+import { ActivityAnimationService } from '../../../services/activity/activity-animation.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class NodeMenuComponent implements OnInit {
   @Input() node: Node;
 
   constructor(
-    private _networkGraphService: NetworkGraphService,
+    private _activityAnimationService: ActivityAnimationService,
   ) { }
 
   ngOnInit() {
@@ -23,6 +23,7 @@ export class NodeMenuComponent implements OnInit {
 
   selectColor(color: string): void {
     this.node.view.color = color;
+    this._activityAnimationService.update.emit();
   }
 
 }

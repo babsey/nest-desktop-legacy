@@ -14,13 +14,11 @@ export class ActivityAnimationGraph extends ActivityGraph {
   private _sources: any[] = [];
   private _style: any = {};
   private _trailModes: string[];
-  private _numDimensions = 2;
 
   constructor(project: Project, config: any = {}) {
     super(project);
 
     this.config = {
-      control: true,
       camera: {
         position: {
           x: 16,
@@ -32,7 +30,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
           theta: 0,
           speed: 0
         },
-        control: true,
+        control: false,
       },
       layer: {
         offset: {
@@ -47,8 +45,6 @@ export class ActivityAnimationGraph extends ActivityGraph {
         reverse: false,
         scale: 'Spectral',
       },
-      sampleRate: 1,
-      frameRate: 30,
       frames: {
         sampleRate: 1,
         speed: 1,
@@ -57,7 +53,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
       },
       trail: {
         mode: 'off',
-        length: 10,
+        length: 0,
         fading: false,
       },
       dotSize: 10,
@@ -83,10 +79,6 @@ export class ActivityAnimationGraph extends ActivityGraph {
 
   set config(value: any) {
     this._config = value;
-  }
-
-  get numDimensions(): number {
-    return this._numDimensions;
   }
 
   get frame(): any {
@@ -131,7 +123,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
   }
 
   update(): void {
-    console.log('Update activity animation');
+    // console.log('Update activity animation');
     this._frames = [];
     this.project.activities.forEach((activity: Activity) => {
       if (activity.hasSpikeData()) {
@@ -139,14 +131,15 @@ export class ActivityAnimationGraph extends ActivityGraph {
       } else {
         this.plotAnalogData(activity);
       }
-      if (activity.nodePositions[0].length > 2) {
-        this._numDimensions = 3;
-      }
     });
   }
 
   hasAnyAnalogData(): boolean {
     return this.project.activities.some((activity: Activity) => activity.hasAnalogData());
+  }
+
+  hasAnySpikeData(): boolean {
+    return this.project.activities.some((activity: Activity) => activity.hasSpikeData());
   }
 
   color(value: any): string {
@@ -162,20 +155,20 @@ export class ActivityAnimationGraph extends ActivityGraph {
 
   plotSpikeData(activity: Activity): void {
     const times: number[] = activity.events.times;
-    const pos: any = activity.getPositionsForSenders();
+    const senders: number[] = activity.events.senders.map((sender: number) => activity.nodeIds.indexOf(sender));
     const color: string = activity.recorder.view.color;
-    this.addFrames(times, pos, color);
+    this.addFrames(times, senders, color);
   }
 
-  plotAnalogData(activity: Activity): void {
+  plotAnalogData(activity: Activity, recordFrom: string = 'V_m'): void {
     // const rangeData: number[] = [-70., -55.];
     const times: number[] = activity.events.times;
-    const pos: any = activity.getPositionsForSenders();
-    const color: number[] = activity.events.V_m;
-    this.addFrames(times, pos, color);
+    const senders: number[] = activity.events.senders.map((sender: number) => activity.nodeIds.indexOf(sender));
+    const color: number[] = activity.events[recordFrom];
+    this.addFrames(times, senders, color);
   }
 
-  addFrames(times: number[], pos: any, color: string | number[]): void {
+  addFrames(times: number[], senders: number[], color: string | number[]): void {
     const sampleRate: number = this._config.frames.sampleRate;
     const nframes: number = this.endtime * sampleRate;
 
@@ -192,7 +185,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
     // Add empty data (from individual recorder) for each frame
     this._frames.forEach((frame: any) => {
       frame.data.push({
-        times: [], x: [], y: [], z: [], color: []
+        senders: [], times: [], color: []
       });
       frame.data[frame.data.length - 1].idx = frame.data.length - 1;
     });
@@ -204,9 +197,7 @@ export class ActivityAnimationGraph extends ActivityGraph {
       if (frame === undefined) { return; }
       const idx: number = frame.data.length - 1;
       frame.data[idx].times.push(times[xIdx]);
-      frame.data[idx].x.push(pos.x[xIdx]);
-      frame.data[idx].y.push(pos.y[xIdx]);
-      frame.data[idx].z.push(pos.z[xIdx]);
+      frame.data[idx].senders.push(senders[xIdx]);
       frame.data[idx].color.push(typeof color === 'string' ? color : color[xIdx]);
     });
   }

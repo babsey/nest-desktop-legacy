@@ -6,7 +6,7 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import * as PlotlyJS from 'plotly.js-cartesian-dist';
+import * as PlotlyJS from 'plotly.js-dist';
 import { PlotlyModule } from 'angular-plotly.js';
 PlotlyModule.plotlyjs = PlotlyJS;
 
