@@ -16,7 +16,7 @@ export class ProjectionParameter {
   private _value: any;
   private _visible: boolean;
   private _options: any;
-  private _parameterType: string;
+  private _parametertype: string;
   private _specs: any;
 
   constructor(projections: ConnectionProjections, param: any = {}) {
@@ -39,7 +39,7 @@ export class ProjectionParameter {
     this._unit = param.unit || '';
 
     this._options = this._projections.config[this._id];
-    this._parameterType = 'constant';
+    this._parametertype = 'constant';
     this._specs = {};
   }
 
@@ -95,8 +95,8 @@ export class ProjectionParameter {
     return this._options;
   }
 
-  get parameterType(): string {
-    return this._parameterType;
+  get parametertype(): string {
+    return this._parametertype;
   }
 
   get projections(): ConnectionProjections {

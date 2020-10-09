@@ -8,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ActivityAnimationColormapComponent implements OnInit {
   @Input() colorMap: any;
-  @Output() colorMapChanges: EventEmitter<any> = new EventEmitter();
+  @Output() colorMapChange: EventEmitter<any> = new EventEmitter();
   private _scales: string[];
 
 
@@ -63,7 +63,7 @@ export class ActivityAnimationColormapComponent implements OnInit {
   }
 
   onChange(event: any): void {
-    this.colorMapChanges.emit(this.colorMap);
+    this.colorMapChange.emit(this.colorMap);
   }
 
 }

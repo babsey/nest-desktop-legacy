@@ -104,7 +104,7 @@ export class Activity {
       const pos: number[] = this._nodePositions[this._nodeIds.indexOf(sender)];
       if (pos) {
         const numDimensions = pos.length;
-        x.push(numDimensions === 3 ? pos[0] : pos[0]);
+        x.push(pos[0]);
         y.push(numDimensions === 3 ? pos[1] : 0);
         z.push(numDimensions === 3 ? pos[2] : pos[1]);
       }

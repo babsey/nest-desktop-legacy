@@ -46,7 +46,7 @@ export class ConnectionParamComponent implements OnInit {
   }
 
   setRandom(): void {
-    this.value = { parameterType: 'constant', specs: { value: this.value } };
+    this.value = { parametertype: 'constant', specs: { value: this.value } };
   }
 
   isNumber(): boolean {

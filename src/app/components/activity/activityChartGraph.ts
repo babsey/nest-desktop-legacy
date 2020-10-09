@@ -1,4 +1,4 @@
-import * as PlotlyJS from 'plotly.js-cartesian-dist';
+import * as PlotlyJS from 'plotly.js-dist';
 
 import { Project } from '../project/project';
 

@@ -11,84 +11,71 @@ export class ActivityScatterAnimationScene extends ActivityAnimationScene {
   }
 
   renderFrame(): void {
-    this.cleanScene();
     if (this.graph.frame) {
-      this.graph.frame.data.forEach((data: any) => this.renderScatter(data));
-      this.renderTrail();
-    }
-  }
 
-  renderTrail(): void {
-    const trail: any = this.graph.config.trail;
-    if (trail.mode === 'off') { return; }
+      const scale: number = this.graph.config.dotSize;
+      this.graph.frame.data.forEach((data: any, idx: number) => {
+        // @ts-ignore
+        const layer: THREE.Group = this.activityLayers.children[idx];
+        // @ts-ignore
+        const activityLayer: THREE.Group = layer.children[1];
+        activityLayer.children.forEach((object: THREE.Mesh) => {
+          // @ts-ignore
+          object.material.opacity = 0.05;
+          object.scale.set(scale, scale, scale);
+          // object.position.setY(object.userData.position.y);
+        });
 
-    let ratio: number;
-    let scale: number;
-    let opacity: number;
-    for (let trailIdx = 0; trailIdx < trail.length; trailIdx++) {
-      const frame: any = this.graph.frames[this.graph.frameIdx - trailIdx];
-      if (frame) {
-        ratio = trailIdx / (trail.length + 1);
-        opacity = 1 - (trail.fading ? ratio : 0);
-        switch (trail.mode) {
-          case 'growing':
-            scale = 1 + ratio;
-            break;
-          case 'shrinking':
-            scale = 1 - ratio;
-            break;
-          default:
-            scale = 1;
+        const trail: any = this.graph.config.trail;
+        if (trail.length > 0) {
+          for (let trailIdx = trail.length; trailIdx > 0; trailIdx--) {
+            const frame: any = this.graph.frames[this.graph.frameIdx - trailIdx];
+            if (frame) {
+              const trailData: any = frame.data[idx];
+              this.renderDot(activityLayer, trailData, trailIdx);
+            }
+          }
         }
-        frame.data.forEach((data: any) =>
-          this.renderScatter(data, {
-            opacity,
-            scale,
-          })
-        );
-      }
+        this.renderDot(activityLayer, data);
+      });
     }
   }
 
-  renderScatter(data: any, options: any = {}): void {
-    if (data === undefined) { return; }
-
-    const extent: number[][] = this.graph.layout.extent || [
-      [-0.5, 0.5],
-      [-0.5, 0.5],
-    ];
-    const ndim: number = extent.length;
-    const opacity: number = options.hasOwnProperty('opacity') ? options.opacity : data.opacity || 1;
-    const scale: number = this.graph.config.dotSize * (options.scale || 1);
-    const layerOffset: any = this.graph.config.layer.offset;
-
-    const configFrames: any = this.graph.config.frames;
+  renderDot(activityLayer: THREE.Group, data: any, trailIdx: number = null): void {
     const trail: any = this.graph.config.trail;
-    const ts: number = this.graph.frameIdx / configFrames.sampleRate;
-
-    for (let i = 0; i < data.x.length; i++) {
-      const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-        color: this.graph.color(data.color[i]),
-        transparent: true,
-        opacity,
-      });
-      const object: THREE.Mesh = new THREE.Mesh(
-        this.geometry,
-        material
-      );
-
-      object.position.x = data.x[i] + layerOffset.x * data.idx;
-      object.position.y = data.y[i] + layerOffset.y * data.idx;
-      if (ndim > 2) {
-        object.position.z = data.z[i] + layerOffset.z * data.idx;
-      }
-      if (scale !== 1) {
-        object.scale.x = scale;
-        object.scale.y = scale;
-        object.scale.z = scale;
-      }
-      this.scene.add(object);
+    const dotSize: number = this.graph.config.dotSize;
+    const ratio = trailIdx !== null ? trailIdx / (trail.length + 1) : 0;
+    const opacity = trailIdx !== null ? (trail.fading ? 1 - ratio : 1) : 1;
+    let scale: number;
+    switch (trail.mode) {
+      case 'growing':
+        scale = (1 + ratio) * dotSize;
+        break;
+      case 'shrinking':
+        scale = (1 - ratio) * dotSize;
+        break;
+      default:
+        scale = dotSize;
     }
+
+    data.senders.forEach((sender: number, senderIdx: number) => {
+      // @ts-ignore
+      const object: THREE.Mesh = activityLayer.children[sender];
+      // @ts-ignore
+      const color: string = this.graph.color(data.color[senderIdx]);
+      // @ts-ignore
+      object.material.color.set(color);
+      // @ts-ignore
+      object.material.opacity = opacity;
+      object.scale.set(scale, scale, scale);
+      // const pos: any = object.userData.position;
+      // if (trailIdx === null) {
+      //   object.position.setY(pos.y);
+      // } else {
+      //   object.position.setY(pos.y - ratio / 2);
+      // }
+    });
+
   }
 
 }

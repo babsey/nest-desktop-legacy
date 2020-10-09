@@ -98,14 +98,14 @@
     <ng-container *ngIf="!isActive('labBook')">
       <div class="no-print network-history">
         <button mat-icon-button
-          (click)="project.network.oldest()"
+          (click)="oldest()"
           [disabled]="countBefore() <= 0"
           matTooltip="Go to oldest network"
           matTooltipShowDelay="1000">
           <fa-icon icon="step-backward"></fa-icon>
         </button>
         <button mat-icon-button
-          (click)="project.network.older()"
+          (click)="older()"
           [disabled]="countBefore() <= 0"
           [matBadge]="countBefore()"
           [matBadgeHidden]="countBefore() <= 0"
@@ -116,7 +116,7 @@
           <fa-icon icon="undo"></fa-icon>
         </button>
         <button mat-icon-button
-          (click)="project.network.newer()"
+          (click)="newer()"
           [disabled]="countAfter() <= 0"
           [matBadge]="countAfter()"
           [matBadgeHidden]="countAfter() <= 0"
@@ -127,7 +127,7 @@
           <fa-icon icon="redo"></fa-icon>
         </button>
         <button mat-icon-button
-          (click)="project.network.newest()"
+          (click)="newest()"
           [disabled]="countAfter() <= 0"
           class="rev-button"
           matTooltip="Go to newest network"

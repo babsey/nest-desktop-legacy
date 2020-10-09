@@ -25,7 +25,9 @@ export class ActivityAnimationComponent implements OnInit, OnDestroy {
     // this._subscriptionInit = this._activityAnimationService.init.subscribe((project: Project) => this.init(project));
     // this._subscriptionUpdate = this._activityAnimationService.update.subscribe(() => this.update());
     // this.init();
-    this._activityAnimationService.graph = new ActivityAnimationGraph(this.project);
+    setTimeout(() => {
+      this._activityAnimationService.graph = new ActivityAnimationGraph(this.project);
+    }, 1);
   }
 
   ngOnDestroy() {

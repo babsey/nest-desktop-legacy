@@ -37,10 +37,6 @@ export class ActivityAnimationControllerComponent implements OnInit {
     return this.graph.config.frames.speed > -2;
   }
 
-  sampleRate(): number {
-    return this.graph.config.frames.sampleRate;
-  }
-
   onChange(event: any): void {
     this._activityAnimationService.update.emit();
   }
