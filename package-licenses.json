@@ -48,7 +48,7 @@
   "mathjs": "Apache-2.0",
   "ngx-toastr": "MIT",
   "object-hash": "MIT",
-  "plotly.js-cartesian-dist": "MIT",
+  "plotly.js-dist": "MIT",
   "pouchdb-upsert": "Apache-2.0",
   "pouchdb": "Apache-2.0",
   "protractor": "MIT",
