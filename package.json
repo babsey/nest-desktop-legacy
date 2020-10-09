@@ -1,10 +1,10 @@
 {
   "name": "nest-desktop",
-  "version": "2.5.0rc1",
+  "version": "2.5.0rc2",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng serve",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
@@ -39,7 +39,7 @@
     "mathjs": "^7.0.0",
     "ngx-toastr": "^13.0.0",
     "object-hash": "^2.0.1",
-    "plotly.js-cartesian-dist": "^1.54.7",
+    "plotly.js-dist": "^1.56.0",
     "pouchdb": "^7.1.1",
     "pouchdb-upsert": "^2.2.0",
     "rxjs": "^6.6.3",
