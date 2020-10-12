@@ -131,31 +131,61 @@ export class Connection extends Config {
     return this._view;
   }
 
+  /**
+   * Observer for connection changes.
+   *
+   * @remarks
+   * It emits network changes.
+   */
   connectionChanges(): void {
     this._network.networkChanges();
   }
 
+  /**
+   * Reverse source and target indices.
+   *
+   * @remarks
+   * It emits connection changes.
+   */
   reverse(): void {
     [this._sourceIdx, this._targetIdx] = [this._targetIdx, this._sourceIdx];
     this.connectionChanges();
   }
 
+  /**
+   * Select this connection.
+   */
   select(): void {
     this._network.view.selectedConnection = this;
   }
 
+  /**
+   * Clean this component.
+   */
   clean(): void {
     this._idx = this._network.connections.indexOf(this);
   }
 
+  /**
+   * Check if source and target nodes has positions.
+   */
   isBothSpatial(): boolean {
     return this.source.spatial.hasPositions() && this.target.spatial.hasPositions();
   }
 
+  /**
+   * Check if it has projection.
+   */
   hasProjections(): boolean {
     return false;
   }
 
+  /**
+   * Set defaults.
+   *
+   * @remarks
+   * It emits connection changes.
+   */
   reset(): void {
     this.srcIdx = undefined;
     this.tgtIdx = undefined;
@@ -166,18 +196,31 @@ export class Connection extends Config {
     this.connectionChanges();
   }
 
+  /**
+   * Check if it has selective source indices.
+   */
   hasSourceIndices(): boolean {
     return this.srcIdx !== undefined;
   }
 
+  /**
+   * Check if it has selective target indices.
+   */
   hasTargetIndices(): boolean {
     return this.tgtIdx !== undefined;
   }
 
+  /**
+   * Delete connection from the network.
+   */
   delete(): void {
     this._network.deleteConnection(this);
   }
 
+  /**
+   * Serialize for JSON.
+   * @return connection object
+   */
   toJSON(target: string = 'db'): any {
     const connection: any = {
       source: this._sourceIdx,

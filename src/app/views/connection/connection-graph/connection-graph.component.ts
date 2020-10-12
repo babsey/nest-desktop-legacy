@@ -16,7 +16,6 @@ export class ConnectionGraphComponent implements OnInit {
   @Input() connection: Connection;
   @Input() height: number;
   @Input() width: number;
-  private _intervalId: any;
   private _selector: any;
 
   constructor(

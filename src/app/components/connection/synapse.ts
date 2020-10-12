@@ -31,6 +31,14 @@ export class Synapse {
     return this._connection.network.project.app.getModel(this._modelId);
   }
 
+  /**
+   * Set model.
+   *
+   * @remarks
+   * Save model id, see modelId.
+   *
+   * @param value - synapse model
+   */
   set model(model: Model) {
     this.modelId = model.id;
   }
@@ -39,6 +47,14 @@ export class Synapse {
     return this._modelId;
   }
 
+  /**
+   * Set model id.
+   *
+   * @remarks
+   * It initializes parameters.
+   *
+   * @param value - id of the model
+   */
   set modelId(value: string) {
     this._modelId = value;
     this.initParameters();
@@ -63,6 +79,14 @@ export class Synapse {
     return delay ? delay.value : 1;
   }
 
+  set delay(value: number) {
+    const delay: any = this._params.find((param: Parameter) => param.id === 'delay');
+    delay.value = value;
+  }
+
+  /**
+   * Initialize synapse parameters.
+   */
   initParameters(synapse: any = null): void {
     // Update parameters from model or node
     this._params = [];
@@ -78,15 +102,25 @@ export class Synapse {
     }
   }
 
+  /**
+   * Add synapse parameter.
+   */
   addParameter(param: any): void {
     this._params.push(new Parameter(this._connection, param));
   }
 
+  /**
+   * Inverse synaptic weight.
+   */
   inverseWeight(): void {
     this.weight = -1 * this.weight;
     this._connection.connectionChanges();
   }
 
+  /**
+   * Serialize for JSON.
+   * @return synapse object
+   */
   toJSON(target: string = 'db'): any {
     const synapse: any = {
       model: this._modelId,
@@ -95,8 +129,12 @@ export class Synapse {
     if (target === 'simulator') {
       // Collect specifications of the synapse
       this._params
-        .filter((param: Parameter) => param.visible === undefined || param.visible)
-        .forEach((param: Parameter) => synapse[param.id] = param.value);
+        .filter(
+          (param: Parameter) => param.visible === undefined || param.visible
+        )
+        .forEach(
+          (param: Parameter) => synapse[param.id] = param.value
+        );
     } else {
       synapse.params = this._params.map((param: Parameter) => param.toJSON());
     }

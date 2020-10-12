@@ -5,12 +5,26 @@ import { Project } from './project';
 export class ProjectCode extends Code {
   private _project: Project;                           // parent
   private _script: string;
-  private _blocks: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
-  private _selectedBlocks: string[] = ['kernel', 'models', 'nodes', 'connections', 'events'];
+  private _blocks: string[];
+  private _selectedBlocks: string[];
 
   constructor(project: Project) {
     super();
     this._project = project;
+    this._blocks = [
+      'kernel',
+      'models',
+      'nodes',
+      'connections',
+      'events'
+    ];
+    this._selectedBlocks = [
+      'kernel',
+      'models',
+      'nodes',
+      'connections',
+      'events'
+    ];
     this.generate();
   }
 

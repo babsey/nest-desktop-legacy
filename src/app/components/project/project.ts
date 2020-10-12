@@ -153,6 +153,9 @@ export class Project extends Config {
 
   /**
    * Clone a new project of this current project.
+   *
+   * @remarks
+   * It generates new project id and empties updatedAt variable;
    */
   clone(): Project {
     const newProject = new Project(this._app, this.toJSON());
@@ -163,6 +166,9 @@ export class Project extends Config {
 
   /**
    * Clone this current project and add it to the list.
+   *
+   * @remarks
+   * It pushes new project to the first line of the list.
    */
   duplicate(): Project {
     const newProject: Project = this.clone();
@@ -191,7 +197,7 @@ export class Project extends Config {
     return this._app.reloadProject(this);
   }
 
-  /**
+  /*
    * Project revisions
    */
 
@@ -208,6 +214,9 @@ export class Project extends Config {
 
   /**
    * Initialize a network.
+   *
+   * @remarks
+   * It commits network after creating network component.
    */
   initNetwork(network: any = {}): void {
     this.clearNetworkHistory();
@@ -229,6 +238,9 @@ export class Project extends Config {
     return this._networkRevisions;
   }
 
+  /** Check if network is changed
+   * Use object hash.
+   */
   isNetworkChanged(): boolean {
     return this.getHash() !== this._activityChartGraph.hash && !this._simulation.running;
   }
@@ -324,7 +336,7 @@ export class Project extends Config {
     this.checkoutNetwork();
   }
 
-  /**
+  /*
    * Simulation
    */
 
@@ -345,6 +357,12 @@ export class Project extends Config {
     }
   }
 
+  /**
+   * Start simulation.
+   *
+   * @remarks
+   * After the simulation it updates activities and commit network.
+   */
   runSimulation(): Promise<any> {
     // console.log('Run simulation');
     const viewCodeEditor: boolean = this.app.view.project.sidenavMode === 'codeEditor';
@@ -365,6 +383,9 @@ export class Project extends Config {
     });
   }
 
+  /**
+   * Run simulation script framework.
+   */
   runSimulationScript(): Promise<any> {
     // console.log('Run simulation script');
     if (this.simulation.config.autoRandomSeed) {
@@ -378,6 +399,9 @@ export class Project extends Config {
     return this._app.nestServer.http.post(url, data);
   }
 
+  /**
+   * Run simulation via textual code.
+   */
   runSimulationCode(): Promise<any> {
     // console.log('Run simulation code');
     const url: string = this._app.nestServer.url + '/exec';
@@ -389,7 +413,7 @@ export class Project extends Config {
     return this.app.nestServer.http.post(url, data);
   }
 
-  /**
+  /*
    * Activities
    */
 
@@ -398,7 +422,9 @@ export class Project extends Config {
    */
   get activities(): Activity[] {
     // console.log('Get activities')
-    const activities: Activity[] = this._network ? this._network.recorders.map((recorder: Node) => recorder.activity) : [];
+    const activities: Activity[] = this._network
+      ? this._network.recorders.map((recorder: Node) => recorder.activity)
+      : [];
     activities.forEach((activity: Activity, idx: number) => {
       activity.idx = idx;
     });
@@ -431,35 +457,47 @@ export class Project extends Config {
   }
 
   /**
-   * Does project has events in activities?
+   * Does the project have events in activities?
    */
   get hasActivities(): boolean {
     return this._hasActivities;
   }
 
   /**
-   * Does project has events in spatial activities?
+   * Does the project have events in spatial activities?
    */
   get hasSpatialActivities(): boolean {
     return this._hasSpatialActivities;
   }
 
-  /**
+  /*
    * Activity graph
    */
 
+  /**
+   * Initialize activity graph.
+   */
   initActivityGraph(): void {
     this.initActivityChartGraph();
   }
 
+  /**
+   * Update activity graph.
+   */
   updateActivityGraph(): void {
     this._activityChartGraph.update();
   }
 
+  /**
+   * Empty activity graph.
+   */
   emptyActivityGraph(): void {
     this._activityChartGraph.empty();
   }
 
+  /**
+   * Initialize activity chart graph (plotly).
+   */
   initActivityChartGraph(panels: any[] = []): void {
     if (this._activityChartGraph === undefined) {
       this._activityChartGraph = new ActivityChartGraph(this, panels);
@@ -468,8 +506,7 @@ export class Project extends Config {
     }
   }
 
-
-  /**
+  /*
    * Serialization
    */
 
@@ -487,12 +524,16 @@ export class Project extends Config {
     return this._hash === this.getHash();
   }
 
+  /**
+   * Calculate hash of this component.
+   */
   getHash(): string {
     return objectHash(this.toJSON('simulator'));
   }
 
   /**
-   * Serialize this project for database or simulator.
+   * Serialize for JSON.
+   * @return project object
    */
   toJSON(target: string = 'db'): any {
     // this.hash = objectHash(this.network.toJSON('simulator'));

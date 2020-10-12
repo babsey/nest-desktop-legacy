@@ -23,8 +23,14 @@ export class NodeView {
     if (this.node.model.elementType === 'recorder') {
       const connections: Connection[] = this.node.network.connections
         .filter(
-          (connection: Connection) => (connection.sourceIdx === this.node.idx || connection.targetIdx === this.node.idx));
-      if (connections.length === 1 && connections[0].sourceIdx !== connections[0].targetIdx) {
+          (connection: Connection) =>
+            connection.sourceIdx === this.node.idx ||
+            connection.targetIdx === this.node.idx
+          );
+      if (
+        connections.length === 1 &&
+        connections[0].sourceIdx !== connections[0].targetIdx
+       ) {
         const connection: Connection = connections[0];
         const node: Node = (connection.sourceIdx === this.node.idx) ? connection.target : connection.source;
         return node.view.color;

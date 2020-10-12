@@ -19,7 +19,7 @@ export class Node extends Config {
   private _idx: number;                      // generative
   private _modelId: string;
   private _network: Network;                 // parent
-  private _params: Parameter[] = [];
+  private _params: Parameter[];
   private _positions: number[][] = [];
   private _recordFrom: string[];             // only for multimeter
   private _size: number;
@@ -65,6 +65,14 @@ export class Node extends Config {
     return this._network.project.app.getModel(this._modelId);
   }
 
+  /**
+   * Set model.
+   *
+   * @remarks
+   * Save model id, see modelId.
+   *
+   * @param value - node model
+   */
   set model(model: Model) {
     this.modelId = model.id;
   }
@@ -78,6 +86,15 @@ export class Node extends Config {
     return this._modelId;
   }
 
+  /**
+   * Set model id.
+   *
+   * @remarks
+   * It initializes parameters, spaital activity and activity graph components.
+   * It triggers node changes to start simulation.
+   *
+   * @param value - id of the model
+   */
   set modelId(value: string) {
     this._modelId = value;
     this._size = 1;
@@ -146,6 +163,9 @@ export class Node extends Config {
     return this._size;
   }
 
+  /**
+   * Set network size.
+   */
   set size(value: number) {
     this._size = value;
     this.nodeChanges();
@@ -173,12 +193,19 @@ export class Node extends Config {
     return this._view;
   }
 
+  /**
+   * Observer for node changes.
+   *
+   * @remarks
+   * It emits network changes
+   */
   nodeChanges(): void {
     this._network.networkChanges();
   }
 
   /**
-   * Initialize activity for recorder node
+   * Initialize activity for recorder node.
+   * @param activity - network activity from the simulator
    */
   initActivity(activity: any = {}): void {
     if (!this.model.isRecorder()) { return; }
@@ -191,10 +218,17 @@ export class Node extends Config {
     }
   }
 
+  /**
+   * Initialize activity graph in project component.
+   */
   initActivityGraph(): void {
     this._network.project.initActivityGraph();
   }
 
+  /**
+   * Initialize parameter components.
+   * @param node - node object
+   */
   initParameters(node: any = null): void {
     // Update parameters from model or node
     this._params = [];
@@ -213,25 +247,52 @@ export class Node extends Config {
     }
   }
 
+  /**
+   * Add parameter component.
+   * @param param - parameter object
+   */
   addParameter(param: any): void {
     this._params.push(new Parameter(this, param));
   }
 
+  /**
+   * Check if node has parameter component.
+   * @param paramId - parameter id
+   */
   hasParameter(paramId: string): boolean {
     return this._params.find((param: Parameter) => param.id === paramId) !== undefined;
   }
 
+  /**
+   * Get parameter component
+   * @param paramId - parameter id
+   * @return parameter component
+   */
   getParameter(paramId: string): any {
     if (this.hasParameter(paramId)) {
       return this._params.find((param: Parameter) => param.id === paramId).value;
     }
   }
 
+  /**
+   * Reset value in parameter components.
+   *
+   * @remarks
+   * It emits node changes.
+   */
   resetParameters(): void {
     this._params.forEach((param: Parameter) => param.reset());
     this.nodeChanges();
   }
 
+  /**
+   * Set all synaptic weights.
+   *
+   * @remarks
+   * It emits node changes.
+   *
+   * @param term - inhibitory (negative) or excitatory (positive)
+   */
   setWeights(term: string): void {
     const connections: Connection[] = this._network.connections
       .filter((connection: Connection) => connection.source.idx === this._idx && connection.target.model.elementType !== 'recorder');
@@ -242,6 +303,10 @@ export class Node extends Config {
     this.nodeChanges();
   }
 
+  /**
+   * Initialize spatial component.
+   * @param spatial - spatial specifications
+   */
   initSpatial(spatial: any = {}) {
     this._spatial = new NodeSpatial(this, spatial);
   }
@@ -258,18 +323,40 @@ export class Node extends Config {
     this._recordFrom = (recordables.length > 0) ? this.recordFrom.filter((rec: string) => recordables.includes(rec)) : [];
   }
 
+  /**
+   * Clone this node component.
+   * @return cloned node component
+   */
   clone(): Node {
     return new Node(this._network, this);
   }
 
+  /**
+   * Delete node.
+   *
+   * @remarks
+   * It removes node component of the network.
+   */
   delete(): void {
     this._network.deleteNode(this);
   }
 
+  /**
+   * Copy node object of this component.
+   *
+   * @remarks
+   * It uses JSON converting method.
+   *
+   * @return copied node object
+   */
   copy(item: any): any {
     return JSON.parse(JSON.stringify(item));
   }
 
+  /**
+   * Serialize for JSON.
+   * @return node object
+   */
   toJSON(target: string = 'db'): any {
     const node: any = {
       model: this._modelId,
