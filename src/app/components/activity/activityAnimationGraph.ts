@@ -50,7 +50,7 @@ export class ActivityAnimationGraph {
       frames: {
         sampleRate: 1,
         speed: 1,
-        rate: 30,
+        rate: 24,
         windowSize: 1,
       },
       trail: {

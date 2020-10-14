@@ -11,7 +11,6 @@ export class ActivityScatterTimeAnimationScene extends ActivityAnimationScene {
   }
 
   renderFrame(): void {
-    this.cleanScene();
     if (this.graph.frame) {
       this.graph.frame.data.forEach((data: any) => this.renderScatter(data));
       this.renderTrail();

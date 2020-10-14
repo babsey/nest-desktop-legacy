@@ -41,16 +41,9 @@ export class ActivityAnimationScene {
 
     this._stats = new STATS();
     this._useStats = this._graph.project.app.config.devMode;
-    if (this._useStats) {
-      this._stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-      document.body.appendChild(this._stats.dom);
-    }
 
-
-    this.stop();
     this.init();
     this.animate();
-    this.graph.play();
   }
 
   get activityLayers(): THREE.Group {
@@ -101,8 +94,12 @@ export class ActivityAnimationScene {
 
   update(): void {
     // console.log('Update animation scene');
-    this.cleanScene();
     this.initActivityLayers();
+
+    if (this._useStats) {
+      this._stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+      document.body.appendChild(this._stats.dom);
+    }
   }
 
   axesHelper(): THREE.AxesHelper {
@@ -124,6 +121,9 @@ export class ActivityAnimationScene {
   }
 
   initActivityLayers(): void {
+    this._scene.children
+      .slice(3)
+      .map((object: any) => this._scene.remove(object));
     const layers: THREE.Group = new THREE.Group();
     this._graph.project.activities.forEach((activity: Activity) => {
       if (activity.nodePositions.length > 0) {
@@ -164,18 +164,16 @@ export class ActivityAnimationScene {
     return grid;
   }
 
-  clear() {
+  destroy() {
+    this.stop();
     try {
       this.container.removeChild(this._renderer.domElement);
+      document.body.removeChild(this._stats.dom);
     } catch { }
-    while (this._scene.children.length > 0) {
-      this._scene.remove(this._scene.children[0]);
-    }
   }
 
   stop(): void {
     // console.log('Stop animation');
-    this.graph.stop();
     cancelAnimationFrame(this._animationFrameIdx);
   }
 

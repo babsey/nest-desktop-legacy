@@ -42,10 +42,9 @@ export class ActivityAnimationControllerComponent implements OnInit {
   }
 
   set sceneIdx(value: number) {
-    this.scene.stop();
-    this.scene.clear();
+    this.scene.destroy();
     this._activityAnimationService.selectedSceneIdx = value;
-    this._activityAnimationService.init.emit();
+    this._activityAnimationService.loadScene(this.graph);
   }
 
   get trailModes(): string[] {
