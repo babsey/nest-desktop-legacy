@@ -12,38 +12,34 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
     super('sphere', graph, containerId);
   }
 
-  createLayer(activity: Activity): THREE.Group {
+  createLayer(layer: any): THREE.Group {
     // console.log('Create activity layer');
-    const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(0.005);
-    const layer: THREE.Group = new THREE.Group();
+    const layerGraph: THREE.Group = new THREE.Group();
+    const activityLayerGraph: THREE.Group = new THREE.Group();
+    activityLayerGraph.userData = layer;
+
     const scale = 0.01;
-    const activityLayer: THREE.Group = new THREE.Group();
-    const color: string = activity.recorder.view.color;
-    activity.nodePositions.forEach((pos: number[]) => {
+    const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(scale / 2);
+
+    layer.positions.forEach((position: any) => {
       const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-        color,
+        color: layer.color,
         transparent: true,
       });
       const object: THREE.Mesh = new THREE.Mesh(
         geometry,
         material
       );
-      object.userData.color = color;
-
-      const position: any = {
-        x: pos[0],
-        y: pos.length === 3 ? pos[1] : 0,
-        z: pos.length === 3 ? pos[2] : pos[1],
-      };
       object.userData.position = position;
       object.position.set(position.x, position.y, position.z);
       object.scale.set(scale, scale, scale);
       // object.layers.set(activity.idx + 1);
-      activityLayer.add(object);
+      activityLayerGraph.add(object);
     });
-    layer.add(this.grids(activity.nodePositions[0].length));
-    layer.add(activityLayer);
-    return layer;
+
+    layerGraph.add(this.grids(layer.ndim));
+    layerGraph.add(activityLayerGraph);
+    return layerGraph;
   }
 
   renderFrame(): void {
@@ -67,16 +63,16 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
             const frame: any = this.graph.frames[this.graph.frameIdx - trailIdx];
             if (frame) {
               const trailData: any = frame.data[idx];
-              this.updateObjects(activityLayer, trailData, trailIdx);
+              this.updateGraphObjects(activityLayer, trailData, trailIdx);
             }
           }
         }
-        this.updateObjects(activityLayer, data);
+        this.updateGraphObjects(activityLayer, data);
       });
     }
   }
 
-  updateObjects(activityLayer: THREE.Group, data: any, trailIdx: number = null): void {
+  updateGraphObjects(activityLayerGraph: THREE.Group, data: any, trailIdx: number = null): void {
     const trail: any = this.graph.config.trail;
     const size: number = this.graph.config.objectSize;
     const ratio = trailIdx !== null ? trailIdx / (trail.length + 1) : 0;
@@ -95,14 +91,16 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
 
     data.senders.forEach((sender: number, senderIdx: number) => {
       // @ts-ignore
-      const object: THREE.Mesh = activityLayer.children[sender];
-      let value: number;
+      const object: THREE.Mesh = activityLayerGraph.children[sender];
+      let colorRGB: string;
       if (data.hasOwnProperty(this.graph.recordFrom)) {
-        value = this.graph.ratio(data[this.graph.recordFrom][senderIdx]);
+        const value: number = this.graph.normalize(data[this.graph.recordFrom][senderIdx]);
+        colorRGB = this.graph.colorRGB(value);
+      } else {
+        colorRGB = activityLayerGraph.userData.color;
       }
-      const color: string = value !== undefined ? this.graph.color(value) : object.userData.color;
       // @ts-ignore
-      object.material.color.set(color);
+      object.material.color.set(colorRGB);
       // @ts-ignore
       object.material.opacity = opacity;
       object.scale.set(scale, scale, scale);

@@ -97,15 +97,21 @@ export class ActivityAnimationSceneBox extends ActivityAnimationScene {
     data.senders.forEach((sender: number, senderIdx: number) => {
       // @ts-ignore
       const object: THREE.Mesh = activityLayer.children[sender];
+      let value: number;
+      let colorRGB: string;
+      if (data.hasOwnProperty(this.graph.recordFrom)) {
+        value = this.graph.normalize(data[this.graph.recordFrom][senderIdx]);
+        colorRGB = this.graph.colorRGB(value);
+      } else {
+        colorRGB = object.userData.color;
+      }
       // @ts-ignore
-      const color: string = data.values ? this.graph.color(data.values[senderIdx]) : object.userData.color;
-      // @ts-ignore
-      object.material.color.set(color);
+      object.material.color.set(colorRGB);
       // @ts-ignore
       object.material.opacity = opacity;
       object.scale.set(scale, (data.values ? 0.5 : scale), scale);
-      if (data.values && !this.graph.config.flatHeight) {
-        const height: number = (data.values[senderIdx] + 70) / 15 * size;
+      if (value && !this.graph.config.flatHeight) {
+        const height: number = value * size;
         if (!this.graph.config.flyingBoxes) {
           object.scale.setY(height);
         }

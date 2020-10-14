@@ -37,7 +37,7 @@ export class ActivityScatterTimeAnimationScene extends ActivityAnimationScene {
 
     for (let i = 0; i < data.x.length; i++) {
       const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-        color: this.graph.color(data.color[i]),
+        color: this.graph.colorRGB(data.color[i]),
         transparent: true,
         opacity,
       });
