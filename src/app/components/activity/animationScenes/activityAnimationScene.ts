@@ -124,13 +124,14 @@ export class ActivityAnimationScene {
     this._scene.children
       .slice(3)
       .map((object: any) => this._scene.remove(object));
-    const layers: THREE.Group = new THREE.Group();
+    const layersGraph: THREE.Group = new THREE.Group();
     this._graph.project.activities.forEach((activity: Activity) => {
-      if (activity.nodePositions.length > 0) {
-        layers.add(this.createLayer(activity));
+      const layer: any = this._graph.layers[activity.idx];
+      if (layer.ndim !== -1) {
+        layersGraph.add(this.createLayer(layer));
       }
     });
-    this._activityLayers = layers;
+    this._activityLayers = layersGraph;
     this._scene.add(this._activityLayers);
   }
 
