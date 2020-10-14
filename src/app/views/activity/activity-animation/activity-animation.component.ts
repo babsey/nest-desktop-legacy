@@ -17,8 +17,6 @@ import { ActivityAnimationService } from '../../../services/activity/activity-an
 })
 export class ActivityAnimationComponent implements OnInit {
   @Input() project: Project;
-  private _scene: ActivityAnimationSceneBox | ActivityAnimationSceneSphere;
-  private _subscriptionInit: any;
   private _subscriptionUpdate: any;
 
   constructor(
@@ -27,19 +25,15 @@ export class ActivityAnimationComponent implements OnInit {
 
   ngOnInit() {
     // console.log('Ng init Three scatter')
-    this._subscriptionInit = this._activityAnimationService.init.subscribe(() =>
-      setTimeout(() => this.init(), 1));
     this._subscriptionUpdate = this._activityAnimationService.update.subscribe(
       () => this.update());
-
-    setTimeout(() => this.init(), 1);
+    this.init();
   }
 
   ngOnDestroy() {
     // console.log('Ng destroy Three scatter');
-    this.clear();
-    this._subscriptionInit.unsubscribe();
     this._subscriptionUpdate.unsubscribe();
+    this.scene.destroy();
   }
 
   get config(): any {
@@ -56,13 +50,7 @@ export class ActivityAnimationComponent implements OnInit {
 
   init(): void {
     // console.log('Init activity animation scene');
-    this._activityAnimationService.initScene(this.graph);
-  }
-
-  clear(): void {
-    // console.log('Clear activity animation scene');
-    this.scene.stop();
-    this.scene.clear();
+    setTimeout(() => this._activityAnimationService.loadScene(this.graph), 1);
   }
 
   update(): void {

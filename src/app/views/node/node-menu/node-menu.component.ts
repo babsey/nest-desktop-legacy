@@ -3,6 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Node } from '../../../components/node/node';
 
 import { ActivityAnimationService } from '../../../services/activity/activity-animation.service';
+import { ActivityChartService } from '../../../services/activity/activity-chart.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class NodeMenuComponent implements OnInit {
 
   constructor(
     private _activityAnimationService: ActivityAnimationService,
+    private _activityChartService: ActivityChartService,
   ) { }
 
   ngOnInit() {
@@ -24,6 +26,7 @@ export class NodeMenuComponent implements OnInit {
   selectColor(color: string): void {
     this.node.view.color = color;
     this._activityAnimationService.update.emit();
+    this._activityChartService.update.emit();
   }
 
 }

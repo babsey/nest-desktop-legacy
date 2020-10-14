@@ -9,7 +9,6 @@ import { ActivityAnimationSceneSphere } from '../../components/activity/animatio
   providedIn: 'root'
 })
 export class ActivityAnimationService {
-  private _init: EventEmitter<any> = new EventEmitter();
   private _update: EventEmitter<any> = new EventEmitter();
   private _scenes: any[];
   private _selectedSceneIdx = 0;
@@ -25,10 +24,6 @@ export class ActivityAnimationService {
       label: 'box',
       scene: (graph: ActivityAnimationGraph) => new ActivityAnimationSceneBox(graph, 'activityAnimationScene'),
     }];
-  }
-
-  get init(): EventEmitter<any> {
-    return this._init;
   }
 
   get scene(): ActivityAnimationScene {
@@ -51,7 +46,7 @@ export class ActivityAnimationService {
     return this._update;
   }
 
-  initScene(graph: ActivityAnimationGraph): void {
+  loadScene(graph: ActivityAnimationGraph): void {
     // console.log('Initialize animation scene');
     this._scene = this._scenes[this._selectedSceneIdx].scene(graph);
   }
