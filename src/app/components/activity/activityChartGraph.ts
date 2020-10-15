@@ -3,7 +3,6 @@ import * as PlotlyJS from 'plotly.js-dist';
 import { Project } from '../project/project';
 
 import { Activity } from './activity';
-import { ActivityGraph } from './activityGraph';
 
 import { ActivityGraphPanel } from './plotPanels/activityGraphPanel';
 import { AnalogSignalHistogramPanel } from './plotPanels/analogSignalHistogramPanel';
@@ -16,20 +15,22 @@ import { InterSpikeIntervalHistogramPanel } from './plotPanels/interSpikeInterva
 import { CVISIHistogramPanel } from './plotPanels/CVISIHistogramPanel';
 
 
-export class ActivityChartGraph extends ActivityGraph {
+export class ActivityChartGraph {
   private _config: any = {};
   private _data: any[] = [];
   private _frames: any[] = [];
+  private _hash: string;
   private _imageButtonOptions: any;
   private _layout: any = {};
   private _panels: ActivityGraphPanel[] = [];
-  private _registerPanels: any[] = [];
   private _panelsVisible: string[] = [];
+  private _project: Project;
+  private _registerPanels: any[] = [];
   private _style: any = {};
 
   constructor(project: Project, registerPanels: any[] = []) {
-    super(project);
-
+    this._project = project;
+    this._hash = project.hash;
     this._config = {
       scrollZoom: true,
       editable: true,
@@ -109,12 +110,20 @@ export class ActivityChartGraph extends ActivityGraph {
     return this._data;
   }
 
+  get endtime(): number {
+    return this._project.simulation.kernel.time;
+  }
+
   get imageButtonOptions(): any {
     return this._imageButtonOptions;
   }
 
-  get frames(): any[] {
-    return this._frames;
+  get hash(): string {
+    return this._hash;
+  }
+
+  set hash(value: string) {
+    this._hash = value;
   }
 
   get layout(): any {
@@ -138,6 +147,10 @@ export class ActivityChartGraph extends ActivityGraph {
     this.panelsAll.forEach((panel: ActivityGraphPanel) => {
       panel.visible = this.panelsVisible.includes(panel.name);
     });
+  }
+
+  get project(): Project {
+    return this._project;
   }
 
   get style(): any {
@@ -169,7 +182,7 @@ export class ActivityChartGraph extends ActivityGraph {
   }
 
   update(): void {
-    // console.log('Update activity chart graph for', this.project.name);
+    // console.log('Update activity chart graph');
     this._data = [];
     this.panels.forEach((panel: ActivityGraphPanel) => {
       panel.update();

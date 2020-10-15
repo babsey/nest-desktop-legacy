@@ -65,14 +65,6 @@ export class Project extends Config {
     this.initActivityGraph();
   }
 
-  get activityAnimationGraph(): ActivityAnimationGraph {
-    return this._activityAnimationGraph;
-  }
-
-  get activityChartGraph(): ActivityChartGraph {
-    return this._activityChartGraph;
-  }
-
   get app(): App {
     return this._app;
   }
@@ -474,25 +466,27 @@ export class Project extends Config {
    * Activity graph
    */
 
+  get activityAnimationGraph(): ActivityAnimationGraph {
+    return this._activityAnimationGraph;
+  }
+
+  get activityChartGraph(): ActivityChartGraph {
+    return this._activityChartGraph;
+  }
+
   /**
    * Initialize activity graph.
    */
   initActivityGraph(): void {
     this.initActivityChartGraph();
+    this.initActivityAnimationGraph();
   }
 
   /**
-   * Update activity graph.
+   * Initialize activity animation graph (Three).
    */
-  updateActivityGraph(): void {
-    this._activityChartGraph.update();
-  }
-
-  /**
-   * Empty activity graph.
-   */
-  emptyActivityGraph(): void {
-    this._activityChartGraph.empty();
+  initActivityAnimationGraph(): void {
+    this._activityAnimationGraph = new ActivityAnimationGraph(this);
   }
 
   /**
@@ -506,7 +500,24 @@ export class Project extends Config {
     }
   }
 
-  /*
+  /**
+   * Empty activity graph.
+   */
+  emptyActivityGraph(): void {
+    this._activityChartGraph.empty();
+  }
+
+  /**
+   * Update activity graph.
+   */
+  updateActivityGraph(): void {
+    // console.log('Update activity graph');
+    this._activityChartGraph.update();
+    this._activityAnimationGraph.update();
+  }
+
+
+  /**
    * Serialization
    */
 

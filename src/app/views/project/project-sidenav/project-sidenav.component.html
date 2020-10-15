@@ -52,11 +52,15 @@
 
       <ng-container *ngSwitchCase="'activityController'">
         <ng-container *ngIf="graphMode === 'chart'">
-          <app-activity-chart-controller [project]="project"></app-activity-chart-controller>
+          <app-activity-chart-controller
+            [project]="project"
+          ></app-activity-chart-controller>
         </ng-container>
 
         <ng-container *ngIf="graphMode === 'animation'">
-          <app-activity-animation-controller></app-activity-animation-controller>
+          <app-activity-animation-controller
+            [project]="project"
+          ></app-activity-animation-controller>
         </ng-container>
       </ng-container>
 

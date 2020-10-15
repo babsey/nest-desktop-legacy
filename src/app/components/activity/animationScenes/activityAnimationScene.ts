@@ -7,21 +7,23 @@ import { ActivityAnimationGraph } from '../activityAnimationGraph';
 
 
 export class ActivityAnimationScene {
+  private _activityLayers: THREE.Group;
   private _animationFrameIdx: number;
   private _camera: THREE.PerspectiveCamera;
   private _clippingPlanes: THREE.Plane[] = [];
+  private _clock: THREE.Clock;
   private _container: any;
   private _controls: OrbitControls;
-  private _geometry: THREE.SphereGeometry;
+  private _delta: number;
   private _graph: ActivityAnimationGraph;                  // parent
-  private _grid: THREE.GridHelper;
-  private _activityLayers: THREE.Group;
+  private _name: string;
   private _renderer: THREE.WebGLRenderer;
   private _scene: THREE.Scene;
   private _stats: STATS;
-  private _useStats = true;
+  private _useStats = false;
 
-  constructor(graph: ActivityAnimationGraph, containerId: string) {
+  constructor(name: string, graph: ActivityAnimationGraph, containerId: string) {
+    this._name = name;
     this._container = document.getElementById(containerId);
     this._graph = graph;
 
@@ -34,16 +36,16 @@ export class ActivityAnimationScene {
       this._camera,
       this._renderer.domElement
     );
-    this._geometry = new THREE.SphereGeometry(0.002);
-    this._grid = new THREE.GridHelper(1, 10);
-
+    this._clock = new THREE.Clock();
     this._scene = new THREE.Scene();
-    this._stats = new STATS();
 
+    this._stats = new STATS();
+    this._useStats = this._graph.project.app.config.devMode;
     if (this._useStats) {
       this._stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild(this._stats.dom);
     }
+
 
     this.stop();
     this.init();
@@ -63,8 +65,8 @@ export class ActivityAnimationScene {
     return this._container;
   }
 
-  get geometry(): THREE.SphereGeometry {
-    return this._geometry;
+  get name(): string {
+    return this._name;
   }
 
   get graph(): ActivityAnimationGraph {
@@ -122,51 +124,19 @@ export class ActivityAnimationScene {
   }
 
   initActivityLayers(): void {
-    // console.log('Add layers');
     const layers: THREE.Group = new THREE.Group();
     this._graph.project.activities.forEach((activity: Activity) => {
       if (activity.nodePositions.length > 0) {
-        layers.add(this.layer(activity));
+        layers.add(this.createLayer(activity));
       }
     });
     this._activityLayers = layers;
     this._scene.add(this._activityLayers);
   }
 
-  layer(activity: Activity): THREE.Group {
-    // console.log('Add layer');
-    const layer: THREE.Group = new THREE.Group();
-    const scale: number = this._graph.config.dotSize;
-    const activityLayer: THREE.Group = new THREE.Group();
-    const color: string = activity.recorder.view.color;
-    activity.nodePositions.forEach((pos: number[]) => {
-      const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-        color,
-        transparent: true,
-      });
-      const object: THREE.Mesh = new THREE.Mesh(
-        this.geometry,
-        material
-      );
-      object.userData.color = color;
-
-      const position: any = {
-        x: pos[0],
-        y: pos.length === 3 ? pos[1] : 0,
-        z: pos.length === 3 ? pos[2] : pos[1],
-      };
-      object.userData.position = position;
-      object.position.set(position.x, position.y, position.z);
-
-      if (scale !== 1) {
-        object.scale.set(scale, scale, scale);
-      }
-      // object.layers.set(activity.idx + 1);
-      activityLayer.add(object);
-    });
-    layer.add(this.grids(activity.nodePositions[0].length));
-    layer.add(activityLayer);
-    return layer;
+  createLayer(activity: Activity): THREE.Group {
+    // console.log('Create activity layer');
+    return new THREE.Group();
   }
 
   grids(numDimensions: number = 2): THREE.Group {
@@ -212,39 +182,46 @@ export class ActivityAnimationScene {
   animate(): void {
     // console.log('Start animation');
     this.update();
+
+    this._delta = 0;
+    const interval: number = 1. / this._graph.config.frames.rate;
+
     const that = this;
     function render(): void {
-      setTimeout(() => {
-        that._animationFrameIdx = requestAnimationFrame(render);
-      }, 1000 / 50);
+      // console.log('render', that._scene.uuid);
+      that._animationFrameIdx = requestAnimationFrame(render);
+      that._delta += that._clock.getDelta();
 
-      if (that._stats) {
-        that._stats.begin();
-      }
-
-      const framesLength: number = that._graph.frames.length;
-      const frames: any = that._graph.config.frames;
-      const framesSpeed: number = frames.speed;
-      that._graph.frameIdx =
-        (that._graph.frameIdx +
-          framesSpeed * frames.windowSize +
-          framesLength) %
-        framesLength;
-      that.renderFrame();
-
-      const camera: any = that._graph.config.camera;
-      if (camera.control) {
-        if (camera.rotation.speed > 0) {
-          that.moveCamera();
+      if (that._delta > interval) {
+        if (that._stats) {
+          that._stats.begin();
         }
-        that.updateCameraPosition();
-      }
 
-      if (that._stats) {
-        that._stats.end();
-      }
+        const framesLength: number = that._graph.frames.length;
+        const frames: any = that._graph.config.frames;
+        const framesSpeed: number = frames.speed;
+        that._graph.frameIdx =
+          (that._graph.frameIdx +
+            framesSpeed * frames.windowSize +
+            framesLength) %
+          framesLength;
+        that.renderFrame();
 
-      that._renderer.render(that._scene, that._camera);
+        const camera: any = that._graph.config.camera;
+        if (camera.control) {
+          if (camera.rotation.speed > 0) {
+            that.moveCamera();
+          }
+          that.updateCameraPosition();
+        }
+
+        if (that._stats) {
+          that._stats.end();
+        }
+
+        that._renderer.render(that._scene, that._camera);
+        that._delta = that._delta % interval;
+      }
     }
 
     render();

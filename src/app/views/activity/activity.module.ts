@@ -22,7 +22,6 @@ import { ActivityChartComponent } from './activity-chart/activity-chart.componen
 import { ActivityChartControllerComponent } from './activity-chart/activity-chart-controller/activity-chart-controller.component';
 
 import { ActivityAnimationComponent } from './activity-animation/activity-animation.component';
-import { ActivityAnimationSceneComponent } from './activity-animation/activity-animation-scene/activity-animation-scene.component';
 import { ActivityAnimationControllerComponent } from './activity-animation/activity-animation-controller/activity-animation-controller.component';
 import { ActivityAnimationColormapComponent } from './activity-animation/activity-animation-colormap/activity-animation-colormap.component';
 
@@ -36,7 +35,6 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     ActivityAnimationColormapComponent,
     ActivityAnimationComponent,
     ActivityAnimationControllerComponent,
-    ActivityAnimationSceneComponent,
     ActivityChartComponent,
     ActivityChartControllerComponent,
     ActivityGraphComponent,
@@ -48,7 +46,6 @@ import { AnalogStatsComponent } from './activity-stats/analog-stats/analog-stats
     ActivityAnimationColormapComponent,
     ActivityAnimationComponent,
     ActivityAnimationControllerComponent,
-    ActivityAnimationSceneComponent,
     ActivityChartComponent,
     ActivityChartControllerComponent,
     ActivityGraphComponent,
