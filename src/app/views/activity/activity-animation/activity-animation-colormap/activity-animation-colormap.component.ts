@@ -11,7 +11,6 @@ export class ActivityAnimationColormapComponent implements OnInit {
   @Output() colorMapChange: EventEmitter<any> = new EventEmitter();
   private _scales: string[];
 
-
   constructor() {
     this._scales = [
       'BrBG',

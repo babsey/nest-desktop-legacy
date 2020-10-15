@@ -7,7 +7,7 @@ import { ActivityAnimationScene } from './activityAnimationScene';
 export class ActivityScatterTimeAnimationScene extends ActivityAnimationScene {
 
   constructor(graph: ActivityAnimationGraph, containerId: string) {
-    super(graph, containerId);
+    super('timeSphere', graph, containerId);
   }
 
   renderFrame(): void {
@@ -26,8 +26,10 @@ export class ActivityScatterTimeAnimationScene extends ActivityAnimationScene {
       [-0.5, 0.5],
     ];
     const ndim: number = extent.length;
+    const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(0.01);
+
     const opacity: number = options.hasOwnProperty('opacity') ? options.opacity : data.opacity || 1;
-    const scale: number = this.graph.config.dotSize * (options.scale || 1);
+    const scale: number = this.graph.config.objectSize * (options.scale || 1);
     const layerOffset: any = this.graph.config.layer.offset;
 
     const configFrames: any = this.graph.config.frames;
@@ -41,7 +43,7 @@ export class ActivityScatterTimeAnimationScene extends ActivityAnimationScene {
         opacity,
       });
       const object: THREE.Mesh = new THREE.Mesh(
-        this.geometry,
+        geometry,
         material
       );
 
