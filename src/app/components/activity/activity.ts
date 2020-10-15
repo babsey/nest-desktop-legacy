@@ -96,22 +96,6 @@ export class Activity {
     return this._recorder.model.existing === 'spike_detector';
   }
 
-  getPositionsForSenders(): any {
-    const x: number[] = [];
-    const y: number[] = [];
-    const z: number[] = [];
-    this._events.senders.map((sender: number) => {
-      const pos: number[] = this._nodePositions[this._nodeIds.indexOf(sender)];
-      if (pos) {
-        const numDimensions = pos.length;
-        x.push(pos[0]);
-        y.push(numDimensions === 3 ? pos[1] : 0);
-        z.push(numDimensions === 3 ? pos[2] : pos[1]);
-      }
-    });
-    return { x, y, z };
-  }
-
   download(): void {
     this._recorder.network.project.app.download(this, 'activity');
   }

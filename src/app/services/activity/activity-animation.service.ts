@@ -3,6 +3,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { ActivityAnimationGraph } from '../../components/activity/activityAnimationGraph';
 import { ActivityAnimationScene } from '../../components/activity/animationScenes/activityAnimationScene';
 import { ActivityAnimationSceneBox } from '../../components/activity/animationScenes/activityAnimationSceneBox';
+import { ActivityAnimationSceneBoxHistogram } from '../../components/activity/animationScenes/activityAnimationSceneBoxHistogram';
 import { ActivityAnimationSceneSphere } from '../../components/activity/animationScenes/activityAnimationSceneSphere';
 
 @Injectable({
@@ -23,6 +24,10 @@ export class ActivityAnimationService {
       value: 1,
       label: 'box',
       scene: (graph: ActivityAnimationGraph) => new ActivityAnimationSceneBox(graph, 'activityAnimationScene'),
+    }, {
+      value: 2,
+      label: 'box histogram',
+      scene: (graph: ActivityAnimationGraph) => new ActivityAnimationSceneBoxHistogram(graph, 'activityAnimationScene'),
     }];
   }
 

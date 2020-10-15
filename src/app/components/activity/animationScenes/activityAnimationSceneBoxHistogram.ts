@@ -1,130 +1,134 @@
+import * as d3 from 'd3';
+import * as math from 'mathjs';
 import * as THREE from 'three';
 
 import { Activity } from '../activity';
-
 import { ActivityAnimationGraph } from '../activityAnimationGraph';
 import { ActivityAnimationScene } from './activityAnimationScene';
 
 
-export class ActivityAnimationSceneBox extends ActivityAnimationScene {
+export class ActivityAnimationSceneBoxHistogram extends ActivityAnimationScene {
 
   constructor(graph: ActivityAnimationGraph, containerId: string) {
-    super('box', graph, containerId);
+    super('box histogram', graph, containerId);
   }
 
-  createLayer(activity: Activity): THREE.Group {
-    // console.log('Add layer');
-    const size = 0.01;
-    const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(size, size, size);
-    const layer: THREE.Group = new THREE.Group();
+  createLayer(layer: any, activity: Activity): THREE.Group {
+    // console.log('Create activity layer');
+    const layerGraph: THREE.Group = new THREE.Group();
+    const activityLayerGraph: THREE.Group = new THREE.Group();
+
     const scale = 0.01;
-    const activityLayer: THREE.Group = new THREE.Group();
-    const color: string = activity.recorder.view.color;
-    activity.nodePositions.forEach((pos: number[]) => {
-      const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-        color,
+    const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(scale, scale, scale);
+
+    const bins = this.graph.config.grid.divisions;
+    const positions: any[] = this.generatePositions(bins, bins);
+    positions.forEach((position: any) => {
+      const material: THREE.MeshBasicMaterial = new THREE.MeshLambertMaterial({
+        color: layer.color,
         transparent: true,
       });
       const object: THREE.Mesh = new THREE.Mesh(
         geometry,
-        material
+        material,
       );
-      object.userData.color = color;
-
-      const position: any = {
-        x: pos[0],
-        y: pos.length === 3 ? pos[1] : 0,
-        z: pos.length === 3 ? pos[2] : pos[1],
-      };
       object.userData.position = position;
-      object.position.set(position.x, position.y, position.z);
-      object.scale.set(scale, scale, scale);
-      // object.layers.set(activity.idx + 1);
-      activityLayer.add(object);
+      object.userData.frames = this.graph.createEmptyFrames();
+      object.position.set(position.x, 0, position.z);
+      object.scale.set(100 / bins, 0, 100 / bins);
+      object.layers.set(activity.idx + 1);
+      activityLayerGraph.add(object);
     });
-    layer.add(this.grids(activity.nodePositions[0].length));
-    layer.add(activityLayer);
-    return layer;
+    this.updateFrameData(activityLayerGraph, activity);
+
+    layerGraph.add(this.grids(2));
+    layerGraph.add(activityLayerGraph);
+    return layerGraph;
+  }
+
+  updateFrameData(activityLayerGraph: THREE.Group, activity: Activity): void {
+    const events: any = activity.events;
+    const eventKeys: string[] = Object.keys(events);
+    const sampleRate: number = this.graph.config.frames.sampleRate;
+
+    const bins = this.graph.config.grid.divisions;
+    // Push values in data frames
+    events.times.forEach((time: number, idx: number) => {
+      const data: any = {};
+      eventKeys.forEach((eventKey: string) => {
+        data[eventKey] = events[eventKey][idx];
+      });
+
+      const senderIdx: number = activity.nodeIds.indexOf(data.senders);
+      const position: number[] = activity.nodePositions[senderIdx];
+      const x: number = Math.floor((position[0] + 0.5) * bins);
+      const y: number = Math.floor((position[1] + 0.5) * bins);
+      const binIdx: number = x * bins + y;
+      // @ts-ignore
+      const object: THREE.Mesh = activityLayerGraph.children[binIdx];
+      const frameIdx: number = Math.floor(time * sampleRate);
+      const frame: any = object.userData.frames[frameIdx - 1];
+      frame.data.push(data);
+    });
+  }
+
+  interval(min: number, max: number, size: number): number[] {
+    const step: number = (max - min) / size / 2;
+    const range: any = math.range(min, max, step);
+    return range._data.filter((v: number, i: number) => i % 2 === 1);
+  }
+
+  generatePositions(xSize: number = 1, zSize: number = 1): any[] {
+    const X: number[] = this.interval(-0.5, 0.5, xSize);
+    const Z: number[] = this.interval(-0.5, 0.5, zSize);
+    const positions: any[] = [];
+    X.forEach((x: number) => {
+      Z.forEach((z: number) => {
+        positions.push({ x, z });
+      });
+    });
+    return positions;
   }
 
   renderFrame(): void {
     if (this.graph.frame) {
-      const scale: number = this.graph.config.objectSize;
       this.graph.frame.data.forEach((data: any, idx: number) => {
         // @ts-ignore
-        const layer: THREE.Group = this.activityLayers.children[idx];
+        const layerGraph: THREE.Group = this.activityLayers.children[idx];
         // @ts-ignore
-        const activityLayer: THREE.Group = layer.children[1];
-        activityLayer.children.forEach((object: THREE.Mesh) => {
-          // @ts-ignore
-          object.material.opacity = 0.05;
-          object.scale.set(scale, scale, scale);
-          // object.position.setY(object.userData.position.y);
-        });
-
-        const trail: any = this.graph.config.trail;
-        if (trail.length > 0) {
-          for (let trailIdx = trail.length; trailIdx > 0; trailIdx--) {
-            const frame: any = this.graph.frames[this.graph.frameIdx - trailIdx];
-            if (frame) {
-              const trailData: any = frame.data[idx];
-              this.updateObjects(activityLayer, trailData, trailIdx);
-            }
-          }
-        }
-        this.updateObjects(activityLayer, data);
+        const activityLayerGraph: THREE.Group = layerGraph.children[1];
+        this.renderLayer(activityLayerGraph, data);
       });
     }
   }
 
-  updateObjects(activityLayer: THREE.Group, data: any, trailIdx: number = null): void {
+  renderLayer(activityLayerGraph: THREE.Group, data: any): void {
+    const size = 10;
+    const opacity: number = this.graph.config.opacity;
     const trail: any = this.graph.config.trail;
-    const size: number = this.graph.config.objectSize;
-    const ratio = trailIdx !== null ? trailIdx / (trail.length + 1) : 0;
-    const opacity = trailIdx !== null ? (trail.fading ? 1 - ratio : 1) : this.graph.config.opacity;
-    let scale: number;
-    switch (trail.mode) {
-      case 'growing':
-        scale = (1 + ratio) * size;
-        break;
-      case 'shrinking':
-        scale = (1 - ratio) * size;
-        break;
-      default:
-        scale = size;
-    }
+    const grid: number = this.graph.config.grid.divisions;
 
-    data.senders.forEach((sender: number, senderIdx: number) => {
-      // @ts-ignore
-      const object: THREE.Mesh = activityLayer.children[sender];
+    activityLayerGraph.children.forEach((object: THREE.Mesh) => {
+      const idx: number = this.graph.frameIdx;
       let value: number;
-      let colorRGB: string;
-      if (data.hasOwnProperty(this.graph.recordFrom)) {
-        value = this.graph.normalize(data[this.graph.recordFrom][senderIdx]);
-        colorRGB = this.graph.colorRGB(value);
+      if (trail.length > 0) {
+        const frames: any[] = object.userData.frames.slice(idx, idx + trail.length);
+        const values: number[] = frames.map((frame: any) => frame.data.length);
+        value = values.length > 0 ? math.sum(values) / math.sqrt(trail.length) : 0;
       } else {
-        colorRGB = object.userData.color;
+        value = object.userData.frames[idx].data.length;
       }
       // @ts-ignore
-      object.material.color.set(colorRGB);
-      // @ts-ignore
-      object.material.opacity = opacity;
-      object.scale.set(scale, (data.values ? 0.5 : scale), scale);
-      if (value && !this.graph.config.flatHeight) {
-        const height: number = value * size;
+      object.material.opacity = value > 0 ? opacity : 0;
+      object.position.setY(0);
+      object.scale.setY(1);
+      if (!this.graph.config.flatHeight) {
+        const height: number = value * size / grid * 10;
+        object.position.setY(height / 100 / 2);
         if (!this.graph.config.flyingBoxes) {
           object.scale.setY(height);
         }
-        object.position.setY(object.userData.position.y + (height / 200));
-      } else {
-        object.position.setY(object.userData.position.y);
       }
-      // const pos: any = object.userData.position;
-      // if (trailIdx === null) {
-      //   object.position.setY(pos.y);
-      // } else {
-      //   object.position.setY(pos.y - ratio / 2);
-      // }
     });
 
   }

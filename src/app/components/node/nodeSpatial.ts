@@ -202,16 +202,6 @@ export class GridPositions {
   set numDimensions(value: number) {
   }
 
-  round(value: number): number {
-    return Math.floor(value * 100) / 100;
-  }
-
-  range(min: number, max: number, size: number): number[] {
-    const step: number = (max - min) / size / 2;
-    const range: any = math.range(min, max, step);
-    return range._data.filter((v: number, i: number) => i % 2 === 1);
-  }
-
   generate(): void {
     const minX: number = this._center[0] - this._extent[0] / 2;
     const maxX: number = this._center[0] + this._extent[0] / 2;
@@ -220,8 +210,21 @@ export class GridPositions {
     const X: number[] = this.range(minX, maxX, this.rows);
     const Y: number[] = this.range(minY, maxY, this.columns);
     this._pos = [];
-    X.forEach((x: number) =>
-      Y.forEach((y: number) => this._pos.push([this.round(x), this.round(y)])));
+    X.forEach((x: number) => {
+      Y.forEach((y: number) => {
+        this._pos.push([this.round(x), this.round(y)]);
+      });
+    });
+  }
+
+  range(min: number, max: number, size: number): number[] {
+    const step: number = (max - min) / size / 2;
+    const range: any = math.range(min, max, step);
+    return range._data.filter((v: number, i: number) => i % 2 === 1);
+  }
+
+  round(value: number): number {
+    return Math.floor(value * 100) / 100;
   }
 
   toJSON(target: string = 'db'): any {

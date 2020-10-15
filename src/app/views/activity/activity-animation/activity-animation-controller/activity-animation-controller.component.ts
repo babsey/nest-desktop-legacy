@@ -65,14 +65,19 @@ export class ActivityAnimationControllerComponent implements OnInit {
     }
   }
 
+  onCameraChange(): void {
+    this.graph.config.camera.control = true;
+  }
+
   onFrameRateChange(event: any): void {
     this.scene.stop();
     this.scene.animate();
     this.scene.graph.play();
   }
 
-  onCameraChange(): void {
-    this.graph.config.camera.control = true;
+  onGridChange(event: any): void {
+    this.scene.initActivityLayers();
+    this.scene.renderFrame();
   }
 
   step(): void {

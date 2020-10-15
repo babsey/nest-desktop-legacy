@@ -59,6 +59,9 @@ export class ActivityAnimationGraph {
         length: 0,
         fading: false,
       },
+      grid: {
+        divisions: 10,
+      },
       objectSize: 4,
       opacity: 1,
       flatHeight: false,
@@ -175,12 +178,11 @@ export class ActivityAnimationGraph {
    */
   init(): void {
     // console.log('Init activity animation');
-    this._frames = [];
     this._layers = [];
     this._recordables = [];
     this._recordablesOptions = [];
     this._recordFrom = 'V_m';
-    this.initFrames();
+    this._frames = this.createEmptyFrames();
   }
 
   /**
@@ -189,19 +191,18 @@ export class ActivityAnimationGraph {
    * @remarks
    * It requires simulation time;
    */
-  initFrames(): void {
+  createEmptyFrames(): any[] {
     // Add empty frames if not existed
     const sampleRate: number = this._config.frames.sampleRate;
     const nframes: number = this.endtime * sampleRate;
-    if (this._frames.length === 0) {
-      for (let i = 0; i < nframes - 1; i++) {
-        const frame: any = {
-          frameIdx: i,
-          data: [],
-        };
-        this._frames.push(frame);
-      }
+    const frames: any[] = [];
+    for (let i = 0; i < nframes; i++) {
+      frames.push({
+        frameIdx: i,
+        data: [],
+      });
     }
+    return frames;
   }
 
   /**
