@@ -34,6 +34,7 @@
     "codemirror": "^5.55.0",
     "core-js": "^3.6.4",
     "d3": "^6.1.1",
+    "dat.gui": "^0.7.7",
     "lodash": "^4.17.15",
     "material-community-components": "^9.0.0",
     "mathjs": "^7.0.0",

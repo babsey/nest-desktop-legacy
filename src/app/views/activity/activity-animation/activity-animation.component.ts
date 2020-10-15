@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, HostListener } from '@angular/core';
-
+import { Component, OnInit, OnDestroy, Input, HostListener, ViewChild, ElementRef, } from '@angular/core';
 
 import { ActivityAnimationGraph } from '../../../components/activity/activityAnimationGraph';
 import { ActivityAnimationScene } from '../../../components/activity/animationScenes/activityAnimationScene';
@@ -18,6 +17,7 @@ import { ActivityAnimationService } from '../../../services/activity/activity-an
 export class ActivityAnimationComponent implements OnInit {
   @Input() project: Project;
   private _subscriptionUpdate: any;
+  @ViewChild('datGui', { static: true }) datGuiRef: ElementRef;
 
   constructor(
     private _activityAnimationService: ActivityAnimationService,
@@ -25,8 +25,7 @@ export class ActivityAnimationComponent implements OnInit {
 
   ngOnInit() {
     // console.log('Ng init Three scatter')
-    this._subscriptionUpdate = this._activityAnimationService.update.subscribe(
-      () => this.update());
+    this._subscriptionUpdate = this._activityAnimationService.update.subscribe(() => this.update());
     this.init();
   }
 
@@ -50,7 +49,12 @@ export class ActivityAnimationComponent implements OnInit {
 
   init(): void {
     // console.log('Init activity animation scene');
-    setTimeout(() => this._activityAnimationService.loadScene(this.graph), 1);
+    setTimeout(() => {
+      this._activityAnimationService.loadScene(this.graph);
+      if (this.project.app.config.devMode) {
+        this.scene.addGUI(this.datGuiRef);
+      }
+    }, 1);
   }
 
   update(): void {

@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 
 import { Activity } from '../activity';
-
 import { ActivityAnimationGraph } from '../activityAnimationGraph';
 import { ActivityAnimationScene } from './activityAnimationScene';
 
@@ -12,16 +11,16 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
     super('sphere', graph, containerId);
   }
 
-  createLayer(layer: any): THREE.Group {
+  createLayer(layer: any, activity: Activity): THREE.Group {
     // console.log('Create activity layer');
     const layerGraph: THREE.Group = new THREE.Group();
     const activityLayerGraph: THREE.Group = new THREE.Group();
-    activityLayerGraph.userData = layer;
 
     const scale = 0.01;
     const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(scale / 2);
 
-    layer.positions.forEach((position: any) => {
+    const positions: any[] = layer.positions;
+    positions.forEach((position: any) => {
       const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
         color: layer.color,
         transparent: true,
@@ -33,7 +32,7 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
       object.userData.position = position;
       object.position.set(position.x, position.y, position.z);
       object.scale.set(scale, scale, scale);
-      // object.layers.set(activity.idx + 1);
+      object.layers.set(activity.idx + 1);
       activityLayerGraph.add(object);
     });
 
@@ -47,14 +46,13 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
       const scale: number = this.graph.config.objectSize;
       this.graph.frame.data.forEach((data: any, idx: number) => {
         // @ts-ignore
-        const layer: THREE.Group = this.activityLayers.children[idx];
+        const layerGraph: THREE.Group = this.activityLayers.children[idx];
         // @ts-ignore
-        const activityLayer: THREE.Group = layer.children[1];
-        activityLayer.children.forEach((object: THREE.Mesh) => {
+        const activityLayerGraph: THREE.Group = layerGraph.children[1];
+        activityLayerGraph.children.forEach((object: THREE.Mesh) => {
           // @ts-ignore
           object.material.opacity = 0;
           object.scale.set(scale, scale, scale);
-          // object.position.setY(object.userData.position.y);
         });
 
         const trail: any = this.graph.config.trail;
@@ -63,11 +61,11 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
             const frame: any = this.graph.frames[this.graph.frameIdx - trailIdx];
             if (frame) {
               const trailData: any = frame.data[idx];
-              this.updateGraphObjects(activityLayer, trailData, trailIdx);
+              this.updateGraphObjects(activityLayerGraph, trailData, trailIdx);
             }
           }
         }
-        this.updateGraphObjects(activityLayer, data);
+        this.updateGraphObjects(activityLayerGraph, data);
       });
     }
   }
@@ -75,8 +73,9 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
   updateGraphObjects(activityLayerGraph: THREE.Group, data: any, trailIdx: number = null): void {
     const trail: any = this.graph.config.trail;
     const size: number = this.graph.config.objectSize;
-    const ratio = trailIdx !== null ? trailIdx / (trail.length + 1) : 0;
-    const opacity = trailIdx !== null ? (trail.fading ? 1 - ratio : 1) : this.graph.config.opacity;
+    const ratio: number = trailIdx !== null ? trailIdx / (trail.length + 1) : 0;
+    const opacity: number = trailIdx !== null ? (trail.fading ? 1 - ratio : 1) : this.graph.config.opacity;
+    let colorRGB: string = activityLayerGraph.userData.color;
     let scale: number;
     switch (trail.mode) {
       case 'growing':
@@ -92,12 +91,9 @@ export class ActivityAnimationSceneSphere extends ActivityAnimationScene {
     data.senders.forEach((sender: number, senderIdx: number) => {
       // @ts-ignore
       const object: THREE.Mesh = activityLayerGraph.children[sender];
-      let colorRGB: string;
       if (data.hasOwnProperty(this.graph.recordFrom)) {
         const value: number = this.graph.normalize(data[this.graph.recordFrom][senderIdx]);
         colorRGB = this.graph.colorRGB(value);
-      } else {
-        colorRGB = activityLayerGraph.userData.color;
       }
       // @ts-ignore
       object.material.color.set(colorRGB);

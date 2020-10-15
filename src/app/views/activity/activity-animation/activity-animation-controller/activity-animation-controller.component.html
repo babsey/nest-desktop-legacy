@@ -94,6 +94,28 @@
       ></app-select>
     </mat-list-item>
 
+      <ng-container *ngFor="let layer of scene.activityLayers.children">
+        <mat-list-item>
+          {{ layer.uuid }}
+      </mat-list-item>
+      </ng-container>
+
+    <mat-list-item class="flex item">
+        <span class="label">Grid</span>
+        <mat-slider
+        (change)="onGridChange($event)"
+        [(value)]="graph.config.grid.divisions"
+        [max]="20"
+        [min]="1"
+        class="slider"
+        style="width:240px"
+        ></mat-slider>
+        <span class="flex-spacer"></span>
+        <span class="value">
+          {{ graph.config.grid.divisions }}
+        </span>
+      </mat-list-item>
+
     <ng-container *ngIf="graph.recordables.length > 0">
       <mat-list-item>
         <app-select
@@ -113,22 +135,24 @@
       ></app-activity-animation-colormap>
     </ng-container>
 
-    <mat-list-item class="flex item">
-      <span class="label">Object size</span>
-      <mat-slider
-        (change)="onChange($event)"
-        [(value)]="graph.config.objectSize"
-        [min]="1"
-        [max]="10"
-        [step]="0.1"
-        class="slider"
-        style="width:240px">
-      </mat-slider>
-      <span class="flex-spacer"></span>
-      <span class="value">
-        {{ graph.config.objectSize }}
-      </span>
-    </mat-list-item>
+    <ng-container *ngIf="!scene.name.includes('histogram')">
+      <mat-list-item class="flex item">
+        <span class="label">Object size</span>
+        <mat-slider
+          (change)="onChange($event)"
+          [(value)]="graph.config.objectSize"
+          [min]="1"
+          [max]="10"
+          [step]="0.1"
+          class="slider"
+          style="width:240px">
+        </mat-slider>
+        <span class="flex-spacer"></span>
+        <span class="value">
+          {{ graph.config.objectSize }}
+        </span>
+      </mat-list-item>
+    </ng-container>
 
     <mat-list-item class="flex item">
       <span class="label">Opacity</span>
@@ -147,24 +171,22 @@
       </span>
     </mat-list-item>
 
-    <ng-container *ngIf="scene.name === 'box'">
-      <ng-container *ngIf="graph.hasAnyAnalogData()">
-        <mat-list-item>
-          <mat-checkbox
-            (change)="onChange($event)"
-            [(ngModel)]="graph.config.flatHeight">
-            Flatten height
-          </mat-checkbox>
-        </mat-list-item>
+    <ng-container *ngIf="scene.name.includes('box')">
+      <mat-list-item>
+        <mat-checkbox
+          (change)="onChange($event)"
+          [(ngModel)]="graph.config.flatHeight">
+          Flatten height
+        </mat-checkbox>
+      </mat-list-item>
 
-        <mat-list-item>
-          <mat-checkbox
-            (change)="onChange($event)"
-            [(ngModel)]="graph.config.flyingBoxes">
-            Flying boxes
-          </mat-checkbox>
-        </mat-list-item>
-      </ng-container>
+      <mat-list-item>
+        <mat-checkbox
+          (change)="onChange($event)"
+          [(ngModel)]="graph.config.flyingBoxes">
+          Flying boxes
+        </mat-checkbox>
+      </mat-list-item>
     </ng-container>
 
     <ng-container *ngIf="graph.hasAnySpikeData() && false">
@@ -225,136 +247,30 @@
         </span>
       </mat-list-item>
 
-      <mat-list-item class="item">
-        <mat-checkbox
-          (change)="onChange($event)"
-          [(ngModel)]="graph.config.trail.fading"
-          [disabled]="graph.hasAnyAnalogData()">
-          Trail fading
-        </mat-checkbox>
-      </mat-list-item>
-
-      <mat-list-item class="item">
-        <mat-form-field class="form-field">
-          <mat-label>Trail effect</mat-label>
-          <mat-select
-            (selectionChange)="onChange($event)"
-            [(value)]="graph.config.trail.mode"
+      <ng-container *ngIf="!scene.name.includes('histogram')">
+        <mat-list-item class="item">
+          <mat-checkbox
+            (change)="onChange($event)"
+            [(ngModel)]="graph.config.trail.fading"
             [disabled]="graph.hasAnyAnalogData()">
-            <ng-container *ngFor="let trailMode of trailModes">
-              <mat-option [value]="trailMode">{{ trailMode }}</mat-option>
-            </ng-container>
-          </mat-select>
-        </mat-form-field>
-      </mat-list-item>
-    </ng-container>
+            Trail fading
+          </mat-checkbox>
+        </mat-list-item>
 
-    <ng-container *ngIf="graph.config.camera.control">
-      <mat-list-item mat-subheader>
-        Camera
-      </mat-list-item>
-
-      <mat-list-item
-        (click)="graph.config.camera.control = true"
-        class="flex item">
-        <span class="label">Camera Position x</span>
-        <mat-slider
-          (change)="onCameraChange()"
-          [(value)]="graph.config.camera.position.x"
-          [disabled]="!graph.config.camera.control"
-          [min]="-40"
-          [max]="40"
-          class="slider"
-          style="width:240px">
-        </mat-slider>
-        <span class="flex-spacer"></span>
-        <span class="value">
-          {{ graph.config.camera.position.x | format }}
-        </span>
-      </mat-list-item>
-
-      <mat-list-item
-        (click)="graph.config.camera.control = true"
-        class="flex item">
-        <span class="label">Camera Position y</span>
-        <span style="width:240px">
-          <mat-slider
-            (change)="onCameraChange()"
-            [(value)]="graph.config.camera.position.y"
-            [disabled]="!graph.config.camera.control"
-            [min]="-40"
-            [max]="40"
-            class="slider"
-            style="width:100%"
-          ></mat-slider>
-        </span>
-        <span class="flex-spacer"></span>
-        <span class="value">
-          {{ graph.config.camera.position.y | format }}
-        </span>
-      </mat-list-item>
-
-      <mat-list-item
-      (click)="graph.config.camera.control = true"
-      class="flex item">
-        <span class="label">Camera Position z</span>
-        <span style="width:240px">
-          <mat-slider
-            (change)="onCameraChange()"
-            [(value)]="graph.config.camera.position.z"
-            [disabled]="!graph.config.camera.control"
-            [min]="-40"
-            [max]="40"
-            class="slider"
-            style="width:100%"
-          ></mat-slider>
-        </span>
-        <span class="flex-spacer"></span>
-        <span class="value">
-          {{ graph.config.camera.position.z | format }}
-        </span>
-      </mat-list-item>
-
-      <mat-list-item mat-subheader>
-        Camera motion
-      </mat-list-item>
-
-      <mat-list-item class="flex item">
-        <span class="label">Camera speed</span>
-        <mat-slider
-          (change)="onCameraChange()"
-          [(value)]="graph.config.camera.rotation.speed"
-          [min]="0"
-          [max]="1"
-          [step]="0.1"
-          class="slider"
-          style="width:240px"
-        ></mat-slider>
-        <span class="flex-spacer"></span>
-        <span class="value">
-          {{ graph.config.camera.rotation.speed }}
-        </span>
-      </mat-list-item>
-
-      <mat-list-item class="flex item">
-        <span class="label">Camera rotation theta</span>
-        <span style="width:240px">
-          <mat-slider
-            *ngIf="graph.config.camera.rotation.speed === 0"
-            (change)="onCameraChange()"
-            [(value)]="graph.config.camera.rotation.theta"
-            [min]="0"
-            [max]="360"
-            [step]="0.1"
-            class="slider"
-            style="width:100%"
-          ></mat-slider>
-        </span>
-        <span class="flex-spacer"></span>
-        <span class="value">
-          {{ graph.config.camera.rotation.theta | format }}
-        </span>
-      </mat-list-item>
+        <mat-list-item class="item">
+          <mat-form-field class="form-field">
+            <mat-label>Trail effect</mat-label>
+            <mat-select
+              (selectionChange)="onChange($event)"
+              [(value)]="graph.config.trail.mode"
+              [disabled]="graph.hasAnyAnalogData()">
+              <ng-container *ngFor="let trailMode of trailModes">
+                <mat-option [value]="trailMode">{{ trailMode }}</mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+        </mat-list-item>
+      </ng-container>
     </ng-container>
 
   </mat-list>
