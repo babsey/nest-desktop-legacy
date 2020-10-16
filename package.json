@@ -1,6 +1,6 @@
 {
   "name": "nest-desktop",
-  "version": "2.5.0rc4",
+  "version": "2.5.0rc5",
   "license": "MIT",
   "scripts": {
     "ng": "ng",

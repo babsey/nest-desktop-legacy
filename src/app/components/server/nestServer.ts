@@ -85,10 +85,10 @@ export class NESTServer extends Config {
           this.oidcLoginFailed(resp);
           this.checkVersion(resp);
         })
-        .catch((error: any) => {
-          console.log(error);
+        .catch((err: any) => {
+          console.log(err);
           // this.seek()
-          this.oidcLoginFailed(error);
+          this.oidcLoginFailed(err);
         });
     } else {
       this.seek();
