@@ -18,7 +18,6 @@ import { CVISIHistogramPanel } from './plotPanels/CVISIHistogramPanel';
 export class ActivityChartGraph {
   private _config: any = {};
   private _data: any[] = [];
-  private _frames: any[] = [];
   private _hash: string;
   private _imageButtonOptions: any;
   private _layout: any = {};
