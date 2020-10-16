@@ -35,7 +35,7 @@ export class HttpClient {
           if (this._oReq.status === 200) {
             resolve(JSON.parse(this._oReq.responseText));
           } else {
-            reject(this._oReq.responseText);
+            reject(this._oReq);
           }
         }
       };
