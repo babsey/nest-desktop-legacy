@@ -83,7 +83,7 @@ export class NESTServer extends Config {
           const duration: any = end - start;
           // console.log('Pong responds in ' + duration + ' ms')
           this.oidcLoginFailed(resp);
-          this.checkVersion(JSON.parse(resp.response));
+          this.checkVersion(resp);
         })
         .catch((error: any) => {
           console.log(error);
@@ -108,12 +108,14 @@ export class NESTServer extends Config {
         const url: string = protocol + '//' + host;
         this.http.get(url)
           .then((resp: any) => {
-            console.log(url);
             this.url = url;
-            this.checkVersion(JSON.parse(resp.response));
-            resolve(true);
+            this.checkVersion(resp);
+            resolve();
           })
-          .catch((err: any) => console.log(err));
+          .catch((err: any) => {
+            console.log(err);
+            reject();
+          });
       })
     );
     Promise.all(hostPromises);
