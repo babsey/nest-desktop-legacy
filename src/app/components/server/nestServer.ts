@@ -114,7 +114,7 @@ export class NESTServer extends Config {
           })
           .catch((err: any) => {
             console.log(err);
-            reject();
+            resolve();
           });
       })
     );
