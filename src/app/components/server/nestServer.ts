@@ -99,9 +99,9 @@ export class NESTServer extends Config {
     const protocol: string = window.location.protocol;
     const hostname: string = window.location.hostname || 'localhost';
     const hosts: string[] = [
-      'server.' + hostname,
-      hostname + '/server',
       hostname + ':' + (this.port || '5000'),
+      hostname + '/server',
+      'server.' + hostname,
     ];
     const hostPromises: any[] = hosts.map((host: string) =>
       new Promise((resolve, reject) => {
