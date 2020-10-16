@@ -22,6 +22,7 @@
               "complex.js",
               "decimal.js",
               "fraction.js",
+              "plotly.js-dist",
               "typed-function"
             ],
             "outputPath": "nest_desktop/app",
