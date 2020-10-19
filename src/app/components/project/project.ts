@@ -359,20 +359,31 @@ export class Project extends Config {
     // console.log('Run simulation');
     const viewCodeEditor: boolean = this.app.view.project.sidenavMode === 'codeEditor';
     const runScript: boolean = this.app.nestServer.state.simulatorVersion.startsWith('2.');
+    this._simulation.running = true;
     const request: Promise<any> = (!runScript || viewCodeEditor) ?
       this.runSimulationCode() : this.runSimulationScript();
-    this._errorMessage = '';
-    return request.then((resp: any) => {
-      this._simulation.running = false;
-      this._simulation.kernel.time = resp.data.kernel.time;
-      this.updateActivities(resp.data.activities);
-      this.commitNetwork(this._network);
-      return resp;
-    }).catch((err: any) => {
-      this._simulation.running = false;
-      this._errorMessage = err;
-      return err;
-    });
+    return request
+      .then((req: any) => {
+        this._simulation.running = false;
+        switch (req.status) {
+          case 200:
+            this._errorMessage = '';
+            const data: any = JSON.parse(req.responseText).data;
+            this._simulation.kernel.time = data.kernel.time;
+            this.updateActivities(data.activities);
+            this.commitNetwork(this._network);
+            break;
+          default:
+            this._errorMessage = req.responseText;
+            break;
+        }
+        return req;
+      })
+      .catch((req: any) => {
+        this._simulation.running = false;
+        this._errorMessage = req.responseText;
+        return req;
+      });
   }
 
   /**
@@ -387,7 +398,6 @@ export class Project extends Config {
     this.code.generate();
     const url: string = this._app.nestServer.url + '/script/simulation/run';
     const data: any = this.toJSON('simulator');
-    this._simulation.running = true;
     return this._app.nestServer.http.post(url, data);
   }
 
@@ -399,9 +409,8 @@ export class Project extends Config {
     const url: string = this._app.nestServer.url + '/exec';
     const data: any = {
       source: this._code.script,
-      return: 'response'
+      return: 'reqonse'
     };
-    this._simulation.running = true;
     return this.app.nestServer.http.post(url, data);
   }
 

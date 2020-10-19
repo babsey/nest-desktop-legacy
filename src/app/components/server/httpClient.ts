@@ -1,104 +1,110 @@
 export class HttpClient {
-  private _oReq: XMLHttpRequest;
 
   constructor() {
   }
 
-  abort(): void {
-    this._oReq.abort();
+  ping(url: string, callback: any): void {
+    const started: number = new Date().getTime();
+    const req: XMLHttpRequest = new XMLHttpRequest();
+    req.open('GET', url, /*async*/true);
+    req.setRequestHeader('Access-Control-Allow-Headers', 'Origin');
+    req.setRequestHeader('Access-Control-Allow-Methods', 'GET');
+    req.setRequestHeader('Access-Control-Allow-Origin', '*');
+    req.timeout = 1000;
+    req.onreadystatechange = () => {
+      switch (req.readyState) {
+        case 4:
+          const ended: number = new Date().getTime();
+          const milliseconds: number = ended - started;
+          if (callback !== null) {
+            callback(req, milliseconds);
+          }
+          break;
+      }
+    };
+    try {
+      req.send(null);
+    } catch (exception) {
+      // this is expected
+      console.log(exception);
+    }
   }
 
   get(url: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this._oReq = new XMLHttpRequest();
-      this._oReq.open('GET', url, /*async*/true);
-      this._oReq.setRequestHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token, content-type');
-      this._oReq.setRequestHeader('Access-Control-Allow-Origin', '*');
-      this._oReq.setRequestHeader('Content-Type', 'application/json');
-      this._oReq.setRequestHeader('Access-Control-Allow-Methods', 'GET');
-      this._oReq.responseType = 'text';
-      this._oReq.onreadystatechange = () => {
-        if (this._oReq.readyState === 1) {
-          // console.log('Request started.');
-        }
-
-        if (this._oReq.readyState === 2) {
-          // console.log('Headers received.');
-        }
-
-        if (this._oReq.readyState === 3) {
-          // console.log('Data loading..!');
-        }
-
-        if (this._oReq.readyState === 4) {
-          // console.log('Request ended.');
-          if (this._oReq.status === 200) {
-            resolve(JSON.parse(this._oReq.responseText));
-          } else {
-            reject(this._oReq);
-          }
+      const req: XMLHttpRequest = new XMLHttpRequest();
+      req.open('GET', url, /*async*/true);
+      req.setRequestHeader('Access-Control-Allow-Headers', 'Origin');
+      req.setRequestHeader('Access-Control-Allow-Methods', 'GET');
+      req.setRequestHeader('Access-Control-Allow-Origin', '*');
+      req.onreadystatechange = () => {
+        switch (req.readyState) {
+          // case 1:
+          //   console.log('Request started.');
+          //   break;
+          // case 2:
+          //   console.log('Headers received.');
+          //   break;
+          // case 3:
+          //   console.log('Headers received.');
+          //   break;
+          case 4:
+            resolve(req);
+            break;
         }
       };
 
-      // this._oReq.addEventListener('progress', event => console.log('progress', event));
-      // this._oReq.addEventListener('load', event => console.log('lead', event));
-      // this._oReq.addEventListener('error', event => console.log('error', event));
-      // this._oReq.addEventListener('abort', event => console.log('abort', event));
+      // req.addEventListener('progress', event => console.log('progress', event));
+      // req.addEventListener('load', event => console.log('lead', event));
+      // req.addEventListener('error', event => console.log('error', event));
+      // req.addEventListener('abort', event => console.log('abort', event));
 
       try {
-        this._oReq.send(null);
+        req.send(null);
       } catch (exception) {
         console.log(exception);
         // this is expected
-        reject(this._oReq);
+        reject(req);
       }
     });
   }
 
   post(url: string, data: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this._oReq = new XMLHttpRequest();
-      this._oReq.open('POST', url, /*async*/true);
-      this._oReq.setRequestHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token, content-type');
-      this._oReq.setRequestHeader('Access-Control-Allow-Origin', '*');
-      this._oReq.setRequestHeader('Content-Type', 'application/json');
-      this._oReq.setRequestHeader('Access-Control-Allow-Methods', 'POST');
-      this._oReq.timeout = 10000;
-      this._oReq.responseType = 'text';
-      this._oReq.onreadystatechange = () => {
-        if (this._oReq.readyState === 1) {
-          // console.log('Request started.');
-        }
-
-        if (this._oReq.readyState === 2) {
-          // console.log('Headers received.');
-        }
-
-        if (this._oReq.readyState === 3) {
-          // console.log('Data loading..!');
-        }
-
-        if (this._oReq.readyState === 4) {
-          // console.log('Request ended.');
-          if (this._oReq.status === 200) {
-            resolve(JSON.parse(this._oReq.responseText));
-          } else {
-            reject(this._oReq.responseText);
-          }
+      const req: XMLHttpRequest = new XMLHttpRequest();
+      req.open('POST', url, /*async*/true);
+      req.setRequestHeader('Access-Control-Allow-Headers', 'Origin, Content-Type');
+      req.setRequestHeader('Access-Control-Allow-Methods', 'POST');
+      req.setRequestHeader('Access-Control-Allow-Origin', '*');
+      req.setRequestHeader('Content-Type', 'application/json');
+      req.onreadystatechange = () => {
+        switch (req.readyState) {
+          // case 1:
+          //   console.log('Request started.');
+          //   break;
+          // case 2:
+          //   console.log('Headers received.');
+          //   break;
+          // case 3:
+          //   console.log('Headers received.');
+          //   break;
+          case 4:
+            resolve(req);
+            break;
         }
       };
 
-      // this._oReq.addEventListener('progress', event => console.log('progress', event));
-      // this._oReq.addEventListener('load', event => console.log('lead', event));
-      // this._oReq.addEventListener('error', event => console.log('error', event));
-      // this._oReq.addEventListener('abort', event => console.log('abort', event));
+      // req.addEventListener('progress', event => console.log('progress', event));
+      // req.addEventListener('load', event => console.log('lead', event));
+      // req.addEventListener('error', event => console.log('error', event));
+      // req.addEventListener('abort', event => console.log('abort', event));
 
       try {
-        this._oReq.send(JSON.stringify(data));
+        req.send(JSON.stringify(data));
       } catch (exception) {
         console.log(exception);
         // this is expected
-        reject(Error('Error'));
+        reject(req);
       }
     });
   }

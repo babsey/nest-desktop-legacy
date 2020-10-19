@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { listAnimation } from '../../../animations/list-animation';
@@ -15,7 +14,7 @@ import { ModelService } from '../../../services/model/model.service';
   selector: 'app-model-list',
   templateUrl: './model-list.component.html',
   styleUrls: ['./model-list.component.scss'],
-  animations: [ listAnimation ]
+  animations: [listAnimation]
 })
 export class ModelListComponent implements OnInit, OnDestroy {
   private _filteredModels: string[] = [];
@@ -26,7 +25,6 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   constructor(
     private _appService: AppService,
-    private _http: HttpClient,
     private _modelService: ModelService,
     private _router: Router,
   ) { }
@@ -38,10 +36,6 @@ export class ModelListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._subscription.unsubscribe();
-  }
-
-  get app(): App {
-    return this._appService.app;
   }
 
   get filteredModels(): string[] {
@@ -75,15 +69,22 @@ export class ModelListComponent implements OnInit, OnDestroy {
   resetModels(): void {
     this._router.navigate([{ outlets: { primary: null, nav: 'model' } }]);
     this._modelService.selectedModel = '';
-    this.app.resetModelDatabase();
+    this._appService.app.resetModelDatabase();
   }
 
   update(): void {
-    const urlRoot: string = this.app.nestServer.url;
-    this._http.get(urlRoot + '/api/Models').subscribe((resp: string[]) => {
-      this._models = resp;
-      this.filterModels();
-    });
+    const urlRoot: string = this._appService.app.nestServer.url;
+    this._appService.app.nestServer.http.get(urlRoot + '/api/Models')
+      .then((req: any) => {
+        if (req.status === 200) {
+          const models: string[] = JSON.parse(req.responseText);
+          this._models = models;
+          this.filterModels();
+        }
+      })
+      .catch((req: any) => {
+        console.log(req);
+      });
   }
 
   filterModelsBySearch(): void {
