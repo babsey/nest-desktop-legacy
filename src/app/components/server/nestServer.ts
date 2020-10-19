@@ -76,19 +76,21 @@ export class NESTServer extends Config {
   check(): void {
     // console.log('Check server')
     if (this.config.hostname) {
-      const start: any = new Date().getTime();
-      this.http.get(this.url)
-        .then((resp: any) => {
-          const end: any = new Date().getTime();
-          const duration: any = end - start;
-          // console.log('Pong responds in ' + duration + ' ms')
-          this.oidcLoginFailed(resp);
-          this.checkVersion(resp);
+      this._http.get(this.url)
+        .then((req: any) => {
+          switch (req.status) {
+            case 200:
+              const resp: any = JSON.parse(req.responseText);
+              this.checkVersion(resp);
+              break;
+            default:
+              console.log(req);
+              this.oidcLoginFailed(req);
+              break;
+          }
         })
-        .catch((err: any) => {
-          console.log(err);
-          // this.seek()
-          this.oidcLoginFailed(err);
+        .catch((req: any) => {
+          console.log(req);
         });
     } else {
       this.seek();
@@ -99,53 +101,58 @@ export class NESTServer extends Config {
     const protocol: string = window.location.protocol;
     const hostname: string = window.location.hostname || 'localhost';
     const hosts: string[] = [
-      hostname + ':' + (this.port || '5000'),
       hostname + '/server',
-      'server.' + hostname,
+      hostname + ':' + (this.port || '5000'),
     ];
     const hostPromises: any[] = hosts.map((host: string) =>
       new Promise((resolve, reject) => {
         const url: string = protocol + '//' + host;
-        this.http.get(url)
-          .then((resp: any) => {
-            this.url = url;
-            this.checkVersion(resp);
-            resolve();
-          })
-          .catch((err: any) => {
-            console.log(err);
-            resolve();
-          });
+        this._http.ping(url, (req: any) => {
+          switch (req.status) {
+            case 200:
+              this.url = url;
+              const resp: any = JSON.parse(req.responseText);
+              this.checkVersion(resp);
+              resolve();
+              break;
+            case 502:
+              this.oidcLoginFailed(req);
+              break;
+          }
+        });
       })
     );
     Promise.all(hostPromises);
   }
 
-  checkVersion(info: any): void {
-    if (info === undefined) { return; }
+  checkVersion(resp: any): void {
     // console.log('Fetch info', info)
     const appVersion: string[] = environment.VERSION.split('.');
 
-    if (info.hasOwnProperty('server')) {
+    if (resp.hasOwnProperty('server')) {
       this._state.serverReady = true;
-      this._state.serverVersion = info.server.version;
+      this._state.serverVersion = resp.server.version;
       const serverVersion: string[] = this._state.serverVersion.split('.');
-      this._state.serverValid = appVersion[0] === serverVersion[0] && appVersion[1] === serverVersion[1];
+      this._state.serverValid =
+        appVersion[0] === serverVersion[0] &&
+        appVersion[1] === serverVersion[1];
     }
 
-    if (info.hasOwnProperty('simulator')) {
+    if (resp.hasOwnProperty('simulator')) {
       this._state.simulatorReady = true;
-      this._state.simulatorVersion = info.simulator.version;
+      this._state.simulatorVersion = resp.simulator.version;
       const simulatorVersion: string[] = this._state.simulatorVersion.split('.');
       if (simulatorVersion.length === 3) {
-        this._state.simulatorValid = simulatorVersion[0] === '2' && simulatorVersion[1] >= '18';
+        this._state.simulatorValid =
+          simulatorVersion[0] === '2' &&
+          simulatorVersion[1] >= '18';
       }
     }
   }
 
   // TODO: not a permament solution
-  oidcLoginFailed(resp: any): void {
-    if (resp.ok === false && resp.url === 'https://services.humanbrainproject.eu/oidc/login') {
+  oidcLoginFailed(req: any): void {
+    if (req.ok === false && req.url === 'https://services.humanbrainproject.eu/oidc/login') {
       window.location.reload();
     }
   }

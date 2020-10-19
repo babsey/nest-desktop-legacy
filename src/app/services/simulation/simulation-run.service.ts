@@ -30,31 +30,35 @@ export class SimulationRunService {
     }
 
     this._logService.log('Run simulation on server');
-    const request: Promise<any> = project.runSimulation();
-
-    return request.then((resp: any) => {
-      if (this._snackBarRef) {
-        this._snackBarRef.dismiss();
-      }
-      this._logService.log('Response from server');
-      if (project.errorMessage !== '') {
-        project.emptyActivityGraph();
-        this.showError(project.errorMessage);
-      }
-      if (resp.hasOwnProperty('stdout')) {
-        this._snackBarRef = this._snackBar.open(resp.stdout, null, {
-          duration: 5000
-        });
-      }
-      this._activityAnimationService.update.emit();
-    }).catch((err: any) => {
-      console.log(err);
-      if (this._snackBarRef) {
-        this._snackBarRef.dismiss();
-      }
-      const message: string = err.error;
-      this.showError(message);
-    });
+    return project.runSimulation()
+      .then((req: any) => {
+        if (this._snackBarRef) {
+          this._snackBarRef.dismiss();
+        }
+        this._logService.log('Response from server');
+        if (req.status === 200) {
+          const resp: any = JSON.parse(req.responseText);
+          if (resp.hasOwnProperty('stdout')) {
+            this._snackBarRef = this._snackBar.open(resp.stdout, null, {
+              duration: 5000
+            });
+          }
+        } else {
+          project.emptyActivityGraph();
+          if (project.errorMessage !== '') {
+            this.showError(project.errorMessage);
+          }
+        }
+        this._activityAnimationService.update.emit();
+      })
+      .catch((req: any) => {
+        console.log(req);
+        if (this._snackBarRef) {
+          this._snackBarRef.dismiss();
+        }
+        const message: string = req.responseText;
+        this.showError(message);
+      });
   }
 
   showError(message: string): void {

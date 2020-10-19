@@ -1,9 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../environments/environment';
 
 import { App } from '../../components/app';
+import { HttpClient } from '../../components/server/httpClient';
 import { Model } from '../../components/model/model';
 
 import { AppService } from '../app/app.service';
@@ -22,7 +22,6 @@ export class ModelService {
 
   constructor(
     private _appService: AppService,
-    private _http: HttpClient,
   ) {
   }
 
@@ -32,6 +31,10 @@ export class ModelService {
 
   get defaults(): any {
     return this._defaults;
+  }
+
+  get http(): HttpClient {
+    return this._appService.app.nestServer.http;
   }
 
   get progress(): boolean {
@@ -75,15 +78,18 @@ export class ModelService {
     const urlRoot: string = this.app.nestServer.url;
     this._defaults = {};
     this._progress = true;
-    const modelId: string = this.selectedModel;
+    const data: any = { model: this.selectedModel };
     setTimeout(() => {
-      this._http.post(urlRoot + '/api/GetDefaults', { model: modelId })
-        .subscribe((resp: any) => {
+      this.http.post(urlRoot + '/api/GetDefaults', data)
+        .then((req: any) => {
           // console.log(resp)
           this._progress = false;
-          this._defaults = resp;
-        }, (err: any) => {
-          console.log(err);
+          if (req.status !== 200) { return; }
+          this._defaults = JSON.parse(req.responseText);
+        })
+        .catch((req: any) => {
+          this._progress = false;
+          console.log(req);
         });
     }, 500);
   }
