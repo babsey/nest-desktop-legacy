@@ -409,7 +409,7 @@ export class Project extends Config {
     const url: string = this._app.nestServer.url + '/exec';
     const data: any = {
       source: this._code.script,
-      return: 'reqonse'
+      return: 'response'
     };
     return this.app.nestServer.http.post(url, data);
   }
