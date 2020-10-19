@@ -28,7 +28,7 @@ export class NESTServer extends Config {
   set host(value: string) {
     const values: string[] = value.split(':');
     this.hostname = values[0];
-    this.port = values[1];
+    this.port = values[1] || '';
   }
 
   get hostname(): string {
