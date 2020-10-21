@@ -154,7 +154,7 @@ export class ActivityAnimationGraph {
   }
 
   /**
-   * Normalize value for color or height;
+   * Normalize value for color or height.
    */
   normalize(value: number): number {
     const min: number = this._config.colorMap.min;
@@ -163,7 +163,7 @@ export class ActivityAnimationGraph {
   }
 
   /**
-   * RGB color for a value in range [0 - 1];
+   * RGB color for a value in range [0 - 1].
    */
   colorRGB(value: number): string {
     const colorScale: any = d3['interpolate' + this._config.colorMap.scale];
@@ -189,7 +189,7 @@ export class ActivityAnimationGraph {
    * Initialize frames for animation.
    *
    * @remarks
-   * It requires simulation time;
+   * It requires simulation time.
    */
   createEmptyFrames(): any[] {
     // Add empty frames if not existed
@@ -209,7 +209,7 @@ export class ActivityAnimationGraph {
    * Update activity graph for animation.
    *
    * @remarks
-   * It requires network activities;
+   * It requires network activities.
    */
   update(): void {
     // console.log('Update activity animation graph');
@@ -319,7 +319,7 @@ export class ActivityAnimationGraph {
   }
 
   /**
-   * step frame animation forward.
+   * Move one frame forward in the animation.
    */
   step(): void {
     this.stop();
@@ -328,7 +328,7 @@ export class ActivityAnimationGraph {
   }
 
   /**
-   * step frame animation backward.
+   * Go back one frame in the animation.
    */
   stepBackward(): void {
     this.stop();

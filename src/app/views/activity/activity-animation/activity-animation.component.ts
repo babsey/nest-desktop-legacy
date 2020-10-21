@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, HostListener, ViewChild, ElementRef, } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
 
 import { ActivityAnimationGraph } from '../../../components/activity/activityAnimationGraph';
 import { ActivityAnimationScene } from '../../../components/activity/animationScenes/activityAnimationScene';
@@ -14,7 +14,7 @@ import { ActivityAnimationService } from '../../../services/activity/activity-an
   templateUrl: './activity-animation.component.html',
   styleUrls: ['./activity-animation.component.scss']
 })
-export class ActivityAnimationComponent implements OnInit {
+export class ActivityAnimationComponent implements OnInit, OnDestroy {
   @Input() project: Project;
   private _subscriptionUpdate: any;
   @ViewChild('datGui', { static: true }) datGuiRef: ElementRef;
@@ -63,6 +63,7 @@ export class ActivityAnimationComponent implements OnInit {
   }
 
   onDblClick(event: MouseEvent): void {
+    // console.log(event);
     this.scene.updateCameraPosition();
   }
 

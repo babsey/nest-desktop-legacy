@@ -20,13 +20,17 @@ export class ConnectionSelectionComponent implements OnInit {
   }
 
   onSynapseSelectionChange(event: any): void {
+    // console.log(event);
     const value: string = event.option.value;
     const selected: boolean = event.option.selected;
-    const parameter: Parameter = this.connection.synapse.params.find((param: Parameter) => param.id === value);
+    const parameter: Parameter = this.connection.synapse.params.find(
+      (param: Parameter) => param.id === value
+    );
     parameter.visible = selected;
   }
 
   onProjectionSelectionChange(event: any): void {
+    // console.log(event);
     const value: string = event.option.value;
     const selected: boolean = event.option.selected;
     if (value === 'kernel' && selected) {
@@ -35,7 +39,9 @@ export class ConnectionSelectionComponent implements OnInit {
     if (value === 'numberOfConnections' && selected) {
       this.connection.projections.kernel.visible = false;
     }
-    const parameter: ProjectionParameter = this.connection.projections.params.find((param: ProjectionParameter) => param.id === value);
+    const parameter: ProjectionParameter = this.connection.projections.params.find(
+      (param: ProjectionParameter) => param.id === value
+    );
     parameter.visible = selected;
   }
 

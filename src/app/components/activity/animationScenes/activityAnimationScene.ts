@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as STATS from 'stats.js';
-import { GUI } from "dat.gui";
+import { GUI } from 'dat.gui';
 
 import { Activity } from '../activity';
 import { ActivityAnimationGraph } from '../activityAnimationGraph';
@@ -281,9 +281,7 @@ export class ActivityAnimationScene {
     this._renderer.render(this._scene, this._camera);
   }
 
-
-  addGUI(ref) {
-
+  addGUI(ref: ElementRef<any>) {
     // Init gui
     const gui = new GUI({ autoPlace: false, closed: false, closeOnTop: true });
     ref.nativeElement.appendChild(gui.domElement);
@@ -295,8 +293,8 @@ export class ActivityAnimationScene {
     // sceneFolder.add(this.config.scene.fog, 'far', 0, 100, 0.1);
 
     const cameraProps = {
-      get 'control'() { return _this.config.camera.control; },
-      set 'control'(v) { _this.config.camera.control = v; },
+      get control() { return _this.config.camera.control; },
+      set control(v) { _this.config.camera.control = v; },
       get 'rotation speed'() { return _this.config.camera.rotation.speed; },
       set 'rotation speed'(v) { _this.config.camera.rotation.speed = v; }
     };

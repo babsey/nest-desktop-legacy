@@ -73,7 +73,12 @@ export class ActivityAnimationSceneBox extends ActivityAnimationScene {
     const trail: any = this.graph.config.trail;
     const size: number = this.graph.config.objectSize;
     const ratio: number = trailIdx !== null ? trailIdx / (trail.length + 1) : 0;
-    const opacity: number = trailIdx !== null ? (trail.fading ? 1 - ratio : 1) : this.graph.config.opacity;
+    const opacity: number =
+      trailIdx !== null
+        ? trail.fading
+          ? 1 - ratio
+          : 1
+        : this.graph.config.opacity;
     let colorRGB: string = activityLayerGraph.userData.color;
     let scale: number;
     switch (trail.mode) {

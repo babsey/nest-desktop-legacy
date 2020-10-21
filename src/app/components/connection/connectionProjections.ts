@@ -24,12 +24,24 @@ export class ConnectionProjections extends Config {
     this._connection = connection;
 
     this._connectionType = projections.connectionType;
-    this._allowAutapses = this.initParameter('allowAutapses', projections.allowAutapses);
-    this._allowMultapses = this.initParameter('allowMultapses', projections.allowMultapses);
-    this._allowOversizedMask = this.initParameter('allowOversizedMask', projections.allowOversizedMask);
+    this._allowAutapses = this.initParameter(
+      'allowAutapses',
+      projections.allowAutapses
+    );
+    this._allowMultapses = this.initParameter(
+      'allowMultapses',
+      projections.allowMultapses
+    );
+    this._allowOversizedMask = this.initParameter(
+      'allowOversizedMask',
+      projections.allowOversizedMask
+    );
     this._delays = this.initParameter('delays', projections.delays);
     this._kernel = this.initParameter('kernel', projections.kernel);
-    this._numberOfConnections = this.initParameter('numberOfConnections', projections.numberOfConnections);
+    this._numberOfConnections = this.initParameter(
+      'numberOfConnections',
+      projections.numberOfConnections
+    );
     this._weights = this.initParameter('weights', projections.weights);
   }
 

@@ -2,8 +2,6 @@ import * as PlotlyJS from 'plotly.js-dist';
 
 import { Project } from '../project/project';
 
-import { Activity } from './activity';
-
 import { ActivityGraphPanel } from './plotPanels/activityGraphPanel';
 import { AnalogSignalHistogramPanel } from './plotPanels/analogSignalHistogramPanel';
 import { NeuronAnalogSignalPlotPanel } from './plotPanels/neuronAnalogSignalPlotPanel';

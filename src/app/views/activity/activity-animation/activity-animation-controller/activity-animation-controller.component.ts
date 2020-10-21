@@ -8,7 +8,6 @@ import { Project } from '../../../../components/project/project';
 import { ActivityAnimationService } from '../../../../services/activity/activity-animation.service';
 
 
-
 @Component({
   selector: 'app-activity-animation-controller',
   templateUrl: './activity-animation-controller.component.html',
@@ -60,6 +59,7 @@ export class ActivityAnimationControllerComponent implements OnInit {
   }
 
   onChange(event: any): void {
+    // console.log(event);
     if (this.graph.config.frames.speed === 0) {
       this.scene.renderFrame();
     }
@@ -70,12 +70,14 @@ export class ActivityAnimationControllerComponent implements OnInit {
   }
 
   onFrameRateChange(event: any): void {
+    // console.log(event);
     this.scene.stop();
     this.scene.animate();
     this.scene.graph.play();
   }
 
   onGridChange(event: any): void {
+    // console.log(event);
     this.scene.initActivityLayers();
     this.scene.renderFrame();
   }

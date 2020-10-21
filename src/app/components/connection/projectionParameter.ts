@@ -150,6 +150,11 @@ export class ProjectionParameter {
     this._visible = value;
   }
 
+  /**
+   * Clones a ProjectionParameter. The created instance is created using the
+   * projections and the parameters of the old instance.
+   * @returns cloned ProjectionParameter
+   */
   copy(): any {
     return new ProjectionParameter(this._projections, this);
   }

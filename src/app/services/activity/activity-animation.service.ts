@@ -19,15 +19,21 @@ export class ActivityAnimationService {
     this._scenes = [{
       value: 0,
       label: 'sphere',
-      scene: (graph: ActivityAnimationGraph) => new ActivityAnimationSceneSphere(graph, 'activityAnimationScene'),
+      scene: (graph: ActivityAnimationGraph) =>
+        new ActivityAnimationSceneSphere(graph, 'activityAnimationScene'),
     }, {
       value: 1,
       label: 'box',
-      scene: (graph: ActivityAnimationGraph) => new ActivityAnimationSceneBox(graph, 'activityAnimationScene'),
+      scene: (graph: ActivityAnimationGraph) =>
+        new ActivityAnimationSceneBox(graph, 'activityAnimationScene'),
     }, {
       value: 2,
       label: 'box histogram',
-      scene: (graph: ActivityAnimationGraph) => new ActivityAnimationSceneBoxHistogram(graph, 'activityAnimationScene'),
+      scene: (graph: ActivityAnimationGraph) =>
+        new ActivityAnimationSceneBoxHistogram(
+          graph,
+          'activityAnimationScene'
+        ),
     }];
   }
 
