@@ -281,7 +281,7 @@ export class ActivityAnimationScene {
     this._renderer.render(this._scene, this._camera);
   }
 
-  addGUI(ref: ElementRef<any>) {
+  addGUI(ref: ElementRef<any>) {  //TODO: @security Permitting direct access to the DOM can make your application more vulnerable to XSS attacks. Carefully review any use of ElementRef in your code. For more detail, see the Security Guide, https://angular.io/guide/security
     // Init gui
     const gui = new GUI({ autoPlace: false, closed: false, closeOnTop: true });
     ref.nativeElement.appendChild(gui.domElement);
