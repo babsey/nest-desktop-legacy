@@ -1,25 +1,13 @@
-<div style="position:absolute; z-index:10; background-color:white; width: 100">
-  <mat-button-toggle-group
-    [(value)]="code.selectedBlocks"
-    [multiple]="true"
-    appearance="legacy">
-    <ng-container *ngFor="let block of code.blocks">
-      <mat-button-toggle [value]="block" >{{ block }}</mat-button-toggle>
-    </ng-container>
-  </mat-button-toggle-group>
-
+<div style="position:absolute; z-index:10; right: 16px">
   <button mat-mini-fab color="light"
     (click)="copyCode()"
     title="Copy code"
-    style="margin: 0 4px">
+    style="margin: 4px">
     <fa-icon icon="copy"></fa-icon>
   </button>
 </div>
 
-
-<div style="position:relative; padding-top:40px">
-  <ngx-codemirror
-    [(ngModel)]="code.script"
-    [options]="options"
-  ></ngx-codemirror>
-</div>
+<ngx-codemirror
+  [(ngModel)]="code.script"
+  [options]="options"
+></ngx-codemirror>

@@ -67,4 +67,5 @@ export class SimulationCodeEditorComponent implements OnInit {
       cm.showHint();
     }
   }
+
 }

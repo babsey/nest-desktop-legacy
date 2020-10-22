@@ -5,39 +5,10 @@ import { Project } from './project';
 export class ProjectCode extends Code {
   private _project: Project;                           // parent
   private _script: string;
-  private _blocks: string[];
-  private _selectedBlocks: string[];
 
   constructor(project: Project) {
     super();
     this._project = project;
-    this._blocks = [
-      'kernel',
-      'models',
-      'nodes',
-      'connections',
-      'events'
-    ];
-    this._selectedBlocks = [
-      'kernel',
-      'models',
-      'nodes',
-      'connections',
-      'events'
-    ];
-    this.generate();
-  }
-
-  get blocks(): string[] {
-    return this._blocks;
-  }
-
-  get selectedBlocks(): string[] {
-    return this._selectedBlocks;
-  }
-
-  set selectedBlocks(value: string[]) {
-    this._selectedBlocks = value;
     this.generate();
   }
 
@@ -50,38 +21,29 @@ export class ProjectCode extends Code {
   }
 
   generate(): void {
+    // console.log('Generate script');
     this._script = '';
     this._script += this.importModules();
     this._script += 'nest.ResetKernel()\n';
 
-    if (this._selectedBlocks.includes('kernel')) {
-      this._script += '\n\n# Simulation kernel\n';
-      this._script += this._project.simulation.code.setRandomSeed();
-      this._script += this._project.simulation.code.setKernelStatus();
-    }
+    this._script += '\n\n# Simulation kernel\n';
+    this._script += this._project.simulation.code.setRandomSeed();
+    this._script += this._project.simulation.code.setKernelStatus();
 
-    // if (sections.includes('models')) {
-    //   this._script += '\n\n# Copy models\n';
-    //   this.project.models.forEach((model: Model) => this._script += model.code.copyModel());
-    // }
+    // this._script += '\n\n# Copy models\n';
+    // this.project.models.forEach((model: Model) => this._script += model.code.copyModel());
 
-    if (this._selectedBlocks.includes('nodes')) {
-      this._script += '\n\n# Create nodes\n';
-      this._script += this._project.network.code.createNodes();
-    }
+    this._script += '\n\n# Create nodes\n';
+    this._script += this._project.network.code.createNodes();
 
-    if (this._selectedBlocks.includes('connections')) {
-      this._script += '\n\n# Connect nodes\n';
-      this._script += this._project.network.code.connectNodes();
-    }
+    this._script += '\n\n# Connect nodes\n';
+    this._script += this._project.network.code.connectNodes();
 
     this._script += '\n\n# Run simulation\n';
     this._script += this._project.simulation.code.simulate();
 
-    if (this._selectedBlocks.includes('events')) {
-      this._script += '\n\n# Collect activities\n';
-      this._script += this._project.network.code.getActivities();
-    }
+    this._script += '\n\n# Collect activities\n';
+    this._script += this._project.network.code.getActivities();
   }
 
   importModules(): string {
