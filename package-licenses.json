@@ -36,6 +36,7 @@
   "codemirror": "MIT",
   "core-js": "MIT",
   "d3": "BSD-3-Clause",
+  "dat.gui": "Apache-2.0",
   "jasmine-core": "MIT",
   "jasmine-spec-reporter": "Apache-2.0",
   "karma-chrome-launcher": "MIT",
