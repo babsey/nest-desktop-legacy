@@ -39,6 +39,7 @@ export class HttpClient {
       req.setRequestHeader('Access-Control-Allow-Origin', '*');
       req.onreadystatechange = () => {
         switch (req.readyState) {
+          // TODO: Verify need for switch
           // case 1:
           //   console.log('Request started.');
           //   break;
@@ -79,6 +80,7 @@ export class HttpClient {
       req.setRequestHeader('Content-Type', 'application/json');
       req.onreadystatechange = () => {
         switch (req.readyState) {
+          // TODO: Verify need for switch
           // case 1:
           //   console.log('Request started.');
           //   break;

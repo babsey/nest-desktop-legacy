@@ -56,9 +56,28 @@ export class ModelDocumentationComponent implements OnInit, OnChanges {
         .then((req: any) => {
           if (req.status !== 200) { return; }
           this._helptext = JSON.parse(req.responseText);
-          const titles: string[] = ['Synopsis', 'Description', 'Parameters', 'Examples', 'Receives', 'Sends', 'Transmits', 'Remarks', 'References', 'Availability', 'Authors', 'Author', 'FirstVersion', 'SeeAlso', 'Source'];
+          const titles: string[] = [
+            'Synopsis',
+            'Description',
+            'Parameters',
+            'Examples',
+            'Receives',
+            'Sends',
+            'Transmits',
+            'Remarks',
+            'References',
+            'Availability',
+            'Authors',
+            'Author',
+            'FirstVersion',
+            'SeeAlso',
+            'Source'
+          ];
           const lines: string[] = this._helptext.split('\n');
-          let blocks: any[] = titles.map((title: string) => [lines.indexOf(title + ':'), title]);
+          let blocks: any[] = titles.map((title: string) => [
+            lines.indexOf(title + ':'),
+            title
+          ]);
           blocks = blocks.sort((a: any, b: any) => a[0] - b[0]);
           blocks = blocks.filter((block: any) => block[0] !== -1);
           const content: any = {};

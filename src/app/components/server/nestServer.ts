@@ -152,7 +152,10 @@ export class NESTServer extends Config {
 
   // TODO: not a permament solution
   oidcLoginFailed(req: any): void {
-    if (req.ok === false && req.url === 'https://services.humanbrainproject.eu/oidc/login') {
+    if (
+      req.ok === false &&
+      req.url === 'https://services.humanbrainproject.eu/oidc/login'
+    ) {
       window.location.reload();
     }
   }
