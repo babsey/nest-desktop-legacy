@@ -7,7 +7,8 @@ import * as d3 from 'd3';
 })
 export class MathService {
 
-  constructor() { }
+  constructor() {
+  }
 
   fill(value: number, size: number): number[] {
     return Array.from({ length: size }, () => value);
@@ -15,21 +16,24 @@ export class MathService {
 
   range(start: number, end: number = null, step: number = null): number[] {
     if (!end) {
-      return Array.from({ length: start }, (val, index) => index);
-    } if (!step) {
-      return Array.from({ length: end - start }, (val, index) => start + index);
+      return Array.from({ length: start }, (val: number, index: number) => index);
+    } else if (!step) {
+      return Array.from({ length: end - start }, (val: number, index: number) => start + index);
     } else {
-      return Array.from({ length: Math.ceil((end - start) / step) }, (val, index) => start + (index * step));
+      return Array.from(
+        { length: Math.ceil((end - start) / step) },
+        (val: number, index: number) => start + (index * step)
+      );
     }
   }
 
   linspace(start: number, end: number, size: number): number[] {
-    var step = (end - start) / (size - 1);
-    return this.range(start, end + step, step)
+    const step: number = (end - start) / (size - 1);
+    return this.range(start, end + step, step);
   }
 
   randomInt(min: number, max: number): number {
-    var range = max - min + 1;
+    const range: number = max - min + 1;
     return Math.floor(Math.random() * range) + min;
   }
 
@@ -50,15 +54,15 @@ export class MathService {
   }
 
   extent(values: number[]): number[] {
-    return d3.extent(values)
+    return d3.extent(values);
   }
 
   mean(values: number[]): number {
-    return d3.mean(values)
+    return d3.mean(values);
   }
 
   deviation(values: number[]): number {
-    return d3.deviation(values)
+    return d3.deviation(values);
   }
 
   radToDeg(rad) {

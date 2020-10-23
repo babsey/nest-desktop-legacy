@@ -15,12 +15,12 @@ Contents
    :caption: User Documentation
 
    user/index
-   user/quickstart
-   user/setup
    user/usage
+   user/setup
    user/command-API
    user/troubleshooting
-   user/use-HBP
+   user/use-ebrains
+
 
 .. toctree::
    :caption: Deployer Documentation
@@ -38,7 +38,8 @@ Contents
    developer/interface-concept
    developer/preparation
    developer/source-code
-   developer/package
-   developer/readthedocs
+   developer/icon-description
    developer/semantic-version
+   developer/package
+   developer/doc-workflow
    developer/sources

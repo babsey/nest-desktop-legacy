@@ -1,0 +1,109 @@
+<div class="flex button-toolbar"
+  style="flex-direction:column; height:calc(100vh - 40px)">
+
+  <button mat-icon-button
+    (click)="toggleSidenav()"
+    style="height:40px">
+    <fa-icon [icon]="isSidenavOpened() ? 'chevron-right' : 'chevron-left'"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('networkSelection')"
+    [class.mat-fab]="isActive('networkSelection')"
+    class="app-button"
+    matTooltip="Network selection"
+    matTooltipPosition="before"
+    matTooltipShowDelay="1000">
+    <fa-icon icon="tasks"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('networkController')"
+    [class.mat-fab]="isActive('networkController')"
+    class="app-button"
+    matTooltip="Network controller"
+    matTooltipPosition="before"
+    matTooltipShowDelay="1000">
+    <fa-icon icon="sliders-h"></fa-icon>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('simulation')"
+    [class.mat-fab]="isActive('simulation')"
+    class="app-button"
+    matTooltip="Simulation settings"
+    matTooltipPosition="before"
+    matTooltipShowDelay="1000">
+    <!-- <fa-icon icon="wrench"></fa-icon> -->
+    <span class="fa-stack" style="line-height:2em">
+      <fa-icon icon="cog" class="fa-stack-1x"></fa-icon>
+      <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top:11px; left:-14px"></fa-icon>
+    </span>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('codeEditor')"
+    [class.mat-fab]="isActive('codeEditor')"
+    class="app-button"
+    matTooltip="Script code"
+    matTooltipPosition="before"
+    matTooltipShowDelay="1000">
+    <fa-icon icon="code"></fa-icon>
+  </button>
+
+  <ng-container *ngIf="app.config.devMode">
+    <button mat-icon-button
+      (click)="selectMode('rawData')"
+      [class.mat-fab]="isActive('rawData')"
+      class="app-button"
+      matTooltip="Raw data"
+      matTooltipPosition="before"
+      matTooltipShowDelay="1000">
+      JSON
+    </button>
+
+    <!-- <button mat-icon-button
+      (click)="selectMode('networkGraphSettings')"
+      [class.mat-fab]="isActive('networkGraphSettings')"
+      matTooltip="Network graph settings"
+      matTooltipPosition="before"
+      class="app-button"
+      >
+      <fa-icon icon="bezier-curve"></fa-icon>
+    </button> -->
+  </ng-container>
+
+  <button mat-icon-button
+    (click)="selectMode('activityController')"
+    [class.mat-fab]="isActive('activityController')"
+    [disabled]="!app.project.hasActivities"
+    class="app-button"
+    matTooltip="Activity controller"
+    matTooltipPosition="before"
+    matTooltipShowDelay="1000">
+    <span class="fa-stack" style="line-height:2em">
+      <ng-container [ngSwitch]="graphMode">
+        <ng-container *ngSwitchCase="'chart'">
+          <fa-icon icon="chart-line" class="fa-stack-1x"></fa-icon>
+        </ng-container>
+        <ng-container *ngSwitchCase="'animation'">
+          <fa-icon icon="braille" class="fa-stack-1x"></fa-icon>
+        </ng-container>
+      </ng-container>
+      <fa-icon icon="wrench" class="fa-stack-2x fa-lg" style="color:Tomato; top: 11px; left: -14px"></fa-icon>
+    </span>
+  </button>
+
+  <button mat-icon-button
+    (click)="selectMode('activityStats')"
+    [class.mat-fab]="isActive('activityStats')"
+    class="app-button"
+    matTooltip="Activity statistics"
+    matTooltipPosition="before"
+    matTooltipShowDelay="1000">
+    <fa-icon icon="poll"></fa-icon>
+  </button>
+
+  <span class="flex-spacer"></span>
+
+</div>

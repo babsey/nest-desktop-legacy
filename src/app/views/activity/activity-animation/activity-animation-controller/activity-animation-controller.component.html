@@ -1,0 +1,271 @@
+<ng-container *ngIf="graph && scene">
+  <mat-list dense>
+    <mat-list-item mat-subheader style="height: 48px; line-height:48px">
+      <span class="flex" style="margin: 0 -15px">
+        <span class="flex-spacer"></span>
+        <button mat-icon-button
+          (click)="graph.decrement()"
+          [class.mat-icon-button]="graph.config.frames.speed >= -1"
+          [class.mat-mini-fab]="graph.config.frames.speed < -1"
+          [matBadgeHidden]="hideDecrementBadge()"
+          matBadge="{{ graph.config.frames.speed }}x"
+          matBadgePosition="below">
+          <fa-icon icon="backward"></fa-icon>
+        </button>
+        <button mat-icon-button
+          (click)="graph.playBackward()"
+          [class.mat-icon-button]="graph.config.frames.speed !== -1"
+          [class.mat-mini-fab]="graph.config.frames.speed === -1">
+          <fa-icon icon="play" rotate="180"></fa-icon>
+        </button>
+        <button mat-icon-button
+          (click)="stepBackward()">
+          <fa-icon icon="step-backward"></fa-icon>
+        </button>
+        <button
+          (click)="graph.stop()"
+          [class.mat-icon-button]="graph.config.frames.speed !== 0"
+          [class.mat-mini-fab]="graph.config.frames.speed === 0">
+          <fa-icon icon="pause"></fa-icon>
+        </button>
+        <button mat-icon-button
+          (click)="step()">
+          <fa-icon icon="step-forward"></fa-icon>
+        </button>
+        <button mat-icon-button
+          (click)="graph.play()"
+          [class.mat-icon-button]="graph.config.frames.speed !== 1"
+          [class.mat-mini-fab]="graph.config.frames.speed === 1">
+          <fa-icon icon="play"></fa-icon>
+        </button>
+        <button mat-icon-button
+          (click)="graph.increment()"
+          [class.mat-icon-button]="graph.config.frames.speed <= 1"
+          [class.mat-mini-fab]="graph.config.frames.speed > 1"
+          [matBadgeHidden]="hideIncrementBadge()"
+          matBadge="{{ graph.config.frames.speed }}x"
+          matBadgePosition="below">
+          <fa-icon icon="forward"></fa-icon>
+        </button>
+        <span class="flex-spacer"></span>
+      </span>
+    </mat-list-item>
+
+    <mat-list-item class="flex item">
+      <span class="label">Time step</span>
+      <span style="width:240px">
+        <mat-slider
+          *ngIf=" graph.config.frames.speed === 0"
+          (change)="onChange($event)"
+          [(value)]="graph.frameIdx"
+          [min]="0"
+          [max]="graph.frames.length - 1"
+          class="slider"
+          style="width:100%"
+        ></mat-slider>
+      </span>
+      <span class="flex-spacer"></span>
+      <span class="value">
+        {{ graph.frameIdx / graph.config.frames.sampleRate }} ms
+      </span>
+    </mat-list-item>
+
+    <mat-list-item class="flex item">
+      <span class="label">Frame Rate</span>
+      <mat-slider
+        (change)="onFrameRateChange($event)"
+        [(value)]="graph.config.frames.rate"
+        [min]="1"
+        [max]="60"
+        class="slider"
+        style="width:240px"
+      ></mat-slider>
+      <span class="flex-spacer"></span>
+      <span class="value">
+        {{ graph.config.frames.rate }} fps
+      </span>
+    </mat-list-item>
+
+    <mat-list-item>
+      <app-select
+        [(selected)]="sceneIdx"
+        [options]="scenes"
+        title="Scene"
+      ></app-select>
+    </mat-list-item>
+
+    <mat-list-item class="flex item">
+        <span class="label">Grid</span>
+        <mat-slider
+        (change)="onGridChange($event)"
+        [(value)]="graph.config.grid.divisions"
+        [max]="20"
+        [min]="1"
+        class="slider"
+        style="width:240px"
+        ></mat-slider>
+        <span class="flex-spacer"></span>
+        <span class="value">
+          {{ graph.config.grid.divisions }}
+        </span>
+      </mat-list-item>
+
+    <ng-container *ngIf="graph.recordables.length > 0">
+      <mat-list-item>
+        <app-select
+          (selectedChange)="onChange($event)"
+          [(selected)]="graph.recordFrom"
+          [options]="graph.recordablesOptions"
+          title="Record from"
+        ></app-select>
+      </mat-list-item>
+    </ng-container>
+
+    <ng-container *ngIf="graph.hasAnyAnalogData()">
+      <app-activity-animation-colormap
+        (colorMapChange)="onChange($event)"
+        [(colorMap)]="graph.config.colorMap"
+        style="width:100%"
+      ></app-activity-animation-colormap>
+    </ng-container>
+
+    <ng-container *ngIf="!scene.name.includes('histogram')">
+      <mat-list-item class="flex item">
+        <span class="label">Object size</span>
+        <mat-slider
+          (change)="onChange($event)"
+          [(value)]="graph.config.objectSize"
+          [min]="1"
+          [max]="10"
+          [step]="0.1"
+          class="slider"
+          style="width:240px">
+        </mat-slider>
+        <span class="flex-spacer"></span>
+        <span class="value">
+          {{ graph.config.objectSize }}
+        </span>
+      </mat-list-item>
+    </ng-container>
+
+    <mat-list-item class="flex item">
+      <span class="label">Opacity</span>
+      <mat-slider
+        (change)="onChange($event)"
+        [(value)]="graph.config.opacity"
+        [min]="0"
+        [max]="1"
+        [step]="0.1"
+        class="slider"
+        style="width:240px">
+      </mat-slider>
+      <span class="flex-spacer"></span>
+      <span class="value">
+        {{ graph.config.opacity }}
+      </span>
+    </mat-list-item>
+
+    <ng-container *ngIf="scene.name.includes('box')">
+      <mat-list-item>
+        <mat-checkbox
+          (change)="onChange($event)"
+          [(ngModel)]="graph.config.flatHeight">
+          Flatten height
+        </mat-checkbox>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-checkbox
+          (change)="onChange($event)"
+          [(ngModel)]="graph.config.flyingBoxes">
+          Flying boxes
+        </mat-checkbox>
+      </mat-list-item>
+    </ng-container>
+
+    <ng-container *ngIf="graph.hasAnySpikeData() && false">
+      <mat-list-item class="flex item">
+        <span class="label">Sample rate</span>
+        <mat-slider
+          (change)="onChange($event)"
+          [(value)]="graph.config.frames.sampleRate"
+          [min]="1"
+          [max]="10"
+          class="slider"
+          style="width:240px"
+        ></mat-slider>
+        <span class="flex-spacer"></span>
+        <span class="value">
+          {{ graph.config.frames.sampleRate }}
+        </span>
+      </mat-list-item>
+
+      <mat-list-item class="flex item">
+        <span class="label">Time window size</span>
+        <mat-slider
+          (change)="onChange($event)"
+          [(value)]="graph.config.frames.windowSize"
+          [min]="graph.config.frames.sampleRate"
+          [max]="graph.config.frames.sampleRate * 10"
+          [step]="graph.config.frames.sampleRate"
+          class="slider"
+          style="width:240px"
+        ></mat-slider>
+        <span class="flex-spacer"></span>
+        <span class="value">
+          {{ graph.config.frames.windowSize / graph.config.frames.sampleRate }} ms
+        </span>
+      </mat-list-item>
+    </ng-container>
+
+    <ng-container *ngIf="graph.hasAnySpikeData()">
+      <mat-list-item mat-subheader>
+        Trail
+      </mat-list-item>
+
+      <mat-list-item class="flex item">
+        <span class="label">Trail length</span>
+        <mat-slider
+        (change)="onChange($event)"
+        [(value)]="graph.config.trail.length"
+        [disabled]="graph.hasAnyAnalogData()"
+        [max]="graph.config.frames.sampleRate * 50"
+        [min]="0"
+        [step]="graph.config.frames.sampleRate"
+        class="slider"
+        style="width:240px"
+        ></mat-slider>
+        <span class="flex-spacer"></span>
+        <span class="value">
+          {{ graph.config.trail.length / graph.config.frames.sampleRate }} ms
+        </span>
+      </mat-list-item>
+
+      <ng-container *ngIf="!scene.name.includes('histogram')">
+        <mat-list-item class="item">
+          <mat-checkbox
+            (change)="onChange($event)"
+            [(ngModel)]="graph.config.trail.fading"
+            [disabled]="graph.hasAnyAnalogData()">
+            Trail fading
+          </mat-checkbox>
+        </mat-list-item>
+
+        <mat-list-item class="item">
+          <mat-form-field class="form-field">
+            <mat-label>Trail effect</mat-label>
+            <mat-select
+              (selectionChange)="onChange($event)"
+              [(value)]="graph.config.trail.mode"
+              [disabled]="graph.hasAnyAnalogData()">
+              <ng-container *ngFor="let trailMode of trailModes">
+                <mat-option [value]="trailMode">{{ trailMode }}</mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+        </mat-list-item>
+      </ng-container>
+    </ng-container>
+
+  </mat-list>
+</ng-container>

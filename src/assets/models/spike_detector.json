@@ -1,4 +1,5 @@
 {
+  "abbreviation": "sd",
   "id": "spike_detector",
   "element_type": "recorder",
   "label": "spike detector",

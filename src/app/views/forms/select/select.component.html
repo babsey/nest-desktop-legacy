@@ -1,0 +1,16 @@
+<span style="display:flex; position:relative;">
+  <mat-form-field class="select">
+    <mat-label>{{ title }}</mat-label>
+    <mat-select
+      (selectionChange)="onSelectionChange()"
+      [(ngModel)]="selected"
+      [disabled]="disabled"
+      [placeholder]="placeholder">
+      <ng-container *ngFor="let option of options">
+        <mat-option [value]="option.value">
+          {{ (option.label || option.value) | capitalize }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+</span>

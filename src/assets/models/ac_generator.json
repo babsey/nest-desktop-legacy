@@ -1,7 +1,8 @@
 {
+  "abbreviation": "ac",
   "id": "ac_generator",
   "element_type": "stimulator",
-  "label": "alternating current (AC)",
+  "label": "alternating current",
   "recordables": ["I"],
   "params": [{
     "id": "amplitude",

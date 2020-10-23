@@ -2,6 +2,7 @@
   "id": "voltmeter",
   "element_type": "recorder",
   "label": "voltmeter",
+  "abbreviation": "vm",
   "params": [{
     "id": "interval",
     "label": "time interval of recording",

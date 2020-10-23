@@ -1,0 +1,19 @@
+<span style="display:flex; position:relative;">
+  <mat-form-field class="select">
+    <mat-select [placeholder]="placeholder" [(ngModel)]="selected" (selectionChange)="onSelectionChange()" [disabled]="disabled">
+      <mat-form-field *ngIf="filter" floatLabel="never" style="width:96%; padding: 0 5px" >
+        <fa-icon matPrefix icon="search" style="padding-right: 10px"></fa-icon>
+        <input matInput
+          (keyup)="search($event.target.value)"
+          autocomplete="off"
+          class="search"
+          placeholder="search"
+          type="text" />
+      </mat-form-field>
+      <ng-container *ngFor="let option of filteredOptions">
+      <mat-option [value]="option.value">{{ (option.label || option.value) | capitalize }}</mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+
+</span>

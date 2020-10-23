@@ -5,9 +5,13 @@ export const listAnimation =
   trigger('listAnimation', [
     transition('* => *', [
       query(':enter', [
-        style({ opacity: 0, transform: 'translateX(0px)' }),
+        style({
+          opacity: 0,
+        }),
         stagger(20, [
-          animate('0.2s', style({ opacity: 1, transform: 'translateX(0px)'  }))
+          animate('0.5s', style({
+            opacity: 1,
+          }))
         ])
       ], { optional: true })
     ])

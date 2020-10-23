@@ -1,0 +1,77 @@
+<div class="selection connection-selection"
+
+  [style.border-left-color]="connection.source.view.color"
+  [style.border-right-color]="connection.target.view.color"
+  [style.display]="connection.view.isSelected() ? '' : 'none'">
+
+  <app-connection-toolbar
+    [connection]="connection"
+  ></app-connection-toolbar>
+
+  <ng-container *ngIf="!connection.isBothSpatial() && !connection.view.connectRecorder()">
+    <mat-selection-list dense (selectionChange)="onSynapseSelectionChange($event)">
+      <ng-container *ngFor="let synParam of connection.synapse.params">
+        <mat-list-option
+          [matTooltip]="synParam.id"
+          [selected]="synParam.visible"
+          [value]="synParam.id"
+          matTooltipPosition="before">
+          <span class="flex">
+            <span class="ellipsis">{{ synParam.options.label | capitalize }}</span>
+            <span class="flex-spacer"></span>
+            <span class="value">{{ synParam.value }}</span>
+            <span class="unit">{{ synParam.options.unit }}</span>
+          </span>
+        </mat-list-option>
+      </ng-container>
+    </mat-selection-list>
+  </ng-container>
+
+  <ng-container *ngIf="connection.isBothSpatial()">
+    <mat-selection-list dense (selectionChange)="onProjectionSelectionChange($event)">
+
+      <mat-list-option
+        [selected]="connection.projections.kernel.visible"
+        value="kernel">
+        <span class="flex">
+          <span class="ellipsis">Kernel</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option
+        [selected]="connection.projections.numberOfConnections.visible"
+        value="numberOfConnections">
+        <span class="flex">
+          <span class="ellipsis">Number of connections</span>
+        </span>
+      </mat-list-option>
+
+      <!-- <mat-list-option value="mask">
+        <span class="flex">
+          <span class="ellipsis">Mask</span>
+        </span>
+      </mat-list-option> -->
+
+      <mat-list-option
+        [selected]="connection.projections.weights.visible"
+        value="weights">
+        <span class="flex">
+          <span class="ellipsis">Weights</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.projections.weights.value }} pA</span>
+        </span>
+      </mat-list-option>
+
+      <mat-list-option
+        [selected]="connection.projections.delays.visible"
+        value="delays">
+        <span class="flex">
+          <span class="ellipsis">Delays</span>
+          <span class="flex-spacer"></span>
+          <span>{{ connection.projections.delays.value }} ms</span>
+        </span>
+      </mat-list-option>
+    </mat-selection-list>
+  </ng-container>
+
+</div>

@@ -1,0 +1,50 @@
+<ng-container *ngIf="isAppReady(); else loading">
+  <app-navigation
+    class="no-print"
+    id="navigation-button"
+  ></app-navigation>
+
+  <mat-sidenav-container id="container" autosize>
+    <mat-sidenav
+      (openedChange)="triggerResize()"
+      [(opened)]="sidenavOpened"
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      autoFocus="false"
+      class="no-print"
+      id="navigation"
+      position="start"
+      role="region">
+      <ng-container *ngIf="sidenavOpened">
+        <router-outlet #navOutlet="outlet" name="nav"></router-outlet>
+      </ng-container>
+    </mat-sidenav>
+
+    <mat-sidenav-content #content>
+      <router-outlet #outlet="outlet"></router-outlet>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+  <div
+    [style.display]="rightClick ? '' : 'none'"
+    class="mouse-right-click dark-theme">
+    <button mat-mini-fab color="primary">
+      <img src="/assets/img/mouse-right-click.png" width="32px"/>
+    </button>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <div style="width:100%; height:100vh; display:flex; justify-content:center; align-items:center;">
+    <div style="text-align:center; height:100px">
+      <div style="margin:auto; width:32px; padding:12px">
+        <mat-spinner
+          diameter="32"
+          mode="indeterminate"
+          strokeWidth="4"
+        ></mat-spinner>
+      </div>
+      <div>App is loading.</div>
+    </div>
+  </div>
+</ng-template>

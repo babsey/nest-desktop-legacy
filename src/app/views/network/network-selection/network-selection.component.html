@@ -1,0 +1,17 @@
+<div style="height:calc(100vh - 73px); overflow-y: auto">
+
+  <ng-container *ngFor="let node of network.nodes">
+    <app-node-selection
+      [node]="node"
+      [style.display]="network.view.isElementTypeSelected(node.model.elementType) ? '': 'None'"
+    ></app-node-selection>
+  </ng-container>
+
+  <ng-container *ngFor="let connection of network.connections">
+    <app-connection-selection
+      [connection]="connection"
+      [style.display]="network.view.isElementTypeSelected(connection.source.model.elementType) ? '': 'None'"
+    ></app-connection-selection>
+  </ng-container>
+
+</div>

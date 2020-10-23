@@ -1,22 +1,49 @@
-The concept of the interface
-============================
-
-NEST Desktop follows a clear concept of the page layout which is overlaid by three bars. For the consistence of the page layout each bar has an unambiguous function. Left and right bars are closable and after changing the open status of a side bar the the visualization content in the center bar changes its width format.
+Concept of the interface
+========================
 
 
-Left bar
---------
+.. topic:: General layout concept of the interface.
 
-It is the navigation showing a list of the items which is loaded from individual modules.  A stacked set of buttons (left) renders the content of the navigation and it shows list of the simulations (sketch icon), of the models (square-root icon) and of the settings (wrench icon). When the user click on an item, it loads the content of the center and right bars. The header toolbar stretches over center and right bars and it is color-coded by a loaded page: Simulation page is summergreen, model is crail and settings page is sycamore. These color palette are generated using deep learning method on the colormind website\footnote{http://colormind.io/template/material-dashboard/}.
+  NEST Desktop contains three columns with clear function.
+  Left column shows a navigation to route pages in the primary outlet.
+  Center column renders main content of the page.
+  Right column displays controller content for the modification.
 
+.. topic:: Pages
 
-Center bar
-----------
+  NEST Desktop has three route pages (Project, Model, Settings).
+  Colored buttons located in the left side of the page shows home icon for the start page.
+  Other icons buttons renders the content of the navigation outlet.
+  The brain icon refers to project page, equation icon to model page and wrench icon to setting page.
 
-It provides as router outlets showing the page content of the modules. The simulation module displays the information of the network and the graphical output of the simulation. A model module shows the detailed information of models which can be used in NEST Simulator. Finally, a settings module shows an overview of all settings for application modules.
+.. topic:: Page colors
 
+  Project button is summergreen, model button is crail and setting button is sycamore.
+  These color palette were selected at the `colormind website <http://colormind.io/template/material-dashboard/>`__.
 
-Right bar
----------
+.. topic:: Navigation outlet (left)
 
-It is the controller which the user is able to change values. The content of the controller is tabbed by several components, e.g. in simulation playground it displays list of network elements for the network component or list of configurations for a visualization component.
+  The navigation content displays a black toolbar in the header showing with the name of the page and an icon for the menu.
+  Subjacent to the header it renders a list of items triggers loading pages in the content outlet.
+
+.. topic:: Primary outlet (center)
+
+  The content outlet renders the page content via the URL.
+  The project page displays network editor and activity explorer.
+  The model page shows the detailed information of models which can be used in NEST Simulator.
+  The setting page shows an overview of all settings for various components of the app.
+  The toolbar in the header stretches over center and right bars and it is color-coded by a loaded page.
+
+.. topic:: Controller bar (right)
+
+  The controller enables users to change values.
+  The network controller displays list of nodes and connections.
+
+.. topic:: Right mouse button
+
+  .. image:: ../_static/img/mouse-right-click.png
+    :width: 48px
+    :align: left
+
+  When a component provides specific context menu triggering by right mouse button,
+  an icon of mouse-right-button-click appears in left bottom of the page.

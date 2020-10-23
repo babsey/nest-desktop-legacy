@@ -1,0 +1,103 @@
+<div mat-dialog-content class="params-config">
+  <ng-container *ngIf="param">
+    <mat-list dense>
+
+      <h3 mat-subheader>{{ param.id }}</h3>
+
+      <mat-list-item>
+        <mat-form-field>
+          <input matInput
+            placeholder="Label"
+            name="label"
+            [(ngModel)]="param.label" />
+        </mat-form-field>
+      </mat-list-item>
+
+      <mat-list-item>
+        <input matInput
+          [(ngModel)]="param.level"
+          name="Level"
+          min="1"
+          max="4"
+          placeholder="Minimum value"
+          type="number" />
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-form-field>
+          <input matInput
+            placeholder="Default value"
+            name="value"
+            [(ngModel)]="param.value" />
+        </mat-form-field>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-form-field>
+          <input matInput
+            placeholder="Unit"
+            name="unit"
+            [(ngModel)]="param.unit" />
+        </mat-form-field>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-form-field class="select">
+          <mat-select placeholder="Input" [(ngModel)]="param.input">
+            <mat-option value="valueInput">Value input</mat-option>
+            <mat-option value="arrayInput">Array input</mat-option>
+            <mat-option value="valueSlider">Value slider</mat-option>
+            <!-- <mat-option value="rangeSlider">Range slider</mat-option> -->
+            <mat-option value="tickSlider">Tick slider</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="param.input === 'valueSlider'">
+        <mat-form-field>
+          <input matInput
+            [(ngModel)]="param.min"
+            name="min"
+            placeholder="Minimum value"
+            type="number" />
+        </mat-form-field>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="param.input === 'valueSlider'">
+        <mat-form-field>
+          <input matInput
+            [(ngModel)]="param.max"
+            name="max"
+            placeholder="Maximum value"
+            type="number" />
+        </mat-form-field>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="param.input.includes('value')">
+        <mat-form-field>
+          <input matInput
+            [(ngModel)]="param.step"
+            name="step"
+            placeholder="Change step"
+            type="number" />
+        </mat-form-field>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="param.input === 'tickSlider'">
+        <mat-form-field>
+          <input matInput
+            (change)="valueChanged($event)"
+            [(ngModel)]="param.ticks"
+            name="ticks"
+            placeholder="Tick values" />
+        </mat-form-field>
+      </mat-list-item>
+
+    </mat-list>
+  </ng-container>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial (click)="save()">Save</button>
+  <button mat-button (click)="cancel()">Cancel</button>
+</div>

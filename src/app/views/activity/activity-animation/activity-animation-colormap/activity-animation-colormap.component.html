@@ -1,0 +1,55 @@
+<mat-list-item>
+  <div class="colormap">
+    <!-- <img src="/assets/img/colorscales/spectral.png"> -->
+    <img
+      [style.transform]="colorMap.reverse ? 'scaleX(-1)': null"
+      src="/assets/img/colorscales/{{colorMap.scale}}.png"
+    />
+  </div>
+
+  <span class="flex">
+    <mat-form-field>
+      <input matInput
+        (change)="onChange($event)"
+        [(ngModel)]="colorMap.min"
+        type="number" />
+    </mat-form-field>
+
+    <span class="flex-spacer"></span>
+    <mat-form-field style="width: 160px">
+      <mat-select
+        (selectionChange)="onChange($event)"
+        [(value)]="colorMap.scale">
+        <mat-option *ngFor="let scale of scales" [value]="scale">
+          <img
+            [style.transform]="colorMap.reverse ? 'scaleX(-1)': null"
+            src="/assets/img/colorscales/{{scale}}.png"
+            style="position: absolute; left: 0; top: 2px; height:44px; width:100%; z-index:-1" />
+          <span style="color:white">
+            {{ scale }}
+            <span *ngIf="colorMap.reverse"> (r)</span>
+          </span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <span class="flex-spacer"></span>
+
+    <mat-form-field>
+      <input matInput
+        (change)="onChange($event)"
+        [(ngModel)]="colorMap.max"
+        style="text-align:right"
+        type="number" />
+    </mat-form-field>
+  </span>
+</mat-list-item>
+
+<ng-container *ngIf="colorMap.hasOwnProperty('reverse')">
+  <mat-list-item>
+    <mat-checkbox
+      (change)="onChange($event)"
+      [(ngModel)]="colorMap.reverse">
+      Reverse colorscale
+    </mat-checkbox>
+  </mat-list-item>
+</ng-container>

@@ -1,0 +1,43 @@
+<mat-menu #nodeMenu="matMenu"class="context-menu node-menu">
+  <app-node-menu
+    [node]="node"
+  ></app-node-menu>
+</mat-menu>
+
+<div style="visibility: hidden; position: fixed"
+  [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y"
+  [matMenuTriggerFor]="nodeMenu"
+></div>
+
+<span appContextMenuTrigger
+  (contextmenu)="onContextMenu($event)">
+  <!-- [style.background-image]="node.view.backgroundImage" -->
+  <mat-toolbar
+    [style.background-color]="node.view.color"
+    class="node-toolbar"
+    color="primary">
+    <span class="node-graph-shape-container">
+      <svg viewBox="0 0 60 60" width="64" height="64" style="margin-top:4px">
+        <g app-node-graph-shape
+          (click)="node.view.select()"
+          [node]="node"
+          [showSelection]="false"
+          transform="translate(32,32)"
+        ></g>
+      </svg>
+    </span>
+
+    <mat-select
+      (onSelectionChange)="selectModel()"
+      [(ngModel)]="node.modelId"
+      [disabled]="disabled">
+      <ng-container *ngFor="let model of models">
+        <mat-option [value]="model.id">
+          {{ model.label | capitalize }}
+          <span *ngIf="model.abbreviation"> ({{model.abbreviation}})</span>
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-toolbar>
+</span>

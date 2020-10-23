@@ -1,0 +1,21 @@
+<ng-container [ngSwitch]="isReady">
+  <ng-container *ngSwitchCase="false">
+    <fa-icon icon="circle-notch" [spin]="true">
+    </fa-icon>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="true">
+    <ng-container [ngSwitch]="isValid">
+
+      <ng-container *ngSwitchCase="true">
+        <fa-icon icon="check" class="green"></fa-icon>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="false">
+        <fa-icon icon="exclamation" class="orange"></fa-icon>
+      </ng-container>
+
+    </ng-container>
+  </ng-container>
+
+</ng-container>

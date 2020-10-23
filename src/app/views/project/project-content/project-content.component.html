@@ -1,0 +1,28 @@
+<ng-container *ngIf="['networkEditor', 'labBook'].includes(view.mode)">
+  <div #content
+    [style.height]="view.mode === 'labBook' ? '200px' : '100%'"
+    class="network-content">
+    <app-network-graph
+      [network]="project.network"
+      [eventTrigger]="view.mode === 'networkEditor'"
+      [width]="width"
+      [height]="height"
+    ></app-network-graph>
+  </div>
+</ng-container>
+
+<ng-container [ngSwitch]="view.mode">
+  <ng-container *ngSwitchCase="'activityExplorer'">
+    <app-activity-graph
+      [project]="project"
+    ></app-activity-graph>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'labBook'">
+    <app-network-list
+      [network]="project.network"
+      [columns]="true"
+      [paramSelective]="true"
+    ></app-network-list>
+  </ng-container>
+</ng-container>

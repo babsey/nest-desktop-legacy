@@ -1,0 +1,25 @@
+<div class="node-list"
+  [style.border-color]="node.view.color"
+  [style.display]="node.view.isSelected(true) ? '' : 'none'">
+
+  <app-node-toolbar
+    [node]="node"
+    [disabled]="true"
+  ></app-node-toolbar>
+
+  <mat-list dense>
+    <span [@listAnimation]="node.params.length">
+      <ng-container *ngFor="let param of node.filteredParams">
+        <mat-list-item>
+          <span class="flex">
+            <span class="ellipsis">{{ param.options.label | capitalize }}</span>
+            <span class="flex-spacer"></span>
+            <span class="ellipsis">{{ format(param.value) }}</span>
+            <span class="unit">{{ param.options.unit }}</span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+    </span>
+  </mat-list>
+
+</div>

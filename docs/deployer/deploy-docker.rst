@@ -13,14 +13,12 @@ It is available for a variety of the operating systems, e.g. Linux, Mac and Wind
 For more information follow the link `here <https://www.docker.com/resources/what-container>`__.
 
 
-Requirements
-------------
+**Requirements**
 
 * Docker engine
 
 
-Installation
-------------
+**Installation**
 
 The image from docker hub contains all required software (NEST Desktop, NEST Server and NEST Simulator).
 For more information, follow the link `here <https://hub.docker.com/r/babsey/nest-desktop>`__.
@@ -30,8 +28,7 @@ For more information, follow the link `here <https://hub.docker.com/r/babsey/nes
    docker pull babsey/nest-desktop
 
 
-Getting started
----------------
+**Getting started**
 
 Start docker container with arguments.
 
@@ -59,8 +56,8 @@ You can find help text of docker arguments by :code:`docker run --help`.
 | -t | Allocate a pseudo-TTY                     |
 +----+-------------------------------------------+
 
-Acknowledgements
-----------------
+**Acknowledgments**
 
 Thanks for the help:
+
   * Steffen Graber (Docker hub for NEST Simulator)

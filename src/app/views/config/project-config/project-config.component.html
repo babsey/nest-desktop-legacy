@@ -1,0 +1,55 @@
+<mat-toolbar class="config-section-toolbar" color="primary">
+  Database for projects
+</mat-toolbar>
+
+<mat-list class="content config">
+  <mat-list-item>
+    <mat-form-field class="form-field">
+      <input matInput
+        (change)="onChange($event)"
+        [value]="config.databases.project.name"
+        name="name"
+        placeholder="Name">
+    </mat-form-field>
+  </mat-list-item>
+
+  <mat-list-item>
+    <mat-form-field class="form-field">
+      <input matInput
+        (change)="onChange($event)"
+        [value]="config.databases.project.host"
+        name="host"
+        placeholder="Host">
+    </mat-form-field>
+  </mat-list-item>
+
+  <mat-list-item>
+    <mat-form-field class="form-field">
+      <input matInput
+        (change)="onChange($event)"
+        [value]="config.databases.project.port"
+        name="port"
+        placeholder="Port">
+    </mat-form-field>
+  </mat-list-item>
+
+  <!-- <mat-list-item>
+    <mat-form-field class="form-field">
+      <input matInput
+        (change)="onChange($event)"
+        [value]="config.databases.project.username"
+        name="username"
+        placeholder="Username">
+    </mat-form-field>
+  </mat-list-item>
+
+  <mat-list-item>
+    <mat-form-field class="form-field">
+      <input matInput
+        (change)="onChange($event)"
+        [value]="config.databases.project.password"
+        name="password"
+        placeholder="Password">
+    </mat-form-field>
+  </mat-list-item> -->
+</mat-list>

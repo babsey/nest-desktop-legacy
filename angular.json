@@ -17,6 +17,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "@ctrl/ngx-codemirror",
+              "complex.js",
+              "decimal.js",
+              "fraction.js",
+              "plotly.js-dist",
+              "typed-function"
+            ],
             "outputPath": "nest_desktop/app",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -30,6 +38,7 @@
             "styles": [
               "src/themes.scss",
               "src/styles.scss",
+              "src/assets/scss/dat-gui-light-theme.scss",
               "node_modules/codemirror/lib/codemirror.css",
               "node_modules/codemirror/addon/fold/foldgutter.css",
               "node_modules/codemirror/addon/hint/show-hint.css",
@@ -66,7 +75,7 @@
               "budgets": [{
                   "type": "initial",
                   "maximumWarning": "10mb",
-                  "maximumError": "12mb"
+                  "maximumError": "16mb"
                 },
                 {
                   "type": "anyComponentStyle",

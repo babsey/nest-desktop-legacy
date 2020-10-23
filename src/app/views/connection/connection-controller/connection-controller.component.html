@@ -1,0 +1,106 @@
+<div class="controller connection-controller"
+  [style.border-left-color]="connection.source.view.color"
+  [style.border-right-color]="connection.target.view.color"
+  [style.display]="connection.view.isSelected() ? '' : 'none'">
+
+  <app-connection-toolbar
+    [connection]="connection"
+  ></app-connection-toolbar>
+
+  <ng-container [ngSwitch]="connection.isBothSpatial()">
+
+    <ng-container *ngSwitchCase="true">
+      <app-connection-projections
+        [projections]="connection.projections"
+      ></app-connection-projections>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="false">
+
+      <ng-container *ngIf="connection.hasSourceIndices()">
+        <mat-list dense>
+          <mat-list-item>
+            <app-array-input-popup
+              [(value)]="connection.srcIdx"
+              [options]="srcIdxOptions"
+              style="width:100%"
+            ></app-array-input-popup>
+          </mat-list-item>
+        </mat-list>
+      </ng-container>
+
+      <ng-container *ngIf="connection.hasTargetIndices()">
+        <mat-list dense>
+          <mat-list-item>
+            <app-array-input-popup
+              [(value)]="connection.tgtIdx"
+              [options]="tgtIdxOptions"
+              style="width:100%"
+            ></app-array-input-popup>
+          </mat-list-item>
+        </mat-list>
+      </ng-container>
+
+      <mat-list dense>
+
+        <ng-container *ngIf="!connection.hasSourceIndices() && !connection.hasTargetIndices()">
+          <mat-list-item>
+            <app-select
+              [(selected)]="connection.rule"
+              [options]="connRules"
+              [disabled]="connection.view.connectSpikeDetector()"
+            ></app-select>
+          </mat-list-item>
+        </ng-container>
+
+        <ng-container *ngIf="connection.params.length > 0">
+          <ng-container *ngFor="let connParam of connection.params">
+              <mat-list-item
+                [style.display]="connParam.visible || connParam.visible === undefined ? '' : 'none'">
+                <app-connection-param
+                  [(value)]="connParam.value"
+                  [connection]="connection"
+                  [options]="connection.view.getRuleParamConfig(connParam.id)"
+                  [random]="false"
+                ></app-connection-param>
+              </mat-list-item>
+          </ng-container>
+        </ng-container>
+
+      </mat-list>
+
+      <ng-container *ngIf="!connection.view.connectRecorder()">
+
+        <ng-container *ngIf="synModels.length > 1">
+          <mat-list dense>
+            <mat-list-item>
+              <app-select
+                [(selected)]="connection.synapse.modelId"
+                [options]="synModels"
+              ></app-select>
+            </mat-list-item>
+          </mat-list>
+        </ng-container>
+
+        <mat-list dense>
+          <ng-container *ngIf="connection.synapse.params.length > 0">
+            <ng-container *ngFor="let synParam of connection.synapse.params">
+              <mat-list-item
+                [style.display]="synParam.visible || synParam.visible === undefined ? '' : 'none'">
+                <app-connection-param
+                  [(value)]="synParam.value"
+                  [connection]="connection"
+                  [options]="synParam.options"
+                  [random]="false"
+                ></app-connection-param>
+              </mat-list-item>
+            </ng-container>
+          </ng-container>
+        </mat-list>
+
+      </ng-container>
+    </ng-container>
+
+  </ng-container>
+
+</div>

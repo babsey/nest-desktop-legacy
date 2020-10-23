@@ -1,0 +1,19 @@
+.background {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  .background-image {
+    margin: auto;
+    width: 760px;
+    height: 500px;
+  }
+
+  .background-text {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+  }
+}

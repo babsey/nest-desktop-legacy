@@ -1,0 +1,109 @@
+<mat-toolbar class="config-section-toolbar" color="primary">
+  Network graph
+</mat-toolbar>
+
+<mat-list dense style="padding:0">
+  <mat-list-item mat-subheader>
+    Node
+  </mat-list-item>
+
+  <mat-list-item>
+    <mat-form-field style="width:100%">
+      <mat-select
+        placeholder="Pick a color scheme"
+        [(ngModel)]="config.color.scheme"
+        (selectionChange)="selectScheme($event)"
+        style="width:100%">
+        <mat-option *ngFor="let scheme of colorSchemes.list()" [value]="scheme">
+          {{ scheme }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-list-item>
+
+  <mat-list-item>
+    <ng-container *ngFor="let colorId of config.color.cycle; let idx = index">
+    <span
+      [style.border-color]="colorId"
+      style="border-width: 1.5px; border-radius: 15px; position:relative; line-height:normal; margin: 2px">
+      <span style="pointer-events:none; position:absolute; left:0px; top:-7px; text-align:center; vertical-align:middle; width:25px; line-height:25px;"></span>
+      <mcc-color-picker hideTransparentUsedColors hideEmptyUsedColors
+        [selectedColor]="colorId"
+        (selected)="selectColor(idx, $event)"
+        class="color">
+      </mcc-color-picker>
+    </span>
+  </ng-container>
+  </mat-list-item>
+<!--
+  <mat-list-item>
+    <app-value-slider-inline
+      [options]="_networkConfigService.config.graph.node.radius"
+      [(value)]="_networkConfigService.config.graph.node.radius.value"
+      (valueChange)="onValueChange($event)"
+    ></app-value-slider-inline>
+  </mat-list-item>
+
+  <mat-list-item>
+    <app-value-slider-inline
+      [options]="_networkConfigService.config.graph.node.strokeWidth"
+      [(value)]="_networkConfigService.config.graph.node.strokeWidth.value"
+      (valueChange)="onValueChange($event)"
+    ></app-value-slider-inline>
+  </mat-list-item>
+
+  <mat-list-item>
+    <mat-checkbox
+      [(ngModel)]="_networkConfigService.config.color.autoColorRec"
+      >
+      Auto colorize recorder
+    </mat-checkbox>
+  </mat-list-item>
+
+  <mat-list-item mat-subheader>
+    Link
+  </mat-list-item>
+
+  <mat-list-item>
+    <app-value-slider-inline
+      [options]="_networkConfigService.config.graph.link.width"
+      [(value)]="_networkConfigService.config.graph.link.width.value"
+      (valueChange)="onValueChange($event)"
+    ></app-value-slider-inline>
+  </mat-list-item>
+  <mat-list-item>
+    <app-value-slider-inline
+      [options]="_networkConfigService.config.graph.link.maxDistance"
+      [(value)]="_networkConfigService.config.graph.link.maxDistance.value"
+      (valueChange)="onValueChange($event)"
+    ></app-value-slider-inline>
+  </mat-list-item>
+  <mat-list-item>
+    <app-value-slider-inline
+      [options]="_networkConfigService.config.graph.link.opacity"
+      [(value)]="_networkConfigService.config.graph.link.opacity.value"
+      (valueChange)="onValueChange($event)"
+    ></app-value-slider-inline>
+  </mat-list-item>
+  <mat-list-item>
+    <app-value-slider-inline
+      [options]="_networkConfigService.config.graph.link.terminusOpacity"
+      [(value)]="_networkConfigService.config.graph.link.terminusOpacity.value"
+      (valueChange)="onValueChange($event)"
+    ></app-value-slider-inline>
+  </mat-list-item>
+  <mat-list-item>
+    <app-value-slider-inline
+      [options]="_networkConfigService.config.graph.link.ellipticalArc"
+      [(value)]="_networkConfigService.config.graph.link.ellipticalArc.value"
+      (valueChange)="onValueChange($event)"
+    ></app-value-slider-inline>
+  </mat-list-item>
+  <mat-list-item>
+    <app-value-slider-inline
+      [options]="_networkConfigService.config.graph.link.xAxisRotation"
+      [(value)]="_networkConfigService.config.graph.link.xAxisRotation.value"
+      (valueChange)="onValueChange($event)"
+    ></app-value-slider-inline>
+  </mat-list-item> -->
+</mat-list>

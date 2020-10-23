@@ -25,14 +25,16 @@ It's so great that you want to use NEST Desktop.
 
 ||||
 
-How the documentation is organized
-----------------------------------
-
-The documentation is organized into three sections. Select the appropriate section that fits your needs.
-
 .. raw:: html
 
     <div class="doc">
+      <h1>How the documentation is organized</h1>
+
+      <p>
+        The documentation is organized into three sections.
+        Select the appropriate section that fits your needs.
+      </p>
+
       <div class="column user">
         <a href="user/index.html">
           <div>

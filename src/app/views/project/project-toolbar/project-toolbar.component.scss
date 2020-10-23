@@ -1,0 +1,88 @@
+.network-history {
+  position: absolute;
+  right: 300px;
+  z-index: 1000;
+  overflow: visible;
+  width: 160px;
+
+  button {
+    height: 24px;
+    line-height: 24px;
+  }
+}
+
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes #{$animation-name} {
+    @content;
+  }
+  @-moz-keyframes #{$animation-name} {
+    @content;
+  }
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};
+}
+
+@include keyframes(shake) {
+  50%, 75% {
+    transform: translate(0, 0);
+  }
+
+  52.5%, 72.5% {
+    transform: translate(-1px, 0);
+  }
+
+  55%, 70% {
+    transform: translate(2px, 0);
+  }
+
+  57.5%, 62.5%, 67.5% {
+    transform: translate(-3px, 0);
+  }
+
+  60%, 65% {
+    transform: translate(3px, 0);
+  }
+}
+
+@include keyframes(bounce) {
+  50%, 75% {
+    transform: scale(1);
+  }
+
+  52.5%, 72.5% {
+    transform: scale(0.95);
+  }
+
+  55%, 70% {
+    transform: scale(1.05);
+  }
+
+  57.5%, 62.5%, 67.5% {
+    transform: scale(1.2);
+  }
+
+  60%, 65% {
+    transform: scale(1.1);
+  }
+}
+
+.network-changed {
+  color: #C05B58; // #BF9956; //E08854;
+  // @include animation('bounce 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
+  @include animation('shake 3.28s cubic-bezier(.36,.07,.19,.97) infinite');
+}

@@ -4,310 +4,241 @@ Usage Guide
 
 This guides provides detailed documentation for the Graphical User Interface (GUI) of NEST Desktop.
 
-.. contents::
-   :local:
-   :depth: 2
-
-
-Get Started
------------
-
-Once you start NEST Desktop, you will see the start page a image of a laptop with NEST logo.
-At the bottom it shows a short description of NEST Desktop (left) and some useful links and the current version (right)
-
-It checks the compatibility of settings and databases with the application.
-When the server responds, the server icon is colored to green.
-
 .. note::
-   If you think something is broken, you can reload the page.
-   You may want to save a protocol. Go the ``Settings > Simulation`` and enter protocol details under `protocol database`.
+  If you want to see quick start in NEST Desktop we prepared a :doc:`video <index>` showing steps to construct networks and explore activity.
 
+.. topic:: Getting Started
 
-Concept of the Layout
----------------------
+  Once you start NEST Desktop, you see the start page a image of a laptop with NEST logo.
+  At the bottom it shows a short description of NEST Desktop (left) and some useful links and the current version (right).
 
-Next you will see the main page of NEST Desktop with the same concept of the layout for several components:
+  .. image:: ../_static/img/start-page.png
+    :width: 100%
 
-:Left sidebar: Navigation (it can be closed)
-:Center: Main container for the content
-:Right sidebar: Controller if provided.
+  |
 
-Navigation
-^^^^^^^^^^
+  It checks settings and databases of the application.
+  When the server responds, the server icon is colored to green.
 
-.. image:: ../_static/img/gif/app-sidenav-left.gif
-  :scale: 100%
+  .. note::
+    You can reload the page if NEST Desktop is somehow crashed.
+
+|
+
+Explore neuron models and devices
+---------------------------------
+
+.. image:: ../_static/img/explore-models.png
+  :width: 100%
+
+|
+
+The model page provides you detailed documentation of models.
+When a selected model is a neuron, it also shows activity graph of neuronal response to excitatory and inhibitory spike inputs at 100 ms and 300 ms, respectively.
+
+|
+
+Manage projects
+---------------
+
+.. image:: ../_static/img/gif/project-management.gif
+  :width: 320px
   :align: left
 
-NEST Desktop provides three root modules (Simulation, Model, Settings) and
-a module can be selected by clicking on stacked, colored buttons right adjacent to navigation panel.
+NEST Desktop has project management helping you to organize your networks and network activity.
+An important remark is that it stores only neuronal networks in database and activity will be lost after page reload.
+If you want to explore activity of the project, you have to start the simulation (See :ref:`Simulation`).
 
-The navigation will be rendered according to the selected module.
-The navigation contains, top a navigation header with the name of the module and an icon ( |fa-ellipsis-v| ) for the context menu,
-and subjacent a content section with a list of items.
+Clicking on a :guilabel:`New project` creates a new project where you can construct network from the scratch (See :ref:`Construction`).
+It is useful to give project a proper name that you can recognize your projects (The video shows a bad manner).
+An asterisk after project name (instead of time since created or updated) indicates that changes of the project are not stored in database.
+
+Below the search field it shows a list of projects where you can load existed networks.
+Clicking right mouse button on a project item in the list shows options to reload, duplicate, download or delete it.
+In the project menu, you find other methods to upload, download or delete all projects or to manage them.
+
+The greatest advantage of NEST Simulator is the reproducibility of the activity of the same network, even on other machine.
+At result, NEST Desktop shows the same simulation events on different machines.
+
+
+.. topic:: Project revisions
+
+  You are able to checkout older version of the project data.
+  An item of the context menu shows an option to call a list of project revisions.
+  Since the database contains version control management, it is able to store and load older versions of the project.
 
 |
+
+.. _Construction:
+
+Construct neuronal networks
+---------------------------
+
+.. image:: ../_static/img/network-editor.png
+  :width: 100%
+
 |
-|
-
-Content and controller
-^^^^^^^^^^^^^^^^^^^^^^
-By clicking on an item in the navigation triggers loading the content in the main container
-and if provided in the controller panel.
-
-.. note::
-   When a section provides a context menu, triggered by right mouse button,
-   an icon of mouse-right-button-click appears in left bottom of the page.
 
 
-Modules
--------
+If you want to construct network, you have to go to the network editor with the button showing red pen on brain icon.
+The network graph is composed of nodes (shapes) and connections (lines).
+Here, we explain steps to create and connect nodes.
 
-|fa-square-root-alt| The Model Module
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. topic:: Create nodes
 
-The model module includes the description and the management of the neuron, device and synapse models.
+  .. image:: ../_static/img/gif/create-nodes.gif
+    :width: 240px
+    :align: left
 
-In the left panel, it shows lists of available node and synapse models. Nodes can be stimulus devices, neurons or recorder devices.
-Once you select a model, the main container displays the documentation as well as a list of parameters with default values.
+  |
 
-In the advanced mode, you can manage the models or configure the input panel of individual parameters.
-It will store the changes in the model database.
-In the input settings you can define the type of input, label, default value and the unit of the parameter.
-Additionally, you can adjust slider settings of the model parameters.
-
-
-The Network Module
-^^^^^^^^^^^^^^^^^^
-
-The network module as a part of the simulation module is where you can create and modify networks.
-
-|fa-pen| Network editor
-~~~~~~~~~~~~~~~~~~~~~~~
-
-When the view mode is set to 'edit', you will see a stretched area of the network sketch for the drawings.
-The right controller shows a network selection of created nodes.
-'Selected' parameters will be visible for the parameterization in the simulation mode.
-
-You can switch to sketch settings by clicking on 'bezier-curve' button left to the controller panel.
-
-|fa-shapes| Network sketch
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. image:: ../_static/img/gif/build-network.gif
-  :scale: 100%
-
-Network sketch is a graphical representation of the network.
-You are able to drag, draw and delete node and link elements.
-
-Network list
-~~~~~~~~~~~~
-
-It is an fixed list of nodes and links to get an overview of the network.
-It appears together with network sketch in simulation details.
-
-Network selection
-~~~~~~~~~~~~~~~~~
-
-It is a list of nodes and links, in which you can set the visibility of node parameters.
-It appears together with network sketch in the network editor.
-
-Network controller
-~~~~~~~~~~~~~~~~~~
-
-It is a list of nodes and links in which you are able to change the parameter values.
-It appears together with records visualization in the simulation play.
-
-|fa-eye| Network summary
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The network summary is appropriate view for the printing output in 'PDF' format.
-
-Here, you find a network sketch (top) and a list of nodes and links (bottom).
-To improve the affiliation of the nodes and links, each node is labeled by a character and a color.
-Each node and link panel starts with a colored header and, if provided, a list of visible parameters.
-
-
-|fa-brain| The Simulation Module
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-In the simulation module, a list of simulations and if provided protocols are displayed in the navigation panel.
-
-The Simulation menu
-~~~~~~~~~~~~~~~~~~~
-
-.. image:: ../_static/img/gif/simulation-menu.gif
-  :scale: 100%
-  :align: left
-
-Clicking on the 3 vertical dots icon ( |fa-ellipsis-v| ) in the navigation header opens the simulation menu.
-
-In the simulation menu you can manage protocols.
-For delete or download specific protocol, click on `select protocols` item.
-To upload protocols from file, select `upload protocols` item.
-To delete all protocol, it will clear Protocol database.
-
-.. note::
-   Some simulations cannot be deleted because they are integrated in the application.
+  In order to create a new node you click the right mouse button in the content area, a `pie` panel  with three letters appears to select a element type.
+  A node is divided in three element types: stimulus (:guilabel:`S`), recording (:guilabel:`R`) devices and neuron (:guilabel:`N`).
+  Then you select a element type and then it creates a specific node in the center of the `pie` panel.
 
 |
 |
 
-Once you select a simulation/protocol, it will load from the database and ready for the simulation.
-In the main container you will see the colored header toolbar and icons.
+.. topic:: Node shapes
 
-.. image:: ../_static/img/gif/simulation-toolbar-tabs.gif
-  :scale: 100%
+  The specific shape defines an element type of a node:
 
-These icons switch views of the main container. NEST Desktop offers view mode according to icons:
+    - **Hexagon:** A stimulus device alias stimulator is an instrument which only produces signals towards target nodes.
+    - **Parallelogram:** A recording device alias recorder is also an instrument which observe states of a recordable node.
+    - **Square/Triangle/Circle:** A neuron node is the core engine of neuronal network model which received inputs from other nodes and produces specific output using intrinsic equation.
 
-:pen icon: Modify the network and visibility of the node parameters.
-:play icon: Modify the parameter values and visualize the results of the simulation.
-:eye icon: View network summary.
+.. topic:: Neuron shapes
 
-|fa-play| Simulation playground
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  .. image:: ../_static/img/neuron-shapes.png
+    :width: 160px
+    :align: right
 
-When the view mode is set to 'analyze activity', you will see a controller of nodes and links with parameters.
-However, the main container remains empty because it does not find records. It is now ready to simulate and
-the simulation outcome will be rendered in the main container.
+  The shape of neurons is differently represented by the set of synaptic weight of their connections.
 
-The content shows top left two icons: 'line chart' and 'braille'.
-The chart icon switch to chart panel in the main container.
-When the recorded neurons are spatial (by clicking on context menu in node header),
-it enables the 'braille' for switching to the animation of the records.
+    - **Square:** Neurons without connections or mixed (positive and negative) synaptic weights to neurons.
+    - **Triangle:** Neurons with excitatory connections to neurons. All synapse weights are positive.
+    - **Circle:** Neurons with inhibitory connections to neurons. All synapse weights are negative.
 
-.. image:: ../_static/img/gif/simulation-sidenav-right.gif
-  :scale: 100%
-  :align: right
 
-You can go to the controller of the network, simulation, chart, animation, and stats of the simulation outcome
-by clicking on the stacked buttons in the right side.
+.. topic:: Connect nodes
+
+  .. image:: ../_static/img/gif/connect-nodes.gif
+    :width: 240px
+    :align: left
+
+  |
+
+  Forming a network of nodes is defined by making connections between and within nodes.
+  In order to connect nodes, you select a node, then move the mouse towards other node and finally click a target node.
+  It creates a connection between selected source node and clicked target node.
+
+  |
+  |
+
+.. topic:: Node labels
+
+  Each node graph is labeled to identify the model of the node.
+  By default, it creates direct current generator (:guilabel:`dc`) for stimulus, voltmeter (:guilabel:`vm`) for recording devices.
+  Neuron are just labeled by :guilabel:`n`.
+  You can see the neuron model in the controller view.
+
+
+.. topic:: Node colors
+
+  Nodes and connections contains parameter configurations which are displayed in the controller panel in the side navigation.
+  The color of nodes helps you to associate the network graph with the controller as well as the visualization of the network activity.
+  The color of lines is defined by the source node.
+
+
+.. topic:: Network controller
+
+  .. image:: ../_static/img/gif/edit-node.gif
+    :width: 260px
+    :align: right
+
+
+  You are able to select node or synapse model in the network controller providing two view modes.
+  One is the selection mode which is designed to select parameter items for its visibility.
+  The other is the editing mode showing only visible parameters allows you to edit it.
+
+  |
+
+.. topic:: Network history
+
+  .. image:: ../_static/img/gif/network-history.gif
+    :width: 200px
+    :align: left
+
+  With network changes it makes a snapshot of the network afterwards and push to the network history list.
+  With this network history you can undo or redo the network changes.
+  A load from a network from the history is called `checkout network`.
+
+
 
 |
-|
-|
-|
-|
-|
-|
-|
-|
-|
 
-Configure the simulation
-########################
+.. _Simulation:
 
-.. image:: ../_static/img/gif/simulation-button.gif
-  :scale: 100%
-  :align: right
+Simulate neuronal networks
+--------------------------
 
-You can click on the `Simulate` button with right mouse button to display the context menu of the simulation.
-Here, you are able to change the settings of the simulation.
-For instance, check the option that runs the simulation after any change of the network automatically.
+You can click :guilabel:`Simulate` button to start the simulation of your network. In a controller content you can have an look on script code.
 
-|
-|
-|
+.. topic:: Script code
 
-Logging
-~~~~~~~
+  .. image:: ../_static/img/script-code.png
+    :width: 320px
+    :align: right
 
-.. image:: ../_static/img/gif/simulation-logging.gif
-  :scale: 100%
-  :align: left
+  NEST Desktop generates textual code from the constructed network.
+  The generated code can be applied in any Python interface and you will obtain the same simulation results.
+  Here, we show that the code semantics of the NEST Simulator is understandable and easily to learn.
 
-Logging component allows you to review the time protocol of the processing checkpoints.
-To activate it, go to ``Settings -> Application`` and then check the item ``Log``.
-Once it is activated and after a successful simulation, you can see the logging list in the bottom of the navigation section.
+  The graphical representatives of the nodes deliver arguments to the block of ``nest.Create(*)`` function.
+  Next, connections supply specification for the block of ``nest.Connect(*)`` function.
+  The function ``nest.Simulate(*)`` triggers simulation of your constructed network.
+  All recording nodes fills a block to collect activities using the code in PyNEST ``nest.GetStatus(rec, 'events')``. These activities contain neuronal properties, e.g. ids and positions, and activity events.
 
 |
-|
-|
-|
-|
-|
-|
-|
-|
-|
-
-The Visualization Module
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-|fa-chart-line| Chart
-~~~~~~~~~~~~~~~~~~~~~
-
-The chart of the recordings is rendered by the library `Plotly.js`.
-The chart interface has dragging and zooming handlers.
-You can download a snapshot of the current chart by clicking on the camera icon in the top mode panel.
-
-|fa-braille| Animation
-~~~~~~~~~~~~~~~~~~~~~~
-
-The animation of the recordings with positions of recorded neurons is rendered by the `three.js`.
 
 
-|fa-cog| The Setting Module
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Explore network activity
+------------------------
 
-The setting module collects settings of the modules.
-Once you modified a setting, it will saves as JSON in local storage of the web browser.
+.. image:: ../_static/img/activity-explorer.png
+  :width: 100%
 
+Network activity is composed of neuronal properties (positions and ids of neurons) and recorded events from recording devices.
+Events can be subdivided in two groups: spike events or analog signals.
+Spike events contains times and ids of the senders emitting events to the recording devices which can be considered as collectors (``spike detector``).
+Analog signals contains continuous quantities from the recording devices aka samplers (``voltmeter`` or ``multimeter``) interrogate their targets at given time intervals.
+Network activity can be explored in a graph or table.
 
+.. topic:: Activity graph
 
-.. |fa-bars| image:: ../_static/img/font-awesome/bars.svg
-   :width: 16px
-   :alt:
-   :target: #
+  .. image:: ../_static/img/activity-graph.png
+    :width: 360px
+    :align: left
 
-.. |fa-braille| image:: ../_static/img/font-awesome/braille.svg
-   :width: 16px
-   :alt:
-   :target: #
+  It displays either a chart graph or animated 3D graph for the spatial network forming layers in topology which neurons has geographical positions.
+  The chart graph contains graphical panels organized in vertical stacks.
+  Chart panels is introduced specifically to explore network activity with mouse interaction.
+  It visualizes scatter graph for spike activity, line graph for analog signals.
+  When you add one or more subpanels for spike activity it shows a histogram graph of spike times or of inter-spike intervals.
 
-.. |fa-brain| image:: ../_static/img/font-awesome/brain.svg
-   :width: 20px
-   :alt:
-   :target: #
+  |
 
-.. |fa-chart-line| image:: ../_static/img/font-awesome/chart-line.svg
-   :width: 16px
-   :alt:
-   :target: #
+.. topic:: Activity table
 
-.. |fa-cog| image:: ../_static/img/font-awesome/cog.svg
-   :width: 16px
-   :alt:
-   :target: #
+  .. image:: ../_static/img/activity-table.png
+    :width: 200px
+    :align: right
 
-.. |fa-ellipsis-v| image:: ../_static/img/font-awesome/ellipsis-v.svg
-   :width: 8px
-   :alt:
-   :target: #
+  You can go to the table by clicking on :guilabel:`Activity statistics` tab button in the right side navigation.
+  A table shows simple statistics e.g. :math:`\mu` (mean) and :math:`\sigma` (standard deviation) of activities for a recording device.
+  Moreover, Spike events show statistics of :math:`ISI` (inter-spike interval) and :math:`CV_{ISI}` (Coefficient of variation in inter-spike interval).
+  Each row represents a recorded neuron (id) from a node connected to the selected recording device.
 
-.. |fa-eye| image:: ../_static/img/font-awesome/eye.svg
-   :width: 16px
-   :alt:
-   :target: #
-
-.. |fa-pen| image:: ../_static/img/font-awesome/pen.svg
-   :width: 16px
-   :alt:
-   :target: #
-
-.. |fa-play| image:: ../_static/img/font-awesome/play.svg
-   :width: 16px
-   :alt:
-   :target: #
-
-.. |fa-shapes| image:: ../_static/img/font-awesome/shapes.svg
-   :width: 16px
-   :alt:
-   :target: #
-
-.. |fa-square-root-alt| image:: ../_static/img/font-awesome/square-root-alt.svg
-   :width: 20px
-   :alt:
-   :target: #
+  |
+  |
+  |

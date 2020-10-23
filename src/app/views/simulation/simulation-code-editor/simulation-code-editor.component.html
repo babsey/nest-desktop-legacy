@@ -1,0 +1,13 @@
+<div style="position:absolute; z-index:10; right: 16px">
+  <button mat-mini-fab color="light"
+    (click)="copyCode()"
+    title="Copy code"
+    style="margin: 4px">
+    <fa-icon icon="copy"></fa-icon>
+  </button>
+</div>
+
+<ngx-codemirror
+  [(ngModel)]="code.script"
+  [options]="options"
+></ngx-codemirror>

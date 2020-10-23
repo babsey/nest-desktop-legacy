@@ -11,7 +11,7 @@ Sebastian Spreizer :sup:`1,2`, Stefan Rotter :sup:`1`, Benjamin Weyers :sup:`3`,
 3. Department IV - Computer Science, Human-Computer Interaction, University of Trier, Trier, Germany
 4. Faculty of Science and Technology, Norwegian University of Life Sciences, Ås, Norway
 
-Email: s.spreizer@fz-juelich.de
+Email: spreizer@uni-trier.de
 
 In the past few years, we have developed a web-based graphical user interface (GUI) for the NEST
 simulation code: NEST Desktop [1]_. This GUI enables the rapid construction, parametrization, and
@@ -40,15 +40,15 @@ desktop into the HBP infrastructure. Additionally, the open-source code of NEST 
 published as a standalone distribution for teaching and training.
 
 
-Acknowledgements
-----------------
-This project has received funding from the European Union’s Horizon 2020 Framework Programme for Research and
-Innovation under Specific Grant Agreement No. 785907 (Human Brain Project SGA2)
+.. topic:: Acknowledgements
+
+  This project has received funding from the European Union’s Horizon 2020 Framework Programme for Research and
+  Innovation under Specific Grant Agreement No. 785907 (Human Brain Project SGA2)
 
 
-References
-----------
-.. [1] NEST Desktop https://github.com/babsey/nest-desktop
-.. [2] NEST InstrumentationApp https://github.com/compneuronmbu/NESTInstrumentationApp
-.. [3] Senk J, et al. (2018) VIOLA—A Multi-Purpose and Web-Based Visualization Tool for Neuronal-Network Simulation Output. Front. Neuroinform. doi: 10.3389/fninf.2018.00075
-.. [4] Oehrl et al. (2018) Streaming Live Neuronal Simulation Data into Visualization and Analysis. Conference Paper doi: 10.1007/978-3-030-02465-9_18
+.. topic:: References
+
+  .. [1] NEST Desktop https://github.com/babsey/nest-desktop
+  .. [2] NEST InstrumentationApp https://github.com/compneuronmbu/NESTInstrumentationApp
+  .. [3] Senk J, et al. (2018) VIOLA—A Multi-Purpose and Web-Based Visualization Tool for Neuronal-Network Simulation Output. Front. Neuroinform. doi: 10.3389/fninf.2018.00075
+  .. [4] Oehrl et al. (2018) Streaming Live Neuronal Simulation Data into Visualization and Analysis. Conference Paper doi: 10.1007/978-3-030-02465-9_18

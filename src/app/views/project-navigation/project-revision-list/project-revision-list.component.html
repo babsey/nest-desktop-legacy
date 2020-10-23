@@ -1,0 +1,32 @@
+<mat-toolbar style="font-size:13px !important; position:relative; height:40px">
+  <button mat-mini-fab (click)="app.updateProjectRevisions()" style="position:absolute;top:5px;left:10px;z-index:1">
+    <fa-icon icon="arrow-left"></fa-icon>
+  </button>
+  <span style="margin: 10px;margin-left:40px">Revisions of </span>
+  <mat-chip-list>
+    <mat-chip>{{ app.project.id.slice(0,6) }}</mat-chip>
+  </mat-chip-list>
+</mat-toolbar>
+
+<mat-nav-list dense style="padding:0">
+  <ng-container *ngFor="let project of app.projectRevisions">
+    <mat-list-item
+      (click)="navigate(project.id, project.rev)"
+      [class.active]="project.isRevisionSelected()"
+      class="project">
+      <span class="flex">
+        {{ project.rev.split('-')[0]}} - {{ project.name }}
+        <div class="flex-spacer"></div>
+        <app-project-timesince [date]="project.updatedAt"></app-project-timesince>
+        <!-- <ng-container [ngSwitch]="project.isHashEqual() && project.updatedAt !== ''">
+          <ng-container *ngSwitchCase="true">
+            <app-project-timesince [date]="project.updatedAt"></app-project-timesince>
+          </ng-container>
+          <ng-container *ngSwitchCase="false">
+            <fa-icon class="menu-icon" icon="asterisk"></fa-icon>
+          </ng-container>
+        </ng-container> -->
+      </span>
+      </mat-list-item>
+  </ng-container>
+</mat-nav-list>
