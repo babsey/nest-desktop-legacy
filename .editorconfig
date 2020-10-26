@@ -11,3 +11,8 @@ trim_trailing_whitespace = true
 [*.md]
 max_line_length = off
 trim_trailing_whitespace = false
+
+
+[*.ts]
+quote_type = single
+spaces_around_operators = true 
