@@ -25,7 +25,7 @@ export class SimulationControllerComponent implements OnInit {
 
   onChange(value: any, id: string): void {
     if (id === 'randomSeed') {
-      this.simulation.config = { autoRandomSeed: false };
+      this.simulation.updateConfig({ autoRandomSeed: false });
     }
   }
 
@@ -33,9 +33,9 @@ export class SimulationControllerComponent implements OnInit {
     const config: any = {};
     config[event.option.value] = event.option.selected;
     if (event.option.value === 'autoRandomSeed') {
-      this.simulation.config = config;
+      this.simulation.updateConfig(config);
     } else {
-      this.simulation.project.config = config;
+      this.simulation.project.config.updateConfig(config);
     }
   }
 

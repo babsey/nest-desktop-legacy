@@ -70,7 +70,6 @@ export class ProjectDialogComponent implements OnInit {
           } catch (e) {
             d.valid = false;
             d.message = e;
-            console.log(d.name, d._id.slice(0, 6), e);
           }
         });
         this._message = 'Select projects to add.';

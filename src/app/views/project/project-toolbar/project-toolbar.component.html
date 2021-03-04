@@ -38,13 +38,20 @@
   </mat-selection-list>
 
   <mat-nav-list dense style="padding:0">
-    <mat-list-item class="mat-menu-item" (click)="project.download()">
-      <fa-icon class="menu-icon" icon="download"></fa-icon>
-      <ng-container [ngSwitch]="project.hasActivities">
-        <span *ngSwitchCase="false"> Download data</span>
-        <span *ngSwitchCase="true"> Download data and records</span>
+    <ng-container [ngSwitch]="project.hasActivities">
+      <ng-container *ngSwitchCase="false">
+        <mat-list-item class="mat-menu-item" (click)="project.download()">
+          <fa-icon class="menu-icon" icon="download"></fa-icon>
+            <span> Download data</span>
+        </mat-list-item>
       </ng-container>
-    </mat-list-item>
+            <ng-container *ngSwitchCase="true">
+        <mat-list-item class="mat-menu-item" (click)="project.downloadWithActivities()">
+          <fa-icon class="menu-icon" icon="download"></fa-icon>
+            <span> Download data and records</span>
+        </mat-list-item>
+      </ng-container>
+    </ng-container>
   </mat-nav-list>
 
 </mat-menu>

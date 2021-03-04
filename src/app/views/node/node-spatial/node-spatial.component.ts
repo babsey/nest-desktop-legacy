@@ -112,7 +112,7 @@ export class NodeSpatialComponent implements OnInit {
 
   onPositionTypeChange(event: any): void {
     // console.log(this.positionType, event);
-    const config: any = (this.positionType === 'free') ? { pos: [] } : { shape: [1, 1] };
+    const config: any = (this.positionType === 'free') ? { numDimensions: 2 } : { shape: [1, 1] };
     this.node.initSpatial(config);
     this.update();
   }

@@ -29,4 +29,17 @@ export class NodeMenuComponent implements OnInit {
     this._activityChartService.update.emit();
   }
 
+  deleteNode(): void {
+    this.node.delete();
+
+    this.node.network.project.activityChartGraph.init();
+    this.node.network.project.activityChartGraph.update();
+    this._activityChartService.init.emit();
+
+    this.node.network.project.activityAnimationGraph.init();
+    this.node.network.project.activityAnimationGraph.update();
+    this._activityAnimationService.update.emit();
+
+  }
+
 }

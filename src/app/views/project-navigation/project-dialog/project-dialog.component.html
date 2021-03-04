@@ -25,11 +25,11 @@
             </span>
             <span class="flex-spacer"></span>
             <span>
-              <span style="margin-right: 8px" [attr.title]="project._id">{{ project._id.slice(0,6) }}</span>
+              <span style="margin-right: 8px" [attr.title]="project.id" *ngIf="project.id">{{ project.id.slice(0,6) }}</span>
               <span *ngIf="project.version">(v{{ project.version }})</span>
             </span>
             <span class="flex-spacer"></span>
-            <span>{{ (project.updatedAt || project.createdAt) | date }}</span>
+            <span *ngIf="project.createdAt">{{ (project.createdAt) | date }}</span>
           </span>
         </mat-list-option>
       </ng-container>
