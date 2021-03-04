@@ -230,7 +230,9 @@ export class App extends Config {
   }
 
   // Delete projects from database and then update the list.
-  deleteProjects(projectIds: string[]): Promise<any> {
+  deleteProjects(projectIds: string[]): void {
+    this._project = new Project(this);
+    this._projectRevisions = [];
     return this._projectDB.deleteBulk(projectIds).then(this.updateProjects());
   }
 
@@ -238,7 +240,7 @@ export class App extends Config {
   downloadProjects(projectIds: string[]): void {
     const projects: Project[] = this._projects.filter((project: Project) =>
       projectIds.includes(project.id));
-    const data: any[] = projects.map((project: Project) => project.toJSON());
+    const data: any[] = projects.map((project: Project) => project.toJSON('file'));
     this.download(data, 'projects');
   }
 
@@ -272,9 +274,9 @@ export class App extends Config {
 
   // Load projects from database and then update list
   updateProjects(): Promise<any> {
-    return this._projectDB.list('createdAt', true).then((projects: any[]) =>
-      this._projects = projects.map((project: any) => new Project(this, project))
-    );
+    return this._projectDB.list('createdAt', true).then((projects: any[]) => {
+      this._projects = projects.map((project: any) => new Project(this, project));
+    });
   }
 
   // Load project revision from database and then update revision list
@@ -282,12 +284,15 @@ export class App extends Config {
     this._projectRevisions = [];
     if (id === null) { return; }
     return this._projectDB.revisions(id)
-      .then((revIds: string[]) =>
-        revIds.forEach((rev: string) =>
+      .then((revIds: string[] | any) => {
+          if (revIds.error) {
+            return revIds;
+          }
+          return revIds.forEach((rev: string) =>
           this._projectDB.read(id, rev).then((doc: any) =>
             this._projectRevisions.push(new Project(this, doc)))
-        )
-      );
+          );
+      });
   }
 
   /*
@@ -309,10 +314,14 @@ export class App extends Config {
   }
 
   // Download project from the list.
-  downloadProject(projectId: string): void {
+  downloadProject(projectId: string, withActivities: boolean = false): void {
     // console.log('Download project:', projectId);
     const project: Project = this._projects.find((p: Project) => p.id === projectId);
-    this.download(project.toJSON('file'), 'projects');
+    const projectData: any = project.toJSON('file');
+    if (withActivities) {
+      projectData.activities = project.activities.map(activity => activity.toJSON());
+    }
+    this.download(projectData, 'project');
   }
 
   // Initialize project or project revision from the list.

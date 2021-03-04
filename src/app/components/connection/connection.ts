@@ -111,6 +111,10 @@ export class Connection extends Config {
     return this._sourceIdx;
   }
 
+  set sourceIdx(value: number) {
+    this._sourceIdx = value;
+  }
+
   get synapse(): Synapse {
     return this._synapse;
   }
@@ -125,6 +129,10 @@ export class Connection extends Config {
 
   get targetIdx(): number {
     return this._targetIdx;
+  }
+
+  set targetIdx(value: number) {
+    this._targetIdx = value;
   }
 
   get view(): ConnectionView {

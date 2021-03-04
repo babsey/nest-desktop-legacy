@@ -73,6 +73,11 @@ export class NetworkView {
     this._network.config.update({ color });
   }
 
+  getColor(idx: number): string {
+    const colors: string[] = this._network.config.color.cycle;
+    return colors[idx % colors.length];
+  }
+
   resetFocus(): void {
     this._focusedNode = null;
     this._focusedConnection = null;

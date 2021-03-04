@@ -251,8 +251,9 @@ export class ActivityAnimationGraph {
    */
   updateFrames(activity: Activity): void {
     const events: any = JSON.parse(JSON.stringify(activity.events));
-    events.senders = events.senders.map((sender: number) => activity.nodeIds.indexOf(sender));
     const eventKeys: string[] = Object.keys(events);
+
+    // Update recordables
     eventKeys.forEach((eventKey: string) => {
       if (!this._recordables.includes(eventKey) && !['senders', 'times'].includes(eventKey)) {
         this._recordables.push(eventKey);
@@ -270,17 +271,24 @@ export class ActivityAnimationGraph {
       frame.data[frame.data.length - 1].idx = frame.data.length - 1;
     });
 
+    // Update senders
+    if (events.senders) {
+      events.senders = events.senders.map((sender: number) => activity.nodeIds.indexOf(sender));
+    }
+
     // Push values in data frames
-    const sampleRate: number = this._config.frames.sampleRate;
-    events.times.forEach((time: number, idx: number) => {
-      const frameIdx: number = Math.floor(time * sampleRate);
-      const frame: any = this._frames[frameIdx - 1];
-      if (frame === undefined) { return; }
-      const data: any = frame.data[activity.idx];
-      eventKeys.forEach((eventKey: string) => {
-        data[eventKey].push(events[eventKey][idx]);
+    if (events.times) {
+      const sampleRate: number = this._config.frames.sampleRate;
+      events.times.forEach((time: number, idx: number) => {
+        const frameIdx: number = Math.floor(time * sampleRate);
+        const frame: any = this._frames[frameIdx - 1];
+        if (frame === undefined) { return; }
+        const data: any = frame.data[activity.idx];
+        eventKeys.forEach((eventKey: string) => {
+          data[eventKey].push(events[eventKey][idx]);
+        });
       });
-    });
+    }
   }
 
   /**

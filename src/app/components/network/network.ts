@@ -130,10 +130,25 @@ export class Network extends Config {
   deleteNode(node: Node): void {
     this._view.resetFocus();
     this._view.resetSelection();
+
+    // Delete associated connections
     this._connections = this._connections.filter((c: Connection) => (c.source !== node && c.target !== node));
+
+    // Update source and target idx in connections
+    this._connections.forEach(connection => {
+      if (connection.sourceIdx > node.idx) {
+        connection.sourceIdx -= 1;
+      }
+      if (connection.targetIdx > node.idx) {
+        connection.targetIdx -= 1;
+      }
+    });
+
     // this.nodes = this.nodes.filter((n: Node) => n.idx !== node.idx);
     const idx: number = node.idx;
     this._nodes = this._nodes.slice(0, idx).concat(this.nodes.slice(idx + 1));
+
+    // clean network
     this.clean();
     this.networkChanges();
   }

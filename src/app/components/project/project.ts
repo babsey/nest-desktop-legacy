@@ -44,7 +44,7 @@ export class Project extends Config {
     this._view = new ProjectView(this);
 
     // Database instance
-    this._id = project._id || uuidv4();
+    this._id = project.id || project._id || uuidv4();
     this._rev = project._rev || '';
     this._createdAt = project.createdAt || new Date();
     this._updatedAt = project.updatedAt;
@@ -180,6 +180,13 @@ export class Project extends Config {
    */
   download(): void {
     this._app.downloadProject(this._id);
+  }
+
+  /**
+   * Download this project and activities.
+   */
+  downloadWithActivities(): void {
+    this._app.downloadProject(this._id, true);
   }
 
   /**
@@ -561,19 +568,19 @@ export class Project extends Config {
       name: this._name,
       network: this._network.toJSON(target),
       simulation: this._simulation.toJSON(target),
+      version: this._app.version,
+      createdAt: this._createdAt,
     };
     if (target === 'db') {
       const meta: any = {
         _id: this._id,
-        createdAt: this._createdAt,
         description: this._description,
         hash: this._hash,
         updatedAt: this._updatedAt,
-        version: this._app.version,
       };
       return { ...project, ...meta };
     } else {
-      return project;
+      return { ...project };
     }
   }
 
