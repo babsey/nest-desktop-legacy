@@ -1,3 +1,10 @@
+
+| :exclamation: This repository is no longer maintained. |
+|:---------------------------|
+
+The source code is moved to https://github.com/nest-desktop/nest-desktop
+
+
 # NEST Desktop
 
 **An interactive desktop application for [NEST simulator](http://www.nest-simulator.org/)**
