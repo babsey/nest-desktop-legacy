@@ -1,9 +1,6 @@
 
-| :exclamation: This repository is no longer maintained. |
+| :exclamation: This repository is no longer maintained and moved to https://github.com/nest-desktop/nest-desktop |
 |:---------------------------|
-
-The source code is moved to https://github.com/nest-desktop/nest-desktop
-
 
 # NEST Desktop
 
